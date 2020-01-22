@@ -11,7 +11,7 @@
 
 Як выкарыстоўваць:
 
-git clone https://github.com/oleg-dydyshko/malitounik.CaliandarBGKC.git
+git clone https://github.com/oleg-dydyshko/MalitounikBGKConKT.git
 
 Далей Android Studio -> Import project
 

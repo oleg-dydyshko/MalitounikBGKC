@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:columnCount="5">
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/t1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnSpan="2"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="I, III, V"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/t2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="3"
+        android:layout_columnSpan="2"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="II, IV"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/t3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Ютрань"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/t4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Вяч."
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/t5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Ютрань"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/t6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Вяч."
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/t7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Ндз"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="2 3"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="-"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="2 3 -"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="-"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/t8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Пн"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="4 5"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="6"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="4 5 6"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="18"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/t9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Аў"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="7 8"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="9"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="7 8 9"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="18"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/t10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Ср"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="10 11"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="12"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="10 11 12"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="18"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/t11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Чц"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="13 14"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="15"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="13 14 15"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="18"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/t12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Пт"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="19 20"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="18"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="- 19 20"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="18"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/t13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Сб"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="16 17"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="1"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView27"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="- 16 17"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:background="@drawable/nadsan"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="1"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="18sp" />
+</GridLayout>

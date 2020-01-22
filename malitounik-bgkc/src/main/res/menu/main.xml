@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/sortdate"
+        android:checkable="true"
+        android:orderInCategory="100"
+        android:title="@string/sort_alf"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/search_nadsan"
+        android:orderInCategory="100"
+        android:title="@string/poshuk_nadsan"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_glava"
+        android:icon="@drawable/calendar"
+        android:orderInCategory="100"
+        android:title="@string/SEARCH_CALL"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_mun"
+        android:icon="@drawable/calendar_full"
+        android:orderInCategory="100"
+        android:title="@string/vybor_daty"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/tipicon"
+        android:orderInCategory="100"
+        android:title="@string/MUNU_SYMBOLS"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/settings"
+        android:orderInCategory="100"
+        android:title="@string/tools_item"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/sabytie"
+        android:orderInCategory="100"
+        android:title="@string/sabytie"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_add"
+        android:icon="@drawable/plus"
+        android:orderInCategory="100"
+        android:title="@string/MALITVA_ADD"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/search_sviatyia"
+        android:orderInCategory="100"
+        android:title="@string/search_svityia"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/onas"
+        android:orderInCategory="100"
+        android:title="@string/PRA_NAS"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/help"
+        android:orderInCategory="100"
+        android:title="@string/help"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/prazdnik"
+        android:icon="@drawable/search"
+        android:orderInCategory="100"
+        android:title="@string/CARKVA_SVIATY"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/pasxa"
+        android:icon="@drawable/search"
+        android:orderInCategory="100"
+        android:title="@string/pascha_kaliandar_bel"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/search"
+        android:orderInCategory="100"
+        android:title="@string/search"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/trash"
+        android:icon="@drawable/trash"
+        android:orderInCategory="100"
+        android:title="@string/Trash"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_bright"
+        android:orderInCategory="100"
+        android:title="@string/Bright"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_font"
+        android:orderInCategory="100"
+        android:title="@string/MENU_FONT_SIZE_APP"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_dzen_noch"
+        android:checkable="true"
+        android:orderInCategory="100"
+        android:title="@string/widget_day_d_n"
+        app:showAsAction="never" />
+</menu>

@@ -1,0 +1,511 @@
+package by.carkva_gazeta.resources
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.provider.Settings
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.TextUtils
+import android.text.style.AbsoluteSizeSpan
+import android.util.TypedValue
+import android.view.*
+import android.view.View.OnTouchListener
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
+import by.carkva_gazeta.resources.R.raw
+import kotlinx.android.synthetic.main.akafist_under.*
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+
+class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
+    private val mHideHandler = Handler()
+    @SuppressLint("InlinedApi")
+    private val mHidePart2Runnable = Runnable {
+        scrollView2.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+    }
+    private val mShowPart2Runnable = Runnable {
+        val actionBar = supportActionBar
+        actionBar?.show()
+    }
+    private var fullscreenPage = false
+    private lateinit var chin: SharedPreferences
+    private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
+    private var dzenNoch = false
+    private var n = 0
+    private var resurs: String? = null
+    //private var men = false
+    private var title = ""
+    private var levo = false
+    private var pravo = false
+    private var checkSetDzenNoch = false
+    private val orientation: Int
+        get() {
+            val rotation = windowManager.defaultDisplay.rotation
+            val displayOrientation = resources.configuration.orientation
+            if (displayOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                return if (rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_180) ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE else ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            } else if (rotation == Surface.ROTATION_180 || rotation == Surface.ROTATION_90) return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+            return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+
+    override fun onResume() {
+        super.onResume()
+        setTollbarTheme()
+        if (fullscreenPage) hide()
+        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+    }
+
+    override fun onDialogFontSizePositiveClick() {
+        fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        if (!MainActivity.checkBrightness) {
+            val lp = window.attributes
+            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+            window.attributes = lp
+        }
+        dzenNoch = chin.getBoolean("dzen_noch", false)
+        super.onCreate(savedInstanceState)
+        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
+        setContentView(R.layout.akafist_under)
+        constraint.setOnTouchListener(this)
+        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        if (savedInstanceState != null) {
+            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
+            checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
+        }
+        fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window = window
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            if (dzenNoch) {
+                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
+                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
+            } else {
+                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
+                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
+            }
+        }
+        if (dzenNoch) {
+            TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+        }
+        TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+        val r = this@Ton.resources
+        val ton = intent.extras?.getInt("ton", 1) ?: 1
+        val tonNadzelny = intent.extras?.getBoolean("ton_naidzelny", true) ?: true
+        val inputStream: InputStream
+        if (tonNadzelny) {
+            inputStream = r.openRawResource(raw.bogashlugbovya9)
+            when (ton) {
+                1 -> {
+                    resurs = "ton_n1"
+                    title = "Тон 1"
+                }
+                2 -> {
+                    resurs = "ton_n2"
+                    title = "Тон 2"
+                }
+                3 -> {
+                    resurs = "ton_n3"
+                    title = "Тон 3"
+                }
+                4 -> {
+                    resurs = "ton_n4"
+                    title = "Тон 4"
+                }
+                5 -> {
+                    resurs = "ton_n5"
+                    title = "Тон 5"
+                }
+                6 -> {
+                    resurs = "ton_n6"
+                    title = "Тон 6"
+                }
+                7 -> {
+                    resurs = "ton_n7"
+                    title = "Тон 7"
+                }
+                8 -> {
+                    resurs = "ton_n8"
+                    title = "Тон 8"
+                }
+            }
+        } else {
+            inputStream = r.openRawResource(raw.bogashlugbovya10)
+            when (ton) {
+                1 -> {
+                    resurs = "ton_sh1"
+                    title = "ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам"
+                }
+                2 -> {
+                    resurs = "ton_sh2"
+                    title = "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю"
+                }
+                3 -> {
+                    resurs = "ton_sh3"
+                    title = "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу"
+                }
+                4 -> {
+                    resurs = "ton_sh4"
+                    title = "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю"
+                }
+                5 -> {
+                    resurs = "ton_sh5"
+                    title = "ПЯТНІЦА\nСлужба Крыжу Гасподняму"
+                }
+                6 -> {
+                    resurs = "ton_sh6"
+                    title = "Субота\nСлужба ўсім сьвятым і памёрлым"
+                }
+            }
+        }
+        val isr = InputStreamReader(inputStream)
+        val reader = BufferedReader(isr)
+        var line: String
+        val builder = StringBuilder()
+        reader.forEachLine {
+            line = it
+            if (dzenNoch) line = line.replace("#d00505", "#f44336")
+            builder.append(line)
+        }
+        inputStream.close()
+        var resursOut = builder.toString()
+        var n = resursOut.indexOf("<!--ton1n-->")
+        var k = resursOut.indexOf("<!--ton1k-->")
+        when (ton) {
+            1 -> {
+                n = resursOut.indexOf("<!--ton1n-->")
+                k = resursOut.indexOf("<!--ton1k-->")
+            }
+            2 -> {
+                n = resursOut.indexOf("<!--ton2n-->")
+                k = resursOut.indexOf("<!--ton2k-->")
+            }
+            3 -> {
+                n = resursOut.indexOf("<!--ton3n-->")
+                k = resursOut.indexOf("<!--ton3k-->")
+            }
+            4 -> {
+                n = resursOut.indexOf("<!--ton4n-->")
+                k = resursOut.indexOf("<!--ton4k-->")
+            }
+            5 -> {
+                n = resursOut.indexOf("<!--ton5n-->")
+                k = resursOut.indexOf("<!--ton5k-->")
+            }
+            6 -> {
+                n = resursOut.indexOf("<!--ton6n-->")
+                k = resursOut.indexOf("<!--ton6k-->")
+            }
+            7 -> {
+                n = resursOut.indexOf("<!--ton7n-->")
+                k = resursOut.indexOf("<!--ton7k-->")
+            }
+            8 -> {
+                n = resursOut.indexOf("<!--ton8n-->")
+                k = resursOut.indexOf("<!--ton8k-->")
+            }
+        }
+        resursOut = resursOut.substring(n, k)
+        //CaseInsensitiveResourcesFontLoader FontLoader = new CaseInsensitiveResourcesFontLoader();
+        TextView.text = MainActivity.fromHtml(resursOut)
+        //men = VybranoeView.checkVybranoe(this, resurs)
+        if (chin.getBoolean("help_str", true)) {
+            startActivity(Intent(this, HelpText::class.java))
+            val prefEditor: Editor = chin.edit()
+            prefEditor.putBoolean("help_str", false)
+            prefEditor.apply()
+        }
+        requestedOrientation = if (chin.getBoolean("orientation", false)) {
+            orientation
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+    }
+
+    private fun setTollbarTheme() {
+        title_toolbar.setOnClickListener {
+            title_toolbar.setHorizontallyScrolling(true)
+            title_toolbar.freezesText = true
+            title_toolbar.marqueeRepeatLimit = -1
+            if (title_toolbar.isSelected) {
+                title_toolbar.ellipsize = TextUtils.TruncateAt.END
+                title_toolbar.isSelected = false
+            } else {
+                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                title_toolbar.isSelected = true
+            }
+        }
+        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        title_toolbar.text = title
+        if (dzenNoch) {
+            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onTouch(v: View, event: MotionEvent): Boolean {
+        val widthConstraintLayout = constraint.width
+        val otstup = (10 * resources.displayMetrics.density).toInt()
+        val y = event.y.toInt()
+        val x = event.x.toInt()
+        val prefEditor: Editor = chin.edit()
+        if (v.id == R.id.constraint) {
+            if (MainActivity.checkBrightness) {
+                MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
+            }
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    n = event.y.toInt()
+                    if (x < otstup) {
+                        levo = true
+                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                        progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                        progress.visibility = View.VISIBLE
+                    }
+                    if (x > widthConstraintLayout - otstup) {
+                        pravo = true
+                        var minmax = ""
+                        if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
+                        if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
+                        progress.text = "$fontBiblia sp$minmax"
+                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                        progress.visibility = View.VISIBLE
+                    }
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    if (x < otstup && y > n && y % 15 == 0) {
+                        if (MainActivity.brightness > 0) {
+                            MainActivity.brightness = MainActivity.brightness - 1
+                            val lp = window.attributes
+                            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+                            window.attributes = lp
+                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                            MainActivity.checkBrightness = false
+                        }
+                    }
+                    if (x < otstup && y < n && y % 15 == 0) {
+                        if (MainActivity.brightness < 100) {
+                            MainActivity.brightness = MainActivity.brightness + 1
+                            val lp = window.attributes
+                            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+                            window.attributes = lp
+                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                            MainActivity.checkBrightness = false
+                        }
+                    }
+                    if (x > widthConstraintLayout - otstup && y > n && y % 26 == 0) {
+                        if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
+                            fontBiblia -= 4
+                            prefEditor.putFloat("font_biblia", fontBiblia)
+                            prefEditor.apply()
+                            TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                            var min = ""
+                            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
+                            progress.text = "$fontBiblia sp$min"
+                            progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                        }
+                    }
+                    if (x > widthConstraintLayout - otstup && y < n && y % 26 == 0) {
+                        if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
+                            fontBiblia += 4
+                            prefEditor.putFloat("font_biblia", fontBiblia)
+                            prefEditor.apply()
+                            TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                            var max = ""
+                            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
+                            progress.text = "$fontBiblia sp$max"
+                            progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                        }
+                    }
+                }
+                MotionEvent.ACTION_UP -> {
+                    v.performClick()
+                    if (levo) {
+                        levo = false
+                        progress.visibility = View.GONE
+                    }
+                    if (pravo) {
+                        pravo = false
+                        progress.visibility = View.GONE
+                    }
+                }
+                MotionEvent.ACTION_CANCEL -> {
+                    if (levo) {
+                        levo = false
+                        progress.visibility = View.GONE
+                    }
+                    if (pravo) {
+                        pravo = false
+                        progress.visibility = View.GONE
+                    }
+                }
+            }
+        }
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
+        /*if (men) {
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
+        } else {
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
+        }*/
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).isVisible = false
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = chin.getBoolean("orientation", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
+        val item = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
+        val spanString = SpannableString(menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title.toString())
+        val end = spanString.length
+        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        item.title = spanString
+        return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        val infl = menuInflater
+        infl.inflate(by.carkva_gazeta.malitounik.R.menu.akafist, menu)
+        for (i in 0 until menu.size()) {
+            val item = menu.getItem(i)
+            val spanString = SpannableString(menu.getItem(i).title.toString())
+            val end = spanString.length
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            item.title = spanString
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        dzenNoch = chin.getBoolean("dzen_noch", false)
+        val prefEditor: Editor = chin.edit()
+        val id = item.itemId
+        if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
+            checkSetDzenNoch = true
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                prefEditor.putBoolean("dzen_noch", true)
+            } else {
+                prefEditor.putBoolean("dzen_noch", false)
+            }
+            prefEditor.apply()
+            recreate()
+        }
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_orientation) {
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                requestedOrientation = orientation
+                prefEditor.putBoolean("orientation", true)
+            } else {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                prefEditor.putBoolean("orientation", false)
+            }
+        }
+        /*if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
+            men = VybranoeView.setVybranoe(this, resurs, title)
+            if (men) {
+                val layout = LinearLayout(this)
+                layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
+                val density = resources.displayMetrics.density
+                val realpadding = (10 * density).toInt()
+                val toast = TextViewRobotoCondensed(this)
+                toast.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                toast.setPadding(realpadding, realpadding, realpadding, realpadding)
+                toast.text = getString(by.carkva_gazeta.malitounik.R.string.addVybranoe)
+                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+                layout.addView(toast)
+                val mes = Toast(this)
+                mes.duration = Toast.LENGTH_SHORT
+                mes.view = layout
+                mes.show()
+            }
+            invalidateOptionsMenu()
+        }*/
+        if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
+            val dialogFontSize = DialogFontSize()
+            dialogFontSize.show(supportFragmentManager, "font")
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_bright) {
+            val dialogBrightness = DialogBrightness()
+            dialogBrightness.show(supportFragmentManager, "brightness")
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
+            if (chin.getBoolean("FullscreenHelp", true)) {
+                val dialogHelpFullscreen = DialogHelpFullscreen()
+                dialogHelpFullscreen.show(supportFragmentManager, "FullscreenHelp")
+            }
+            fullscreenPage = true
+            hide()
+        }
+        prefEditor.apply()
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        if (fullscreenPage) {
+            fullscreenPage = false
+            show()
+        } else {
+            if (checkSetDzenNoch) onSupportNavigateUp() else super.onBackPressed()
+        }
+    }
+
+    private fun hide() {
+        val actionBar = supportActionBar
+        actionBar?.hide()
+        mHideHandler.removeCallbacks(mShowPart2Runnable)
+        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
+    }
+
+    private fun show() {
+        scrollView2.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        mHideHandler.removeCallbacks(mHidePart2Runnable)
+        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("fullscreen", fullscreenPage)
+        outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
+    }
+
+    companion object {
+        private const val UI_ANIMATION_DELAY = 300
+    }
+}

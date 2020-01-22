@@ -1,0 +1,403 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    tools:context="by.carkva_gazeta.malitounik.CaliandarFull">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="20dp">
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_gravity="start"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/calendar_fon"
+            android:foregroundGravity="left"
+            android:singleLine="false" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp">
+
+
+            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                android:id="@+id/textDenNedeli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/textChislo"
+                android:layout_alignLeft="@+id/textChislo"
+                android:layout_alignEnd="@+id/textChislo"
+                android:layout_alignRight="@+id/textChislo"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/colorDivider"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:singleLine="false"
+                android:text="пятніца"
+                android:textColor="@color/colorPrimary_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                android:id="@+id/textChislo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textDenNedeli"
+                android:layout_alignStart="@+id/textMesiac"
+                android:layout_alignLeft="@+id/textMesiac"
+                android:layout_alignEnd="@+id/textMesiac"
+                android:layout_alignRight="@+id/textMesiac"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/colorDivider"
+                android:gravity="center_vertical|center_horizontal"
+                android:minHeight="110dp"
+                android:singleLine="false"
+                android:text="30"
+                android:textColor="@color/colorPrimary_text"
+                android:textSize="80sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/znakTipicona"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/znaki_krest"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/PostFish"
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/znakTipicona"
+                android:layout_alignLeft="@+id/znakTipicona"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/fishe"
+                android:visibility="gone" />
+
+            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                android:id="@+id/textMesiac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textChislo"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/colorDivider"
+                android:gravity="center"
+                android:minWidth="190dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:singleLine="false"
+                android:text="КАСТРЫЧНІКА"
+                android:textColor="@color/colorPrimary_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                android:id="@+id/textPost"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/textDenNedeli"
+                android:layout_alignStart="@+id/PostFish"
+                android:layout_alignLeft="@+id/PostFish"
+                android:layout_gravity="start|bottom"
+                android:layout_marginTop="0dp"
+                android:gravity="start"
+                android:text="Пост"
+                android:textColor="@color/colorPrimary_text"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/textCviatyGlavnyia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector_default"
+            android:gravity="center_horizontal"
+            android:paddingBottom="5dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/textPredsviaty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center_horizontal"
+            android:paddingBottom="5dp"
+            android:textColor="@color/colorPrimary_text"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/polosa1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorSecondary_text" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/textSviatyia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector_default"
+            android:gravity="start"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="Вялеб. Яна, Сяргея, Патрыка і інш. айцоў, замучаных у лаўры сьв. Савы"
+            android:textColor="@color/colorPrimary_text"
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/polosa2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorSecondary_text" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/textTitleChyt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector_gray"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:text="Чытаньне:"
+            android:textColor="@color/colorPrimary_text"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/textChytanne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector_gray"
+            android:gravity="start|center_vertical"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="Дз 15.5-34; Ян 10.17-28"
+            android:textColor="@color/colorPrimary_text"
+            android:textSize="18sp" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/textChytanneSviatyiaDop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector_gray"
+            android:gravity="start|bottom"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="Дз 15.5-34; Ян 10.17-28"
+            android:textColor="@color/colorPrimary_text"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:visibility="gone" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/textChytanneSviatyia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector_gray"
+            android:gravity="start|bottom"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="Дз 15.5-34; Ян 10.17-28"
+            android:textColor="@color/colorPrimary_text"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:visibility="gone" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/textPamerlyia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorDivider"
+            android:gravity="start|bottom"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingBottom="5dp"
+            android:text="Памінаньне памёрлых"
+            android:textColor="@color/colorPrimary_text"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:ignore="HardcodedText" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/textTitleMaranata"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorDivider"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:text="@string/maranata"
+            android:textColor="@color/colorPrimary_text"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:visibility="gone" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/maranata"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector_gray"
+            android:gravity="start|center_vertical"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Дз 15.5-34; Ян 10.17-28"
+            android:textColor="@color/colorPrimary_text"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/padzei"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/pravaslavie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:gravity="right|end"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="Праваслаўныя сьвяты"
+            android:textColor="@color/colorSecondary_text"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:visibility="gone" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/RKC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:gravity="right|end"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="Рыма-каталіцкія сьвяты"
+            android:textColor="@color/colorSecondary_text"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:visibility="gone" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/gosudarstvo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:gravity="right|end"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="Дзяржаўныя сьвяты"
+            android:textColor="@color/colorSecondary_text"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:visibility="gone" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/prafesional"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:gravity="right|end"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="Прафісійныя сьвяты"
+            android:textColor="@color/colorSecondary_text"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:visibility="gone" />
+    </LinearLayout>
+</ScrollView>

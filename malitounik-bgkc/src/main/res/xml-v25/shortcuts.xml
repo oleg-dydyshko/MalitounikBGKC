@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="compose1"
+        android:enabled="true"
+        android:icon="@drawable/star_big_on_desktop"
+        android:shortcutShortLabel="@string/str_short_label1"
+        android:shortcutLongLabel="@string/str_short_label1"
+        android:shortcutDisabledMessage="@string/str_disable_message">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="content://by.carkva_gazeta.malitounik?shortcuts=1"
+            android:targetPackage="by.carkva_gazeta.malitounik"
+            android:targetClass="by.carkva_gazeta.malitounik.SplashActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="compose3"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/str_short_label3"
+        android:shortcutLongLabel="@string/str_short_label3"
+        android:shortcutDisabledMessage="@string/str_disable_message">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="content://by.carkva_gazeta.malitounik?shortcuts=3"
+            android:targetPackage="by.carkva_gazeta.malitounik"
+            android:targetClass="by.carkva_gazeta.malitounik.SplashActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="compose2"
+        android:enabled="true"
+        android:icon="@drawable/book_icon"
+        android:shortcutShortLabel="@string/str_short_label2"
+        android:shortcutLongLabel="@string/str_short_label2"
+        android:shortcutDisabledMessage="@string/str_disable_message">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="content://by.carkva_gazeta.malitounik?shortcuts=2"
+            android:targetPackage="by.carkva_gazeta.malitounik"
+            android:targetClass="by.carkva_gazeta.malitounik.SplashActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+</shortcuts>

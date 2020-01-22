@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:drawableLeft="@drawable/stiker"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageView
+        android:id="@+id/button_popup"
+        android:layout_width="24dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/btn_drawable"
+        android:contentDescription="@string/content_open_popup"
+        android:src="@drawable/button_with_three_dots" />
+</LinearLayout>

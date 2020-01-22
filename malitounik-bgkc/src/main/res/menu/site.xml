@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_fullscreen"
+        android:icon="@drawable/full_screen"
+        android:orderInCategory="100"
+        android:title="@string/fullscreen"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/num"
+        android:orderInCategory="100"
+        android:title="Навіны"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/sva"
+        android:orderInCategory="100"
+        android:title="Сьвятло Ўсходу"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/his"
+        android:orderInCategory="100"
+        android:title="Гісторыя Царквы"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/gra"
+        android:orderInCategory="100"
+        android:title="Царква і грамадзтва"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/calendar"
+        android:orderInCategory="100"
+        android:title="Літургічны каляндар БГКЦ"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/biblia"
+        android:orderInCategory="100"
+        android:title="Біблія па-беларуску"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/it"
+        android:orderInCategory="100"
+        android:title="Катэдральны пляц"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/ik"
+        android:orderInCategory="100"
+        android:title="Відэа"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/bib"
+        android:orderInCategory="100"
+        android:title="Бібліятэка"
+        app:showAsAction="never" />
+</menu>

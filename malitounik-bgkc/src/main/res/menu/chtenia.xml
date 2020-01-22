@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_minus"
+        android:icon="@drawable/minus"
+        android:orderInCategory="100"
+        android:title="-"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_plus"
+        android:icon="@drawable/plus"
+        android:orderInCategory="100"
+        android:title="+"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_auto"
+        android:icon="@drawable/scroll_icon"
+        android:orderInCategory="100"
+        android:title="@string/autoScrolloff"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_fullscreen"
+        android:icon="@drawable/full_screen"
+        android:orderInCategory="100"
+        android:title="@string/fullscreen"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_orientation"
+        android:checkable="true"
+        android:orderInCategory="100"
+        android:title="@string/blok_orientation"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_utran"
+        android:checkable="true"
+        android:checked="true"
+        android:orderInCategory="100"
+        android:title="Прапусьціць ютрань"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_paralel"
+        android:checkable="true"
+        android:checked="true"
+        android:orderInCategory="100"
+        android:title="@string/paralel"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_font"
+        android:orderInCategory="100"
+        android:title="@string/MENU_FONT_SIZE_APP"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_bright"
+        android:orderInCategory="100"
+        android:title="@string/Bright"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_dzen_noch"
+        android:checkable="true"
+        android:orderInCategory="100"
+        android:title="@string/widget_day_d_n"
+        app:showAsAction="never" />
+</menu>

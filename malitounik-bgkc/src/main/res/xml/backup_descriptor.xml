@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <exclude domain="file"
+        path="Book"/>
+    <exclude domain="file"
+        path="image_temp"/>
+    <exclude domain="file"
+        path="Biblijateka"/>
+    <exclude domain="file"
+        path="Site"/>
+</full-backup-content>

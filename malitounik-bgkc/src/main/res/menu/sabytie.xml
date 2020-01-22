@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_add"
+        android:icon="@drawable/plus"
+        android:title="Дадаць падзею"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_delite"
+        android:icon="@drawable/trash"
+        android:title="Выдаліць падзеі"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_save"
+        android:icon="@drawable/save"
+        android:title="Захаваць"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_save_redak"
+        android:icon="@drawable/save"
+        android:title="Захаваць"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_cansel"
+        android:icon="@drawable/cancel"
+        android:title="Адмена"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/settings"
+        android:title="Налады"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <!--<item
+        android:id="@+id/update"
+        android:orderInCategory="100"
+        android:title="@string/update_bibliateka"
+        app:showAsAction="never" />-->
+</menu>

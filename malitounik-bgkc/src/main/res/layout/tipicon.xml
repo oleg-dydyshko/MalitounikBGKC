@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textView13"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:padding="10dp"
+        android:text="@string/SYMBOLS"
+        android:textColor="@color/colorIcons"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/tipicon_fon"
+                android:textColor="@color/colorPrimary" />
+
+            <View
+                android:id="@+id/polosa"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorPrimary" />
+
+            <TableRow
+                android:id="@+id/t1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_column="0"
+                    android:background="@color/colorPost" />
+
+                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
+                    android:text="@string/Post"
+                    android:textColor="@color/colorPrimary_text" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/t2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_column="0"
+                    android:background="@color/colorStrogiPost" />
+
+                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
+                    android:text="@string/Strogi_post"
+                    android:textColor="@color/colorPrimary_text" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/t3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_column="0"
+                    android:background="@color/colorBezPosta"
+                    android:contentDescription="TODO"
+                    tools:ignore="ContentDescription" />
+
+                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
+                    android:text="@string/No_post"
+                    android:textColor="@color/colorPrimary_text" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/t11"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/image5"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_column="0"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/niadzeli_i_sviaty"
+                    android:src="@drawable/znaki_red_kub" />
+
+                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
+                    android:text="@string/niadzeli_i_sviaty"
+                    android:textColor="@color/colorPrimary_text" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/t10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_column="0"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/zvychaynye_dny"
+                    android:src="@drawable/znaki_sery_kub" />
+
+                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
+                    android:text="@string/zvychaynye_dny"
+                    android:textColor="@color/colorPrimary_text" />
+            </TableRow>
+
+            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingTop="10dp"
+                android:text="@string/Znaki_cviat"
+                android:textColor="@color/colorPrimary" />
+
+            <View
+                android:id="@+id/line2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorPrimary" />
+
+            <TableRow
+                android:id="@+id/t5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/image1"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_column="0"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/Vial_Dvun"
+                    android:src="@drawable/znaki_krest_v_kruge" />
+
+                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
+                    android:textColor="@color/colorPrimary" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/t6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/image2"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_column="0"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/Z_Lic_na_ve"
+                    android:src="@drawable/znaki_krest_v_polukruge" />
+
+                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
+                    android:text="@string/Z_Lic_na_ve"
+                    android:textColor="@color/colorPrimary_text" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/t7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/image3"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_column="0"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/Z_v_v_v_u_n_u"
+                    android:src="@drawable/znaki_krest" />
+
+                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
+                    android:text="@string/Z_v_v_v_u_n_u"
+                    android:textColor="@color/colorPrimary_text" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/t8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/image4"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_column="0"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/Z_sh_v_v_u_u"
+                    android:src="@drawable/znaki_ttk" />
+
+                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
+                    android:text="@string/Z_sh_v_v_u_u"
+                    android:textColor="@color/colorPrimary_text" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/t9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/imageView14"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_column="0"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/Z_sh_v_m_u_u"
+                    android:src="@drawable/znaki_ttk_black" />
+
+                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/textView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
+                    android:text="@string/Z_sh_v_m_u_u"
+                    android:textColor="@color/colorPrimary_text" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</LinearLayout>

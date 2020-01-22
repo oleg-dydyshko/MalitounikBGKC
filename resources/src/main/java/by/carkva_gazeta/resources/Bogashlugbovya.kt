@@ -184,16 +184,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         title = "Служба за памерлых — Малая паніхіда"
                         inputStream = resources.openRawResource(R.raw.bogashlugbovya11)
                     }
-                    6 -> {
-                        resurs = "bogashlugbovya9"
-                        title = "Трапары і кандакі нядзельныя васьмі тонаў"
-                        inputStream = resources.openRawResource(R.raw.bogashlugbovya9)
-                    }
-                    7 -> {
-                        resurs = "bogashlugbovya10"
-                        title = "Трапары і кандакі штодзённыя - на кожны дзень тыдня"
-                        inputStream = resources.openRawResource(R.raw.bogashlugbovya10)
-                    }
                 }
             }
             2 -> {

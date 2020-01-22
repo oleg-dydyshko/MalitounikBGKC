@@ -277,7 +277,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
         positionY = (k.getInt(resurs + "Scroll", 0) / resources.displayMetrics.density).toInt()
         WebView.setOnScrollChangedCallback(this)
         WebView.setOnBottomListener(this)
-        if (resurs.intern().contains("bogashlugbovya") || resurs.intern().contains("akafist") || resurs.intern().contains("malitvy") || resurs.intern().contains("ruzanec")) {
+        if (resurs.intern().contains("bogashlugbovya") || resurs.intern().contains("akafist") || resurs.intern().contains("malitvy") || resurs.intern().contains("ruzanec") || resurs.intern().contains("ton")) {
             TextView.visibility = View.GONE
             WebView.visibility = View.VISIBLE
             WebView.loadDataWithBaseURL("malitounikApp-app//carkva-gazeta.by/", loadData(), "text/html", "utf-8", null)

@@ -42,6 +42,8 @@ class MenuGlavnoe : ListFragment() {
                 if (MainActivity.checkmodulesBiblijateka(activity)) {
                     val intent = Intent(activity, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
                     intent.data = activity?.intent?.data
+                    if (activity?.intent?.extras?.containsKey("filePath") == true)
+                        intent.putExtra("filePath", activity?.intent?.extras?.getString("filePath"))
                     startActivity(intent)
                 } else {
                     activity?.let { MainActivity.downloadDynamicModule(it) }

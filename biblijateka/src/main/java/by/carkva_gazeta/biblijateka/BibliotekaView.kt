@@ -9,7 +9,6 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
@@ -688,14 +687,16 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     val t1 = it.toString().indexOf("root")
                     filePath = it.toString().substring(t1 + 4)
                 } else {
-                    val cursor: Cursor?
                     val proj = arrayOf(MediaStore.Images.Media.DATA)
-                    cursor = contentResolver.query(it, proj, null, null, null)
+                    val cursor = contentResolver.query(it, proj, null, null, null)
                     val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
                     cursor?.moveToFirst()
                     filePath = cursor?.getString(columnIndex ?: 0) ?: ""
                     cursor?.close()
                 }
+            }
+            if (intent.extras?.containsKey("filePath") == true) {
+                filePath = intent.extras?.getString("filePath")?: ""
             }
             if (filePath != "") {
                 val t1 = filePath.lastIndexOf("/")
@@ -794,8 +795,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 .autoSpacing(false) // add dynamic spacing to fit each page on its own on the screen
 //.linkHandler(DefaultLinkHandler)
                 .pageFitPolicy(FitPolicy.WIDTH)
-                .pageSnap(true) // snap pages to screen boundaries
-                .pageFling(true) // make a fling change only a single page like ViewPager
+                .pageSnap(false) // snap pages to screen boundaries
+                .pageFling(false) // make a fling change only a single page like ViewPager
                 .nightMode(k.getBoolean("inversion", false)) // toggle night mode
                 .load()
     }
@@ -829,8 +830,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private fun loadFileEPUB(dir: File) {
         animationStoronaLeft = true
         val allEntries: Map<String, *> = k.all
-        for (entry in allEntries.entries) {
-            if (entry.key.contains(fileName)) {
+        for ((key) in allEntries) {
+            if (key.contains(fileName)) {
                 defaultPage = k.getInt(fileName, 0)
                 break
             }
@@ -901,8 +902,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         animationStoronaLeft = true
         biblioteka = null
         val allEntries: Map<String, *> = k.all
-        for (entry in allEntries.entries) {
-            if (entry.key.contains(fileName)) {
+        for ((key) in allEntries) {
+            if (key.contains(fileName)) {
                 defaultPage = k.getInt(fileName, 0)
                 break
             }
@@ -929,10 +930,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         var file = File("$filesDir/Book")
         fb2?.let {
             val map: Map<String, Binary> = it.binaries
-            for (entry in map.entries) {
-                if (entry.key.toLowerCase(Locale.getDefault()).contains("cover")) {
-                    file = File("$filesDir/Book", File(filePath).name.toString() + entry.key)
-                    val buffer = entry.value.binary
+            for ((key, value) in map) {
+                if (key.toLowerCase(Locale.getDefault()).contains("cover")) {
+                    file = File("$filesDir/Book", File(filePath).name.toString() + key)
+                    val buffer = value.binary
                     FileOutputStream(file).use { fout -> fout.write(decode(buffer, DEFAULT)) }
                 }
             }

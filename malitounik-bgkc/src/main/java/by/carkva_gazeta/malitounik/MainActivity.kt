@@ -1509,6 +1509,8 @@ try {
             cytanne = cytanne.replace("Суб.", "")
             cytanne = cytanne.replace("Нядз.", "")
             cytanne = cytanne.replace("Ганне", "")
+            cytanne = cytanne.replace("а", "")
+            cytanne = cytanne.replace("б", "")
             cytanne = cytanne.trim()
             return cytanne
         }

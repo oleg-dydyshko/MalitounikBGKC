@@ -2,7 +2,9 @@ package by.carkva_gazeta.malitounik
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
+import java.io.FileOutputStream
 
 /**
  * Created by oleg on 22.4.17
@@ -35,6 +37,27 @@ class SplashActivity : AppCompatActivity() {
         }
         if (data != null) {
             intent1.data = data
+
+            var file = ""
+            val cursor2 = contentResolver.query(data, arrayOf(MediaStore.MediaColumns.DISPLAY_NAME), null, null, null)
+            cursor2?.moveToFirst()
+            val nameIndex = cursor2?.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
+                    ?: -1
+            if (nameIndex >= 0) {
+                file = cursor2?.getString(nameIndex) ?: ""
+            }
+            cursor2?.close()
+
+            if (file != "") {
+                val filePath = "$filesDir/Book/$file"
+                val inputStream = contentResolver.openInputStream(data)
+                val buffer = ByteArray(8192)
+                var count: Int
+                if (inputStream != null) {
+                    FileOutputStream(filePath).use { fout -> while (inputStream.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count) }
+                }
+                intent1.putExtra("filePath", filePath)
+            }
         }
         startActivity(intent1)
         finish()

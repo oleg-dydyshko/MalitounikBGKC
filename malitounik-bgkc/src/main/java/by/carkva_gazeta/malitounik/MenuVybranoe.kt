@@ -58,11 +58,6 @@ class MenuVybranoe : ListFragment() {
         //MyBackupAgent.requestBackup(getActivity());
     }
 
-    fun onDialogDeliteVybranoeClick(position: Int, name: String) {
-        val dd = DialogDelite.getInstance(position, "", "з выбранага", name)
-        fragmentManager?.let { dd.show(it, "dialog_dilite") }
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let { it ->
@@ -104,8 +99,8 @@ class MenuVybranoe : ListFragment() {
             listAdapter = adapter
             listView.isVerticalScrollBarEnabled = false
             listView.onItemLongClickListener = OnItemLongClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
-                val contextMenuVybranoe = DialogContextMenuVybranoe.getInstance(position, vybranoe[position].data)
-                fragmentManager?.let { contextMenuVybranoe.show(it, "context_menu_vybranoe") }
+                val dd = DialogDelite.getInstance(position, "", "з выбранага", vybranoe[position].data)
+                fragmentManager?.let { dd.show(it, "dialog_dilite") }
                 true
             }
         }
@@ -185,12 +180,6 @@ class MenuVybranoe : ListFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        onDialogDeliteVybranoeClick(id, vybranoe[id].data)
-        return super.onContextItemSelected(item)
-    }
-
     internal inner class MyVybranoeAdapter(private val activity: Activity) : ArrayAdapter<VybranoeData?>(activity, R.layout.simple_list_item_3, R.id.label, vybranoe as List<VybranoeData>) {
         private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
 
@@ -234,7 +223,8 @@ class MenuVybranoe : ListFragment() {
             popup.setOnMenuItemClickListener { menuItem: MenuItem ->
                 popup.dismiss()
                 if (menuItem.itemId == R.id.menu_remove) {
-                    onDialogDeliteVybranoeClick(position, name)
+                    val dd = DialogDelite.getInstance(position, "", "з выбранага", name)
+                    fragmentManager?.let { dd.show(it, "dialog_dilite") }
                     return@setOnMenuItemClickListener true
                 }
                 false

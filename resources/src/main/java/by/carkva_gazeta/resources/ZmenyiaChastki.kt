@@ -59,10 +59,12 @@ internal class ZmenyiaChastki(context: Context) {
         var w1 = w
         val res = StringBuilder()
         w1 = MainActivity.removeZnakiAndSlovy(w1)
+        //w1 = w1.replace("а", "")
+        //w1 = w1.replace("б", "")
         val split = w1.split(";").toTypedArray()
         //String[] split = {"Гал 1.1-10, 20-2.5"};
-        var knigaN: Int
-        var knigaK = 0
+        var knigaN: String
+        var knigaK = "0"
         var zaglnum = 0
         // Мц 1.1-10, 20-2.5, 10-20, 1.21-2.4, 11;
         var chtenie: Int = if (apostal == 1) 0 else 1
@@ -70,6 +72,7 @@ internal class ZmenyiaChastki(context: Context) {
         val zaglavie = split[chtenie].split(",").toTypedArray()
         var zagl = ""
         var zaglavieName = ""
+        var result = ""
         for (e in zaglavie.indices) {
             val zaglav = zaglavie[e].trim { it <= ' ' }
             val zag = zaglav.indexOf(" ", 2)
@@ -96,29 +99,39 @@ internal class ZmenyiaChastki(context: Context) {
             if (glav) {
                 val zagS1 = zagS.indexOf(".")
                 if (zagS1 == -1) {
-                    knigaN = zagS.toInt() // Начало чтения
+                    knigaN = zagS // Начало чтения
                 } else {
                     zaglnum = zagS.substring(0, zagS1).toInt() // Номер главы
-                    knigaN = zagS.substring(zagS1 + 1).toInt() // Начало чтения
+                    knigaN = zagS.substring(zagS1 + 1) // Начало чтения
                 }
             } else if (zag2 == -1) {
                 knigaN = if (zag1 != -1) {
-                    zaglav.substring(zag1 + 1).toInt() // Начало чтения
+                    zaglav.substring(zag1 + 1) // Начало чтения
                 } else {
-                    zaglav.toInt() // Начало чтения
+                    zaglav // Начало чтения
                 }
                 knigaK = knigaN // Конец чтения
             } else {
-                knigaN = zaglav.substring(zag1 + 1, zag2).toInt() // Начало чтения
+                knigaN = zaglav.substring(zag1 + 1, zag2) // Начало чтения
             }
             if (glav) {
-                knigaK = zaglav.substring(zag1 + 1).toInt() // Конец чтения
+                knigaK = zaglav.substring(zag1 + 1) // Конец чтения
             } else if (zag2 != -1) {
                 knigaK = if (zag3 == -1) {
-                    zaglav.substring(zag2 + 1).toInt() // Конец чтения
+                    zaglav.substring(zag2 + 1) // Конец чтения
                 } else {
-                    zaglav.substring(zag3 + 1).toInt() // Конец чтения
+                    zaglav.substring(zag3 + 1) // Конец чтения
                 }
+            }
+            var polstixaA = false
+            var polstixaB = false
+            if (knigaK.contains("а")) {
+                polstixaA = true
+                knigaK = knigaK.replace("а", "")
+            }
+            if (knigaN.contains("б")) {
+                polstixaB = true
+                knigaN = knigaN.replace("б", "")
             }
             var kniga = 0
             //if (zagl.equals("Ціт")) kniga = 0;
@@ -198,7 +211,7 @@ internal class ZmenyiaChastki(context: Context) {
                     val des1 = spl1.length
                     desN = spl1.indexOf("$knigaN.")
                     desK1 = spl2.indexOf("$knigaK.")
-                    var desN1: Int = spl2.indexOf((knigaK + 1).toString().plus("."), desK1)
+                    var desN1: Int = spl2.indexOf((knigaK.toInt() + 1).toString().plus("."), desK1)
                     if (desN1 == -1) {
                         desN1 = spl1.length
                     }
@@ -209,8 +222,33 @@ internal class ZmenyiaChastki(context: Context) {
             }
             val desK = spl.indexOf("\n", desK1)
             if (desK == -1) res.append(spl.substring(desN)) else res.append(spl.substring(desN, desK))
+            result = res.toString()
+            if (polstixaA) {
+                val t2 = result.indexOf("$knigaK.")
+                val t3 = result.indexOf(".", t2)
+                var t1 = result.indexOf(":", t2)
+                if (t1 == -1)
+                    t1 = result.indexOf(";", t3 + 1)
+                if (t1 == -1)
+                    t1 = result.indexOf(".", t3 + 1)
+                if (t1 != -1)
+                    result = result.substring(0, t1 + 1) + "<strike>" + result.substring(t1 + 1, result.length) + "</strike>"
+            }
+            if (polstixaB) {
+                val t2 = result.indexOf("\n")
+                val textPol = result.substring(0, t2 + 1)
+                val t4 = textPol.indexOf("</strong><br>")
+                val t3 = textPol.indexOf(".", t4 + 13)
+                var t1 = textPol.indexOf(":")
+                if (t1 == -1)
+                    t1 = textPol.indexOf(";", t3 + 1)
+                if (t1 == -1)
+                    t1 = textPol.indexOf(".", t3 + 1)
+                if (t1 != -1)
+                    result = result.substring(0, t3 + 1) + "<strike>" + result.substring(t3 + 1, t1 + 1) + "</strike>" + result.substring(t1 + 1, result.length)
+            }
         }
-        return res.toString()
+        return result
     }
 
     fun traparyIKandakiNiadzelnyia(chast: Int): String {

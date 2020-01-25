@@ -195,10 +195,38 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     override fun fileDelite(position: Int, file: String) {
-        val file1 = File("$filesDir/Biblijateka/$file")
+        var file1 = File("$filesDir/Biblijateka/$file")
         if (file1.exists()) {
             file1.delete()
+        } else {
+            val t1 = file.lastIndexOf(".")
+            val dirName = file.substring(0, t1)
+            var t2 = dirName.lastIndexOf("/")
+            var patch = "$filesDir/Book/" + dirName.substring(t2 + 1)
+            file1 = File(patch)
+            if (file1.exists() && file1.isDirectory) {
+                file1.deleteRecursively()
+            } else {
+                t2 = file.lastIndexOf("/")
+                patch = "$filesDir/Book/" + file.substring(t2 + 1)
+                file1 = File(patch)
+                if (file1.exists())
+                    file1.delete()
+            }
         }
+        var position1 = 0
+        naidaunia.forEachIndexed { index, arrayList1 ->
+            if (arrayList1[0] == arrayList[position][0]) {
+                position1 = index
+            }
+        }
+        arrayList.removeAt(position)
+        naidaunia.removeAt(position1)
+        val gson = Gson()
+        val prefEditor: SharedPreferences.Editor = k.edit()
+        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+        prefEditor.apply()
+        adapter.notifyDataSetChanged()
         popup?.menu?.getItem(2)?.isVisible = false
     }
 
@@ -502,6 +530,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     dialogBibliateka.show(supportFragmentManager, "dialog_bibliateka")
                 }
             }
+        }
+        listView.setOnItemLongClickListener { _, _, position, _ ->
+            val dd = DialogDelite.getInstance(position, arrayList[position][1], "з нядаўніх кніг", arrayList[position][0])
+            dd.show(supportFragmentManager, "dialog_dilite")
+            true
         }
 
         animInRight = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_right)
@@ -842,15 +875,15 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             defaultPage = 0
             positionY = 0
         }
-        val split: Array<String> = biblioteka?.content?.get(defaultPage)?.get(1)?.split("#")?.toTypedArray()
-                ?: arrayOf("")
-        val epubfile = File(dir.absolutePath.toString() + "/" + split[0])
-        val inputStream = FileReader(epubfile)
-        val reader = BufferedReader(inputStream)
-        val builder = reader.readText()
-        inputStream.close()
-        val ebubcontent = builder.replace("</head>", "<style type=\"text/css\">::selection {background: #eb9b9a}</style></head>")
-        webView.loadDataWithBaseURL(null, ebubcontent, "text/html", "utf-8", null)
+        val split: Array<String> = biblioteka?.content?.get(defaultPage)?.get(1)?.split("#")?.toTypedArray()?: arrayOf("")
+        //val epubfile = File(dir.absolutePath.toString() + "/" + split[0])
+        //val inputStream = FileReader(epubfile)
+        //val reader = BufferedReader(inputStream)
+        //val builder = reader.readText()
+        //inputStream.close()
+        //val ebubcontent = builder.replace("</head>", "<style type=\"text/css\">::selection {background: #eb9b9a}</style></head>")
+        //webView.loadDataWithBaseURL(null, ebubcontent, "text/html", "utf-8", null)
+        webView.loadUrl("file://" + dir.absolutePath.toString() + "/" + split[0])
         //webView.loadUrl("file://" + dir.getAbsolutePath() + "/" + split[0])
         webView.scrollTo(0, positionY)
         bookTitle.clear()

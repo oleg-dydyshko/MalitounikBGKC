@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
+import java.io.File
 import java.io.FileOutputStream
 
 /**
@@ -49,6 +50,9 @@ class SplashActivity : AppCompatActivity() {
             cursor2?.close()
 
             if (file != "") {
+                val dir = File("$filesDir/Book")
+                if (!dir.exists())
+                    dir.mkdir()
                 val filePath = "$filesDir/Book/$file"
                 val inputStream = contentResolver.openInputStream(data)
                 val buffer = ByteArray(8192)

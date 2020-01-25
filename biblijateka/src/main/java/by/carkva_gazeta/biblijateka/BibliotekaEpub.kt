@@ -92,28 +92,38 @@ internal class BibliotekaEpub(dirPatch: String) {
 
     val titleImage: String
         get() {
-            var file = File(patch + contentOpf)
+            val file = File(patch + contentOpf)
             var inputStream = FileReader(file)
             var reader = BufferedReader(inputStream)
-            var builder = reader.readText()
+            var spineSrc = reader.readText()
             inputStream.close()
-            var spineSrc = builder
-            val t1 = spineSrc.indexOf("id=\"cover\"")
-            val t2 = spineSrc.indexOf("href=\"", t1 + 10)
-            val t3 = spineSrc.indexOf("\"", t2 + 6)
-            file = File(patch + spineSrc.substring(t2 + 6, t3))
-            inputStream = FileReader(file)
-            reader = BufferedReader(inputStream)
-            builder = reader.readText()
-            inputStream.close()
-            spineSrc = builder
-            val t4 = spineSrc.indexOf("<img")
-            val t5 = spineSrc.indexOf("src=\"", t4 + 4)
-            val t6 = spineSrc.indexOf("\"", t5 + 5)
-            var res = spineSrc.substring(t5 + 5, t6)
-            res = File(res).canonicalPath
-            val t7 = res.indexOf("/")
-            res = res.substring(t7 + 1)
+            val item = spineSrc.split("<item")
+            var res = ""
+            var t2: Int
+            var t3: Int
+            var rashirenie = arrayOf("", "")
+            item.forEach {
+                val t1 = it.indexOf("id=\"cover\"")
+                if (t1 != -1) {
+                    t2 = it.indexOf("href=\"")
+                    t3 = it.indexOf("\"", t2 + 6)
+                    res = it.substring(t2 + 6, t3)
+                    rashirenie = it.substring(t2 + 6, t3).split(".").toTypedArray()
+                }
+            }
+            if (rashirenie[1] != "jpg") {
+                inputStream = FileReader(File(patch + res))
+                reader = BufferedReader(inputStream)
+                spineSrc = reader.readText()
+                inputStream.close()
+                val t4 = spineSrc.indexOf("<img")
+                val t5 = spineSrc.indexOf("src=\"", t4 + 4)
+                val t6 = spineSrc.indexOf("\"", t5 + 5)
+                res = spineSrc.substring(t5 + 5, t6)
+                res = File(res).canonicalPath
+                val t7 = res.indexOf("/")
+                res = res.substring(t7 + 1)
+            }
             return patch + res
         }
 

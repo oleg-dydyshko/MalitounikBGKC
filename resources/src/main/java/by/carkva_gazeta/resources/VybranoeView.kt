@@ -432,7 +432,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                         var sv = zmenyiaChastki.sviatyia()
                         if (sv != "") {
                             val s1 = sv.split(":").toTypedArray()
-                            val s2 = s1[1].split("").toTypedArray()
+                            val s2 = s1[1].split(";").toTypedArray()
                             sv = s1[0] + ":" + s2[0]
                             builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=8\">").append(color).append(sv).append("</font></a>").append("<br><br>\n")
                         } else builder.append(line)
@@ -447,7 +447,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                         var sv = zmenyiaChastki.sviatyia()
                         if (sv != "") {
                             val s1 = sv.split(":").toTypedArray()
-                            val s2 = s1[1].split("").toTypedArray()
+                            val s2 = s1[1].split(";").toTypedArray()
                             sv = s1[0] + ":" + s2[1]
                             builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=9\">").append(color).append(sv).append("</font></a>").append("<br><br>\n")
                         } else builder.append(line)

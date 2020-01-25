@@ -23,8 +23,6 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.DialogContextMenuVybranoe.Companion.getInstance
-import by.carkva_gazeta.malitounik.DialogContextMenuVybranoe.DialogContextMenuVybranoeListener
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MaranAtaGlobalList
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -38,7 +36,7 @@ import java.io.FileWriter
 import java.util.*
 import kotlin.collections.ArrayList
 
-class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickListener, ZakladkaDeliteListiner, DialogDeliteAllZakladkiINatatkiListener, DialogContextMenuVybranoeListener {
+class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickListener, ZakladkaDeliteListiner, DialogDeliteAllZakladkiINatatkiListener {
     private lateinit var adapter: BibleZakladkiListAdaprer
     private var semuxa = 1
     private var dzenNoch = false
@@ -74,11 +72,6 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
         help.visibility = View.VISIBLE
         ListView.visibility = View.GONE
         invalidateOptionsMenu()
-    }
-
-    override fun onDialogDeliteVybranoeClick(position: Int, name: String) {
-        val delite = DialogZakladkaDelite.getInstance(position, name, semuxa, true)
-        delite.show(supportFragmentManager, "zakladka_delite")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -448,8 +441,8 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
         val t1 = data[position].indexOf("\n\n")
         val t2: Int
         t2 = if (semuxa == 1) data[position].indexOf(". ", t1) else data[position].indexOf(" ", t1)
-        val vybranoe = getInstance(position, data[position].substring(0, t1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + data[position].substring(t1 + 2, t2))
-        vybranoe.show(supportFragmentManager, "context_menu_vybranoe")
+        val delite = DialogZakladkaDelite.getInstance(position, data[position].substring(0, t1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + data[position].substring(t1 + 2, t2), semuxa, true)
+        delite.show(supportFragmentManager, "zakladka_delite")
         return true
     }
 

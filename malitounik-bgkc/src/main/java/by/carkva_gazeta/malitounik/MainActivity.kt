@@ -48,7 +48,7 @@ import kotlin.math.roundToLong
 
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
-class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, DialogContextMenuVybranoe.DialogContextMenuVybranoeListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener {
 
     private var setAlarm = true
     private lateinit var c: GregorianCalendar
@@ -98,10 +98,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
     override fun onDialogDeliteClick(position: Int, name: String) {
         menuNatatki?.onDialogDeliteClick(position, name)
-    }
-
-    override fun onDialogDeliteVybranoeClick(position: Int, name: String) {
-        vybranoe?.onDialogDeliteVybranoeClick(position, name)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -1509,8 +1505,6 @@ try {
             cytanne = cytanne.replace("Суб.", "")
             cytanne = cytanne.replace("Нядз.", "")
             cytanne = cytanne.replace("Ганне", "")
-            cytanne = cytanne.replace("а", "")
-            cytanne = cytanne.replace("б", "")
             cytanne = cytanne.trim()
             return cytanne
         }

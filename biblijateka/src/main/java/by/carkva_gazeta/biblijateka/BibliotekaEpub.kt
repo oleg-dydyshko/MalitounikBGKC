@@ -102,13 +102,16 @@ internal class BibliotekaEpub(dirPatch: String) {
             var t2: Int
             var t3: Int
             var rashirenie = arrayOf("", "")
-            item.forEach {
-                val t1 = it.indexOf("id=\"cover\"")
-                if (t1 != -1) {
-                    t2 = it.indexOf("href=\"")
-                    t3 = it.indexOf("\"", t2 + 6)
-                    res = it.substring(t2 + 6, t3)
-                    rashirenie = it.substring(t2 + 6, t3).split(".").toTypedArray()
+            run item@{
+                item.forEach {
+                    val t1 = it.indexOf("id=\"cover\"")
+                    if (t1 != -1) {
+                        t2 = it.indexOf("href=\"")
+                        t3 = it.indexOf("\"", t2 + 6)
+                        res = it.substring(t2 + 6, t3)
+                        rashirenie = it.substring(t2 + 6, t3).split(".").toTypedArray()
+                        return@item
+                    }
                 }
             }
             if (rashirenie[1] != "jpg") {

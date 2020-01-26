@@ -74,6 +74,15 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
     private var title: String = ""
     private var editVybranoe = false
     private var mActionDown = false
+    private val orientation: Int
+        get() {
+            val rotation = windowManager.defaultDisplay.rotation
+            val displayOrientation = resources.configuration.orientation
+            if (displayOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                return if (rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_180) ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE else ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            } else if (rotation == Surface.ROTATION_180 || rotation == Surface.ROTATION_90) return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+            return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
 
     companion object {
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -165,15 +174,6 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
             }
             return check
         }
-    }
-
-    private fun getOrientation(): Int {
-        val rotation = windowManager.defaultDisplay.rotation
-        val displayOrientation = resources.configuration.orientation
-        if (displayOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            return if (rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_180) ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE else ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        } else if (rotation == Surface.ROTATION_180 || rotation == Surface.ROTATION_90) return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-        return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     override fun onDialogFontSizePositiveClick() {
@@ -294,7 +294,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
             prefEditor.apply()
         }
         requestedOrientation = if (k.getBoolean("orientation", false)) {
-            getOrientation()
+            orientation
         } else {
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
@@ -518,76 +518,55 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
     }
 
     private fun stopProcent() {
-        if (procentTimer != null) {
-            procentTimer?.cancel()
-            procentTimer = null
-        }
-        procentSchedule = null
+        procentTimer?.cancel()
+        procentSchedule?.cancel()
     }
 
     private fun startProcent() {
         g = Calendar.getInstance() as GregorianCalendar
-        if (procentTimer == null) {
-            procentTimer = Timer()
-            if (procentSchedule != null) {
-                procentSchedule?.cancel()
-                procentSchedule = null
-            }
-            procentSchedule = object : TimerTask() {
-                override fun run() {
-                    val g2: GregorianCalendar = Calendar.getInstance() as GregorianCalendar
-                    if (g.timeInMillis + 1000 <= g2.timeInMillis) {
-                        runOnUiThread {
-                            progress.visibility = View.GONE
-                            stopProcent()
-                        }
+        procentTimer = Timer()
+        procentSchedule?.cancel()
+        procentSchedule = object : TimerTask() {
+            override fun run() {
+                val g2: GregorianCalendar = Calendar.getInstance() as GregorianCalendar
+                if (g.timeInMillis + 1000 <= g2.timeInMillis) {
+                    runOnUiThread {
+                        progress.visibility = View.GONE
+                        stopProcent()
                     }
                 }
             }
-            procentTimer?.schedule(procentSchedule, 20, 20)
         }
+        procentTimer?.schedule(procentSchedule, 20, 20)
     }
 
     private fun stopAutoScroll() {
-        if (scrollTimer != null) {
-            scrollTimer?.cancel()
-            scrollTimer = null
-        }
-        scrollerSchedule = null
-        if (resetTimer == null) {
-            resetTimer = Timer()
-            val resetSchedule: TimerTask = object : TimerTask() {
-                override fun run() {
-                    runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
-                }
+        scrollTimer?.cancel()
+        scrollerSchedule?.cancel()
+        resetTimer = Timer()
+        val resetSchedule: TimerTask = object : TimerTask() {
+            override fun run() {
+                runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
-            resetTimer?.schedule(resetSchedule, 60000)
         }
+        resetTimer?.schedule(resetSchedule, 60000)
     }
 
     private fun startAutoScroll() {
-        if (resetTimer != null) {
-            resetTimer?.cancel()
-            resetTimer = null
-        }
-        if (scrollTimer == null) {
-            scrollTimer = Timer()
-            if (scrollerSchedule != null) {
-                scrollerSchedule?.cancel()
-                scrollerSchedule = null
-            }
-            scrollerSchedule = object : TimerTask() {
-                override fun run() {
-                    runOnUiThread {
-                        if (!mActionDown && !MainActivity.dialogVisable) {
-                            WebView.scrollBy(0, 2)
-                        }
+        resetTimer?.cancel()
+        scrollTimer = Timer()
+        scrollerSchedule?.cancel()
+        scrollerSchedule = object : TimerTask() {
+            override fun run() {
+                runOnUiThread {
+                    if (!mActionDown && !MainActivity.dialogVisable) {
+                        WebView.scrollBy(0, 2)
                     }
                 }
             }
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
         }
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     @SuppressLint("SetTextI18n")
@@ -844,7 +823,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
         if (id == by.carkva_gazeta.malitounik.R.id.action_orientation) {
             item.isChecked = !item.isChecked
             if (item.isChecked) {
-                requestedOrientation = getOrientation()
+                requestedOrientation = orientation
                 prefEditor.putBoolean("orientation", true)
             } else {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
@@ -934,9 +913,6 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
     }
 
     override fun onBackPressed() {
-        val prefEditor = k.edit()
-        prefEditor.putInt(resurs + "Scroll", positionY)
-        prefEditor.apply()
         if (fullscreenPage) {
             fullscreenPage = false
             show()
@@ -958,6 +934,18 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
             else
                 super.onBackPressed()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val prefEditor = k.edit()
+        prefEditor.putInt(resurs + "Scroll", positionY)
+        prefEditor.apply()
+        stopAutoScroll()
+        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        scrollTimer?.cancel()
+        resetTimer?.cancel()
+        procentTimer?.cancel()
     }
 
     override fun onResume() {

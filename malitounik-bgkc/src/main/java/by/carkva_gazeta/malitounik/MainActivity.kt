@@ -115,8 +115,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 15
             }
         } else {
-            val lp: WindowManager.LayoutParams = window.attributes
-            lp.screenBrightness = (brightness / 100).toFloat()
+            val lp = window.attributes
+            lp.screenBrightness = brightness.toFloat() / 100
             window.attributes = lp
         }
         k = getSharedPreferences("biblia", MODE_PRIVATE)

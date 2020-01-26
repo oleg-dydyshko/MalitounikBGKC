@@ -63,6 +63,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var procentTimer: Timer? = null
     private var scrollerSchedule: TimerTask? = null
     private var procentSchedule: TimerTask? = null
+    private var resetTimer: Timer? = null
     private lateinit var g: GregorianCalendar
     private var levo = false
     private var pravo = false
@@ -902,63 +903,55 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     }
 
     private fun stopProcent() {
-        if (procentTimer != null) {
-            procentTimer?.cancel()
-            procentTimer = null
-        }
-        procentSchedule = null
+        procentTimer?.cancel()
+        procentSchedule?.cancel()
     }
 
     private fun startProcent() {
         g = Calendar.getInstance() as GregorianCalendar
-        if (procentTimer == null) {
-            procentTimer = Timer()
-            if (procentSchedule != null) {
-                procentSchedule?.cancel()
-                procentSchedule = null
-            }
-            procentSchedule = object : TimerTask() {
-                override fun run() {
-                    val g2 = Calendar.getInstance() as GregorianCalendar
-                    if (g.timeInMillis + 1000 <= g2.timeInMillis) {
-                        runOnUiThread {
-                            progress.visibility = View.GONE
-                            stopProcent()
-                        }
+        procentTimer = Timer()
+        procentSchedule?.cancel()
+        procentSchedule = object : TimerTask() {
+            override fun run() {
+                val g2 = Calendar.getInstance() as GregorianCalendar
+                if (g.timeInMillis + 1000 <= g2.timeInMillis) {
+                    runOnUiThread {
+                        progress.visibility = View.GONE
+                        stopProcent()
                     }
                 }
             }
-            procentTimer?.schedule(procentSchedule, 20, 20)
         }
+        procentTimer?.schedule(procentSchedule, 20, 20)
     }
 
     private fun stopAutoScroll() {
-        if (scrollTimer != null) {
-            scrollTimer?.cancel()
-            scrollTimer = null
+        scrollTimer?.cancel()
+        scrollerSchedule?.cancel()
+        resetTimer = Timer()
+        val resetSchedule: TimerTask = object : TimerTask() {
+            override fun run() {
+                runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+            }
         }
-        scrollerSchedule = null
+        resetTimer?.schedule(resetSchedule, 60000)
     }
 
     private fun startAutoScroll() {
-        if (scrollTimer == null) {
-            scrollTimer = Timer()
-            if (scrollerSchedule != null) {
-                scrollerSchedule?.cancel()
-                scrollerSchedule = null
-            }
-            scrollerSchedule = object : TimerTask() {
-                override fun run() {
-                    runOnUiThread {
-                        if (!mActionDown && !MainActivity.dialogVisable) {
-                            InteractiveScroll.smoothScrollBy(0, 2)
-                        }
+        resetTimer?.cancel()
+        scrollTimer = Timer()
+        scrollerSchedule?.cancel()
+        scrollerSchedule = object : TimerTask() {
+            override fun run() {
+                runOnUiThread {
+                    if (!mActionDown && !MainActivity.dialogVisable) {
+                        InteractiveScroll.smoothScrollBy(0, 2)
                     }
                 }
             }
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
         }
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -1015,8 +1008,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         super.onPause()
         stopAutoScroll()
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollerSchedule = null
-        scrollTimer = null
+        scrollTimer?.cancel()
+        resetTimer?.cancel()
+        procentTimer?.cancel()
     }
 
     override fun onResume() {

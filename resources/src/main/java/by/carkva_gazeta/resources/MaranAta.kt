@@ -100,52 +100,39 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     private fun stopAutoScroll() {
-        if (scrollTimer != null) {
-            scrollTimer?.cancel()
-            scrollTimer = null
-        }
-        scrollerSchedule = null
-        if (resetTimer == null) {
-            resetTimer = Timer()
-            val resetSchedule: TimerTask = object : TimerTask() {
-                override fun run() {
-                    runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
-                }
+        scrollTimer?.cancel()
+        scrollerSchedule?.cancel()
+        resetTimer = Timer()
+        val resetSchedule: TimerTask = object : TimerTask() {
+            override fun run() {
+                runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
-            resetTimer?.schedule(resetSchedule, 60000)
         }
+        resetTimer?.schedule(resetSchedule, 60000)
     }
 
     private fun startAutoScroll() {
-        if (resetTimer != null) {
-            resetTimer?.cancel()
-            resetTimer = null
-        }
-        if (scrollTimer == null) {
-            scrollTimer = Timer()
-            if (scrollerSchedule != null) {
-                scrollerSchedule?.cancel()
-                scrollerSchedule = null
-            }
-            scrollerSchedule = object : TimerTask() {
-                override fun run() {
-                    runOnUiThread {
-                        forceScroll()
-                        if (!mActionDown && !MainActivity.dialogVisable) {
-                            val firstPosition = ListView.firstVisiblePosition
-                            if (firstPosition == INVALID_POSITION) {
-                                return@runOnUiThread
-                            }
-                            val firstView = ListView.getChildAt(0) ?: return@runOnUiThread
-                            val newTop = firstView.top - 2
-                            ListView.setSelectionFromTop(firstPosition, newTop)
+        resetTimer?.cancel()
+        scrollTimer = Timer()
+        scrollerSchedule?.cancel()
+        scrollerSchedule = object : TimerTask() {
+            override fun run() {
+                runOnUiThread {
+                    forceScroll()
+                    if (!mActionDown && !MainActivity.dialogVisable) {
+                        val firstPosition = ListView.firstVisiblePosition
+                        if (firstPosition == INVALID_POSITION) {
+                            return@runOnUiThread
                         }
+                        val firstView = ListView.getChildAt(0) ?: return@runOnUiThread
+                        val newTop = firstView.top - 2
+                        ListView.setSelectionFromTop(firstPosition, newTop)
                     }
                 }
             }
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
         }
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     private fun forceScroll() {
@@ -906,34 +893,26 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     private fun stopProcent() {
-        if (procentTimer != null) {
-            procentTimer?.cancel()
-            procentTimer = null
-        }
-        procentSchedule = null
+        procentTimer?.cancel()
+        procentSchedule?.cancel()
     }
 
     private fun startProcent() {
         g = Calendar.getInstance() as GregorianCalendar
-        if (procentTimer == null) {
-            procentTimer = Timer()
-            if (procentSchedule != null) {
-                procentSchedule?.cancel()
-                procentSchedule = null
-            }
-            procentSchedule = object : TimerTask() {
-                override fun run() {
-                    val g2 = Calendar.getInstance() as GregorianCalendar
-                    if (g.timeInMillis + 1000 <= g2.timeInMillis) {
-                        runOnUiThread {
-                            progress.visibility = View.GONE
-                            stopProcent()
-                        }
+        procentTimer = Timer()
+        procentSchedule?.cancel()
+        procentSchedule = object : TimerTask() {
+            override fun run() {
+                val g2 = Calendar.getInstance() as GregorianCalendar
+                if (g.timeInMillis + 1000 <= g2.timeInMillis) {
+                    runOnUiThread {
+                        progress.visibility = View.GONE
+                        stopProcent()
                     }
                 }
             }
-            procentTimer?.schedule(procentSchedule, 20, 20)
         }
+        procentTimer?.schedule(procentSchedule, 20, 20)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -976,8 +955,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         super.onPause()
         stopAutoScroll()
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollerSchedule = null
-        scrollTimer = null
         if (addboldUnderline) {
             clearEmptyPosition()
             val file: File = if (belarus) {
@@ -997,10 +974,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
             //MyBackupAgent.requestBackup(this);
         }
-        if (resetTimer != null) {
-            resetTimer?.cancel()
-            resetTimer = null
-        }
+        scrollTimer?.cancel()
+        resetTimer?.cancel()
+        procentTimer?.cancel()
     }
 
     override fun onResume() {

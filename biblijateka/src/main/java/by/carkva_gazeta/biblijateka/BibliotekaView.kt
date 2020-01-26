@@ -132,6 +132,15 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var animationStoronaLeft = true
     private var site = false
     private var mActionDown = false
+    private val orientation: Int
+        get() {
+            val rotation = windowManager.defaultDisplay.rotation
+            val displayOrientation = resources.configuration.orientation
+            if (displayOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                return if (rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_180) ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE else ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            } else if (rotation == Surface.ROTATION_180 || rotation == Surface.ROTATION_90) return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+            return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
     private val animationListenerOutRight: AnimationListener = object : AnimationListener {
         override fun onAnimationStart(animation: Animation) {}
         override fun onAnimationEnd(animation: Animation) {
@@ -297,15 +306,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         pdfError.show(supportFragmentManager, "pdf_error")
     }
 
-    private fun getOrientation(): Int {
-        val rotation = windowManager.defaultDisplay.rotation
-        val displayOrientation = resources.configuration.orientation
-        if (displayOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            return if (rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_180) ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE else ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        } else if (rotation == Surface.ROTATION_180 || rotation == Surface.ROTATION_90) return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-        return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    }
-
     override fun onDialogFile(file: File) {
         onClick(label1)
         filePath = file.absolutePath
@@ -428,7 +428,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         width = size.x
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
-            lp.screenBrightness = (MainActivity.brightness / 100).toFloat()
+            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -668,7 +668,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
 
         requestedOrientation = if (k.getBoolean("orientation", false)) {
-            getOrientation()
+            orientation
         } else {
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
@@ -729,7 +729,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
             }
             if (intent.extras?.containsKey("filePath") == true) {
-                filePath = intent.extras?.getString("filePath")?: ""
+                filePath = intent.extras?.getString("filePath") ?: ""
             }
             if (filePath != "") {
                 val t1 = filePath.lastIndexOf("/")
@@ -875,7 +875,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             defaultPage = 0
             positionY = 0
         }
-        val split: Array<String> = biblioteka?.content?.get(defaultPage)?.get(1)?.split("#")?.toTypedArray()?: arrayOf("")
+        val split: Array<String> = biblioteka?.content?.get(defaultPage)?.get(1)?.split("#")?.toTypedArray()
+                ?: arrayOf("")
         //val epubfile = File(dir.absolutePath.toString() + "/" + split[0])
         //val inputStream = FileReader(epubfile)
         //val reader = BufferedReader(inputStream)
@@ -1324,7 +1325,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         if (id == by.carkva_gazeta.malitounik.R.id.action_orientation) {
             item.isChecked = !item.isChecked
             if (item.isChecked) {
-                requestedOrientation = getOrientation()
+                requestedOrientation = orientation
                 prefEditor.putBoolean("orientation", true)
             } else {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
@@ -1388,12 +1389,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         prefEditor.apply()
         stopAutoScroll()
-        scrollerSchedule = null
-        scrollTimer = null
-        if (resetTimer != null) {
-            resetTimer?.cancel()
-            resetTimer = null
-        }
+        scrollTimer?.cancel()
+        resetTimer?.cancel()
+        procentTimer?.cancel()
     }
 
     override fun onBackPressed() {
@@ -1440,8 +1438,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 webView.visibility = View.GONE
             }
             stopAutoScroll()
-            scrollerSchedule = null
-            scrollTimer = null
         } else {
             if (site) {
                 val intent = Intent(this, MainActivity::class.java)
@@ -1734,77 +1730,56 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     private fun stopAutoScroll() {
         webView.setOnBottomListener(null)
-        if (scrollTimer != null) {
-            scrollTimer?.cancel()
-            scrollTimer = null
-        }
-        scrollerSchedule = null
-        if (resetTimer == null) {
-            resetTimer = Timer()
-            val resetSchedule: TimerTask = object : TimerTask() {
-                override fun run() {
-                    runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
-                }
+        scrollTimer?.cancel()
+        scrollerSchedule?.cancel()
+        resetTimer = Timer()
+        val resetSchedule: TimerTask = object : TimerTask() {
+            override fun run() {
+                runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
-            resetTimer?.schedule(resetSchedule, 60000)
         }
+        resetTimer?.schedule(resetSchedule, 60000)
     }
 
     private fun startAutoScroll() {
-        if (resetTimer != null) {
-            resetTimer?.cancel()
-            resetTimer = null
-        }
+        resetTimer?.cancel()
         webView.setOnBottomListener(this)
-        if (scrollTimer == null) {
-            scrollTimer = Timer()
-            if (scrollerSchedule != null) {
-                scrollerSchedule?.cancel()
-                scrollerSchedule = null
-            }
-            scrollerSchedule = object : TimerTask() {
-                override fun run() {
-                    runOnUiThread {
-                        if (!mActionDown && !drawer_layout.isDrawerOpen(GravityCompat.START) && !MainActivity.dialogVisable) {
-                            webView.scrollBy(0, 2)
-                        }
+        scrollTimer = Timer()
+        scrollerSchedule?.cancel()
+        scrollerSchedule = object : TimerTask() {
+            override fun run() {
+                runOnUiThread {
+                    if (!mActionDown && !drawer_layout.isDrawerOpen(GravityCompat.START) && !MainActivity.dialogVisable) {
+                        webView.scrollBy(0, 2)
                     }
                 }
             }
-            scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
+        scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun stopProcent() {
-        if (procentTimer != null) {
-            procentTimer?.cancel()
-            procentTimer = null
-        }
-        procentSchedule = null
+        procentTimer?.cancel()
+        procentSchedule?.cancel()
     }
 
     private fun startProcent() {
         g = Calendar.getInstance() as GregorianCalendar
-        if (procentTimer == null) {
-            procentTimer = Timer()
-            if (procentSchedule != null) {
-                procentSchedule?.cancel()
-                procentSchedule = null
-            }
-            procentSchedule = object : TimerTask() {
-                override fun run() {
-                    val g2: GregorianCalendar = Calendar.getInstance() as GregorianCalendar
-                    if (g.timeInMillis + 1000 <= g2.timeInMillis) {
-                        runOnUiThread {
-                            progress.visibility = View.GONE
-                            stopProcent()
-                        }
+        procentTimer = Timer()
+        procentSchedule?.cancel()
+        procentSchedule = object : TimerTask() {
+            override fun run() {
+                val g2: GregorianCalendar = Calendar.getInstance() as GregorianCalendar
+                if (g.timeInMillis + 1000 <= g2.timeInMillis) {
+                    runOnUiThread {
+                        progress.visibility = View.GONE
+                        stopProcent()
                     }
                 }
             }
-            procentTimer?.schedule(procentSchedule, 20, 20)
         }
+        procentTimer?.schedule(procentSchedule, 20, 20)
     }
 
     private fun showPopupMenu(view: View, position: Int, name: String) {

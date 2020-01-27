@@ -464,7 +464,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             listView?.visibility = View.GONE
             var edit = editText?.text.toString()
             if (edit != "") {
-                edit = edit.trim { it <= ' ' }
+                edit = edit.trim()
                 editText?.setText(edit)
                 prefEditors.putString("search_string", edit)
                 prefEditors.apply()
@@ -838,7 +838,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                     var prepinanie = bibleline[r]
                                     if (prepinanie.contains("//")) {
                                         val t1 = prepinanie.indexOf("//")
-                                        prepinanie = if (t1 == 0) continue else prepinanie.substring(0, t1).trim { it <= ' ' }
+                                        prepinanie = if (t1 == 0) continue else prepinanie.substring(0, t1).trim()
                                     }
                                     stix++
                                     if (chin?.getInt("slovocalkam", 0) == 1) prepinanie = " " + bibleline[r] + " "

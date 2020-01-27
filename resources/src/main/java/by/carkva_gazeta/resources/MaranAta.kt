@@ -65,11 +65,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var yS = 0
     private var spid = 60
     private var belarus = false
-    private var scrollTimer: Timer? = null
-    private var procentTimer: Timer? = null
-    private var resetTimer: Timer? = null
-    private var scrollerSchedule: TimerTask? = null
-    private var procentSchedule: TimerTask? = null
+    private var scrollTimer: Timer = Timer()
+    private var procentTimer: Timer = Timer()
+    private var resetTimer: Timer = Timer()
     private lateinit var g: GregorianCalendar
     private var levo = false
     private var pravo = false
@@ -100,22 +98,20 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     private fun stopAutoScroll() {
-        scrollTimer?.cancel()
-        scrollerSchedule?.cancel()
+        scrollTimer.cancel()
         resetTimer = Timer()
         val resetSchedule: TimerTask = object : TimerTask() {
             override fun run() {
                 runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
         }
-        resetTimer?.schedule(resetSchedule, 60000)
+        resetTimer.schedule(resetSchedule, 60000)
     }
 
     private fun startAutoScroll() {
-        resetTimer?.cancel()
+        resetTimer.cancel()
         scrollTimer = Timer()
-        scrollerSchedule?.cancel()
-        scrollerSchedule = object : TimerTask() {
+        val scrollerSchedule = object : TimerTask() {
             override fun run() {
                 runOnUiThread {
                     forceScroll()
@@ -132,7 +128,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     private fun forceScroll() {
@@ -582,7 +578,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         val chten = cytanne.split(";").toTypedArray()
         for (i in chten.indices) {
-            val fit = chten[i].trim { it <= ' ' }
+            val fit = chten[i].trim()
             try {
                 var nachalo: Int
                 var konec: Int
@@ -777,11 +773,11 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 val reader = BufferedReader(isr)
                 var line: String
                 val builder = StringBuilder()
-                reader.forEachLine { it ->
+                reader.forEachLine {
                     line = it
                     if (line.contains("//")) {
                         val t1 = line.indexOf("//")
-                        line = line.substring(0, t1).trim { it <= ' ' }
+                        line = line.substring(0, t1).trim()
                         if (line != "") builder.append(line).append("\n")
                     } else {
                         builder.append(line).append("\n")
@@ -791,7 +787,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     if (belarus) {
                         if (line.contains("//")) {
                             val t1 = line.indexOf("//")
-                            line = line.substring(0, t1).trim { it <= ' ' }
+                            line = line.substring(0, t1).trim()
                             if (line != "") builder.append(line).append("\n")
                             continue
                         }
@@ -818,10 +814,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         if (s5 != -1) {
                             if (e == nachalo) {
                                 vN = if (belarus) split2[e].indexOf("$stixn. ") else split2[e].indexOf("$stixn ")
-                                r1.append(split2[e].substring(vN).trim { it <= ' ' })
+                                r1.append(split2[e].substring(vN).trim())
                             }
                             if (e != nachalo && e != konec) {
-                                r1.append("\n").append(split2[e].trim { it <= ' ' })
+                                r1.append("\n").append(split2[e].trim())
                             }
                             if (e == konec) {
                                 val vK1: Int = if (belarus) split2[e].indexOf("$stixk. ") else split2[e].indexOf("$stixk ")
@@ -846,7 +842,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         } else {
                             maranAta.add("<!--no--><!--nazva+++" + ParalelnyeMesta.nazva + " " + e + "--><br><strong>" + ParalelnyeMesta.nazva + " " + e + "</strong><br>\n")
                         }
-                        val splitline = split2[e].trim { it <= ' ' }.split("\n").toTypedArray()
+                        val splitline = split2[e].trim().split("\n").toTypedArray()
                         var i3: Int
                         for (i2 in splitline.indices) {
                             i3 = if (ParalelnyeMesta.kniga.contains("Сир") && e == 1 && i2 >= 8) i2 - 7 else i2 + 1
@@ -861,7 +857,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     } else {
                         maranAta.add("<!--no--><!--nazva+++" + ParalelnyeMesta.nazva + " " + fit.substring(s2 + 1, t1) + "--><br><strong>" + ParalelnyeMesta.nazva + " " + fit.substring(s2 + 1) + "</strong><br>\n")
                     }
-                    val res1 = r1.toString().trim { it <= ' ' }.split("\n").toTypedArray()
+                    val res1 = r1.toString().trim().split("\n").toTypedArray()
                     var i2 = 0
                     var i3 = stixn
                     while (i2 < res1.size) {
@@ -870,7 +866,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         i3++
                     }
                     if (konec - nachalo != 0) {
-                        val res2 = r2.trim { it <= ' ' }.split("\n").toTypedArray()
+                        val res2 = r2.trim().split("\n").toTypedArray()
                         for (i21 in res2.indices) {
                             if (belarus) maranAta.add("<!--" + ParalelnyeMesta.kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + ParalelnyeMesta.nazvaBel + " " + konec + "-->" + res2[i21] + getParallel(ParalelnyeMesta.nomer, konec, i21) + "\n") else maranAta.add("<!--" + ParalelnyeMesta.kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + ParalelnyeMesta.nazva + " " + konec + "-->" + res2[i21] + getParallel(ParalelnyeMesta.nomer, konec, i21) + "\n")
                         }
@@ -893,15 +889,13 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     private fun stopProcent() {
-        procentTimer?.cancel()
-        procentSchedule?.cancel()
+        procentTimer.cancel()
     }
 
     private fun startProcent() {
         g = Calendar.getInstance() as GregorianCalendar
         procentTimer = Timer()
-        procentSchedule?.cancel()
-        procentSchedule = object : TimerTask() {
+        val procentSchedule = object : TimerTask() {
             override fun run() {
                 val g2 = Calendar.getInstance() as GregorianCalendar
                 if (g.timeInMillis + 1000 <= g2.timeInMillis) {
@@ -912,7 +906,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 }
             }
         }
-        procentTimer?.schedule(procentSchedule, 20, 20)
+        procentTimer.schedule(procentSchedule, 20, 20)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -974,9 +968,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
             //MyBackupAgent.requestBackup(this);
         }
-        scrollTimer?.cancel()
-        resetTimer?.cancel()
-        procentTimer?.cancel()
+        scrollTimer.cancel()
+        resetTimer.cancel()
+        procentTimer.cancel()
     }
 
     override fun onResume() {
@@ -1165,7 +1159,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     val ch = maranAta[position].substring(t3 + 4, t2)
                     val biblia = ch.split(".").toTypedArray()
                     conteiner.removeAllViewsInLayout()
-                    val arrayList = pm.paralel(this, biblia[0] + " " + biblia[1] + "." + biblia[2], maranAta[position].substring(t1 + 1).trim { it <= ' ' }, belarus)
+                    val arrayList = pm.paralel(this, biblia[0] + " " + biblia[1] + "." + biblia[2], maranAta[position].substring(t1 + 1).trim(), belarus)
                     for (i in arrayList.indices) {
                         conteiner.addView(arrayList[i])
                     }
@@ -1180,7 +1174,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     override fun onItemLongClick(parent: AdapterView<*>?, view: View, position: Int, id: Long): Boolean {
         if (!autoscroll) {
-            if (!maranAta[position].contains("<!--no-->") && maranAta[position].trim { it <= ' ' } != "") {
+            if (!maranAta[position].contains("<!--no-->") && maranAta[position].trim() != "") {
                 if (linearLayout2.visibility == View.GONE) {
                     linearLayout2.visibility = View.VISIBLE
                     listPosition = position
@@ -1436,7 +1430,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     internal inner class MaranAtaListAdaprer(private val activity: Activity) : ArrayAdapter<String?>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_maranata, maranAta as List<String>) {
         override fun isEnabled(position: Int): Boolean {
-            return if (maranAta[position].contains("<!--no-->")) false else if (scrollerSchedule == null) super.isEnabled(position) else false
+            return if (maranAta[position].contains("<!--no-->")) false else if (!autoscroll) super.isEnabled(position) else false
         }
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
@@ -1466,7 +1460,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 }
                 val paralelLeg = textView.substring(t1 + 1).length
                 textView = textView.replace("$", "<br>")
-                val spanned = MainActivity.fromHtml(textView.trim { it <= ' ' })
+                val spanned = MainActivity.fromHtml(textView.trim())
                 end = spanned.length
                 t1 = end - paralelLeg
                 ssb = SpannableStringBuilder(spanned)

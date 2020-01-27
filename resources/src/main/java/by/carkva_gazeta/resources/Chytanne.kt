@@ -59,11 +59,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var n = 0
     private var yS = 0
     private var spid = 60
-    private var scrollTimer: Timer? = null
-    private var procentTimer: Timer? = null
-    private var scrollerSchedule: TimerTask? = null
-    private var procentSchedule: TimerTask? = null
-    private var resetTimer: Timer? = null
+    private var scrollTimer: Timer = Timer()
+    private var procentTimer: Timer = Timer()
+    private var resetTimer: Timer = Timer()
     private lateinit var g: GregorianCalendar
     private var levo = false
     private var pravo = false
@@ -369,7 +367,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             glav = true
                         } else if (zag != -1) {
                             zagl = zaglav.substring(0, zag) // Название книги
-                            val zaglavieName1 = split[i].trim { it <= ' ' }
+                            val zaglavieName1 = split[i].trim()
                             zaglavieName = " " + zaglavieName1.substring(zag + 1)
                             zaglnum = zaglav.substring(zag + 1, zag1).toInt() // Номер главы
                         } else if (zag1 != -1) {
@@ -466,7 +464,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_0, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             1 -> {
@@ -474,7 +472,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_1, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             2 -> {
@@ -482,7 +480,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_2, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             3 -> {
@@ -490,7 +488,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_3, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             4 -> {
@@ -498,7 +496,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_4, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             5 -> {
@@ -506,7 +504,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_5, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             6 -> {
@@ -514,7 +512,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_6, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             7 -> {
@@ -522,7 +520,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_7, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             8 -> {
@@ -530,7 +528,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_8, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             9 -> {
@@ -538,7 +536,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_9, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             10 -> {
@@ -546,7 +544,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_10, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             11 -> {
@@ -554,7 +552,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_11, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             12 -> {
@@ -562,7 +560,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_12, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             13 -> {
@@ -570,7 +568,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_13, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             14 -> {
@@ -578,7 +576,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_14, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             15 -> {
@@ -586,7 +584,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_15, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             16 -> {
@@ -594,7 +592,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_16, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             17 -> {
@@ -602,7 +600,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_17, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             18 -> {
@@ -610,7 +608,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_18, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             19 -> {
@@ -618,7 +616,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_19, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             20 -> {
@@ -626,7 +624,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_20, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             21 -> {
@@ -634,7 +632,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_21, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             22 -> {
@@ -642,7 +640,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_22, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             23 -> {
@@ -650,7 +648,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_23, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             24 -> {
@@ -658,7 +656,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_24, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             25 -> {
@@ -666,7 +664,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_25, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             26 -> {
@@ -674,7 +672,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_26, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             27 -> {
@@ -682,7 +680,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_27, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             28 -> {
@@ -690,7 +688,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_28, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             29 -> {
@@ -698,7 +696,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_29, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             30 -> {
@@ -706,7 +704,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_30, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             31 -> {
@@ -714,7 +712,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_31, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             32 -> {
@@ -722,7 +720,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_32, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             33 -> {
@@ -730,7 +728,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_33, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             34 -> {
@@ -738,7 +736,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_34, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             35 -> {
@@ -746,7 +744,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_35, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             36 -> {
@@ -754,7 +752,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_36, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             37 -> {
@@ -762,7 +760,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_37, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             38 -> {
@@ -770,7 +768,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 ssbTitle = if (e == 0) {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_38, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim { it <= ' ' }))
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                         }
@@ -787,11 +785,11 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         val reader = BufferedReader(isr)
                         var line: String
                         val builder = StringBuilder()
-                        reader.forEachLine { it ->
+                        reader.forEachLine {
                             line = it
                             if (line.contains("//")) {
                                 val t1 = line.indexOf("//")
-                                line = line.substring(0, t1).trim { it <= ' ' }
+                                line = line.substring(0, t1).trim()
                                 if (line != "") builder.append(line).append("\n")
                             } else {
                                 builder.append(line).append("\n")
@@ -800,7 +798,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         /*while (reader.readLine()?.also { line = it } != null) {
                         if (line.contains("//")) {
                             val t1 = line.indexOf("//")
-                            line = line.substring(0, t1).trim { it <= ' ' }
+                            line = line.substring(0, t1).trim()
                             if (line != "") builder.append(line).append("\n")
                             continue
                         }
@@ -811,7 +809,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         var spl: String
                         var desK1: Int
                         var desN: Int
-                        spl = split2[zaglnum].trim { it <= ' ' }
+                        spl = split2[zaglnum].trim()
                         desN = spl.indexOf("$knigaN.")
                         if (knigaN == knigaK) {
                             desK1 = desN
@@ -822,8 +820,8 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 desK1 = spl.indexOf("$splAll.")
                             }
                             if (zag3 != -1 || glav) {
-                                val spl1 = split2[zaglnum].trim { it <= ' ' }
-                                val spl2 = split2[zaglnum + 1].trim { it <= ' ' }
+                                val spl1 = split2[zaglnum].trim()
+                                val spl2 = split2[zaglnum + 1].trim()
                                 val des1 = spl1.length
                                 desN = spl1.indexOf("$knigaN.")
                                 desK1 = spl2.indexOf("$knigaK.")
@@ -903,15 +901,13 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     }
 
     private fun stopProcent() {
-        procentTimer?.cancel()
-        procentSchedule?.cancel()
+        procentTimer.cancel()
     }
 
     private fun startProcent() {
         g = Calendar.getInstance() as GregorianCalendar
         procentTimer = Timer()
-        procentSchedule?.cancel()
-        procentSchedule = object : TimerTask() {
+        val procentSchedule = object : TimerTask() {
             override fun run() {
                 val g2 = Calendar.getInstance() as GregorianCalendar
                 if (g.timeInMillis + 1000 <= g2.timeInMillis) {
@@ -922,26 +918,24 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 }
             }
         }
-        procentTimer?.schedule(procentSchedule, 20, 20)
+        procentTimer.schedule(procentSchedule, 20, 20)
     }
 
     private fun stopAutoScroll() {
-        scrollTimer?.cancel()
-        scrollerSchedule?.cancel()
+        scrollTimer.cancel()
         resetTimer = Timer()
         val resetSchedule: TimerTask = object : TimerTask() {
             override fun run() {
                 runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
         }
-        resetTimer?.schedule(resetSchedule, 60000)
+        resetTimer.schedule(resetSchedule, 60000)
     }
 
     private fun startAutoScroll() {
-        resetTimer?.cancel()
+        resetTimer.cancel()
         scrollTimer = Timer()
-        scrollerSchedule?.cancel()
-        scrollerSchedule = object : TimerTask() {
+        val scrollerSchedule = object : TimerTask() {
             override fun run() {
                 runOnUiThread {
                     if (!mActionDown && !MainActivity.dialogVisable) {
@@ -951,7 +945,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -1008,9 +1002,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         super.onPause()
         stopAutoScroll()
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer?.cancel()
-        resetTimer?.cancel()
-        procentTimer?.cancel()
+        scrollTimer.cancel()
+        resetTimer.cancel()
+        procentTimer.cancel()
     }
 
     override fun onResume() {

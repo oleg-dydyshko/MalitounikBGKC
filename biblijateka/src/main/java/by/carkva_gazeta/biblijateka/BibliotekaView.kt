@@ -116,13 +116,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var fb2: FictionBook? = null
     private var fb2PageText: String = ""
     private var spid = 60
-    private var scrollTimer: Timer? = null
-    private var procentTimer: Timer? = null
-    private var toNextPageTimer: Timer? = null
-    private var scrollerSchedule: TimerTask? = null
-    private var procentSchedule: TimerTask? = null
-    private var toNextPageSchedule: TimerTask? = null
-    private var resetTimer: Timer? = null
+    private var scrollTimer: Timer = Timer()
+    private var procentTimer: Timer = Timer()
+    private var toNextPageTimer: Timer = Timer()
+    private var resetTimer: Timer = Timer()
     private var autoscroll = false
     private lateinit var g: GregorianCalendar
     private lateinit var animInRight: Animation
@@ -550,11 +547,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             override fun onSwipeRight() {
                 if (defaultPage - 1 >= 0) {
                     stopAutoScroll()
-                    if (toNextPageTimer != null) {
-                        toNextPageTimer?.cancel()
-                        toNextPageTimer = null
-                        toNextPageSchedule = null
-                    }
+                    toNextPageTimer.cancel()
                     animationStoronaLeft = false
                     webView.startAnimation(animOutRight)
                 }
@@ -564,22 +557,14 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 if (biblioteka != null) {
                     if (defaultPage + 1 < biblioteka?.content?.size ?: 0) {
                         stopAutoScroll()
-                        if (toNextPageTimer != null) {
-                            toNextPageTimer?.cancel()
-                            toNextPageTimer = null
-                            toNextPageSchedule = null
-                        }
+                        toNextPageTimer.cancel()
                         animationStoronaLeft = true
                         webView.startAnimation(animOutLeft)
                     }
                 } else {
                     if (defaultPage + 1 < bookTitle.size) {
                         stopAutoScroll()
-                        if (toNextPageTimer != null) {
-                            toNextPageTimer?.cancel()
-                            toNextPageTimer = null
-                            toNextPageSchedule = null
-                        }
+                        toNextPageTimer.cancel()
                         animationStoronaLeft = true
                         webView.startAnimation(animOutLeft)
                     }
@@ -1389,9 +1374,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         prefEditor.apply()
         stopAutoScroll()
-        scrollTimer?.cancel()
-        resetTimer?.cancel()
-        procentTimer?.cancel()
+        scrollTimer.cancel()
+        resetTimer.cancel()
+        procentTimer.cancel()
     }
 
     override fun onBackPressed() {
@@ -1452,11 +1437,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     override fun onClick(view: View) {
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         stopAutoScroll()
-        if (toNextPageTimer != null) {
-            toNextPageTimer?.cancel()
-            toNextPageTimer = null
-            toNextPageSchedule = null
-        }
+        toNextPageTimer.cancel()
         idSelect = view.id
         onClickView = view
         val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -1719,34 +1700,32 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     private fun toNextPage() {
         toNextPageTimer = Timer()
-        toNextPageSchedule = object : TimerTask() {
+        val toNextPageSchedule = object : TimerTask() {
             override fun run() {
                 animationStoronaLeft = true
                 runOnUiThread { webView.startAnimation(animOutLeft) }
             }
         }
-        toNextPageTimer?.schedule(toNextPageSchedule, spid.toLong() * 500)
+        toNextPageTimer.schedule(toNextPageSchedule, spid.toLong() * 500)
     }
 
     private fun stopAutoScroll() {
         webView.setOnBottomListener(null)
-        scrollTimer?.cancel()
-        scrollerSchedule?.cancel()
+        scrollTimer.cancel()
         resetTimer = Timer()
         val resetSchedule: TimerTask = object : TimerTask() {
             override fun run() {
                 runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
         }
-        resetTimer?.schedule(resetSchedule, 60000)
+        resetTimer.schedule(resetSchedule, 60000)
     }
 
     private fun startAutoScroll() {
-        resetTimer?.cancel()
+        resetTimer.cancel()
         webView.setOnBottomListener(this)
         scrollTimer = Timer()
-        scrollerSchedule?.cancel()
-        scrollerSchedule = object : TimerTask() {
+        val scrollerSchedule = object : TimerTask() {
             override fun run() {
                 runOnUiThread {
                     if (!mActionDown && !drawer_layout.isDrawerOpen(GravityCompat.START) && !MainActivity.dialogVisable) {
@@ -1755,20 +1734,18 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
             }
         }
-        scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun stopProcent() {
-        procentTimer?.cancel()
-        procentSchedule?.cancel()
+        procentTimer.cancel()
     }
 
     private fun startProcent() {
         g = Calendar.getInstance() as GregorianCalendar
         procentTimer = Timer()
-        procentSchedule?.cancel()
-        procentSchedule = object : TimerTask() {
+        val procentSchedule = object : TimerTask() {
             override fun run() {
                 val g2: GregorianCalendar = Calendar.getInstance() as GregorianCalendar
                 if (g.timeInMillis + 1000 <= g2.timeInMillis) {
@@ -1779,7 +1756,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
             }
         }
-        procentTimer?.schedule(procentSchedule, 20, 20)
+        procentTimer.schedule(procentSchedule, 20, 20)
     }
 
     private fun showPopupMenu(view: View, position: Int, name: String) {

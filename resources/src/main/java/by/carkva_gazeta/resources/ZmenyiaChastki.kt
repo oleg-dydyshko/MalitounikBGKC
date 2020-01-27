@@ -62,7 +62,7 @@ internal class ZmenyiaChastki(context: Context) {
         //w1 = w1.replace("а", "")
         //w1 = w1.replace("б", "")
         val split = w1.split(";").toTypedArray()
-        //String[] split = {"Гал 1.1-10, 20-2.5"};
+        //val split = arrayOf("Гал 1.1-10, 20-2.5", "Гал 1.1-10, 20-2.5")
         var knigaN: String
         var knigaK = "0"
         var zaglnum = 0
@@ -74,7 +74,7 @@ internal class ZmenyiaChastki(context: Context) {
         var zaglavieName = ""
         var result = ""
         for (e in zaglavie.indices) {
-            val zaglav = zaglavie[e].trim { it <= ' ' }
+            val zaglav = zaglavie[e].trim()
             val zag = zaglav.indexOf(" ", 2)
             val zag1 = zaglav.indexOf(".")
             val zag2 = zaglav.indexOf("-")
@@ -90,7 +90,7 @@ internal class ZmenyiaChastki(context: Context) {
                 glav = true
             } else if (zag != -1) {
                 zagl = zaglav.substring(0, zag) // Название книги
-                val zaglavieName1 = split[chtenie].trim { it <= ' ' }
+                val zaglavieName1 = split[chtenie].trim()
                 zaglavieName = " " + zaglavieName1.substring(zag + 1)
                 zaglnum = zaglav.substring(zag + 1, zag1).toInt() // Номер главы
             } else if (zag1 != -1) {
@@ -175,27 +175,25 @@ internal class ZmenyiaChastki(context: Context) {
             val reader = BufferedReader(isr)
             var line: String
             val builder = StringBuilder()
-            reader.forEachLine { it ->
-                line = it
+            reader.forEachLine {
+                line = it.trim()
                 if (line.contains("//")) {
                     val t1 = line.indexOf("//")
-                    line = line.substring(0, t1).trim { it <= ' ' }
-                    if (line != "") builder.append(line).append("<br>\n")
-                } else {
-                    builder.append(line).append("<br>\n")
+                    line = line.substring(0, t1).trim()
                 }
+                if (line != "") builder.append(line).append("<br>\n")
             }
             inputStream.close()
-            val split2 = builder.toString().split("===").toTypedArray()
+            val split2 = builder.toString().split("===<br>").toTypedArray()
             var spl: String
             var desK1: Int
             var desN: Int
-            spl = split2[zaglnum].trim { it <= ' ' }
+            spl = split2[zaglnum].trim()
             desN = spl.indexOf("$knigaN.")
             if (e == 0) {
                 res.append("<strong>").append(data.keyAt(kniga)).append(zaglavieName).append("</strong><br>")
             } else {
-                res.append("[...]<br>")
+                res.append("[&#8230;]<br>") // &#8230; -> ...
             }
             if (knigaN == knigaK) {
                 desK1 = desN
@@ -206,8 +204,8 @@ internal class ZmenyiaChastki(context: Context) {
                     desK1 = spl.indexOf("$splAll.")
                 }
                 if (zag3 != -1 || glav) {
-                    val spl1 = split2[zaglnum].trim { it <= ' ' }
-                    val spl2 = split2[zaglnum + 1].trim { it <= ' ' }
+                    val spl1 = split2[zaglnum].trim()
+                    val spl2 = split2[zaglnum + 1].trim()
                     val des1 = spl1.length
                     desN = spl1.indexOf("$knigaN.")
                     desK1 = spl2.indexOf("$knigaK.")

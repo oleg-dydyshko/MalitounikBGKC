@@ -446,11 +446,11 @@ class PageFragmentStaryZapaviet : ListFragment(), OnItemLongClickListener {
         val reader = BufferedReader(isr)
         var line: String
         val builder = StringBuilder()
-        reader.forEachLine { it ->
+        reader.forEachLine {
             line = it
             if (line.contains("//")) {
                 val t1 = line.indexOf("//")
-                line = line.substring(0, t1).trim { it <= ' ' }
+                line = line.substring(0, t1).trim()
                 if (line != "") builder.append(line).append("\n")
             } else {
                 builder.append(line).append("\n")

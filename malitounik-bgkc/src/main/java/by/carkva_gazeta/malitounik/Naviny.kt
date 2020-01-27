@@ -671,7 +671,7 @@ class Naviny : AppCompatActivity() {
             val htmlData = readerFile(file1)
             val seaN = htmlData.indexOf("<title>")
             val seaK = htmlData.indexOf("</title>")
-            res = htmlData.substring(seaN + 7, seaK).trim { it <= ' ' }
+            res = htmlData.substring(seaN + 7, seaK).trim()
             val arrayList1 = ArrayList<String>()
             arrayList1.add(file1.name)
             arrayList1.add(res)

@@ -193,7 +193,7 @@ internal class ParalelnyeMesta {
         arrayList.add(textViewSours)
         for (aChten in chten) {
             var nomerglavy = 1
-            val fit = aChten.trim { it <= ' ' }
+            val fit = aChten.trim()
             var nachalo: String
             var konec: String
             val bible = biblia(fit)
@@ -205,7 +205,7 @@ internal class ParalelnyeMesta {
 // Быт 13:15; 15:7, 18, 15-16; 26:3-4; Втор 34:4; 1 Тим 2:13
             val split = fit.split(",").toTypedArray()
             for (aSplit in split) {
-                val splitres = aSplit.trim { it <= ' ' }
+                val splitres = aSplit.trim()
                 val s2 = splitres.indexOf(" ", 2)
                 val a1 = splitres.indexOf(".")
                 if (s2 != -1) {
@@ -401,11 +401,11 @@ internal class ParalelnyeMesta {
                     val reader = BufferedReader(isr)
                     var line: String
                     val builder = StringBuilder()
-                    reader.forEachLine { it ->
+                    reader.forEachLine {
                         line = it
                         if (line.contains("//")) {
                             val t1 = line.indexOf("//")
-                            line = line.substring(0, t1).trim { it <= ' ' }
+                            line = line.substring(0, t1).trim()
                             if (line != "") builder.append(line).append("\n")
                         } else {
                             builder.append(line).append("\n")
@@ -413,7 +413,7 @@ internal class ParalelnyeMesta {
                     }
                     inputStream.close()
                     val split2 = builder.toString().split("===").toTypedArray()
-                    var r1 = split2[nomerglavy].trim { it <= ' ' }
+                    var r1 = split2[nomerglavy].trim()
                     var r2: String
                     val vN = r1.indexOf(nachalo)
                     val vK1 = r1.indexOf(konec)

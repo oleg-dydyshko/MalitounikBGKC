@@ -58,11 +58,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var resurs: String = ""
     private var title: String = ""
     private var men = false
-    private var scrollTimer: Timer? = null
-    private var procentTimer: Timer? = null
-    private var resetTimer: Timer? = null
-    private var scrollerSchedule: TimerTask? = null
-    private var procentSchedule: TimerTask? = null
+    private var scrollTimer: Timer = Timer()
+    private var procentTimer: Timer = Timer()
+    private var resetTimer: Timer = Timer()
     private lateinit var g: GregorianCalendar
     private var levo = false
     private var pravo = false
@@ -120,7 +118,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         WebView.setOnTouchListener(this)
-        WebView.setOnLongClickListener { scrollTimer != null }
+        //WebView.setOnLongClickListener { scrollTimer != null }
         val client = MyWebViewClient()
         client.setOnLinkListenner(this)
         WebView.webViewClient = client
@@ -348,15 +346,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun stopProcent() {
-        procentTimer?.cancel()
-        procentSchedule?.cancel()
+        procentTimer.cancel()
     }
 
     private fun startProcent() {
         g = Calendar.getInstance() as GregorianCalendar
         procentTimer = Timer()
-        procentSchedule?.cancel()
-        procentSchedule = object : TimerTask() {
+        val procentSchedule = object : TimerTask() {
             override fun run() {
                 val g2: GregorianCalendar = Calendar.getInstance() as GregorianCalendar
                 if (g.timeInMillis + 1000 <= g2.timeInMillis) {
@@ -367,7 +363,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }
             }
         }
-        procentTimer?.schedule(procentSchedule, 20, 20)
+        procentTimer.schedule(procentSchedule, 20, 20)
     }
 
     private fun loadData(inputStream: InputStream): String {
@@ -536,22 +532,20 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun stopAutoScroll() {
-        scrollTimer?.cancel()
-        scrollerSchedule?.cancel()
+        scrollTimer.cancel()
         resetTimer = Timer()
         val resetSchedule: TimerTask = object : TimerTask() {
             override fun run() {
                 runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
         }
-        resetTimer?.schedule(resetSchedule, 60000)
+        resetTimer.schedule(resetSchedule, 60000)
     }
 
     private fun startAutoScroll() {
-        resetTimer?.cancel()
+        resetTimer.cancel()
         scrollTimer = Timer()
-        scrollerSchedule?.cancel()
-        scrollerSchedule = object : TimerTask() {
+        val scrollerSchedule = object : TimerTask() {
             override fun run() {
                 runOnUiThread {
                     if (!mActionDown && !MainActivity.dialogVisable) {
@@ -561,7 +555,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     @SuppressLint("SetTextI18n")
@@ -934,9 +928,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         prefEditor.apply()
         stopAutoScroll()
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer?.cancel()
-        resetTimer?.cancel()
-        procentTimer?.cancel()
+        scrollTimer.cancel()
+        resetTimer.cancel()
+        procentTimer.cancel()
     }
 
     override fun onResume() {

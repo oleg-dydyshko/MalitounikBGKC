@@ -61,7 +61,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var scrollTimer: Timer = Timer()
     private var procentTimer: Timer = Timer()
     private var resetTimer: Timer = Timer()
-    private lateinit var g: GregorianCalendar
+    private var scrollerSchedule: TimerTask? = null
+    private var procentSchedule: TimerTask? = null
+    private var resetSchedule: TimerTask? = null
     private var levo = false
     private var pravo = false
     private var niz = false
@@ -330,7 +332,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
     }
 
-    private fun scrollWebView(): StringBuilder? {
+    private fun scrollWebView(): StringBuilder {
         val script = StringBuilder()
         script.append("<script language=\"javascript\" type=\"text/javascript\">")
         script.append("\n")
@@ -347,23 +349,20 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     private fun stopProcent() {
         procentTimer.cancel()
+        procentSchedule = null
     }
 
     private fun startProcent() {
-        g = Calendar.getInstance() as GregorianCalendar
+        stopProcent()
         procentTimer = Timer()
-        val procentSchedule = object : TimerTask() {
+        procentSchedule = object : TimerTask() {
             override fun run() {
-                val g2: GregorianCalendar = Calendar.getInstance() as GregorianCalendar
-                if (g.timeInMillis + 1000 <= g2.timeInMillis) {
-                    runOnUiThread {
-                        progress.visibility = View.GONE
-                        stopProcent()
-                    }
+                runOnUiThread {
+                    progress.visibility = View.GONE
                 }
             }
         }
-        procentTimer.schedule(procentSchedule, 20, 20)
+        procentTimer.schedule(procentSchedule, 1000)
     }
 
     private fun loadData(inputStream: InputStream): String {
@@ -534,7 +533,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private fun stopAutoScroll() {
         scrollTimer.cancel()
         resetTimer = Timer()
-        val resetSchedule: TimerTask = object : TimerTask() {
+        scrollerSchedule = null
+        resetSchedule = object : TimerTask() {
             override fun run() {
                 runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
@@ -545,7 +545,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private fun startAutoScroll() {
         resetTimer.cancel()
         scrollTimer = Timer()
-        val scrollerSchedule = object : TimerTask() {
+        resetSchedule = null
+        scrollerSchedule = object : TimerTask() {
             override fun run() {
                 runOnUiThread {
                     if (!mActionDown && !MainActivity.dialogVisable) {
@@ -591,15 +592,17 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         progress.visibility = View.VISIBLE
+                        startProcent()
                     }
                     if (x > widthConstraintLayout - otstup) {
                         pravo = true
                         var minmax = ""
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        progress.text = "$fontBiblia sp$minmax"
-                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                        progress.text = "${fontBiblia.toInt()} sp$minmax"
+                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.visibility = View.VISIBLE
+                        startProcent()
                     }
                     if (y > heightConstraintLayout - otstup) {
                         niz = true
@@ -627,6 +630,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             window.attributes = lp
                             progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
+                            progress.visibility = View.VISIBLE
+                            startProcent()
                         }
                     }
                     if (x < otstup && y < n && y % 15 == 0) {
@@ -637,6 +642,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             window.attributes = lp
                             progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
+                            progress.visibility = View.VISIBLE
+                            startProcent()
                         }
                     }
                     if (x > widthConstraintLayout - otstup && y > n && y % 26 == 0) {
@@ -654,8 +661,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             webSettings.defaultFontSize = fontBiblia.toInt()
                             var min = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                            progress.text = "$fontBiblia sp$min"
-                            progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                            progress.text = "${fontBiblia.toInt()} sp$min"
+                            progress.visibility = View.VISIBLE
+                            startProcent()
                         }
                     }
                     if (x > widthConstraintLayout - otstup && y < n && y % 26 == 0) {
@@ -673,8 +681,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             webSettings.defaultFontSize = fontBiblia.toInt()
                             var max = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                            progress.text = "$fontBiblia sp$max"
-                            progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                            progress.text = "${fontBiblia.toInt()} sp$max"
+                            progress.visibility = View.VISIBLE
+                            startProcent()
                         }
                     }
                     if (y > heightConstraintLayout - otstup && x > yS && x % 25 == 0) {
@@ -706,11 +715,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     v.performClick()
                     if (levo) {
                         levo = false
-                        progress.visibility = View.GONE
                     }
                     if (pravo) {
                         pravo = false
-                        progress.visibility = View.GONE
                     }
                     if (niz) {
                         niz = false
@@ -721,11 +728,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 MotionEvent.ACTION_CANCEL -> {
                     if (levo) {
                         levo = false
-                        progress.visibility = View.GONE
                     }
                     if (pravo) {
                         pravo = false
-                        progress.visibility = View.GONE
                     }
                     if (niz) {
                         niz = false
@@ -931,6 +936,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         scrollTimer.cancel()
         resetTimer.cancel()
         procentTimer.cancel()
+        scrollerSchedule = null
+        procentSchedule = null
+        resetSchedule = null
     }
 
     override fun onResume() {

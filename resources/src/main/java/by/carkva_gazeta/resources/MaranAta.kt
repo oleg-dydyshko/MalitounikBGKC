@@ -68,7 +68,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var scrollTimer: Timer = Timer()
     private var procentTimer: Timer = Timer()
     private var resetTimer: Timer = Timer()
-    private lateinit var g: GregorianCalendar
+    private var scrollerSchedule: TimerTask? = null
+    private var procentSchedule: TimerTask? = null
+    private var resetSchedule: TimerTask? = null
     private var levo = false
     private var pravo = false
     private var niz = false
@@ -95,40 +97,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         setFont = true
         adapter.notifyDataSetChanged()
-    }
-
-    private fun stopAutoScroll() {
-        scrollTimer.cancel()
-        resetTimer = Timer()
-        val resetSchedule: TimerTask = object : TimerTask() {
-            override fun run() {
-                runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
-            }
-        }
-        resetTimer.schedule(resetSchedule, 60000)
-    }
-
-    private fun startAutoScroll() {
-        resetTimer.cancel()
-        scrollTimer = Timer()
-        val scrollerSchedule = object : TimerTask() {
-            override fun run() {
-                runOnUiThread {
-                    forceScroll()
-                    if (!mActionDown && !MainActivity.dialogVisable) {
-                        val firstPosition = ListView.firstVisiblePosition
-                        if (firstPosition == INVALID_POSITION) {
-                            return@runOnUiThread
-                        }
-                        val firstView = ListView.getChildAt(0) ?: return@runOnUiThread
-                        val newTop = firstView.top - 2
-                        ListView.setSelectionFromTop(firstPosition, newTop)
-                    }
-                }
-            }
-        }
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     private fun forceScroll() {
@@ -435,15 +403,17 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         progress.visibility = View.VISIBLE
+                        startProcent()
                     }
                     if (x > widthConstraintLayout - otstup) {
                         pravo = true
                         var minmax = ""
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        progress.text = "$fontBiblia sp$minmax"
-                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                        progress.text = "${fontBiblia.toInt()} sp$minmax"
+                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.visibility = View.VISIBLE
+                        startProcent()
                     }
                     if (y > heightConstraintLayout - otstup) {
                         niz = true
@@ -470,6 +440,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
                             progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                            progress.visibility = View.VISIBLE
+                            startProcent()
                             MainActivity.checkBrightness = false
                         }
                     }
@@ -480,16 +452,19 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
                             progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                            progress.visibility = View.VISIBLE
+                            startProcent()
                             MainActivity.checkBrightness = false
                         }
                     }
                     if (x > widthConstraintLayout - otstup && y > n && y % 26 == 0) {
                         if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
                             fontBiblia -= 4
-                            progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
                             var min = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                            progress.text = "$fontBiblia sp$min"
+                            progress.text = "${fontBiblia.toInt()} sp$min"
+                            progress.visibility = View.VISIBLE
+                            startProcent()
                             prefEditor.putFloat("font_biblia", fontBiblia)
                             prefEditor.apply()
                             setFont = true
@@ -499,10 +474,11 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     if (x > widthConstraintLayout - otstup && y < n && y % 26 == 0) {
                         if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                             fontBiblia += 4
-                            progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
                             var max = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                            progress.text = "$fontBiblia sp$max"
+                            progress.text = "${fontBiblia.toInt()} sp$max"
+                            progress.visibility = View.VISIBLE
+                            startProcent()
                             prefEditor.putFloat("font_biblia", fontBiblia)
                             prefEditor.apply()
                             setFont = true
@@ -538,14 +514,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     v.performClick()
                     if (levo) {
                         levo = false
-                        progress.visibility = View.GONE
                     }
                     if (pravo) {
                         pravo = false
-                        /*prefEditor.putFloat("font_biblia", fontBiblia);
-                        setFont = true;
-                        adapter.notifyDataSetChanged();
-                        prefEditor.apply();*/progress.visibility = View.GONE
                     }
                     if (niz) {
                         niz = false
@@ -556,11 +527,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 MotionEvent.ACTION_CANCEL -> {
                     if (levo) {
                         levo = false
-                        progress.visibility = View.GONE
                     }
                     if (pravo) {
                         pravo = false
-                        progress.visibility = View.GONE
                     }
                     if (niz) {
                         niz = false
@@ -768,7 +737,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     if (ParalelnyeMesta.nomer == 76) inputStream = r.openRawResource(R.raw.sinaidaln26)
                     if (ParalelnyeMesta.nomer == 77) inputStream = r.openRawResource(R.raw.sinaidaln27)
                 }
-                //if (inputStream != null) {
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
                 var line: String
@@ -795,7 +763,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     builder.append(line).append("\n")
                 }*/
                 inputStream.close()
-                //inputStream = null
                 if (chten.size == 6 && i == 3) {
                     if (belarus) {
                         maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n")
@@ -888,25 +855,58 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         adapter.notifyDataSetChanged()
     }
 
-    private fun stopProcent() {
-        procentTimer.cancel()
+    private fun stopAutoScroll() {
+        scrollTimer.cancel()
+        resetTimer = Timer()
+        scrollerSchedule = null
+        resetSchedule = object : TimerTask() {
+            override fun run() {
+                runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+            }
+        }
+        resetTimer.schedule(resetSchedule, 60000)
     }
 
-    private fun startProcent() {
-        g = Calendar.getInstance() as GregorianCalendar
-        procentTimer = Timer()
-        val procentSchedule = object : TimerTask() {
+    private fun startAutoScroll() {
+        resetTimer.cancel()
+        scrollTimer = Timer()
+        resetSchedule = null
+        scrollerSchedule = object : TimerTask() {
             override fun run() {
-                val g2 = Calendar.getInstance() as GregorianCalendar
-                if (g.timeInMillis + 1000 <= g2.timeInMillis) {
-                    runOnUiThread {
-                        progress.visibility = View.GONE
-                        stopProcent()
+                runOnUiThread {
+                    forceScroll()
+                    if (!mActionDown && !MainActivity.dialogVisable) {
+                        val firstPosition = ListView.firstVisiblePosition
+                        if (firstPosition == INVALID_POSITION) {
+                            return@runOnUiThread
+                        }
+                        val firstView = ListView.getChildAt(0) ?: return@runOnUiThread
+                        val newTop = firstView.top - 2
+                        ListView.setSelectionFromTop(firstPosition, newTop)
                     }
                 }
             }
         }
-        procentTimer.schedule(procentSchedule, 20, 20)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+    }
+
+    private fun stopProcent() {
+        procentTimer.cancel()
+        procentSchedule = null
+    }
+
+    private fun startProcent() {
+        stopProcent()
+        procentTimer = Timer()
+        procentSchedule = object : TimerTask() {
+            override fun run() {
+                runOnUiThread {
+                    progress.visibility = View.GONE
+                }
+            }
+        }
+        procentTimer.schedule(procentSchedule, 1000)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -971,6 +971,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         scrollTimer.cancel()
         resetTimer.cancel()
         procentTimer.cancel()
+        scrollerSchedule = null
+        procentSchedule = null
+        resetSchedule = null
     }
 
     override fun onResume() {

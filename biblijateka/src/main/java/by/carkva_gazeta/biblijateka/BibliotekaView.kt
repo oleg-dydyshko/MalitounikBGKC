@@ -120,8 +120,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var procentTimer: Timer = Timer()
     private var toNextPageTimer: Timer = Timer()
     private var resetTimer: Timer = Timer()
+    private var scrollerSchedule: TimerTask? = null
+    private var procentSchedule: TimerTask? = null
+    private var resetSchedule: TimerTask? = null
     private var autoscroll = false
-    private lateinit var g: GregorianCalendar
     private lateinit var animInRight: Animation
     private lateinit var animOutRight: Animation
     private lateinit var animInLeft: Animation
@@ -1164,14 +1166,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isVisible = false
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_font).isVisible = true
             }
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isVisible = true
         } else {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_set_page).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_bright).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isVisible = false
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isVisible = false
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isChecked = k.getBoolean("inversion", false)
@@ -1377,6 +1377,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         scrollTimer.cancel()
         resetTimer.cancel()
         procentTimer.cancel()
+        scrollerSchedule = null
+        procentSchedule = null
+        resetSchedule = null
     }
 
     override fun onBackPressed() {
@@ -1713,7 +1716,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         webView.setOnBottomListener(null)
         scrollTimer.cancel()
         resetTimer = Timer()
-        val resetSchedule: TimerTask = object : TimerTask() {
+        scrollerSchedule = null
+        resetSchedule = object : TimerTask() {
             override fun run() {
                 runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
@@ -1725,6 +1729,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         resetTimer.cancel()
         webView.setOnBottomListener(this)
         scrollTimer = Timer()
+        resetSchedule = null
         val scrollerSchedule = object : TimerTask() {
             override fun run() {
                 runOnUiThread {
@@ -1740,23 +1745,20 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     private fun stopProcent() {
         procentTimer.cancel()
+        procentSchedule = null
     }
 
     private fun startProcent() {
-        g = Calendar.getInstance() as GregorianCalendar
+        stopProcent()
         procentTimer = Timer()
-        val procentSchedule = object : TimerTask() {
+        procentSchedule = object : TimerTask() {
             override fun run() {
-                val g2: GregorianCalendar = Calendar.getInstance() as GregorianCalendar
-                if (g.timeInMillis + 1000 <= g2.timeInMillis) {
-                    runOnUiThread {
-                        progress.visibility = View.GONE
-                        stopProcent()
-                    }
+                runOnUiThread {
+                    progress.visibility = View.GONE
                 }
             }
         }
-        procentTimer.schedule(procentSchedule, 20, 20)
+        procentTimer.schedule(procentSchedule, 1000)
     }
 
     private fun showPopupMenu(view: View, position: Int, name: String) {

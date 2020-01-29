@@ -263,9 +263,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 znakTipicona.visibility = View.VISIBLE
             }
             2 -> {
-                var rDrawableZnakiKrestVKruge = R.drawable.znaki_krest_v_kruge
-                if (dzenNoch) rDrawableZnakiKrestVKruge = R.drawable.znaki_krest_v_kruge_black
-                znakTipicona.setImageResource(rDrawableZnakiKrestVKruge)
+                if (dzenNoch) znakTipicona.setImageResource(R.drawable.znaki_krest_v_kruge_black)
+                else znakTipicona.setImageResource(R.drawable.znaki_krest_v_kruge)
                 znakTipicona.visibility = View.VISIBLE
             }
             3 -> {

@@ -2238,14 +2238,18 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     }
                 }
                 outputStream.close()
-                File("$filesDir/Sabytie").walk().forEach {
-                    if (it.isFile && !it.path.contains(filename)) {
-                        val fileReader = FileReader(it)
+                File("$filesDir/Sabytie").walk().forEach { file1 ->
+                    if (file1.isFile && !file1.path.contains(filename)) {
+                        val fileReader = FileReader(file1)
                         val bufferedReader = BufferedReader(fileReader)
-                        val line1 = bufferedReader.readText()
-                        if (line1 != "") {
-                            val t1 = line1.split(" ").toTypedArray()
-                            if (t1.size == 11) MainActivity.padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], t1[10], color)) else MainActivity.padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], t1[10], t1[11].toInt()))
+                        bufferedReader.forEachLine {
+                            if (it != "") {
+                                val t1 = it.split(" ").toTypedArray()
+                                if (t1.size == 11)
+                                    MainActivity.padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], t1[10], color))
+                                else
+                                    MainActivity.padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], t1[10], t1[11].toInt()))
+                            }
                         }
                         fileReader.close()
                     }

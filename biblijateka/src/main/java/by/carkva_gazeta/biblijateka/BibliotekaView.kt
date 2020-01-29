@@ -118,7 +118,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var spid = 60
     private var scrollTimer: Timer = Timer()
     private var procentTimer: Timer = Timer()
-    private var toNextPageTimer: Timer = Timer()
+    //private var toNextPageTimer: Timer = Timer()
     private var resetTimer: Timer = Timer()
     private var scrollerSchedule: TimerTask? = null
     private var procentSchedule: TimerTask? = null
@@ -158,7 +158,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     webView.loadDataWithBaseURL(null, fb2PageText, "text/html", "utf-8", null)
                 }
             }
-            if (autoscroll) nextPageAutoScroll()
+            if (autoscroll) {
+                webView.postDelayed({
+                    startAutoScroll()
+                }, 300)
+            } //nextPageAutoScroll()
         }
 
         override fun onAnimationRepeat(animation: Animation) {}
@@ -181,7 +185,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     webView.loadDataWithBaseURL(null, fb2PageText, "text/html", "utf-8", null)
                 }
             }
-            if (autoscroll) nextPageAutoScroll()
+            if (autoscroll) {
+                webView.postDelayed({
+                    startAutoScroll()
+                }, 300)
+            } //nextPageAutoScroll()
         }
 
         override fun onAnimationRepeat(animation: Animation) {}
@@ -193,7 +201,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     override fun onBottom() {
         stopAutoScroll()
-        toNextPage()
+        //toNextPage()
     }
 
     override fun onDialogFontSizePositiveClick() {
@@ -549,7 +557,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             override fun onSwipeRight() {
                 if (defaultPage - 1 >= 0) {
                     stopAutoScroll()
-                    toNextPageTimer.cancel()
+                    //toNextPageTimer.cancel()
                     animationStoronaLeft = false
                     webView.startAnimation(animOutRight)
                 }
@@ -559,14 +567,14 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 if (biblioteka != null) {
                     if (defaultPage + 1 < biblioteka?.content?.size ?: 0) {
                         stopAutoScroll()
-                        toNextPageTimer.cancel()
+                        //toNextPageTimer.cancel()
                         animationStoronaLeft = true
                         webView.startAnimation(animOutLeft)
                     }
                 } else {
                     if (defaultPage + 1 < bookTitle.size) {
                         stopAutoScroll()
-                        toNextPageTimer.cancel()
+                        //toNextPageTimer.cancel()
                         animationStoronaLeft = true
                         webView.startAnimation(animOutLeft)
                     }
@@ -1239,10 +1247,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return true
-        }
-        mLastClickTime = SystemClock.elapsedRealtime()
         val prefEditor: SharedPreferences.Editor = k.edit()
         val id: Int = item.itemId
         if (id == by.carkva_gazeta.malitounik.R.id.action_update) {
@@ -1440,7 +1444,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     override fun onClick(view: View) {
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         stopAutoScroll()
-        toNextPageTimer.cancel()
+        //toNextPageTimer.cancel()
         idSelect = view.id
         onClickView = view
         val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -1627,11 +1631,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     override fun onResume() {
         super.onResume()
-        autoscroll = k.getBoolean("autoscroll", false)
+        /*autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
             startAutoScroll()
-        }
+        }*/
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
@@ -1691,7 +1695,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
     }
 
-    private fun nextPageAutoScroll() {
+    /*private fun nextPageAutoScroll() {
         val nextPageAutoScrollTimer = Timer()
         val nextPageAutoScrollSchedule: TimerTask = object : TimerTask() {
             override fun run() {
@@ -1710,7 +1714,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
         }
         toNextPageTimer.schedule(toNextPageSchedule, spid.toLong() * 500)
-    }
+    }*/
 
     private fun stopAutoScroll() {
         webView.setOnBottomListener(null)
@@ -1730,7 +1734,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         webView.setOnBottomListener(this)
         scrollTimer = Timer()
         resetSchedule = null
-        val scrollerSchedule = object : TimerTask() {
+        scrollerSchedule = object : TimerTask() {
             override fun run() {
                 runOnUiThread {
                     if (!mActionDown && !drawer_layout.isDrawerOpen(GravityCompat.START) && !MainActivity.dialogVisable) {

@@ -28,6 +28,7 @@ import by.carkva_gazeta.resources.R.raw
 import kotlinx.android.synthetic.main.akafist_under.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.util.*
 
 class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private val mHideHandler = Handler()
@@ -55,6 +56,8 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
     private var title = ""
     private var levo = false
     private var pravo = false
+    private var procentTimer: Timer = Timer()
+    private var procentSchedule: TimerTask? = null
     private val orientation: Int
         get() {
             val rotation = windowManager.defaultDisplay.rotation
@@ -170,6 +173,24 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         }
     }
 
+    private fun stopProcent() {
+        procentTimer.cancel()
+        procentSchedule = null
+    }
+
+    private fun startProcent() {
+        stopProcent()
+        procentTimer = Timer()
+        procentSchedule = object : TimerTask() {
+            override fun run() {
+                runOnUiThread {
+                    progress.visibility = View.GONE
+                }
+            }
+        }
+        procentTimer.schedule(procentSchedule, 1000)
+    }
+
     @SuppressLint("SetTextI18n")
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         val widthConstraintLayout = constraint.width
@@ -189,15 +210,17 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         progress.visibility = View.VISIBLE
+                        startProcent()
                     }
                     if (x > widthConstraintLayout - otstup) {
                         pravo = true
                         var minmax = ""
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        progress.text = "$fontBiblia sp$minmax"
-                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                        progress.text = "${fontBiblia.toInt()} sp$minmax"
+                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.visibility = View.VISIBLE
+                        startProcent()
                     }
                 }
                 MotionEvent.ACTION_MOVE -> {
@@ -209,6 +232,8 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                             window.attributes = lp
                             progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
+                            progress.visibility = View.VISIBLE
+                            startProcent()
                         }
                     }
                     if (x < otstup && y < n && y % 15 == 0) {
@@ -219,6 +244,8 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                             window.attributes = lp
                             progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
+                            progress.visibility = View.VISIBLE
+                            startProcent()
                         }
                     }
                     if (x > widthConstraintLayout - otstup && y > n && y % 26 == 0) {
@@ -229,8 +256,9 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                             TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
                             var min = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                            progress.text = "$fontBiblia sp$min"
-                            progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                            progress.text = "${fontBiblia.toInt()} sp$min"
+                            progress.visibility = View.VISIBLE
+                            startProcent()
                         }
                     }
                     if (x > widthConstraintLayout - otstup && y < n && y % 26 == 0) {
@@ -241,8 +269,9 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                             TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
                             var max = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                            progress.text = "$fontBiblia sp$max"
-                            progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                            progress.text = "${fontBiblia.toInt()} sp$max"
+                            progress.visibility = View.VISIBLE
+                            startProcent()
                         }
                     }
                 }
@@ -250,21 +279,17 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                     v.performClick()
                     if (levo) {
                         levo = false
-                        progress.visibility = View.GONE
                     }
                     if (pravo) {
                         pravo = false
-                        progress.visibility = View.GONE
                     }
                 }
                 MotionEvent.ACTION_CANCEL -> {
                     if (levo) {
                         levo = false
-                        progress.visibility = View.GONE
                     }
                     if (pravo) {
                         pravo = false
-                        progress.visibility = View.GONE
                     }
                 }
             }

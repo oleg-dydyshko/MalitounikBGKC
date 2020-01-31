@@ -40,7 +40,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private val mHideHandler = Handler()
     @SuppressLint("InlinedApi")
     private val mHidePart2Runnable = Runnable {
-        ListView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+        constraint.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
                 or View.SYSTEM_UI_FLAG_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -1126,7 +1126,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     private fun show() {
-        ListView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        constraint.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         mHideHandler.removeCallbacks(mHidePart2Runnable)
         mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
     }

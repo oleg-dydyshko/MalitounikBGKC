@@ -12,35 +12,20 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.ListFragment
-import java.util.*
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 /**
  * Created by oleg on 30.5.16
  */
 class MenuPesnyBag : ListFragment() {
-    private val data = ArrayList<String>()
+    private var data = ArrayList<String>()
     private var mLastClickTime: Long = 0
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        data.add("Анёл ад Бога Габрыэль")
-        data.add("З далёкай Фацімы")
-        data.add("Люрдаўская песьня")
-        data.add("Матачка Божая")
-        data.add("Маці Божая Будслаўская")
-        data.add("Маці Божая ў Жыровіцах")
-        data.add("Маці з Фацімы")
-        data.add("Маці мая Божая")
-        data.add("Мне аднойчы")
-        data.add("О Марыя, Маці Бога (1)")
-        data.add("О Марыя, Маці Бога (2)")
-        data.add("Памаліся, Марыя")
-        data.add("Песьня да Маці Божай Нястомнай Дапамогі")
-        data.add("Радуйся, Марыя!")
-        data.add("Табе, Марыя, давяраю я")
-        data.add("Ціхая, пакорная")
-        // так же добавить в search_pesny.get_Menu_list_data
-        data.sort()
         activity?.let {
+            data = getMenuListData(it, "bag")
+            data.sort()
             listAdapter = MenuListAdaprer(it)
             listView.isVerticalScrollBarEnabled = false
         }
@@ -95,5 +80,24 @@ class MenuPesnyBag : ListFragment() {
 
     private class ViewHolder {
         var text: TextViewRobotoCondensed? = null
+    }
+
+    companion object {
+
+        fun getMenuListData(context: Context, pesny: String): ArrayList<String> {
+            val menuListData = ArrayList<String>()
+            val inputStream = context.resources.openRawResource(R.raw.pesny_menu)
+            val isr = InputStreamReader(inputStream)
+            val reader = BufferedReader(isr)
+            var line: String
+            reader.forEachLine {
+                line = it
+                if (it.contains(pesny)) {
+                    val split = line.split("<>").toTypedArray()
+                    menuListData.add(split[1])
+                }
+            }
+            return menuListData
+        }
     }
 }

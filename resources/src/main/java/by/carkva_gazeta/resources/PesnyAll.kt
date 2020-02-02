@@ -118,7 +118,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         }
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         title = intent.extras?.getString("pesny", "") ?: ""
-        val pedsny = getPesniaID(title)
+        val pedsny = getPesniaID(this, title)
         val fields = raw::class.java.fields
         for (field in fields) {
             if (field.getInt(null) == pedsny) {

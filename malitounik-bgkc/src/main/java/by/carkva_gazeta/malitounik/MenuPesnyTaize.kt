@@ -19,30 +19,13 @@ import java.util.*
  * Created by oleg on 30.5.16
  */
 class MenuPesnyTaize : ListFragment() {
-    private val data = ArrayList<String>()
+    private var data = ArrayList<String>()
     private var mLastClickTime: Long = 0
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        data.add("Magnifikat")
-        data.add("Ostende nobis")
-        data.add("Ubi caritas")
-        data.add("Блаславёны Бог")
-        data.add("Бог мой, Iсус, сьвяцi нам у цемры")
-        data.add("Будзь са Мной")
-        data.add("Дай нам, Божа, моц ласкi Сваёй")
-        data.add("Дзякуем Табе, Божа наш")
-        data.add("Дзякуем Табе, Хрысьце")
-        data.add("Кожны дзень Бог дае мне сiлы")
-        data.add("Мая душа ў Богу мае спакой")
-        data.add("О, Iсусе")
-        data.add("О, Госпадзе мой")
-        data.add("Прыйдзi, Дух Сьвяты")
-        data.add("У цемры iдзём")
-        data.add("У цемры нашых дзён")
-        data.add("Хай тваё сэрца больш не журыцца")
-        // так же добавить в search_pesny.get_Menu_list_data
-        data.sort()
         activity?.let {
+            data = MenuPesnyBag.getMenuListData(it, "taize")
+            data.sort()
             listAdapter = MenuListAdaprer(it)
             listView.isVerticalScrollBarEnabled = false
         }

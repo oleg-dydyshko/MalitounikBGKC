@@ -116,17 +116,18 @@ class SearchPesnyViewResult : AppCompatActivity(), OnTouchListener, DialogFontSi
         }
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         val resultat = intent.extras?.getString("resultat") ?: ""
-        val menuListData: ArrayList<MenuListData> = SearchPesny.getMenuListData()
-        for (i in menuListData.indices) {
-            if (menuListData[i].data.toLowerCase(Locale.getDefault()).contains(resultat.toLowerCase(Locale.getDefault()))) {
+        if (!SearchPesny.menuListDataIsInitialized())
+            SearchPesny.menuListData = SearchPesny.getMenuListData(this)
+        for (i in SearchPesny.menuListData.indices) {
+            if (SearchPesny.menuListData[i].data.toLowerCase(Locale.getDefault()).contains(resultat.toLowerCase(Locale.getDefault()))) {
                 val fields = raw::class.java.fields
                 for (field in fields) {
-                    if (field.getInt(null) == menuListData[i].id) {
+                    if (field.getInt(null) == SearchPesny.menuListData[i].id) {
                         resurs = field.name
                         break
                     }
                 }
-                val inputStream = resources.openRawResource(menuListData[i].id)
+                val inputStream = resources.openRawResource(SearchPesny.menuListData[i].id)
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
                 var line: String
@@ -137,7 +138,7 @@ class SearchPesnyViewResult : AppCompatActivity(), OnTouchListener, DialogFontSi
                     builder.append(line)
                 }
                 inputStream.close()
-                title = menuListData[i].data
+                title = SearchPesny.menuListData[i].data
                 TextView.text = MainActivity.fromHtml(builder.toString())
                 break
             }

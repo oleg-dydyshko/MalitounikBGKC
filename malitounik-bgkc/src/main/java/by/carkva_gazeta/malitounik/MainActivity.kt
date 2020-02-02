@@ -1427,8 +1427,7 @@ try {
 
         fun caliandar(context: Context?, mun: Int): Int {
             val filename = "caliandar".plus(mun)
-            return context?.resources?.getIdentifier(filename, "raw", context.packageName)
-                    ?: return 0
+            return context?.resources?.getIdentifier(filename, "raw", context.packageName)?: return 0
         }
 
         fun removeZnakiAndSlovy(ctenie: String): String {

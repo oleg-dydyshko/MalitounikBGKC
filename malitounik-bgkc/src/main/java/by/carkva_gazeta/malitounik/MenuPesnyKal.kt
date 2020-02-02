@@ -19,35 +19,13 @@ import java.util.*
  * Created by oleg on 30.5.16
  */
 class MenuPesnyKal : ListFragment() {
-    private val data = ArrayList<String>()
+    private var data = ArrayList<String>()
     private var mLastClickTime: Long = 0
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        data.add("Ave Maria (Зорка зазьзяла)")
-        data.add("А што гэта за сьпевы")
-        data.add("А ў сьвеце нам навіна была")
-        data.add("А ўчора з вячора")
-        data.add("Вясёлых калядных сьвятаў")
-        data.add("Зазьзяла зорачка над Бэтлеемам")
-        data.add("Звон зьвініць")
-        data.add("На шляху ў Бэтлеем")
-        data.add("Неба і зямля")
-        data.add("Нова радасьць стала")
-        data.add("Ночка цiхая, зарыста")
-        data.add("Ноччу сьвятой")
-        data.add("Паказалась з неба яснасьць")
-        data.add("Прыйдзіце да Збаўцы")
-        data.add("Радасная вестка")
-        data.add("У начную ціш")
-        data.add("Учора зьвячора — засьвяціла зора")
-        data.add("Ціхая ноч (пер. Н. Арсеньневай)")
-        data.add("Ціхая ноч-2")
-        data.add("Ціхая ноч-3")
-        data.add("Прыйдзі, прыйдзі, Эмануэль (ХІХ ст.)")
-        data.add("Прыйдзі, прыйдзі, Эмануэль (XII–ХVIII стст.)")
-        // так же добавить в search_pesny.get_Menu_list_data
-        data.sort()
         activity?.let {
+            data = MenuPesnyBag.getMenuListData(it, "kal")
+            data.sort()
             listAdapter = MenuListAdaprer(it)
             listView.isVerticalScrollBarEnabled = false
         }

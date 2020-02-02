@@ -19,23 +19,13 @@ import java.util.*
  * Created by oleg on 30.5.16
  */
 class MenuPesnyBel : ListFragment() {
-    private val data = ArrayList<String>()
+    private var data = ArrayList<String>()
     private var mLastClickTime: Long = 0
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        data.add("Ave Maria")
-        data.add("Божа, што калісь народы")
-        data.add("Божа, я малюся за Беларусь")
-        data.add("Вечна жывi, мая Беларусь")
-        data.add("К табе, Беларусь")
-        data.add("Магутны Божа")
-        data.add("Малюся за цябе, Беларусь")
-        data.add("Малітва")
-        data.add("Мая краіна")
-        data.add("Мы хочам Бога")
-        // так же добавить в search_pesny.get_Menu_list_data
-        data.sort()
         activity?.let {
+            data = MenuPesnyBag.getMenuListData(it, "bel")
+            data.sort()
             listAdapter = MenuListAdaprer(it)
             listView.isVerticalScrollBarEnabled = false
         }

@@ -238,7 +238,8 @@ class Widget : AppWidgetProvider() {
                 }
             }
             if (!data[day][6].contains("no_sviaty")) {
-                if (data[day][5].contains("1")) updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml("<strong>" + data[day][6] + "</strong>")) else updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml(data[day][6]))
+                val svita = data[day][6].replace("\n", "<br>")
+                if (data[day][5].contains("1")) updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml("<strong>" + svita + "</strong>")) else updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml(svita))
                 updateViews.setViewVisibility(R.id.textCviatyGlavnyia, View.VISIBLE)
             }
             if (data[day][6].contains("Пачатак") || data[day][6].contains("Вялікі") || data[day][6].contains("Вялікая") || data[day][6].contains("убот") || data[day][6].contains("ВЕЧАР") || data[day][6].contains("Палова")) {

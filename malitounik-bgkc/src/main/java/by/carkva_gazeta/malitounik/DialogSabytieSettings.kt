@@ -12,7 +12,9 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
@@ -33,13 +35,16 @@ class DialogSabytieSettings : DialogFragment() {
     private lateinit var k: SharedPreferences
     private lateinit var prefEditor: Editor
     private lateinit var alert: AlertDialog
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    private lateinit var rootView: View
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let {
-            k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch) it.setTheme(R.style.AppCompatDark) else it.setTheme(R.style.AppTheme)
-            val ad = AlertDialog.Builder(it)
-            val view = View.inflate(it, R.layout.dialog_sabytie_settings, null)
             notificationNotification.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             notificationAlarm.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             notificationRingtone.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
@@ -116,7 +121,17 @@ class DialogSabytieSettings : DialogFragment() {
                 }
                 prefEditor.apply()
             }
-            ad.setView(view)
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        activity?.let {
+            k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = k.getBoolean("dzen_noch", false)
+            if (dzenNoch) it.setTheme(R.style.AppCompatDark) else it.setTheme(R.style.AppTheme)
+            val ad = AlertDialog.Builder(it)
+            rootView = View.inflate(it, R.layout.dialog_sabytie_settings, null)
+            ad.setView(rootView)
             ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = ad.create()
             alert.setOnShowListener {

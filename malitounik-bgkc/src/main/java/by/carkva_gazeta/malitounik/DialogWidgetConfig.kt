@@ -7,19 +7,23 @@ import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.DialogFragment
+import kotlinx.android.synthetic.main.dialog_widget_config.*
 
 /**
  * Created by oleg on 20.7.17
  */
 class DialogWidgetConfig : DialogFragment() {
+    private var configDzenNoch = false
     private var widgetID = 0
     private lateinit var mListener: DialogWidgetConfigListener
     private lateinit var alert: AlertDialog
+    private lateinit var rootView: View
 
     internal interface DialogWidgetConfigListener {
         fun onDialogWidgetConfigPositiveClick()
@@ -46,28 +50,32 @@ class DialogWidgetConfig : DialogFragment() {
         activity?.finish()
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val prefEditor = k.edit()
-            val builder = AlertDialog.Builder(it)
-            val linearLayout = View.inflate(it, R.layout.dialog_widget_config, null)
-            val checkBox20: SwitchCompat = linearLayout.findViewById(R.id.checkBox20)
             checkBox20.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
             checkBox20.isChecked = k.getBoolean("dzen_noch_widget_day$widgetID", false)
             checkBox20.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-                if (isChecked) {
-                    prefEditor.putBoolean("dzen_noch_widget_day$widgetID", true)
-                } else {
-                    prefEditor.putBoolean("dzen_noch_widget_day$widgetID", false)
-                }
+                configDzenNoch = isChecked
             }
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return rootView
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        activity?.let {
+            val builder = AlertDialog.Builder(it)
+            rootView = View.inflate(it, R.layout.dialog_widget_config, null)
             builder.setPositiveButton(resources.getText(R.string.ok)) { dialog: DialogInterface, _: Int ->
-                prefEditor.apply()
+                save()
                 mListener.onDialogWidgetConfigPositiveClick()
                 dialog.cancel()
             }
-            builder.setView(linearLayout)
+            builder.setView(rootView)
             alert = builder.create()
             alert.setOnShowListener {
                 val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
@@ -75,6 +83,15 @@ class DialogWidgetConfig : DialogFragment() {
             }
         }
         return alert
+    }
+
+    private fun save() {
+        activity?.let {
+            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("dzen_noch_widget_day$widgetID", configDzenNoch)
+            prefEditor.apply()
+        }
     }
 
     companion object {

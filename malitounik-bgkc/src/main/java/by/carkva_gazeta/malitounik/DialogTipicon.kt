@@ -5,85 +5,99 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.tipicon.view.*
+import kotlinx.android.synthetic.main.tipicon.*
 
 class DialogTipicon : DialogFragment() {
     private lateinit var alert: AlertDialog
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    private lateinit var rootView: View
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.let {
             val tipicon = arguments?.getInt("tipicon") ?: 0
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val builder = AlertDialog.Builder(it)
-            val dialogView = View.inflate(it, R.layout.tipicon, null)
-            builder.setView(dialogView)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            dialogView.t1.visibility = View.GONE
-            dialogView.t2.visibility = View.GONE
-            dialogView.t3.visibility = View.GONE
-            dialogView.t10.visibility = View.GONE
-            dialogView.t11.visibility = View.GONE
-            dialogView.polosa.visibility = View.GONE
-            if (tipicon == 1) dialogView.t7.visibility = View.VISIBLE else dialogView.t7.visibility = View.GONE
-            if (tipicon == 2) dialogView.t5.visibility = View.VISIBLE else dialogView.t5.visibility = View.GONE
-            if (tipicon == 3) dialogView.t6.visibility = View.VISIBLE else dialogView.t6.visibility = View.GONE
-            if (tipicon == 4) dialogView.t8.visibility = View.VISIBLE else dialogView.t8.visibility = View.GONE
-            if (tipicon == 5) dialogView.t9.visibility = View.VISIBLE else dialogView.t9.visibility = View.GONE
-            dialogView.textView1.visibility = View.GONE
+            t1.visibility = View.GONE
+            t2.visibility = View.GONE
+            t3.visibility = View.GONE
+            t10.visibility = View.GONE
+            t11.visibility = View.GONE
+            polosa.visibility = View.GONE
+            if (tipicon == 1) t7.visibility = View.VISIBLE else t7.visibility = View.GONE
+            if (tipicon == 2) t5.visibility = View.VISIBLE else t5.visibility = View.GONE
+            if (tipicon == 3) t6.visibility = View.VISIBLE else t6.visibility = View.GONE
+            if (tipicon == 4) t8.visibility = View.VISIBLE else t8.visibility = View.GONE
+            if (tipicon == 5) t9.visibility = View.VISIBLE else t9.visibility = View.GONE
+            textView1.visibility = View.GONE
             if (tipicon == 0) {
-                dialogView.t1.visibility = View.VISIBLE
-                dialogView.t2.visibility = View.VISIBLE
-                dialogView.t3.visibility = View.VISIBLE
-                dialogView.t10.visibility = View.VISIBLE
-                dialogView.t11.visibility = View.VISIBLE
-                dialogView.polosa.visibility = View.VISIBLE
-                dialogView.t5.visibility = View.VISIBLE
-                dialogView.t6.visibility = View.VISIBLE
-                dialogView.t7.visibility = View.VISIBLE
-                dialogView.t8.visibility = View.VISIBLE
-                dialogView.t9.visibility = View.VISIBLE
-                dialogView.textView1.visibility = View.VISIBLE
+                t1.visibility = View.VISIBLE
+                t2.visibility = View.VISIBLE
+                t3.visibility = View.VISIBLE
+                t10.visibility = View.VISIBLE
+                t11.visibility = View.VISIBLE
+                polosa.visibility = View.VISIBLE
+                t5.visibility = View.VISIBLE
+                t6.visibility = View.VISIBLE
+                t7.visibility = View.VISIBLE
+                t8.visibility = View.VISIBLE
+                t9.visibility = View.VISIBLE
+                textView1.visibility = View.VISIBLE
             }
-            dialogView.textView7.setPadding(0, 0, 0, 0)
-            dialogView.textView8.text = MainActivity.fromHtml("<strong>Двунадзясятыя</strong><br> і вялікія сьвяты")
-            dialogView.textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            dialogView.textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            dialogView.textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            dialogView.textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            dialogView.textView5.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            dialogView.textView6.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            dialogView.textView7.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            dialogView.textView8.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            dialogView.textView9.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            dialogView.textView10.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            dialogView.textView11.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            dialogView.textView12.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            dialogView.textView13.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView7.setPadding(0, 0, 0, 0)
+            textView8.text = MainActivity.fromHtml("<strong>Двунадзясятыя</strong><br> і вялікія сьвяты")
+            textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView5.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView6.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView7.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView8.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView9.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView10.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView11.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView12.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView13.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
-                dialogView.imageView14.setImageResource(R.drawable.znaki_ttk_whate)
-                dialogView.textView1.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                dialogView.textView2.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                dialogView.textView3.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                dialogView.textView4.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                dialogView.textView5.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                dialogView.textView6.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                dialogView.textView7.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                dialogView.textView8.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                dialogView.textView9.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                dialogView.textView10.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                dialogView.textView11.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                dialogView.textView12.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                dialogView.textView13.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                dialogView.line2.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                dialogView.image1.setImageResource(R.drawable.znaki_krest_v_kruge_black)
-                dialogView.image2.setImageResource(R.drawable.znaki_krest_v_polukruge_black)
-                dialogView.image3.setImageResource(R.drawable.znaki_krest_black)
-                dialogView.image4.setImageResource(R.drawable.znaki_ttk_black_black)
-                dialogView.image5.setImageResource(R.drawable.znaki_red_kub_black)
+                imageView14.setImageResource(R.drawable.znaki_ttk_whate)
+                textView1.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView2.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView3.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView4.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView5.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView6.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView7.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView8.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView9.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView10.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView11.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView12.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView13.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                line2.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                image1.setImageResource(R.drawable.znaki_krest_v_kruge_black)
+                image2.setImageResource(R.drawable.znaki_krest_v_polukruge_black)
+                image3.setImageResource(R.drawable.znaki_krest_black)
+                image4.setImageResource(R.drawable.znaki_ttk_black_black)
+                image5.setImageResource(R.drawable.znaki_red_kub_black)
             }
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return rootView
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        activity?.let {
+            val builder = AlertDialog.Builder(it)
+            rootView = View.inflate(it, R.layout.tipicon, null)
+            builder.setView(rootView)
             builder.setPositiveButton(it.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
             alert.setOnShowListener {

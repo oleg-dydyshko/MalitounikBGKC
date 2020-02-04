@@ -123,6 +123,7 @@ internal class BibliotekaEpub(dirPatch: String) {
                 val t5 = spineSrc.indexOf("src=\"", t4 + 4)
                 val t6 = spineSrc.indexOf("\"", t5 + 5)
                 res = spineSrc.substring(t5 + 5, t6)
+                res = res.replace("../", "/")
                 res = File(res).canonicalPath
                 val t7 = res.indexOf("/")
                 res = res.substring(t7 + 1)

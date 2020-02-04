@@ -916,7 +916,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             var count: Int
             val buffer = ByteArray(8192)
             while (zis.nextEntry?.also { ze = it } != null) {
-                file = File("$filesDir/Book", ze.name)
+                file = File(dir.canonicalPath, ze.name)
+                val canonicalPath = file.canonicalPath
+                if (!canonicalPath.startsWith(dir.canonicalPath))
+                    return
                 FileOutputStream(file).use { fout -> while (zis.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count) }
             }
             filePath = file.absolutePath
@@ -1690,6 +1693,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 val dir: File = if (ze.isDirectory) file else file.parentFile ?: file
                 if (!dir.isDirectory && !dir.mkdirs()) throw FileNotFoundException("Failed to ensure directory: " + dir.absolutePath)
                 if (ze.isDirectory) continue
+                val canonicalPath = file.canonicalPath
+                if (!canonicalPath.startsWith(targetDirectory.canonicalPath))
+                    return
                 FileOutputStream(file).use { fout -> while (zis.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count) }
             }
         }

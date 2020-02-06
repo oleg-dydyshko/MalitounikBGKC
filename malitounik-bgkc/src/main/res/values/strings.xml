@@ -334,5 +334,6 @@
     <string name="default_font">Па змаўчаньні</string>
     <string name="notifi_fix">Рамонт апавяшчэньняў</string>
     <string name="sviaty_under">ІНШЫЯ СЬВЯТЫ:</string>
+    <string name="security_error">Файл ня бясьпечны</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

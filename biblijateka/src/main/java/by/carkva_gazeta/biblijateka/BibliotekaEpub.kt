@@ -92,41 +92,44 @@ internal class BibliotekaEpub(dirPatch: String) {
 
     val titleImage: String
         get() {
-            val file = File(patch + contentOpf)
-            var inputStream = FileReader(file)
-            var reader = BufferedReader(inputStream)
-            var spineSrc = reader.readText()
-            inputStream.close()
-            val item = spineSrc.split("<item")
             var res = ""
-            var t2: Int
-            var t3: Int
-            var rashirenie = arrayOf("", "")
-            run item@{
-                item.forEach {
-                    val t1 = it.indexOf("id=\"cover\"")
-                    if (t1 != -1) {
-                        t2 = it.indexOf("href=\"")
-                        t3 = it.indexOf("\"", t2 + 6)
-                        res = it.substring(t2 + 6, t3)
-                        rashirenie = it.substring(t2 + 6, t3).split(".").toTypedArray()
-                        return@item
+            try {
+                val file = File(patch + contentOpf)
+                var inputStream = FileReader(file)
+                var reader = BufferedReader(inputStream)
+                var spineSrc = reader.readText()
+                inputStream.close()
+                val item = spineSrc.split("<item")
+                var t2: Int
+                var t3: Int
+                var rashirenie = arrayOf("", "")
+                run item@{
+                    item.forEach {
+                        val t1 = it.indexOf("id=\"cover\"")
+                        if (t1 != -1) {
+                            t2 = it.indexOf("href=\"")
+                            t3 = it.indexOf("\"", t2 + 6)
+                            res = it.substring(t2 + 6, t3)
+                            rashirenie = it.substring(t2 + 6, t3).split(".").toTypedArray()
+                            return@item
+                        }
                     }
                 }
-            }
-            if (rashirenie[1] != "jpg") {
-                inputStream = FileReader(File(patch + res))
-                reader = BufferedReader(inputStream)
-                spineSrc = reader.readText()
-                inputStream.close()
-                val t4 = spineSrc.indexOf("<img")
-                val t5 = spineSrc.indexOf("src=\"", t4 + 4)
-                val t6 = spineSrc.indexOf("\"", t5 + 5)
-                res = spineSrc.substring(t5 + 5, t6)
-                res = res.replace("../", "/")
-                res = File(res).canonicalPath
-                val t7 = res.indexOf("/")
-                res = res.substring(t7 + 1)
+                if (rashirenie[1] != "jpg" && rashirenie[1] != "jpeg") {
+                    inputStream = FileReader(File(patch + res))
+                    reader = BufferedReader(inputStream)
+                    spineSrc = reader.readText()
+                    inputStream.close()
+                    val t4 = spineSrc.indexOf("<img")
+                    val t5 = spineSrc.indexOf("src=\"", t4 + 4)
+                    val t6 = spineSrc.indexOf("\"", t5 + 5)
+                    res = spineSrc.substring(t5 + 5, t6)
+                    res = File(res).canonicalPath
+                    val t7 = res.indexOf("/")
+                    res = res.substring(t7 + 1)
+                }
+            } catch (th: Throwable) {
+                return ""
             }
             return patch + res
         }

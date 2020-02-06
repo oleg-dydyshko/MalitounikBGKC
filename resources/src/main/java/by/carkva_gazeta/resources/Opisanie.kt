@@ -98,11 +98,11 @@ class Opisanie : AppCompatActivity() {
             }
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
-            var line: String
+            //var line: String
             val builder = StringBuilder()
             reader.forEachLine {
-                line = it.replace("h3", "h6")
-                builder.append(line)
+                //line = it.replace("h3", "h6")
+                builder.append(it)
             }
             inputStream.close()
             val dataR: String = if (day < 10) "0$day" else day.toString()
@@ -112,6 +112,11 @@ class Opisanie : AppCompatActivity() {
             val tN = res.indexOf("<div id=\"$dataR$munR\">")
             val tK = res.indexOf("</div>", tN)
             res = res.substring(tN, tK + 6)
+            res = res.replace("<div id=\"$dataR$munR\">", "")
+            res = res.replace("<h3 class=\"blocks\">", "<p><strong>")
+            res = res.replace("</h3>", "</strong>")
+            //res = res.replace("<p class=\"blocks\">", "<p>")
+            res = res.replace("</div>", "")
             if (dzenNoch) TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             TextView.text = MainActivity.fromHtml(res)
         }

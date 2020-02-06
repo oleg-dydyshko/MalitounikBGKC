@@ -840,9 +840,13 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 progressBar2.visibility = View.VISIBLE
                 dir.mkdirs()
                 Thread(Runnable {
-                    unzip(file, dir)
-                    runOnUiThread {
-                        loadFileEPUB(dir)
+                    val noerror = unzip(file, dir)
+                    if (noerror) {
+                        runOnUiThread {
+                            loadFileEPUB(dir)
+                            progressBar2.visibility = View.GONE
+                        }
+                    } else {
                         progressBar2.visibility = View.GONE
                     }
                 }).start()
@@ -918,8 +922,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             while (zis.nextEntry?.also { ze = it } != null) {
                 file = File(dir.canonicalPath, ze.name)
                 val canonicalPath = file.canonicalPath
-                if (!canonicalPath.startsWith(dir.canonicalPath))
+                if (!canonicalPath.startsWith(dir.canonicalPath)) {
+                    val securityError = DialogSecurityError()
+                    securityError.show(supportFragmentManager, "securityError")
                     return
+                }
                 FileOutputStream(file).use { fout -> while (zis.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count) }
             }
             filePath = file.absolutePath
@@ -1683,7 +1690,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         outState.putString("nameRubrika", nameRubrika)
     }
 
-    private fun unzip(zipFile: File, targetDirectory: File) {
+    private fun unzip(zipFile: File, targetDirectory: File): Boolean {
         ZipInputStream(BufferedInputStream(FileInputStream(zipFile))).use { zis ->
             var ze = ZipEntry("")
             var count: Int
@@ -1694,11 +1701,16 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 if (!dir.isDirectory && !dir.mkdirs()) throw FileNotFoundException("Failed to ensure directory: " + dir.absolutePath)
                 if (ze.isDirectory) continue
                 val canonicalPath = file.canonicalPath
-                if (!canonicalPath.startsWith(targetDirectory.canonicalPath))
-                    return
+                if (!canonicalPath.startsWith(targetDirectory.canonicalPath)) {
+                    val securityError = DialogSecurityError()
+                    securityError.show(supportFragmentManager, "securityError")
+                    targetDirectory.deleteRecursively()
+                    return false
+                }
                 FileOutputStream(file).use { fout -> while (zis.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count) }
             }
         }
+        return true
     }
 
     /*private fun nextPageAutoScroll() {

@@ -63,7 +63,7 @@ class DialogFileExplorer : DialogFragment() {
             }
             val filterFile = FilenameFilter { dir: File, filename: String ->
                 val sel = File(dir, filename)
-                sel.isFile && !sel.isHidden && (sel.name.toLowerCase(Locale.getDefault()).contains(".pdf") || sel.name.toLowerCase(Locale.getDefault()).contains(".epub") || sel.name.toLowerCase(Locale.getDefault()).contains(".fb2"))
+                sel.isFile && !sel.isHidden && (sel.name.toLowerCase(Locale.getDefault()).contains(".pdf") || sel.name.toLowerCase(Locale.getDefault()).contains(".epub") || sel.name.toLowerCase(Locale.getDefault()).contains(".fb2") || sel.name.toLowerCase(Locale.getDefault()).contains(".txt") || sel.name.toLowerCase(Locale.getDefault()).contains(".htm"))
             }
             if (!firstLvl) {
                 val temp = ArrayList<String>()
@@ -97,6 +97,10 @@ class DialogFileExplorer : DialogFragment() {
                     if (dzenNoch) temp.add(R.drawable.file_icon_black.toString()) else temp.add(R.drawable.file_icon.toString())
                 } else if (aFList.toLowerCase(Locale.getDefault()).contains(".fb2")) {
                     if (dzenNoch) temp.add(R.drawable.file_fb2_icon_black.toString()) else temp.add(R.drawable.file_fb2_icon.toString())
+                } else if (aFList.toLowerCase(Locale.getDefault()).contains(".txt")) {
+                    if (dzenNoch) temp.add(R.drawable.file_txt_icon_black.toString()) else temp.add(R.drawable.file_txt_icon.toString())
+                } else if (aFList.toLowerCase(Locale.getDefault()).contains(".htm")) {
+                    if (dzenNoch) temp.add(R.drawable.file_html_icon_black.toString()) else temp.add(R.drawable.file_html_icon.toString())
                 } else {
                     if (dzenNoch) temp.add(R.drawable.file_epub_icon_black.toString()) else temp.add(R.drawable.file_epub_icon.toString())
                 }

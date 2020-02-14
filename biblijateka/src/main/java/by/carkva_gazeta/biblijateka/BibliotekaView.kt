@@ -206,8 +206,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     override fun onDialogFontSizePositiveClick() {
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        val webSettings: WebSettings = webView.settings
-        webSettings.defaultFontSize = fontBiblia.toInt()
+        if (scrollViewB.visibility == View.VISIBLE) {
+            textViewB.textSize = fontBiblia
+        } else {
+            val webSettings: WebSettings = webView.settings
+            webSettings.defaultFontSize = fontBiblia.toInt()
+        }
     }
 
     override fun fileDelite(position: Int, file: String) {
@@ -264,6 +268,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             listView.visibility = View.GONE
             webView.visibility = View.GONE
             pdfView.visibility = View.VISIBLE
+            scrollViewB.visibility = View.GONE
             invalidateOptionsMenu()
         } else {
             if (MainActivity.isIntNetworkAvailable(this) == 2) {
@@ -302,6 +307,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 loadFilePDF()
                 listView.visibility = View.GONE
                 webView.visibility = View.GONE
+                scrollViewB.visibility = View.GONE
                 pdfView.visibility = View.VISIBLE
                 invalidateOptionsMenu()
             }
@@ -327,6 +333,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             fileName.toLowerCase(Locale.getDefault()).contains(".pdf") -> {
                 loadFilePDF()
                 pdfView.visibility = View.VISIBLE
+            }
+            fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
+                loadFileTXT()
+            }
+            fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
+                loadFileHTML()
             }
             else -> {
                 loadFileEPUB()
@@ -472,6 +484,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         fileName.toLowerCase(Locale.getDefault()).contains(".fb2") -> {
                             loadFileFB2()
                         }
+                        fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
+                            loadFileTXT()
+                        }
+                        fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
+                            loadFileHTML()
+                        }
                         else -> {
                             loadFileEPUB()
                         }
@@ -530,6 +548,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     loadFilePDF()
                     listView.visibility = View.GONE
                     webView.visibility = View.GONE
+                    scrollViewB.visibility = View.GONE
                     pdfView.visibility = View.VISIBLE
                     invalidateOptionsMenu()
                 } else {
@@ -626,6 +645,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
             label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
             label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+            textViewB.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
         } else {
             title.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
             label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
@@ -684,6 +704,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     listView.visibility = View.GONE
                     pdfView.visibility = View.VISIBLE
                     webView.visibility = View.GONE
+                    scrollViewB.visibility = View.GONE
                     savedInstance = 1
                 }
                 savedInstanceState.getInt("pdfView", 0) == 2 -> {
@@ -696,6 +717,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     listView.visibility = View.VISIBLE
                     pdfView.visibility = View.GONE
                     webView.visibility = View.GONE
+                    scrollViewB.visibility = View.GONE
                     savedInstance = 0
                 }
             }
@@ -777,6 +799,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     fileName.toLowerCase(Locale.getDefault()).contains(".fb2") -> {
                         loadFileFB2()
                     }
+                    fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
+                        loadFileTXT()
+                    }
+                    fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
+                        loadFileHTML()
+                    }
                     else -> {
                         loadFileEPUB()
                     }
@@ -802,31 +830,79 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 .swipeHorizontal(false)
                 .enableDoubletap(true)
                 .defaultPage(defaultPage) // allows to draw something on the current page, usually visible in the middle of the screen
-//.onDraw(onDrawListener)
-// allows to draw something on all pages, separately for every page. Called only for visible pages
-//.onDrawAll(onDrawListener)
+                //.onDraw(onDrawListener)
+                // allows to draw something on all pages, separately for every page. Called only for visible pages
+                //.onDrawAll(onDrawListener)
                 .onLoad(this) // called after document is loaded and starts to be rendered
                 .onPageChange(this) //.onPageChange(onPageChangeListener)
-//.onPageScroll(onPageScrollListener)
+                //.onPageScroll(onPageScrollListener)
                 .onError(this) //.onError(onErrorListener)
-//.onPageError(onPageErrorListener)
-//.onRender(onRenderListener) // called after document is rendered for the first time
-// called on single tap, return true if handled, false to toggle scroll handle visibility
-//.onTap(onTapListener)
-//.onLongPress(onLongPressListener)
+                //.onPageError(onPageErrorListener)
+                //.onRender(onRenderListener) // called after document is rendered for the first time
+                // called on single tap, return true if handled, false to toggle scroll handle visibility
+                //.onTap(onTapListener)
+                //.onLongPress(onLongPressListener)
                 .enableAnnotationRendering(false) // render annotations (such as comments, colors or forms)
                 .password(null)
                 .scrollHandle(null)
                 .enableAntialiasing(true) // improve rendering a little bit on low-res screens
-// spacing between pages in dp. To define spacing color, set view background
+                // spacing between pages in dp. To define spacing color, set view background
                 .spacing(2)
                 .autoSpacing(false) // add dynamic spacing to fit each page on its own on the screen
-//.linkHandler(DefaultLinkHandler)
+                //.linkHandler(DefaultLinkHandler)
                 .pageFitPolicy(FitPolicy.WIDTH)
                 .pageSnap(false) // snap pages to screen boundaries
                 .pageFling(false) // make a fling change only a single page like ViewPager
                 .nightMode(k.getBoolean("inversion", false)) // toggle night mode
                 .load()
+    }
+
+    private fun loadFileTXT() {
+        progressBar2.visibility = View.GONE
+        scrollViewB.visibility = View.VISIBLE
+        val file = File(filePath)
+        textViewB.text = file.readText()
+        val t1 = file.name.lastIndexOf(".")
+        title_toolbar.text = file.name.substring(0, t1)
+        for (i in 0 until naidaunia.size) {
+            if (naidaunia[i][1].contains(filePath)) {
+                naidaunia.removeAt(i)
+                break
+            }
+        }
+        val gson = Gson()
+        val temp: ArrayList<String> = ArrayList()
+        temp.add(file.name.substring(0, t1))
+        temp.add(filePath)
+        temp.add("")
+        naidaunia.add(temp)
+        val prefEditor: SharedPreferences.Editor = k.edit()
+        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+        prefEditor.apply()
+    }
+
+    private fun loadFileHTML() {
+        progressBar2.visibility = View.GONE
+        webView.visibility = View.VISIBLE
+        val file = File(filePath)
+        webView.loadUrl("file://" + file.absolutePath)
+        val t1 = file.name.lastIndexOf(".")
+        title_toolbar.text = file.name.substring(0, t1)
+        for (i in 0 until naidaunia.size) {
+            if (naidaunia[i][1].contains(filePath)) {
+                naidaunia.removeAt(i)
+                break
+            }
+        }
+        val gson = Gson()
+        val temp: ArrayList<String> = ArrayList()
+        temp.add(file.name.substring(0, t1))
+        temp.add(filePath)
+        temp.add("")
+        naidaunia.add(temp)
+        val prefEditor: SharedPreferences.Editor = k.edit()
+        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+        prefEditor.apply()
     }
 
     private fun loadFileEPUB() {
@@ -840,8 +916,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 progressBar2.visibility = View.VISIBLE
                 dir.mkdirs()
                 Thread(Runnable {
-                    val noerror = unzip(file, dir)
-                    if (noerror) {
+                    if (unzip(file, dir)) {
                         runOnUiThread {
                             loadFileEPUB(dir)
                             progressBar2.visibility = View.GONE
@@ -1177,9 +1252,20 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
                     menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title = (resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon))
                 }
-                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = true
-                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = true
-                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = true
+                when {
+                    fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
+                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = false
+                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
+                    }
+                    fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
+                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = false
+                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = true
+                    }
+                    else -> {
+                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = true
+                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = true
+                    }
+                }
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_set_page).isVisible = false
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isVisible = false
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_font).isVisible = true
@@ -1438,6 +1524,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 listView.visibility = View.VISIBLE
                 pdfView.visibility = View.GONE
                 webView.visibility = View.GONE
+                scrollViewB.visibility = View.GONE
             }
             stopAutoScroll()
         } else {
@@ -1527,6 +1614,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 listView.visibility = View.VISIBLE
                 pdfView.visibility = View.GONE
                 webView.visibility = View.GONE
+                scrollViewB.visibility = View.GONE
             }
             if (rub != -1 && listView.visibility == View.VISIBLE) {
                 arrayList.clear()
@@ -1660,7 +1748,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         mHideHandler.removeCallbacks(mHidePart2Runnable)
         mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelaY.toLong())
-        recreate()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

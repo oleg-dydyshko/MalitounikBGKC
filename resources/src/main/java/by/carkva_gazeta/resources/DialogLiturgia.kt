@@ -97,15 +97,17 @@ class DialogLiturgia : DialogFragment() {
                     builder.append(zch.sviatyiaView(0))
                 }
             }
-            val isr = InputStreamReader(inputStream)
-            val reader = BufferedReader(isr)
-            var line: String
-            reader.forEachLine {
-                line = it
-                if (dzenNoch) line = line.replace("#d00505", "#f44336")
-                builder.append(line).append("\n")
+            if (!(bogashlugbovya == 8 || bogashlugbovya == 9)) {
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                var line: String
+                reader.forEachLine {
+                    line = it
+                    if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                    builder.append(line).append("\n")
+                }
+                inputStream.close()
             }
-            inputStream.close()
             val scrollView = ScrollView(it)
             linearLayout.addView(scrollView)
             scrollView.isVerticalScrollBarEnabled = false

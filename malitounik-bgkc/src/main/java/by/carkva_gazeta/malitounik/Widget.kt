@@ -7,9 +7,6 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.graphics.Shader
-import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.SystemClock
 import android.view.View
@@ -148,8 +145,8 @@ class Widget : AppWidgetProvider() {
 
         fun kaliandar(context: Context, appWidgetManager: AppWidgetManager, widgetID: Int) {
             val updateViews = RemoteViews(context.packageName, R.layout.widget)
-            val tileMe = BitmapDrawable(context.resources, BitmapFactory.decodeResource(context.resources, R.drawable.calendar_fon))
-            tileMe.tileModeX = Shader.TileMode.REPEAT
+            //val tileMe = BitmapDrawable(context.resources, BitmapFactory.decodeResource(context.resources, R.drawable.calendar_fon))
+            //tileMe.tileModeX = Shader.TileMode.REPEAT
             val inputStream = context.resources.openRawResource(MainActivity.caliandar(context, getmun()))
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
@@ -239,7 +236,7 @@ class Widget : AppWidgetProvider() {
             }
             if (!data[day][6].contains("no_sviaty")) {
                 val svita = data[day][6].replace("\n", "<br>")
-                if (data[day][5].contains("1")) updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml("<strong>" + svita + "</strong>")) else updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml(svita))
+                if (data[day][5].contains("1")) updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml("<strong>$svita</strong>")) else updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml(svita))
                 updateViews.setViewVisibility(R.id.textCviatyGlavnyia, View.VISIBLE)
             }
             if (data[day][6].contains("Пачатак") || data[day][6].contains("Вялікі") || data[day][6].contains("Вялікая") || data[day][6].contains("убот") || data[day][6].contains("ВЕЧАР") || data[day][6].contains("Палова")) {

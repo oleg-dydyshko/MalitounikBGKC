@@ -43,7 +43,6 @@ class Widget : AppWidgetProvider() {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pIntent = PendingIntent.getBroadcast(context, 50, intent, 0)
         val c = Calendar.getInstance() as GregorianCalendar
-        //if (alarmManager != null) {
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
@@ -58,8 +57,6 @@ class Widget : AppWidgetProvider() {
                 alarmManager[AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH])] = pIntent
             }
         }
-        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, mkTime(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)), 86400000, pIntent);
-//}
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
@@ -80,10 +77,8 @@ class Widget : AppWidgetProvider() {
         val pIntent = PendingIntent.getBroadcast(context, 50, intent, 0)
         val pIntentBoot = PendingIntent.getBroadcast(context, 51, intent, 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        //if (alarmManager != null) {
         alarmManager.cancel(pIntent)
         alarmManager.cancel(pIntentBoot)
-        //}
     }
 
     private fun mkTime(year: Int, month: Int, day: Int): Long {
@@ -145,8 +140,6 @@ class Widget : AppWidgetProvider() {
 
         fun kaliandar(context: Context, appWidgetManager: AppWidgetManager, widgetID: Int) {
             val updateViews = RemoteViews(context.packageName, R.layout.widget)
-            //val tileMe = BitmapDrawable(context.resources, BitmapFactory.decodeResource(context.resources, R.drawable.calendar_fon))
-            //tileMe.tileModeX = Shader.TileMode.REPEAT
             val inputStream = context.resources.openRawResource(MainActivity.caliandar(context, getmun()))
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
@@ -205,7 +198,7 @@ class Widget : AppWidgetProvider() {
             updateViews.setTextColor(R.id.textDenNedeli, ContextCompat.getColor(context, R.color.colorPrimary_text))
             updateViews.setTextColor(R.id.textMesiac, ContextCompat.getColor(context, R.color.colorPrimary_text))
             updateViews.setTextColor(R.id.textCviatyGlavnyia, ContextCompat.getColor(context, rColorColorPrimary))
-            updateViews.setViewVisibility(R.id.textSviatyia, View.VISIBLE)
+            updateViews.setViewVisibility(R.id.textSviatyia, View.GONE)
             updateViews.setTextViewText(R.id.textChislo, dayofmounth.toString())
             if (data[day][7].toInt() == 1) {
                 updateViews.setTextColor(R.id.textDenNedeli, ContextCompat.getColor(context, R.color.colorPrimary_text))
@@ -247,13 +240,16 @@ class Widget : AppWidgetProvider() {
             var dataSviatyia = ""
             if (!data[day][4].contains("no_sviatyia")) {
                 dataSviatyia = data[day][4]
-                if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
-                updateViews.setTextViewText(R.id.textSviatyia, MainActivity.fromHtml(dataSviatyia))
-            } else {
-                updateViews.setViewVisibility(R.id.textSviatyia, View.GONE)
             }
             if (data[day][8] != "") {
-                updateViews.setTextViewText(R.id.textSviatyia, MainActivity.fromHtml(data[day][8] + ";<br>" + dataSviatyia))
+                dataSviatyia = data[day][8] + ";<br>" + dataSviatyia
+            }
+            if (data[day][18] == "1") {
+                dataSviatyia = dataSviatyia + "<br><strong>" + context.getString(R.string.pamerlyia) + "</strong>"
+            }
+            if (dataSviatyia != "") {
+                if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
+                updateViews.setTextViewText(R.id.textSviatyia, MainActivity.fromHtml(dataSviatyia))
                 updateViews.setViewVisibility(R.id.textSviatyia, View.VISIBLE)
             }
             if (data[day][7].contains("2")) {

@@ -335,5 +335,6 @@
     <string name="notifi_fix">Рамонт апавяшчэньняў</string>
     <string name="sviaty_under">ІНШЫЯ СЬВЯТЫ:</string>
     <string name="security_error">Файл ня бясьпечны</string>
+    <string name="pamerlyia">Памінаньне памёрлых</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

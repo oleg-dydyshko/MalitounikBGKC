@@ -1554,9 +1554,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         idSelect = view.id
         onClickView = view
         val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        /*if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
-        } else {*/
         var rub = -1
         if (dzenNoch) {
             label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))

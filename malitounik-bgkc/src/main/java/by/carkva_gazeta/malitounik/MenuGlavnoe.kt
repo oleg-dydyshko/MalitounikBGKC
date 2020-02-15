@@ -13,7 +13,6 @@ import androidx.fragment.app.ListFragment
  */
 class MenuGlavnoe : ListFragment() {
     private val data = arrayOf("Апошнія навіны", "Гісторыя Царквы", "Сьвятло Ўсходу", "Царква і грамадзтва", "Катэдральны пляц", "Відэа", "Бібліятэка")
-    //private var shortcuts = false
     private var mLastClickTime: Long = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

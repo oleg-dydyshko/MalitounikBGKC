@@ -90,8 +90,8 @@
 
             <ImageView
                 android:id="@+id/znakTipicona"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_below="@+id/textChislo"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
@@ -103,7 +103,7 @@
 
             <ImageView
                 android:id="@+id/imageView4"
-                android:layout_width="15dp"
+                android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
@@ -111,7 +111,7 @@
                 android:layout_marginLeft="5dp"
                 android:contentDescription="TODO"
                 android:src="@drawable/fishe"
-                android:visibility="gone"
+                android:visibility="visible"
                 tools:ignore="ContentDescription" />
 
             <LinearLayout
@@ -123,12 +123,13 @@
 
                 <ImageView
                     android:id="@+id/imageView7"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:contentDescription="TODO"
                     android:src="@drawable/settings_black" />
+
             </LinearLayout>
 
         </RelativeLayout>
@@ -162,7 +163,7 @@
         <TextView
             android:id="@+id/textPost"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="start|bottom"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"

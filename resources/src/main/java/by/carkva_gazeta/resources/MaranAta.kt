@@ -201,7 +201,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         /*if (scroll == -1) {
                         nazva = maranAta.get(list.getLastVisiblePosition() - 5);
                     }*/if (scroll == 1) {
-                            nazva = if (list.lastVisiblePosition - 5 >= 0) maranAta[list.lastVisiblePosition - 5] else maranAta[list.lastVisiblePosition]
+                            nazva = if (list.lastVisiblePosition - 4 >= 0) maranAta[list.lastVisiblePosition - 4] else maranAta[list.lastVisiblePosition]
                         }
                         val oldtollBarText = title_toolbar.text.toString()
                         if (oldtollBarText == "") {

@@ -548,13 +548,11 @@ try {
                         prefEditors.putInt(key, 0)
                     }
                 }
-                //prefEditors.putInt("id", R.id.label1)
                 prefEditors.putString("search_svityx_string", "")
                 prefEditors.putString("search_string", "")
                 prefEditors.putInt("search_position", 0)
                 prefEditors.putInt("pegistr", 0)
                 prefEditors.putInt("slovocalkam", 0)
-                //prefEditors.putInt("kohnoeslovo", 0)
                 prefEditors.putInt("biblia_seash", 0)
                 prefEditors.apply()
                 setPadzeia = true

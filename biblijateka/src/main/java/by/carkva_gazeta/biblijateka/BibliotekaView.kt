@@ -189,7 +189,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 webView.postDelayed({
                     startAutoScroll()
                 }, 300)
-            } //nextPageAutoScroll()
+            }
         }
 
         override fun onAnimationRepeat(animation: Animation) {}
@@ -201,7 +201,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     override fun onBottom() {
         stopAutoScroll()
-        //toNextPage()
     }
 
     override fun onDialogFontSizePositiveClick() {
@@ -267,7 +266,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             loadFilePDF()
             listView.visibility = View.GONE
             webView.visibility = View.GONE
-            pdfView.visibility = View.VISIBLE
             scrollViewB.visibility = View.GONE
             invalidateOptionsMenu()
         } else {
@@ -308,7 +306,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 listView.visibility = View.GONE
                 webView.visibility = View.GONE
                 scrollViewB.visibility = View.GONE
-                pdfView.visibility = View.VISIBLE
                 invalidateOptionsMenu()
             }
         }).start()
@@ -332,7 +329,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
             fileName.toLowerCase(Locale.getDefault()).contains(".pdf") -> {
                 loadFilePDF()
-                pdfView.visibility = View.VISIBLE
             }
             fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
                 loadFileTXT()
@@ -414,7 +410,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             val t2: Int = filePath.lastIndexOf("/")
             val image: String = filePath.substring(t2 + 1)
             val t1 = image.lastIndexOf(".")
-            //String image_local = getFilesDir() + "/image_temp/" + pdf.substring(0, t1) + ".png"
             temp.add(filesDir.toString() + "/image_temp/" + image.substring(0, t1) + ".png")
         } else {
             temp.add("")
@@ -473,10 +468,16 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 if (file.exists()) {
                     filePath = file.absolutePath
                     fileName = file.name
+                    if (!file.canonicalPath.startsWith(filesDir.canonicalPath)) {
+                        val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        if (PackageManager.PERMISSION_DENIED == permissionCheck) {
+                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                            return@setOnItemClickListener
+                        }
+                    }
                     when {
                         fileName.toLowerCase(Locale.getDefault()).contains(".pdf") -> {
                             loadFilePDF()
-                            pdfView.visibility = View.VISIBLE
                         }
                         fileName.toLowerCase(Locale.getDefault()).contains(".fb2.zip") -> {
                             loadFileFB2ZIP()
@@ -576,7 +577,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             override fun onSwipeRight() {
                 if (defaultPage - 1 >= 0) {
                     stopAutoScroll()
-                    //toNextPageTimer.cancel()
                     animationStoronaLeft = false
                     webView.startAnimation(animOutRight)
                 }
@@ -586,14 +586,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 if (biblioteka != null) {
                     if (defaultPage + 1 < biblioteka?.content?.size ?: 0) {
                         stopAutoScroll()
-                        //toNextPageTimer.cancel()
                         animationStoronaLeft = true
                         webView.startAnimation(animOutLeft)
                     }
                 } else {
                     if (defaultPage + 1 < bookTitle.size) {
                         stopAutoScroll()
-                        //toNextPageTimer.cancel()
                         animationStoronaLeft = true
                         webView.startAnimation(animOutLeft)
                     }
@@ -727,7 +725,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }.type
                 naidaunia.addAll(gson.fromJson(json, type))
             }
-            if (idSelect != R.id.label6)//if (!(idSelect == by.carkva_gazeta.malitounik.R.id.label6 || idSelect == by.carkva_gazeta.malitounik.R.id.label7))
+            if (idSelect != R.id.label6)
                 onClick(findViewById(idSelect))
             invalidateOptionsMenu()
             if (fullscreenPage) hide()
@@ -816,6 +814,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     private fun loadFilePDF() {
         progressBar2.visibility = View.GONE
+        pdfView.visibility = View.VISIBLE
         val allEntries: Map<String, *> = k.all
         for ((key) in allEntries) {
             if (key.contains(fileName)) {
@@ -951,15 +950,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         val split: Array<String> = biblioteka?.content?.get(defaultPage)?.get(1)?.split("#")?.toTypedArray()
                 ?: arrayOf("")
-        //val epubfile = File(dir.absolutePath.toString() + "/" + split[0])
-        //val inputStream = FileReader(epubfile)
-        //val reader = BufferedReader(inputStream)
-        //val builder = reader.readText()
-        //inputStream.close()
-        //val ebubcontent = builder.replace("</head>", "<style type=\"text/css\">::selection {background: #eb9b9a}</style></head>")
-        //webView.loadDataWithBaseURL(null, ebubcontent, "text/html", "utf-8", null)
         webView.loadUrl("file://" + dir.absolutePath.toString() + "/" + split[0])
-        //webView.loadUrl("file://" + dir.getAbsolutePath() + "/" + split[0])
         webView.scrollTo(0, positionY)
         bookTitle.clear()
         bookTitle.addAll(biblioteka?.contentList as List<String>)
@@ -1323,21 +1314,41 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
         if (requestCode == myPermissionsWriteExternalStorage) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (listView.visibility == View.GONE) {
-                    if (fileName != "") {
-                        if (fileName.contains(".pdf")) {
+                if (idSelect == R.id.label6) {
+                    progressBar2.visibility = View.GONE
+                    val fileExplorer = DialogFileExplorer()
+                    fileExplorer.show(supportFragmentManager, "file_explorer")
+                } else {
+                    when {
+                        fileName.toLowerCase(Locale.getDefault()).contains(".pdf") -> {
                             loadFilePDF()
-                        } else {
+                        }
+                        fileName.toLowerCase(Locale.getDefault()).contains(".fb2.zip") -> {
+                            loadFileFB2ZIP()
+                        }
+                        fileName.toLowerCase(Locale.getDefault()).contains(".fb2") -> {
+                            loadFileFB2()
+                        }
+                        fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
+                            loadFileTXT()
+                        }
+                        fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
+                            loadFileHTML()
+                        }
+                        else -> {
                             loadFileEPUB()
                         }
-                    } else {
-                        onClick(onClickView)
                     }
-                } else {
-                    onClick(onClickView)
+                    if (!fileName.toLowerCase(Locale.getDefault()).contains(".pdf")) {
+                        autoscroll = k.getBoolean("autoscroll", false)
+                        spid = k.getInt("autoscrollSpid", 60)
+                        if (autoscroll) {
+                            startAutoScroll()
+                        }
+                    }
+                    listView.visibility = View.GONE
+                    invalidateOptionsMenu()
                 }
-            } else {
-                finish()
             }
         }
     }
@@ -1504,7 +1515,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 } else {
                     if (site) {
                         val intent = Intent(this, MainActivity::class.java)
-                        //ContextCompat.startActivity(intent)
                         startActivity(intent)
                         finish()
                     } else {
@@ -1541,113 +1551,115 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     override fun onClick(view: View) {
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         stopAutoScroll()
-        //toNextPageTimer.cancel()
         idSelect = view.id
         onClickView = view
         val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        if (PackageManager.PERMISSION_DENIED == permissionCheck) {
+        /*if (PackageManager.PERMISSION_DENIED == permissionCheck) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+        } else {*/
+        var rub = -1
+        if (dzenNoch) {
+            label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+            label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+            label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+            label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+            label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+            label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
         } else {
-            var rub = -1
-            if (dzenNoch) {
-                label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-                label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-                label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-                label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-                label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-                label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            } else {
-                label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+        }
+        when (idSelect) {
+            R.id.label1 -> {
+                progressBar2.visibility = View.GONE
+                arrayList.clear()
+                arrayList.addAll(naidaunia)
+                arrayList.reverse()
+                adapter.notifyDataSetChanged()
+                nameRubrika = "Нядаўнія кнігі"
+                title_toolbar.text = nameRubrika
+                page_toolbar.text = ""
+                if (dzenNoch) label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
             }
-            when (idSelect) {
-                R.id.label1 -> {
-                    progressBar2.visibility = View.GONE
-                    arrayList.clear()
-                    arrayList.addAll(naidaunia)
-                    arrayList.reverse()
-                    adapter.notifyDataSetChanged()
-                    nameRubrika = "Нядаўнія кнігі"
-                    title_toolbar.text = nameRubrika
-                    page_toolbar.text = ""
-                    if (dzenNoch) label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
-                }
-                R.id.label2 -> {
-                    nameRubrika = "Гісторыя Царквы"
-                    title_toolbar.text = nameRubrika
-                    page_toolbar.text = ""
-                    rub = 1
-                    if (dzenNoch) label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
-                }
-                R.id.label3 -> {
-                    nameRubrika = "Малітоўнікі"
-                    title_toolbar.text = nameRubrika
-                    page_toolbar.text = ""
-                    rub = 2
-                    if (dzenNoch) label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
-                }
-                R.id.label4 -> {
-                    nameRubrika = "Сьпеўнікі"
-                    title_toolbar.text = nameRubrika
-                    page_toolbar.text = ""
-                    rub = 3
-                    if (dzenNoch) label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
-                }
-                R.id.label5 -> {
-                    nameRubrika = "Рэлігійная літаратура"
-                    title_toolbar.text = nameRubrika
-                    page_toolbar.text = ""
-                    rub = 4
-                    if (dzenNoch) label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
-                }
-                R.id.label6 -> {
+            R.id.label2 -> {
+                nameRubrika = "Гісторыя Царквы"
+                title_toolbar.text = nameRubrika
+                page_toolbar.text = ""
+                rub = 1
+                if (dzenNoch) label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+            }
+            R.id.label3 -> {
+                nameRubrika = "Малітоўнікі"
+                title_toolbar.text = nameRubrika
+                page_toolbar.text = ""
+                rub = 2
+                if (dzenNoch) label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+            }
+            R.id.label4 -> {
+                nameRubrika = "Сьпеўнікі"
+                title_toolbar.text = nameRubrika
+                page_toolbar.text = ""
+                rub = 3
+                if (dzenNoch) label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+            }
+            R.id.label5 -> {
+                nameRubrika = "Рэлігійная літаратура"
+                title_toolbar.text = nameRubrika
+                page_toolbar.text = ""
+                rub = 4
+                if (dzenNoch) label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+            }
+            R.id.label6 -> {
+                if (PackageManager.PERMISSION_DENIED == permissionCheck) {
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                } else {
                     progressBar2.visibility = View.GONE
                     val fileExplorer = DialogFileExplorer()
                     fileExplorer.show(supportFragmentManager, "file_explorer")
                 }
             }
-            if (saveindep) {
-                listView.visibility = View.VISIBLE
-                pdfView.visibility = View.GONE
-                webView.visibility = View.GONE
-                scrollViewB.visibility = View.GONE
-            }
-            if (rub != -1 && listView.visibility == View.VISIBLE) {
-                arrayList.clear()
-                if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(this) == 2) {
-                    if (firstLiadSql) {
-                        getSql(rub)
-                        firstLiadSql = false
-                    } else {
-                        val gson = Gson()
-                        val json: String = k.getString("Biblioteka", "") ?: ""
-                        if (json != "") {
-                            val type: Type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
-                            arrayList.addAll(gson.fromJson(json, type))
-                        }
-                        val temp: ArrayList<ArrayList<String>> = ArrayList()
-                        for (i in 0 until arrayList.size) {
-                            val rtemp2: Int = arrayList[i][4].toInt()
-                            if (rtemp2 != rub) temp.add(arrayList[i])
-                        }
-                        arrayList.removeAll(temp)
-                        adapter.notifyDataSetChanged()
-                    }
-                } else {
-                    arrayList.clear()
-                    adapter.notifyDataSetChanged()
-                    val noInternet = DialogNoInternet()
-                    noInternet.show(supportFragmentManager, "no_internet")
-                }
-            }
-            invalidateOptionsMenu()
-            drawer_layout.closeDrawer(GravityCompat.START)
-            saveindep = true
         }
+        if (saveindep) {
+            listView.visibility = View.VISIBLE
+            pdfView.visibility = View.GONE
+            webView.visibility = View.GONE
+            scrollViewB.visibility = View.GONE
+        }
+        if (rub != -1 && listView.visibility == View.VISIBLE) {
+            arrayList.clear()
+            if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(this) == 2) {
+                if (firstLiadSql) {
+                    getSql(rub)
+                    firstLiadSql = false
+                } else {
+                    val gson = Gson()
+                    val json: String = k.getString("Biblioteka", "") ?: ""
+                    if (json != "") {
+                        val type: Type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
+                        arrayList.addAll(gson.fromJson(json, type))
+                    }
+                    val temp: ArrayList<ArrayList<String>> = ArrayList()
+                    for (i in 0 until arrayList.size) {
+                        val rtemp2: Int = arrayList[i][4].toInt()
+                        if (rtemp2 != rub) temp.add(arrayList[i])
+                    }
+                    arrayList.removeAll(temp)
+                    adapter.notifyDataSetChanged()
+                }
+            } else {
+                arrayList.clear()
+                adapter.notifyDataSetChanged()
+                val noInternet = DialogNoInternet()
+                noInternet.show(supportFragmentManager, "no_internet")
+            }
+        }
+        invalidateOptionsMenu()
+        drawer_layout.closeDrawer(GravityCompat.START)
+        saveindep = true
     }
 
     private fun getSql(rub: Int) {
@@ -1701,7 +1713,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         val file = File(imageLocal)
                         if (!file.exists()) {
                             FileOutputStream(filesDir.toString() + "/image_temp/" + pdf.substring(0, t1) + ".png").use { out ->
-                                //image.substring(t1 + 1))) {
                                 val inputStream: InputStream = URL(image).openStream()
                                 mIcon11 = BitmapFactory.decodeStream(inputStream)
                                 mIcon11.compress(Bitmap.CompressFormat.PNG, 90, out)
@@ -1729,11 +1740,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     override fun onResume() {
         super.onResume()
-        /*autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getInt("autoscrollSpid", 60)
-        if (autoscroll) {
-            startAutoScroll()
-        }*/
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
@@ -1785,7 +1791,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             while (zis.nextEntry?.also { ze = it } != null) {
                 val file = File(targetDirectory, ze.name)
                 val dir: File = if (ze.isDirectory) file else file.parentFile ?: file
-                if (!dir.isDirectory && !dir.mkdirs()) throw FileNotFoundException("Failed to ensure directory: " + dir.absolutePath)
+                if (!dir.isDirectory && !dir.mkdirs()) return false
                 if (ze.isDirectory) continue
                 val canonicalPath = file.canonicalPath
                 if (!canonicalPath.startsWith(targetDirectory.canonicalPath)) {
@@ -1799,27 +1805,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         return true
     }
-
-    /*private fun nextPageAutoScroll() {
-        val nextPageAutoScrollTimer = Timer()
-        val nextPageAutoScrollSchedule: TimerTask = object : TimerTask() {
-            override fun run() {
-                runOnUiThread { startAutoScroll() }
-            }
-        }
-        nextPageAutoScrollTimer.schedule(nextPageAutoScrollSchedule, spid.toLong() * 100)
-    }
-
-    private fun toNextPage() {
-        toNextPageTimer = Timer()
-        val toNextPageSchedule = object : TimerTask() {
-            override fun run() {
-                animationStoronaLeft = true
-                runOnUiThread { webView.startAnimation(animOutLeft) }
-            }
-        }
-        toNextPageTimer.schedule(toNextPageSchedule, spid.toLong() * 500)
-    }*/
 
     private fun stopAutoScroll() {
         webView.setOnBottomListener(null)

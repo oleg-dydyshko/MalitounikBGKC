@@ -1019,7 +1019,6 @@ try {
                 else label12.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
         }
-        title_toolbar.text = tolbarTitle
 
         if (idOld != idSelect) {
             val ftrans: FragmentTransaction = supportFragmentManager.beginTransaction()
@@ -1053,7 +1052,23 @@ try {
                 }
                 R.id.label2 -> {
                     prefEditors.putInt("id", idSelect)
-                    val menuGlavnoe: MenuGlavnoe = MenuGlavnoe.newInstance(shortcuts)
+                    if (shortcuts) {
+                        if (checkmoduleResources(this)) {
+                            if (checkmodulesBiblijateka(this)) {
+                                val intentBib = Intent(this, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
+                                intentBib.data = intent.data
+                                if (intent.extras?.containsKey("filePath") == true)
+                                    intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
+                                startActivity(intentBib)
+                            } else {
+                                downloadDynamicModule(this)
+                            }
+                        } else {
+                            val dadatak = DialogInstallDadatak()
+                            dadatak.show(supportFragmentManager, "dadatak")
+                        }
+                    }
+                    val menuGlavnoe = MenuGlavnoe()
                     ftrans.replace(R.id.conteiner, menuGlavnoe)
                 }
                 R.id.label3 -> {
@@ -1232,6 +1247,7 @@ try {
             toolbar.postDelayed({ ftrans.commitAllowingStateLoss() }, 300)
             prefEditors.apply()
         }
+        title_toolbar.text = tolbarTitle
         idOld = idSelect
     }
 
@@ -1346,17 +1362,23 @@ try {
                                 SplitInstallHelper.updateAppInfo(context)
                                 Handler().post {
                                     val intent = Intent(context, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
-                                    //if (context.getIntent().getData() != null)
                                     intent.data = context.intent.data
-                                    intent.putExtra("site", true)
+                                    if (intent.extras?.containsKey("filePath") == true) {
+                                        intent.putExtra("filePath", intent.extras?.getString("filePath"))
+                                    } else {
+                                        intent.putExtra("site", true)
+                                    }
                                     context.startActivity(intent)
                                 }
                             } else {
                                 val newContext = context.createPackageContext(context.packageName, 0)
                                 val intent = Intent(newContext, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
-                                //if (context.getIntent().getData() != null)
                                 intent.data = context.intent.data
-                                intent.putExtra("site", true)
+                                if (intent.extras?.containsKey("filePath") == true) {
+                                    intent.putExtra("filePath", intent.extras?.getString("filePath"))
+                                } else {
+                                    intent.putExtra("site", true)
+                                }
                                 context.startActivity(intent)
                             }
                         }
@@ -1427,7 +1449,8 @@ try {
 
         fun caliandar(context: Context?, mun: Int): Int {
             val filename = "caliandar".plus(mun)
-            return context?.resources?.getIdentifier(filename, "raw", context.packageName)?: return 0
+            return context?.resources?.getIdentifier(filename, "raw", context.packageName)
+                    ?: return 0
         }
 
         fun removeZnakiAndSlovy(ctenie: String): String {

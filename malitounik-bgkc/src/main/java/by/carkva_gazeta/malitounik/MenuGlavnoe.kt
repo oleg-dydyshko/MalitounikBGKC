@@ -13,19 +13,17 @@ import androidx.fragment.app.ListFragment
  */
 class MenuGlavnoe : ListFragment() {
     private val data = arrayOf("Апошнія навіны", "Гісторыя Царквы", "Сьвятло Ўсходу", "Царква і грамадзтва", "Катэдральны пляц", "Відэа", "Бібліятэка")
-    private var shortcuts = false
+    //private var shortcuts = false
     private var mLastClickTime: Long = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        shortcuts = arguments?.getBoolean("shortcuts") ?: false
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let { listAdapter = MenuListAdaprer(it, data) }
         listView.isVerticalScrollBarEnabled = false
-        if (shortcuts) view?.let { onListItemClick(listView, it, 6, 0) }
     }
 
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
@@ -41,9 +39,6 @@ class MenuGlavnoe : ListFragment() {
             if (MainActivity.checkmoduleResources(activity)) {
                 if (MainActivity.checkmodulesBiblijateka(activity)) {
                     val intent = Intent(activity, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
-                    intent.data = activity?.intent?.data
-                    if (activity?.intent?.extras?.containsKey("filePath") == true)
-                        intent.putExtra("filePath", activity?.intent?.extras?.getString("filePath"))
                     startActivity(intent)
                 } else {
                     activity?.let { MainActivity.downloadDynamicModule(it) }
@@ -55,16 +50,6 @@ class MenuGlavnoe : ListFragment() {
         } else {
             val intent = Intent(activity, Naviny::class.java)
             startActivity(intent)
-        }
-    }
-
-    companion object {
-        fun newInstance(shortcuts: Boolean): MenuGlavnoe {
-            val menuGlavnoe = MenuGlavnoe()
-            val bundle = Bundle()
-            bundle.putBoolean("shortcuts", shortcuts)
-            menuGlavnoe.arguments = bundle
-            return menuGlavnoe
         }
     }
 }

@@ -2,8 +2,6 @@ package by.carkva_gazeta.malitounik
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -50,7 +48,6 @@ import kotlin.math.roundToLong
 @SuppressWarnings("ResultOfMethodCallIgnored")
 class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener {
 
-    private var setAlarm = true
     private lateinit var c: GregorianCalendar
     private lateinit var k: SharedPreferences
     private lateinit var prefEditors: SharedPreferences.Editor
@@ -481,13 +478,13 @@ try {
 
         if (setAlarm) {
             val i = Intent(this, ReceiverUpdate::class.java)
-            i.action = "UPDATE"
+            //i.action = "UPDATE"
             sendBroadcast(i)
-            val c2 = Calendar.getInstance() as GregorianCalendar
+            /*val c2 = Calendar.getInstance() as GregorianCalendar
             val pServise = PendingIntent.getBroadcast(this, 10, i, PendingIntent.FLAG_UPDATE_CURRENT)
             val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (c2.timeInMillis > mkTime(c2[Calendar.YEAR], c2[Calendar.MONTH], c2[Calendar.DAY_OF_MONTH])) c2.add(Calendar.DATE, 1)
-            am.setRepeating(AlarmManager.RTC_WAKEUP, mkTime(c2[Calendar.YEAR], c2[Calendar.MONTH], c2[Calendar.DAY_OF_MONTH]), 86400000L, pServise)
+            am.setRepeating(AlarmManager.RTC_WAKEUP, mkTime(c2[Calendar.YEAR], c2[Calendar.MONTH], c2[Calendar.DAY_OF_MONTH]), 86400000L, pServise)*/
             setAlarm = false
         }
         if (setPadzeia) {
@@ -1249,13 +1246,15 @@ try {
         idOld = idSelect
     }
 
-    private fun mkTime(year: Int, month: Int, day: Int): Long {
-        val calendar = Calendar.getInstance()
+    /*private fun mkTime(year: Int, month: Int, day: Int): Long {
+        val calendar = Calendar.getInstance() as GregorianCalendar
         calendar.set(year, month, day, 10, 0, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
         return calendar.timeInMillis
-    }
+    }*/
 
     companion object {
+        private var setAlarm = true
         var back_pressed = 0L
         var padzeia: ArrayList<Padzeia> = ArrayList()
         var setDataCalendar = -1

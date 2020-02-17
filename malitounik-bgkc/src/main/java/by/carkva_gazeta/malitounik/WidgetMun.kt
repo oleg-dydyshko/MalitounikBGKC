@@ -101,9 +101,8 @@ class WidgetMun : AppWidgetProvider() {
         intent.action = updateAllWidgets
         val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pIntent = PendingIntent.getBroadcast(context, 52, intent, 0)
+        val pIntent = PendingIntent.getBroadcast(context, 50, intent, 0)
         val c = Calendar.getInstance() as GregorianCalendar
-        //if (alarmManager != null) {
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
@@ -119,7 +118,6 @@ class WidgetMun : AppWidgetProvider() {
             }
         }
         //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, mkTime(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)), 86400000, pIntent);
-//}
     }
 
     override fun onDisabled(context: Context) {
@@ -134,11 +132,9 @@ class WidgetMun : AppWidgetProvider() {
         val reset = Intent(context, WidgetMun::class.java)
         reset.action = this.reset
         val pReset = PendingIntent.getBroadcast(context, 257, reset, 0)
-        //if (alarmManager != null) {
         alarmManager.cancel(pIntent)
         alarmManager.cancel(pIntentBoot)
         alarmManager.cancel(pReset)
-        //}
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
@@ -154,7 +150,8 @@ class WidgetMun : AppWidgetProvider() {
 
     private fun mkTime(year: Int, month: Int, day: Int): Long {
         val calendar = Calendar.getInstance()
-        calendar[year, month, day, 0, 0] = 0
+        calendar.set(year, month, day, 0, 0, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
         return calendar.timeInMillis
     }
 

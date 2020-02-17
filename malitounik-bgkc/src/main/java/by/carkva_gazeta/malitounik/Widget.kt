@@ -39,7 +39,7 @@ class Widget : AppWidgetProvider() {
         sp.edit().putBoolean("WIDGET_ENABLED", true).apply()
         val intent = Intent(context, Widget::class.java)
         intent.action = updateAllWidgets
-        val pIntentBoot = PendingIntent.getBroadcast(context, 51, intent, 0)
+        val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pIntent = PendingIntent.getBroadcast(context, 50, intent, 0)
         val c = Calendar.getInstance() as GregorianCalendar
@@ -83,7 +83,8 @@ class Widget : AppWidgetProvider() {
 
     private fun mkTime(year: Int, month: Int, day: Int): Long {
         val calendar = Calendar.getInstance()
-        calendar[year, month, day, 0, 0] = 0
+        calendar.set(year, month, day, 0, 0, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
         return calendar.timeInMillis
     }
 
@@ -308,6 +309,14 @@ class Widget : AppWidgetProvider() {
             if (nedel == 1) prazdnik(context, updateViews, rColorColorPrimary)
             val monthName = arrayOf("СТУДЗЕНЯ", "ЛЮТАГА", "САКАВІКА", "КРАСАВІКА", "ТРАЎНЯ", "ЧЭРВЕНЯ",
                     "ЛІПЕНЯ", "ЖНІЎНЯ", "ВЕРАСЬНЯ", "КАСТРЫЧНІКА", "ЛІСТАПАДА", "СЬНЕЖНЯ")
+            if (month == Calendar.OCTOBER)
+                updateViews.setFloat(R.id.textMesiac, "setTextSize", 12f)
+            else
+                updateViews.setFloat(R.id.textMesiac, "setTextSize", 14f)
+            if (nedel == Calendar.MONDAY)
+                updateViews.setFloat(R.id.textDenNedeli, "setTextSize", 12f)
+            else
+                updateViews.setFloat(R.id.textDenNedeli, "setTextSize", 14f)
             updateViews.setTextViewText(R.id.textMesiac, monthName[month])
             appWidgetManager.updateAppWidget(widgetID, updateViews)
             //appWidgetManager.updateAppWidget(new ComponentName(context.getPackageName(), Widget.class.getName()), updateViews);

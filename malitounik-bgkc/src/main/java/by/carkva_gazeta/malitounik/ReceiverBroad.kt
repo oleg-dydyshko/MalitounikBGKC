@@ -28,14 +28,16 @@ class ReceiverBroad : BroadcastReceiver() {
         val g = Calendar.getInstance() as GregorianCalendar
         val dayofyear = g[Calendar.DAY_OF_YEAR]
         val year = g[Calendar.YEAR]
-            val sabytie = intent.getBooleanExtra("sabytieSet", false)
-            if (sabytie) {
-                channelId = "3000"
-                val idString = intent.extras?.getString("dataString", dayofyear.toString() + g[Calendar.MONTH].toString() + g[Calendar.HOUR_OF_DAY] + g[Calendar.MINUTE]) ?: "205"
-                id = idString.toInt()
-                sabytieSet = true
-            }
-        sendNotif(ctx, intent.action, intent.getStringExtra("extra") ?: "", intent.getIntExtra("dayofyear", dayofyear), intent.getIntExtra("year", year))
+        val sabytie = intent.getBooleanExtra("sabytieSet", false)
+        if (sabytie) {
+            channelId = "3000"
+            val idString = intent.extras?.getString("dataString", dayofyear.toString() + g[Calendar.MONTH].toString() + g[Calendar.HOUR_OF_DAY] + g[Calendar.MINUTE])
+                    ?: "205"
+            id = idString.toInt()
+            sabytieSet = true
+        }
+        sendNotif(ctx, intent.action, intent.getStringExtra("extra")
+                ?: "", intent.getIntExtra("dayofyear", dayofyear), intent.getIntExtra("year", year))
     }
 
     private fun sendNotif(context: Context, Sviata: String?, Name: String, dayofyear: Int, year: Int) {
@@ -85,6 +87,8 @@ class ReceiverBroad : BroadcastReceiver() {
                     .setAutoCancel(true)
                     .setContentTitle(Name)
                     .setContentText(Sviata)
+            if (sabytieSet)
+                builder.setStyle(Notification.BigTextStyle().bigText(Sviata))
             val notification = builder.build()
             notificationManager?.notify(id, notification)
             notificationManager?.deleteNotificationChannel("by.carkva-gazeta")
@@ -108,6 +112,8 @@ class ReceiverBroad : BroadcastReceiver() {
                     .setLights(ContextCompat.getColor(context, R.color.colorPrimary), 1000, 1000)
                     .setContentTitle(Name)
                     .setContentText(Sviata)
+            if (sabytieSet)
+                builder.setStyle(NotificationCompat.BigTextStyle().bigText(Sviata))
             if (chin.getInt("guk", 1) == 1) builder.setSound(uri)
             if (chin.getInt("vibra", 1) == 1) builder.setVibrate(vibrate)
             val notification = builder.build()

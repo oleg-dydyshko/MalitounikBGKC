@@ -57,7 +57,7 @@ class ReceiverUpdate : BroadcastReceiver() {
                 if (resetWid) {
                     val reset = Intent(context, WidgetMun::class.java)
                     reset.action = resetMain
-                    val pReset = PendingIntent.getBroadcast(context, 258, reset, 0)
+                    val pReset = PendingIntent.getBroadcast(context, 257, reset, PendingIntent.FLAG_UPDATE_CURRENT)
                     when {
                         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 120000L, pReset)

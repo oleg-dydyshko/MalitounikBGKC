@@ -420,7 +420,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         }
                         var spln = ""
                         if (i > 0) spln = "\n"
-                        var kniga = 0
+                        var kniga = -1
                         if (zagl == "Мц") kniga = 0
                         if (zagl == "Мк") kniga = 1
                         if (zagl == "Лк") kniga = 2
@@ -438,7 +438,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         if (zagl == "2 Кар") kniga = 14
                         if (zagl == "Гал") kniga = 15
                         if (zagl == "Эф") kniga = 16
-                        if (zagl == "Флп") kniga = 17
+                        if (zagl == "Плп") kniga = 17
                         if (zagl == "Клс") kniga = 18
                         if (zagl == "1 Фес") kniga = 19
                         if (zagl == "2 Фес") kniga = 20
@@ -464,6 +464,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         val r = resources
                         var inputStream = r.openRawResource(R.raw.biblian1)
                         var ssbTitle = SpannableStringBuilder()
+                        var errorChytanne = false
                         when (kniga) {
                             0 -> {
                                 inputStream = r.openRawResource(R.raw.biblian1)
@@ -777,31 +778,36 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                     SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
-                        }
-                        if (e == 0) ssbTitle.setSpan(StyleSpan(Typeface.BOLD), 0, ssbTitle.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        val textView1 = TextViewRobotoCondensed(this)
-                        textView1.isFocusable = false
-                        textView1.text = ssbTitle
-                        textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                        if (dzenNoch) textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-                        textView1.setPadding(0, 10, 0, 0)
-                        LinearButtom.addView(textView1)
-                        cytannelist.add(textView1)
-                        val isr = InputStreamReader(inputStream)
-                        val reader = BufferedReader(isr)
-                        var line: String
-                        val builder = StringBuilder()
-                        reader.forEachLine {
-                            line = it
-                            if (line.contains("//")) {
-                                val t1 = line.indexOf("//")
-                                line = line.substring(0, t1).trim()
-                                if (line != "") builder.append(line).append("\n")
-                            } else {
-                                builder.append(line).append("\n")
+                            else -> {
+                                errorChytanne = true
                             }
                         }
-                        /*while (reader.readLine()?.also { line = it } != null) {
+                        if (!errorChytanne) {
+                            if (e == 0) ssbTitle.setSpan(StyleSpan(Typeface.BOLD), 0, ssbTitle.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            val textView1 = TextViewRobotoCondensed(this)
+                            textView1.isFocusable = false
+                            textView1.text = ssbTitle
+                            textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                            if (dzenNoch) textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+                            textView1.setPadding(0, 10, 0, 0)
+                            LinearButtom.addView(textView1)
+                            cytannelist.add(textView1)
+
+                            val isr = InputStreamReader(inputStream)
+                            val reader = BufferedReader(isr)
+                            var line: String
+                            val builder = StringBuilder()
+                            reader.forEachLine {
+                                line = it
+                                if (line.contains("//")) {
+                                    val t1 = line.indexOf("//")
+                                    line = line.substring(0, t1).trim()
+                                    if (line != "") builder.append(line).append("\n")
+                                } else {
+                                    builder.append(line).append("\n")
+                                }
+                            }
+                            /*while (reader.readLine()?.also { line = it } != null) {
                         if (line.contains("//")) {
                             val t1 = line.indexOf("//")
                             line = line.substring(0, t1).trim()
@@ -810,72 +816,75 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         }
                         builder.append(line).append("\n")
                     }*/
-                        inputStream.close()
-                        val split2 = builder.toString().split("===").toTypedArray()
-                        var spl: String
-                        var desK1: Int
-                        var desN: Int
-                        spl = split2[zaglnum].trim()
-                        desN = spl.indexOf("$knigaN.")
-                        if (knigaN == knigaK) {
-                            desK1 = desN
-                        } else {
-                            desK1 = spl.indexOf("$knigaK.")
-                            if (desK1 == -1) {
-                                val splAll = spl.split("\n").toTypedArray().size
-                                desK1 = spl.indexOf("$splAll.")
-                            }
-                            if (zag3 != -1 || glav) {
-                                val spl1 = split2[zaglnum].trim()
-                                val spl2 = split2[zaglnum + 1].trim()
-                                val des1 = spl1.length
-                                desN = spl1.indexOf("$knigaN.")
-                                desK1 = spl2.indexOf("$knigaK.")
-                                var desN1: Int = spl2.indexOf((knigaK.toInt() + 1).toString().plus("."), desK1)
-                                if (desN1 == -1) {
-                                    desN1 = spl1.length
+                            inputStream.close()
+                            val split2 = builder.toString().split("===").toTypedArray()
+                            var spl: String
+                            var desK1: Int
+                            var desN: Int
+                            spl = split2[zaglnum].trim()
+                            desN = spl.indexOf("$knigaN.")
+                            if (knigaN == knigaK) {
+                                desK1 = desN
+                            } else {
+                                desK1 = spl.indexOf("$knigaK.")
+                                if (desK1 == -1) {
+                                    val splAll = spl.split("\n").toTypedArray().size
+                                    desK1 = spl.indexOf("$splAll.")
                                 }
-                                desK1 = desN1 + des1
-                                spl = spl1 + "\n" + spl2
-                                zaglnum += 1
+                                if (zag3 != -1 || glav) {
+                                    val spl1 = split2[zaglnum].trim()
+                                    val spl2 = split2[zaglnum + 1].trim()
+                                    val des1 = spl1.length
+                                    desN = spl1.indexOf("$knigaN.")
+                                    desK1 = spl2.indexOf("$knigaK.")
+                                    var desN1: Int = spl2.indexOf((knigaK.toInt() + 1).toString().plus("."), desK1)
+                                    if (desN1 == -1) {
+                                        desN1 = spl1.length
+                                    }
+                                    desK1 = desN1 + des1
+                                    spl = spl1 + "\n" + spl2
+                                    zaglnum += 1
+                                }
                             }
+                            var desK = spl.indexOf("\n", desK1)
+                            if (desK == -1) {
+                                desK = spl.length
+                            }
+                            val textBiblia = SpannableStringBuilder(spl.substring(desN, desK))
+                            if (polstixaA) {
+                                val t2 = textBiblia.indexOf("$knigaK.")
+                                val t3 = textBiblia.indexOf(".", t2)
+                                var t1 = textBiblia.indexOf(":", t2)
+                                if (t1 == -1)
+                                    t1 = textBiblia.indexOf(";", t3 + 1)
+                                if (t1 == -1)
+                                    t1 = textBiblia.indexOf(".", t3 + 1)
+                                if (t1 != -1)
+                                    textBiblia.setSpan(StrikethroughSpan(), t1 + 1, textBiblia.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            }
+                            if (polstixaB) {
+                                val t2 = textBiblia.indexOf("\n")
+                                val textPol = textBiblia.substring(0, t2 + 1)
+                                val t3 = textPol.indexOf(".")
+                                var t1 = textPol.indexOf(":")
+                                if (t1 == -1)
+                                    t1 = textPol.indexOf(";", t3 + 1)
+                                if (t1 == -1)
+                                    t1 = textPol.indexOf(".", t3 + 1)
+                                if (t1 != -1)
+                                    textBiblia.setSpan(StrikethroughSpan(), t3 + 1, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            }
+                            val textView2 = TextViewRobotoCondensed(this)
+                            textView2.isFocusable = false
+                            textView2.text = textBiblia
+                            textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                            if (dzenNoch) textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+                            textView2.setPadding(0, 10, 0, 0)
+                            cytannelist.add(textView2)
+                            LinearButtom.addView(textView2)
+                        } else {
+                            error()
                         }
-                        var desK = spl.indexOf("\n", desK1)
-                        if (desK == -1) {
-                            desK = spl.length
-                        }
-                        val textBiblia = SpannableStringBuilder(spl.substring(desN, desK))
-                        if (polstixaA) {
-                            val t2 = textBiblia.indexOf("$knigaK.")
-                            val t3 = textBiblia.indexOf(".", t2)
-                            var t1 = textBiblia.indexOf(":", t2)
-                            if (t1 == -1)
-                                t1 = textBiblia.indexOf(";", t3 + 1)
-                            if (t1 == -1)
-                                t1 = textBiblia.indexOf(".", t3 + 1)
-                            if (t1 != -1)
-                                textBiblia.setSpan(StrikethroughSpan(), t1 + 1, textBiblia.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
-                        if (polstixaB) {
-                            val t2 = textBiblia.indexOf("\n")
-                            val textPol = textBiblia.substring(0, t2 + 1)
-                            val t3 = textPol.indexOf(".")
-                            var t1 = textPol.indexOf(":")
-                            if (t1 == -1)
-                                t1 = textPol.indexOf(";", t3 + 1)
-                            if (t1 == -1)
-                                t1 = textPol.indexOf(".", t3 + 1)
-                            if (t1 != -1)
-                                textBiblia.setSpan(StrikethroughSpan(), t3 + 1, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
-                        val textView2 = TextViewRobotoCondensed(this)
-                        textView2.isFocusable = false
-                        textView2.text = textBiblia
-                        textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                        if (dzenNoch) textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-                        textView2.setPadding(0, 10, 0, 0)
-                        cytannelist.add(textView2)
-                        LinearButtom.addView(textView2)
                     } catch (t: Throwable) {
                         error()
                     }

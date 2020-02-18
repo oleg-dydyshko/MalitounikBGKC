@@ -14,7 +14,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
             app:contentInsetStartWithNavigation="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -68,37 +68,37 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/sabytie_pachatak"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                     android:id="@+id/label1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@android:drawable/arrow_down_float"
-                    android:drawableRight="@android:drawable/arrow_down_float"
+                    android:drawableEnd="@drawable/arrow_down_float"
+                    android:drawableRight="@drawable/arrow_down_float"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                     android:id="@+id/label2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@android:drawable/arrow_down_float"
-                    android:drawableRight="@android:drawable/arrow_down_float"
+                    android:drawableEnd="@drawable/arrow_down_float"
+                    android:drawableRight="@drawable/arrow_down_float"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
 
             </LinearLayout>
@@ -117,37 +117,37 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/Sabytie_end"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                     android:id="@+id/label12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@android:drawable/arrow_down_float"
-                    android:drawableRight="@android:drawable/arrow_down_float"
+                    android:drawableEnd="@drawable/arrow_down_float"
+                    android:drawableRight="@drawable/arrow_down_float"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                     android:id="@+id/label22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@android:drawable/arrow_down_float"
-                    android:drawableRight="@android:drawable/arrow_down_float"
+                    android:drawableEnd="@drawable/arrow_down_float"
+                    android:drawableRight="@drawable/arrow_down_float"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
             </LinearLayout>
 
@@ -166,7 +166,7 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/Sabytie_uved"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp"
                     tools:ignore="RtlSymmetry" />
 
@@ -202,7 +202,7 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/Sabytie_repit"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
 
                 <Spinner
@@ -271,15 +271,15 @@
                     android:id="@+id/labelbutton12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@android:drawable/arrow_down_float"
-                    android:drawableRight="@android:drawable/arrow_down_float"
+                    android:drawableEnd="@drawable/arrow_down_float"
+                    android:drawableRight="@drawable/arrow_down_float"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
             </RadioGroup>
 
@@ -297,7 +297,7 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:text="Колер: "
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
 
                 <Spinner

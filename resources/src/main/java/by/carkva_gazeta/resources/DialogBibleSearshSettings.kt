@@ -131,7 +131,7 @@ class DialogBibleSearshSettings : DialogFragment() {
             spinner.adapter = arrayAdapter
             spinner.setSelection(chin.getInt("biblia_seash", 0))
             spinner.onItemSelectedListener = object : OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     prefEditors.putInt("biblia_seash", position)
                     prefEditors.apply()
                 }

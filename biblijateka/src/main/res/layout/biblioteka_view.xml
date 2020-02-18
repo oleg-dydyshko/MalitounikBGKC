@@ -38,8 +38,7 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
-                    android:text="БІБЛІЯТЭКА ЦАРКВЫ"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/bibliateka_carkvy"
                     android:textColor="@color/colorPrimary"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -50,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:gravity="center"
-                    android:text="http://carkva-gazeta.by/"
+                    android:text="@string/http_carkva_gazeta_by"
                     android:textColor="@color/colorSecondary_text"
                     android:textStyle="italic" />
 
@@ -64,8 +63,8 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Нядаўнія кнігі"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/bibliateka_niadaunia"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -78,8 +77,8 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Гісторыя Царквы"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/bibliateka_gistoryia_carkvy"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -92,8 +91,8 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Малітоўнікі"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/bibliateka_malitouniki"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -106,8 +105,8 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Сьпеўнікі"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/bibliateka_speuniki"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -120,8 +119,8 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Рэлігійная літаратура"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/bibliateka_rel_litaratura"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -134,26 +133,9 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Выбраць файл"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/bibliateka_file"
+                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
-
-                <!--<by.carkva_gazeta.malitounik.TextView_Roboto_Condensed
-                    android:id="@+id/label7"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginBottom="10dp"
-                    android:drawablePadding="10dp"
-                    android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:text="Выйсьці ў Малітоўнік"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="16sp" />-->
             </LinearLayout>
         </ScrollView>
     </com.google.android.material.navigation.NavigationView>

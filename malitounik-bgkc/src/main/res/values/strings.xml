@@ -336,5 +336,12 @@
     <string name="sviaty_under">ІНШЫЯ СЬВЯТЫ:</string>
     <string name="security_error">Файл ня бясьпечны</string>
     <string name="pamerlyia">Памінаньне памёрлых</string>
+    <string name="bibliateka_carkvy">БІБЛІЯТЭКА ЦАРКВЫ</string>
+    <string name="bibliateka_niadaunia">Нядаўнія кнігі</string>
+    <string name="bibliateka_gistoryia_carkvy">Гісторыя Царквы</string>
+    <string name="bibliateka_malitouniki">Малітоўнікі</string>
+    <string name="bibliateka_speuniki">Сьпеўнікі</string>
+    <string name="bibliateka_rel_litaratura">Рэлігійная літаратура</string>
+    <string name="bibliateka_file">Выбраць файл</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

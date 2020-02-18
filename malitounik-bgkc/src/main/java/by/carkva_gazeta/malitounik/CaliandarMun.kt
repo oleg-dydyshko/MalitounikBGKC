@@ -200,7 +200,7 @@ class CaliandarMun : AppCompatActivity() {
         if (pagerNedel.currentItem == 0) imageButton.visibility = View.GONE
         spinner.setSelection(posMun)
         spinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val son1 = (yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + position
                 posMun = position
                 val pagepos1 = pager.currentItem
@@ -213,7 +213,7 @@ class CaliandarMun : AppCompatActivity() {
         }
         spinner2.setSelection(yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN)
         spinner2.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 yearG = (parent.selectedItem as String).toInt()
                 val son1 = (yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + posMun
                 val pagepos1 = pager.currentItem

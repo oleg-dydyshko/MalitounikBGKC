@@ -228,7 +228,7 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
         }*/invalidateOptionsMenu()
     }
 
-    override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+    override fun onItemClick(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return
         }
@@ -437,7 +437,7 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
         }
     }
 
-    override fun onItemLongClick(parent: AdapterView<*>?, view: View, position: Int, id: Long): Boolean {
+    override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
         val t1 = data[position].indexOf("\n\n")
         val t2: Int
         t2 = if (semuxa == 1) data[position].indexOf(". ", t1) else data[position].indexOf(" ", t1)
@@ -477,7 +477,7 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            viewHolder.buttonPopup?.setOnClickListener { showPopupMenu(viewHolder.buttonPopup, position, itemsL[position]) }
+            viewHolder.buttonPopup?.setOnClickListener { viewHolder.buttonPopup?.let { showPopupMenu(it, position, itemsL[position]) } }
             viewHolder.text?.text = itemsL[position]
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
@@ -488,7 +488,7 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
             return rootView
         }
 
-        private fun showPopupMenu(view: View?, position: Int, name: String) {
+        private fun showPopupMenu(view: View, position: Int, name: String) {
             val popup = PopupMenu(mContext, view)
             val infl = popup.menuInflater
             infl.inflate(by.carkva_gazeta.malitounik.R.menu.popup, popup.menu)

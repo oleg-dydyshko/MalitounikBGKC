@@ -242,7 +242,7 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
         }*/invalidateOptionsMenu()
     }
 
-    override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return
         }
@@ -313,7 +313,7 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
         }
     }
 
-    override fun onItemLongClick(parent: AdapterView<*>?, view: View, position: Int, id: Long): Boolean {
+    override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
         val contextMenu = DialogContextMenu.getInstance(position, data[position][5])
         contextMenu.show(supportFragmentManager, "context_menu")
         return true
@@ -351,7 +351,7 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            viewHolder.buttonPopup?.setOnClickListener { showPopupMenu(viewHolder.buttonPopup, position, itemsL[position][5]) }
+            viewHolder.buttonPopup?.setOnClickListener { viewHolder.buttonPopup?.let { showPopupMenu(it, position, itemsL[position][5]) } }
             viewHolder.text?.text = itemsL[position][4] + "\n\n" + itemsL[position][5]
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
@@ -364,7 +364,7 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
 
     }
 
-    private fun showPopupMenu(view: View?, position: Int, name: String) {
+    private fun showPopupMenu(view: View, position: Int, name: String) {
         val popup = PopupMenu(this, view)
         val infl = popup.menuInflater
         infl.inflate(by.carkva_gazeta.malitounik.R.menu.popup, popup.menu)

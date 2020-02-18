@@ -560,15 +560,16 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onTouch(v: View, event: MotionEvent): Boolean {
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         val heightConstraintLayout = constraint.height
         val widthConstraintLayout = constraint.width
         val otstup = (10 * resources.displayMetrics.density).toInt()
-        val y = event.y.toInt()
-        val x = event.x.toInt()
+        val y = event?.y?.toInt() ?: 0
+        val x = event?.x?.toInt() ?: 0
         val prefEditor: Editor = k.edit()
-        if (v.id == R.id.WebView) {
-            when (event.action) {
+        val id = v?.id ?: 0
+        if (id == R.id.WebView) {
+            when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> mActionDown = true
                 MotionEvent.ACTION_UP -> mActionDown = false
                 MotionEvent.ACTION_MOVE -> {
@@ -578,14 +579,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
             return false
         }
-        if (v.id == R.id.constraint) {
+        if (id == R.id.constraint) {
             if (MainActivity.checkBrightness) {
                 MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
             }
-            when (event.action) {
+            when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
-                    n = event.y.toInt()
-                    yS = event.x.toInt()
+                    n = event?.y?.toInt() ?: 0
+                    yS = event?.x?.toInt() ?: 0
                     val proc: Int
                     if (x < otstup) {
                         levo = true
@@ -712,7 +713,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                 }
                 MotionEvent.ACTION_UP -> {
-                    v.performClick()
+                    v?.performClick()
                     if (levo) {
                         levo = false
                     }

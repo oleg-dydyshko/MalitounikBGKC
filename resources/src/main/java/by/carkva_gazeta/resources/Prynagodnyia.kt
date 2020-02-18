@@ -192,19 +192,19 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onTouch(v: View, event: MotionEvent): Boolean {
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         val widthConstraintLayout = constraint.width
         val otstup = (10 * resources.displayMetrics.density).toInt()
-        val y = event.y.toInt()
-        val x = event.x.toInt()
+        val y = event?.y?.toInt() ?: 0
+        val x = event?.x?.toInt() ?: 0
         val prefEditor: Editor = k.edit()
-        if (v.id == R.id.constraint) {
+        if (v?.id ?: 0 == R.id.constraint) {
             if (MainActivity.checkBrightness) {
                 MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
             }
-            when (event.action) {
+            when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
-                    n = event.y.toInt()
+                    n = event?.y?.toInt() ?: 0
                     if (x < otstup) {
                         levo = true
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
@@ -276,7 +276,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                     }
                 }
                 MotionEvent.ACTION_UP -> {
-                    v.performClick()
+                    v?.performClick()
                     if (levo) {
                         levo = false
                     }

@@ -197,7 +197,7 @@ class MenuVybranoe : ListFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            viewHolder.buttonPopup?.setOnClickListener { showPopupMenu(viewHolder.buttonPopup, position, vybranoe[position].data) }
+            viewHolder.buttonPopup?.setOnClickListener { viewHolder.buttonPopup?.let { showPopupMenu(it, position, vybranoe[position].data) } }
             viewHolder.text?.text = vybranoe[position].data
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
@@ -208,7 +208,7 @@ class MenuVybranoe : ListFragment() {
             return rootView
         }
 
-        private fun showPopupMenu(view: View?, position: Int, name: String) {
+        private fun showPopupMenu(view: View, position: Int, name: String) {
             val popup = PopupMenu(activity, view)
             val infl = popup.menuInflater
             infl.inflate(R.menu.popup, popup.menu)

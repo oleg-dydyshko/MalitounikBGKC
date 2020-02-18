@@ -2584,7 +2584,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onClick(v: View) {
+    override fun onClick(v: View?) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return
         }
@@ -2592,7 +2592,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
         activity?.let {
             if (linearLayout.visibility == View.GONE) {
                 val intent = Intent()
-                when (v.id) {
+                when (v?.id ?: 0) {
                     R.id.button1 -> {
                         intent.putExtra("data", pageNumberFull - wik)
                         intent.putExtra("year", year)
@@ -2847,7 +2847,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                 }
             } else {
-                viewId = v.id
+                viewId = v?.id ?: 0
                 when (viewId) {
                     R.id.button1 -> sabytieView(pageNumberFull - wik)
                     R.id.button2 -> sabytieView(pageNumberFull + 1 - wik)

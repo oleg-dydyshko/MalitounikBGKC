@@ -110,7 +110,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private val naidaunia: ArrayList<ArrayList<String>> = ArrayList()
     private var saveindep = true
     private var runSql = false
-    private lateinit var onClickView: View
     private var biblioteka: BibliotekaEpub? = null
     private var positionY = 0
     private var fb2: FictionBook? = null
@@ -118,7 +117,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var spid = 60
     private var scrollTimer: Timer = Timer()
     private var procentTimer: Timer = Timer()
-    //private var toNextPageTimer: Timer = Timer()
     private var resetTimer: Timer = Timer()
     private var scrollerSchedule: TimerTask? = null
     private var procentSchedule: TimerTask? = null
@@ -598,9 +596,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
             }
 
-            override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-                if (view.id == R.id.webView) {
-                    when (motionEvent.action) {
+            override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
+                if (view?.id == R.id.webView) {
+                    when (motionEvent?.action) {
                         MotionEvent.ACTION_DOWN -> {
                             if (autoscroll)
                                 mActionDown = true
@@ -665,7 +663,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         label4.setOnClickListener(this)
         label5.setOnClickListener(this)
         label6.setOnClickListener(this)
-        onClickView = label1
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
@@ -1548,11 +1545,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
     }
 
-    override fun onClick(view: View) {
+    override fun onClick(view: View?) {
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         stopAutoScroll()
-        idSelect = view.id
-        onClickView = view
+        idSelect = view?.id ?: 0
         val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
         var rub = -1
         if (dzenNoch) {
@@ -1747,7 +1743,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     private fun show() {
-        val decorView: View = window.decorView
+        val decorView = window.decorView
         decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         mHideHandler.removeCallbacks(mHidePart2Runnable)
         mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelaY.toLong())

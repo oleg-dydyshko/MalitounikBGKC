@@ -85,12 +85,12 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onClick(v: View) {
+    override fun onClick(v: View?) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val id = v.id
+        val id = v?.id ?: 0
         if (id == R.id.psalter) {
             startActivity(Intent(activity, NadsanContent::class.java))
         }

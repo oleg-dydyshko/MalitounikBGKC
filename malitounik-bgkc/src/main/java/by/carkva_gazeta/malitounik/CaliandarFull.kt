@@ -326,7 +326,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onClick(v: View) {
+    override fun onClick(v: View?) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return
         }
@@ -337,7 +337,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
         }
         MainActivity.setDataCalendar = dayyear + dayYear
-        when (v.id) {
+        when (v?.id ?: 0) {
             R.id.textCviatyGlavnyia -> if (MainActivity.checkmoduleResources(activity)) {
                 val i = Intent(activity, Class.forName("by.carkva_gazeta.resources.Opisanie"))
                 i.putExtra("glavnyia", true)

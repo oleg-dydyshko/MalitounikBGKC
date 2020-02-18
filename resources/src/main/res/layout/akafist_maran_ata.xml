@@ -80,16 +80,33 @@
             app:contentInsetStartWithNavigation="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-                android:id="@+id/title_toolbar"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:singleLine="true"
-                android:textColor="@color/colorIcons"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/title_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:singleLine="true"
+                    android:textColor="@color/colorIcons"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/subtitle_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:singleLine="true"
+                    android:textColor="@color/colorIcons"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 

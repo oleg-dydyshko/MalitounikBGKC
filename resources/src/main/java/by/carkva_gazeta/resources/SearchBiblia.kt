@@ -426,8 +426,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onClick(view: View) {
-        val idSelect = view.id
+    override fun onClick(view: View?) {
+        val idSelect = view?.id ?: 0
         if (idSelect == R.id.buttonx) {
             searche = true
             adapter?.clear()

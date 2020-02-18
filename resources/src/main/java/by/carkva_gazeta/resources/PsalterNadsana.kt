@@ -59,10 +59,10 @@ class PsalterNadsana : AppCompatActivity(), View.OnClickListener {
         setTollbarTheme()
     }
 
-    override fun onClick(v: View) {
+    override fun onClick(v: View?) {
         var pNadsana = k.getInt("pravalaNadsana", 1)
         val prefEditors = k.edit()
-        when (v.id) {
+        when (v?.id ?: 0) {
             R.id.buttonleft -> {
                 pNadsana -= 1
                 prefEditors.putInt("pravalaNadsana", pNadsana)

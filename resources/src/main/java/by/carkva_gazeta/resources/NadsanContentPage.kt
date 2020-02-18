@@ -44,7 +44,7 @@ class NadsanContentPage : ListFragment(), OnItemLongClickListener {
         pazicia = arguments?.getInt("pos") ?: 0
     }
 
-    override fun onItemLongClick(parent: AdapterView<*>, view: View, position: Int, id: Long): Boolean {
+    override fun onItemLongClick(parent: AdapterView<*>, view: View?, position: Int, id: Long): Boolean {
         val clipboard = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val copy = MainActivity.fromHtml(parent.adapter.getItem(position).toString()).toString()
         val clip = ClipData.newPlainText("", MainActivity.fromHtml(copy)) //MaranAta_Global_List.getBible().get(MaranAta_Global_List.getListPosition())).toString()

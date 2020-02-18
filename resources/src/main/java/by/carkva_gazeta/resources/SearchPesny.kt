@@ -79,7 +79,7 @@ class SearchPesny : AppCompatActivity() {
         if (dzenNoch) {
             TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
         }
-        ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, view: View, _: Int, _: Long ->
+        ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, view: View?, _: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnItemClickListener
             }

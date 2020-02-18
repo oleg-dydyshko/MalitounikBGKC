@@ -794,8 +794,8 @@ try {
         return true
     }
 
-    override fun onClick(view: View) {
-        idSelect = view.id
+    override fun onClick(view: View?) {
+        idSelect = view?.id ?: 0
         if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         }

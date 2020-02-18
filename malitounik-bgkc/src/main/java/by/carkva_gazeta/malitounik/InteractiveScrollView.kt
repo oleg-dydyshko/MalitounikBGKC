@@ -29,8 +29,8 @@ class InteractiveScrollView : ScrollView {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        when (event?.action ?: MotionEvent.ACTION_CANCEL) {
             MotionEvent.ACTION_DOWN -> mTouch?.onTouch(true)
             MotionEvent.ACTION_UP -> mTouch?.onTouch(false)
         }

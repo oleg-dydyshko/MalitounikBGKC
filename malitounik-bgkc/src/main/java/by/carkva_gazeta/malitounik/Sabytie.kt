@@ -2568,14 +2568,14 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             } else {
                 viewHolder.text?.setTypeface(null, Typeface.NORMAL)
             }
-            viewHolder.buttonPopup?.setOnClickListener { showPopupMenu(viewHolder.buttonPopup, position) }
+            viewHolder.buttonPopup?.setOnClickListener { viewHolder.buttonPopup?.let { showPopupMenu(it, position) } }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolder.text?.text = sabytie2[position]
             if (dzenNoch) viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }
 
-        private fun showPopupMenu(view: View?, position: Int) {
+        private fun showPopupMenu(view: View, position: Int) {
             val popup = PopupMenu(this@Sabytie, view)
             val infl = popup.menuInflater
             infl.inflate(R.menu.popup, popup.menu)

@@ -52,7 +52,7 @@ class PageFragmentNovyZapaviet : ListFragment(), OnItemLongClickListener {
         pazicia = arguments?.getInt("pazicia") ?: 0
     }
 
-    override fun onItemLongClick(parent: AdapterView<*>?, view: View, position: Int, id: Long): Boolean {
+    override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
         MaranAtaGlobalList.listPosition = position
         MaranAtaGlobalList.bible = bible
         longClicListiner?.onLongClick()

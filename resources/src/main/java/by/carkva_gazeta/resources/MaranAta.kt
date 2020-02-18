@@ -160,7 +160,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             change = savedInstanceState.getBoolean("change")
             tollBarText = savedInstanceState.getString("tollBarText") ?: ""
-            title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata_tollbar, tollBarText)
+            title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata)//, tollBarText
             paralel = savedInstanceState.getBoolean("paralel", paralel)
             if (paralel) {
                 paralelPosition = savedInstanceState.getInt("paralelPosition")
@@ -210,7 +210,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                                 val t1 = nazva.indexOf("nazva+++")
                                 val t2 = nazva.indexOf("-->", t1 + 8)
                                 tollBarText = nazva.substring(t1 + 8, t2)
-                                title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata_tollbar, tollBarText)
+                                title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata)
+                                subtitle_toolbar.text = tollBarText
                             }
                         }
                         if (!nazva.contains(tollBarText) && scroll != 0) {
@@ -218,7 +219,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                                 val t1 = nazva.indexOf("nazva+++")
                                 val t2 = nazva.indexOf("-->", t1 + 8)
                                 tollBarText = nazva.substring(t1 + 8, t2)
-                                title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata_tollbar, tollBarText)
+                                title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata)
+                                subtitle_toolbar.text = tollBarText
                             }
                         }
                         mPosition = position
@@ -371,32 +373,33 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onTouch(v: View, event: MotionEvent): Boolean {
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         if (linearLayout2.visibility == View.VISIBLE) {
             return false
         }
         val heightConstraintLayout = constraint.height
         val widthConstraintLayout = constraint.width
         val otstup = (10 * resources.displayMetrics.density).toInt()
-        val y = event.y.toInt()
-        val x = event.x.toInt()
+        val y = event?.y?.toInt() ?: 0
+        val x = event?.x?.toInt() ?: 0
         val prefEditor: Editor = k.edit()
-        if (v.id == R.id.ListView) {
-            when (event.action) {
+        val id = v?.id ?: 0
+        if (id == R.id.ListView) {
+            when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> mActionDown = true
                 MotionEvent.ACTION_UP -> mActionDown = false
             }
             return false
         }
-        if (v.id == R.id.constraint) {
+        if (id == R.id.constraint) {
             if (MainActivity.checkBrightness) {
                 MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
             }
             linearLayout2.visibility = View.GONE
-            when (event.action) {
+            when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
-                    n = event.y.toInt()
-                    yS = event.x.toInt()
+                    n = event?.y?.toInt() ?: 0
+                    yS = event?.x?.toInt() ?: 0
                     val proc: Int
                     if (x < otstup) {
                         levo = true
@@ -511,7 +514,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     }
                 }
                 MotionEvent.ACTION_UP -> {
-                    v.performClick()
+                    v?.performClick()
                     if (levo) {
                         levo = false
                     }
@@ -548,16 +551,25 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         val chten = cytanne.split(";").toTypedArray()
         for (i in chten.indices) {
             val fit = chten[i].trim()
+            var nazvaFull = ""
+            var nazvaFullBel = ""
             try {
                 var nachalo: Int
                 var konec: Int
                 var stixn = -1
                 var stixk = -1
-                val bible = ParalelnyeMesta.biblia(fit)
-                ParalelnyeMesta.kniga = bible[0]
-                ParalelnyeMesta.nazva = bible[1]
-                ParalelnyeMesta.nazvaBel = bible[2]
-                ParalelnyeMesta.nomer = bible[3].toInt()
+                val paralelnyeMesta = ParalelnyeMesta()
+                val bible = paralelnyeMesta.biblia(fit)
+                val kniga = bible[0]
+                val nazva = bible[1]
+                val nazvaBel = bible[2]
+                val nomer = bible[3].toInt()
+                nazvaFull = bible[4]
+                nazvaFullBel = bible[5]
+                if (nazvaFull == "")
+                    nazvaFull = bible[1]
+                if (nazvaFullBel == "")
+                    nazvaFullBel = bible[2]
                 //int s1 = kniga.length();
                 val s2 = fit.lastIndexOf(" ")
                 var s5 = -1
@@ -592,150 +604,150 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 val r = this@MaranAta.resources
                 var inputStream = r.openRawResource(R.raw.biblias1)
                 if (belarus) {
-                    if (ParalelnyeMesta.nomer == 1) inputStream = r.openRawResource(R.raw.biblias1)
-                    if (ParalelnyeMesta.nomer == 2) inputStream = r.openRawResource(R.raw.biblias2)
-                    if (ParalelnyeMesta.nomer == 3) inputStream = r.openRawResource(R.raw.biblias3)
-                    if (ParalelnyeMesta.nomer == 4) inputStream = r.openRawResource(R.raw.biblias4)
-                    if (ParalelnyeMesta.nomer == 5) inputStream = r.openRawResource(R.raw.biblias5)
-                    if (ParalelnyeMesta.nomer == 6) inputStream = r.openRawResource(R.raw.biblias6)
-                    if (ParalelnyeMesta.nomer == 7) inputStream = r.openRawResource(R.raw.biblias7)
-                    if (ParalelnyeMesta.nomer == 8) inputStream = r.openRawResource(R.raw.biblias8)
-                    if (ParalelnyeMesta.nomer == 9) inputStream = r.openRawResource(R.raw.biblias9)
-                    if (ParalelnyeMesta.nomer == 10) inputStream = r.openRawResource(R.raw.biblias10)
-                    if (ParalelnyeMesta.nomer == 11) inputStream = r.openRawResource(R.raw.biblias11)
-                    if (ParalelnyeMesta.nomer == 12) inputStream = r.openRawResource(R.raw.biblias12)
-                    if (ParalelnyeMesta.nomer == 13) inputStream = r.openRawResource(R.raw.biblias13)
-                    if (ParalelnyeMesta.nomer == 14) inputStream = r.openRawResource(R.raw.biblias14)
-                    if (ParalelnyeMesta.nomer == 15) inputStream = r.openRawResource(R.raw.biblias15)
-                    if (ParalelnyeMesta.nomer == 16) inputStream = r.openRawResource(R.raw.biblias16)
-                    if (ParalelnyeMesta.nomer == 20) inputStream = r.openRawResource(R.raw.biblias17)
-                    if (ParalelnyeMesta.nomer == 21) inputStream = r.openRawResource(R.raw.biblias18)
-                    if (ParalelnyeMesta.nomer == 22) inputStream = r.openRawResource(R.raw.biblias19)
-                    if (ParalelnyeMesta.nomer == 23) inputStream = r.openRawResource(R.raw.biblias20)
-                    if (ParalelnyeMesta.nomer == 24) inputStream = r.openRawResource(R.raw.biblias21)
-                    if (ParalelnyeMesta.nomer == 25) inputStream = r.openRawResource(R.raw.biblias22)
-                    if (ParalelnyeMesta.nomer == 28) inputStream = r.openRawResource(R.raw.biblias23)
-                    if (ParalelnyeMesta.nomer == 29) inputStream = r.openRawResource(R.raw.biblias24)
-                    if (ParalelnyeMesta.nomer == 30) inputStream = r.openRawResource(R.raw.biblias25)
-                    if (ParalelnyeMesta.nomer == 33) inputStream = r.openRawResource(R.raw.biblias26)
-                    if (ParalelnyeMesta.nomer == 34) inputStream = r.openRawResource(R.raw.biblias27)
-                    if (ParalelnyeMesta.nomer == 35) inputStream = r.openRawResource(R.raw.biblias28)
-                    if (ParalelnyeMesta.nomer == 36) inputStream = r.openRawResource(R.raw.biblias29)
-                    if (ParalelnyeMesta.nomer == 37) inputStream = r.openRawResource(R.raw.biblias30)
-                    if (ParalelnyeMesta.nomer == 38) inputStream = r.openRawResource(R.raw.biblias31)
-                    if (ParalelnyeMesta.nomer == 39) inputStream = r.openRawResource(R.raw.biblias32)
-                    if (ParalelnyeMesta.nomer == 40) inputStream = r.openRawResource(R.raw.biblias33)
-                    if (ParalelnyeMesta.nomer == 41) inputStream = r.openRawResource(R.raw.biblias34)
-                    if (ParalelnyeMesta.nomer == 42) inputStream = r.openRawResource(R.raw.biblias35)
-                    if (ParalelnyeMesta.nomer == 43) inputStream = r.openRawResource(R.raw.biblias36)
-                    if (ParalelnyeMesta.nomer == 44) inputStream = r.openRawResource(R.raw.biblias37)
-                    if (ParalelnyeMesta.nomer == 45) inputStream = r.openRawResource(R.raw.biblias38)
-                    if (ParalelnyeMesta.nomer == 46) inputStream = r.openRawResource(R.raw.biblias39)
-                    if (ParalelnyeMesta.nomer == 51) inputStream = r.openRawResource(R.raw.biblian1)
-                    if (ParalelnyeMesta.nomer == 52) inputStream = r.openRawResource(R.raw.biblian2)
-                    if (ParalelnyeMesta.nomer == 53) inputStream = r.openRawResource(R.raw.biblian3)
-                    if (ParalelnyeMesta.nomer == 54) inputStream = r.openRawResource(R.raw.biblian4)
-                    if (ParalelnyeMesta.nomer == 55) inputStream = r.openRawResource(R.raw.biblian5)
-                    if (ParalelnyeMesta.nomer == 56) inputStream = r.openRawResource(R.raw.biblian6)
-                    if (ParalelnyeMesta.nomer == 57) inputStream = r.openRawResource(R.raw.biblian7)
-                    if (ParalelnyeMesta.nomer == 58) inputStream = r.openRawResource(R.raw.biblian8)
-                    if (ParalelnyeMesta.nomer == 59) inputStream = r.openRawResource(R.raw.biblian9)
-                    if (ParalelnyeMesta.nomer == 60) inputStream = r.openRawResource(R.raw.biblian10)
-                    if (ParalelnyeMesta.nomer == 61) inputStream = r.openRawResource(R.raw.biblian11)
-                    if (ParalelnyeMesta.nomer == 62) inputStream = r.openRawResource(R.raw.biblian12)
-                    if (ParalelnyeMesta.nomer == 63) inputStream = r.openRawResource(R.raw.biblian13)
-                    if (ParalelnyeMesta.nomer == 64) inputStream = r.openRawResource(R.raw.biblian14)
-                    if (ParalelnyeMesta.nomer == 65) inputStream = r.openRawResource(R.raw.biblian15)
-                    if (ParalelnyeMesta.nomer == 66) inputStream = r.openRawResource(R.raw.biblian16)
-                    if (ParalelnyeMesta.nomer == 67) inputStream = r.openRawResource(R.raw.biblian17)
-                    if (ParalelnyeMesta.nomer == 68) inputStream = r.openRawResource(R.raw.biblian18)
-                    if (ParalelnyeMesta.nomer == 69) inputStream = r.openRawResource(R.raw.biblian19)
-                    if (ParalelnyeMesta.nomer == 70) inputStream = r.openRawResource(R.raw.biblian20)
-                    if (ParalelnyeMesta.nomer == 71) inputStream = r.openRawResource(R.raw.biblian21)
-                    if (ParalelnyeMesta.nomer == 72) inputStream = r.openRawResource(R.raw.biblian22)
-                    if (ParalelnyeMesta.nomer == 73) inputStream = r.openRawResource(R.raw.biblian23)
-                    if (ParalelnyeMesta.nomer == 74) inputStream = r.openRawResource(R.raw.biblian24)
-                    if (ParalelnyeMesta.nomer == 75) inputStream = r.openRawResource(R.raw.biblian25)
-                    if (ParalelnyeMesta.nomer == 76) inputStream = r.openRawResource(R.raw.biblian26)
-                    if (ParalelnyeMesta.nomer == 77) inputStream = r.openRawResource(R.raw.biblian27)
+                    if (nomer == 1) inputStream = r.openRawResource(R.raw.biblias1)
+                    if (nomer == 2) inputStream = r.openRawResource(R.raw.biblias2)
+                    if (nomer == 3) inputStream = r.openRawResource(R.raw.biblias3)
+                    if (nomer == 4) inputStream = r.openRawResource(R.raw.biblias4)
+                    if (nomer == 5) inputStream = r.openRawResource(R.raw.biblias5)
+                    if (nomer == 6) inputStream = r.openRawResource(R.raw.biblias6)
+                    if (nomer == 7) inputStream = r.openRawResource(R.raw.biblias7)
+                    if (nomer == 8) inputStream = r.openRawResource(R.raw.biblias8)
+                    if (nomer == 9) inputStream = r.openRawResource(R.raw.biblias9)
+                    if (nomer == 10) inputStream = r.openRawResource(R.raw.biblias10)
+                    if (nomer == 11) inputStream = r.openRawResource(R.raw.biblias11)
+                    if (nomer == 12) inputStream = r.openRawResource(R.raw.biblias12)
+                    if (nomer == 13) inputStream = r.openRawResource(R.raw.biblias13)
+                    if (nomer == 14) inputStream = r.openRawResource(R.raw.biblias14)
+                    if (nomer == 15) inputStream = r.openRawResource(R.raw.biblias15)
+                    if (nomer == 16) inputStream = r.openRawResource(R.raw.biblias16)
+                    if (nomer == 20) inputStream = r.openRawResource(R.raw.biblias17)
+                    if (nomer == 21) inputStream = r.openRawResource(R.raw.biblias18)
+                    if (nomer == 22) inputStream = r.openRawResource(R.raw.biblias19)
+                    if (nomer == 23) inputStream = r.openRawResource(R.raw.biblias20)
+                    if (nomer == 24) inputStream = r.openRawResource(R.raw.biblias21)
+                    if (nomer == 25) inputStream = r.openRawResource(R.raw.biblias22)
+                    if (nomer == 28) inputStream = r.openRawResource(R.raw.biblias23)
+                    if (nomer == 29) inputStream = r.openRawResource(R.raw.biblias24)
+                    if (nomer == 30) inputStream = r.openRawResource(R.raw.biblias25)
+                    if (nomer == 33) inputStream = r.openRawResource(R.raw.biblias26)
+                    if (nomer == 34) inputStream = r.openRawResource(R.raw.biblias27)
+                    if (nomer == 35) inputStream = r.openRawResource(R.raw.biblias28)
+                    if (nomer == 36) inputStream = r.openRawResource(R.raw.biblias29)
+                    if (nomer == 37) inputStream = r.openRawResource(R.raw.biblias30)
+                    if (nomer == 38) inputStream = r.openRawResource(R.raw.biblias31)
+                    if (nomer == 39) inputStream = r.openRawResource(R.raw.biblias32)
+                    if (nomer == 40) inputStream = r.openRawResource(R.raw.biblias33)
+                    if (nomer == 41) inputStream = r.openRawResource(R.raw.biblias34)
+                    if (nomer == 42) inputStream = r.openRawResource(R.raw.biblias35)
+                    if (nomer == 43) inputStream = r.openRawResource(R.raw.biblias36)
+                    if (nomer == 44) inputStream = r.openRawResource(R.raw.biblias37)
+                    if (nomer == 45) inputStream = r.openRawResource(R.raw.biblias38)
+                    if (nomer == 46) inputStream = r.openRawResource(R.raw.biblias39)
+                    if (nomer == 51) inputStream = r.openRawResource(R.raw.biblian1)
+                    if (nomer == 52) inputStream = r.openRawResource(R.raw.biblian2)
+                    if (nomer == 53) inputStream = r.openRawResource(R.raw.biblian3)
+                    if (nomer == 54) inputStream = r.openRawResource(R.raw.biblian4)
+                    if (nomer == 55) inputStream = r.openRawResource(R.raw.biblian5)
+                    if (nomer == 56) inputStream = r.openRawResource(R.raw.biblian6)
+                    if (nomer == 57) inputStream = r.openRawResource(R.raw.biblian7)
+                    if (nomer == 58) inputStream = r.openRawResource(R.raw.biblian8)
+                    if (nomer == 59) inputStream = r.openRawResource(R.raw.biblian9)
+                    if (nomer == 60) inputStream = r.openRawResource(R.raw.biblian10)
+                    if (nomer == 61) inputStream = r.openRawResource(R.raw.biblian11)
+                    if (nomer == 62) inputStream = r.openRawResource(R.raw.biblian12)
+                    if (nomer == 63) inputStream = r.openRawResource(R.raw.biblian13)
+                    if (nomer == 64) inputStream = r.openRawResource(R.raw.biblian14)
+                    if (nomer == 65) inputStream = r.openRawResource(R.raw.biblian15)
+                    if (nomer == 66) inputStream = r.openRawResource(R.raw.biblian16)
+                    if (nomer == 67) inputStream = r.openRawResource(R.raw.biblian17)
+                    if (nomer == 68) inputStream = r.openRawResource(R.raw.biblian18)
+                    if (nomer == 69) inputStream = r.openRawResource(R.raw.biblian19)
+                    if (nomer == 70) inputStream = r.openRawResource(R.raw.biblian20)
+                    if (nomer == 71) inputStream = r.openRawResource(R.raw.biblian21)
+                    if (nomer == 72) inputStream = r.openRawResource(R.raw.biblian22)
+                    if (nomer == 73) inputStream = r.openRawResource(R.raw.biblian23)
+                    if (nomer == 74) inputStream = r.openRawResource(R.raw.biblian24)
+                    if (nomer == 75) inputStream = r.openRawResource(R.raw.biblian25)
+                    if (nomer == 76) inputStream = r.openRawResource(R.raw.biblian26)
+                    if (nomer == 77) inputStream = r.openRawResource(R.raw.biblian27)
                 } else {
-                    if (ParalelnyeMesta.nomer == 1) inputStream = r.openRawResource(R.raw.sinaidals1)
-                    if (ParalelnyeMesta.nomer == 2) inputStream = r.openRawResource(R.raw.sinaidals2)
-                    if (ParalelnyeMesta.nomer == 3) inputStream = r.openRawResource(R.raw.sinaidals3)
-                    if (ParalelnyeMesta.nomer == 4) inputStream = r.openRawResource(R.raw.sinaidals4)
-                    if (ParalelnyeMesta.nomer == 5) inputStream = r.openRawResource(R.raw.sinaidals5)
-                    if (ParalelnyeMesta.nomer == 6) inputStream = r.openRawResource(R.raw.sinaidals6)
-                    if (ParalelnyeMesta.nomer == 7) inputStream = r.openRawResource(R.raw.sinaidals7)
-                    if (ParalelnyeMesta.nomer == 8) inputStream = r.openRawResource(R.raw.sinaidals8)
-                    if (ParalelnyeMesta.nomer == 9) inputStream = r.openRawResource(R.raw.sinaidals9)
-                    if (ParalelnyeMesta.nomer == 10) inputStream = r.openRawResource(R.raw.sinaidals10)
-                    if (ParalelnyeMesta.nomer == 11) inputStream = r.openRawResource(R.raw.sinaidals11)
-                    if (ParalelnyeMesta.nomer == 12) inputStream = r.openRawResource(R.raw.sinaidals12)
-                    if (ParalelnyeMesta.nomer == 13) inputStream = r.openRawResource(R.raw.sinaidals13)
-                    if (ParalelnyeMesta.nomer == 14) inputStream = r.openRawResource(R.raw.sinaidals14)
-                    if (ParalelnyeMesta.nomer == 15) inputStream = r.openRawResource(R.raw.sinaidals15)
-                    if (ParalelnyeMesta.nomer == 16) inputStream = r.openRawResource(R.raw.sinaidals16)
-                    if (ParalelnyeMesta.nomer == 17) inputStream = r.openRawResource(R.raw.sinaidals17)
-                    if (ParalelnyeMesta.nomer == 18) inputStream = r.openRawResource(R.raw.sinaidals18)
-                    if (ParalelnyeMesta.nomer == 19) inputStream = r.openRawResource(R.raw.sinaidals19)
-                    if (ParalelnyeMesta.nomer == 20) inputStream = r.openRawResource(R.raw.sinaidals20)
-                    if (ParalelnyeMesta.nomer == 21) inputStream = r.openRawResource(R.raw.sinaidals21)
-                    if (ParalelnyeMesta.nomer == 22) inputStream = r.openRawResource(R.raw.sinaidals22)
-                    if (ParalelnyeMesta.nomer == 23) inputStream = r.openRawResource(R.raw.sinaidals23)
-                    if (ParalelnyeMesta.nomer == 24) inputStream = r.openRawResource(R.raw.sinaidals24)
-                    if (ParalelnyeMesta.nomer == 25) inputStream = r.openRawResource(R.raw.sinaidals25)
-                    if (ParalelnyeMesta.nomer == 26) inputStream = r.openRawResource(R.raw.sinaidals26)
-                    if (ParalelnyeMesta.nomer == 27) inputStream = r.openRawResource(R.raw.sinaidals27)
-                    if (ParalelnyeMesta.nomer == 28) inputStream = r.openRawResource(R.raw.sinaidals28)
-                    if (ParalelnyeMesta.nomer == 29) inputStream = r.openRawResource(R.raw.sinaidals29)
-                    if (ParalelnyeMesta.nomer == 30) inputStream = r.openRawResource(R.raw.sinaidals30)
-                    if (ParalelnyeMesta.nomer == 31) inputStream = r.openRawResource(R.raw.sinaidals31)
-                    if (ParalelnyeMesta.nomer == 32) inputStream = r.openRawResource(R.raw.sinaidals32)
-                    if (ParalelnyeMesta.nomer == 33) inputStream = r.openRawResource(R.raw.sinaidals33)
-                    if (ParalelnyeMesta.nomer == 34) inputStream = r.openRawResource(R.raw.sinaidals34)
-                    if (ParalelnyeMesta.nomer == 35) inputStream = r.openRawResource(R.raw.sinaidals35)
-                    if (ParalelnyeMesta.nomer == 36) inputStream = r.openRawResource(R.raw.sinaidals36)
-                    if (ParalelnyeMesta.nomer == 37) inputStream = r.openRawResource(R.raw.sinaidals37)
-                    if (ParalelnyeMesta.nomer == 38) inputStream = r.openRawResource(R.raw.sinaidals38)
-                    if (ParalelnyeMesta.nomer == 39) inputStream = r.openRawResource(R.raw.sinaidals39)
-                    if (ParalelnyeMesta.nomer == 40) inputStream = r.openRawResource(R.raw.sinaidals40)
-                    if (ParalelnyeMesta.nomer == 41) inputStream = r.openRawResource(R.raw.sinaidals41)
-                    if (ParalelnyeMesta.nomer == 42) inputStream = r.openRawResource(R.raw.sinaidals42)
-                    if (ParalelnyeMesta.nomer == 43) inputStream = r.openRawResource(R.raw.sinaidals43)
-                    if (ParalelnyeMesta.nomer == 44) inputStream = r.openRawResource(R.raw.sinaidals44)
-                    if (ParalelnyeMesta.nomer == 45) inputStream = r.openRawResource(R.raw.sinaidals45)
-                    if (ParalelnyeMesta.nomer == 46) inputStream = r.openRawResource(R.raw.sinaidals46)
-                    if (ParalelnyeMesta.nomer == 47) inputStream = r.openRawResource(R.raw.sinaidals47)
-                    if (ParalelnyeMesta.nomer == 48) inputStream = r.openRawResource(R.raw.sinaidals48)
-                    if (ParalelnyeMesta.nomer == 49) inputStream = r.openRawResource(R.raw.sinaidals49)
-                    if (ParalelnyeMesta.nomer == 50) inputStream = r.openRawResource(R.raw.sinaidals50)
-                    if (ParalelnyeMesta.nomer == 51) inputStream = r.openRawResource(R.raw.sinaidaln1)
-                    if (ParalelnyeMesta.nomer == 52) inputStream = r.openRawResource(R.raw.sinaidaln2)
-                    if (ParalelnyeMesta.nomer == 53) inputStream = r.openRawResource(R.raw.sinaidaln3)
-                    if (ParalelnyeMesta.nomer == 54) inputStream = r.openRawResource(R.raw.sinaidaln4)
-                    if (ParalelnyeMesta.nomer == 55) inputStream = r.openRawResource(R.raw.sinaidaln5)
-                    if (ParalelnyeMesta.nomer == 56) inputStream = r.openRawResource(R.raw.sinaidaln6)
-                    if (ParalelnyeMesta.nomer == 57) inputStream = r.openRawResource(R.raw.sinaidaln7)
-                    if (ParalelnyeMesta.nomer == 58) inputStream = r.openRawResource(R.raw.sinaidaln8)
-                    if (ParalelnyeMesta.nomer == 59) inputStream = r.openRawResource(R.raw.sinaidaln9)
-                    if (ParalelnyeMesta.nomer == 60) inputStream = r.openRawResource(R.raw.sinaidaln10)
-                    if (ParalelnyeMesta.nomer == 61) inputStream = r.openRawResource(R.raw.sinaidaln11)
-                    if (ParalelnyeMesta.nomer == 62) inputStream = r.openRawResource(R.raw.sinaidaln12)
-                    if (ParalelnyeMesta.nomer == 63) inputStream = r.openRawResource(R.raw.sinaidaln13)
-                    if (ParalelnyeMesta.nomer == 64) inputStream = r.openRawResource(R.raw.sinaidaln14)
-                    if (ParalelnyeMesta.nomer == 65) inputStream = r.openRawResource(R.raw.sinaidaln15)
-                    if (ParalelnyeMesta.nomer == 66) inputStream = r.openRawResource(R.raw.sinaidaln16)
-                    if (ParalelnyeMesta.nomer == 67) inputStream = r.openRawResource(R.raw.sinaidaln17)
-                    if (ParalelnyeMesta.nomer == 68) inputStream = r.openRawResource(R.raw.sinaidaln18)
-                    if (ParalelnyeMesta.nomer == 69) inputStream = r.openRawResource(R.raw.sinaidaln19)
-                    if (ParalelnyeMesta.nomer == 70) inputStream = r.openRawResource(R.raw.sinaidaln20)
-                    if (ParalelnyeMesta.nomer == 71) inputStream = r.openRawResource(R.raw.sinaidaln21)
-                    if (ParalelnyeMesta.nomer == 72) inputStream = r.openRawResource(R.raw.sinaidaln22)
-                    if (ParalelnyeMesta.nomer == 73) inputStream = r.openRawResource(R.raw.sinaidaln23)
-                    if (ParalelnyeMesta.nomer == 74) inputStream = r.openRawResource(R.raw.sinaidaln24)
-                    if (ParalelnyeMesta.nomer == 75) inputStream = r.openRawResource(R.raw.sinaidaln25)
-                    if (ParalelnyeMesta.nomer == 76) inputStream = r.openRawResource(R.raw.sinaidaln26)
-                    if (ParalelnyeMesta.nomer == 77) inputStream = r.openRawResource(R.raw.sinaidaln27)
+                    if (nomer == 1) inputStream = r.openRawResource(R.raw.sinaidals1)
+                    if (nomer == 2) inputStream = r.openRawResource(R.raw.sinaidals2)
+                    if (nomer == 3) inputStream = r.openRawResource(R.raw.sinaidals3)
+                    if (nomer == 4) inputStream = r.openRawResource(R.raw.sinaidals4)
+                    if (nomer == 5) inputStream = r.openRawResource(R.raw.sinaidals5)
+                    if (nomer == 6) inputStream = r.openRawResource(R.raw.sinaidals6)
+                    if (nomer == 7) inputStream = r.openRawResource(R.raw.sinaidals7)
+                    if (nomer == 8) inputStream = r.openRawResource(R.raw.sinaidals8)
+                    if (nomer == 9) inputStream = r.openRawResource(R.raw.sinaidals9)
+                    if (nomer == 10) inputStream = r.openRawResource(R.raw.sinaidals10)
+                    if (nomer == 11) inputStream = r.openRawResource(R.raw.sinaidals11)
+                    if (nomer == 12) inputStream = r.openRawResource(R.raw.sinaidals12)
+                    if (nomer == 13) inputStream = r.openRawResource(R.raw.sinaidals13)
+                    if (nomer == 14) inputStream = r.openRawResource(R.raw.sinaidals14)
+                    if (nomer == 15) inputStream = r.openRawResource(R.raw.sinaidals15)
+                    if (nomer == 16) inputStream = r.openRawResource(R.raw.sinaidals16)
+                    if (nomer == 17) inputStream = r.openRawResource(R.raw.sinaidals17)
+                    if (nomer == 18) inputStream = r.openRawResource(R.raw.sinaidals18)
+                    if (nomer == 19) inputStream = r.openRawResource(R.raw.sinaidals19)
+                    if (nomer == 20) inputStream = r.openRawResource(R.raw.sinaidals20)
+                    if (nomer == 21) inputStream = r.openRawResource(R.raw.sinaidals21)
+                    if (nomer == 22) inputStream = r.openRawResource(R.raw.sinaidals22)
+                    if (nomer == 23) inputStream = r.openRawResource(R.raw.sinaidals23)
+                    if (nomer == 24) inputStream = r.openRawResource(R.raw.sinaidals24)
+                    if (nomer == 25) inputStream = r.openRawResource(R.raw.sinaidals25)
+                    if (nomer == 26) inputStream = r.openRawResource(R.raw.sinaidals26)
+                    if (nomer == 27) inputStream = r.openRawResource(R.raw.sinaidals27)
+                    if (nomer == 28) inputStream = r.openRawResource(R.raw.sinaidals28)
+                    if (nomer == 29) inputStream = r.openRawResource(R.raw.sinaidals29)
+                    if (nomer == 30) inputStream = r.openRawResource(R.raw.sinaidals30)
+                    if (nomer == 31) inputStream = r.openRawResource(R.raw.sinaidals31)
+                    if (nomer == 32) inputStream = r.openRawResource(R.raw.sinaidals32)
+                    if (nomer == 33) inputStream = r.openRawResource(R.raw.sinaidals33)
+                    if (nomer == 34) inputStream = r.openRawResource(R.raw.sinaidals34)
+                    if (nomer == 35) inputStream = r.openRawResource(R.raw.sinaidals35)
+                    if (nomer == 36) inputStream = r.openRawResource(R.raw.sinaidals36)
+                    if (nomer == 37) inputStream = r.openRawResource(R.raw.sinaidals37)
+                    if (nomer == 38) inputStream = r.openRawResource(R.raw.sinaidals38)
+                    if (nomer == 39) inputStream = r.openRawResource(R.raw.sinaidals39)
+                    if (nomer == 40) inputStream = r.openRawResource(R.raw.sinaidals40)
+                    if (nomer == 41) inputStream = r.openRawResource(R.raw.sinaidals41)
+                    if (nomer == 42) inputStream = r.openRawResource(R.raw.sinaidals42)
+                    if (nomer == 43) inputStream = r.openRawResource(R.raw.sinaidals43)
+                    if (nomer == 44) inputStream = r.openRawResource(R.raw.sinaidals44)
+                    if (nomer == 45) inputStream = r.openRawResource(R.raw.sinaidals45)
+                    if (nomer == 46) inputStream = r.openRawResource(R.raw.sinaidals46)
+                    if (nomer == 47) inputStream = r.openRawResource(R.raw.sinaidals47)
+                    if (nomer == 48) inputStream = r.openRawResource(R.raw.sinaidals48)
+                    if (nomer == 49) inputStream = r.openRawResource(R.raw.sinaidals49)
+                    if (nomer == 50) inputStream = r.openRawResource(R.raw.sinaidals50)
+                    if (nomer == 51) inputStream = r.openRawResource(R.raw.sinaidaln1)
+                    if (nomer == 52) inputStream = r.openRawResource(R.raw.sinaidaln2)
+                    if (nomer == 53) inputStream = r.openRawResource(R.raw.sinaidaln3)
+                    if (nomer == 54) inputStream = r.openRawResource(R.raw.sinaidaln4)
+                    if (nomer == 55) inputStream = r.openRawResource(R.raw.sinaidaln5)
+                    if (nomer == 56) inputStream = r.openRawResource(R.raw.sinaidaln6)
+                    if (nomer == 57) inputStream = r.openRawResource(R.raw.sinaidaln7)
+                    if (nomer == 58) inputStream = r.openRawResource(R.raw.sinaidaln8)
+                    if (nomer == 59) inputStream = r.openRawResource(R.raw.sinaidaln9)
+                    if (nomer == 60) inputStream = r.openRawResource(R.raw.sinaidaln10)
+                    if (nomer == 61) inputStream = r.openRawResource(R.raw.sinaidaln11)
+                    if (nomer == 62) inputStream = r.openRawResource(R.raw.sinaidaln12)
+                    if (nomer == 63) inputStream = r.openRawResource(R.raw.sinaidaln13)
+                    if (nomer == 64) inputStream = r.openRawResource(R.raw.sinaidaln14)
+                    if (nomer == 65) inputStream = r.openRawResource(R.raw.sinaidaln15)
+                    if (nomer == 66) inputStream = r.openRawResource(R.raw.sinaidaln16)
+                    if (nomer == 67) inputStream = r.openRawResource(R.raw.sinaidaln17)
+                    if (nomer == 68) inputStream = r.openRawResource(R.raw.sinaidaln18)
+                    if (nomer == 69) inputStream = r.openRawResource(R.raw.sinaidaln19)
+                    if (nomer == 70) inputStream = r.openRawResource(R.raw.sinaidaln20)
+                    if (nomer == 71) inputStream = r.openRawResource(R.raw.sinaidaln21)
+                    if (nomer == 72) inputStream = r.openRawResource(R.raw.sinaidaln22)
+                    if (nomer == 73) inputStream = r.openRawResource(R.raw.sinaidaln23)
+                    if (nomer == 74) inputStream = r.openRawResource(R.raw.sinaidaln24)
+                    if (nomer == 75) inputStream = r.openRawResource(R.raw.sinaidaln25)
+                    if (nomer == 76) inputStream = r.openRawResource(R.raw.sinaidaln26)
+                    if (nomer == 77) inputStream = r.openRawResource(R.raw.sinaidaln27)
                 }
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
@@ -805,37 +817,37 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         }
                     } else {
                         if (belarus) {
-                            maranAta.add("<!--no--><!--nazva+++" + ParalelnyeMesta.nazvaBel + " " + e + "--><br><strong>" + ParalelnyeMesta.nazvaBel + " " + e + "</strong><br>\n")
+                            maranAta.add("<!--no--><!--nazva+++$nazvaBel $e--><br><strong>$nazvaFullBel $e</strong><br>\n")
                         } else {
-                            maranAta.add("<!--no--><!--nazva+++" + ParalelnyeMesta.nazva + " " + e + "--><br><strong>" + ParalelnyeMesta.nazva + " " + e + "</strong><br>\n")
+                            maranAta.add("<!--no--><!--nazva+++$nazva $e--><br><strong>$nazvaFull $e</strong><br>\n")
                         }
                         val splitline = split2[e].trim().split("\n").toTypedArray()
                         var i3: Int
                         for (i2 in splitline.indices) {
-                            i3 = if (ParalelnyeMesta.kniga.contains("Сир") && e == 1 && i2 >= 8) i2 - 7 else i2 + 1
-                            if (belarus) maranAta.add("<!--" + ParalelnyeMesta.kniga + "." + e + "." + i3 + "--><!--nazva+++" + ParalelnyeMesta.nazvaBel + " " + e + "-->" + splitline[i2] + getParallel(ParalelnyeMesta.nomer, e, i2) + "\n") else maranAta.add("<!--" + ParalelnyeMesta.kniga + "." + e + "." + i3 + "--><!--nazva+++" + ParalelnyeMesta.nazva + " " + e + "-->" + splitline[i2] + getParallel(ParalelnyeMesta.nomer, e, i2) + "\n")
+                            i3 = if (kniga.contains("Сир") && e == 1 && i2 >= 8) i2 - 7 else i2 + 1
+                            if (belarus) maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazvaBel + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n") else maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazva + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
                         }
                     }
                 }
                 if (stixn != -1) {
                     val t1 = fit.indexOf(".")
                     if (belarus) {
-                        maranAta.add("<!--no--><!--nazva+++" + ParalelnyeMesta.nazvaBel + " " + fit.substring(s2 + 1, t1) + "--><br><strong>" + ParalelnyeMesta.nazvaBel + " " + fit.substring(s2 + 1) + "</strong><br>\n")
+                        maranAta.add("<!--no--><!--nazva+++" + nazvaBel + " " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFullBel + " " + fit.substring(s2 + 1) + "</strong><br>\n")
                     } else {
-                        maranAta.add("<!--no--><!--nazva+++" + ParalelnyeMesta.nazva + " " + fit.substring(s2 + 1, t1) + "--><br><strong>" + ParalelnyeMesta.nazva + " " + fit.substring(s2 + 1) + "</strong><br>\n")
+                        maranAta.add("<!--no--><!--nazva+++" + nazva + " " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n")
                     }
                     val res1 = r1.toString().trim().split("\n").toTypedArray()
                     var i2 = 0
                     var i3 = stixn
                     while (i2 < res1.size) {
-                        if (belarus) maranAta.add("<!--" + ParalelnyeMesta.kniga + "." + nachalo + "." + i3 + "--><!--nazva+++" + ParalelnyeMesta.nazvaBel + " " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(ParalelnyeMesta.nomer, nachalo, i3 - 1) + "\n") else maranAta.add("<!--" + ParalelnyeMesta.kniga + "." + nachalo + "." + i3 + "--><!--nazva+++" + ParalelnyeMesta.nazva + " " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(ParalelnyeMesta.nomer, nachalo, i3 - 1) + "\n")
+                        if (belarus) maranAta.add("<!--" + kniga + "." + nachalo + "." + i3 + "--><!--nazva+++" + nazvaBel + " " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n") else maranAta.add("<!--" + kniga + "." + nachalo + "." + i3 + "--><!--nazva+++" + nazva + " " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n")
                         i2++
                         i3++
                     }
                     if (konec - nachalo != 0) {
                         val res2 = r2.trim().split("\n").toTypedArray()
                         for (i21 in res2.indices) {
-                            if (belarus) maranAta.add("<!--" + ParalelnyeMesta.kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + ParalelnyeMesta.nazvaBel + " " + konec + "-->" + res2[i21] + getParallel(ParalelnyeMesta.nomer, konec, i21) + "\n") else maranAta.add("<!--" + ParalelnyeMesta.kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + ParalelnyeMesta.nazva + " " + konec + "-->" + res2[i21] + getParallel(ParalelnyeMesta.nomer, konec, i21) + "\n")
+                            if (belarus) maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazvaBel + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n") else maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazva + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n")
                         }
                     }
                 }
@@ -845,9 +857,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 }*/
             } catch (t: Throwable) {
                 if (belarus) {
-                    maranAta.add("<!--no--><br><strong>" + ParalelnyeMesta.nazvaBel + " " + fit + "</strong><br>\n")
+                    maranAta.add("<!--no--><br><strong>$nazvaFullBel $fit</strong><br>\n")
                 } else {
-                    maranAta.add("<!--no--><br><strong>" + ParalelnyeMesta.nazva + " " + fit + "</strong><br>\n")
+                    maranAta.add("<!--no--><br><strong>$nazvaFull $fit</strong><br>\n")
                 }
                 maranAta.add("<!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch) + "\n")
             }
@@ -927,7 +939,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         if (paralel) {
             scroll.visibility = View.GONE
             ListView.visibility = View.VISIBLE
-            title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata_tollbar, tollBarText)
+            title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata)//, tollBarText
             paralel = false
             invalidateOptionsMenu()
         } else if (fullscreenPage) {
@@ -990,24 +1002,32 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         autoscroll = k.getBoolean("autoscroll", false)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = !paralel
+        val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
+        itemAuto.isVisible = !paralel
         if (linearLayout2.visibility == View.GONE) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = true
+            itemAuto.isVisible = true
             mActionDown = false
         } else {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
+            itemAuto.isVisible = false
         }
         if (autoscroll) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
+            itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         } else {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
+            itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }
+        val spanString = SpannableString(itemAuto.title.toString())
+        val end = spanString.length
+        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        itemAuto.title = spanString
+
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isChecked = k.getBoolean("paralel_maranata", true)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isVisible = true
@@ -1140,7 +1160,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         outState.putInt("paralelPosition", paralelPosition)
     }
 
-    override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if (linearLayout2.visibility == View.VISIBLE) {
             linearLayout2.visibility = View.GONE
             invalidateOptionsMenu()
@@ -1175,7 +1195,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
     }
 
-    override fun onItemLongClick(parent: AdapterView<*>?, view: View, position: Int, id: Long): Boolean {
+    override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
         if (!autoscroll) {
             if (!maranAta[position].contains("<!--no-->") && maranAta[position].trim() != "") {
                 if (linearLayout2.visibility == View.GONE) {

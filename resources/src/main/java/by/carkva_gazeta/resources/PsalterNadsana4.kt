@@ -131,10 +131,10 @@ class PsalterNadsana4 internal constructor(private val activity: Activity) : Fra
         }
     }
 
-    override fun onClick(v: View) {
+    override fun onClick(v: View?) {
         val intent = Intent(activity, NadsanContentActivity::class.java)
         var glava = 1
-        when (v.id) {
+        when (v?.id ?: 0) {
             R.id.textView1, R.id.textView14 -> glava = 2
             R.id.textView5 -> glava = 4
             R.id.textView6 -> glava = 7

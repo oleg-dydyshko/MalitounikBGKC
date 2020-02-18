@@ -12,7 +12,7 @@ import kotlin.math.abs
 internal open class OnSwipeTouchListener(c: Context?) : OnTouchListener {
     private val gestureDetector: GestureDetector
     @SuppressLint("ClickableViewAccessibility")
-    override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
+    override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
         return gestureDetector.onTouchEvent(motionEvent)
     }
 

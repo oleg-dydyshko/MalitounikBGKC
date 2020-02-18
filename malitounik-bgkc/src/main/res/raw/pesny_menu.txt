@@ -1,0 +1,137 @@
+pesny_bag_0<>Анёл ад Бога Габрыэль
+pesny_bag_1<>З далёкай Фацімы
+pesny_bag_2<>Люрдаўская песьня
+pesny_bag_3<>Матачка Божая
+pesny_bag_4<>Маці Божая Будслаўская
+pesny_bag_5<>Маці Божая ў Жыровіцах
+pesny_bag_6<>Маці з Фацімы
+pesny_bag_7<>Маці мая Божая
+pesny_bag_8<>Мне аднойчы
+pesny_bag_9<>О Марыя, Маці Бога (1)
+pesny_bag_10<>О Марыя, Маці Бога (2)
+pesny_bag_11<>Памаліся, Марыя
+pesny_bag_12<>Песьня да Маці Божай Нястомнай Дапамогі
+pesny_bag_13<>Радуйся, Марыя!
+pesny_bag_14<>Табе, Марыя, давяраю я
+pesny_bag_15<>Ціхая, пакорная
+pesny_bel_0<>Ave Maria
+pesny_bel_1<>Божа, што калісь народы
+pesny_bel_2<>Божа, я малюся за Беларусь
+pesny_bel_3<>Вечна жывi, мая Беларусь
+pesny_bel_4<>К табе, Беларусь
+pesny_bel_5<>Магутны Божа
+pesny_bel_6<>Малюся за цябе, Беларусь
+pesny_bel_7<>Малітва
+pesny_bel_8<>Мая краіна
+pesny_bel_9<>Мы хочам Бога
+pesny_kal_0<>Ave Maria (Зорка зазьзяла)
+pesny_kal_1<>А што гэта за сьпевы
+pesny_kal_2<>А ў сьвеце нам навіна была
+pesny_kal_3<>А ўчора з вячора
+pesny_kal_4<>Вясёлых калядных сьвятаў
+pesny_kal_5<>Зазьзяла зорачка над Бэтлеемам
+pesny_kal_6<>Звон зьвініць
+pesny_kal_7<>На шляху ў Бэтлеем
+pesny_kal_8<>Неба і зямля
+pesny_kal_9<>Нова радасьць стала
+pesny_kal_10<>Ночка цiхая, зарыста
+pesny_kal_11<>Ноччу сьвятой
+pesny_kal_12<>Паказалась з неба яснасьць
+pesny_kal_13<>Прыйдзіце да Збаўцы
+pesny_kal_14<>Радасная вестка
+pesny_kal_15<>У начную ціш
+pesny_kal_16<>Учора зьвячора — засьвяціла зора
+pesny_kal_17<>Ціхая ноч (пер. Н. Арсеньневай)
+pesny_kal_18<>Ціхая ноч-2
+pesny_kal_19<>Ціхая ноч-3
+pesny_kal_20<>Прыйдзі, прыйдзі, Эмануэль (ХІХ ст.)
+pesny_kal_21<>Прыйдзі, прыйдзі, Эмануэль (XII–ХVIII стст.)
+pesny_prasl_0<>Ён паўсюль
+pesny_prasl_1<>Ісус вызваліў мяне
+pesny_prasl_2<>Ісус нам дае збаўленьне
+pesny_prasl_3<>Айцец наш і наш Валадар
+pesny_prasl_4<>Алілуя!
+pesny_prasl_5<>Бог блаславіў гэты дзень
+pesny_prasl_6<>Бог ёсьць любоў
+pesny_prasl_7<>Богу сьпявай, уся зямля!
+pesny_prasl_8<>Божа мой
+pesny_prasl_9<>Браце мой
+pesny_prasl_10<>Весяліся і пляскай у далоні
+pesny_prasl_11<>Вольная воля
+pesny_prasl_12<>Вось маё сэрца
+pesny_prasl_13<>Вядзі мяне, Божа
+pesny_prasl_14<>Вялікім і цудоўным
+pesny_prasl_15<>Госпад мой заўсёды па маёй правіцы
+pesny_prasl_16<>Госпаду дзякуйце, бо добры Ён
+pesny_prasl_17<>Дай Духа любові
+pesny_prasl_18<>Дай уславіць Цябе
+pesny_prasl_19<>Дай, добры Божа
+pesny_prasl_20<>Дакраніся да маіх вачэй
+pesny_prasl_21<>Дзякуй за ўсё, што Ты стварыў
+pesny_prasl_22<>Дзякуй!
+pesny_prasl_23<>З намі — Пятро і Андрэй
+pesny_prasl_24<>Знайдзі мяне
+pesny_prasl_25<>Зоркі далёка
+pesny_prasl_26<>Кадош (Сьвяты)
+pesny_prasl_27<>Клічаш ты
+pesny_prasl_28<>Любоў Твая
+pesny_prasl_29<>Любіць — гэта ахвяраваць
+pesny_prasl_30<>Майго жыцьця — мой Бог крыніца
+pesny_prasl_31<>Маё сэрца
+pesny_prasl_32<>Маё шчасьце ў Iсуса
+pesny_prasl_33<>На псалтыры і на арфе
+pesny_prasl_34<>Настане дзень
+pesny_prasl_35<>Невычэрпныя ласкі ў Бога
+pesny_prasl_36<>О, калі б ты паслухаў Мяне
+pesny_prasl_37<>Ойча мой, к Табе іду
+pesny_prasl_38<>Ойча, мяне Ты любіш
+pesny_prasl_39<>Пакліканьне (Човен)
+pesny_prasl_40<>Пачуй мой кліч, чулы Ойча
+pesny_prasl_41<>Песьню славы засьпявайма
+pesny_prasl_42<>Песьня Давіда
+pesny_prasl_43<>Песьня вячэрняя
+pesny_prasl_44<>Песьня пілігрыма
+pesny_prasl_45<>Песьня ранішняя
+pesny_prasl_46<>Пяцёра пакутнікаў
+pesny_prasl_47<>Пілігрым
+pesny_prasl_48<>Руах
+pesny_prasl_49<>Сьвятло жыцьця
+pesny_prasl_50<>Сьпявайма добраму Богу
+pesny_prasl_51<>Сьпявайце Цару
+pesny_prasl_52<>Так, як імкнецца сарна
+pesny_prasl_53<>Твая любоў
+pesny_prasl_54<>Твая прысутнасьць
+pesny_prasl_55<>Толькі Ісус
+pesny_prasl_56<>Толькі Бог, толькі ты
+pesny_prasl_57<>Толькі Бог
+pesny_prasl_58<>Ты ведаеш сэрца маё
+pesny_prasl_59<>Ты ведаеш...
+pesny_prasl_60<>Ты — Госпад мой
+pesny_prasl_61<>Хвала Табе, вялікі Бог
+pesny_prasl_62<>Хвалім Цябе, Божа!
+pesny_prasl_63<>Хрыстос уваскрос! (Resucito)
+pesny_prasl_64<>Ці ты быў на Галгофе
+pesny_prasl_65<>Шалом алэхем (Мір вам)
+pesny_prasl_66<>Я люблю Цябе, Ойча міласэрны
+pesny_prasl_67<>Я ўстану рана, каб сьпяваць
+pesny_prasl_68<>Як гэта хораша й міла
+pesny_prasl_69<>Яму за ўсё слава
+pesny_prasl_70<>Цябе, Бога, хвалім
+pesny_prasl_71<>Мой Госпад, мой Збаўца
+pesny_taize_0<>Magnifikat
+pesny_taize_1<>Ostende nobis
+pesny_taize_2<>Ubi caritas
+pesny_taize_3<>Блаславёны Бог
+pesny_taize_4<>Бог мой, Iсус, сьвяцi нам у цемры
+pesny_taize_5<>Будзь са Мной
+pesny_taize_6<>Дай нам, Божа, моц ласкi Сваёй
+pesny_taize_7<>Дзякуем Табе, Божа наш
+pesny_taize_8<>Дзякуем Табе, Хрысьце
+pesny_taize_9<>Кожны дзень Бог дае мне сiлы
+pesny_taize_10<>Мая душа ў Богу мае спакой
+pesny_taize_11<>О, Iсусе
+pesny_taize_12<>О, Госпадзе мой
+pesny_taize_13<>Прыйдзi, Дух Сьвяты
+pesny_taize_14<>У цемры iдзём
+pesny_taize_15<>У цемры нашых дзён
+pesny_taize_16<>Хай тваё сэрца больш не журыцца

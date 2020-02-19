@@ -21,6 +21,7 @@ import android.webkit.WebSettings
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import kotlinx.android.synthetic.main.bogasluzbovya.*
@@ -131,6 +132,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
+            MainActivity.dialogVisable = false
             if (savedInstanceState.getBoolean("seach")) {
                 textSearch.visibility = View.VISIBLE
                 textCount.visibility = View.VISIBLE
@@ -747,31 +749,55 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         autoscroll = k.getBoolean("autoscroll", false)
+        val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
+        val itemVybranoe: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = true
         if (autoscroll) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
+            itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         } else {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
+            itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }
+        var spanString = SpannableString(itemAuto.title.toString())
+        var end = spanString.length
+        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        itemAuto.title = spanString
+
         if (men) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
+            itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
+            itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
         } else {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
+            itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
+            itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
-        val item: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
-        val spanString = SpannableString(menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title.toString())
-        val end = spanString.length
+
+        spanString = SpannableString(itemVybranoe.title.toString())
+        end = spanString.length
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        item.title = spanString
+        itemVybranoe.title = spanString
         return true
+    }
+
+    override fun onMenuOpened(featureId: Int, menu: Menu?): Boolean {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = true
+        }
+        return menu?.let { super.onMenuOpened(featureId, it) } ?: true
+    }
+
+    override fun onPanelClosed(featureId: Int, menu: Menu) {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = false
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

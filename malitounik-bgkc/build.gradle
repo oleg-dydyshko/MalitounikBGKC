@@ -10,7 +10,7 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 43573
+        versionCode 43575
         versionName "3.7.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,7 +41,7 @@ dependencies {
     api 'androidx.appcompat:appcompat:1.1.0'
     api 'androidx.constraintlayout:constraintlayout:1.1.3'
     api 'com.google.android.material:material:1.1.0'
-    api 'com.google.android.play:core:1.6.4'
+    api 'com.google.android.play:core:1.6.5'
     api 'com.google.code.gson:gson:2.8.6'
     api 'androidx.core:core-ktx:1.2.0'
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"

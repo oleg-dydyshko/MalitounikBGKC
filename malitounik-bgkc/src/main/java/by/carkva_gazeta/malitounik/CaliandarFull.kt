@@ -247,7 +247,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             textPredsviaty.visibility = View.VISIBLE
         }
         textChytanne.text = data[day][9]
-        if (data[day][9].contains("Прабачьце, няма дадзеных") || !data[day][9].contains(";")) textChytanne.isEnabled = false
+        if (data[day][9] == "Прабачьце, няма дадзеных" || data[day][9] == "Літургіі няма") textChytanne.isEnabled = false
         if (data[day][9] == "") textChytanne.visibility = View.GONE
         if (data[day][10] != "") {
             textChytanneSviatyia.text = data[day][10]

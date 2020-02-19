@@ -22,6 +22,7 @@ import android.view.View.OnTouchListener
 import android.widget.*
 import android.widget.AdapterView.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
@@ -157,11 +158,13 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         setMaranata(cytanne)
         if (savedInstanceState != null) {
             onsave = true
+            MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             change = savedInstanceState.getBoolean("change")
             tollBarText = savedInstanceState.getString("tollBarText") ?: ""
-            title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata)//, tollBarText
+            title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
             paralel = savedInstanceState.getBoolean("paralel", paralel)
+            subtitle_toolbar.text = savedInstanceState.getString("chtenie")
             if (paralel) {
                 paralelPosition = savedInstanceState.getInt("paralelPosition")
                 parralelMestaView(paralelPosition)
@@ -210,7 +213,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                                 val t1 = nazva.indexOf("nazva+++")
                                 val t2 = nazva.indexOf("-->", t1 + 8)
                                 tollBarText = nazva.substring(t1 + 8, t2)
-                                title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata)
+                                title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
                                 subtitle_toolbar.text = tollBarText
                             }
                         }
@@ -219,7 +222,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                                 val t1 = nazva.indexOf("nazva+++")
                                 val t2 = nazva.indexOf("-->", t1 + 8)
                                 tollBarText = nazva.substring(t1 + 8, t2)
-                                title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata)
+                                title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
                                 subtitle_toolbar.text = tollBarText
                             }
                         }
@@ -939,7 +942,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         if (paralel) {
             scroll.visibility = View.GONE
             ListView.visibility = View.VISIBLE
-            title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata)//, tollBarText
+            title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)//, tollBarText
             paralel = false
             invalidateOptionsMenu()
         } else if (fullscreenPage) {
@@ -1003,7 +1006,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         super.onPrepareOptionsMenu(menu)
         autoscroll = k.getBoolean("autoscroll", false)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
-        itemAuto.isVisible = !paralel
         if (linearLayout2.visibility == View.GONE) {
             itemAuto.isVisible = true
             mActionDown = false
@@ -1023,6 +1025,13 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }
+        if (paralel) {
+            subtitle_toolbar.visibility = View.GONE
+            itemAuto.isVisible = false
+        } else {
+            subtitle_toolbar.visibility = View.VISIBLE
+            itemAuto.isVisible = true
+        }
         val spanString = SpannableString(itemAuto.title.toString())
         val end = spanString.length
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -1033,6 +1042,19 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isVisible = true
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         return true
+    }
+
+    override fun onMenuOpened(featureId: Int, menu: Menu?): Boolean {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = true
+        }
+        return menu?.let { super.onMenuOpened(featureId, it) } ?: true
+    }
+
+    override fun onPanelClosed(featureId: Int, menu: Menu) {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = false
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -1158,6 +1180,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         outState.putString("tollBarText", tollBarText)
         outState.putBoolean("paralel", paralel)
         outState.putInt("paralelPosition", paralelPosition)
+        outState.putString("chtenie", subtitle_toolbar.text.toString())
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

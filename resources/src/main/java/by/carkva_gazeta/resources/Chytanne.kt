@@ -23,6 +23,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
@@ -103,6 +104,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.akafist_chytanne)
         if (savedInstanceState != null) {
+            MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             change = savedInstanceState.getBoolean("change")
         }
@@ -974,6 +976,19 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             item.title = spanString
         }
         return true
+    }
+
+    override fun onMenuOpened(featureId: Int, menu: Menu?): Boolean {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = true
+        }
+        return menu?.let { super.onMenuOpened(featureId, it) } ?: true
+    }
+
+    override fun onPanelClosed(featureId: Int, menu: Menu) {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = false
+        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {

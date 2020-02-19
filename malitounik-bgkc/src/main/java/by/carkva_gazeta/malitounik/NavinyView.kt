@@ -52,7 +52,7 @@ class NavinyView : AppCompatActivity() {
         mnemonics["&nbsp;"] = "\u0020"
         mnemonics["&mdash;"] = "\u0020-\u0020"
         var output = intent.extras?.getString("url") ?: ""
-        mnemonics.forEach { 
+        mnemonics.forEach {
             val matcher = Pattern.compile(it.key).matcher(output)
             output = matcher.replaceAll(mnemonics[it.key] ?: it.key)
         }
@@ -64,6 +64,34 @@ class NavinyView : AppCompatActivity() {
         viewWeb.settings.javaScriptEnabled = true
         viewWeb.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                if (url.contains("https://malitounik.page.link/caliandar")) {
+                    val prefEditors = kq.edit()
+                    prefEditors.putInt("id", R.id.label1)
+                    prefEditors.apply()
+                    val intent = Intent(this@NavinyView, MainActivity::class.java)
+                    startActivity(intent)
+                    return false
+                }
+                if (url.contains("https://malitounik.page.link/biblija")) {
+                    val prefEditors = kq.edit()
+                    prefEditors.putInt("id", R.id.label8)
+                    prefEditors.apply()
+                    val intent = Intent(this@NavinyView, MainActivity::class.java)
+                    startActivity(intent)
+                    return false
+                }
+                if (url.contains("https://m.carkva-gazeta.by/index.php?bib=")) {
+                    if (MainActivity.checkmoduleResources(this@NavinyView)) {
+                        if (MainActivity.checkmodulesBiblijateka(this@NavinyView)) {
+                            val intent = Intent(this@NavinyView, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
+                            intent.putExtra("site", true)
+                            startActivity(intent)
+                        } else {
+                            MainActivity.downloadDynamicModule(this@NavinyView)
+                        }
+                        return false
+                    }
+                }
                 if (MainActivity.isNetworkAvailable(this@NavinyView)) {
                     if (Uri.parse(url).host?.contains("m.carkva-gazeta.by") == true) {
                         return false
@@ -81,7 +109,7 @@ class NavinyView : AppCompatActivity() {
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener{
+        title_toolbar.setOnClickListener {
             title_toolbar.setHorizontallyScrolling(true)
             title_toolbar.freezesText = true
             title_toolbar.marqueeRepeatLimit = -1

@@ -57,7 +57,8 @@ class Naviny : AppCompatActivity() {
     private var errorInternet = false
     private var mUploadMessage: ValueCallback<Uri?>? = null
     private var mUploadMessageArr: ValueCallback<Array<Uri>>? = null
-    private var mLastClickTime: Long = 0
+    private var mLastClickTime = 0L
+    private val uiAnimationDelay = 300L
 
     @SuppressLint("SetTextI18n", "SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -294,13 +295,13 @@ class Naviny : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.hide()
         mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelay)
     }
 
     private fun show() {
         relative.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
     }
 
     override fun onResume() {
@@ -635,7 +636,7 @@ class Naviny : AppCompatActivity() {
             } catch (e: ActivityNotFoundException) {
                 File("$filesDir/Site").walk().forEach {
                     if (it.isFile)
-                        File("$filesDir/Site/$it").delete()
+                        it.delete()
                 }
                 /*val dir1 = File("$filesDir/Site")
                 val dirContents1 = dir1.list()
@@ -658,7 +659,7 @@ class Naviny : AppCompatActivity() {
         }*/
         File("$filesDir/Site").walk().forEach {
             if (it.isFile)
-                files.add(File("$filesDir/Site/$it"))
+                files.add(it)
         }
         files.sortWith(Comparator { o1: File, o2: File ->
             o1.lastModified().compareTo(o2.lastModified())
@@ -774,9 +775,5 @@ class Naviny : AppCompatActivity() {
 
     private class ViewHolder {
         var text: TextViewRobotoCondensed? = null
-    }
-
-    companion object {
-        private const val UI_ANIMATION_DELAY = 300
     }
 }

@@ -60,6 +60,7 @@
                 android:orientation="horizontal">
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/pacatak"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -109,6 +110,7 @@
                 android:orientation="horizontal">
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/kanec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -158,6 +160,7 @@
                 android:orientation="horizontal">
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/pavedamic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -195,6 +198,7 @@
                 android:orientation="horizontal">
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/pavtor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -253,6 +257,7 @@
                         android:text="5" />
 
                     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                        android:id="@+id/pazov"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -290,6 +295,7 @@
                 android:orientation="horizontal">
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    android:id="@+id/cvet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -315,8 +321,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:orientation="vertical">
 
         <ListView
             android:id="@+id/ListView"

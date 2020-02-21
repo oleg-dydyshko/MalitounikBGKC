@@ -176,8 +176,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         color = 0
         label1.text = da
         val notifi = arrayOf("хвілінаў", "часоў", "дзён", "тыдняў")
-        val adapter2 = ArrayAdapter(this,
-                R.layout.simple_list_item_1, notifi)
+        val adapter2 = SpinnerAdapter(this, notifi)
         spinner3.adapter = adapter2
         spinner3.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -187,8 +186,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         val repit = arrayOf("Няма", "Кожны дзень", "Па будных днях", "Два дні праз два", "Кожны тыдзень", "Кожныя два тыдні", "Кожныя чатыры тыдні", "Кожны месяц", "Раз на год")
-        val adapter3 = ArrayAdapter(this,
-                R.layout.simple_list_item_1, repit)
+        val adapter3 = SpinnerAdapter(this, repit)
         spinner4.adapter = adapter3
         spinner4.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -412,6 +410,17 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         title_toolbar.text = resources.getString(R.string.sabytie)
         if (dzenNoch) {
+            pacatak.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            kanec.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            pavedamic.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            pavtor.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            cvet.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            pazov.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            label1.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            label2.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            label12.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            label22.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            labelbutton12.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             toolbar.popupTheme = R.style.AppCompatDark
             toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
         }
@@ -2571,7 +2580,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             viewHolder.buttonPopup?.setOnClickListener { viewHolder.buttonPopup?.let { showPopupMenu(it, position) } }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolder.text?.text = sabytie2[position]
-            if (dzenNoch) viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            if (dzenNoch) {
+                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+                viewHolder.text?.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+            }
             return rootView
         }
 
@@ -2630,6 +2642,38 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             text.text = "Назва падзеі"
             text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             text.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+            return view
+        }
+    }
+
+    internal inner class SpinnerAdapter(context: Context, list: Array<String>) : ArrayAdapter<String>(context, R.layout.simple_list_item_1, list) {
+        private val spinnerList = list
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolderColor
+            if (convertView == null) {
+                rootView = this@Sabytie.layoutInflater.inflate(R.layout.simple_list_item_1, parent, false)
+                viewHolder = ViewHolderColor()
+                rootView.tag = viewHolder
+                viewHolder.text = rootView.findViewById(R.id.text1)
+            } else {
+                rootView = convertView
+                viewHolder = rootView.tag as ViewHolderColor
+            }
+            viewHolder.text?.text = spinnerList[position]
+            viewHolder.text?.textSize = SettingsActivity.GET_FONT_SIZE_MIN
+            if (dzenNoch)
+                viewHolder.text?.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+            return rootView
+        }
+
+        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val view = super.getDropDownView(position, convertView, parent)
+            val text: TextView = view.findViewById(R.id.text1)
+            text.text = spinnerList[position]
+            text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
+            if (dzenNoch)
+                text.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
             return view
         }
     }

@@ -25,10 +25,10 @@ import java.util.*
  * Created by oleg on 14.6.16
  */
 class MyNatatkiAdd : AppCompatActivity() {
-    private var filename: String = ""
-    private var redak: Boolean = false
+    private var filename = ""
+    private var redak = false
     private var dzenNoch = false
-    private var md5sum: String = ""
+    private var md5sum = ""
 
     override fun onPause() {
         super.onPause()
@@ -153,7 +153,7 @@ class MyNatatkiAdd : AppCompatActivity() {
                 val mun = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
                 filename = gc[Calendar.DATE].toString() + " " + mun[gc[Calendar.MONTH]] + " " + gc[Calendar.YEAR] + " " + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
             }
-            val file: File = if (redak) {
+            val file = if (redak) {
                 File(this.filesDir.toString() + "/Malitva/" + this.filename)
             } else {
                 File(this.filesDir.toString() + "/Malitva/" + imiafile)
@@ -166,7 +166,7 @@ class MyNatatkiAdd : AppCompatActivity() {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(EditText.windowToken, 0)
             redak = true
-            //MyBackupAgent.requestBackup(this);
+            this.filename = file.name
         }
     }
 

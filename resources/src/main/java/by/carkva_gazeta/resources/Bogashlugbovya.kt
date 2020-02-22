@@ -55,13 +55,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var autoscroll = false
     private var n = 0
     private var yS = 0
-    private var spid = 60
-    private var resurs: String = ""
-    private var title: String = ""
+    private var spid = 60L
+    private var resurs = ""
+    private var title = ""
     private var men = false
-    private var scrollTimer: Timer = Timer()
-    private var procentTimer: Timer = Timer()
-    private var resetTimer: Timer = Timer()
+    private var scrollTimer = Timer()
+    private var procentTimer = Timer()
+    private var resetTimer = Timer()
     private var scrollerSchedule: TimerTask? = null
     private var procentSchedule: TimerTask? = null
     private var resetSchedule: TimerTask? = null
@@ -119,7 +119,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         super.onCreate(savedInstanceState)
         setContentView(R.layout.bogasluzbovya)
         autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getInt("autoscrollSpid", 60)
+        spid =  k.getLong("speedAutoScroll", 60L)
         WebView.setOnTouchListener(this)
         //WebView.setOnLongClickListener { scrollTimer != null }
         val client = MyWebViewClient()
@@ -387,7 +387,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             else
                 line.replace("<html><head>", "<html><head><style type=\"text/css\">::selection {background: #eb9b9a} body{-webkit-tap-highlight-color: rgba(208,5,5,0.1); margin: 0; padding: 0}</style>")
             if (menu == 1) {
-                if (line.intern().contains("<KANDAK></KANDAK>")) {
+                if (line.contains("<KANDAK></KANDAK>")) {
                     line = line.replace("<KANDAK></KANDAK>", "")
                     builder.append(line)
                     try {
@@ -400,7 +400,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
                     }
                 }
-                if (line.intern().contains("<PRAKIMEN></PRAKIMEN>")) {
+                if (line.contains("<PRAKIMEN></PRAKIMEN>")) {
                     line = line.replace("<PRAKIMEN></PRAKIMEN>", "")
                     builder.append(line)
                     try {
@@ -413,7 +413,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
                     }
                 }
-                if (line.intern().contains("<ALILUIA></ALILUIA>")) {
+                if (line.contains("<ALILUIA></ALILUIA>")) {
                     line = line.replace("<ALILUIA></ALILUIA>", "")
                     builder.append(line)
                     try {
@@ -426,7 +426,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
                     }
                 }
-                if (line.intern().contains("<PRICHASNIK></PRICHASNIK>")) {
+                if (line.contains("<PRICHASNIK></PRICHASNIK>")) {
                     line = line.replace("<PRICHASNIK></PRICHASNIK>", "")
                     builder.append(line)
                     try {
@@ -440,7 +440,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                 }
                 when {
-                    line.intern().contains("<APCH></APCH>") -> {
+                    line.contains("<APCH></APCH>") -> {
                         line = line.replace("<APCH></APCH>", "")
                         var sv = zmenyiaChastki.sviatyia()
                         if (sv != "") {
@@ -456,7 +456,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
                         }
                     }
-                    line.intern().contains("<EVCH></EVCH>") -> {
+                    line.contains("<EVCH></EVCH>") -> {
                         line = line.replace("<EVCH></EVCH>", "")
                         var sv = zmenyiaChastki.sviatyia()
                         if (sv != "") {
@@ -558,7 +558,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+        scrollTimer.schedule(scrollerSchedule, spid, spid)
     }
 
     @SuppressLint("SetTextI18n")
@@ -589,7 +589,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
                     yS = event?.x?.toInt() ?: 0
-                    val proc: Int
+                    val proc: Long
                     if (x < otstup) {
                         levo = true
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
@@ -609,7 +609,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                     if (y > heightConstraintLayout - otstup) {
                         niz = true
-                        spid = k.getInt("autoscrollSpid", 60)
+                        spid =  k.getLong("speedAutoScroll", 60L)
                         proc = 100 - (spid - 15) * 100 / 215
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
@@ -724,7 +724,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                     if (niz) {
                         niz = false
-                        prefEditor.putInt("autoscrollSpid", spid)
+                        prefEditor.putLong("speedAutoScroll", spid)
                         prefEditor.apply()
                     }
                 }
@@ -737,7 +737,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                     if (niz) {
                         niz = false
-                        prefEditor.putInt("autoscrollSpid", spid)
+                        prefEditor.putLong("speedAutoScroll", spid)
                         prefEditor.apply()
                     }
                 }
@@ -859,7 +859,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 stopAutoScroll()
                 startAutoScroll()
                 val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.putLong("speedAutoScroll", spid)
                 prefEditors.apply()
             }
         }
@@ -874,7 +874,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 stopAutoScroll()
                 startAutoScroll()
                 val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.putLong("speedAutoScroll", spid)
                 prefEditors.apply()
             }
         }
@@ -973,7 +973,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         setTollbarTheme()
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getInt("autoscrollSpid", 60)
+        spid =  k.getLong("speedAutoScroll", 60L)
         if (autoscroll) {
             startAutoScroll()
         }

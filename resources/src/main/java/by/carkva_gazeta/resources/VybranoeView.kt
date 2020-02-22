@@ -24,7 +24,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
-import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.bogasluzbovya.*
@@ -59,12 +58,12 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
     private var autoscroll = false
     private var n = 0
     private var yS = 0
-    private var spid = 60
-    private var resurs: String = ""
+    private var spid = 60L
+    private var resurs = ""
     private var men = true
-    private var scrollTimer: Timer = Timer()
-    private var procentTimer: Timer = Timer()
-    private var resetTimer: Timer = Timer()
+    private var scrollTimer = Timer()
+    private var procentTimer = Timer()
+    private var resetTimer = Timer()
     private var scrollerSchedule: TimerTask? = null
     private var procentSchedule: TimerTask? = null
     private var resetSchedule: TimerTask? = null
@@ -72,9 +71,10 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
     private var pravo = false
     private var niz = false
     private var positionY = 0
-    private var title: String = ""
+    private var title = ""
     private var editVybranoe = false
     private var mActionDown = false
+    private var mAutoScroll = true
     private val orientation: Int
         get() {
             val rotation = windowManager.defaultDisplay.rotation
@@ -179,7 +179,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
 
     override fun onDialogFontSizePositiveClick() {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        if (TextView.visibility == View.VISIBLE) {
+        if (scrollView2.visibility == View.VISIBLE) {
             TextView.textSize = fontBiblia
         } else {
             val webSettings = WebView.settings
@@ -218,27 +218,14 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         setContentView(R.layout.bogasluzbovya)
         autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getInt("autoscrollSpid", 60)
+        spid =  k.getLong("speedAutoScroll", 60L)
         WebView.setOnTouchListener(this)
-        //WebView.setOnLongClickListener { scrollTimer != null }
         val client = MyWebViewClient()
         client.setOnLinkListenner(this)
         WebView.webViewClient = client
-        scrollView2.setOnTouchListener(this)
         scrollView2.setOnScrollChangedCallback(this)
-        //scrollView2.setOnLongClickListener { scrollTimer != null }
         constraint.setOnTouchListener(this)
         autoscroll = k.getBoolean("autoscroll", false)
-        scrollView2.setOnBottomReachedListener(object : OnBottomReachedListener {
-            override fun onBottomReached() {
-                stopAutoScroll()
-                val prefEditors = k.edit()
-                prefEditors.putBoolean("autoscroll", false)
-                prefEditors.apply()
-                invalidateOptionsMenu()
-            }
-        }
-        )
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             editVybranoe = savedInstanceState.getBoolean("editVybranoe")
@@ -276,19 +263,21 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
         webSettings.standardFontFamily = "sans-serif-condensed"
         webSettings.defaultFontSize = fontBiblia.toInt()
         webSettings.javaScriptEnabled = true
-        //akafist.addJavascriptInterface(WebAppInterface(this, getSupportFragmentManager()), "Android")
         positionY = (k.getInt(resurs + "Scroll", 0) / resources.displayMetrics.density).toInt()
         WebView.setOnScrollChangedCallback(this)
         WebView.setOnBottomListener(this)
-        if (resurs.intern().contains("bogashlugbovya") || resurs.intern().contains("akafist") || resurs.intern().contains("malitvy") || resurs.intern().contains("ruzanec") || resurs.intern().contains("ton")) {
-            TextView.visibility = View.GONE
+        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("ton")) {
+            scrollView2.visibility = View.GONE
             WebView.visibility = View.VISIBLE
             WebView.loadDataWithBaseURL("malitounikApp-app//carkva-gazeta.by/", loadData(), "text/html", "utf-8", null)
         } else {
             WebView.visibility = View.GONE
+            scrollView2.visibility = View.VISIBLE
             TextView.text = MainActivity.fromHtml(loadData())
             positionY = k.getInt(resurs + "Scroll", 0)
             scrollView2.post { scrollView2.scrollBy(0, positionY) }
+            if (!resurs.contains("ton"))
+                mAutoScroll = false
         }
         if (k.getBoolean("help_str", true)) {
             startActivity(Intent(this, HelpText::class.java))
@@ -326,7 +315,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
         }
     }
 
-    private fun scrollWebView(): StringBuilder? {
+    private fun scrollWebView(): StringBuilder {
         val script = StringBuilder()
         script.append("<script language=\"javascript\" type=\"text/javascript\">")
         script.append("\n")
@@ -377,7 +366,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
             else
                 line.replace("<html><head>", "<html><head><style type=\"text/css\">::selection {background: #eb9b9a} body{-webkit-tap-highlight-color: rgba(208,5,5,0.1); margin: 0; padding: 0}</style>")
             if (resurs.contains("bogashlugbovya")) {
-                if (line.intern().contains("<KANDAK></KANDAK>")) {
+                if (line.contains("<KANDAK></KANDAK>")) {
                     line = line.replace("<KANDAK></KANDAK>", "")
                     builder.append(line)
                     try {
@@ -390,7 +379,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                         builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
                     }
                 }
-                if (line.intern().contains("<PRAKIMEN></PRAKIMEN>")) {
+                if (line.contains("<PRAKIMEN></PRAKIMEN>")) {
                     line = line.replace("<PRAKIMEN></PRAKIMEN>", "")
                     builder.append(line)
                     try {
@@ -403,7 +392,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                         builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
                     }
                 }
-                if (line.intern().contains("<ALILUIA></ALILUIA>")) {
+                if (line.contains("<ALILUIA></ALILUIA>")) {
                     line = line.replace("<ALILUIA></ALILUIA>", "")
                     builder.append(line)
                     try {
@@ -416,7 +405,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                         builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
                     }
                 }
-                if (line.intern().contains("<PRICHASNIK></PRICHASNIK>")) {
+                if (line.contains("<PRICHASNIK></PRICHASNIK>")) {
                     line = line.replace("<PRICHASNIK></PRICHASNIK>", "")
                     builder.append(line)
                     try {
@@ -430,7 +419,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                     }
                 }
                 when {
-                    line.intern().contains("<APCH></APCH>") -> {
+                    line.contains("<APCH></APCH>") -> {
                         line = line.replace("<APCH></APCH>", "")
                         var sv = zmenyiaChastki.sviatyia()
                         if (sv != "") {
@@ -445,7 +434,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                             builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
                         }
                     }
-                    line.intern().contains("<EVCH></EVCH>") -> {
+                    line.contains("<EVCH></EVCH>") -> {
                         line = line.replace("<EVCH></EVCH>", "")
                         var sv = zmenyiaChastki.sviatyia()
                         if (sv != "") {
@@ -564,7 +553,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+        scrollTimer.schedule(scrollerSchedule, spid, spid)
     }
 
     @SuppressLint("SetTextI18n")
@@ -576,7 +565,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
         val x = event?.x?.toInt() ?: 0
         val prefEditor: Editor = k.edit()
         val id = v?.id ?: 0
-        if (id == R.id.WebView || id == by.carkva_gazeta.malitounik.R.id.scrollView2) {
+        if (id == R.id.WebView) {
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> mActionDown = true
                 MotionEvent.ACTION_UP -> mActionDown = false
@@ -595,7 +584,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
                     yS = event?.x?.toInt() ?: 0
-                    val proc: Int
+                    val proc: Long
                     if (x < otstup) {
                         levo = true
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
@@ -615,7 +604,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                     }
                     if (y > heightConstraintLayout - otstup) {
                         niz = true
-                        spid = k.getInt("autoscrollSpid", 60)
+                        spid =  k.getLong("speedAutoScroll", 60L)
                         proc = 100 - (spid - 15) * 100 / 215
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
@@ -730,7 +719,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                     }
                     if (niz) {
                         niz = false
-                        prefEditor.putInt("autoscrollSpid", spid)
+                        prefEditor.putLong("speedAutoScroll", spid)
                         prefEditor.apply()
                     }
                 }
@@ -743,7 +732,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                     }
                     if (niz) {
                         niz = false
-                        prefEditor.putInt("autoscrollSpid", spid)
+                        prefEditor.putLong("speedAutoScroll", spid)
                         prefEditor.apply()
                     }
                 }
@@ -754,25 +743,29 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        autoscroll = k.getBoolean("autoscroll", false)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         val itemVybranoe: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
-        if (resurs.contains("bogashlugbovya") || resurs.intern().contains("akafist") || resurs.intern().contains("malitvy") || resurs.intern().contains("ruzanec")) {
+        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec")) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = true
         }
-        if (autoscroll) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
-            itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-            itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        if (mAutoScroll) {
+            autoscroll = k.getBoolean("autoscroll", false)
+            if (autoscroll) {
+                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
+                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
+                itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
+                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+                itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            } else {
+                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
+                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
+                itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
+                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            }
         } else {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
-            itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            itemAuto.isVisible = false
         }
         var spanString = SpannableString(itemAuto.title.toString())
         var end = spanString.length
@@ -868,7 +861,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                 stopAutoScroll()
                 startAutoScroll()
                 val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.putLong("speedAutoScroll", spid)
                 prefEditors.apply()
             }
         }
@@ -883,7 +876,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                 stopAutoScroll()
                 startAutoScroll()
                 val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.putLong("speedAutoScroll", spid)
                 prefEditors.apply()
             }
         }
@@ -983,7 +976,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
         setTollbarTheme()
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getInt("autoscrollSpid", 60)
+        spid =  k.getLong("speedAutoScroll", 60L)
         if (autoscroll) {
             startAutoScroll()
         }

@@ -338,8 +338,8 @@ class CaliandarMun : AppCompatActivity() {
         private var arrayList: List<String>? = null
 
         constructor(context: Context, strings: Array<String?>) : super(context, R.layout.simple_list_item_4, strings)
-        constructor(context: Context, objects: List<String>) : super(context, R.layout.simple_list_item_4, objects) {
-            arrayList = objects
+        constructor(context: Context, list: List<String>) : super(context, R.layout.simple_list_item_4, list) {
+            arrayList = list
         }
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -347,6 +347,8 @@ class CaliandarMun : AppCompatActivity() {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextViewRobotoCondensed
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            if (dzenNoch)
+                textView.setTextColor(ContextCompat.getColor(this@CaliandarMun, R.color.colorIcons))
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
                     textView.setTypeface(null, Typeface.BOLD)
@@ -377,6 +379,8 @@ class CaliandarMun : AppCompatActivity() {
                 viewHolder = convert.tag as ViewHolder
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            if (dzenNoch)
+                viewHolder.text?.setTextColor(ContextCompat.getColor(this@CaliandarMun, R.color.colorIcons))
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
                     viewHolder.text?.setTypeface(null, Typeface.BOLD)

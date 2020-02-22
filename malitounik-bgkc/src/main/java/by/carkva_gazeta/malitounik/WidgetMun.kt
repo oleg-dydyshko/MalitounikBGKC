@@ -31,8 +31,8 @@ class WidgetMun : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         if (updateViews == null) updateViews = RemoteViews(context.packageName, R.layout.widget_mun)
-        for (i in appWidgetIds) {
-            updateWidget(context, appWidgetManager, i)
+        for (widgetID in appWidgetIds) {
+            updateWidget(context, appWidgetManager, widgetID)
         }
         // Обновляем виджет
         appWidgetManager.updateAppWidget(appWidgetIds, updateViews)

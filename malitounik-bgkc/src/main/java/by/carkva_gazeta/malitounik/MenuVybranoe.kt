@@ -46,16 +46,8 @@ class MenuVybranoe : ListFragment() {
             val outputStream = FileWriter(file)
             outputStream.write(gson.toJson(vybranoe))
             outputStream.close()
-            /*val file = File(it.filesDir.toString() + "/Vybranoe.json")
-            try {
-                val outputStream = FileWriter(file)
-                outputStream.write(gson.toJson(vybranoe))
-                outputStream.close()
-            } catch (ignored: IOException) {
-            }*/
             adapter.notifyDataSetChanged()
         }
-        //MyBackupAgent.requestBackup(getActivity());
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -74,26 +66,7 @@ class MenuVybranoe : ListFragment() {
                 }
             }
         }
-        /*var sb: String? = ""
-        if (file.exists()) {
-            try {
-                val inputStream = FileReader(file)
-                val reader = BufferedReader(inputStream)
-                var line: String?
-                reader.forEachLine {
-                lene = it
-                sb = line
-            }
-                inputStream.close()
-            } catch (ignored: IOException) {
-            }
-            val type = object : TypeToken<ArrayList<Vybranoe_data?>?>() {}.type
-            vybranoe = gson.fromJson(sb, type)
-        } else {
-            vybranoe = ArrayList()
-        }*/
         vybranoe.sortWith(VybranoeDataSort())
-        //Collections.sort(vybranoe, Vybranoe_data_sort())
         activity?.let { it ->
             adapter = MyVybranoeAdapter(it)
             listAdapter = adapter
@@ -114,7 +87,6 @@ class MenuVybranoe : ListFragment() {
         super.onListItemClick(l, v, position, id)
         if (MainActivity.checkmoduleResources(activity)) {
             val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.VybranoeView"))
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             intent.putExtra("resurs", vybranoe[position].resurs)
             intent.putExtra("title", vybranoe[position].data)
             startActivity(intent)

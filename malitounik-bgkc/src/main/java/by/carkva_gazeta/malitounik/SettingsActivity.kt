@@ -1118,6 +1118,12 @@ class SettingsActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
+            val id = k.getInt("id", R.id.label1)
+            k.all.forEach {
+                if (!it.key.contains("WIDGET", ignoreCase = true))
+                    prefEditor.remove(it.key)
+            }
+            File("$filesDir/Book").deleteRecursively()
             val layout = LinearLayout(this)
             if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
             val density = resources.displayMetrics.density
@@ -1132,6 +1138,7 @@ class SettingsActivity : AppCompatActivity() {
             mes.duration = Toast.LENGTH_SHORT
             mes.view = layout
             mes.show()
+            prefEditor.putInt("id", id)
             prefEditor.putBoolean("help_str", true)
             prefEditor.putFloat("font_biblia", GET_DEFAULT_FONT_SIZE)
             prefEditor.putBoolean("dzen_noch", false)

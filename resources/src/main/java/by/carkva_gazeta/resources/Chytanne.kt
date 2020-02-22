@@ -59,10 +59,10 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var autoscroll = false
     private var n = 0
     private var yS = 0
-    private var spid = 60
-    private var scrollTimer: Timer = Timer()
-    private var procentTimer: Timer = Timer()
-    private var resetTimer: Timer = Timer()
+    private var spid = 60L
+    private var scrollTimer = Timer()
+    private var procentTimer = Timer()
+    private var resetTimer = Timer()
     private var scrollerSchedule: TimerTask? = null
     private var procentSchedule: TimerTask? = null
     private var resetSchedule: TimerTask? = null
@@ -71,7 +71,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var niz = false
     private var mActionDown = false
     private var change = false
-    private var cytannelist: ArrayList<TextViewRobotoCondensed> = ArrayList()
+    private var cytannelist = ArrayList<TextViewRobotoCondensed>()
     private var nedelia = -1
     private var toTwoList = 0
     private val orientation: Int
@@ -128,7 +128,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         })
         if (dzenNoch) progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
         autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getInt("autoscrollSpid", 60)
+        spid = k.getLong("speedAutoScroll", 60L)
         autoscroll = k.getBoolean("autoscroll", false)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
@@ -195,7 +195,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
                     yS = event?.x?.toInt() ?: 0
-                    val proc: Int
+                    val proc: Long
                     if (x < otstup) {
                         levo = true
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
@@ -215,7 +215,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                     }
                     if (y > heightConstraintLayout - otstup) {
                         niz = true
-                        spid = k.getInt("autoscrollSpid", 60)
+                        spid = k.getLong("speedAutoScroll", 60L)
                         proc = 100 - (spid - 15) * 100 / 215
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
@@ -320,7 +320,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                     }
                     if (niz) {
                         niz = false
-                        prefEditor.putInt("autoscrollSpid", spid)
+                        prefEditor.putLong("speedAutoScroll", spid)
                         prefEditor.apply()
                     }
                 }
@@ -333,7 +333,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                     }
                     if (niz) {
                         niz = false
-                        prefEditor.putInt("autoscrollSpid", spid)
+                        prefEditor.putLong("speedAutoScroll", spid)
                         prefEditor.apply()
                     }
                 }
@@ -961,7 +961,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+        scrollTimer.schedule(scrollerSchedule, spid, spid)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -1044,7 +1044,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         setTollbarTheme()
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getInt("autoscrollSpid", 60)
+        spid = k.getLong("speedAutoScroll", 60L)
         if (autoscroll) {
             startAutoScroll()
         }
@@ -1095,7 +1095,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 stopAutoScroll()
                 startAutoScroll()
                 val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.putLong("speedAutoScroll", spid)
                 prefEditors.apply()
             }
         }
@@ -1110,7 +1110,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 stopAutoScroll()
                 startAutoScroll()
                 val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.putLong("speedAutoScroll", spid)
                 prefEditors.apply()
             }
         }

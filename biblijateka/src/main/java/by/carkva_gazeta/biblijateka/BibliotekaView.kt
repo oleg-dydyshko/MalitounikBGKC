@@ -114,7 +114,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var positionY = 0
     private var fb2: FictionBook? = null
     private var fb2PageText: String = ""
-    private var spid = 60
+    private var spid = 60L
     private var scrollTimer: Timer = Timer()
     private var procentTimer: Timer = Timer()
     private var resetTimer: Timer = Timer()
@@ -495,7 +495,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     }
                     if (!fileName.toLowerCase(Locale.getDefault()).contains(".pdf")) {
                         autoscroll = k.getBoolean("autoscroll", false)
-                        spid = k.getInt("autoscrollSpid", 60)
+                        spid = k.getLong("speedAutoScroll", 60L)
                         if (autoscroll) {
                             startAutoScroll()
                         }
@@ -1338,7 +1338,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     }
                     if (!fileName.toLowerCase(Locale.getDefault()).contains(".pdf")) {
                         autoscroll = k.getBoolean("autoscroll", false)
-                        spid = k.getInt("autoscrollSpid", 60)
+                        spid = k.getLong("speedAutoScroll", 60L)
                         if (autoscroll) {
                             startAutoScroll()
                         }
@@ -1432,27 +1432,27 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         if (id == by.carkva_gazeta.malitounik.R.id.action_plus) {
             if (spid in 20..235) {
                 spid -= 5
-                val proc: Int = 100 - (spid - 15) * 100 / 215
+                val proc = 100 - (spid - 15) * 100 / 215
                 progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                 progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 progress.visibility = View.VISIBLE
                 startProcent()
                 stopAutoScroll()
                 startAutoScroll()
-                prefEditor.putInt("autoscrollSpid", spid)
+                prefEditor.putLong("speedAutoScroll", spid)
             }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_minus) {
             if (spid in 10..225) {
                 spid += 5
-                val proc: Int = 100 - (spid - 15) * 100 / 215
+                val proc = 100 - (spid - 15) * 100 / 215
                 progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                 progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 progress.visibility = View.VISIBLE
                 startProcent()
                 stopAutoScroll()
                 startAutoScroll()
-                prefEditor.putInt("autoscrollSpid", spid)
+                prefEditor.putLong("speedAutoScroll", spid)
             }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
@@ -1826,7 +1826,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
             }
         }
-        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+        scrollTimer.schedule(scrollerSchedule, spid, spid)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 

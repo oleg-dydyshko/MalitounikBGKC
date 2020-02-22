@@ -61,14 +61,14 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var autoscroll = false
     private lateinit var adapter: MaranAtaListAdaprer
     private val maranAta = ArrayList<String>()
-    private var vydelenie: ArrayList<ArrayList<Int>> = ArrayList()
+    private var vydelenie = ArrayList<ArrayList<Int>>()
     private var n = 0
     private var yS = 0
-    private var spid = 60
+    private var spid = 60L
     private var belarus = false
-    private var scrollTimer: Timer = Timer()
-    private var procentTimer: Timer = Timer()
-    private var resetTimer: Timer = Timer()
+    private var scrollTimer = Timer()
+    private var procentTimer = Timer()
+    private var resetTimer = Timer()
     private var scrollerSchedule: TimerTask? = null
     private var procentSchedule: TimerTask? = null
     private var resetSchedule: TimerTask? = null
@@ -146,7 +146,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             window.attributes = lp
         }
         autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getInt("autoscrollSpid", 60)
+        spid = k.getLong("speedAutoScroll", 60L)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         ListView.onItemClickListener = this
         ListView.onItemLongClickListener = this
@@ -403,7 +403,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
                     yS = event?.x?.toInt() ?: 0
-                    val proc: Int
+                    val proc: Long
                     if (x < otstup) {
                         levo = true
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
@@ -423,7 +423,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     }
                     if (y > heightConstraintLayout - otstup) {
                         niz = true
-                        spid = k.getInt("autoscrollSpid", 60)
+                        spid = k.getLong("speedAutoScroll", 60L)
                         proc = 100 - (spid - 15) * 100 / 215
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
@@ -526,7 +526,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     }
                     if (niz) {
                         niz = false
-                        prefEditor.putInt("autoscrollSpid", spid)
+                        prefEditor.putLong("speedAutoScroll", spid)
                         prefEditor.apply()
                     }
                 }
@@ -539,7 +539,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     }
                     if (niz) {
                         niz = false
-                        prefEditor.putInt("autoscrollSpid", spid)
+                        prefEditor.putLong("speedAutoScroll", spid)
                         prefEditor.apply()
                     }
                 }
@@ -903,7 +903,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+        scrollTimer.schedule(scrollerSchedule, spid, spid)
     }
 
     private fun stopProcent() {
@@ -995,7 +995,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         super.onResume()
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getInt("autoscrollSpid", 60)
+        spid = k.getLong("speedAutoScroll", 60L)
         if (autoscroll) {
             startAutoScroll()
         }
@@ -1110,7 +1110,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 stopAutoScroll()
                 startAutoScroll()
                 val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.putLong("speedAutoScroll", spid)
                 prefEditors.apply()
             }
         }
@@ -1125,7 +1125,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 stopAutoScroll()
                 startAutoScroll()
                 val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.putLong("speedAutoScroll", spid)
                 prefEditors.apply()
             }
         }

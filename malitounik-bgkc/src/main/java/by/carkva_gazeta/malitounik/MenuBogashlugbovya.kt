@@ -47,7 +47,6 @@ class MenuBogashlugbovya : ListFragment() {
             else -> {
                 if (MainActivity.checkmoduleResources(activity)) {
                     val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                     intent.putExtra("bogashlugbovya", position)
                     intent.putExtra("menu", 1)
                     startActivity(intent)

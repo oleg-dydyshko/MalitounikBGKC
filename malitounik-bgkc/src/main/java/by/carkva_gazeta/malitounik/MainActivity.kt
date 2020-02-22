@@ -161,6 +161,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             prefEditors.remove("font_malitounik")
             prefEditors.apply()
         }
+        // Удаление старой константы скорости прокрутки
+        if (k.contains("autoscrollSpid")) {
+            prefEditors = k.edit()
+            prefEditors.putLong("speedAutoScroll", k.getInt("autoscrollSpid", 60).toLong())
+            prefEditors.remove("autoscrollSpid")
+            prefEditors.apply()
+        }
 
         if (savedInstanceState != null) {
             idSelect = savedInstanceState.getInt("id")

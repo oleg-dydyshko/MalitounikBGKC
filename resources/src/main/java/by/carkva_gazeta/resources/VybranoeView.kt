@@ -58,7 +58,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
     private var autoscroll = false
     private var n = 0
     private var yS = 0
-    private var spid = 60L
+    private var spid = 60
     private var resurs = ""
     private var men = true
     private var scrollTimer = Timer()
@@ -218,7 +218,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         setContentView(R.layout.bogasluzbovya)
         autoscroll = k.getBoolean("autoscroll", false)
-        spid =  k.getLong("speedAutoScroll", 60L)
+        spid =  k.getInt("autoscrollSpid", 60)
         WebView.setOnTouchListener(this)
         val client = MyWebViewClient()
         client.setOnLinkListenner(this)
@@ -553,7 +553,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer.schedule(scrollerSchedule, spid, spid)
+        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     @SuppressLint("SetTextI18n")
@@ -584,7 +584,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
                     yS = event?.x?.toInt() ?: 0
-                    val proc: Long
+                    val proc: Int
                     if (x < otstup) {
                         levo = true
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
@@ -604,7 +604,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                     }
                     if (y > heightConstraintLayout - otstup) {
                         niz = true
-                        spid =  k.getLong("speedAutoScroll", 60L)
+                        spid =  k.getInt("autoscrollSpid", 60)
                         proc = 100 - (spid - 15) * 100 / 215
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
@@ -719,7 +719,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                     }
                     if (niz) {
                         niz = false
-                        prefEditor.putLong("speedAutoScroll", spid)
+                        prefEditor.putInt("autoscrollSpid", spid)
                         prefEditor.apply()
                     }
                 }
@@ -732,7 +732,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                     }
                     if (niz) {
                         niz = false
-                        prefEditor.putLong("speedAutoScroll", spid)
+                        prefEditor.putInt("autoscrollSpid", spid)
                         prefEditor.apply()
                     }
                 }
@@ -861,7 +861,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                 stopAutoScroll()
                 startAutoScroll()
                 val prefEditors = k.edit()
-                prefEditors.putLong("speedAutoScroll", spid)
+                prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()
             }
         }
@@ -876,7 +876,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
                 stopAutoScroll()
                 startAutoScroll()
                 val prefEditors = k.edit()
-                prefEditors.putLong("speedAutoScroll", spid)
+                prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()
             }
         }
@@ -976,7 +976,7 @@ class VybranoeView : AppCompatActivity(), View.OnTouchListener, DialogFontSize.D
         setTollbarTheme()
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
-        spid =  k.getLong("speedAutoScroll", 60L)
+        spid =  k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
             startAutoScroll()
         }

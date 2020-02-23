@@ -64,7 +64,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var vydelenie = ArrayList<ArrayList<Int>>()
     private var n = 0
     private var yS = 0
-    private var spid = 60L
+    private var spid = 60
     private var belarus = false
     private var scrollTimer = Timer()
     private var procentTimer = Timer()
@@ -146,7 +146,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             window.attributes = lp
         }
         autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getLong("speedAutoScroll", 60L)
+        spid = k.getInt("autoscrollSpid", 60)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         ListView.onItemClickListener = this
         ListView.onItemLongClickListener = this
@@ -403,7 +403,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
                     yS = event?.x?.toInt() ?: 0
-                    val proc: Long
+                    val proc: Int
                     if (x < otstup) {
                         levo = true
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
@@ -423,7 +423,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     }
                     if (y > heightConstraintLayout - otstup) {
                         niz = true
-                        spid = k.getLong("speedAutoScroll", 60L)
+                        spid = k.getInt("autoscrollSpid", 60)
                         proc = 100 - (spid - 15) * 100 / 215
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
@@ -526,7 +526,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     }
                     if (niz) {
                         niz = false
-                        prefEditor.putLong("speedAutoScroll", spid)
+                        prefEditor.putInt("autoscrollSpid", spid)
                         prefEditor.apply()
                     }
                 }
@@ -539,7 +539,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     }
                     if (niz) {
                         niz = false
-                        prefEditor.putLong("speedAutoScroll", spid)
+                        prefEditor.putInt("autoscrollSpid", spid)
                         prefEditor.apply()
                     }
                 }
@@ -606,73 +606,77 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 }
                 val r = this@MaranAta.resources
                 var inputStream = r.openRawResource(R.raw.biblias1)
+                var error = false
                 if (belarus) {
-                    if (nomer == 1) inputStream = r.openRawResource(R.raw.biblias1)
-                    if (nomer == 2) inputStream = r.openRawResource(R.raw.biblias2)
-                    if (nomer == 3) inputStream = r.openRawResource(R.raw.biblias3)
-                    if (nomer == 4) inputStream = r.openRawResource(R.raw.biblias4)
-                    if (nomer == 5) inputStream = r.openRawResource(R.raw.biblias5)
-                    if (nomer == 6) inputStream = r.openRawResource(R.raw.biblias6)
-                    if (nomer == 7) inputStream = r.openRawResource(R.raw.biblias7)
-                    if (nomer == 8) inputStream = r.openRawResource(R.raw.biblias8)
-                    if (nomer == 9) inputStream = r.openRawResource(R.raw.biblias9)
-                    if (nomer == 10) inputStream = r.openRawResource(R.raw.biblias10)
-                    if (nomer == 11) inputStream = r.openRawResource(R.raw.biblias11)
-                    if (nomer == 12) inputStream = r.openRawResource(R.raw.biblias12)
-                    if (nomer == 13) inputStream = r.openRawResource(R.raw.biblias13)
-                    if (nomer == 14) inputStream = r.openRawResource(R.raw.biblias14)
-                    if (nomer == 15) inputStream = r.openRawResource(R.raw.biblias15)
-                    if (nomer == 16) inputStream = r.openRawResource(R.raw.biblias16)
-                    if (nomer == 20) inputStream = r.openRawResource(R.raw.biblias17)
-                    if (nomer == 21) inputStream = r.openRawResource(R.raw.biblias18)
-                    if (nomer == 22) inputStream = r.openRawResource(R.raw.biblias19)
-                    if (nomer == 23) inputStream = r.openRawResource(R.raw.biblias20)
-                    if (nomer == 24) inputStream = r.openRawResource(R.raw.biblias21)
-                    if (nomer == 25) inputStream = r.openRawResource(R.raw.biblias22)
-                    if (nomer == 28) inputStream = r.openRawResource(R.raw.biblias23)
-                    if (nomer == 29) inputStream = r.openRawResource(R.raw.biblias24)
-                    if (nomer == 30) inputStream = r.openRawResource(R.raw.biblias25)
-                    if (nomer == 33) inputStream = r.openRawResource(R.raw.biblias26)
-                    if (nomer == 34) inputStream = r.openRawResource(R.raw.biblias27)
-                    if (nomer == 35) inputStream = r.openRawResource(R.raw.biblias28)
-                    if (nomer == 36) inputStream = r.openRawResource(R.raw.biblias29)
-                    if (nomer == 37) inputStream = r.openRawResource(R.raw.biblias30)
-                    if (nomer == 38) inputStream = r.openRawResource(R.raw.biblias31)
-                    if (nomer == 39) inputStream = r.openRawResource(R.raw.biblias32)
-                    if (nomer == 40) inputStream = r.openRawResource(R.raw.biblias33)
-                    if (nomer == 41) inputStream = r.openRawResource(R.raw.biblias34)
-                    if (nomer == 42) inputStream = r.openRawResource(R.raw.biblias35)
-                    if (nomer == 43) inputStream = r.openRawResource(R.raw.biblias36)
-                    if (nomer == 44) inputStream = r.openRawResource(R.raw.biblias37)
-                    if (nomer == 45) inputStream = r.openRawResource(R.raw.biblias38)
-                    if (nomer == 46) inputStream = r.openRawResource(R.raw.biblias39)
-                    if (nomer == 51) inputStream = r.openRawResource(R.raw.biblian1)
-                    if (nomer == 52) inputStream = r.openRawResource(R.raw.biblian2)
-                    if (nomer == 53) inputStream = r.openRawResource(R.raw.biblian3)
-                    if (nomer == 54) inputStream = r.openRawResource(R.raw.biblian4)
-                    if (nomer == 55) inputStream = r.openRawResource(R.raw.biblian5)
-                    if (nomer == 56) inputStream = r.openRawResource(R.raw.biblian6)
-                    if (nomer == 57) inputStream = r.openRawResource(R.raw.biblian7)
-                    if (nomer == 58) inputStream = r.openRawResource(R.raw.biblian8)
-                    if (nomer == 59) inputStream = r.openRawResource(R.raw.biblian9)
-                    if (nomer == 60) inputStream = r.openRawResource(R.raw.biblian10)
-                    if (nomer == 61) inputStream = r.openRawResource(R.raw.biblian11)
-                    if (nomer == 62) inputStream = r.openRawResource(R.raw.biblian12)
-                    if (nomer == 63) inputStream = r.openRawResource(R.raw.biblian13)
-                    if (nomer == 64) inputStream = r.openRawResource(R.raw.biblian14)
-                    if (nomer == 65) inputStream = r.openRawResource(R.raw.biblian15)
-                    if (nomer == 66) inputStream = r.openRawResource(R.raw.biblian16)
-                    if (nomer == 67) inputStream = r.openRawResource(R.raw.biblian17)
-                    if (nomer == 68) inputStream = r.openRawResource(R.raw.biblian18)
-                    if (nomer == 69) inputStream = r.openRawResource(R.raw.biblian19)
-                    if (nomer == 70) inputStream = r.openRawResource(R.raw.biblian20)
-                    if (nomer == 71) inputStream = r.openRawResource(R.raw.biblian21)
-                    if (nomer == 72) inputStream = r.openRawResource(R.raw.biblian22)
-                    if (nomer == 73) inputStream = r.openRawResource(R.raw.biblian23)
-                    if (nomer == 74) inputStream = r.openRawResource(R.raw.biblian24)
-                    if (nomer == 75) inputStream = r.openRawResource(R.raw.biblian25)
-                    if (nomer == 76) inputStream = r.openRawResource(R.raw.biblian26)
-                    if (nomer == 77) inputStream = r.openRawResource(R.raw.biblian27)
+                    when (nomer) {
+                        1 -> inputStream = r.openRawResource(R.raw.biblias1)
+                        2 -> inputStream = r.openRawResource(R.raw.biblias2)
+                        3 -> inputStream = r.openRawResource(R.raw.biblias3)
+                        4 -> inputStream = r.openRawResource(R.raw.biblias4)
+                        5 -> inputStream = r.openRawResource(R.raw.biblias5)
+                        6 -> inputStream = r.openRawResource(R.raw.biblias6)
+                        7 -> inputStream = r.openRawResource(R.raw.biblias7)
+                        8 -> inputStream = r.openRawResource(R.raw.biblias8)
+                        9 -> inputStream = r.openRawResource(R.raw.biblias9)
+                        10 -> inputStream = r.openRawResource(R.raw.biblias10)
+                        11 -> inputStream = r.openRawResource(R.raw.biblias11)
+                        12 -> inputStream = r.openRawResource(R.raw.biblias12)
+                        13 -> inputStream = r.openRawResource(R.raw.biblias13)
+                        14 -> inputStream = r.openRawResource(R.raw.biblias14)
+                        15 -> inputStream = r.openRawResource(R.raw.biblias15)
+                        16 -> inputStream = r.openRawResource(R.raw.biblias16)
+                        20 -> inputStream = r.openRawResource(R.raw.biblias17)
+                        21 -> inputStream = r.openRawResource(R.raw.biblias18)
+                        22 -> inputStream = r.openRawResource(R.raw.biblias19)
+                        23 -> inputStream = r.openRawResource(R.raw.biblias20)
+                        24 -> inputStream = r.openRawResource(R.raw.biblias21)
+                        25 -> inputStream = r.openRawResource(R.raw.biblias22)
+                        28 -> inputStream = r.openRawResource(R.raw.biblias23)
+                        29 -> inputStream = r.openRawResource(R.raw.biblias24)
+                        30 -> inputStream = r.openRawResource(R.raw.biblias25)
+                        33 -> inputStream = r.openRawResource(R.raw.biblias26)
+                        34 -> inputStream = r.openRawResource(R.raw.biblias27)
+                        35 -> inputStream = r.openRawResource(R.raw.biblias28)
+                        36 -> inputStream = r.openRawResource(R.raw.biblias29)
+                        37 -> inputStream = r.openRawResource(R.raw.biblias30)
+                        38 -> inputStream = r.openRawResource(R.raw.biblias31)
+                        39 -> inputStream = r.openRawResource(R.raw.biblias32)
+                        40 -> inputStream = r.openRawResource(R.raw.biblias33)
+                        41 -> inputStream = r.openRawResource(R.raw.biblias34)
+                        42 -> inputStream = r.openRawResource(R.raw.biblias35)
+                        43 -> inputStream = r.openRawResource(R.raw.biblias36)
+                        44 -> inputStream = r.openRawResource(R.raw.biblias37)
+                        45 -> inputStream = r.openRawResource(R.raw.biblias38)
+                        46 -> inputStream = r.openRawResource(R.raw.biblias39)
+                        51 -> inputStream = r.openRawResource(R.raw.biblian1)
+                        52 -> inputStream = r.openRawResource(R.raw.biblian2)
+                        53 -> inputStream = r.openRawResource(R.raw.biblian3)
+                        54 -> inputStream = r.openRawResource(R.raw.biblian4)
+                        55 -> inputStream = r.openRawResource(R.raw.biblian5)
+                        56 -> inputStream = r.openRawResource(R.raw.biblian6)
+                        57 -> inputStream = r.openRawResource(R.raw.biblian7)
+                        58 -> inputStream = r.openRawResource(R.raw.biblian8)
+                        59 -> inputStream = r.openRawResource(R.raw.biblian9)
+                        60 -> inputStream = r.openRawResource(R.raw.biblian10)
+                        61 -> inputStream = r.openRawResource(R.raw.biblian11)
+                        62 -> inputStream = r.openRawResource(R.raw.biblian12)
+                        63 -> inputStream = r.openRawResource(R.raw.biblian13)
+                        64 -> inputStream = r.openRawResource(R.raw.biblian14)
+                        65 -> inputStream = r.openRawResource(R.raw.biblian15)
+                        66 -> inputStream = r.openRawResource(R.raw.biblian16)
+                        67 -> inputStream = r.openRawResource(R.raw.biblian17)
+                        68 -> inputStream = r.openRawResource(R.raw.biblian18)
+                        69 -> inputStream = r.openRawResource(R.raw.biblian19)
+                        70 -> inputStream = r.openRawResource(R.raw.biblian20)
+                        71 -> inputStream = r.openRawResource(R.raw.biblian21)
+                        72 -> inputStream = r.openRawResource(R.raw.biblian22)
+                        73 -> inputStream = r.openRawResource(R.raw.biblian23)
+                        74 -> inputStream = r.openRawResource(R.raw.biblian24)
+                        75 -> inputStream = r.openRawResource(R.raw.biblian25)
+                        76 -> inputStream = r.openRawResource(R.raw.biblian26)
+                        77 -> inputStream = r.openRawResource(R.raw.biblian27)
+                        else -> error = true
+                    }
                 } else {
                     if (nomer == 1) inputStream = r.openRawResource(R.raw.sinaidals1)
                     if (nomer == 2) inputStream = r.openRawResource(R.raw.sinaidals2)
@@ -752,21 +756,22 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     if (nomer == 76) inputStream = r.openRawResource(R.raw.sinaidaln26)
                     if (nomer == 77) inputStream = r.openRawResource(R.raw.sinaidaln27)
                 }
-                val isr = InputStreamReader(inputStream)
-                val reader = BufferedReader(isr)
-                var line: String
-                val builder = StringBuilder()
-                reader.forEachLine {
-                    line = it
-                    if (line.contains("//")) {
-                        val t1 = line.indexOf("//")
-                        line = line.substring(0, t1).trim()
-                        if (line != "") builder.append(line).append("\n")
-                    } else {
-                        builder.append(line).append("\n")
+                if (!error) {
+                    val isr = InputStreamReader(inputStream)
+                    val reader = BufferedReader(isr)
+                    var line: String
+                    val builder = StringBuilder()
+                    reader.forEachLine {
+                        line = it
+                        if (line.contains("//")) {
+                            val t1 = line.indexOf("//")
+                            line = line.substring(0, t1).trim()
+                            if (line != "") builder.append(line).append("\n")
+                        } else {
+                            builder.append(line).append("\n")
+                        }
                     }
-                }
-                /*while (reader.readLine()?.also { line = it } != null) {
+                    /*while (reader.readLine()?.also { line = it } != null) {
                     if (belarus) {
                         if (line.contains("//")) {
                             val t1 = line.indexOf("//")
@@ -777,87 +782,88 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     }
                     builder.append(line).append("\n")
                 }*/
-                inputStream.close()
-                if (chten.size == 6 && i == 3) {
-                    if (belarus) {
-                        maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n")
-                    } else {
-                        maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n")
-                    }
-                }
-                val split2 = builder.toString().split("===").toTypedArray()
-                if (konec == split2.size) konec -= 1
-                var vN: Int
-                var vK: Int
-                val r1 = StringBuilder()
-                var r2 = ""
-                for (e in nachalo..konec) {
-                    if (stixn != -1) {
-                        if (s5 != -1) {
-                            if (e == nachalo) {
-                                vN = if (belarus) split2[e].indexOf("$stixn. ") else split2[e].indexOf("$stixn ")
-                                r1.append(split2[e].substring(vN).trim())
-                            }
-                            if (e != nachalo && e != konec) {
-                                r1.append("\n").append(split2[e].trim())
-                            }
-                            if (e == konec) {
-                                val vK1: Int = if (belarus) split2[e].indexOf("$stixk. ") else split2[e].indexOf("$stixk ")
-                                vK = split2[e].indexOf("\n", vK1)
-                                r2 = split2[e].substring(0, vK)
-                            }
-                        } else {
-                            var vK1: Int
-                            if (belarus) {
-                                vN = split2[e].indexOf("$stixn. ")
-                                vK1 = split2[e].indexOf("$stixk. ")
-                            } else {
-                                vN = split2[e].indexOf("$stixn ")
-                                vK1 = split2[e].indexOf("$stixk ")
-                            }
-                            vK = split2[e].indexOf("\n", vK1)
-                            r1.append(split2[e].substring(vN, vK))
-                        }
-                    } else {
+                    inputStream.close()
+                    if (chten.size == 6 && i == 3) {
                         if (belarus) {
-                            maranAta.add("<!--no--><!--nazva+++$nazvaBel $e--><br><strong>$nazvaFullBel $e</strong><br>\n")
+                            maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n")
                         } else {
-                            maranAta.add("<!--no--><!--nazva+++$nazva $e--><br><strong>$nazvaFull $e</strong><br>\n")
-                        }
-                        val splitline = split2[e].trim().split("\n").toTypedArray()
-                        var i3: Int
-                        for (i2 in splitline.indices) {
-                            i3 = if (kniga.contains("Сир") && e == 1 && i2 >= 8) i2 - 7 else i2 + 1
-                            if (belarus) maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazvaBel + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n") else maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazva + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
+                            maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n")
                         }
                     }
+                    val split2 = builder.toString().split("===").toTypedArray()
+                    if (konec == split2.size) konec -= 1
+                    var vN: Int
+                    var vK: Int
+                    val r1 = StringBuilder()
+                    var r2 = ""
+                    for (e in nachalo..konec) {
+                        if (stixn != -1) {
+                            if (s5 != -1) {
+                                if (e == nachalo) {
+                                    vN = if (belarus) split2[e].indexOf("$stixn. ") else split2[e].indexOf("$stixn ")
+                                    r1.append(split2[e].substring(vN).trim())
+                                }
+                                if (e != nachalo && e != konec) {
+                                    r1.append("\n").append(split2[e].trim())
+                                }
+                                if (e == konec) {
+                                    val vK1: Int = if (belarus) split2[e].indexOf("$stixk. ") else split2[e].indexOf("$stixk ")
+                                    vK = split2[e].indexOf("\n", vK1)
+                                    r2 = split2[e].substring(0, vK)
+                                }
+                            } else {
+                                var vK1: Int
+                                if (belarus) {
+                                    vN = split2[e].indexOf("$stixn. ")
+                                    vK1 = split2[e].indexOf("$stixk. ")
+                                } else {
+                                    vN = split2[e].indexOf("$stixn ")
+                                    vK1 = split2[e].indexOf("$stixk ")
+                                }
+                                vK = split2[e].indexOf("\n", vK1)
+                                r1.append(split2[e].substring(vN, vK))
+                            }
+                        } else {
+                            if (belarus) {
+                                maranAta.add("<!--no--><!--nazva+++$nazvaBel $e--><br><strong>$nazvaFullBel $e</strong><br>\n")
+                            } else {
+                                maranAta.add("<!--no--><!--nazva+++$nazva $e--><br><strong>$nazvaFull $e</strong><br>\n")
+                            }
+                            val splitline = split2[e].trim().split("\n").toTypedArray()
+                            var i3: Int
+                            for (i2 in splitline.indices) {
+                                i3 = if (kniga.contains("Сир") && e == 1 && i2 >= 8) i2 - 7 else i2 + 1
+                                if (belarus) maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazvaBel + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n") else maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazva + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
+                            }
+                        }
+                    }
+                    if (stixn != -1) {
+                        val t1 = fit.indexOf(".")
+                        if (belarus) {
+                            maranAta.add("<!--no--><!--nazva+++" + nazvaBel + " " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFullBel + " " + fit.substring(s2 + 1) + "</strong><br>\n")
+                        } else {
+                            maranAta.add("<!--no--><!--nazva+++" + nazva + " " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n")
+                        }
+                        val res1 = r1.toString().trim().split("\n").toTypedArray()
+                        var i2 = 0
+                        var i3 = stixn
+                        while (i2 < res1.size) {
+                            if (belarus) maranAta.add("<!--" + kniga + "." + nachalo + "." + i3 + "--><!--nazva+++" + nazvaBel + " " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n") else maranAta.add("<!--" + kniga + "." + nachalo + "." + i3 + "--><!--nazva+++" + nazva + " " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n")
+                            i2++
+                            i3++
+                        }
+                        if (konec - nachalo != 0) {
+                            val res2 = r2.trim().split("\n").toTypedArray()
+                            for (i21 in res2.indices) {
+                                if (belarus) maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazvaBel + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n") else maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazva + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n")
+                            }
+                        }
+                    }
+                } else {
+                    // Только Семуха
+                    maranAta.add("<!--no--><br><strong>$nazvaFullBel $fit</strong><br>\n")
+                    maranAta.add("<!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "\n")
                 }
-                if (stixn != -1) {
-                    val t1 = fit.indexOf(".")
-                    if (belarus) {
-                        maranAta.add("<!--no--><!--nazva+++" + nazvaBel + " " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFullBel + " " + fit.substring(s2 + 1) + "</strong><br>\n")
-                    } else {
-                        maranAta.add("<!--no--><!--nazva+++" + nazva + " " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n")
-                    }
-                    val res1 = r1.toString().trim().split("\n").toTypedArray()
-                    var i2 = 0
-                    var i3 = stixn
-                    while (i2 < res1.size) {
-                        if (belarus) maranAta.add("<!--" + kniga + "." + nachalo + "." + i3 + "--><!--nazva+++" + nazvaBel + " " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n") else maranAta.add("<!--" + kniga + "." + nachalo + "." + i3 + "--><!--nazva+++" + nazva + " " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n")
-                        i2++
-                        i3++
-                    }
-                    if (konec - nachalo != 0) {
-                        val res2 = r2.trim().split("\n").toTypedArray()
-                        for (i21 in res2.indices) {
-                            if (belarus) maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazvaBel + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n") else maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazva + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n")
-                        }
-                    }
-                }
-                /*} else {
-                    maranAta.add("<!--no--><!--nazva+++" + Paralelnye_mesta.nazvaBel + "--><br><strong>" + Paralelnye_mesta.nazvaBel + "</strong><br>\n")
-                    maranAta.add("<!--no-->" + getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error))
-                }*/
             } catch (t: Throwable) {
                 if (belarus) {
                     maranAta.add("<!--no--><br><strong>$nazvaFullBel $fit</strong><br>\n")
@@ -903,7 +909,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer.schedule(scrollerSchedule, spid, spid)
+        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     private fun stopProcent() {
@@ -995,7 +1001,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         super.onResume()
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getLong("speedAutoScroll", 60L)
+        spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
             startAutoScroll()
         }
@@ -1110,7 +1116,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 stopAutoScroll()
                 startAutoScroll()
                 val prefEditors = k.edit()
-                prefEditors.putLong("speedAutoScroll", spid)
+                prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()
             }
         }
@@ -1125,7 +1131,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 stopAutoScroll()
                 startAutoScroll()
                 val prefEditors = k.edit()
-                prefEditors.putLong("speedAutoScroll", spid)
+                prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()
             }
         }

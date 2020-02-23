@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     private var carkva: MenuCviaty? = null
     private var menuPamiatka: MenuPamiatka? = null
     private var padryxtouka: MenuPadryxtoukaDaSpovedzi? = null
-    private var tolbarTitle: String = ""
+    private var tolbarTitle = ""
     private var shortcuts = false
 
     override fun setDataCalendar(day_of_year: Int, year: Int) {
@@ -154,21 +154,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Удаление старой константы размера шрифта
-        if (k.contains("font_malitounik")) {
-            prefEditors = k.edit()
-            prefEditors.putFloat("font_biblia", k.getInt("font_malitounik", 18).toFloat())
-            prefEditors.remove("font_malitounik")
-            prefEditors.apply()
-        }
-        // Удаление старой константы скорости прокрутки
-        if (k.contains("autoscrollSpid")) {
-            prefEditors = k.edit()
-            prefEditors.putLong("speedAutoScroll", k.getInt("autoscrollSpid", 60).toLong())
-            prefEditors.remove("autoscrollSpid")
-            prefEditors.apply()
-        }
-
         if (savedInstanceState != null) {
             idSelect = savedInstanceState.getInt("id")
             idOld = savedInstanceState.getInt("idOld")
@@ -203,25 +188,6 @@ try {
 } catch (Throwable ignored) {
 }
 */
-        // Удаление старой версии Избраного
-        File("$filesDir/Vybranoe").walk().forEach {
-            if (it.exists()) {
-                it.delete()
-            }
-        }
-        /*val dirV = File("$filesDir/Vybranoe")
-        if (dirV.exists()) {
-            val dirContents: Array<String>? = dirV.list()
-            for (dirContent in dirContents) {
-                val file = File("$filesDir/Vybranoe/$dirContent")
-                if (file.exists()) {
-                    file.delete()
-                }
-            }
-            dirV.delete()
-        }*/
-        // Конец
-
         title_toolbar.setOnClickListener {
             title_toolbar.setHorizontallyScrolling(true)
             title_toolbar.freezesText = true

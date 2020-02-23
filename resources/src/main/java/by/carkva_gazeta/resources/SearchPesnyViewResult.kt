@@ -54,8 +54,9 @@ class SearchPesnyViewResult : AppCompatActivity(), OnTouchListener, DialogFontSi
     private var men = false
     private var levo = false
     private var pravo = false
-    private var resurs: String = ""
-    private var procentTimer: Timer = Timer()
+    private var resurs = ""
+    private var resultat = ""
+    private var procentTimer = Timer()
     private var procentSchedule: TimerTask? = null
     private val orientation: Int
         get() {
@@ -115,7 +116,7 @@ class SearchPesnyViewResult : AppCompatActivity(), OnTouchListener, DialogFontSi
             progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
         }
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        val resultat = intent.extras?.getString("resultat") ?: ""
+        resultat = intent.extras?.getString("resultat") ?: ""
         if (!SearchPesny.menuListDataIsInitialized())
             SearchPesny.menuListData = SearchPesny.getMenuListData(this)
         for (i in SearchPesny.menuListData.indices) {
@@ -173,7 +174,10 @@ class SearchPesnyViewResult : AppCompatActivity(), OnTouchListener, DialogFontSi
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.search)
+        if (resultat == "")
+            title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.search)
+        else
+            title_toolbar.text = resultat
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
             toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)

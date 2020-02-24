@@ -20,7 +20,10 @@ import android.widget.ArrayAdapter
 import android.widget.Filter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MenuListData
+import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import kotlinx.android.synthetic.main.akafist_list_bible.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -127,7 +130,7 @@ class MalitvyPrynagodnyia : AppCompatActivity() {
         data.add(MenuListData(R.raw.prynagodnyia_25, "Малітвы ў часе хваробы і за хворых"))
         data.add(MenuListData(R.raw.prynagodnyia_26, "Намер ісьці за Хрыстом"))
         data.add(MenuListData(R.raw.prynagodnyia_27, "Цябе, Бога, хвалім"))
-        Collections.sort(data, MenuListDataSort())
+        data.sort()
         adapter = MenuListAdaprer(this)
         ListView.adapter = adapter
         ListView.setOnScrollListener(object : AbsListView.OnScrollListener {

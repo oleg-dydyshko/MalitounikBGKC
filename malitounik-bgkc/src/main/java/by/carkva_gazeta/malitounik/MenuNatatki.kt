@@ -44,9 +44,9 @@ class MenuNatatki : ListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        File(activity?.filesDir.toString().plus("/Malitva")).walk().forEach {
-            if (it.isFile) {
-                val inputStream = FileReader(it)
+        File(activity?.filesDir.toString().plus("/Malitva")).walk().forEach { file ->
+            if (file.isFile) {
+                val inputStream = FileReader(file)
                 val reader = BufferedReader(inputStream)
                 val res = reader.readText().split("<MEMA></MEMA>").toTypedArray()
                 inputStream.close()
@@ -57,13 +57,15 @@ class MenuNatatki : ListFragment() {
                     lRTE = res[1].substring(start + 11, end).toLong()
                 }
                 if (lRTE <= 1) {
-                    lRTE = it.lastModified()
+                    lRTE = file.lastModified()
                 }
-                myNatatkiFiles.add(MyNatatkiFiles(lRTE, res[0], it.absoluteFile))
+                activity?.let {
+                    myNatatkiFiles.add(MyNatatkiFiles(it, lRTE, res[0], file.absoluteFile))
+                }
             }
         }
+        myNatatkiFiles.sort()
         activity?.let {
-            Collections.sort(myNatatkiFiles, MyNatatkiFilesSort(it))
             adapter = MyNatatkiAdapter(it)
         }
         listAdapter = adapter
@@ -76,7 +78,7 @@ class MenuNatatki : ListFragment() {
     }
 
     fun sortAlfavit() {
-        activity?.let { Collections.sort(myNatatkiFiles, MyNatatkiFilesSort(it)) }
+        myNatatkiFiles.sort()
         adapter.notifyDataSetChanged()
     }
 
@@ -84,7 +86,7 @@ class MenuNatatki : ListFragment() {
         val f = myNatatkiFiles[position]
         myNatatkiFiles.removeAt(position)
         f.file.delete()
-        activity?.let { Collections.sort(myNatatkiFiles, MyNatatkiFilesSort(it)) }
+        myNatatkiFiles.sort()
         adapter.notifyDataSetChanged()
     }
 
@@ -115,9 +117,9 @@ class MenuNatatki : ListFragment() {
         if (requestCode == 103 || requestCode == 104) {
             if (save) {
                 myNatatkiFiles.clear()
-                File(activity?.filesDir.toString().plus("/Malitva")).walk().forEach {
-                    if (it.isFile) {
-                        val inputStream = FileReader(it)
+                File(activity?.filesDir.toString().plus("/Malitva")).walk().forEach { file ->
+                    if (file.isFile) {
+                        val inputStream = FileReader(file)
                         val reader = BufferedReader(inputStream)
                         val res = reader.readText().split("<MEMA></MEMA>").toTypedArray()
                         inputStream.close()
@@ -129,12 +131,14 @@ class MenuNatatki : ListFragment() {
                             res[1] = res[1].substring(0, start)
                         }
                         if (lRTE <= 1) {
-                            lRTE = it.lastModified()
+                            lRTE = file.lastModified()
                         }
-                        myNatatkiFiles.add(MyNatatkiFiles(lRTE, res[0], it.absoluteFile))
+                        activity?.let {
+                            myNatatkiFiles.add(MyNatatkiFiles(it, lRTE, res[0], file.absoluteFile))
+                        }
                     }
                 }
-                activity?.let { Collections.sort(myNatatkiFiles, MyNatatkiFilesSort(it)) }
+                myNatatkiFiles.sort()
                 adapter.notifyDataSetChanged()
             }
         }

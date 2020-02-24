@@ -215,7 +215,7 @@ class SearchPesny : AppCompatActivity() {
                     }
                 }
             }
-            Collections.sort(menuListData, by.carkva_gazeta.malitounik.MenuListDataSort())
+            menuListData.sort()
             for (i in menuListData.indices) {
                 val inputStream = resources.openRawResource(menuListData[i].id)
                 val isr = InputStreamReader(inputStream)

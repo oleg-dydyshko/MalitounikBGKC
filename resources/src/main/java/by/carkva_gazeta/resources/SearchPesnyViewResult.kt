@@ -144,7 +144,7 @@ class SearchPesnyViewResult : AppCompatActivity(), OnTouchListener, DialogFontSi
                 break
             }
         }
-        men = VybranoeView.checkVybranoe(this, resurs)
+        men = Bogashlugbovya.checkVybranoe(this, resurs)
         if (k.getBoolean("help_str", true)) {
             startActivity(Intent(this, HelpText::class.java))
             val prefEditor: Editor = k.edit()
@@ -364,7 +364,7 @@ class SearchPesnyViewResult : AppCompatActivity(), OnTouchListener, DialogFontSi
             }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            men = VybranoeView.setVybranoe(this, resurs, title)
+            men = Bogashlugbovya.setVybranoe(this, resurs, title)
             if (men) {
                 val layout = LinearLayout(this)
                 layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)

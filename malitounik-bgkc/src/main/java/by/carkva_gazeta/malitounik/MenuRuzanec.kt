@@ -34,8 +34,36 @@ class MenuRuzanec : ListFragment() {
         mLastClickTime = SystemClock.elapsedRealtime()
         if (MainActivity.checkmoduleResources(activity)) {
             val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-            intent.putExtra("bogashlugbovya", position)
-            intent.putExtra("menu", 4)
+            when (position) {
+                0 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "ruzanec0")
+                }
+                1 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "ruzanec2")
+                }
+                2 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "ruzanec1")
+                }
+                3 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "ruzanec3")
+                }
+                4 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "ruzanec4")
+                }
+                5 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "ruzanec5")
+                }
+                6 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "ruzanec6")
+                }
+            }
             startActivity(intent)
         } else {
             val dadatak = DialogInstallDadatak()

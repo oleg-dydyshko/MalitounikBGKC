@@ -138,7 +138,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         }
         inputStream.close()
         TextView.text = MainActivity.fromHtml(builder.toString())
-        men = VybranoeView.checkVybranoe(this, resurs)
+        men = Bogashlugbovya.checkVybranoe(this, resurs)
         if (k.getBoolean("help_str", true)) {
             startActivity(Intent(this, HelpText::class.java))
             val prefEditor: Editor = k.edit()
@@ -366,7 +366,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            men = VybranoeView.setVybranoe(this, resurs, title)
+            men = Bogashlugbovya.setVybranoe(this, resurs, title)
             if (men) {
                 val layout = LinearLayout(this)
                 layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)

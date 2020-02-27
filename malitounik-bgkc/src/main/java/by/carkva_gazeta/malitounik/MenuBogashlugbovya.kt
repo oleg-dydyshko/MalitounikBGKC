@@ -47,8 +47,28 @@ class MenuBogashlugbovya : ListFragment() {
             else -> {
                 if (MainActivity.checkmoduleResources(activity)) {
                     val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-                    intent.putExtra("bogashlugbovya", position)
-                    intent.putExtra("menu", 1)
+                    when (position) {
+                        0 -> {
+                            intent.putExtra("title", data[position])
+                            intent.putExtra("resurs", "bogashlugbovya1")
+                        }
+                        1 -> {
+                            intent.putExtra("title", data[position])
+                            intent.putExtra("resurs", "bogashlugbovya4")
+                        }
+                        3 -> {
+                            intent.putExtra("title", data[position])
+                            intent.putExtra("resurs", "bogashlugbovya6")
+                        }
+                        4 -> {
+                            intent.putExtra("title", data[position])
+                            intent.putExtra("resurs", "bogashlugbovya8")
+                        }
+                        5 -> {
+                            intent.putExtra("title", data[position])
+                            intent.putExtra("resurs", "bogashlugbovya11")
+                        }
+                    }
                     startActivity(intent)
                 } else {
                     val dadatak = DialogInstallDadatak()

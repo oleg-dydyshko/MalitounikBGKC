@@ -34,8 +34,40 @@ class MenuAkafisty internal constructor(private val activity: Activity) : ListFr
         mLastClickTime = SystemClock.elapsedRealtime()
         if (MainActivity.checkmoduleResources(activity)) {
             val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-            intent.putExtra("bogashlugbovya", position)
-            intent.putExtra("menu", 3)
+            when (position) {
+                0 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "akafist0")
+                }
+                1 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "akafist1")
+                }
+                2 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "akafist2")
+                }
+                3 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "akafist3")
+                }
+                4 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "akafist4")
+                }
+                5 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "akafist5")
+                }
+                6 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "akafist6")
+                }
+                7 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "akafist7")
+                }
+            }
             startActivity(intent)
         } else {
             val dadatak = DialogInstallDadatak()

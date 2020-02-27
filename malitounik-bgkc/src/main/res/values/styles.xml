@@ -10,7 +10,7 @@
         <item name="android:colorBackground">@color/colorIcons</item>
         <item name="android:textColorPrimary">@color/colorPrimary_text</item>
         <item name="android:textColorSecondary">@color/colorSecondary_text</item>
-        <item name="android:colorForeground">@color/colorforeground_material_light</item>
+        <!--<item name="android:colorForeground">@color/colorforeground_material_light</item>-->
         <item name="fontFamily">sans-serif-condensed</item>
     </style>
 
@@ -23,7 +23,7 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="fontFamily">sans-serif-condensed</item>
@@ -40,7 +40,7 @@
         <item name="colorPrimaryDark">@color/colorPrimary_text</item>
         <item name="android:textColorPrimary">@color/colorIcons</item>
         <item name="android:colorBackground">@color/colorbackground_material_dark</item>
-        <item name="android:colorForeground">@color/colorforeground_material_dark</item>
+        <!--<item name="android:colorForeground">@color/colorforeground_material_dark</item>-->
         <item name="fontFamily">sans-serif-condensed</item>
     </style>
 

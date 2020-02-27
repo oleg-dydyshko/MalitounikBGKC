@@ -7,6 +7,9 @@ import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -82,6 +85,11 @@ class DialogFontSize : DialogFragment() {
             10 -> font = 54F
         }
         return font
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        dialog?.window?.setDimAmount(0f)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

@@ -66,7 +66,7 @@ class MenuVybranoe : ListFragment() {
                 }
             }
         }
-        vybranoe.sortWith(VybranoeDataSort())
+        vybranoe.sort()
         activity?.let { it ->
             adapter = MyVybranoeAdapter(it)
             listAdapter = adapter
@@ -86,7 +86,7 @@ class MenuVybranoe : ListFragment() {
         mLastClickTime = SystemClock.elapsedRealtime()
         super.onListItemClick(l, v, position, id)
         if (MainActivity.checkmoduleResources(activity)) {
-            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.VybranoeView"))
+            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
             intent.putExtra("resurs", vybranoe[position].resurs)
             intent.putExtra("title", vybranoe[position].data)
             startActivity(intent)

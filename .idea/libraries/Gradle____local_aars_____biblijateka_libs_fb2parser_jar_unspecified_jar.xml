@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: __local_aars__:/home/oleg/AndroidStudioProjects/Malitounik/biblijateka/libs/fb2parser.jar:unspecified@jar">
+  <library name="Gradle: __local_aars__:./biblijateka/libs/fb2parser.jar:unspecified@jar">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/biblijateka/libs/fb2parser.jar!/" />
     </CLASSES>

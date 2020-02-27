@@ -24,20 +24,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.bogasluzbovya.*
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
+import java.io.*
+import java.lang.reflect.Field
+import java.lang.reflect.Type
 import java.util.*
+import kotlin.collections.ArrayList
 
 
-class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, MyWebViewClient.OnLinkListenner {
+class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, InteractiveScrollView.OnScrollChangedCallback, MyWebViewClient.OnLinkListenner {
 
     private val ulAnimationDelay = 300
     private val mHideHandler: Handler = Handler()
     @SuppressLint("InlinedApi")
     private val mHidePart2Runnable = Runnable {
-        WebView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+        scrollView2.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
                 or View.SYSTEM_UI_FLAG_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -57,8 +60,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var yS = 0
     private var spid = 60
     private var resurs = ""
-    private var title = ""
-    private var men = false
+    private var men = true
     private var scrollTimer = Timer()
     private var procentTimer = Timer()
     private var resetTimer = Timer()
@@ -69,9 +71,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var pravo = false
     private var niz = false
     private var positionY = 0
-    private var menu = 1
-    private var checkSetDzenNoch = false
+    private var title = ""
+    private var editVybranoe = false
     private var mActionDown = false
+    private var mAutoScroll = true
     private val orientation: Int
         get() {
             val rotation = windowManager.defaultDisplay.rotation
@@ -82,16 +85,112 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
+    companion object {
+        fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
+            val gson = Gson()
+            val file = File(context.filesDir.toString() + "/Vybranoe.json")
+            if (file.exists()) {
+                MenuVybranoe.vybranoe = try {
+                    val type: Type = object : TypeToken<ArrayList<VybranoeData?>?>() {}.type
+                    gson.fromJson(file.readText(), type)
+                } catch (t: Throwable) {
+                    file.delete()
+                    ArrayList()
+                }
+            }
+            var check = true
+            val fields = R.raw::class.java.fields
+            for (field in fields) {
+                if (field.name.intern() == resurs) {
+                    for (i in 0 until MenuVybranoe.vybranoe.size) {
+                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
+                            MenuVybranoe.vybranoe.removeAt(i)
+                            check = false
+                            break
+                        }
+                    }
+                    break
+                }
+            }
+            val fields2 = by.carkva_gazeta.malitounik.R.raw::class.java.fields
+            for (field in fields2) {
+                if (field.name.intern() == resurs) {
+                    for (i in 0 until MenuVybranoe.vybranoe.size) {
+                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
+                            MenuVybranoe.vybranoe.removeAt(i)
+                            check = false
+                            break
+                        }
+                    }
+                    break
+                }
+            }
+            if (check) {
+                MenuVybranoe.vybranoe.add(VybranoeData(resurs, title))
+            }
+            val outputStream = FileWriter(file)
+            outputStream.write(gson.toJson(MenuVybranoe.vybranoe))
+            outputStream.close()
+            return check
+        }
+
+        fun checkVybranoe(context: Context, resurs: String): Boolean {
+            var check = false
+            val gson = Gson()
+            val file = File(context.filesDir.toString() + "/Vybranoe.json")
+            if (file.exists()) {
+                try {
+                    val type: Type = object : TypeToken<ArrayList<VybranoeData?>?>() {}.type
+                    MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
+                } catch (t: Throwable) {
+                    file.delete()
+                    return false
+                }
+            } else {
+                return false
+            }
+            val fields: Array<Field> = R.raw::class.java.fields
+            for (field in fields) {
+                if (field.name.intern() == resurs) {
+                    for (i in 0 until MenuVybranoe.vybranoe.size) {
+                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) { //MenuVybranoe.vybranoe.remove(i)
+                            check = true
+                            break
+                        }
+                    }
+                    break
+                }
+            }
+            val fields2: Array<Field> = by.carkva_gazeta.malitounik.R.raw::class.java.fields
+            for (field in fields2) {
+                if (field.name.intern() == resurs) {
+                    for (i in 0 until MenuVybranoe.vybranoe.size) {
+                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) { //MenuVybranoe.vybranoe.remove(i)
+                            check = true
+                            break
+                        }
+                    }
+                    break
+                }
+            }
+            return check
+        }
+    }
+
     override fun onDialogFontSizePositiveClick() {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        val webSettings = WebView.settings
-        webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
-        webSettings.setAppCacheEnabled(false)
-        webSettings.blockNetworkImage = true
-        webSettings.loadsImagesAutomatically = true
-        webSettings.setGeolocationEnabled(false)
-        webSettings.setNeedInitialFocus(false)
-        webSettings.defaultFontSize = fontBiblia.toInt()
+        if (scrollView2.visibility == View.VISIBLE) {
+            TextView.textSize = fontBiblia
+        } else {
+            val webSettings = WebView.settings
+            webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
+            webSettings.setAppCacheEnabled(false)
+            webSettings.blockNetworkImage = true
+            webSettings.loadsImagesAutomatically = true
+            webSettings.setGeolocationEnabled(false)
+            webSettings.setNeedInitialFocus(false)
+            webSettings.defaultFontSize = fontBiblia.toInt()
+        }
     }
 
     override fun onScroll(t: Int) {
@@ -106,7 +205,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         invalidateOptionsMenu()
     }
 
-    @SuppressLint("ClickableViewAccessibility", "AddJavascriptInterface", "SetJavaScriptEnabled")
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (!MainActivity.checkBrightness) {
@@ -115,23 +214,21 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             window.attributes = lp
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
+        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         setContentView(R.layout.bogasluzbovya)
         autoscroll = k.getBoolean("autoscroll", false)
         spid =  k.getInt("autoscrollSpid", 60)
         WebView.setOnTouchListener(this)
-        //WebView.setOnLongClickListener { scrollTimer != null }
         val client = MyWebViewClient()
         client.setOnLinkListenner(this)
         WebView.webViewClient = client
+        scrollView2.setOnScrollChangedCallback(this)
         constraint.setOnTouchListener(this)
-        if (dzenNoch) {
-            progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            WebView.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-        }
+        autoscroll = k.getBoolean("autoscroll", false)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
+            editVybranoe = savedInstanceState.getBoolean("editVybranoe")
             MainActivity.dialogVisable = false
             if (savedInstanceState.getBoolean("seach")) {
                 textSearch.visibility = View.VISIBLE
@@ -139,9 +236,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 imageView6.visibility = View.VISIBLE
                 imageView5.visibility = View.VISIBLE
             }
-            checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        TextView.textSize = fontBiblia
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -154,150 +251,34 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
             }
         }
-        WebView.visibility = View.VISIBLE
-        val shlugbovya: Int = intent.extras?.getInt("bogashlugbovya", 0) ?: 0
-        menu = intent.extras?.getInt("menu", 1) ?: 1
-        var inputStream = resources.openRawResource(R.raw.bogashlugbovya1)
-        when (menu) {
-            1 -> {
-                when (shlugbovya) {
-                    0 -> {
-                        resurs = "bogashlugbovya1"
-                        title = "Боская Літургія між сьвятымі айца нашага Яна Залатавуснага"
-                        inputStream = resources.openRawResource(R.raw.bogashlugbovya1)
-                    }
-                    1 -> {
-                        resurs = "bogashlugbovya4"
-                        title = "Набажэнства ў гонар Маці Божай Нястомнай Дапамогі"
-                        inputStream = resources.openRawResource(R.raw.bogashlugbovya4)
-                    }
-                    3 -> {
-                        resurs = "bogashlugbovya6"
-                        title = "Ютрань нядзельная (у скароце)"
-                        inputStream = resources.openRawResource(R.raw.bogashlugbovya6)
-                    }
-                    4 -> {
-                        resurs = "bogashlugbovya8"
-                        title = "Абедніца"
-                        inputStream = resources.openRawResource(R.raw.bogashlugbovya8)
-                    }
-                    5 -> {
-                        resurs = "bogashlugbovya11"
-                        title = "Служба за памерлых — Малая паніхіда"
-                        inputStream = resources.openRawResource(R.raw.bogashlugbovya11)
-                    }
-                }
-            }
-            2 -> {
-                when (shlugbovya) {
-                    0 -> {
-                        resurs = "malitvy1"
-                        title = getString(by.carkva_gazeta.malitounik.R.string.malitvy1)
-                        inputStream = resources.openRawResource(R.raw.malitvy1)
-                    }
-                    1 -> {
-                        resurs = "malitvy2"
-                        title = getString(by.carkva_gazeta.malitounik.R.string.malitvy2)
-                        inputStream = resources.openRawResource(R.raw.malitvy2)
-                    }
-                }
-            }
-            3 -> {
-                when (shlugbovya) {
-                    0 -> {
-                        inputStream = resources.openRawResource(R.raw.akafist0)
-                        resurs = "akafist0"
-                        title = resources.getString(by.carkva_gazeta.malitounik.R.string.akafist0)
-                    }
-                    1 -> {
-                        inputStream = resources.openRawResource(R.raw.akafist1)
-                        resurs = "akafist1"
-                        title = resources.getString(by.carkva_gazeta.malitounik.R.string.akafist1)
-                    }
-                    2 -> {
-                        inputStream = resources.openRawResource(R.raw.akafist2)
-                        resurs = "akafist2"
-                        title = resources.getString(by.carkva_gazeta.malitounik.R.string.akafist2)
-                    }
-                    3 -> {
-                        inputStream = resources.openRawResource(R.raw.akafist3)
-                        resurs = "akafist3"
-                        title = resources.getString(by.carkva_gazeta.malitounik.R.string.akafist3)
-                    }
-                    4 -> {
-                        inputStream = resources.openRawResource(R.raw.akafist4)
-                        resurs = "akafist4"
-                        title = resources.getString(by.carkva_gazeta.malitounik.R.string.akafist4)
-                    }
-                    5 -> {
-                        inputStream = resources.openRawResource(R.raw.akafist5)
-                        resurs = "akafist5"
-                        title = resources.getString(by.carkva_gazeta.malitounik.R.string.akafist5)
-                    }
-                    6 -> {
-                        inputStream = resources.openRawResource(R.raw.akafist6)
-                        resurs = "akafist6"
-                        title = resources.getString(by.carkva_gazeta.malitounik.R.string.akafist6)
-                    }
-                    7 -> {
-                        inputStream = resources.openRawResource(R.raw.akafist7)
-                        resurs = "akafist7"
-                        title = resources.getString(by.carkva_gazeta.malitounik.R.string.akafist7)
-                    }
-                }
-            }
-            4 -> {
-                when (shlugbovya) {
-                    0 -> {
-                        inputStream = resources.openRawResource(R.raw.ruzanec0)
-                        resurs = "ruzanec0"
-                        title = "Малітвы на вяровіцы"
-                    }
-                    1 -> {
-                        inputStream = resources.openRawResource(R.raw.ruzanec2)
-                        resurs = "ruzanec2"
-                        title = "Молімся на ружанцы"
-                    }
-                    2 -> {
-                        inputStream = resources.openRawResource(R.raw.ruzanec1)
-                        resurs = "ruzanec1"
-                        title = "Разважаньні на Ружанец"
-                    }
-                    3 -> {
-                        inputStream = resources.openRawResource(R.raw.ruzanec3)
-                        resurs = "ruzanec3"
-                        title = "Частка I. Радасныя таямніцы (пн, сб)"
-                    }
-                    4 -> {
-                        inputStream = resources.openRawResource(R.raw.ruzanec4)
-                        resurs = "ruzanec4"
-                        title = "Частка II. Балесныя таямніцы (аўт, пт)"
-                    }
-                    5 -> {
-                        inputStream = resources.openRawResource(R.raw.ruzanec5)
-                        resurs = "ruzanec5"
-                        title = "Частка III. Слаўныя таямніцы (ср, ндз)"
-                    }
-                    6 -> {
-                        inputStream = resources.openRawResource(R.raw.ruzanec6)
-                        resurs = "ruzanec6"
-                        title = "Частка IV. Таямніцы сьвятла (чц)"
-                    }
-                }
-            }
-            //akafist.addJavascriptInterface(WebAppInterface(this, getSupportFragmentManager()), "Android")
+        if (dzenNoch) {
+            TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            WebView.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
         }
-        positionY = (k.getInt(resurs + "Scroll", 0) / resources.displayMetrics.density).toInt()
-        WebView.setOnScrollChangedCallback(this)
-        WebView.setOnBottomListener(this)
+        resurs = intent?.getStringExtra("resurs") ?: ""
+        if (resurs.contains("pesny")) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        title = intent?.getStringExtra("title") ?: ""
         val webSettings = WebView.settings
         webSettings.standardFontFamily = "sans-serif-condensed"
         webSettings.defaultFontSize = fontBiblia.toInt()
         webSettings.javaScriptEnabled = true
-        //akafist.addJavascriptInterface(WebAppInterface(this, getSupportFragmentManager()), "Android")
-        scrollView2.visibility = View.GONE
-        WebView.loadDataWithBaseURL("malitounik-app//carkva-gazeta.by/", loadData(inputStream), "text/html", "utf-8", null)
-        men = VybranoeView.checkVybranoe(this, resurs)
+        positionY = (k.getInt(resurs + "Scroll", 0) / resources.displayMetrics.density).toInt()
+        WebView.setOnScrollChangedCallback(this)
+        WebView.setOnBottomListener(this)
+        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("ton")) {
+            scrollView2.visibility = View.GONE
+            WebView.visibility = View.VISIBLE
+            WebView.loadDataWithBaseURL("malitounikApp-app//carkva-gazeta.by/", loadData(), "text/html", "utf-8", null)
+        } else {
+            WebView.visibility = View.GONE
+            scrollView2.visibility = View.VISIBLE
+            TextView.text = MainActivity.fromHtml(loadData())
+            positionY = k.getInt(resurs + "Scroll", 0)
+            scrollView2.post { scrollView2.scrollBy(0, positionY) }
+            if (!resurs.contains("ton"))
+                mAutoScroll = false
+        }
         if (k.getBoolean("help_str", true)) {
             startActivity(Intent(this, HelpText::class.java))
             val prefEditor: Editor = k.edit()
@@ -349,26 +330,24 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         return script
     }
 
-    private fun stopProcent() {
-        procentTimer.cancel()
-        procentSchedule = null
-    }
-
-    private fun startProcent() {
-        stopProcent()
-        procentTimer = Timer()
-        procentSchedule = object : TimerTask() {
-            override fun run() {
-                runOnUiThread {
-                    progress.visibility = View.GONE
-                }
+    private fun loadData(): String {
+        val builder = StringBuilder()
+        var id = R.raw.bogashlugbovya1
+        val fields = R.raw::class.java.fields
+        for (field in fields) {
+            if (field.name.intern() == resurs) {
+                id = field.getInt(null)
+                break
             }
         }
-        procentTimer.schedule(procentSchedule, 1000)
-    }
-
-    private fun loadData(inputStream: InputStream): String {
-        val builder = StringBuilder()
+        val fields2 = by.carkva_gazeta.malitounik.R.raw::class.java.fields
+        for (field in fields2) {
+            if (field.name.intern() == resurs) {
+                id = field.getInt(null)
+                break
+            }
+        }
+        val inputStream: InputStream = resources.openRawResource(id)
         val zmenyiaChastki = ZmenyiaChastki(this)
         val gregorian = Calendar.getInstance() as GregorianCalendar
         val dayOfWeek = gregorian.get(Calendar.DAY_OF_WEEK)
@@ -386,7 +365,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 line.replace("<html><head>", "<html><head><style type=\"text/css\">::selection {background: #eb9b9a} body{-webkit-tap-highlight-color: rgba(244,67,54,0.2); color: #fff; background-color: #303030; margin: 0; padding: 0}</style>")
             else
                 line.replace("<html><head>", "<html><head><style type=\"text/css\">::selection {background: #eb9b9a} body{-webkit-tap-highlight-color: rgba(208,5,5,0.1); margin: 0; padding: 0}</style>")
-            if (menu == 1) {
+            if (resurs.contains("bogashlugbovya")) {
                 if (line.contains("<KANDAK></KANDAK>")) {
                     line = line.replace("<KANDAK></KANDAK>", "")
                     builder.append(line)
@@ -449,10 +428,16 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             sv = s1[0] + ":" + s2[0]
                             builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=8\">").append(color).append(sv).append("</font></a>").append("<br><br>\n")
                         } else builder.append(line)
+                        var svDop = zmenyiaChastki.sviatyiaDop()
+                        if (svDop != "") {
+                            val s1 = svDop.split(":").toTypedArray()
+                            val s2 = s1[1].split(";").toTypedArray()
+                            svDop = s1[0] + ":" + s2[0]
+                            builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=8\">").append(color).append(svDop).append("</font></a>").append("<br><br>\n")
+                        } else builder.append(line)
                         try {
                             builder.append(zmenyiaChastki.zmenya(1))
                         } catch (t: Throwable) {
-                            t.printStackTrace()
                             builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
                         }
                     }
@@ -465,10 +450,16 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             sv = s1[0] + ":" + s2[1]
                             builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=9\">").append(color).append(sv).append("</font></a>").append("<br><br>\n")
                         } else builder.append(line)
+                        var svDop = zmenyiaChastki.sviatyiaDop()
+                        if (svDop != "") {
+                            val s1 = svDop.split(":").toTypedArray()
+                            val s2 = s1[1].split(";").toTypedArray()
+                            svDop = s1[0] + ":" + s2[1]
+                            builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=9\">").append(color).append(svDop).append("</font></a>").append("<br><br>\n")
+                        } else builder.append(line)
                         try {
                             builder.append(zmenyiaChastki.zmenya(0))
                         } catch (t: Throwable) {
-                            t.printStackTrace()
                             builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
                         }
                     }
@@ -530,6 +521,24 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             imageView5.setOnClickListener { WebView.findNext(true) }
         }
         return builder.toString()
+    }
+
+    private fun stopProcent() {
+        procentTimer.cancel()
+        procentSchedule = null
+    }
+
+    private fun startProcent() {
+        stopProcent()
+        procentTimer = Timer()
+        procentSchedule = object : TimerTask() {
+            override fun run() {
+                runOnUiThread {
+                    progress.visibility = View.GONE
+                }
+            }
+        }
+        procentTimer.schedule(procentSchedule, 1000)
     }
 
     private fun stopAutoScroll() {
@@ -748,22 +757,29 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        autoscroll = k.getBoolean("autoscroll", false)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         val itemVybranoe: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = true
-        if (autoscroll) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
-            itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-            itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = true
+        }
+        if (mAutoScroll) {
+            autoscroll = k.getBoolean("autoscroll", false)
+            if (autoscroll) {
+                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
+                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
+                itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
+                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+                itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            } else {
+                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
+                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
+                itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
+                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            }
         } else {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
-            itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            itemAuto.isVisible = false
         }
         var spanString = SpannableString(itemAuto.title.toString())
         var end = spanString.length
@@ -819,7 +835,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val prefEditor: Editor = k.edit()
         val id: Int = item.itemId
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            checkSetDzenNoch = true
+            editVybranoe = true
             item.isChecked = !item.isChecked
             if (item.isChecked) {
                 prefEditor.putBoolean("dzen_noch", true)
@@ -890,7 +906,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             invalidateOptionsMenu()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            men = VybranoeView.setVybranoe(this, resurs, title)
+            editVybranoe = true
+            men = setVybranoe(this, resurs, title)
             if (men) {
                 val layout = LinearLayout(this)
                 layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
@@ -930,9 +947,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     override fun onBackPressed() {
-        val prefEditor = k.edit()
-        prefEditor.putInt(resurs + "Scroll", positionY)
-        prefEditor.apply()
         if (fullscreenPage) {
             fullscreenPage = false
             show()
@@ -949,7 +963,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 imm.hideSoftInputFromWindow(textSearch.windowToken, 0)
             }
         } else {
-            if (checkSetDzenNoch) onSupportNavigateUp() else super.onBackPressed()
+            if (editVybranoe)
+                onSupportNavigateUp()
+            else
+                super.onBackPressed()
         }
     }
 
@@ -987,7 +1004,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun show() {
-        WebView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        scrollView2.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         mHideHandler.removeCallbacks(mHidePart2Runnable)
         mHideHandler.postDelayed(mShowPart2Runnable, ulAnimationDelay.toLong())
     }
@@ -995,8 +1012,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
-        outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
-        if (textSearch.visibility == View.VISIBLE) outState.putBoolean("seach", true) else outState.putBoolean("seach", false)
+        outState.putBoolean("editVybranoe", editVybranoe)
+        if (textSearch.visibility == View.VISIBLE)
+            outState.putBoolean("seach", true)
+        else
+            outState.putBoolean("seach", false)
     }
 
     override fun onActivityStart() {

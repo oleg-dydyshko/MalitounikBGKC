@@ -31,24 +31,26 @@ class MenuMalitvy : ListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        if (position == 2) {
-            if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.MalitvyPrynagodnyia"))
-                startActivity(intent)
-            } else {
-                val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+        if (MainActivity.checkmoduleResources(activity)) {
+            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
+            when (position) {
+                0 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "malitvy1")
+                }
+                1 -> {
+                    intent.putExtra("title", data[position])
+                    intent.putExtra("resurs", "malitvy2")
+                }
+                2 -> {
+                    startActivity(Intent(activity, Class.forName("by.carkva_gazeta.resources.MalitvyPrynagodnyia")))
+                    return
+                }
             }
+            startActivity(intent)
         } else {
-            if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-                intent.putExtra("bogashlugbovya", position)
-                intent.putExtra("menu", 2)
-                startActivity(intent)
-            } else {
-                val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
-            }
+            val dadatak = DialogInstallDadatak()
+            fragmentManager?.let { dadatak.show(it, "dadatak") }
         }
     }
 }

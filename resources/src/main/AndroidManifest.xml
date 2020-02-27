@@ -142,15 +142,6 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.VybranoeView"
-            android:label="@string/MenuVybranoe"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustResize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
             android:name="by.carkva_gazeta.resources.ParafiiBgkcDekanat"
             android:label="@string/parafii"
             android:theme="@style/AppTheme.NoActionBar">

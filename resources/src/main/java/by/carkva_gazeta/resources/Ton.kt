@@ -250,7 +250,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         resursOut = resursOut.substring(n, k)*/
         //CaseInsensitiveResourcesFontLoader FontLoader = new CaseInsensitiveResourcesFontLoader();
         TextView.text = MainActivity.fromHtml(resursOut)
-        men = VybranoeView.checkVybranoe(this, resurs)
+        men = Bogashlugbovya.checkVybranoe(this, resurs)
         if (chin.getBoolean("help_str", true)) {
             startActivity(Intent(this, HelpText::class.java))
             val prefEditor: Editor = chin.edit()
@@ -479,7 +479,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            men = VybranoeView.setVybranoe(this, resurs, title)
+            men = Bogashlugbovya.setVybranoe(this, resurs, title)
             if (men) {
                 val layout = LinearLayout(this)
                 layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)

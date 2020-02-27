@@ -45,6 +45,11 @@ internal class ZmenyiaChastki(context: Context) {
         return arrayData[gc[Calendar.DATE] - 1][10]
     }
 
+    fun sviatyiaDop(): String {
+        val gc = Calendar.getInstance() as GregorianCalendar
+        return arrayData[gc[Calendar.DATE] - 1][11]
+    }
+
     fun sviatyiaView(apostal: Int): String {
         return chtenia(sviatyia(), apostal)
     }

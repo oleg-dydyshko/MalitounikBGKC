@@ -1,30 +1,29 @@
 package by.carkva_gazeta.malitounik
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import kotlinx.android.synthetic.main.dialog_font.*
 
 /**
  * Created by oleg on 20.7.17
  */
 class DialogFontSize : DialogFragment() {
-    private lateinit var input: AppCompatSeekBar
     private lateinit var mListener: DialogFontSizeListener
     private lateinit var alert: AlertDialog
+    private lateinit var rootView: View
 
     interface DialogFontSizeListener {
         fun onDialogFontSizePositiveClick()
@@ -48,7 +47,7 @@ class DialogFontSize : DialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("seekbar", input.progress)
+        outState.putInt("seekbar", seekBar.progress)
     }
 
     private fun setProgress(fontBiblia: Int): Int {
@@ -87,84 +86,93 @@ class DialogFontSize : DialogFragment() {
         return font
     }
 
+    @SuppressLint("SetTextI18n")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        activity?.let {
+            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            if (dzenNoch) {
+                title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                textSize.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                zmauchanni.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                cansel.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                ok.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                zmauchanni.setBackgroundResource(R.drawable.selector_dialog_font_dark)
+                cansel.setBackgroundResource(R.drawable.selector_dialog_font_dark)
+                ok.setBackgroundResource(R.drawable.selector_dialog_font_dark)
+            }
+            textSize.text = "${fontBiblia.toInt()} sp"
+            zmauchanni.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+            cansel.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+            ok.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+            zmauchanni.setOnClickListener {
+                val prefEditors = k.edit()
+                prefEditors.putFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                prefEditors.apply()
+                mListener.onDialogFontSizePositiveClick()
+                dialog?.cancel()
+            }
+            cansel.setOnClickListener {
+                val prefEditors = k.edit()
+                prefEditors.putFloat("font_biblia", fontBiblia)
+                prefEditors.apply()
+                mListener.onDialogFontSizePositiveClick()
+                dialog?.cancel()
+            }
+            ok.setOnClickListener {
+                val progress = seekBar.progress
+                val prefEditors = k.edit()
+                prefEditors.putFloat("font_biblia", getFont(progress))
+                prefEditors.apply()
+                mListener.onDialogFontSizePositiveClick()
+                dialog?.cancel()
+            }
+            if (savedInstanceState != null) {
+                val seekbar = savedInstanceState.getInt("seekbar")
+                seekBar.progress = seekbar
+            } else {
+                seekBar.progress = setProgress(fontBiblia.toInt())
+            }
+            seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    val prefEditors = k.edit()
+                    prefEditors.putFloat("font_biblia", getFont(progress))
+                    prefEditors.apply()
+                    textSize.text = getFont(progress).toInt().toString() + " sp"
+                    mListener.onDialogFontSizePositiveClick()
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    title.visibility = View.GONE
+                    zmauchanni.visibility = View.GONE
+                    cansel.visibility = View.GONE
+                    ok.visibility = View.GONE
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    title.visibility = View.VISIBLE
+                    zmauchanni.visibility = View.VISIBLE
+                    cansel.visibility = View.VISIBLE
+                    ok.visibility = View.VISIBLE
+                }
+            })
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.window?.setDimAmount(0f)
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return rootView
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             MainActivity.dialogVisable = true
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
-            val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            if (dzenNoch) it.setTheme(R.style.AppCompatDark) else it.setTheme(R.style.AppTheme)
+            rootView = View.inflate(it, R.layout.dialog_font, null)
             val builder = AlertDialog.Builder(it)
-            val linearLayout = LinearLayout(it)
-            linearLayout.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextViewRobotoCondensed(it)
-            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(R.string.FONT_SIZE_APP)
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-            linearLayout.addView(textViewZaglavie)
-            input = AppCompatSeekBar(it)
-            input.setPadding(realpadding, realpadding, realpadding, realpadding)
-            input.max = 10
-            if (savedInstanceState != null) {
-                val seekbar = savedInstanceState.getInt("seekbar")
-                input.progress = seekbar
-            } else {
-                input.progress = setProgress(fontBiblia.toInt())
-            }
-            linearLayout.addView(input)
-            input.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                    val prefEditors = k.edit()
-                    prefEditors.putFloat("font_biblia", getFont(progress))
-                    prefEditors.apply()
-                    mListener.onDialogFontSizePositiveClick()
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar) {}
-                override fun onStopTrackingTouch(seekBar: SeekBar) {}
-            })
-            builder.setPositiveButton(resources.getText(R.string.ok)) { dialog: DialogInterface, _: Int ->
-                val progress = input.progress
-                val prefEditors = k.edit()
-                prefEditors.putFloat("font_biblia", getFont(progress))
-                prefEditors.apply()
-                mListener.onDialogFontSizePositiveClick()
-                dialog.cancel()
-            }
-            builder.setNegativeButton(resources.getText(R.string.CANCEL)) { dialog: DialogInterface, _: Int ->
-                val prefEditors = k.edit()
-                prefEditors.putFloat("font_biblia", fontBiblia)
-                prefEditors.apply()
-                mListener.onDialogFontSizePositiveClick()
-                dialog.cancel()
-            }
-            builder.setNeutralButton(resources.getText(R.string.default_font)) { dialog: DialogInterface, _: Int ->
-                val prefEditors = k.edit()
-                prefEditors.putFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-                prefEditors.apply()
-                mListener.onDialogFontSizePositiveClick()
-                dialog.cancel()
-            }
-            builder.setView(linearLayout)
+            builder.setView(rootView)
             alert = builder.create()
-            alert.setOnShowListener {
-                val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
-                val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
-                val btnNeutral = alert.getButton(Dialog.BUTTON_NEUTRAL)
-                btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
-            }
         }
         return alert
     }

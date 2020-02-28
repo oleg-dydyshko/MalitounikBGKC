@@ -23,4 +23,5 @@
     <color name="colorforeground_material_light">#000000</color>
     <color name="colorYelloy">#FFFF00</color>
     <color name="color_ten">#78000000</color>
+    <!--<color name="colorIconsDialog">#FCFFFFFF</color>-->
 </resources>

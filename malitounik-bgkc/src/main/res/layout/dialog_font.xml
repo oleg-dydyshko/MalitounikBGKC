@@ -36,14 +36,13 @@
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
         android:id="@+id/textSize"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="false"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="false"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:text="18 sp"
         android:textColor="@color/colorPrimary_text"
         android:textSize="18sp"

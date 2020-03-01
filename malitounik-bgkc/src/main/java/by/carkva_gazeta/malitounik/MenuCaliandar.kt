@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
-import by.carkva_gazeta.malitounik.CaliandarFull.Companion.newInstance
 import kotlinx.android.synthetic.main.calendar.*
 import java.util.*
 
@@ -96,11 +95,11 @@ class MenuCaliandar : Fragment() {
                     val dayofyear = g[Calendar.DAY_OF_YEAR] - 1
                     val year = g[Calendar.YEAR]
                     val day = g[Calendar.DATE] - 1
-                    return newInstance(position, day, year, dayofyear)
+                    return CaliandarFull.newInstance(position, day, year, dayofyear)
                 }
                 g.add(Calendar.DATE, 1)
             }
-            return newInstance(0, 1, SettingsActivity.GET_CALIANDAR_YEAR_MIN, 1)
+            return CaliandarFull.newInstance(0, 1, SettingsActivity.GET_CALIANDAR_YEAR_MIN, 1)
         }
 
         override fun getItemPosition(`object`: Any): Int {

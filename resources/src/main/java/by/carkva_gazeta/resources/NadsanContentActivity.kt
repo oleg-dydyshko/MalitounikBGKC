@@ -243,37 +243,28 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("dialog", dialog)
-        //outState.putBoolean("paralel", paralel);
-//outState.putString("cytanneSours", cytanneSours);
-//outState.putString("cytanneParalelnye", cytanneParalelnye);
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
     }
 
-    override fun onBackPressed() { /*if (paralel) {
-            scrollView.setVisibility(View.GONE);
-            bibleInfo.setVisibility(View.VISIBLE);
-            vpPager.setVisibility(View.VISIBLE);
-            title_toolbar.setText(getResources().getText(by.carkva_gazeta.malitounik.R.string.psalter));
-            paralel = false;
-            supportInvalidateOptionsMenu();
-        } else*/
+    override fun onBackPressed() {
         when {
             fullscreenPage -> {
                 fullscreenPage = false
                 show()
             }
-            checkSetDzenNoch -> onSupportNavigateUp()
-            else -> super.onBackPressed()
+            checkSetDzenNoch -> {
+                onSupportNavigateUp()
+            }
+            else -> {
+                super.onBackPressed()
+            }
         }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        /*if (paralel) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_glava).setVisible(false);
-        } else {*/menu.findItem(by.carkva_gazeta.malitounik.R.id.action_glava).isVisible = true
-        //}
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_glava).isVisible = true
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         return true

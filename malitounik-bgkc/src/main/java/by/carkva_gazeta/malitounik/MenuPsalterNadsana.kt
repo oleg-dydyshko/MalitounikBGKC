@@ -101,9 +101,10 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                 val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
                 val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
                 if (MainActivity.checkmoduleResources(activity)) {
-                    val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.NadsanContentActivity"))
+                    val intent = Intent(activity, NadsanContent::class.java)
                     intent.putExtra("glava", set["glava"])
                     intent.putExtra("stix", set["stix"])
+                    intent.putExtra("prodolzyt", true)
                     startActivity(intent)
                 } else {
                     val dadatak = DialogInstallDadatak()

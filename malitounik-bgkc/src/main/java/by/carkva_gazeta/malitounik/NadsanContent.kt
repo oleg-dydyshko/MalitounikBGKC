@@ -42,6 +42,12 @@ class NadsanContent : AppCompatActivity() {
             }
         }
         setTollbarTheme()
+        if (intent.extras?.getBoolean("prodolzyt", false) == true) {
+            val intent1 = Intent(this, Class.forName("by.carkva_gazeta.resources.NadsanContentActivity"))
+            intent1.putExtra("glava", intent.extras?.getInt("glava") ?: 0)
+            intent1.putExtra("stix", intent.extras?.getInt("stix") ?: 0)
+            startActivity(intent1)
+        }
     }
 
     private fun setTollbarTheme() {

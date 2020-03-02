@@ -198,9 +198,6 @@ class NovyZapaviet3 : AppCompatActivity(), DialogFontSizeListener, DialogBibleRa
             trak = true
         }
         setmListGlava(0)
-        //if (dzenNoch) {
-        //    linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-        //}
         copy.setOnClickListener {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("", MainActivity.fromHtml(MaranAtaGlobalList.bible?.get(listPosition)

@@ -80,7 +80,6 @@ class DialogFileExplorer : DialogFragment() {
             }
             val dList = path?.list(filterDir) ?: Array(0) { "" }
             dList.sort()
-            //Arrays.sort(dList)
             for (aFList in dList) {
                 val temp = ArrayList<String>()
                 temp.add(aFList)
@@ -89,7 +88,6 @@ class DialogFileExplorer : DialogFragment() {
             }
             val fList = path?.list(filterFile) ?: Array(0) { "" }
             dList.sort()
-            //Arrays.sort(fList)
             for (aFList in fList) {
                 val temp = ArrayList<String>()
                 temp.add(aFList)

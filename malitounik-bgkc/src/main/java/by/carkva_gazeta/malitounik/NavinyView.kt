@@ -56,10 +56,6 @@ class NavinyView : AppCompatActivity() {
             val matcher = Pattern.compile(it.key).matcher(output)
             output = matcher.replaceAll(mnemonics[it.key] ?: it.key)
         }
-        /*for (key in mnemonics.keys) {
-            val matcher = Pattern.compile(key).matcher(Objects.requireNonNull(output))
-            output = matcher.replaceAll(Objects.requireNonNull(mnemonics[key]))
-        }*/
         title_toolbar.text = output
         viewWeb.settings.javaScriptEnabled = true
         viewWeb.webViewClient = object : WebViewClient() {

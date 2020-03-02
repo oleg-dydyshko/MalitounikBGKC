@@ -61,7 +61,6 @@ class DialogBibliateka : DialogFragment() {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             builder = AlertDialog.Builder(it)
-            if (dzenNoch) it.setTheme(R.style.AppCompatDark) else it.setTheme(R.style.AppTheme)
             val linearLayout2 = LinearLayout(it)
             linearLayout2.orientation = LinearLayout.VERTICAL
             builder.setView(linearLayout2)

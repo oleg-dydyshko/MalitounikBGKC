@@ -23,7 +23,6 @@ class DialogInstallDadatak : DialogFragment() {
         activity?.let {
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            if (dzenNoch) it.setTheme(R.style.AppCompatDark) else it.setTheme(R.style.AppTheme)
             val ad = AlertDialog.Builder(it)
             val linearLayout = LinearLayout(it)
             linearLayout.orientation = LinearLayout.VERTICAL

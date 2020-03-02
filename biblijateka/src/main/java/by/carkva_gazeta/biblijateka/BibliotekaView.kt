@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
@@ -616,7 +617,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 return super.onTouch(view, motionEvent)
             }
         })
-        webView.setOnLongClickListener { mActionDown }
         webView.webViewClient = HelloWebViewClient()
         val webSettings = webView.settings
         webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
@@ -738,12 +738,17 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     val t1 = it.toString().indexOf("root")
                     filePath = it.toString().substring(t1 + 4)
                 } else {
-                    val proj = arrayOf(MediaStore.Images.Media.DATA)
-                    val cursor = contentResolver.query(it, proj, null, null, null)
-                    val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                    cursor?.moveToFirst()
-                    filePath = cursor?.getString(columnIndex ?: 0) ?: ""
-                    cursor?.close()
+                    var cursor: Cursor? = null
+                    try {
+                        val proj = arrayOf(MediaStore.Images.Media.DATA)
+                        cursor = contentResolver.query(it, proj, null, null, null)
+                        val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                        cursor?.moveToFirst()
+                        filePath = cursor?.getString(columnIndex ?: 0) ?: ""
+                    } catch (t: Throwable) {
+                    } finally {
+                        cursor?.close()
+                    }
                 }
             }
             if (intent.extras?.containsKey("filePath") == true) {

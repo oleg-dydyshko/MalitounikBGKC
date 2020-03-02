@@ -27,6 +27,7 @@ class DialogBibleSearshSettings : DialogFragment() {
     private lateinit var prefEditors: Editor
     private var mListener: DiallogBibleSearshListiner? = null
     private lateinit var builder: AlertDialog.Builder
+    private var dzenNoch = false
 
     internal interface DiallogBibleSearshListiner {
         fun onSetSettings(edit: String?)
@@ -46,8 +47,7 @@ class DialogBibleSearshSettings : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
-            if (dzenNoch) it.setTheme(R.style.AppCompatDark) else it.setTheme(R.style.AppTheme)
+            dzenNoch = chin.getBoolean("dzen_noch", false)
             prefEditors = chin.edit()
             builder = AlertDialog.Builder(it)
             val linear = LinearLayout(it)
@@ -94,37 +94,6 @@ class DialogBibleSearshSettings : DialogFragment() {
                 prefEditors.apply()
             }
             checkBox1.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            /*RadioGroup radioGroup = new RadioGroup(getActivity());
-        final RadioButton_Roboto_Condensed radioButton1 = new RadioButton_Roboto_Condensed(getActivity());
-        final RadioButton_Roboto_Condensed radioButton2 = new RadioButton_Roboto_Condensed(getActivity());
-        radioGroup.addView(radioButton1);
-        radioGroup.addView(radioButton2);
-        if (dzenNoch) {
-            checkBox.setTextColor(ContextCompat.getColor(getActivity(), by.carkva_gazeta.malitounik.R.color.colorIcons));
-            checkBox1.setTextColor(ContextCompat.getColor(getActivity(), by.carkva_gazeta.malitounik.R.color.colorIcons));
-            radioButton1.setTextColor(ContextCompat.getColor(getActivity(), by.carkva_gazeta.malitounik.R.color.colorIcons));
-            radioButton2.setTextColor(ContextCompat.getColor(getActivity(), by.carkva_gazeta.malitounik.R.color.colorIcons));
-        }
-        radioButton1.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN);
-        radioButton2.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN);
-        radioButton1.setText("Усе словы");
-        radioButton2.setText("Любое з слоў");
-        if (chin.getInt("kohnoeslovo", 0) == 1) {
-            radioButton1.setChecked(false);
-            radioButton2.setChecked(true);
-        } else {
-            radioButton1.setChecked(true);
-            radioButton2.setChecked(false);
-        }
-        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == radioButton1.getId()) {
-                prefEditors.putInt("kohnoeslovo", 0);
-            }
-            if (checkedId == radioButton2.getId()) {
-                prefEditors.putInt("kohnoeslovo", 1);
-            }
-            prefEditors.apply();
-        });*/
             val data = arrayOf("УСЯ БІБЛІЯ", "НОВЫ ЗАПАВЕТ", "СТАРЫ ЗАПАВЕТ")
             val spinner = Spinner(it)
             val arrayAdapter = DialogBibleAdapter(it, data)
@@ -139,7 +108,6 @@ class DialogBibleSearshSettings : DialogFragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
             linearLayout.addView(checkBox)
-            //linearLayout.addView(radioGroup);
             linearLayout.addView(checkBox1)
             linearLayout.addView(spinner)
             builder.setView(linear)
@@ -156,12 +124,14 @@ class DialogBibleSearshSettings : DialogFragment() {
         return alert
     }
 
-    internal class DialogBibleAdapter(private val context: Activity, private val name: Array<String>) : ArrayAdapter<String?>(context, R.layout.simple_list_item_1, name) {
+    internal inner class DialogBibleAdapter(private val context: Activity, private val name: Array<String>) : ArrayAdapter<String?>(context, R.layout.simple_list_item_1, name) {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextViewRobotoCondensed
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
+            if (dzenNoch)
+                textView.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
             return v
         }
 
@@ -179,6 +149,8 @@ class DialogBibleSearshSettings : DialogFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
+            if (dzenNoch)
+                viewHolder.text?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
             viewHolder.text?.gravity = Gravity.START
             viewHolder.text?.setTypeface(null, Typeface.NORMAL)
             viewHolder.text?.text = name[position]

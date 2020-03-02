@@ -40,7 +40,6 @@ class DialogLiturgia : DialogFragment() {
             MainActivity.dialogVisable = true
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch) it.setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark) else it.setTheme(by.carkva_gazeta.malitounik.R.style.AppTheme)
             ab = AlertDialog.Builder(it)
             val builder = StringBuilder()
             val linearLayout = LinearLayout(it)

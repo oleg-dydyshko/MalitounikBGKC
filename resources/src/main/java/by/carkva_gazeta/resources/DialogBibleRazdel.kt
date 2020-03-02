@@ -18,7 +18,6 @@ import by.carkva_gazeta.malitounik.EditTextRobotoCondensed
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-import java.util.*
 
 /**
  * Created by oleg on 21.7.17
@@ -51,14 +50,13 @@ class DialogBibleRazdel : DialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("glava", Objects.requireNonNull(input.text).toString())
+        outState.putString("glava", input.text.toString())
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            val k = Objects.requireNonNull(it).getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch) it.setTheme(R.style.AppCompatDark) else it.setTheme(R.style.AppTheme)
             builder = AlertDialog.Builder(it)
             val linearLayout2 = LinearLayout(it)
             linearLayout2.orientation = LinearLayout.VERTICAL
@@ -95,18 +93,18 @@ class DialogBibleRazdel : DialogFragment() {
             input.requestFocus()
             // Показываем клавиатуру
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            Objects.requireNonNull(imm).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             linearLayout.addView(input)
             builder.setNegativeButton(resources.getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int ->
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                Objects.requireNonNull(imm12).hideSoftInputFromWindow(input.windowToken, 0)
+                imm12.hideSoftInputFromWindow(input.windowToken, 0)
                 dialog.cancel()
             }
             builder.setPositiveButton(resources.getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                 // Скрываем клавиатуру
                 val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                Objects.requireNonNull(imm1).hideSoftInputFromWindow(input.windowToken, 0)
-                if (Objects.requireNonNull(input.text).toString() == "") {
+                imm1.hideSoftInputFromWindow(input.windowToken, 0)
+                if (input.text.toString() == "") {
                     val layout = LinearLayout(it)
                     if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
                     val toast = TextViewRobotoCondensed(it)

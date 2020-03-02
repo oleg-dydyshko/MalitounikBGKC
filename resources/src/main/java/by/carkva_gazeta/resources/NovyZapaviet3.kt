@@ -188,6 +188,7 @@ class NovyZapaviet3 : AppCompatActivity(), DialogFontSizeListener, DialogBibleRa
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bible)
         kniga = intent.extras?.getInt("kniga", 0) ?: 0
@@ -197,9 +198,9 @@ class NovyZapaviet3 : AppCompatActivity(), DialogFontSizeListener, DialogBibleRa
             trak = true
         }
         setmListGlava(0)
-        if (dzenNoch) {
-            linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-        }
+        //if (dzenNoch) {
+        //    linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+        //}
         copy.setOnClickListener {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("", MainActivity.fromHtml(MaranAtaGlobalList.bible?.get(listPosition)
@@ -350,13 +351,8 @@ class NovyZapaviet3 : AppCompatActivity(), DialogFontSizeListener, DialogBibleRa
                 window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
             }
         }
-        if (dzenNoch) {
-            window.setBackgroundDrawableResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
+        if (dzenNoch)
             bible.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            pagerTabStrip.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            bible.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            pagerTabStrip.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-        }
         pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
             override fun onPageSelected(position: Int) {
@@ -527,8 +523,6 @@ class NovyZapaviet3 : AppCompatActivity(), DialogFontSizeListener, DialogBibleRa
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
             toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-            title_toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-            title_toolbar.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
         }
     }
 

@@ -189,6 +189,7 @@ class NovyZapavietSinaidal3 : AppCompatActivity(), DialogFontSizeListener, Dialo
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
+        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bible)
         kniga = intent.extras?.getInt("kniga", 0) ?: 0
@@ -198,9 +199,6 @@ class NovyZapavietSinaidal3 : AppCompatActivity(), DialogFontSizeListener, Dialo
             trak = true
         }
         setmListGlava(0)
-        if (dzenNoch) {
-            linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-        }
         copy.setOnClickListener {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("", MainActivity.fromHtml(MaranAtaGlobalList.bible?.get(listPosition)
@@ -304,7 +302,6 @@ class NovyZapavietSinaidal3 : AppCompatActivity(), DialogFontSizeListener, Dialo
             }
             if (!check) MaranAtaGlobalList.zakladkiSinodal?.add(0, knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (getmListGlava() + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_ru) + " " + (listPosition + 1) + "\n\n" + MainActivity.fromHtml(MaranAtaGlobalList.bible?.get(listPosition)
                     ?: "").toString())
-            //MaranAta_Global_List.getZakladkiSinodal().add(0, getKnigaBible() + "/" + getResources().getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (MaranAta_Global_List.getmListGlava() + 1) + "\n\n" + Html.fromHtml(MaranAta_Global_List.getBible().get(MaranAta_Global_List.getListPosition())).toString());
             val layout = LinearLayout(this@NovyZapavietSinaidal3)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
@@ -355,11 +352,7 @@ class NovyZapavietSinaidal3 : AppCompatActivity(), DialogFontSizeListener, Dialo
             }
         }
         if (dzenNoch) {
-            window.setBackgroundDrawableResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             bible.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            pagerTabStrip.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            bible.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            pagerTabStrip.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
         }
         pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
@@ -531,8 +524,6 @@ class NovyZapavietSinaidal3 : AppCompatActivity(), DialogFontSizeListener, Dialo
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
             toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-            title_toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-            title_toolbar.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
         }
     }
 

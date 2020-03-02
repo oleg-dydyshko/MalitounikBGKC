@@ -95,7 +95,6 @@ class DialogWidgetConfig : DialogFragment() {
     }
 
     companion object {
-
         fun getInstance(widgetID: Int): DialogWidgetConfig {
             val dialogWidgetConfig = DialogWidgetConfig()
             val bundle = Bundle()

@@ -188,8 +188,8 @@ class StaryZapavietSinaidal3 : AppCompatActivity(), DialogFontSizeListener, Dial
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
-        super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bible)
         kniga = intent.extras?.getInt("kniga", 0) ?: 0
         glava = intent.extras?.getInt("glava", 0) ?: 0
@@ -198,9 +198,6 @@ class StaryZapavietSinaidal3 : AppCompatActivity(), DialogFontSizeListener, Dial
             trak = true
         }
         setmListGlava(0)
-        if (dzenNoch) {
-            linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-        }
         copy.setOnClickListener {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("", MainActivity.fromHtml(MaranAtaGlobalList.bible?.get(listPosition)
@@ -354,11 +351,7 @@ class StaryZapavietSinaidal3 : AppCompatActivity(), DialogFontSizeListener, Dial
             }
         }
         if (dzenNoch) {
-            window.setBackgroundDrawableResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             bible.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            pagerTabStrip.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            bible.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            pagerTabStrip.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
         }
         pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
@@ -622,8 +615,6 @@ class StaryZapavietSinaidal3 : AppCompatActivity(), DialogFontSizeListener, Dial
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
             toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-            title_toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-            title_toolbar.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
         }
     }
 

@@ -25,7 +25,6 @@ class DialogAlesyaSemukha : DialogFragment() {
         activity?.let { it ->
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            if (dzenNoch) it.setTheme(R.style.AppCompatDark) else it.setTheme(R.style.AppTheme)
             ad = AlertDialog.Builder(it)
             val scrollView = ScrollView(it)
             scrollView.isVerticalScrollBarEnabled = false
@@ -47,7 +46,7 @@ class DialogAlesyaSemukha : DialogFragment() {
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             textView.text = reader.readText()
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             scrollView.addView(textView)
             linearLayout.addView(scrollView)

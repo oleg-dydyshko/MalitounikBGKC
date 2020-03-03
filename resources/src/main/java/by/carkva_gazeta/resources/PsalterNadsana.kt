@@ -3,10 +3,16 @@ package by.carkva_gazeta.resources
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.TextUtils
+import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import by.carkva_gazeta.malitounik.DialogNadsanPravila
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import kotlinx.android.synthetic.main.nadsan_pravila.*
@@ -123,6 +129,28 @@ class PsalterNadsana : AppCompatActivity(), View.OnClickListener {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
             toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == by.carkva_gazeta.malitounik.R.id.action_glava) {
+            val pravila = DialogNadsanPravila()
+            pravila.show(supportFragmentManager, "pravila")
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        val infl = menuInflater
+        infl.inflate(by.carkva_gazeta.malitounik.R.menu.nadsan_pravila, menu)
+        for (i in 0 until menu.size()) {
+            val item = menu.getItem(i)
+            val spanString = SpannableString(menu.getItem(i).title.toString())
+            val end = spanString.length
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            item.title = spanString
+        }
+        return true
     }
 
     override fun onResume() {

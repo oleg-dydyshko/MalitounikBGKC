@@ -41,7 +41,7 @@ class Help : AppCompatActivity() {
         reader.forEachLine {
             line = it
             if (dzenNoch) line = line.replace("#d00505", "#f44336")
-            builder.append(it)
+            builder.append(line)
         }
         inputStream.close()
         textView.text = MainActivity.fromHtml(builder.toString().replace("<!--version-->", "API " + Build.VERSION.SDK_INT))

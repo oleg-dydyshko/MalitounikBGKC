@@ -8,6 +8,7 @@ import android.text.TextUtils
 import android.util.TypedValue
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import kotlinx.android.synthetic.main.activity_parafii_bgkc.*
@@ -114,6 +115,8 @@ class ParafiiBgkc : AppCompatActivity() {
             builder.append(line)
         }
         builder.append("</body></html>")
+        if (dzenNoch)
+            WebView.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
         WebView.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
         inputStreamReader.close()
     }

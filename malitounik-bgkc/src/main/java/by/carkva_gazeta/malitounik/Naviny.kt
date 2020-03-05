@@ -36,6 +36,7 @@ import java.util.regex.Pattern
 
 class Naviny : AppCompatActivity() {
     private val mHideHandler = Handler()
+
     @SuppressLint("InlinedApi")
     private val mHidePart2Runnable = Runnable {
         relative.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
@@ -318,37 +319,40 @@ class Naviny : AppCompatActivity() {
 
     private fun writeFile(url: String) {
         if (Uri.parse(url).host?.contains("m.carkva-gazeta.by") == true) {
-            val myThread = Thread(Runnable {
-                val myUrl = URL(url)
-                var filename = url
-                filename = filename.replace("/", "_")
-                val inpstr = myUrl.openStream()
-                val file = File("$filesDir/Site/$filename")
-                val outputStream = FileOutputStream("$filesDir/Site/$filename")
-                val buffer = ByteArray(1024)
-                var bytesRead: Int
-                while (inpstr.read(buffer).also { bytesRead = it } != -1) {
-                    outputStream.write(buffer, 0, bytesRead)
-                }
-                outputStream.close()
-                val htmlData = readerFile(file)
-                if (htmlData.contains("iframe")) {
-                    val r1 = htmlData.indexOf("<iframe")
-                    val r2 = htmlData.indexOf("</iframe>", r1 + 7)
-                    var s2 = htmlData.substring(r1, r2 + 9)
-                    if (!s2.contains("https://")) {
-                        s2 = s2.replace("//", "https://")
+            Thread(Runnable {
+                try {
+                    val myUrl = URL(url)
+                    var filename = url
+                    filename = filename.replace("/", "_")
+                    val inpstr = myUrl.openStream()
+                    val file = File("$filesDir/Site/$filename")
+                    val outputStream = FileOutputStream("$filesDir/Site/$filename")
+                    val buffer = ByteArray(1024)
+                    var bytesRead: Int
+                    while (inpstr.read(buffer).also { bytesRead = it } != -1) {
+                        outputStream.write(buffer, 0, bytesRead)
                     }
-                    val s1 = htmlData.substring(0, r1)
-                    val s3 = htmlData.substring(r2 + 9)
-                    val fileNew = File("$filesDir/Site/$filename")
-                    val output: FileWriter
-                    output = FileWriter(fileNew)
-                    output.write(s1 + s2 + s3)
-                    output.close()
+                    outputStream.close()
+                    val htmlData = readerFile(file)
+                    if (htmlData.contains("iframe")) {
+                        val r1 = htmlData.indexOf("<iframe")
+                        val r2 = htmlData.indexOf("</iframe>", r1 + 7)
+                        var s2 = htmlData.substring(r1, r2 + 9)
+                        if (!s2.contains("https://")) {
+                            s2 = s2.replace("//", "https://")
+                        }
+                        val s1 = htmlData.substring(0, r1)
+                        val s3 = htmlData.substring(r2 + 9)
+                        val fileNew = File("$filesDir/Site/$filename")
+                        val output: FileWriter
+                        output = FileWriter(fileNew)
+                        output.write(s1 + s2 + s3)
+                        output.close()
+                    }
+                } catch (t: Throwable) {
+                    DialogNoInternet().show(supportFragmentManager, "no_internet")
                 }
-            })
-            myThread.start()
+            }).start()
         }
     }
 

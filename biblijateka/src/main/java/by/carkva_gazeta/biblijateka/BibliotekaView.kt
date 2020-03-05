@@ -76,6 +76,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var firstLiadSql = true
     private val uiAnimationDelaY = 300
     private val mHideHandler: Handler = Handler()
+
     @SuppressLint("InlinedApi")
     private val mHidePart2Runnable = Runnable {
         val decorView = window.decorView
@@ -280,32 +281,36 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private fun writeFile(url: String) {
         progressBar2.visibility = View.VISIBLE
         Thread(Runnable {
-            val dir = File(this.filesDir.toString() + "/Biblijateka")
-            if (!dir.exists()) {
-                dir.mkdir()
-            }
-            val myUrl = URL(url)
-            val last = url.lastIndexOf("/")
-            filename = url.substring(last + 1)
-            val inpstr: InputStream = myUrl.openStream()
-            val file = File(this.filesDir.toString() + "/Biblijateka/" + filename)
-            val outputStream = FileOutputStream(file)
-            val buffer = ByteArray(1024)
-            var bytesRead: Int
-            while (inpstr.read(buffer).also { bytesRead = it } != -1) {
-                outputStream.write(buffer, 0, bytesRead)
-            }
-            outputStream.close()
-            runOnUiThread {
-                adapter.notifyDataSetChanged()
-                progressBar2.visibility = View.GONE
-                filePath = this.filesDir.toString() + "/Biblijateka/" + filename
-                fileName = filename
-                loadFilePDF()
-                listView.visibility = View.GONE
-                webView.visibility = View.GONE
-                scrollViewB.visibility = View.GONE
-                invalidateOptionsMenu()
+            try {
+                val dir = File(this.filesDir.toString() + "/Biblijateka")
+                if (!dir.exists()) {
+                    dir.mkdir()
+                }
+                val myUrl = URL(url)
+                val last = url.lastIndexOf("/")
+                filename = url.substring(last + 1)
+                val inpstr: InputStream = myUrl.openStream()
+                val file = File(this.filesDir.toString() + "/Biblijateka/" + filename)
+                val outputStream = FileOutputStream(file)
+                val buffer = ByteArray(1024)
+                var bytesRead: Int
+                while (inpstr.read(buffer).also { bytesRead = it } != -1) {
+                    outputStream.write(buffer, 0, bytesRead)
+                }
+                outputStream.close()
+                runOnUiThread {
+                    adapter.notifyDataSetChanged()
+                    progressBar2.visibility = View.GONE
+                    filePath = this.filesDir.toString() + "/Biblijateka/" + filename
+                    fileName = filename
+                    loadFilePDF()
+                    listView.visibility = View.GONE
+                    webView.visibility = View.GONE
+                    scrollViewB.visibility = View.GONE
+                    invalidateOptionsMenu()
+                }
+            } catch (t: Throwable) {
+                DialogNoInternet().show(supportFragmentManager, "no_internet")
             }
         }).start()
     }

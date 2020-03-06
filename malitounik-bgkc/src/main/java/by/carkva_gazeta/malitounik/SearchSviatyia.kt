@@ -315,7 +315,13 @@ class SearchSviatyia : AppCompatActivity() {
             }
             for (e in MenuCviaty.opisanie.indices) {
                 if (MenuCviaty.opisanie[e].toLowerCase(Locale.getDefault()).replace("ё", "е").contains(poshuk.toLowerCase(Locale.getDefault()))) {
-                    val result = MenuCviaty.opisanie[e]
+                    var result = MenuCviaty.opisanie[e]
+                    if (result.contains("<font color=")) {
+                        val t1 = result.indexOf("<font")
+                        val t2 = result.indexOf("\">")
+                        val t3 = result.indexOf("</font>")
+                        result = result.substring(0, t1) + result.substring(t2 + 2, t3)
+                    }
                     val t1 = result.indexOf("<!--")
                     val t2 = result.indexOf(":")
                     val t3 = result.indexOf("-->")

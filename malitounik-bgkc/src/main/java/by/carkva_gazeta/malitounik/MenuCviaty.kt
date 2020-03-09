@@ -17,21 +17,31 @@ import java.util.*
  * Created by oleg on 31.5.16
  */
 class MenuCviaty : ListFragment() {
-    private var yearG = 0
+    private var year = Calendar.getInstance()[Calendar.YEAR]
     private lateinit var mListener: CarkvaCarkvaListener
     private var mLastClickTime: Long = 0
+    private lateinit var myArrayAdapter: MyArrayAdapter
+    private var list = ArrayList<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        val c = Calendar.getInstance()
-        yearG = arguments?.getInt("Year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
+    }
+
+    fun setCviatyYear(year: Int) {
+        this.year = year
+        list = getPrazdnik(activity, year)
+        myArrayAdapter.notifyDataSetChanged()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         listView.isVerticalScrollBarEnabled = false
         listView.isHorizontalScrollBarEnabled = false
-        activity?.let { listAdapter = MyArrayAdapter(it, getPrazdnik(activity, yearG)) }
+        activity?.let {
+            list = getPrazdnik(activity)
+            myArrayAdapter = MyArrayAdapter(it)
+            listAdapter = myArrayAdapter
+        }
         val pad = (10 * resources.displayMetrics.density).toInt()
         listView.setPadding(pad, pad, pad, pad)
     }
@@ -41,7 +51,7 @@ class MenuCviaty : ListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        if (SettingsActivity.GET_CALIANDAR_YEAR_MAX >= yearG) mListener.setDataCalendar(data[position], yearG)
+        if (SettingsActivity.GET_CALIANDAR_YEAR_MAX >= year) mListener.setDataCalendar(data[position], year)
     }
 
     internal interface CarkvaCarkvaListener {
@@ -59,7 +69,7 @@ class MenuCviaty : ListFragment() {
         }
     }
 
-    private class MyArrayAdapter internal constructor(private val context: Activity, private val list: ArrayList<String>) : ArrayAdapter<String>(context, R.layout.simple_list_item_sviaty, list as List<String>) {
+    private inner class MyArrayAdapter internal constructor(private val context: Activity) : ArrayAdapter<String>(context, R.layout.simple_list_item_sviaty, list) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -91,15 +101,8 @@ class MenuCviaty : ListFragment() {
     companion object {
         var opisanie: ArrayList<String> = ArrayList()
         private var data: ArrayList<Int> = ArrayList()
-        fun newInstance(year: Int): MenuCviaty {
-            val fragmentFirst = MenuCviaty()
-            val args = Bundle()
-            args.putInt("Year", year)
-            fragmentFirst.arguments = args
-            return fragmentFirst
-        }
 
-        fun getPrazdnik(context: Context?, yearG: Int): ArrayList<String> {
+        fun getPrazdnik(context: Context?, yearG: Int = Calendar.getInstance().get(Calendar.YEAR)): ArrayList<String> {
             val builder = ArrayList<String>()
             data = ArrayList()
             opisanie = ArrayList()

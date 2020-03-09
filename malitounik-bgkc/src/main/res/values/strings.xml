@@ -343,5 +343,6 @@
     <string name="bibliateka_speuniki">Сьпеўнікі</string>
     <string name="bibliateka_rel_litaratura">Рэлігійная літаратура</string>
     <string name="bibliateka_file">Выбраць файл</string>
+    <string name="del_all_vybranoe">Вы сапраўды жадаеце выдаліць усё Выбранае?</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

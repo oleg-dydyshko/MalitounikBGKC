@@ -46,7 +46,7 @@ import kotlin.math.roundToLong
 
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
-class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener {
 
     private lateinit var c: GregorianCalendar
     private lateinit var k: SharedPreferences
@@ -54,11 +54,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     private var idSelect = 0
     private var idOld = -1
     private var dzenNoch = false
-    private var menuNatatki: MenuNatatki? = null
-    private var vybranoe: MenuVybranoe? = null
-    private var carkva: MenuCviaty? = null
-    private var menuPamiatka: MenuPamiatka? = null
-    private var padryxtouka: MenuPadryxtoukaDaSpovedzi? = null
     private var tolbarTitle = ""
     private var shortcuts = false
 
@@ -76,7 +71,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }
 
     override fun onDialogFontSizePositiveClick() {
-        padryxtouka?.onDialogFontSizePositiveClick()
+        val menuPadryxtoukaDaSpovedzi = supportFragmentManager.findFragmentByTag("MenuPadryxtoukaDaSpovedzi") as? MenuPadryxtoukaDaSpovedzi
+        menuPadryxtoukaDaSpovedzi?.onDialogFontSizePositiveClick()
+        val menuPamiatka = supportFragmentManager.findFragmentByTag("MenuPamiatka") as? MenuPamiatka
         menuPamiatka?.onDialogFontSizePositiveClick()
     }
 
@@ -85,15 +82,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }
 
     override fun fileDelite(position: Int, file: String) {
+        val vybranoe = supportFragmentManager.findFragmentByTag("MenuVybranoe") as? MenuVybranoe
         vybranoe?.fileDelite(position)
+        val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
         menuNatatki?.fileDelite(position)
     }
 
+    override fun deliteAllVybranoe() {
+        val vybranoe = supportFragmentManager.findFragmentByTag("MenuVybranoe") as? MenuVybranoe
+        vybranoe?.deliteAllVybranoe()
+    }
+
     override fun onDialogEditClick(position: Int) {
+        val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
         menuNatatki?.onDialogEditClick(position)
     }
 
     override fun onDialogDeliteClick(position: Int, name: String) {
+        val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
         menuNatatki?.onDialogDeliteClick(position, name)
     }
 
@@ -583,16 +589,8 @@ try {
     }
 
     override fun setPrazdnik(year: Int) {
-        val ftrans: FragmentTransaction = supportFragmentManager.beginTransaction()
-        ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
-        carkva = MenuCviaty.newInstance(year)
-        var str = getString(R.string.CARKVA_SVIATY)
-        if (year != c.get(Calendar.YEAR)) str = "$str на $year год"
-        title_toolbar.text = str
-        carkva?.let {
-            ftrans.replace(R.id.conteiner, it)
-            ftrans.commit()
-        }
+        val menuCviaty = supportFragmentManager.findFragmentByTag("MenuCviaty") as? MenuCviaty
+        menuCviaty?.setCviatyYear(year)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -679,6 +677,7 @@ try {
             else
                 prefEditors.putInt("natatki_sort", 1)
             prefEditors.apply()
+            val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
             menuNatatki?.sortAlfavit()
         }
         return super.onOptionsItemSelected(item)
@@ -1018,16 +1017,6 @@ try {
             c = Calendar.getInstance() as GregorianCalendar
             if (idSelect != R.id.label2 && linear.visibility == View.VISIBLE)
                 linear.visibility = View.GONE
-            if (idSelect != R.id.label7)
-                menuNatatki = null
-            if (idSelect != R.id.label12)
-                vybranoe = null
-            if (idSelect != R.id.label101)
-                padryxtouka = null
-            if (idSelect != R.id.label102)
-                menuPamiatka = null
-            if (idSelect != R.id.label103)
-                carkva = null
             when (idSelect) {
                 R.id.label1 -> {
                     var dayyear = 0
@@ -1084,10 +1073,8 @@ try {
                 }
                 R.id.label7 -> {
                     prefEditors.putInt("id", idSelect)
-                    menuNatatki = MenuNatatki()
-                    menuNatatki?.let {
-                        ftrans.replace(R.id.conteiner, it)
-                    }
+                    val menuNatatki = MenuNatatki()
+                    ftrans.replace(R.id.conteiner, menuNatatki, "MenuNatatki")
                 }
                 R.id.label8 -> {
                     if (MaranAtaGlobalList.natatkiSemuxa == null) {
@@ -1158,10 +1145,8 @@ try {
                 }
                 R.id.label103 -> {
                     prefEditors.putInt("id", idSelect)
-                    carkva = MenuCviaty.newInstance(c.get(Calendar.YEAR))
-                    carkva?.let {
-                        ftrans.replace(R.id.conteiner, it)
-                    }
+                    val menuCviaty = MenuCviaty()
+                    ftrans.replace(R.id.conteiner, menuCviaty, "MenuCviaty")
                 }
                 R.id.label104 -> {
                     prefEditors.putInt("id", idSelect)
@@ -1175,17 +1160,13 @@ try {
                 }
                 R.id.label102 -> {
                     prefEditors.putInt("id", idSelect)
-                    menuPamiatka = MenuPamiatka()
-                    menuPamiatka?.let {
-                        ftrans.replace(R.id.conteiner, it)
-                    }
+                    val menuPamiatka = MenuPamiatka()
+                    ftrans.replace(R.id.conteiner, menuPamiatka, "MenuPamiatka")
                 }
                 R.id.label101 -> {
                     prefEditors.putInt("id", idSelect)
-                    padryxtouka = MenuPadryxtoukaDaSpovedzi()
-                    padryxtouka?.let {
-                        ftrans.replace(R.id.conteiner, it)
-                    }
+                    val menuPadryxtoukaDaSpovedzi = MenuPadryxtoukaDaSpovedzi()
+                    ftrans.replace(R.id.conteiner, menuPadryxtoukaDaSpovedzi, "MenuPadryxtoukaDaSpovedzi")
                 }
                 R.id.label11 -> {
                     if (MaranAtaGlobalList.natatkiSinodal == null) {
@@ -1225,10 +1206,8 @@ try {
                 }
                 R.id.label12 -> {
                     prefEditors.putInt("id", idSelect)
-                    vybranoe = MenuVybranoe()
-                    vybranoe?.let {
-                        ftrans.replace(R.id.conteiner, it)
-                    }
+                    val vybranoe = MenuVybranoe()
+                    ftrans.replace(R.id.conteiner, vybranoe, "MenuVybranoe")
                 }
                 else -> {
                     idSelect = idOld

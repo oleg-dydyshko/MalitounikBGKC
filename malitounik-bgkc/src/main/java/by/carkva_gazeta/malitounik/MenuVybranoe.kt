@@ -1,25 +1,20 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
-import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Typeface
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.ListFragment
 import com.google.gson.Gson
@@ -33,6 +28,7 @@ import java.io.FileWriter
 class MenuVybranoe : ListFragment() {
     private lateinit var adapter: MyVybranoeAdapter
     private var mLastClickTime: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -41,6 +37,18 @@ class MenuVybranoe : ListFragment() {
     fun fileDelite(position: Int) {
         vybranoe.removeAt(position)
         activity?.let {
+            val gson = Gson()
+            val file = File(it.filesDir.toString() + "/Vybranoe.json")
+            val outputStream = FileWriter(file)
+            outputStream.write(gson.toJson(vybranoe))
+            outputStream.close()
+            adapter.notifyDataSetChanged()
+        }
+    }
+
+    fun deliteAllVybranoe() {
+        activity?.let {
+            vybranoe.clear()
             val gson = Gson()
             val file = File(it.filesDir.toString() + "/Vybranoe.json")
             val outputStream = FileWriter(file)
@@ -104,48 +112,8 @@ class MenuVybranoe : ListFragment() {
         val id = item.itemId
         if (id == R.id.trash) {
             if (vybranoe.size > 0) {
-                activity?.let {
-                    val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-                    val dzenNoch = chin.getBoolean("dzen_noch", false)
-                    val builder = AlertDialog.Builder(it)
-                    val linearLayout = LinearLayout(it)
-                    linearLayout.orientation = LinearLayout.VERTICAL
-                    val textViewZaglavie = TextViewRobotoCondensed(it)
-                    if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
-                    val density = resources.displayMetrics.density
-                    val realpadding = (10 * density).toInt()
-                    textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-                    textViewZaglavie.text = resources.getString(R.string.remove)
-                    textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-                    textViewZaglavie.setTypeface(null, Typeface.BOLD)
-                    textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    linearLayout.addView(textViewZaglavie)
-                    val textView = TextViewRobotoCondensed(it)
-                    textView.text = "Вы сапраўды жадаеце выдаліць усё Выбранае?"
-                    textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-                    textView.gravity = Gravity.CENTER_HORIZONTAL
-                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-                    if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                    linearLayout.addView(textView)
-                    builder.setView(linearLayout)
-                    builder.setPositiveButton(resources.getString(R.string.ok)) { _: DialogInterface?, _: Int ->
-                        vybranoe.clear()
-                        val gson = Gson()
-                        val file = File(it.filesDir.toString() + "/Vybranoe.json")
-                        val outputStream = FileWriter(file)
-                        outputStream.write(gson.toJson(vybranoe))
-                        outputStream.close()
-                        adapter.notifyDataSetChanged()
-                    }
-                    builder.setNegativeButton(resources.getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
-                    val alert = builder.create()
-                    alert.setOnShowListener {
-                        val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                        btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
-                        val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                        btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
-                    }
-                    alert.show()
+                fragmentManager?.let {
+                    DialogDeliteAllVybranoe().show(it, "DeliteVybranoe")
                 }
             }
         }

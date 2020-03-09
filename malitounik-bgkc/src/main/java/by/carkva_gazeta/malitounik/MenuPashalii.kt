@@ -34,7 +34,7 @@ class MenuPashalii : Fragment() {
             yearG2 = yearG + 10
         } else {
             yearG = c[Calendar.YEAR] - 3
-            yearG2 = yearG + 20
+            yearG2 = yearG + 13
         }
     }
 
@@ -142,15 +142,13 @@ class MenuPashalii : Fragment() {
     }
 
     companion object {
-        fun newInstance(): MenuPashalii {
-            return MenuPashalii()
-        }
-
-        fun newInstance(year: Int): MenuPashalii {
+        fun newInstance(year: Int = -1): MenuPashalii {
             val fragmentFirst = MenuPashalii()
-            val args = Bundle()
-            args.putInt("Year", year)
-            fragmentFirst.arguments = args
+            if (year != -1) {
+                val args = Bundle()
+                args.putInt("Year", year)
+                fragmentFirst.arguments = args
+            }
             return fragmentFirst
         }
     }

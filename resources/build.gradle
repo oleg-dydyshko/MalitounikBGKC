@@ -18,6 +18,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':malitounik-bgkc')
 }
+
 repositories {
     mavenCentral()
 }

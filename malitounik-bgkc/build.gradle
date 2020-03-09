@@ -10,7 +10,7 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 43580
+        versionCode 43582
         versionName "3.7.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -28,7 +28,6 @@ android {
     }
 
     dynamicFeatures = [":biblijateka", ":resources"]
-
 }
 
 dependencies {

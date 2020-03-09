@@ -17,13 +17,13 @@ import androidx.fragment.app.DialogFragment
 
 class DialogPasxa : DialogFragment() {
     private var value = -1
-    private var input: EditTextRobotoCondensed? = null
+    private lateinit var input: EditTextRobotoCondensed
     private lateinit var mListener: DialogPasxaListener
     private var realpadding = 0
     private var dzenNoch = false
     private lateinit var alert: AlertDialog
 
-    interface DialogPasxaListener {
+    internal interface DialogPasxaListener {
         fun setPasxa(year: Int)
     }
 
@@ -40,7 +40,7 @@ class DialogPasxa : DialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("value", input?.text.toString())
+        outState.putString("value", input.text.toString())
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -60,7 +60,7 @@ class DialogPasxa : DialogFragment() {
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             linear.addView(textViewZaglavie)
-            val input = EditTextRobotoCondensed(it)
+            input = EditTextRobotoCondensed(it)
             if (dzenNoch) {
                 input.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                 input.setBackgroundResource(R.color.colorbackground_material_dark_ligte)

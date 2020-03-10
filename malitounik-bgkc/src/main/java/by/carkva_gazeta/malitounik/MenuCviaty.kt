@@ -27,6 +27,11 @@ class MenuCviaty : ListFragment() {
         setHasOptionsMenu(true)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("year", year)
+    }
+
     fun setCviatyYear(year: Int) {
         this.year = year
         list = getPrazdnik(activity, year)
@@ -38,7 +43,12 @@ class MenuCviaty : ListFragment() {
         listView.isVerticalScrollBarEnabled = false
         listView.isHorizontalScrollBarEnabled = false
         activity?.let {
-            list = getPrazdnik(activity)
+            if (savedInstanceState != null) {
+                year = savedInstanceState.getInt("year")
+                list = getPrazdnik(activity, year)
+            } else {
+                list = getPrazdnik(activity)
+            }
             myArrayAdapter = MyArrayAdapter(it)
             listAdapter = myArrayAdapter
         }

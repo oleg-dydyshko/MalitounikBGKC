@@ -581,11 +581,8 @@ try {
     }
 
     override fun setPasxa(year: Int) {
-        val ftrans: FragmentTransaction = supportFragmentManager.beginTransaction()
-        ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
-        val menuPashalii: MenuPashalii = MenuPashalii.newInstance(year)
-        ftrans.replace(R.id.conteiner, menuPashalii)
-        ftrans.commit()
+        val menuPashalii = supportFragmentManager.findFragmentByTag("MenuPashalii") as? MenuPashalii
+        menuPashalii?.setPasha(year)
     }
 
     override fun setPrazdnik(year: Int) {
@@ -1150,8 +1147,8 @@ try {
                 }
                 R.id.label104 -> {
                     prefEditors.putInt("id", idSelect)
-                    val menuPashalii = MenuPashalii.newInstance()
-                    ftrans.replace(R.id.conteiner, menuPashalii)
+                    val menuPashalii = MenuPashalii()
+                    ftrans.replace(R.id.conteiner, menuPashalii, "MenuPashalii")
                 }
                 R.id.label105 -> {
                     prefEditors.putInt("id", idSelect)

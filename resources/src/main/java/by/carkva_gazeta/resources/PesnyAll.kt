@@ -33,6 +33,7 @@ import java.util.*
 
 class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private val mHideHandler = Handler()
+
     @SuppressLint("InlinedApi")
     private val mHidePart2Runnable = Runnable {
         scrollView2.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
@@ -51,11 +52,11 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
     private var dzenNoch = false
     private var n = 0
-    private var title: String = ""
+    private var title = ""
     private var men = false
     private var levo = false
     private var pravo = false
-    private var resurs: String = ""
+    private var resurs = ""
     private var checkSetDzenNoch = false
     private var procentTimer: Timer = Timer()
     private var procentSchedule: TimerTask? = null
@@ -400,6 +401,13 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             }
             fullscreenPage = true
             hide()
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
+            val sendIntent = Intent()
+            sendIntent.action = Intent.ACTION_SEND
+            sendIntent.putExtra(Intent.EXTRA_TEXT, TextView.text.toString())
+            sendIntent.type = "text/plain"
+            startActivity(Intent.createChooser(sendIntent, null))
         }
         prefEditor.apply()
         return super.onOptionsItemSelected(item)

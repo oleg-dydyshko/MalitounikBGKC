@@ -399,6 +399,13 @@ class SearchPesnyViewResult : AppCompatActivity(), OnTouchListener, DialogFontSi
             fullscreenPage = true
             hide()
         }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
+            val sendIntent = Intent()
+            sendIntent.action = Intent.ACTION_SEND
+            sendIntent.putExtra(Intent.EXTRA_TEXT, TextView.text.toString())
+            sendIntent.type = "text/plain"
+            startActivity(Intent.createChooser(sendIntent, "Падзяліцьца..."))
+        }
         prefEditor.apply()
         return super.onOptionsItemSelected(item)
     }

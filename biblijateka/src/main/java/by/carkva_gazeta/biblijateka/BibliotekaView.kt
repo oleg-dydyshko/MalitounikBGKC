@@ -104,7 +104,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private val popup: PopupMenu? = null
     private val arrayList: ArrayList<ArrayList<String>> = ArrayList()
     private var width = 0
-    private var filename: String = ""
     private lateinit var adapter: BibliotekaAdapter
     private var nameRubrika = ""
     private var defaultPage = 0
@@ -115,7 +114,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var biblioteka: BibliotekaEpub? = null
     private var positionY = 0
     private var fb2: FictionBook? = null
-    private var fb2PageText: String = ""
+    private var fb2PageText = ""
     private var spid = 60
     private var scrollTimer: Timer = Timer()
     private var procentTimer: Timer = Timer()
@@ -288,9 +287,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
                 val myUrl = URL(url)
                 val last = url.lastIndexOf("/")
-                filename = url.substring(last + 1)
+                val uplFilename = url.substring(last + 1)
                 val inpstr: InputStream = myUrl.openStream()
-                val file = File(this.filesDir.toString() + "/Biblijateka/" + filename)
+                val file = File(this.filesDir.toString() + "/Biblijateka/" + uplFilename)
                 val outputStream = FileOutputStream(file)
                 val buffer = ByteArray(1024)
                 var bytesRead: Int
@@ -301,8 +300,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 runOnUiThread {
                     adapter.notifyDataSetChanged()
                     progressBar2.visibility = View.GONE
-                    filePath = this.filesDir.toString() + "/Biblijateka/" + filename
-                    fileName = filename
+                    filePath = this.filesDir.toString() + "/Biblijateka/" + uplFilename
+                    fileName = uplFilename
                     loadFilePDF()
                     listView.visibility = View.GONE
                     webView.visibility = View.GONE
@@ -1325,6 +1324,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == myPermissionsWriteExternalStorage) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (idSelect == R.id.label6) {

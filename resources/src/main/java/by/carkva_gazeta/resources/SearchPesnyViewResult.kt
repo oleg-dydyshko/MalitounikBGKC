@@ -310,6 +310,7 @@ class SearchPesnyViewResult : AppCompatActivity(), OnTouchListener, DialogFontSi
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
@@ -402,9 +403,9 @@ class SearchPesnyViewResult : AppCompatActivity(), OnTouchListener, DialogFontSi
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
-            sendIntent.putExtra(Intent.EXTRA_TEXT, TextView.text.toString())
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=1&file=$resurs")
             sendIntent.type = "text/plain"
-            startActivity(Intent.createChooser(sendIntent, "Падзяліцьца..."))
+            startActivity(Intent.createChooser(sendIntent, null))
         }
         prefEditor.apply()
         return super.onOptionsItemSelected(item)

@@ -1060,7 +1060,7 @@ try {
                 }
                 R.id.label5 -> {
                     prefEditors.putInt("id", idSelect)
-                    val menuAkafisty = MenuAkafisty(this)
+                    val menuAkafisty = MenuAkafisty()
                     ftrans.replace(R.id.conteiner, menuAkafisty)
                 }
                 R.id.label6 -> {

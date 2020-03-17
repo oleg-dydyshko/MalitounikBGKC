@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Typeface
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -889,11 +891,26 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
         if (id == R.id.action_settings) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val vibrate = longArrayOf(0, 1000, 700, 1000, 700, 1000)
+                val channel = NotificationChannel("3000", resources.getString(R.string.sabytie), NotificationManager.IMPORTANCE_HIGH)
+                channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                channel.description = resources.getString(R.string.sabytie)
+                channel.importance = NotificationManager.IMPORTANCE_HIGH
+                channel.lightColor = ContextCompat.getColor(this, R.color.colorPrimary)
+                val att = AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build()
+                channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att)
+                channel.enableVibration(true)
+                channel.vibrationPattern = vibrate
+                channel.enableLights(true)
+                val notificationManager = getSystemService(NotificationManager::class.java)
+                notificationManager?.createNotificationChannel(channel)
                 val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
                 intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
                 intent.putExtra(Settings.EXTRA_CHANNEL_ID, "3000")
                 startActivity(intent)
-                val notificationManager = getSystemService(NotificationManager::class.java)
                 notificationManager?.deleteNotificationChannel("by.carkva-gazeta")
             } else {
                 val settings = DialogSabytieSettings()

@@ -1,0 +1,1766 @@
+[
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bel_3.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bel_3.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_akafist0.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/akafist0.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian4.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian4.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals26.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals26.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln26.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln26.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_40.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_40.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_4.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_4.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_50.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_50.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_akafist_chytanne.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_chytanne.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian19.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian19.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_70.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_70.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_12.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_12.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_60.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_60.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_8.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_8.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias28.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias28.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals33.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals33.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_malitvy2.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/malitvy2.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias6.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias6.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals42.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals42.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian26.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian26.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias19.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias19.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_7.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_7.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_0.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_0.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie3.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie3.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias35.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias35.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals17.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals17.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln17.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln17.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias33.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias33.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals28.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals28.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton5.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton5.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ruzanec1.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ruzanec1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian2.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian2.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals40.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals40.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_67.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_67.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_paslia_prychascia3.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/paslia_prychascia3.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_1.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_57.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_57.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_nadsan_pravila.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/nadsan_pravila.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_19.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_19.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie6_0.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie6_0.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_brest.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_brest.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals35.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals35.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie1_0.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie1_0.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias26.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias26.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias8.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias8.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_10.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_10.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_3.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_3.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_65.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_65.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals2.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals2.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_27.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_27.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie1.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie1.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_17.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_17.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_37.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_37.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_47.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_47.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_3.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_3.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_rym.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_rym.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals15.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals15.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals37.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals37.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie11.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie11.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_55.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_55.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_2.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_2.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_22.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_22.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_0.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_0.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias39.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias39.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ruzanec3.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ruzanec3.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_15.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_15.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_5.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_5.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_35.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_35.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian17.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian17.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias15.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias15.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_akafist2.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/akafist2.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bel_1.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bel_1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian10.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian10.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_42.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_42.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_17.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_17.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie21_10.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie21_10.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_12.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_12.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_nadsan_pravila3.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/nadsan_pravila3.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_21.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_21.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias22.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias22.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_62.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_62.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_6.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_6.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_20.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_20.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bel_8.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bel_8.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie6_7.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie6_7.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie5.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie5.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_zaslaue.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_zaslaue.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_16.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_16.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln5.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln5.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_activity_bible.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_bible.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya1_5.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya1_5.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals24.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals24.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals4.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals4.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_slonim.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_slonim.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln13.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln13.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_nadsan_malitvy_i_pesny.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/nadsan_malitvy_i_pesny.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton2_budni.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton2_budni.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias4.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias4.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals9.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals9.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_akafist_maran_ata.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_maran_ata.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_9.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_9.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian6.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian6.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie_sv3.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie_sv3.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_14.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_14.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_20.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_20.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian24.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian24.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln19.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln19.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals31.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals31.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya1_7.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya1_7.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals44.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals44.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie25_2.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie25_2.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya1_4.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya1_4.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_15.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_15.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias12.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias12.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_pinsk.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_pinsk.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln3.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln3.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton5_budni.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton5_budni.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_1.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals6.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals6.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_akafist_under.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_under.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bel_6.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bel_6.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals48.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals48.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian20.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian20.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya16.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya16.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals20.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals20.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias13.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias13.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln20.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln20.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals7.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals7.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_18.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_18.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_59.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_59.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_69.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_69.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_12.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_12.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton1.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals10.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals10.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_19.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_19.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton8.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton8.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_33.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_33.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_7.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_7.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln2.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln2.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_43.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_43.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals49.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals49.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_64.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_64.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya11.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya11.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_0.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_0.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_24.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_24.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals8.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals8.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_6.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_6.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_34.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_34.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian22.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian22.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_magilev.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_magilev.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_navagrudak.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_navagrudak.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_19.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_19.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_akafist_list_bible.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_list_bible.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_4.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_4.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias10.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias10.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton1_budni.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton1_budni.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_29.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_29.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_marenagorka.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_marenagorka.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln1.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln1.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_lida.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_lida.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_2.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_2.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bel_5.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bel_5.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_londan.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_londan.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln4.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln4.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals5.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals5.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_15.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_15.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton4_budni.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton4_budni.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_bgkc_list.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/bgkc_list.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_28.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_28.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ruzanec0.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ruzanec0.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias23.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias23.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals22.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals22.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_my_malitva_view.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/my_malitva_view.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_activity_parafii_bgkc.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_parafii_bgkc.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_12.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_12.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_3.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_3.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_13.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_13.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln15.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln15.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_25.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_25.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_68.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_68.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_0.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_0.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_52.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_52.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_7.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_7.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals46.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals46.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_grodno.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_grodno.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie15_7.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie15_7.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias38.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias38.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_akafist1.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/akafist1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prichasnik.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prichasnik.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_11.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_11.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_21.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_21.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals47.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals47.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ruzanec4.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ruzanec4.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_61.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_61.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals21.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals21.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_21.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_21.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_my_malitva_add.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/my_malitva_add.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias37.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias37.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_16.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_16.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_7.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_7.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie2.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie2.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_nadsan_psaltyr.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/nadsan_psaltyr.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_8.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_8.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_3.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_3.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_akafist5.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/akafist5.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln16.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln16.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian21.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian21.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian3.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian3.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias11.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias11.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias24.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias24.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals19.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals19.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_30.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_30.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias7.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias7.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_nadsan_pravila5.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/nadsan_pravila5.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_24.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_24.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_nadsan_posle.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/nadsan_posle.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_15.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_15.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_zaxod_dekan.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_zaxod_dekan.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya1_1.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya1_1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals34.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals34.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bel_9.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bel_9.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian27.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian27.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals18.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals18.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_maladechna.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_maladechna.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie4.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie4.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias34.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias34.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals27.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals27.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln18.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln18.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_paslia_prychascia4.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/paslia_prychascia4.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya6.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya6.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_ivachevichi.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_ivachevichi.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_usxod_dekan.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_usxod_dekan.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_12.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_12.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton3_budni.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton3_budni.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ruzanec2.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ruzanec2.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_18.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_18.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_miniapolis.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_miniapolis.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_barysau.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_barysau.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln27.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln27.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_3.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_3.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_bogasluzbovya.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/bogasluzbovya.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals32.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals32.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_20.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_20.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias25.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias25.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias29.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias29.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln25.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln25.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_11.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_11.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias5.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias5.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_10.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_10.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias18.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias18.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bel_2.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bel_2.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias36.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias36.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian5.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian5.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_nadsan_pravila4.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/nadsan_pravila4.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian25.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian25.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals43.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals43.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_kuryia.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_kuryia.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_36.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_36.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_sanktpeterburg.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_sanktpeterburg.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_vilnia.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_vilnia.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_16.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_16.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_56.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_56.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_46.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_46.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_26.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_26.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_4.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_4.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals25.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals25.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton4.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton4.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_2.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_2.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian18.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian18.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie10.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie10.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals50.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals50.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bel_4.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bel_4.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_66.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_66.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_18.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_18.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals45.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals45.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian16.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian16.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_8.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_8.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_38.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_38.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian7.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian7.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_10.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_10.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_27.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_27.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals30.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals30.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_58.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_58.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_nadsan_pravila2.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/nadsan_pravila2.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals29.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals29.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias3.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias3.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_5.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_5.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie8_8.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie8_8.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian23.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian23.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln6.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln6.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie6.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie6.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals23.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals23.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie12.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie12.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_11.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_11.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya1_3.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya1_3.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals3.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals3.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_paslia_prychascia2.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/paslia_prychascia2.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias9.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias9.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals36.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals36.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian1.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian1.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln14.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln14.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_23.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_23.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias14.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias14.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_4.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_4.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_vena.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_vena.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_11.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_11.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_51.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_51.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_akafist4.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/akafist4.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_71.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_71.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_9.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_9.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie25_11.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie25_11.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_6.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_6.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias21.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias21.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals16.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals16.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln21.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln21.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_14.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_14.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_31.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_31.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_nadsan_pered.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/nadsan_pered.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_6.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_6.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie2_1.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie2_1.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_25.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_25.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_13.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_13.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_akafist6.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/akafist6.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_4.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_4.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian11.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian11.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ruzanec5.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ruzanec5.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_16.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_16.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya1.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias27.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias27.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_5.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_5.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_anverpan.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_anverpan.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias20.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias20.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_7.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_7.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_8.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_8.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_file_list.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_file_list.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_22.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_22.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_1.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_praga.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_praga.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_akafist3.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/akafist3.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals11.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals11.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian12.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian12.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton7.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton7.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_13.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_13.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_49.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_49.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_paslia_prychascia1.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/paslia_prychascia1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_jodino.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_jodino.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln11.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln11.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_13.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_13.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian13.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian13.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_63.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_63.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_53.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_53.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_14.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_14.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_2.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_2.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bel_0.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bel_0.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_23.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_23.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie_sv1.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie_sv1.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_nadsan_pravila1.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/nadsan_pravila1.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_44.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_44.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_54.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_54.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton2.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton2.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_1.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_0.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_0.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_14.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_14.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bel_7.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bel_7.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_9.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_9.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie14_8.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie14_8.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie_sv2.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie_sv2.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_39.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_39.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie9.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie9.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_baranavichi.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_baranavichi.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_gomel.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_gomel.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln22.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln22.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_warshava.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_warshava.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_kaliningrad.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_kaliningrad.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prichasnik_budni.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prichasnik_budni.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian15.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian15.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln12.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln12.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya8.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya8.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals38.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals38.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias30.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias30.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_search_biblia.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/search_biblia.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals12.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals12.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_2.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_2.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_15.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_15.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya4.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya4.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_nadsan_pesni.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/nadsan_pesni.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln23.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln23.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln7.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln7.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_48.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_48.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias16.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias16.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_5.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_5.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie7.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie7.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_mensk.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_mensk.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias31.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias31.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_45.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_45.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton6.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton6.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_paslia_prychascia5.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/paslia_prychascia5.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton3.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton3.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton6_budni.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton6_budni.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_17.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_17.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals14.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals14.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_orsha.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_orsha.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias32.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias32.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias2.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias2.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_10.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_10.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya1_2.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya1_2.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln24.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln24.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian8.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian8.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_8.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_8.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_32.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_32.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_6.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_6.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_malitvy1.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/malitvy1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_9.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_9.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_11.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_11.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals1.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals1.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln9.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln9.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln10.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln10.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_26.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_26.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian14.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian14.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias1.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias1.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals13.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals13.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_bag_9.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_bag_9.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_1.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals39.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals39.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblian9.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian9.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_polachk.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_polachk.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_41.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_41.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_akafist7.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/akafist7.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_13.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_13.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln8.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln8.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ruzanec6.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ruzanec6.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_centr_dekan.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_centr_dekan.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya1_6.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya1_6.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie_sv0.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie_sv0.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_dzie_vitebsk.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/dzie_vitebsk.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidals41.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals41.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_biblias17.txt.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias17.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_taize_5.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_taize_5.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_prasl_10.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_10.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_pesny_kal_14.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_kal_14.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_opisanie8.htm.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie8.htm"
+    }
+]

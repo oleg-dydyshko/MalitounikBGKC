@@ -13,7 +13,7 @@ import androidx.fragment.app.ListFragment
 class MenuBogashlugbovya : ListFragment() {
     private var mLastClickTime: Long = 0
     //String[] by.carkva_gazeta.malitounikApp.data = {"няма Літургія сьв. Яна Залатавуснага", "няма Літургія сьв. Васіля Вялікага", "няма Літургія раней асьвячаных дароў", "Набажэнства ў гонар Маці Божай Нястомнай Дапамогі", "Малітвы пасьля сьвятога прычасьця", "няма Ютрань", "няма Вячэрня", "Абедніца"};
-    private val data = arrayOf("Боская Літургія між сьвятымі айца нашага Яна Залатавуснага", "Набажэнства ў гонар Маці Божай Нястомнай Дапамогі", "Малітвы пасьля сьвятога прычасьця", "Ютрань нядзельная (у скароце)", "Абедніца", "Служба за памерлых — Малая паніхіда", "Трапары і кандакі нядзельныя васьмі тонаў", "Трапары і кандакі штодзённыя - на кожны дзень тыдня", "Службы 4-га тыдня Вялікага посту", "Службы 5-га тыдня Вялікага посту")
+    private val data = arrayOf("Боская Літургія між сьвятымі айца нашага Яна Залатавуснага", "Набажэнства ў гонар Маці Божай Нястомнай Дапамогі", "Малітвы пасьля сьвятога прычасьця", "Ютрань нядзельная (у скароце)", "Абедніца", "Служба за памерлых — Малая паніхіда", "Трапары і кандакі нядзельныя васьмі тонаў", "Трапары і кандакі штодзённыя - на кожны дзень тыдня", "Службы 3-га тыдня Вялікага посту", "Службы 4-га тыдня Вялікага посту", "Службы 5-га тыдня Вялікага посту")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,9 +70,13 @@ class MenuBogashlugbovya : ListFragment() {
                         }
                         8 -> {
                             intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "bogashlugbovya15")
+                            intent.putExtra("resurs", "bogashlugbovya14")
                         }
                         9 -> {
+                            intent.putExtra("title", data[position])
+                            intent.putExtra("resurs", "bogashlugbovya15")
+                        }
+                        10 -> {
                             intent.putExtra("title", data[position])
                             intent.putExtra("resurs", "bogashlugbovya16")
                         }

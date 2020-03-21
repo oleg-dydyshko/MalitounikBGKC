@@ -825,7 +825,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             var desN: Int
                             spl = split2[zaglnum].trim()
                             desN = spl.indexOf("$knigaN.")
-                            if (knigaN == knigaK) {
+                            if (knigaN == knigaK && zag3 == -1) {
                                 desK1 = desN
                             } else {
                                 desK1 = spl.indexOf("$knigaK.")

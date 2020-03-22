@@ -53,14 +53,17 @@ class SplashActivity : AppCompatActivity() {
                 val dir = File("$filesDir/Book")
                 if (!dir.exists())
                     dir.mkdir()
-                val filePath = "$filesDir/Book/$file"
-                val inputStream = contentResolver.openInputStream(data)
-                val buffer = ByteArray(8192)
-                var count: Int
-                if (inputStream != null) {
-                    FileOutputStream(filePath).use { fout -> while (inputStream.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count) }
+                try {
+                    val filePath = "$filesDir/Book/$file"
+                    val inputStream = contentResolver.openInputStream(data)
+                    val buffer = ByteArray(8192)
+                    var count: Int
+                    if (inputStream != null) {
+                        FileOutputStream(filePath).use { fout -> while (inputStream.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count) }
+                    }
+                    intent1.putExtra("filePath", filePath)
+                } catch (t: Throwable) {
                 }
-                intent1.putExtra("filePath", filePath)
             }
         }
         startActivity(intent1)

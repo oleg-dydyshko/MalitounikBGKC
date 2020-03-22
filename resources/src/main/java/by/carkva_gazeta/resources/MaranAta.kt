@@ -862,7 +862,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 } else {
                     // Только Семуха
                     maranAta.add("<!--no--><br><strong>$nazvaFullBel $fit</strong><br>\n")
-                    maranAta.add("<!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "\n")
+                    maranAta.add("<!--no--><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>\n")
                 }
             } catch (t: Throwable) {
                 if (belarus) {

@@ -130,6 +130,7 @@ class MalitvyPrynagodnyia : AppCompatActivity() {
         data.add(MenuListData(R.raw.prynagodnyia_25, "Малітвы ў часе хваробы і за хворых"))
         data.add(MenuListData(R.raw.prynagodnyia_26, "Намер ісьці за Хрыстом"))
         data.add(MenuListData(R.raw.prynagodnyia_27, "Цябе, Бога, хвалім"))
+        data.add(MenuListData(R.raw.prynagodnyia_28, "Малітва падчас згубнай пошасьці"))
         data.sort()
         adapter = MenuListAdaprer(this)
         ListView.adapter = adapter

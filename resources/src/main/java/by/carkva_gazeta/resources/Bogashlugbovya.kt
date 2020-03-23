@@ -760,6 +760,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         val itemVybranoe: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec")) {
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = true
         }
@@ -941,6 +942,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
             fullscreenPage = true
             hide()
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
+            val sendIntent = Intent()
+            sendIntent.action = Intent.ACTION_SEND
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=2&file=$resurs")
+            sendIntent.type = "text/plain"
+            startActivity(Intent.createChooser(sendIntent, null))
         }
         prefEditor.apply()
         return super.onOptionsItemSelected(item)

@@ -4,7 +4,7 @@
             "outputFile": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/incremental/mergeDebugResources/merged.dir/values-small-v4/values-small-v4.xml",
             "map": [
                 {
-                    "source": "/home/oleg/.gradle/caches/transforms-2/files-2.1/5c06b4c920bade8b263672a626e753be/material-1.1.0/res/values-small-v4/values-small-v4.xml",
+                    "source": "/home/oleg/.gradle/caches/transforms-2/files-2.1/3617665fc9c65869caa876cc9ba14c07/material-1.1.0/res/values-small-v4/values-small-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",

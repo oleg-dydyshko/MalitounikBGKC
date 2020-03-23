@@ -18,6 +18,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <dist:module dist:instant="true" />
+    <!-- Permission will be merged into the manifest of the hosting app. -->
+    <!-- Is required to launch foreground extraction service for targetSdkVersion 28+. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name="by.carkva_gazeta.malitounik.Malitounik"

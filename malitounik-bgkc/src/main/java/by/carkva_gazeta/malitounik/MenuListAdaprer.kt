@@ -13,19 +13,19 @@ import java.util.*
 /**
  * Created by oleg on 17.1.18
  */
-class MenuListAdaprer : ArrayAdapter<String?> {
+class MenuListAdaprer : ArrayAdapter<String> {
     private val mContext: Activity
     private var items: Array<String>? = null
-    private var itemsL: ArrayList<String?>? = null
+    private var itemsL: ArrayList<String>? = null
     private val k: SharedPreferences
 
-    internal constructor(context: Activity, strings: Array<String>) : super(context, R.layout.simple_list_item_2, R.id.label, strings) {
+    constructor(context: Activity, strings: Array<String>) : super(context, R.layout.simple_list_item_2, R.id.label, strings) {
         mContext = context
         items = strings
         k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
     }
 
-    constructor(context: Activity, strings: ArrayList<String?>) : super(context, R.layout.simple_list_item_2, R.id.label, strings) {
+    constructor(context: Activity, strings: ArrayList<String>) : super(context, R.layout.simple_list_item_2, R.id.label, strings) {
         mContext = context
         itemsL = strings
         k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -33,7 +33,7 @@ class MenuListAdaprer : ArrayAdapter<String?> {
 
     override fun add(string: String?) {
         super.add(string)
-        itemsL?.add(string)
+        itemsL?.add(string?: "")
     }
 
     override fun remove(string: String?) {

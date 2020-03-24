@@ -253,6 +253,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
+        <activity
+            android:name="by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"
+            android:label="@string/slugby_vialikaga_postu"
+            android:splitName="resources"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
+            android:name="by.carkva_gazeta.resources.SlugbyVialikagaPostu"
+            android:label="@string/slugby_vialikaga_postu"
+            android:splitName="resources"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

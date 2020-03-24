@@ -42,6 +42,10 @@
 -keep class by.carkva_gazeta.resources.SearchPesny { <init>(); }
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/merged_manifests/debug/AndroidManifest.xml:217
 -keep class by.carkva_gazeta.resources.SearchPesnyViewResult { <init>(); }
+# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/merged_manifests/debug/AndroidManifest.xml:241
+-keep class by.carkva_gazeta.resources.SlugbyVialikagaPostu { <init>(); }
+# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/merged_manifests/debug/AndroidManifest.xml:233
+-keep class by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis { <init>(); }
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/merged_manifests/debug/AndroidManifest.xml:43
 -keep class by.carkva_gazeta.resources.StaryZapaviet3 { <init>(); }
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/merged_manifests/debug/AndroidManifest.xml:61

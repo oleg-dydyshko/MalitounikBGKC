@@ -266,7 +266,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         positionY = (k.getInt(resurs + "Scroll", 0) / resources.displayMetrics.density).toInt()
         WebView.setOnScrollChangedCallback(this)
         WebView.setOnBottomListener(this)
-        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("ton")) {
+        var bogashlugbovya = true
+        if (resurs.contains("bogashlugbovya")) {
+            val t1 = resurs.indexOf("_")
+            if (t1 != -1)
+                bogashlugbovya = false
+        }
+
+        if ((resurs.contains("bogashlugbovya") && bogashlugbovya) || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("ton")) {
             scrollView2.visibility = View.GONE
             WebView.visibility = View.VISIBLE
             WebView.loadDataWithBaseURL("malitounikApp-app//carkva-gazeta.by/", loadData(), "text/html", "utf-8", null)

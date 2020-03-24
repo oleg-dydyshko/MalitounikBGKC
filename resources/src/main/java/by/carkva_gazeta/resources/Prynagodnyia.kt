@@ -96,6 +96,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
+            traker = savedInstanceState.getBoolean("traker")
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -299,6 +300,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
@@ -360,7 +362,6 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
             }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            traker = true
             men = Bogashlugbovya.setVybranoe(this, resurs, title)
             if (men) {
                 val layout = LinearLayout(this)
@@ -396,6 +397,13 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
             fullscreenPage = true
             hide()
         }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
+            val sendIntent = Intent()
+            sendIntent.action = Intent.ACTION_SEND
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=4&file=$resurs")
+            sendIntent.type = "text/plain"
+            startActivity(Intent.createChooser(sendIntent, null))
+        }
         prefEditor.apply()
         return super.onOptionsItemSelected(item)
     }
@@ -425,6 +433,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
+        outState.putBoolean("traker", traker)
     }
 
     companion object {

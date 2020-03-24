@@ -1089,6 +1089,36 @@
 598                android:value="by.carkva_gazeta.malitounik.MainActivity" />
 598-->/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:166:17-73
 599        </activity>
-600    </application>
-601
-602</manifest>
+600        <activity
+600-->[:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:256:9-264:20
+601            android:name="by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"
+601-->[:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:257:13-79
+602            android:label="@string/slugby_vialikaga_postu"
+602-->[:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:258:13-59
+603            android:theme="@style/AppTheme.NoActionBar" >
+603-->[:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:260:13-56
+604            <meta-data
+604-->/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:164:13-166:76
+605                android:name="android.support.PARENT_ACTIVITY"
+605-->/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:165:17-63
+606                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+606-->/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:166:17-73
+607        </activity>
+608        <activity
+608-->[:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:265:9-273:20
+609            android:name="by.carkva_gazeta.resources.SlugbyVialikagaPostu"
+609-->[:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:266:13-75
+610            android:label="@string/slugby_vialikaga_postu"
+610-->[:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:267:13-59
+611            android:theme="@style/AppTheme.NoActionBar" >
+611-->[:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:269:13-56
+612            <meta-data
+612-->/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:164:13-166:76
+613                android:name="android.support.PARENT_ACTIVITY"
+613-->/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:165:17-63
+614                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+614-->/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:166:17-73
+615        </activity>
+616    </application>
+617
+618</manifest>

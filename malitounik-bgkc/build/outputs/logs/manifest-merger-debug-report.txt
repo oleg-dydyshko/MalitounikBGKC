@@ -34,7 +34,7 @@ MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /home/oleg/.gradle/cac
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4943d7d706321462e16a190d2c6b2d50/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.arch.core:core-runtime:2.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/35094e9f072a7df8eadaa8cd6d427412/core-runtime-2.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:2:1-32:12
-MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:2:1-258:12
+MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:2:1-276:12
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-356:12
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-356:12
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-356:12
@@ -98,8 +98,8 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/af8bcb344eff79f5cbd18225e2799f6f/versionedparcelable-1.1.0/AndroidManifest.xml:24:5-25:19
 MERGED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-30:19
 MERGED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-30:19
-MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-256:19
-MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-256:19
+MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-274:19
+MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-274:19
 	tools:ignore
 		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:26:9-48
 	android:roundIcon
@@ -824,3 +824,23 @@ ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/bu
 		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:251:13-56
 	android:name
 		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:248:13-63
+activity#by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis
+ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:256:9-264:20
+	android:label
+		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:258:13-59
+	android:splitName
+		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:259:13-42
+	android:theme
+		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:260:13-56
+	android:name
+		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:257:13-79
+activity#by.carkva_gazeta.resources.SlugbyVialikagaPostu
+ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:265:9-273:20
+	android:label
+		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:267:13-59
+	android:splitName
+		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:268:13-42
+	android:theme
+		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:269:13-56
+	android:name
+		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:266:13-75

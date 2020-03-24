@@ -2794,6 +2794,7 @@ string settings_notifi_sviata
 string settings_poshuk
 string share
 string skid_brightness
+string slugby_vialikaga_postu
 string song
 string sort_alf
 string spovedz

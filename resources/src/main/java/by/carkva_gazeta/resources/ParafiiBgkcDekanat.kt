@@ -52,7 +52,7 @@ class ParafiiBgkcDekanat : AppCompatActivity() {
         }
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.parafii)
-        val data = ArrayList<String?>()
+        val data = ArrayList<String>()
         bgkc = intent.getIntExtra("bgkc", 1)
         if (bgkc == 1) {
             data.add("Цэнтральны дэканат")

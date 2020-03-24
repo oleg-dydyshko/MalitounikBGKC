@@ -22,7 +22,7 @@ class NadsanContent : AppCompatActivity() {
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_psalter)
-        val arrayList = ArrayList<String?>()
+        val arrayList = ArrayList<String>()
         for (i in 1..151) {
             arrayList.add(getString(R.string.psalom2) + " " + i)
         }

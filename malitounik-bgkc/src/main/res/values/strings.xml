@@ -345,5 +345,6 @@
     <string name="bibliateka_file">Выбраць файл</string>
     <string name="del_all_vybranoe">Вы сапраўды жадаеце выдаліць усё Выбранае?</string>
     <string name="share">Падзяліцьца&#8230;</string>
+    <string name="slugby_vialikaga_postu">Службы Вялікага посту</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

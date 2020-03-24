@@ -46,54 +46,74 @@ class MenuBogashlugbovya : ListFragment() {
             }
             else -> {
                 if (MainActivity.checkmoduleResources(activity)) {
-                    val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
                     when (position) {
                         0 -> {
+                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
                             intent.putExtra("title", data[position])
                             intent.putExtra("resurs", "bogashlugbovya1")
+                            startActivity(intent)
                         }
                         1 -> {
+                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
                             intent.putExtra("title", data[position])
                             intent.putExtra("resurs", "bogashlugbovya4")
+                            startActivity(intent)
                         }
                         3 -> {
+                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
                             intent.putExtra("title", data[position])
                             intent.putExtra("resurs", "bogashlugbovya6")
+                            startActivity(intent)
                         }
                         4 -> {
+                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
                             intent.putExtra("title", data[position])
                             intent.putExtra("resurs", "bogashlugbovya8")
+                            startActivity(intent)
                         }
                         5 -> {
+                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
                             intent.putExtra("title", data[position])
                             intent.putExtra("resurs", "bogashlugbovya11")
+                            startActivity(intent)
                         }
                         8 -> {
+                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"))
                             intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "bogashlugbovya12")
+                            intent.putExtra("resurs", 12)
+                            startActivity(intent)
                         }
                         9 -> {
+                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"))
                             intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "bogashlugbovya13")
+                            intent.putExtra("resurs", 13)
+                            startActivity(intent)
                         }
                         10 -> {
+                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"))
                             intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "bogashlugbovya14")
+                            intent.putExtra("resurs", 14)
+                            startActivity(intent)
                         }
                         11 -> {
+                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"))
                             intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "bogashlugbovya15")
+                            intent.putExtra("resurs", 15)
+                            startActivity(intent)
                         }
                         12 -> {
+                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"))
                             intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "bogashlugbovya16")
+                            intent.putExtra("resurs", 16)
+                            startActivity(intent)
                         }
                         13 -> {
+                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"))
                             intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "bogashlugbovya17")
+                            intent.putExtra("resurs", 17)
+                            startActivity(intent)
                         }
                     }
-                    startActivity(intent)
                 } else {
                     val dadatak = DialogInstallDadatak()
                     fragmentManager?.let { dadatak.show(it, "dadatak") }

@@ -28,6 +28,7 @@ class Opisanie : AppCompatActivity() {
     private var dzenNoch = false
     private var mun = Calendar.getInstance()[Calendar.MONTH]
     private var day = Calendar.getInstance()[Calendar.DATE]
+    private var svity = ""
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -59,25 +60,24 @@ class Opisanie : AppCompatActivity() {
         val c = Calendar.getInstance()
         mun = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
-        val svity = intent.extras?.getString("svity", "") ?: ""
-        val r = resources
-        var inputStream = r.openRawResource(R.raw.opisanie1)
+        svity = intent.extras?.getString("svity", "") ?: ""
+        var inputStream = resources.openRawResource(R.raw.opisanie1)
         if (intent.extras?.getBoolean("glavnyia", false) == true) {
-            if (svity.toLowerCase(Locale.getDefault()).contains("уваход у ерусалім")) inputStream = r.openRawResource(R.raw.opisanie_sv0)
-            if (svity.toLowerCase(Locale.getDefault()).contains("уваскрасеньне")) inputStream = r.openRawResource(R.raw.opisanie_sv1)
-            if (svity.toLowerCase(Locale.getDefault()).contains("узьнясеньне")) inputStream = r.openRawResource(R.raw.opisanie_sv2)
-            if (svity.toLowerCase(Locale.getDefault()).contains("зыход")) inputStream = r.openRawResource(R.raw.opisanie_sv3)
+            if (svity.toLowerCase(Locale.getDefault()).contains("уваход у ерусалім")) inputStream = resources.openRawResource(R.raw.opisanie_sv0)
+            if (svity.toLowerCase(Locale.getDefault()).contains("уваскрасеньне")) inputStream = resources.openRawResource(R.raw.opisanie_sv1)
+            if (svity.toLowerCase(Locale.getDefault()).contains("узьнясеньне")) inputStream = resources.openRawResource(R.raw.opisanie_sv2)
+            if (svity.toLowerCase(Locale.getDefault()).contains("зыход")) inputStream = resources.openRawResource(R.raw.opisanie_sv3)
             val resFile = day.toString() + "_" + mun
-            if (resFile.contains("1_0")) inputStream = r.openRawResource(R.raw.opisanie1_0)
-            if (resFile.contains("2_1")) inputStream = r.openRawResource(R.raw.opisanie2_1)
-            if (resFile.contains("6_0")) inputStream = r.openRawResource(R.raw.opisanie6_0)
-            if (resFile.contains("6_7")) inputStream = r.openRawResource(R.raw.opisanie6_7)
-            if (resFile.contains("8_8")) inputStream = r.openRawResource(R.raw.opisanie8_8)
-            if (resFile.contains("14_8")) inputStream = r.openRawResource(R.raw.opisanie14_8)
-            if (resFile.contains("15_7")) inputStream = r.openRawResource(R.raw.opisanie15_7)
-            if (resFile.contains("25_2")) inputStream = r.openRawResource(R.raw.opisanie25_2)
-            if (resFile.contains("21_10")) inputStream = r.openRawResource(R.raw.opisanie21_10)
-            if (resFile.contains("25_11")) inputStream = r.openRawResource(R.raw.opisanie25_11)
+            if (resFile.contains("1_0")) inputStream = resources.openRawResource(R.raw.opisanie1_0)
+            if (resFile.contains("2_1")) inputStream = resources.openRawResource(R.raw.opisanie2_1)
+            if (resFile.contains("6_0")) inputStream = resources.openRawResource(R.raw.opisanie6_0)
+            if (resFile.contains("6_7")) inputStream = resources.openRawResource(R.raw.opisanie6_7)
+            if (resFile.contains("8_8")) inputStream = resources.openRawResource(R.raw.opisanie8_8)
+            if (resFile.contains("14_8")) inputStream = resources.openRawResource(R.raw.opisanie14_8)
+            if (resFile.contains("15_7")) inputStream = resources.openRawResource(R.raw.opisanie15_7)
+            if (resFile.contains("25_2")) inputStream = resources.openRawResource(R.raw.opisanie25_2)
+            if (resFile.contains("21_10")) inputStream = resources.openRawResource(R.raw.opisanie21_10)
+            if (resFile.contains("25_11")) inputStream = resources.openRawResource(R.raw.opisanie25_11)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             var line: String
@@ -91,18 +91,18 @@ class Opisanie : AppCompatActivity() {
             TextView.text = MainActivity.fromHtml(builder.toString())
         } else {
             when (mun) {
-                0 -> inputStream = r.openRawResource(R.raw.opisanie1)
-                1 -> inputStream = r.openRawResource(R.raw.opisanie2)
-                2 -> inputStream = r.openRawResource(R.raw.opisanie3)
-                3 -> inputStream = r.openRawResource(R.raw.opisanie4)
-                4 -> inputStream = r.openRawResource(R.raw.opisanie5)
-                5 -> inputStream = r.openRawResource(R.raw.opisanie6)
-                6 -> inputStream = r.openRawResource(R.raw.opisanie7)
-                7 -> inputStream = r.openRawResource(R.raw.opisanie8)
-                8 -> inputStream = r.openRawResource(R.raw.opisanie9)
-                9 -> inputStream = r.openRawResource(R.raw.opisanie10)
-                10 -> inputStream = r.openRawResource(R.raw.opisanie11)
-                11 -> inputStream = r.openRawResource(R.raw.opisanie12)
+                0 -> inputStream = resources.openRawResource(R.raw.opisanie1)
+                1 -> inputStream = resources.openRawResource(R.raw.opisanie2)
+                2 -> inputStream = resources.openRawResource(R.raw.opisanie3)
+                3 -> inputStream = resources.openRawResource(R.raw.opisanie4)
+                4 -> inputStream = resources.openRawResource(R.raw.opisanie5)
+                5 -> inputStream = resources.openRawResource(R.raw.opisanie6)
+                6 -> inputStream = resources.openRawResource(R.raw.opisanie7)
+                7 -> inputStream = resources.openRawResource(R.raw.opisanie8)
+                8 -> inputStream = resources.openRawResource(R.raw.opisanie9)
+                9 -> inputStream = resources.openRawResource(R.raw.opisanie10)
+                10 -> inputStream = resources.openRawResource(R.raw.opisanie11)
+                11 -> inputStream = resources.openRawResource(R.raw.opisanie12)
             }
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
@@ -173,7 +173,10 @@ class Opisanie : AppCompatActivity() {
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=3&date=$day&month=$mun")
+            var sviatylink = ""
+            if (svity != "")
+                sviatylink = "&sviata=true"
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=3$sviatylink&date=$day&month=$mun")
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
         }

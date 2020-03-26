@@ -843,30 +843,42 @@ try {
         prefEditors = k.edit()
         if (idSelect == R.id.label91 || idSelect == R.id.label92 || idSelect == R.id.label93 || idSelect == R.id.label94 || idSelect == R.id.label95) {
             title9.visibility = View.VISIBLE
-            image2.setImageResource(android.R.drawable.arrow_up_float)
+            if (dzenNoch)
+                image2.setImageResource(R.drawable.arrow_up_float_black)
+            else
+                image2.setImageResource(R.drawable.arrow_up_float)
         }
         if (idSelect == R.id.label101 || idSelect == R.id.label102 || idSelect == R.id.label103 || idSelect == R.id.label104 || idSelect == R.id.label105) {
             title10.visibility = View.VISIBLE
-            image3.setImageResource(android.R.drawable.arrow_up_float)
+            if (dzenNoch)
+                image3.setImageResource(R.drawable.arrow_up_float_black)
+            else
+                image3.setImageResource(R.drawable.arrow_up_float)
         }
 
         if (idSelect == R.id.label9a) {
             if (title9.visibility == View.VISIBLE) {
                 title9.visibility = View.GONE
-                image2.setImageResource(android.R.drawable.arrow_down_float)
+                image2.setImageResource(R.drawable.arrow_down_float)
             } else {
                 title9.visibility = View.VISIBLE
-                image2.setImageResource(android.R.drawable.arrow_up_float)
+                if (dzenNoch)
+                    image2.setImageResource(R.drawable.arrow_up_float_black)
+                else
+                    image2.setImageResource(R.drawable.arrow_up_float)
                 scrollView.post { scrollView.smoothScrollBy(0, title9.height) }
             }
         }
         if (idSelect == R.id.label10a) {
             if (title10.visibility == View.VISIBLE) {
                 title10.visibility = View.GONE
-                image3.setImageResource(android.R.drawable.arrow_down_float)
+                image3.setImageResource(R.drawable.arrow_down_float)
             } else {
                 title10.visibility = View.VISIBLE
-                image3.setImageResource(android.R.drawable.arrow_up_float)
+                if (dzenNoch)
+                    image3.setImageResource(R.drawable.arrow_up_float_black)
+                else
+                    image3.setImageResource(R.drawable.arrow_up_float)
                 scrollView.post { scrollView.smoothScrollBy(0, title10.height) }
             }
         }

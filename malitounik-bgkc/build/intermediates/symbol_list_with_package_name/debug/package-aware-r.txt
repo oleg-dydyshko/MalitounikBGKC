@@ -1359,7 +1359,9 @@ drawable abc_textfield_search_default_mtrl_alpha
 drawable abc_textfield_search_material
 drawable abc_vector_test
 drawable arrow_down_float
+drawable arrow_down_float_sabytie
 drawable arrow_up_float
+drawable arrow_up_float_black
 drawable avd_hide_password
 drawable avd_show_password
 drawable background_splash

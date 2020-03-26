@@ -4,7 +4,7 @@
 4    featureSplit="resources"
 5    package="by.carkva_gazeta.malitounik"
 6    android:versionCode="43587"
-7    android:versionName="3.7.2" >
+7    android:versionName="3.7.3" >
 8
 9    <uses-sdk
 10        android:minSdkVersion="14"

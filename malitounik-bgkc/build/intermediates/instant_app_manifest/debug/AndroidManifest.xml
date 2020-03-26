@@ -4,7 +4,7 @@
     package="by.carkva_gazeta.malitounik"
     android:targetSandboxVersion="2"
     android:versionCode="43587"
-    android:versionName="3.7.2" >
+    android:versionName="3.7.3" >
 
     <uses-sdk
         android:minSdkVersion="14"

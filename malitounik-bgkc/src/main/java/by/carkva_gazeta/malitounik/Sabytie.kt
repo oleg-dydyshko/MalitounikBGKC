@@ -427,6 +427,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             label12.setBackgroundResource(R.drawable.selector_dark)
             label22.setBackgroundResource(R.drawable.selector_dark)
             labelbutton12.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            labelbutton12.setBackgroundResource(R.drawable.selector_dark)
             toolbar.popupTheme = R.style.AppCompatDark
             toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
         }

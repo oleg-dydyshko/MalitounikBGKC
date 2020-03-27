@@ -153,6 +153,7 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
+
                     android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -280,6 +281,7 @@
                     android:id="@+id/labelbutton12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/selector_default"
                     android:drawableEnd="@drawable/arrow_down_float_sabytie"
                     android:drawableRight="@drawable/arrow_down_float_sabytie"
                     android:drawablePadding="10dp"

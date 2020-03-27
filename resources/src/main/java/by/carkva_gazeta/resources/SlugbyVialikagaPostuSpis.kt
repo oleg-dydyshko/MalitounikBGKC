@@ -117,10 +117,10 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
                 data.add(Data(R.raw.bogashlugbovya17_2,"Панядзелак 6-га тыдня посту ўвечары"))
                 data.add(Data(R.raw.bogashlugbovya17_3,"Аўторак 6-га тыдня посту ўвечары"))
                 data.add(Data(R.raw.bogashlugbovya17_4,"Серада 6-га тыдня посту ўвечары"))
-                data.add(Data(R.raw.bogashlugbovya17_4,"Чацьвер 6-га тыдня посту ўвечары"))
-                data.add(Data(R.raw.bogashlugbovya17_5,"Пятніца 6-га тыдня посту ўвечары"))
-                data.add(Data(R.raw.bogashlugbovya17_6,"Субота Лазара Ютрань"))
-                data.add(Data(R.raw.bogashlugbovya17_7,"Літургія"))
+                data.add(Data(R.raw.bogashlugbovya17_5,"Чацьвер 6-га тыдня посту ўвечары"))
+                data.add(Data(R.raw.bogashlugbovya17_6,"Пятніца 6-га тыдня посту ўвечары"))
+                data.add(Data(R.raw.bogashlugbovya17_7,"Субота Лазара Ютрань"))
+                data.add(Data(R.raw.bogashlugbovya17_8,"Літургія"))
             }
         }
         val adapter = ListAdaprer(this)

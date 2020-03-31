@@ -3,8 +3,8 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="by.carkva_gazeta.malitounik"
     android:targetSandboxVersion="2"
-    android:versionCode="43587"
-    android:versionName="3.7.3" >
+    android:versionCode="43588"
+    android:versionName="3.7.4" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -379,7 +379,6 @@
             android:name="com.google.android.play.core.common.PlayCoreDialogWrapperActivity"
             android:enabled="false"
             android:exported="false"
-            android:process=":playcore_dialog_wrapper_activity"
             android:stateNotNeeded="true"
             android:theme="@style/Theme.PlayCore.Transparent" /> <!-- The service will be merged into the manifest of the hosting app. -->
         <service

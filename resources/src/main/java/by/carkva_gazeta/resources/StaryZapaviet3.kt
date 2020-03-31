@@ -783,7 +783,7 @@ class StaryZapaviet3 : AppCompatActivity(), DialogFontSizeListener, DialogBibleR
         this.cytanneSours = cytanneSours ?: ""
         val pm = ParalelnyeMesta()
         conteiner.removeAllViewsInLayout()
-        val arrayList = pm.paralel(this@StaryZapaviet3, this.cytanneParalelnye, this.cytanneParalelnye, true)
+        val arrayList = pm.paralel(this@StaryZapaviet3, this.cytanneSours, this.cytanneParalelnye, true)
         for (textView in arrayList) {
             conteiner.addView(textView)
         }

@@ -3,6 +3,7 @@ package by.carkva_gazeta.resources
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
+import android.util.Log
 import android.util.TypedValue
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.MainActivity
@@ -191,21 +192,26 @@ class ParalelnyeMesta {
         textViewSours.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         textViewSours.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours1)
         arrayList.add(textViewSours)
+        var knigaName = "Быт"
         for (aChten in chten) {
             var nomerglavy = 1
             val fit = aChten.trim()
             var nachalo: String
             var konec: String
-            val bible = biblia(fit)
-            //val kniga = bible[0]
-            var nazva = bible[1]
-            val nazvaBel = bible[2]
-            val nomer = bible[3].toInt()
             // Пс 88:12-13; 135:5; 145:6; Сир 18:1; Ин 1:3; Пс 22
 // Быт 13:15; 15:7, 18, 15-16; 26:3-4; Втор 34:4; 1 Тим 2:13
             val split = fit.split(",").toTypedArray()
             for (aSplit in split) {
                 val splitres = aSplit.trim()
+                val t2 = splitres.lastIndexOf(" ")
+                if (t2 != -1) {
+                    knigaName = splitres.substring(0, t2)
+                }
+                val bible = biblia(knigaName)
+                //val kniga = bible[0]
+                var nazva = bible[1]
+                val nazvaBel = bible[2]
+                val nomer = bible[3].toInt()
                 val s2 = splitres.indexOf(" ", 2)
                 val a1 = splitres.indexOf(".")
                 if (s2 != -1) {
@@ -245,198 +251,266 @@ class ParalelnyeMesta {
                         }
                     }
                 }
-                val r = context.resources
-                var inputStream: InputStream? = null
-                if (semuxa) {
-                    inputStream = when (nomer) {
-                        1 -> r.openRawResource(R.raw.biblias1)
-                        2 -> r.openRawResource(R.raw.biblias2)
-                        3 -> r.openRawResource(R.raw.biblias3)
-                        4 -> r.openRawResource(R.raw.biblias4)
-                        5 -> r.openRawResource(R.raw.biblias5)
-                        6 -> r.openRawResource(R.raw.biblias6)
-                        7 -> r.openRawResource(R.raw.biblias7)
-                        8 -> r.openRawResource(R.raw.biblias8)
-                        9 -> r.openRawResource(R.raw.biblias9)
-                        10 -> r.openRawResource(R.raw.biblias10)
-                        11 -> r.openRawResource(R.raw.biblias11)
-                        12 -> r.openRawResource(R.raw.biblias12)
-                        13 -> r.openRawResource(R.raw.biblias13)
-                        14 -> r.openRawResource(R.raw.biblias14)
-                        15 -> r.openRawResource(R.raw.biblias15)
-                        16 -> r.openRawResource(R.raw.biblias16)
-                        20 -> r.openRawResource(R.raw.biblias17)
-                        21 -> r.openRawResource(R.raw.biblias18)
-                        22 -> r.openRawResource(R.raw.biblias19)
-                        23 -> r.openRawResource(R.raw.biblias20)
-                        24 -> r.openRawResource(R.raw.biblias21)
-                        25 -> r.openRawResource(R.raw.biblias22)
-                        28 -> r.openRawResource(R.raw.biblias23)
-                        29 -> r.openRawResource(R.raw.biblias24)
-                        30 -> r.openRawResource(R.raw.biblias25)
-                        33 -> r.openRawResource(R.raw.biblias26)
-                        34 -> r.openRawResource(R.raw.biblias27)
-                        35 -> r.openRawResource(R.raw.biblias28)
-                        36 -> r.openRawResource(R.raw.biblias29)
-                        37 -> r.openRawResource(R.raw.biblias30)
-                        38 -> r.openRawResource(R.raw.biblias31)
-                        39 -> r.openRawResource(R.raw.biblias32)
-                        40 -> r.openRawResource(R.raw.biblias33)
-                        41 -> r.openRawResource(R.raw.biblias34)
-                        42 -> r.openRawResource(R.raw.biblias35)
-                        43 -> r.openRawResource(R.raw.biblias36)
-                        44 -> r.openRawResource(R.raw.biblias37)
-                        45 -> r.openRawResource(R.raw.biblias38)
-                        46 -> r.openRawResource(R.raw.biblias39)
-                        51 -> r.openRawResource(R.raw.biblian1)
-                        52 -> r.openRawResource(R.raw.biblian2)
-                        53 -> r.openRawResource(R.raw.biblian3)
-                        54 -> r.openRawResource(R.raw.biblian4)
-                        55 -> r.openRawResource(R.raw.biblian5)
-                        56 -> r.openRawResource(R.raw.biblian6)
-                        57 -> r.openRawResource(R.raw.biblian7)
-                        58 -> r.openRawResource(R.raw.biblian8)
-                        59 -> r.openRawResource(R.raw.biblian9)
-                        60 -> r.openRawResource(R.raw.biblian10)
-                        61 -> r.openRawResource(R.raw.biblian11)
-                        62 -> r.openRawResource(R.raw.biblian12)
-                        63 -> r.openRawResource(R.raw.biblian13)
-                        64 -> r.openRawResource(R.raw.biblian14)
-                        65 -> r.openRawResource(R.raw.biblian15)
-                        66 -> r.openRawResource(R.raw.biblian16)
-                        67 -> r.openRawResource(R.raw.biblian17)
-                        68 -> r.openRawResource(R.raw.biblian18)
-                        69 -> r.openRawResource(R.raw.biblian19)
-                        70 -> r.openRawResource(R.raw.biblian20)
-                        71 -> r.openRawResource(R.raw.biblian21)
-                        72 -> r.openRawResource(R.raw.biblian22)
-                        73 -> r.openRawResource(R.raw.biblian23)
-                        74 -> r.openRawResource(R.raw.biblian24)
-                        75 -> r.openRawResource(R.raw.biblian25)
-                        76 -> r.openRawResource(R.raw.biblian26)
-                        77 -> r.openRawResource(R.raw.biblian27)
-                        else -> null
-                    }
-                } else {
-                    if (nomer == 1) inputStream = r.openRawResource(R.raw.sinaidals1)
-                    if (nomer == 2) inputStream = r.openRawResource(R.raw.sinaidals2)
-                    if (nomer == 3) inputStream = r.openRawResource(R.raw.sinaidals3)
-                    if (nomer == 4) inputStream = r.openRawResource(R.raw.sinaidals4)
-                    if (nomer == 5) inputStream = r.openRawResource(R.raw.sinaidals5)
-                    if (nomer == 6) inputStream = r.openRawResource(R.raw.sinaidals6)
-                    if (nomer == 7) inputStream = r.openRawResource(R.raw.sinaidals7)
-                    if (nomer == 8) inputStream = r.openRawResource(R.raw.sinaidals8)
-                    if (nomer == 9) inputStream = r.openRawResource(R.raw.sinaidals9)
-                    if (nomer == 10) inputStream = r.openRawResource(R.raw.sinaidals10)
-                    if (nomer == 11) inputStream = r.openRawResource(R.raw.sinaidals11)
-                    if (nomer == 12) inputStream = r.openRawResource(R.raw.sinaidals12)
-                    if (nomer == 13) inputStream = r.openRawResource(R.raw.sinaidals13)
-                    if (nomer == 14) inputStream = r.openRawResource(R.raw.sinaidals14)
-                    if (nomer == 15) inputStream = r.openRawResource(R.raw.sinaidals15)
-                    if (nomer == 16) inputStream = r.openRawResource(R.raw.sinaidals16)
-                    if (nomer == 17) inputStream = r.openRawResource(R.raw.sinaidals17)
-                    if (nomer == 18) inputStream = r.openRawResource(R.raw.sinaidals18)
-                    if (nomer == 19) inputStream = r.openRawResource(R.raw.sinaidals19)
-                    if (nomer == 20) inputStream = r.openRawResource(R.raw.sinaidals20)
-                    if (nomer == 21) inputStream = r.openRawResource(R.raw.sinaidals21)
-                    if (nomer == 22) inputStream = r.openRawResource(R.raw.sinaidals22)
-                    if (nomer == 23) inputStream = r.openRawResource(R.raw.sinaidals23)
-                    if (nomer == 24) inputStream = r.openRawResource(R.raw.sinaidals24)
-                    if (nomer == 25) inputStream = r.openRawResource(R.raw.sinaidals25)
-                    if (nomer == 26) inputStream = r.openRawResource(R.raw.sinaidals26)
-                    if (nomer == 27) inputStream = r.openRawResource(R.raw.sinaidals27)
-                    if (nomer == 28) inputStream = r.openRawResource(R.raw.sinaidals28)
-                    if (nomer == 29) inputStream = r.openRawResource(R.raw.sinaidals29)
-                    if (nomer == 30) inputStream = r.openRawResource(R.raw.sinaidals30)
-                    if (nomer == 31) inputStream = r.openRawResource(R.raw.sinaidals31)
-                    if (nomer == 32) inputStream = r.openRawResource(R.raw.sinaidals32)
-                    if (nomer == 33) inputStream = r.openRawResource(R.raw.sinaidals33)
-                    if (nomer == 34) inputStream = r.openRawResource(R.raw.sinaidals34)
-                    if (nomer == 35) inputStream = r.openRawResource(R.raw.sinaidals35)
-                    if (nomer == 36) inputStream = r.openRawResource(R.raw.sinaidals36)
-                    if (nomer == 37) inputStream = r.openRawResource(R.raw.sinaidals37)
-                    if (nomer == 38) inputStream = r.openRawResource(R.raw.sinaidals38)
-                    if (nomer == 39) inputStream = r.openRawResource(R.raw.sinaidals39)
-                    if (nomer == 40) inputStream = r.openRawResource(R.raw.sinaidals40)
-                    if (nomer == 41) inputStream = r.openRawResource(R.raw.sinaidals41)
-                    if (nomer == 42) inputStream = r.openRawResource(R.raw.sinaidals42)
-                    if (nomer == 43) inputStream = r.openRawResource(R.raw.sinaidals43)
-                    if (nomer == 44) inputStream = r.openRawResource(R.raw.sinaidals44)
-                    if (nomer == 45) inputStream = r.openRawResource(R.raw.sinaidals45)
-                    if (nomer == 46) inputStream = r.openRawResource(R.raw.sinaidals46)
-                    if (nomer == 47) inputStream = r.openRawResource(R.raw.sinaidals47)
-                    if (nomer == 48) inputStream = r.openRawResource(R.raw.sinaidals48)
-                    if (nomer == 49) inputStream = r.openRawResource(R.raw.sinaidals49)
-                    if (nomer == 50) inputStream = r.openRawResource(R.raw.sinaidals50)
-                    if (nomer == 51) inputStream = r.openRawResource(R.raw.sinaidaln1)
-                    if (nomer == 52) inputStream = r.openRawResource(R.raw.sinaidaln2)
-                    if (nomer == 53) inputStream = r.openRawResource(R.raw.sinaidaln3)
-                    if (nomer == 54) inputStream = r.openRawResource(R.raw.sinaidaln4)
-                    if (nomer == 55) inputStream = r.openRawResource(R.raw.sinaidaln5)
-                    if (nomer == 56) inputStream = r.openRawResource(R.raw.sinaidaln6)
-                    if (nomer == 57) inputStream = r.openRawResource(R.raw.sinaidaln7)
-                    if (nomer == 58) inputStream = r.openRawResource(R.raw.sinaidaln8)
-                    if (nomer == 59) inputStream = r.openRawResource(R.raw.sinaidaln9)
-                    if (nomer == 60) inputStream = r.openRawResource(R.raw.sinaidaln10)
-                    if (nomer == 61) inputStream = r.openRawResource(R.raw.sinaidaln11)
-                    if (nomer == 62) inputStream = r.openRawResource(R.raw.sinaidaln12)
-                    if (nomer == 63) inputStream = r.openRawResource(R.raw.sinaidaln13)
-                    if (nomer == 64) inputStream = r.openRawResource(R.raw.sinaidaln14)
-                    if (nomer == 65) inputStream = r.openRawResource(R.raw.sinaidaln15)
-                    if (nomer == 66) inputStream = r.openRawResource(R.raw.sinaidaln16)
-                    if (nomer == 67) inputStream = r.openRawResource(R.raw.sinaidaln17)
-                    if (nomer == 68) inputStream = r.openRawResource(R.raw.sinaidaln18)
-                    if (nomer == 69) inputStream = r.openRawResource(R.raw.sinaidaln19)
-                    if (nomer == 70) inputStream = r.openRawResource(R.raw.sinaidaln20)
-                    if (nomer == 71) inputStream = r.openRawResource(R.raw.sinaidaln21)
-                    if (nomer == 72) inputStream = r.openRawResource(R.raw.sinaidaln22)
-                    if (nomer == 73) inputStream = r.openRawResource(R.raw.sinaidaln23)
-                    if (nomer == 74) inputStream = r.openRawResource(R.raw.sinaidaln24)
-                    if (nomer == 75) inputStream = r.openRawResource(R.raw.sinaidaln25)
-                    if (nomer == 76) inputStream = r.openRawResource(R.raw.sinaidaln26)
-                    if (nomer == 77) inputStream = r.openRawResource(R.raw.sinaidaln27)
-                }
-                if (inputStream != null) {
-                    val isr = InputStreamReader(inputStream)
-                    val reader = BufferedReader(isr)
-                    var line: String
-                    val builder = StringBuilder()
-                    reader.forEachLine {
-                        line = it
-                        if (line.contains("//")) {
-                            val t1 = line.indexOf("//")
-                            line = line.substring(0, t1).trim()
-                            if (line != "") builder.append(line).append("\n")
-                        } else {
-                            builder.append(line).append("\n")
+                try {
+                    val r = context.resources
+                    var inputStream: InputStream? = null
+                    if (semuxa) {
+                        inputStream = when (nomer) {
+                            1 -> r.openRawResource(R.raw.biblias1)
+                            2 -> r.openRawResource(R.raw.biblias2)
+                            3 -> r.openRawResource(R.raw.biblias3)
+                            4 -> r.openRawResource(R.raw.biblias4)
+                            5 -> r.openRawResource(R.raw.biblias5)
+                            6 -> r.openRawResource(R.raw.biblias6)
+                            7 -> r.openRawResource(R.raw.biblias7)
+                            8 -> r.openRawResource(R.raw.biblias8)
+                            9 -> r.openRawResource(R.raw.biblias9)
+                            10 -> r.openRawResource(R.raw.biblias10)
+                            11 -> r.openRawResource(R.raw.biblias11)
+                            12 -> r.openRawResource(R.raw.biblias12)
+                            13 -> r.openRawResource(R.raw.biblias13)
+                            14 -> r.openRawResource(R.raw.biblias14)
+                            15 -> r.openRawResource(R.raw.biblias15)
+                            16 -> r.openRawResource(R.raw.biblias16)
+                            20 -> r.openRawResource(R.raw.biblias17)
+                            21 -> r.openRawResource(R.raw.biblias18)
+                            22 -> r.openRawResource(R.raw.biblias19)
+                            23 -> r.openRawResource(R.raw.biblias20)
+                            24 -> r.openRawResource(R.raw.biblias21)
+                            25 -> r.openRawResource(R.raw.biblias22)
+                            28 -> r.openRawResource(R.raw.biblias23)
+                            29 -> r.openRawResource(R.raw.biblias24)
+                            30 -> r.openRawResource(R.raw.biblias25)
+                            33 -> r.openRawResource(R.raw.biblias26)
+                            34 -> r.openRawResource(R.raw.biblias27)
+                            35 -> r.openRawResource(R.raw.biblias28)
+                            36 -> r.openRawResource(R.raw.biblias29)
+                            37 -> r.openRawResource(R.raw.biblias30)
+                            38 -> r.openRawResource(R.raw.biblias31)
+                            39 -> r.openRawResource(R.raw.biblias32)
+                            40 -> r.openRawResource(R.raw.biblias33)
+                            41 -> r.openRawResource(R.raw.biblias34)
+                            42 -> r.openRawResource(R.raw.biblias35)
+                            43 -> r.openRawResource(R.raw.biblias36)
+                            44 -> r.openRawResource(R.raw.biblias37)
+                            45 -> r.openRawResource(R.raw.biblias38)
+                            46 -> r.openRawResource(R.raw.biblias39)
+                            51 -> r.openRawResource(R.raw.biblian1)
+                            52 -> r.openRawResource(R.raw.biblian2)
+                            53 -> r.openRawResource(R.raw.biblian3)
+                            54 -> r.openRawResource(R.raw.biblian4)
+                            55 -> r.openRawResource(R.raw.biblian5)
+                            56 -> r.openRawResource(R.raw.biblian6)
+                            57 -> r.openRawResource(R.raw.biblian7)
+                            58 -> r.openRawResource(R.raw.biblian8)
+                            59 -> r.openRawResource(R.raw.biblian9)
+                            60 -> r.openRawResource(R.raw.biblian10)
+                            61 -> r.openRawResource(R.raw.biblian11)
+                            62 -> r.openRawResource(R.raw.biblian12)
+                            63 -> r.openRawResource(R.raw.biblian13)
+                            64 -> r.openRawResource(R.raw.biblian14)
+                            65 -> r.openRawResource(R.raw.biblian15)
+                            66 -> r.openRawResource(R.raw.biblian16)
+                            67 -> r.openRawResource(R.raw.biblian17)
+                            68 -> r.openRawResource(R.raw.biblian18)
+                            69 -> r.openRawResource(R.raw.biblian19)
+                            70 -> r.openRawResource(R.raw.biblian20)
+                            71 -> r.openRawResource(R.raw.biblian21)
+                            72 -> r.openRawResource(R.raw.biblian22)
+                            73 -> r.openRawResource(R.raw.biblian23)
+                            74 -> r.openRawResource(R.raw.biblian24)
+                            75 -> r.openRawResource(R.raw.biblian25)
+                            76 -> r.openRawResource(R.raw.biblian26)
+                            77 -> r.openRawResource(R.raw.biblian27)
+                            else -> null
                         }
-                    }
-                    inputStream.close()
-                    val split2 = builder.toString().split("===").toTypedArray()
-                    var r1 = split2[nomerglavy].trim()
-                    var r2: String
-                    val vN = r1.indexOf(nachalo)
-                    val vK1 = r1.indexOf(konec)
-                    val vK = r1.indexOf("\n", vK1)
-                    if (semuxa && nomer == 22) {
-                        r1 = r1.replace("\n", "<br>\n")
-                        val r3 = r1.split("\n").toTypedArray()
-                        val sb = StringBuilder()
-                        for (w in nachalo.toInt()..konec.toInt()) {
-                            sb.append(r3[w - 1])
-                        }
-                        r2 = sb.toString()
                     } else {
-                        r2 = if (vK1 != -1) {
-                            if (vK != -1) {
-                                r1.substring(vN, vK)
+                        if (nomer == 1) inputStream = r.openRawResource(R.raw.sinaidals1)
+                        if (nomer == 2) inputStream = r.openRawResource(R.raw.sinaidals2)
+                        if (nomer == 3) inputStream = r.openRawResource(R.raw.sinaidals3)
+                        if (nomer == 4) inputStream = r.openRawResource(R.raw.sinaidals4)
+                        if (nomer == 5) inputStream = r.openRawResource(R.raw.sinaidals5)
+                        if (nomer == 6) inputStream = r.openRawResource(R.raw.sinaidals6)
+                        if (nomer == 7) inputStream = r.openRawResource(R.raw.sinaidals7)
+                        if (nomer == 8) inputStream = r.openRawResource(R.raw.sinaidals8)
+                        if (nomer == 9) inputStream = r.openRawResource(R.raw.sinaidals9)
+                        if (nomer == 10) inputStream = r.openRawResource(R.raw.sinaidals10)
+                        if (nomer == 11) inputStream = r.openRawResource(R.raw.sinaidals11)
+                        if (nomer == 12) inputStream = r.openRawResource(R.raw.sinaidals12)
+                        if (nomer == 13) inputStream = r.openRawResource(R.raw.sinaidals13)
+                        if (nomer == 14) inputStream = r.openRawResource(R.raw.sinaidals14)
+                        if (nomer == 15) inputStream = r.openRawResource(R.raw.sinaidals15)
+                        if (nomer == 16) inputStream = r.openRawResource(R.raw.sinaidals16)
+                        if (nomer == 17) inputStream = r.openRawResource(R.raw.sinaidals17)
+                        if (nomer == 18) inputStream = r.openRawResource(R.raw.sinaidals18)
+                        if (nomer == 19) inputStream = r.openRawResource(R.raw.sinaidals19)
+                        if (nomer == 20) inputStream = r.openRawResource(R.raw.sinaidals20)
+                        if (nomer == 21) inputStream = r.openRawResource(R.raw.sinaidals21)
+                        if (nomer == 22) inputStream = r.openRawResource(R.raw.sinaidals22)
+                        if (nomer == 23) inputStream = r.openRawResource(R.raw.sinaidals23)
+                        if (nomer == 24) inputStream = r.openRawResource(R.raw.sinaidals24)
+                        if (nomer == 25) inputStream = r.openRawResource(R.raw.sinaidals25)
+                        if (nomer == 26) inputStream = r.openRawResource(R.raw.sinaidals26)
+                        if (nomer == 27) inputStream = r.openRawResource(R.raw.sinaidals27)
+                        if (nomer == 28) inputStream = r.openRawResource(R.raw.sinaidals28)
+                        if (nomer == 29) inputStream = r.openRawResource(R.raw.sinaidals29)
+                        if (nomer == 30) inputStream = r.openRawResource(R.raw.sinaidals30)
+                        if (nomer == 31) inputStream = r.openRawResource(R.raw.sinaidals31)
+                        if (nomer == 32) inputStream = r.openRawResource(R.raw.sinaidals32)
+                        if (nomer == 33) inputStream = r.openRawResource(R.raw.sinaidals33)
+                        if (nomer == 34) inputStream = r.openRawResource(R.raw.sinaidals34)
+                        if (nomer == 35) inputStream = r.openRawResource(R.raw.sinaidals35)
+                        if (nomer == 36) inputStream = r.openRawResource(R.raw.sinaidals36)
+                        if (nomer == 37) inputStream = r.openRawResource(R.raw.sinaidals37)
+                        if (nomer == 38) inputStream = r.openRawResource(R.raw.sinaidals38)
+                        if (nomer == 39) inputStream = r.openRawResource(R.raw.sinaidals39)
+                        if (nomer == 40) inputStream = r.openRawResource(R.raw.sinaidals40)
+                        if (nomer == 41) inputStream = r.openRawResource(R.raw.sinaidals41)
+                        if (nomer == 42) inputStream = r.openRawResource(R.raw.sinaidals42)
+                        if (nomer == 43) inputStream = r.openRawResource(R.raw.sinaidals43)
+                        if (nomer == 44) inputStream = r.openRawResource(R.raw.sinaidals44)
+                        if (nomer == 45) inputStream = r.openRawResource(R.raw.sinaidals45)
+                        if (nomer == 46) inputStream = r.openRawResource(R.raw.sinaidals46)
+                        if (nomer == 47) inputStream = r.openRawResource(R.raw.sinaidals47)
+                        if (nomer == 48) inputStream = r.openRawResource(R.raw.sinaidals48)
+                        if (nomer == 49) inputStream = r.openRawResource(R.raw.sinaidals49)
+                        if (nomer == 50) inputStream = r.openRawResource(R.raw.sinaidals50)
+                        if (nomer == 51) inputStream = r.openRawResource(R.raw.sinaidaln1)
+                        if (nomer == 52) inputStream = r.openRawResource(R.raw.sinaidaln2)
+                        if (nomer == 53) inputStream = r.openRawResource(R.raw.sinaidaln3)
+                        if (nomer == 54) inputStream = r.openRawResource(R.raw.sinaidaln4)
+                        if (nomer == 55) inputStream = r.openRawResource(R.raw.sinaidaln5)
+                        if (nomer == 56) inputStream = r.openRawResource(R.raw.sinaidaln6)
+                        if (nomer == 57) inputStream = r.openRawResource(R.raw.sinaidaln7)
+                        if (nomer == 58) inputStream = r.openRawResource(R.raw.sinaidaln8)
+                        if (nomer == 59) inputStream = r.openRawResource(R.raw.sinaidaln9)
+                        if (nomer == 60) inputStream = r.openRawResource(R.raw.sinaidaln10)
+                        if (nomer == 61) inputStream = r.openRawResource(R.raw.sinaidaln11)
+                        if (nomer == 62) inputStream = r.openRawResource(R.raw.sinaidaln12)
+                        if (nomer == 63) inputStream = r.openRawResource(R.raw.sinaidaln13)
+                        if (nomer == 64) inputStream = r.openRawResource(R.raw.sinaidaln14)
+                        if (nomer == 65) inputStream = r.openRawResource(R.raw.sinaidaln15)
+                        if (nomer == 66) inputStream = r.openRawResource(R.raw.sinaidaln16)
+                        if (nomer == 67) inputStream = r.openRawResource(R.raw.sinaidaln17)
+                        if (nomer == 68) inputStream = r.openRawResource(R.raw.sinaidaln18)
+                        if (nomer == 69) inputStream = r.openRawResource(R.raw.sinaidaln19)
+                        if (nomer == 70) inputStream = r.openRawResource(R.raw.sinaidaln20)
+                        if (nomer == 71) inputStream = r.openRawResource(R.raw.sinaidaln21)
+                        if (nomer == 72) inputStream = r.openRawResource(R.raw.sinaidaln22)
+                        if (nomer == 73) inputStream = r.openRawResource(R.raw.sinaidaln23)
+                        if (nomer == 74) inputStream = r.openRawResource(R.raw.sinaidaln24)
+                        if (nomer == 75) inputStream = r.openRawResource(R.raw.sinaidaln25)
+                        if (nomer == 76) inputStream = r.openRawResource(R.raw.sinaidaln26)
+                        if (nomer == 77) inputStream = r.openRawResource(R.raw.sinaidaln27)
+                    }
+                    if (inputStream != null) {
+                        val isr = InputStreamReader(inputStream)
+                        val reader = BufferedReader(isr)
+                        var line: String
+                        val builder = StringBuilder()
+                        reader.forEachLine {
+                            line = it
+                            if (line.contains("//")) {
+                                val t1 = line.indexOf("//")
+                                line = line.substring(0, t1).trim()
+                                if (line != "") builder.append(line).append("\n")
                             } else {
-                                r1.substring(vN)
+                                builder.append(line).append("\n")
                             }
+                        }
+                        inputStream.close()
+                        val split2 = builder.toString().split("===").toTypedArray()
+                        var r1 = split2[nomerglavy].trim()
+                        var r2: String
+                        val vN = r1.indexOf(nachalo)
+                        val vK1 = r1.indexOf(konec)
+                        val vK = r1.indexOf("\n", vK1)
+                        if (semuxa && nomer == 22) {
+                            r1 = r1.replace("\n", "<br>\n")
+                            val r3 = r1.split("\n").toTypedArray()
+                            val sb = StringBuilder()
+                            for (w in nachalo.toInt()..konec.toInt()) {
+                                sb.append(r3[w - 1])
+                            }
+                            r2 = sb.toString()
                         } else {
-                            r1
+                            r2 = if (vK1 != -1) {
+                                if (vK != -1) {
+                                    r1.substring(vN, vK)
+                                } else {
+                                    r1.substring(vN)
+                                }
+                            } else {
+                                r1
+                            }
                         }
+                        textViewZag = TextViewRobotoCondensed(context)
+                        textViewOpis = TextViewRobotoCondensed(context)
+                        textViewZag.setTextIsSelectable(true)
+                        textViewOpis.setTextIsSelectable(true)
+                        dzenNoch = k.getBoolean("dzen_noch", false)
+                        if (dzenNoch) {
+                            textViewZag.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                            textViewOpis.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                        } else {
+                            textViewZag.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+                            textViewOpis.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+                        }
+                        textViewZag.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                        textViewZag.setTypeface(null, Typeface.BOLD)
+                        if (semuxa) nazva = nazvaBel
+                        val kon: String = when {
+                            nachalo == konec -> {
+                                "$nazva $nomerglavy.$nachalo"
+                            }
+                            konec.contains("+-+") -> {
+                                "$nazva $nomerglavy"
+                            }
+                            else -> {
+                                "$nazva $nomerglavy.$nachalo-$konec"
+                            }
+                        }
+                        textViewZag.text = kon
+                        arrayList.add(textViewZag)
+                        textViewOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                        if (semuxa && nomer == 22) {
+                            textViewOpis.text = MainActivity.fromHtml(context.resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_opis, r2))
+                        } else textViewOpis.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_opis, r2)
+                    } else {
+                        textViewZag = TextViewRobotoCondensed(context)
+                        textViewOpis = TextViewRobotoCondensed(context)
+                        textViewZag.setTextIsSelectable(true)
+                        textViewOpis.setTextIsSelectable(true)
+                        dzenNoch = k.getBoolean("dzen_noch", false)
+                        if (dzenNoch) {
+                            textViewZag.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                            textViewOpis.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                        } else {
+                            textViewZag.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+                            textViewOpis.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+                        }
+                        textViewOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                        textViewOpis.setTypeface(null, Typeface.ITALIC)
+                        textViewZag.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                        textViewZag.setTypeface(null, Typeface.BOLD)
+                        if (semuxa) nazva = nazvaBel
+                        val kon: String = when {
+                            nachalo == konec -> {
+                                "$nazva $nomerglavy.$nachalo"
+                            }
+                            konec.contains("+-+") -> {
+                                "$nazva $nomerglavy"
+                            }
+                            else -> {
+                                "$nazva $nomerglavy.$nachalo-$konec"
+                            }
+                        }
+                        textViewZag.text = kon
+                        arrayList.add(textViewZag)
+                        textViewOpis.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "\n"
                     }
+                    arrayList.add(textViewOpis)
+                } catch (t: Throwable) {
                     textViewZag = TextViewRobotoCondensed(context)
                     textViewOpis = TextViewRobotoCondensed(context)
                     textViewZag.setTextIsSelectable(true)
@@ -449,6 +523,8 @@ class ParalelnyeMesta {
                         textViewZag.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
                         textViewOpis.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
                     }
+                    textViewOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                    textViewOpis.setTypeface(null, Typeface.ITALIC)
                     textViewZag.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
                     textViewZag.setTypeface(null, Typeface.BOLD)
                     if (semuxa) nazva = nazvaBel
@@ -465,43 +541,9 @@ class ParalelnyeMesta {
                     }
                     textViewZag.text = kon
                     arrayList.add(textViewZag)
-                    textViewOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                    if (semuxa && nomer == 22) { //CaseInsensitiveResourcesFontLoader fontLoader = new CaseInsensitiveResourcesFontLoader();
-                        textViewOpis.text = MainActivity.fromHtml(context.resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_opis, r2))
-                    } else textViewOpis.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_opis, r2)
-                } else {
-                    textViewZag = TextViewRobotoCondensed(context)
-                    textViewOpis = TextViewRobotoCondensed(context)
-                    textViewZag.setTextIsSelectable(true)
-                    textViewOpis.setTextIsSelectable(true)
-                    dzenNoch = k.getBoolean("dzen_noch", false)
-                    if (dzenNoch) {
-                        textViewZag.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                        textViewOpis.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                    } else {
-                        textViewZag.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-                        textViewOpis.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-                    }
-                    textViewOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                    textViewZag.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                    textViewZag.setTypeface(null, Typeface.BOLD)
-                    if (semuxa) nazva = nazvaBel
-                    val kon: String = when {
-                        nachalo == konec -> {
-                            "$nazva $nomerglavy.$nachalo"
-                        }
-                        konec.contains("+-+") -> {
-                            "$nazva $nomerglavy"
-                        }
-                        else -> {
-                            "$nazva $nomerglavy.$nachalo-$konec"
-                        }
-                    }
-                    textViewZag.text = kon
-                    arrayList.add(textViewZag)
-                    textViewOpis.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "\n"
+                    textViewOpis.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch) + "\n"
+                    arrayList.add(textViewOpis)
                 }
-                arrayList.add(textViewOpis)
             }
         }
         return arrayList

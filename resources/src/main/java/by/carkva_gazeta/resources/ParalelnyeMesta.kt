@@ -3,7 +3,6 @@ package by.carkva_gazeta.resources
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
-import android.util.Log
 import android.util.TypedValue
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.MainActivity

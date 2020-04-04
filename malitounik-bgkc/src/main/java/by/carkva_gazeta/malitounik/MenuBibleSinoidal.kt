@@ -23,7 +23,7 @@ class MenuBibleSinoidal : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val k = activity?.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val dzenNoch = k?.getBoolean("dzen_noch", false)
+        val dzenNoch = k?.getBoolean("dzen_noch", false)?: false
         novyZavet.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
@@ -39,7 +39,7 @@ class MenuBibleSinoidal : Fragment() {
             startActivity(Intent(activity, StaryZapavietSinaidal2::class.java))
         }
         prodolzych.setOnClickListener {
-            val bibleTime = k?.getString("bible_time_sinodal", "")
+            val bibleTime = k?.getString("bible_time_sinodal", "")?: ""
             if (bibleTime != "") {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
@@ -121,7 +121,7 @@ class MenuBibleSinoidal : Fragment() {
             }
         }
         umovy_karystannia.visibility = View.GONE
-        if (dzenNoch == true) {
+        if (dzenNoch) {
             activity?.let {
                 novyZavet.setBackgroundResource(R.drawable.knopka_red_black)
                 staryZavet.setBackgroundResource(R.drawable.knopka_red_black)

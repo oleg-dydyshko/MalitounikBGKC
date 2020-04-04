@@ -2567,6 +2567,7 @@ string appbar_scrolling_view_behavior
 string autoScrolloff
 string autoScrollon
 string autotext
+string bad_internet
 string bible_natatka
 string bible_no_chtenia
 string bible_time

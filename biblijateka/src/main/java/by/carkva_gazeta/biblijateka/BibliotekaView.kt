@@ -25,6 +25,7 @@ import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.util.Base64.DEFAULT
 import android.util.Base64.decode
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.Animation
@@ -143,8 +144,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         override fun onAnimationStart(animation: Animation) {}
         override fun onAnimationEnd(animation: Animation) {
             if (biblioteka != null) {
-                val t1: Int = fileName.lastIndexOf(".")
-                val dirName: String = fileName.substring(0, t1)
+                val t1 = fileName.lastIndexOf(".")
+                val dirName = if (t1 != -1) fileName.substring(0, t1)
+                else fileName
                 val dir = File("$filesDir/Book/$dirName/")
                 if (defaultPage - 1 >= 0) {
                     defaultPage--
@@ -170,8 +172,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         override fun onAnimationStart(animation: Animation) {}
         override fun onAnimationEnd(animation: Animation) {
             if (biblioteka != null) {
-                val t1: Int = fileName.lastIndexOf(".")
-                val dirName: String = fileName.substring(0, t1)
+                val t1 = fileName.lastIndexOf(".")
+                val dirName = if (t1 != -1) fileName.substring(0, t1)
+                else fileName
                 val dir = File("$filesDir/Book/$dirName/")
                 if (defaultPage + 1 < biblioteka?.content?.size ?: 0) {
                     defaultPage++
@@ -370,8 +373,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     override fun onDialogTitleString(page: String) {
-        val t1: Int = fileName.lastIndexOf(".")
-        val dirName: String = fileName.substring(0, t1)
+        val t1 = fileName.lastIndexOf(".")
+        val dirName = if (t1 != -1) fileName.substring(0, t1)
+        else fileName
         val dir = File("$filesDir/Book/$dirName/")
         webView.loadUrl("file://" + dir.absolutePath.toString() + "/" + page)
         defaultPage = biblioteka?.setPage(page) ?: 0
@@ -920,8 +924,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         val naidauCount: Int = naidaunia.size - 1
         if (biblioteka == null || naidaunia.size <= 0 || !naidaunia[naidauCount][1].contains(filePath)) {
             val file = File(filePath)
-            val t1: Int = fileName.lastIndexOf(".")
-            val dirName: String = fileName.substring(0, t1)
+            val t1 = fileName.lastIndexOf(".")
+            val dirName = if (t1 != -1) fileName.substring(0, t1)
+            else fileName
             val dir = File("$filesDir/Book/$dirName/")
             if (!dir.exists()) {
                 progressBar2.visibility = View.VISIBLE
@@ -1650,13 +1655,13 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     if (json != "") {
                         val type: Type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
                         arrayList.addAll(gson.fromJson(json, type))
+                        val temp: ArrayList<ArrayList<String>> = ArrayList()
+                        for (i in 0 until arrayList.size) {
+                            val rtemp2: Int = arrayList[i][4].toInt()
+                            if (rtemp2 != rub) temp.add(arrayList[i])
+                        }
+                        arrayList.removeAll(temp)
                     }
-                    val temp: ArrayList<ArrayList<String>> = ArrayList()
-                    for (i in 0 until arrayList.size) {
-                        val rtemp2: Int = arrayList[i][4].toInt()
-                        if (rtemp2 != rub) temp.add(arrayList[i])
-                    }
-                    arrayList.removeAll(temp)
                     adapter.notifyDataSetChanged()
                 }
             } else {
@@ -1680,10 +1685,18 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         val showUrl = "https://carkva-gazeta.by/biblioteka.php"
         val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, showUrl, null, Response.Listener { response: JSONObject ->
             Thread(Runnable {
+                val time = Calendar.getInstance().timeInMillis
+                var timeCansel = true
+                val arrayListTemp: ArrayList<ArrayList<String>> = ArrayList()
                 val temp: ArrayList<ArrayList<String>> = ArrayList()
                 val biblioteka = response.getJSONArray("biblioteka")
                 val gson = Gson()
                 for (i in 0 until biblioteka.length()) {
+                    val timeRun = Calendar.getInstance().timeInMillis
+                    if (timeRun - time > 30000) {
+                        timeCansel = false
+                        break
+                    }
                     val mySqlList: ArrayList<String> = ArrayList()
                     val kniga = biblioteka.getJSONObject(i)
                     val rubrika = kniga.getString("rubryka").toInt()
@@ -1729,14 +1742,32 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         }
                     }
                     if (rubrika == rub) {
-                        arrayList.add(mySqlList)
+                        arrayListTemp.add(mySqlList)
                     }
                     temp.add(mySqlList)
                 }
-                val json: String = gson.toJson(temp)
-                val prefEditors: SharedPreferences.Editor = k.edit()
-                prefEditors.putString("Biblioteka", json)
-                prefEditors.apply()
+                if (timeCansel) {
+                    val json: String = gson.toJson(temp)
+                    val prefEditors: SharedPreferences.Editor = k.edit()
+                    prefEditors.putString("Biblioteka", json)
+                    prefEditors.apply()
+                    arrayList.addAll(arrayListTemp)
+                } else {
+                    val json: String = k.getString("Biblioteka", "") ?: ""
+                    if (json != "") {
+                        val type: Type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
+                        arrayList.addAll(gson.fromJson(json, type))
+                        val temp2: ArrayList<ArrayList<String>> = ArrayList()
+                        for (i in 0 until arrayList.size) {
+                            val rtemp2: Int = arrayList[i][4].toInt()
+                            if (rtemp2 != rub) temp2.add(arrayList[i])
+                        }
+                        arrayList.removeAll(temp2)
+                    }
+                    runOnUiThread {
+                        showSqlToast()
+                    }
+                }
                 runOnUiThread {
                     adapter.notifyDataSetChanged()
                     progressBar2.visibility = View.GONE
@@ -1745,6 +1776,23 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }).start()
         }, Response.ErrorListener { })
         requestQueue.add(jsonObjectRequest)
+    }
+
+    private fun showSqlToast() {
+        val layout = LinearLayout(this)
+        if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
+        val density = resources.displayMetrics.density
+        val realpadding = (10 * density).toInt()
+        val toast = TextViewRobotoCondensed(this)
+        toast.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
+        toast.text = getString(by.carkva_gazeta.malitounik.R.string.bad_internet)
+        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+        layout.addView(toast)
+        val mes = Toast(this)
+        mes.duration = Toast.LENGTH_LONG
+        mes.view = layout
+        mes.show()
     }
 
     override fun onResume() {

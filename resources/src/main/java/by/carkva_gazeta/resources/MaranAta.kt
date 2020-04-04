@@ -337,7 +337,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             val reader = BufferedReader(inputStream)
             val gson = Gson()
             val type = object : TypeToken<ArrayList<ArrayList<Int?>?>?>() {}.type
-            vydelenie = gson.fromJson<ArrayList<ArrayList<Int>>>(reader.readText(), type)
+            vydelenie = gson.fromJson(reader.readText(), type)
             inputStream.close()
         }
         if (k.getBoolean("help_str", true)) {

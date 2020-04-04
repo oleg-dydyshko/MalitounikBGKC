@@ -4,7 +4,7 @@
             "outputFile": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "/home/oleg/.gradle/caches/transforms-2/files-2.1/d4e2c990a93746e8625fbcf721f3c4e7/core-1.2.0/res/values-v16/values-v16.xml",
+                    "source": "/home/oleg/.gradle/caches/transforms-2/files-2.1/163ba80aa74cf2b66a97b31641e8ba82/core-1.2.0/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -14,7 +14,7 @@
                     }
                 },
                 {
-                    "source": "/home/oleg/.gradle/caches/transforms-2/files-2.1/153c093b872ce71fbc12cfe7b8584cdf/appcompat-1.1.0/res/values-v16/values-v16.xml",
+                    "source": "/home/oleg/.gradle/caches/transforms-2/files-2.1/c718709a63172dec4cfffa1a59a58445/appcompat-1.1.0/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

@@ -14,10 +14,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.graphics.drawable.Drawable
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.SystemClock
+import android.os.*
 import android.provider.MediaStore
 import android.text.Spannable
 import android.text.SpannableString
@@ -25,7 +22,6 @@ import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.util.Base64.DEFAULT
 import android.util.Base64.decode
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.Animation
@@ -1765,7 +1761,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         arrayList.removeAll(temp2)
                     }
                     runOnUiThread {
-                        showSqlToast()
+                        showMessage(false, getString(by.carkva_gazeta.malitounik.R.string.bad_internet_title), getString(by.carkva_gazeta.malitounik.R.string.bad_internet_massege))
                     }
                 }
                 runOnUiThread {
@@ -1778,21 +1774,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         requestQueue.add(jsonObjectRequest)
     }
 
-    private fun showSqlToast() {
-        val layout = LinearLayout(this)
-        if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
-        val density = resources.displayMetrics.density
-        val realpadding = (10 * density).toInt()
-        val toast = TextViewRobotoCondensed(this)
-        toast.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-        toast.text = getString(by.carkva_gazeta.malitounik.R.string.bad_internet)
-        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
-        layout.addView(toast)
-        val mes = Toast(this)
-        mes.duration = Toast.LENGTH_LONG
-        mes.view = layout
-        mes.show()
+    private fun showMessage(sql: Boolean, title: String, message: String) {
+        DialogMessage.getInstance(sql, title, message).show(supportFragmentManager, "DialogMessage")
     }
 
     override fun onResume() {
@@ -1912,6 +1895,14 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         procentTimer.schedule(procentSchedule, 1000)
     }
 
+    @SuppressLint("StringFormatInvalid")
+    private fun copyToSdKard(fileName: String) {
+        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
+        if (!file.exists())
+            File("$filesDir/Biblijateka/$fileName").copyTo(file)
+        showMessage(true, getString(by.carkva_gazeta.malitounik.R.string.copy_to_sd_title), getString(by.carkva_gazeta.malitounik.R.string.copy_to_sd, fileName))
+    }
+
     private fun showPopupMenu(view: View, position: Int, name: String) {
         val popup = PopupMenu(this, view)
         val infl = popup.menuInflater
@@ -1919,8 +1910,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         val file = File("$filesDir/Biblijateka/" + arrayList[position][2])
         if (file.exists()) {
             popup.menu.getItem(1).isVisible = false
+            popup.menu.getItem(3).isVisible = true
         } else {
             popup.menu.getItem(2).isVisible = false
+            popup.menu.getItem(3).isVisible = false
             if (MainActivity.isIntNetworkAvailable(this) == 0)
                 popup.menu.getItem(1).isVisible = false
         }
@@ -1947,6 +1940,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     val dd = DialogDelite.getInstance(0, arrayList[position][2], "з бібліятэкі", name)
                     dd.show(supportFragmentManager, "dialog_delite")
                     return@setOnMenuItemClickListener true
+                }
+                R.id.menu_copy_to_sd -> {
+                    copyToSdKard(arrayList[position][2])
                 }
             }
             false

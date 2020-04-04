@@ -2567,7 +2567,8 @@ string appbar_scrolling_view_behavior
 string autoScrolloff
 string autoScrollon
 string autotext
-string bad_internet
+string bad_internet_massege
+string bad_internet_title
 string bible_natatka
 string bible_no_chtenia
 string bible_time
@@ -2631,6 +2632,8 @@ string chtinia_zag
 string clear_text_end_icon_content_description
 string content_open_popup
 string copy
+string copy_to_sd
+string copy_to_sd_title
 string copynadsan
 string dalshe
 string dazvolic

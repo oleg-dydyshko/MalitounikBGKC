@@ -1668,6 +1668,10 @@
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya13_2.html"
     },
     {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/debug/layout_akafist_fragment_paslia_prich.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_fragment_paslia_prich.xml"
+    },
+    {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/debug/raw_bogashlugbovya12_9.html.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya12_9.html"
     },
@@ -1866,6 +1870,10 @@
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/debug/raw_opisanie8.htm.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/opisanie8.htm"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/debug/layout_akafist_activity_paslia_prich.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_activity_paslia_prich.xml"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/debug/raw_bogashlugbovya1_3.html.flat",

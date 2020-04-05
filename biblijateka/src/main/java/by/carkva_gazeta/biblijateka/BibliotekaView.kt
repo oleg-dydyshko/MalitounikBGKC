@@ -1761,7 +1761,20 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         arrayList.removeAll(temp2)
                     }
                     runOnUiThread {
-                        showMessage(false, getString(by.carkva_gazeta.malitounik.R.string.bad_internet_title), getString(by.carkva_gazeta.malitounik.R.string.bad_internet_massege))
+                        val layout = LinearLayout(this)
+                        if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
+                        val density = resources.displayMetrics.density
+                        val realpadding = (10 * density).toInt()
+                        val toast = TextViewRobotoCondensed(this)
+                        toast.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
+                        toast.text = getString(by.carkva_gazeta.malitounik.R.string.bad_internet)
+                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                        layout.addView(toast)
+                        val mes = Toast(this)
+                        mes.duration = Toast.LENGTH_LONG
+                        mes.view = layout
+                        mes.show()
                     }
                 }
                 runOnUiThread {
@@ -1772,10 +1785,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }).start()
         }, Response.ErrorListener { })
         requestQueue.add(jsonObjectRequest)
-    }
-
-    private fun showMessage(sql: Boolean, title: String, message: String) {
-        DialogMessage.getInstance(sql, title, message).show(supportFragmentManager, "DialogMessage")
     }
 
     override fun onResume() {
@@ -1895,12 +1904,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         procentTimer.schedule(procentSchedule, 1000)
     }
 
-    @SuppressLint("StringFormatInvalid")
     private fun copyToSdKard(fileName: String) {
         val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
         if (!file.exists())
             File("$filesDir/Biblijateka/$fileName").copyTo(file)
-        showMessage(true, getString(by.carkva_gazeta.malitounik.R.string.copy_to_sd_title), getString(by.carkva_gazeta.malitounik.R.string.copy_to_sd, fileName))
+        DialogMessage.getInstance(fileName).show(supportFragmentManager, "DialogMessage")
     }
 
     private fun showPopupMenu(view: View, position: Int, name: String) {

@@ -56,7 +56,7 @@ class MalitvyPasliaPrychascia : AppCompatActivity() {
             mLastClickTime = SystemClock.elapsedRealtime()
             if (MainActivity.checkmoduleResources(this)) {
                 val intent = Intent(this, Class.forName("by.carkva_gazeta.resources.PasliaPrychascia"))
-                intent.putExtra("paslia_prychascia", position + 1)
+                intent.putExtra("paslia_prychascia", position)
                 startActivityForResult(intent, 300)
             } else {
                 val dadatak = DialogInstallDadatak()

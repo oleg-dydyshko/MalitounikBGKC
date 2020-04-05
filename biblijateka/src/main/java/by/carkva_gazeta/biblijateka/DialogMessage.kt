@@ -18,7 +18,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-import java.util.*
 
 /**
  * Created by oleg on 21.7.17
@@ -38,27 +37,22 @@ class DialogMessage : DialogFragment() {
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = arguments?.getString("title") ?: ""
+            textViewZaglavie.text = getString(R.string.copy_to_sd_title)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             linearLayout.addView(textViewZaglavie)
             val textView = TextViewRobotoCondensed(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView.text = arguments?.getString("massege") ?: ""
+            textView.text = String.format(getString(R.string.copy_to_sd), arguments?.getString("filename")?: "")
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             linearLayout.addView(textView)
             ad.setView(linearLayout)
-            val sql = arguments?.getBoolean("sql") ?: false
-            var okButtomtext = resources.getString(R.string.ok)
-            if (sql) {
-                okButtomtext = "Адчыніць"
-                ad.setNegativeButton(resources.getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int ->
-                    dialog.cancel()
-                }
+            ad.setNegativeButton(resources.getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int ->
+                dialog.cancel()
             }
-            ad.setPositiveButton(okButtomtext) { dialog: DialogInterface, _: Int ->
+            ad.setPositiveButton(getString(R.string.open_file_manager)) { dialog: DialogInterface, _: Int ->
                 val uri = Uri.parse(it.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString())
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.setDataAndType(uri, "*/*")
@@ -83,12 +77,10 @@ class DialogMessage : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(sql: Boolean, title: String, message: String): DialogMessage {
+        fun getInstance(filename: String): DialogMessage {
             val instance = DialogMessage()
             val args = Bundle()
-            args.putString("title", title)
-            args.putString("massege", message)
-            args.putBoolean("sql", sql)
+            args.putString("filename", filename)
             instance.arguments = args
             return instance
         }

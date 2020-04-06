@@ -40,7 +40,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private val mHideHandler: Handler = Handler()
     @SuppressLint("InlinedApi")
     private val mHidePart2Runnable = Runnable {
-        scrollView2.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+        constraint.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
                 or View.SYSTEM_UI_FLAG_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -1019,7 +1019,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun show() {
-        scrollView2.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        constraint.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         mHideHandler.removeCallbacks(mHidePart2Runnable)
         mHideHandler.postDelayed(mShowPart2Runnable, ulAnimationDelay.toLong())
     }

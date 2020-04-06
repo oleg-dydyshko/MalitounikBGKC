@@ -159,7 +159,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 webView.postDelayed({
                     startAutoScroll()
                 }, 300)
-            } //nextPageAutoScroll()
+            }
         }
 
         override fun onAnimationRepeat(animation: Animation) {}
@@ -212,7 +212,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     override fun fileDelite(position: Int, file: String) {
-        var file1 = File("$filesDir/Biblijateka/$file")
+        var file1 = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), file)
         if (file1.exists()) {
             file1.delete()
         } else {
@@ -256,11 +256,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
     }
 
-    override fun onDialogbibliatekaPositiveClick(listPosition: String?, title: String?) {
-        val file = File("$filesDir/Biblijateka/$listPosition")
+    override fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) {
+        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), listPosition)
         if (file.exists()) {
-            filePath = "$filesDir/Biblijateka/$listPosition"
-            fileName = title ?: ""
+            filePath = file.path
+            fileName = title
             loadFilePDF()
             listView.visibility = View.GONE
             webView.visibility = View.GONE
@@ -280,15 +280,15 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         progressBar2.visibility = View.VISIBLE
         Thread(Runnable {
             try {
-                val dir = File(this.filesDir.toString() + "/Biblijateka")
-                if (!dir.exists()) {
-                    dir.mkdir()
+                val dir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                if (dir?.exists() != true) {
+                    dir?.mkdir()
                 }
                 val myUrl = URL(url)
                 val last = url.lastIndexOf("/")
                 val uplFilename = url.substring(last + 1)
                 val inpstr: InputStream = myUrl.openStream()
-                val file = File(this.filesDir.toString() + "/Biblijateka/" + uplFilename)
+                val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), uplFilename)
                 val outputStream = FileOutputStream(file)
                 val buffer = ByteArray(1024)
                 var bytesRead: Int
@@ -299,7 +299,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 runOnUiThread {
                     adapter.notifyDataSetChanged()
                     progressBar2.visibility = View.GONE
-                    filePath = this.filesDir.toString() + "/Biblijateka/" + uplFilename
+                    filePath = file.path
                     fileName = uplFilename
                     loadFilePDF()
                     listView.visibility = View.GONE
@@ -409,14 +409,14 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         val temp: ArrayList<String> = ArrayList()
         temp.add(title)
         temp.add(filePath)
-        if (filePath.contains("/Biblijateka/")) {
-            val t2: Int = filePath.lastIndexOf("/")
-            val image: String = filePath.substring(t2 + 1)
-            val t1 = image.lastIndexOf(".")
+        val t2: Int = filePath.lastIndexOf("/")
+        val image: String = filePath.substring(t2 + 1)
+        val t1 = image.lastIndexOf(".")
+        val imageTemp = File(filesDir.toString() + "/image_temp/" + image.substring(0, t1) + ".png")
+        if (imageTemp.exists())
             temp.add(filesDir.toString() + "/image_temp/" + image.substring(0, t1) + ".png")
-        } else {
+        else
             temp.add("")
-        }
         naidaunia.add(temp)
         val prefEditor: SharedPreferences.Editor = k.edit()
         prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
@@ -448,6 +448,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
+        // Временно: удаление старых файлов из Библиотеки
+        File("$filesDir/Biblijateka").deleteRecursively()
+        ////////////////////////////////////
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         dzenNoch = k.getBoolean("dzen_noch", false)
@@ -471,7 +474,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 if (file.exists()) {
                     filePath = file.absolutePath
                     fileName = file.name
-                    if (!file.canonicalPath.startsWith(filesDir.canonicalPath)) {
+                    if (!File(arrayList[position][2]).exists()) {
                         val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         if (PackageManager.PERMISSION_DENIED == permissionCheck) {
                             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
@@ -545,7 +548,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     mes.show()
                 }
             } else {
-                file = File("$filesDir/Biblijateka/" + arrayList[position][2])
+                file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
                 if (file.exists()) {
                     filePath = file.absolutePath
                     fileName = file.name
@@ -1688,11 +1691,13 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 val biblioteka = response.getJSONArray("biblioteka")
                 val gson = Gson()
                 for (i in 0 until biblioteka.length()) {
+                    // Этот код не работает как надо
                     val timeRun = Calendar.getInstance().timeInMillis
                     if (timeRun - time > 30000) {
                         timeCansel = false
                         break
                     }
+                    ////////////////////////
                     val mySqlList: ArrayList<String> = ArrayList()
                     val kniga = biblioteka.getJSONObject(i)
                     val rubrika = kniga.getString("rubryka").toInt()
@@ -1904,24 +1909,15 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         procentTimer.schedule(procentSchedule, 1000)
     }
 
-    private fun copyToSdKard(fileName: String) {
-        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
-        if (!file.exists())
-            File("$filesDir/Biblijateka/$fileName").copyTo(file)
-        DialogMessage.getInstance(fileName).show(supportFragmentManager, "DialogMessage")
-    }
-
     private fun showPopupMenu(view: View, position: Int, name: String) {
         val popup = PopupMenu(this, view)
         val infl = popup.menuInflater
         infl.inflate(R.menu.popup_biblioteka, popup.menu)
-        val file = File("$filesDir/Biblijateka/" + arrayList[position][2])
+        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),arrayList[position][2])
         if (file.exists()) {
             popup.menu.getItem(1).isVisible = false
-            popup.menu.getItem(3).isVisible = true
         } else {
             popup.menu.getItem(2).isVisible = false
-            popup.menu.getItem(3).isVisible = false
             if (MainActivity.isIntNetworkAvailable(this) == 0)
                 popup.menu.getItem(1).isVisible = false
         }
@@ -1948,9 +1944,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     val dd = DialogDelite.getInstance(0, arrayList[position][2], "з бібліятэкі", name)
                     dd.show(supportFragmentManager, "dialog_delite")
                     return@setOnMenuItemClickListener true
-                }
-                R.id.menu_copy_to_sd -> {
-                    copyToSdKard(arrayList[position][2])
                 }
             }
             false

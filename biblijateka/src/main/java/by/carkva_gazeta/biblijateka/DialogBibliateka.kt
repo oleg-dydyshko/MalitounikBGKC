@@ -33,7 +33,7 @@ class DialogBibliateka : DialogFragment() {
     private lateinit var builder: AlertDialog.Builder
 
     internal interface DialogBibliatekaListener {
-        fun onDialogbibliatekaPositiveClick(listPosition: String?, title: String?) //void onDialogbibliatekaNeutralClick(String listPosition, String title);
+        fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) //void onDialogbibliatekaNeutralClick(String listPosition, String title);
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

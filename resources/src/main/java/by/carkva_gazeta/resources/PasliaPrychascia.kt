@@ -28,8 +28,6 @@ import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import kotlinx.android.synthetic.main.akafist_activity_paslia_prich.*
-import kotlinx.android.synthetic.main.akafist_activity_paslia_prich.constraint
-import kotlinx.android.synthetic.main.akafist_fragment_paslia_prich.*
 import java.util.*
 
 class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSizeListener {
@@ -327,7 +325,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
                             fontBiblia -= 4
                             prefEditor.putFloat("font_biblia", fontBiblia)
                             prefEditor.apply()
-                            TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                            onDialogFontSizePositiveClick()
                             var min = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
                             progress.text = "${fontBiblia.toInt()} sp$min"
@@ -340,7 +338,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
                             fontBiblia += 4
                             prefEditor.putFloat("font_biblia", fontBiblia)
                             prefEditor.apply()
-                            TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                            onDialogFontSizePositiveClick()
                             var max = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
                             progress.text = "${fontBiblia.toInt()} sp$max"

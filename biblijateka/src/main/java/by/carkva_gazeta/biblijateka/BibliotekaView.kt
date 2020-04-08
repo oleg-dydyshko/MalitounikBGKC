@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -70,7 +71,6 @@ import kotlin.collections.ArrayList
 
 class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener {
 
-    private var firstLiadSql = true
     private val uiAnimationDelaY = 300
     private val mHideHandler: Handler = Handler()
 
@@ -233,17 +233,19 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         var position1 = 0
         naidaunia.forEachIndexed { index, arrayList1 ->
-            if (arrayList1[0] == arrayList[position][0]) {
+            if (arrayList1[0] == arrayList[position][2]) {
                 position1 = index
             }
         }
-        arrayList.removeAt(position)
+        if (idSelect == R.id.label1) {
+            arrayList.removeAt(position)
+            adapter.notifyDataSetChanged()
+        }
         naidaunia.removeAt(position1)
         val gson = Gson()
         val prefEditor: SharedPreferences.Editor = k.edit()
         prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
         prefEditor.apply()
-        adapter.notifyDataSetChanged()
         popup?.menu?.getItem(2)?.isVisible = false
     }
 
@@ -448,7 +450,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        // Временно: удаление старых файлов из Библиотеки
+        // Временно: копирование и удаление старых файлов из Библиотеки
+        getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.let {
+            val file = File("$filesDir/Biblijateka")
+            if (file.exists())
+                file.copyRecursively(it, overwrite = true)
+        }
         File("$filesDir/Biblijateka").deleteRecursively()
         ////////////////////////////////////
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -456,8 +463,15 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.biblioteka_view)
-
+        try {
+            setContentView(R.layout.biblioteka_view)
+        } catch (t: Resources.NotFoundException) {
+            finish()
+            val i = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
+            i?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            i?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(i)
+        }
         pdfView = findViewById(R.id.pdfView)
 
         autoscroll = k.getBoolean("autoscroll", false)
@@ -1381,10 +1395,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             } else {
                 var rub = 1
                 when (idSelect) {
-                    by.carkva_gazeta.malitounik.R.id.label2 -> rub = 1
-                    by.carkva_gazeta.malitounik.R.id.label3 -> rub = 2
-                    by.carkva_gazeta.malitounik.R.id.label4 -> rub = 3
-                    by.carkva_gazeta.malitounik.R.id.label5 -> rub = 4
+                    R.id.label2 -> rub = 1
+                    R.id.label3 -> rub = 2
+                    R.id.label4 -> rub = 3
+                    R.id.label5 -> rub = 4
                 }
                 getSql(rub)
             }
@@ -1643,31 +1657,47 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             scrollViewB.visibility = View.GONE
         }
         if (rub != -1 && listView.visibility == View.VISIBLE) {
-            arrayList.clear()
-            if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(this) == 2) {
-                if (firstLiadSql) {
-                    getSql(rub)
-                    firstLiadSql = false
-                } else {
-                    val gson = Gson()
-                    val json: String = k.getString("Biblioteka", "") ?: ""
-                    if (json != "") {
-                        val type: Type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
-                        arrayList.addAll(gson.fromJson(json, type))
-                        val temp: ArrayList<ArrayList<String>> = ArrayList()
-                        for (i in 0 until arrayList.size) {
-                            val rtemp2: Int = arrayList[i][4].toInt()
-                            if (rtemp2 != rub) temp.add(arrayList[i])
-                        }
-                        arrayList.removeAll(temp)
+            val gson = Gson()
+            val json: String = k.getString("Biblioteka", "") ?: ""
+            val timeUpdate = Calendar.getInstance().timeInMillis
+            val timeUpdateSave = k.getLong("BibliotekaTimeUpdate", timeUpdate)
+            if (!(json == "" || timeUpdate - timeUpdateSave == 0L)) {
+                if (timeUpdate - timeUpdateSave > (30 * 24 * 60 * 60 * 1000L)) {
+                    if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(this) == 2) {
+                        val prefEditors: SharedPreferences.Editor = k.edit()
+                        prefEditors.putLong("BibliotekaTimeUpdate", timeUpdate)
+                        prefEditors.apply()
+                        getSql(rub)
+                    } else {
+                        arrayList.clear()
+                        adapter.notifyDataSetChanged()
+                        val noInternet = DialogNoInternet()
+                        noInternet.show(supportFragmentManager, "no_internet")
                     }
+                } else {
+                    arrayList.clear()
+                    val type: Type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
+                    arrayList.addAll(gson.fromJson(json, type))
+                    val temp: ArrayList<ArrayList<String>> = ArrayList()
+                    for (i in 0 until arrayList.size) {
+                        val rtemp2: Int = arrayList[i][4].toInt()
+                        if (rtemp2 != rub) temp.add(arrayList[i])
+                    }
+                    arrayList.removeAll(temp)
                     adapter.notifyDataSetChanged()
                 }
             } else {
-                arrayList.clear()
-                adapter.notifyDataSetChanged()
-                val noInternet = DialogNoInternet()
-                noInternet.show(supportFragmentManager, "no_internet")
+                if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(this) == 2) {
+                    val prefEditors: SharedPreferences.Editor = k.edit()
+                    prefEditors.putLong("BibliotekaTimeUpdate", timeUpdate)
+                    prefEditors.apply()
+                    getSql(rub)
+                } else {
+                    arrayList.clear()
+                    adapter.notifyDataSetChanged()
+                    val noInternet = DialogNoInternet()
+                    noInternet.show(supportFragmentManager, "no_internet")
+                }
             }
         }
         invalidateOptionsMenu()
@@ -1684,20 +1714,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         val showUrl = "https://carkva-gazeta.by/biblioteka.php"
         val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, showUrl, null, Response.Listener { response: JSONObject ->
             Thread(Runnable {
-                val time = Calendar.getInstance().timeInMillis
-                var timeCansel = true
-                val arrayListTemp: ArrayList<ArrayList<String>> = ArrayList()
                 val temp: ArrayList<ArrayList<String>> = ArrayList()
                 val biblioteka = response.getJSONArray("biblioteka")
                 val gson = Gson()
                 for (i in 0 until biblioteka.length()) {
-                    // Этот код не работает как надо
-                    val timeRun = Calendar.getInstance().timeInMillis
-                    if (timeRun - time > 30000) {
-                        timeCansel = false
-                        break
-                    }
-                    ////////////////////////
                     val mySqlList: ArrayList<String> = ArrayList()
                     val kniga = biblioteka.getJSONObject(i)
                     val rubrika = kniga.getString("rubryka").toInt()
@@ -1743,45 +1763,14 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         }
                     }
                     if (rubrika == rub) {
-                        arrayListTemp.add(mySqlList)
+                        arrayList.add(mySqlList)
                     }
                     temp.add(mySqlList)
                 }
-                if (timeCansel) {
-                    val json: String = gson.toJson(temp)
-                    val prefEditors: SharedPreferences.Editor = k.edit()
-                    prefEditors.putString("Biblioteka", json)
-                    prefEditors.apply()
-                    arrayList.addAll(arrayListTemp)
-                } else {
-                    val json: String = k.getString("Biblioteka", "") ?: ""
-                    if (json != "") {
-                        val type: Type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
-                        arrayList.addAll(gson.fromJson(json, type))
-                        val temp2: ArrayList<ArrayList<String>> = ArrayList()
-                        for (i in 0 until arrayList.size) {
-                            val rtemp2: Int = arrayList[i][4].toInt()
-                            if (rtemp2 != rub) temp2.add(arrayList[i])
-                        }
-                        arrayList.removeAll(temp2)
-                    }
-                    runOnUiThread {
-                        val layout = LinearLayout(this)
-                        if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
-                        val density = resources.displayMetrics.density
-                        val realpadding = (10 * density).toInt()
-                        val toast = TextViewRobotoCondensed(this)
-                        toast.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        toast.text = getString(by.carkva_gazeta.malitounik.R.string.bad_internet)
-                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
-                        layout.addView(toast)
-                        val mes = Toast(this)
-                        mes.duration = Toast.LENGTH_LONG
-                        mes.view = layout
-                        mes.show()
-                    }
-                }
+                val json: String = gson.toJson(temp)
+                val prefEditors: SharedPreferences.Editor = k.edit()
+                prefEditors.putString("Biblioteka", json)
+                prefEditors.apply()
                 runOnUiThread {
                     adapter.notifyDataSetChanged()
                     progressBar2.visibility = View.GONE
@@ -1913,7 +1902,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         val popup = PopupMenu(this, view)
         val infl = popup.menuInflater
         infl.inflate(R.menu.popup_biblioteka, popup.menu)
-        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),arrayList[position][2])
+        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
         if (file.exists()) {
             popup.menu.getItem(1).isVisible = false
         } else {

@@ -347,9 +347,5 @@
     <string name="share">Падзяліцьца&#8230;</string>
     <string name="slugby_vialikaga_postu">Службы Вялікага посту</string>
     <string name="bad_internet">ДРЭННАЕ ІНТЭРНЭТ ЗЛУЧЭНЬНЕ/nПраверце якасьць сігналу</string>
-    <string name="copy_to_sd_title">ФАЙЛ СКАПІЯВАНЫ</string>
-    <string name="copy_to_sd">Файл \"%1$s\" скапіяваны.\nАдкрыйце яго ў файлавым мэнэджары.</string>
-    <string name="menu_copy_to_sd">Скапіяваць на SD-карту</string>
-    <string name="open_file_manager">Адчыніць</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

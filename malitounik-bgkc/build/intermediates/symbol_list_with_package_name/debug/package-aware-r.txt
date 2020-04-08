@@ -2631,8 +2631,6 @@ string chtinia_zag
 string clear_text_end_icon_content_description
 string content_open_popup
 string copy
-string copy_to_sd
-string copy_to_sd_title
 string copynadsan
 string dalshe
 string dazvolic
@@ -2683,7 +2681,6 @@ string maranata
 string maranata2
 string maranata_opis
 string mc_5_3_12
-string menu_copy_to_sd
 string mtrl_badge_numberless_content_description
 string mtrl_chip_close_icon_content_description
 string mtrl_exceed_max_badge_number_suffix
@@ -2734,7 +2731,6 @@ string notify_help
 string novsinaidal
 string novy_zapaviet
 string ok
-string open_file_manager
 string opisanie
 string padzeia_off
 string padzeia_on

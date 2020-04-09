@@ -397,7 +397,10 @@ class PageFragmentStaryZapavietSinaidal : ListFragment(), OnItemLongClickListene
         val split = reader.readText().split("===").toTypedArray()
         inputStream.close()
         val bibleline = split[page + 1].split("\n").toTypedArray()
-        bible.addAll(listOf(*bibleline).subList(1, bibleline.size))
+        bibleline.forEach {
+            if (it.trim() != "")
+                bible.add(it)
+        }
         activity?.let {
             val adapter = ExpArrayAdapterParallel(it, bible, kniga, page, false, 2)
             listView.divider = null

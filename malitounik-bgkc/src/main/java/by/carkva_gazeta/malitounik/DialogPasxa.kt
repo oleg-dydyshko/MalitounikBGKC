@@ -8,6 +8,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.text.InputType
 import android.util.TypedValue
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -76,6 +77,26 @@ class DialogPasxa : DialogFragment() {
             }
             input.inputType = InputType.TYPE_CLASS_NUMBER
             input.requestFocus()
+            input.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    // Скрываем клавиатуру
+                    val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm1.hideSoftInputFromWindow(input.windowToken, 0)
+                    if (input.text.toString() == "") {
+                        error()
+                    } else {
+                        value = input.text.toString().toInt()
+                        if (value in 1583..2089) {
+                            mListener.setPasxa(value)
+                        } else {
+                            error()
+                        }
+                    }
+                    dialog?.cancel()
+                }
+                false
+            }
+            input.imeOptions = EditorInfo.IME_ACTION_GO
             // Показываем клавиатуру
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)

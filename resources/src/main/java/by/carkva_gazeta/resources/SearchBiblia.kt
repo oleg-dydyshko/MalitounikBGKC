@@ -39,7 +39,7 @@ import kotlin.collections.ArrayList
  */
 class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSearshListiner {
     private var seash: ArrayList<String> = ArrayList()
-    private var adapter: SearchBibliaListAdaprer? = null
+    private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
     private var dzenNoch = false
     private var mLastClickTime: Long = 0
@@ -113,7 +113,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         if (zavet == 1) title = resources.getString(by.carkva_gazeta.malitounik.R.string.poshuk_semuxa)
         if (zavet == 2) title = resources.getString(by.carkva_gazeta.malitounik.R.string.poshuk_sinoidal)
         if (zavet == 3) title = resources.getString(by.carkva_gazeta.malitounik.R.string.poshuk_nadsan)
-        editText.setOnEditorActionListener(OnEditorActionListener { _: TextView?, actionId: Int, _: KeyEvent? ->
+        editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val edit = editText.text.toString()
                 if (edit.length >= 3) {
@@ -136,10 +136,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                     mes.show()
                 }
                 editText.setSelection(edit.length)
-                return@OnEditorActionListener true
             }
             false
-        })
+        }
         editText.imeOptions = EditorInfo.IME_ACTION_SEARCH
         TextView.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, seash.size)
         adapter = SearchBibliaListAdaprer(this)
@@ -156,7 +155,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         })
         editText.setText(chin.getString("search_string", ""))
         editText2.setText(chin.getString("search_string_filter", ""))
-        adapterReference = WeakReference<ArrayAdapter<String>>(adapter)
+        adapterReference = WeakReference(adapter)
         if (dzenNoch) TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
         ListView.setOnItemClickListener { adapterView: AdapterView<*>, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -430,7 +429,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         val idSelect = view?.id ?: 0
         if (idSelect == R.id.buttonx) {
             searche = true
-            adapter?.clear()
+            adapter.clear()
             editText.setText("")
             editText.requestFocus()
             prefEditors.putString("search_string", "")
@@ -444,7 +443,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         }
     }
 
-    internal class Poshuk(context: Activity) : AsyncTask<String, Void, ArrayList<String>>() {
+    private class Poshuk(context: Activity) : AsyncTask<String, Void, ArrayList<String>>() {
         private val activityReference: WeakReference<Activity> = WeakReference(context)
         private val chin: SharedPreferences = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private var prefEditors: Editor = chin.edit()
@@ -541,7 +540,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                     editText.addTextChangedListener(this)
                 }
             }
-            if (filtep) adapter?.filter?.filter(edit)
+            if (filtep) adapter.filter.filter(edit)
         }
 
     }
@@ -627,7 +626,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     companion object {
         private var zavet = 1
-        private var adapterReference: WeakReference<ArrayAdapter<String>>? = null
+        private var adapterReference: WeakReference<SearchBibliaListAdaprer>? = null
         private var setSinodalBible: ArrayMap<String, Int> = ArrayMap()
         private var setSemuxaBible: ArrayMap<String, Int> = ArrayMap()
         private var searche = false

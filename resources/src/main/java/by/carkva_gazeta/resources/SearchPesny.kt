@@ -12,6 +12,7 @@ import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
 import android.widget.AdapterView
@@ -91,6 +92,15 @@ class SearchPesny : AppCompatActivity() {
             intent.putExtra("resultat", strText)
             startActivity(intent)
         }
+        editText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                // Скрываем клавиатуру
+                val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm1.hideSoftInputFromWindow(editText.windowToken, 0)
+            }
+            false
+        }
+        editText.imeOptions = EditorInfo.IME_ACTION_GO
         editText.addTextChangedListener(MyTextWatcher())
         setTollbarTheme()
     }
@@ -264,6 +274,7 @@ class SearchPesny : AppCompatActivity() {
             if (editch) {
                 var edit = s.toString()
                 edit = edit.replace("и", "і")
+                edit = edit.replace("И", "І")
                 edit = edit.replace("щ", "ў")
                 edit = edit.replace("ъ", "'")
                 if (edit.length >= 3) {

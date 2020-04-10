@@ -13,9 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.provider.Settings
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.TextUtils
+import android.text.*
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.Menu
@@ -86,6 +84,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     private lateinit var am: AlarmManager
     private var menu: Menu? = null
     private var mLastClickTime: Long = 0
+    private lateinit var colorAdapter: ColorAdapter
+    private var nazvaPadzei = "Назва падзеі"
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
@@ -174,7 +174,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         munG = c[Calendar.MONTH]
         da = nol1 + c[Calendar.DAY_OF_MONTH] + "." + nol2 + (c[Calendar.MONTH] + 1) + "." + c[Calendar.YEAR]
         ta = "$timeH:00"
-        spinner5.setSelection(0)
         color = 0
         label1.text = da
         val notifi = arrayOf("хвілінаў", "часоў", "дзён", "тыдняў")
@@ -214,7 +213,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-        spinner5.adapter = ColorAdapter(this)
+        colorAdapter = ColorAdapter(this)
+        spinner5.adapter = colorAdapter
         spinner5.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 color = position
@@ -223,6 +223,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+        spinner5.setSelection(0)
         label1.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
@@ -480,7 +481,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val dialogShowSabytie = getInstance(title, data, time, dataK, timeK, res)
             dialogShowSabytie.show(supportFragmentManager, "sabytie")
         }
-        editSave = editText.text.toString()
+        editText.addTextChangedListener(MyTextWatcher())
+        editSave = editText.text.toString().trim()
         edit2Save = editText2.text.toString()
         daSave = label1.text.toString()
         taSave = label2.text.toString()
@@ -532,7 +534,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
         }
         repitL = p.repit
-        editSave = editText.text.toString()
+        editSave = editText.text.toString().trim()
         edit2Save = editText2.text.toString()
         daSave = label1.text.toString()
         taSave = label2.text.toString()
@@ -661,7 +663,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
         repitL = p.repit
         time = timeC
-        editSave = editText.text.toString()
+        editSave = editText.text.toString().trim()
         edit2Save = editText2.text.toString()
         daSave = label1.text.toString()
         taSave = label2.text.toString()
@@ -671,7 +673,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     }
 
     override fun onBackPressed() {
-        val editSaveN = editText.text.toString()
+        val editSaveN = editText.text.toString().trim()
         val edit2SaveN = editText2.text.toString()
         val edit4SaveN = editText4.text.toString()
         val daSaveN = label1.text.toString()
@@ -925,7 +927,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         if (id == R.id.action_save) {
             redak = true
             back = false
-            val edit = editText.text.toString()
+            val edit = editText.text.toString().trim()
             var edit2 = editText2.text.toString()
             da = label1.text.toString()
             ta = label2.text.toString()
@@ -1609,7 +1611,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             redak = true
             back = false
             val p = MainActivity.padzeia[nomer]
-            val edit = editText.text.toString()
+            val edit = editText.text.toString().trim()
             var edit2 = editText2.text.toString()
             da = label1.text.toString()
             ta = label2.text.toString()
@@ -2546,7 +2548,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             spinner4.setSelection(0)
             spinner5.setSelection(0)
             color = 0
-            editSave = editText.text.toString()
+            editSave = editText.text.toString().trim()
             edit2Save = editText2.text.toString()
             daSave = label1.text.toString()
             taSave = label2.text.toString()
@@ -2576,7 +2578,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         outState.putBoolean("back", back)
     }
 
-    internal inner class SabytieAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_3, R.id.label, sabytie2 as List<String>) {
+    private inner class SabytieAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_3, R.id.label, sabytie2 as List<String>) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -2637,7 +2639,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         var buttonPopup: ImageView? = null
     }
 
-    internal inner class ColorAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_color, R.id.label, colors) {
+    private inner class ColorAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_color, R.id.label, colors) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolderColor
@@ -2651,7 +2653,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 viewHolder = rootView.tag as ViewHolderColor
             }
             viewHolder.text?.setBackgroundColor(Color.parseColor(colors[position]))
-            viewHolder.text?.text = "Назва падзеі"
+            viewHolder.text?.text = nazvaPadzei
             viewHolder.text?.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             viewHolder.text?.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
             return rootView
@@ -2661,14 +2663,14 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val view = super.getDropDownView(position, convertView, parent)
             val text: TextView = view.findViewById(R.id.label)
             text.setBackgroundColor(Color.parseColor(colors[position]))
-            text.text = "Назва падзеі"
+            text.text = nazvaPadzei
             text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             text.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
             return view
         }
     }
 
-    internal inner class SpinnerAdapter(context: Context, list: Array<String>) : ArrayAdapter<String>(context, R.layout.simple_list_item_1, list) {
+    private inner class SpinnerAdapter(context: Context, list: Array<String>) : ArrayAdapter<String>(context, R.layout.simple_list_item_1, list) {
         private val spinnerList = list
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -2702,6 +2704,37 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
     private class ViewHolderColor {
         var text: TextViewRobotoCondensed? = null
+    }
+
+    private inner class MyTextWatcher : TextWatcher {
+        private var editPosition = 0
+        private var check = 0
+        private var editch = true
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            editch = count != after
+            check = after
+        }
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            editPosition = start + count
+        }
+
+        override fun afterTextChanged(s: Editable) {
+            if (editch) {
+                val edit = s.toString()
+                nazvaPadzei = if (edit != "")
+                    edit
+                else
+                    "Назва падзеі"
+                colorAdapter.notifyDataSetChanged()
+                if (check != 0) {
+                    editText.removeTextChangedListener(this)
+                    editText.setText(edit)
+                    editText.setSelection(editPosition)
+                    editText.addTextChangedListener(this)
+                }
+            }
+        }
     }
 
     companion object {

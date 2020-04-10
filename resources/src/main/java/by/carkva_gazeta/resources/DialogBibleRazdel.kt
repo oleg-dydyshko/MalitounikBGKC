@@ -8,6 +8,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.text.InputType
 import android.util.TypedValue
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -27,6 +28,7 @@ class DialogBibleRazdel : DialogFragment() {
     private lateinit var input: EditTextRobotoCondensed
     private var mListener: DialogBibleRazdelListener? = null
     private lateinit var builder: AlertDialog.Builder
+    private var dzenNoch = false
 
     internal interface DialogBibleRazdelListener {
         fun onComplete(glava: Int)
@@ -56,7 +58,7 @@ class DialogBibleRazdel : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            dzenNoch = k.getBoolean("dzen_noch", false)
             builder = AlertDialog.Builder(it)
             val linearLayout2 = LinearLayout(it)
             linearLayout2.orientation = LinearLayout.VERTICAL
@@ -91,6 +93,14 @@ class DialogBibleRazdel : DialogFragment() {
             }
             input.setPadding(realpadding, realpadding, realpadding, realpadding) //10, 0, 0, 0
             input.requestFocus()
+            input.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    goRazdel()
+                    dialog?.cancel()
+                }
+                false
+            }
+            input.imeOptions = EditorInfo.IME_ACTION_GO
             // Показываем клавиатуру
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
@@ -101,10 +111,48 @@ class DialogBibleRazdel : DialogFragment() {
                 dialog.cancel()
             }
             builder.setPositiveButton(resources.getString(R.string.ok)) { _: DialogInterface?, _: Int ->
-                // Скрываем клавиатуру
-                val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm1.hideSoftInputFromWindow(input.windowToken, 0)
-                if (input.text.toString() == "") {
+                goRazdel()
+            }
+        }
+        val alert = builder.create()
+        alert.setOnShowListener {
+            val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
+            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+            val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
+            btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+        }
+        return alert
+    }
+
+    private fun goRazdel() {
+        activity?.let {
+            // Скрываем клавиатуру
+            val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm1.hideSoftInputFromWindow(input.windowToken, 0)
+            val density = resources.displayMetrics.density
+            val realpadding = (10 * density).toInt()
+            if (input.text.toString() == "") {
+                val layout = LinearLayout(it)
+                if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
+                val toast = TextViewRobotoCondensed(it)
+                toast.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                toast.setPadding(realpadding, realpadding, realpadding, realpadding)
+                toast.text = getString(R.string.error)
+                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+                layout.addView(toast)
+                val mes = Toast(it)
+                mes.duration = Toast.LENGTH_SHORT
+                mes.view = layout
+                mes.show()
+            } else {
+                val value: Int = try {
+                    input.text.toString().toInt() - 1
+                } catch (e: NumberFormatException) {
+                    -1
+                }
+                if (value in 0 until fullGlav) {
+                    mListener?.onComplete(value)
+                } else {
                     val layout = LinearLayout(it)
                     if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
                     val toast = TextViewRobotoCondensed(it)
@@ -117,39 +165,9 @@ class DialogBibleRazdel : DialogFragment() {
                     mes.duration = Toast.LENGTH_SHORT
                     mes.view = layout
                     mes.show()
-                } else {
-                    val value: Int = try {
-                        input.text.toString().toInt() - 1
-                    } catch (e: NumberFormatException) {
-                        -1
-                    }
-                    if (value in 0 until fullGlav) {
-                        mListener?.onComplete(value)
-                    } else {
-                        val layout = LinearLayout(it)
-                        if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-                        val toast = TextViewRobotoCondensed(it)
-                        toast.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        toast.text = getString(R.string.error)
-                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
-                        layout.addView(toast)
-                        val mes = Toast(it)
-                        mes.duration = Toast.LENGTH_SHORT
-                        mes.view = layout
-                        mes.show()
-                    }
                 }
             }
         }
-        val alert = builder.create()
-        alert.setOnShowListener {
-            val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
-            val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-            btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
-        }
-        return alert
     }
 
     companion object {

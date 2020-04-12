@@ -34,6 +34,7 @@ import android.webkit.WebViewClient
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -69,7 +70,7 @@ import javax.xml.parsers.ParserConfigurationException
 import kotlin.collections.ArrayList
 
 
-class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener {
+class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
 
     private val uiAnimationDelaY = 300
     private val mHideHandler: Handler = Handler()
@@ -578,11 +579,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
             }
         }
-        listView.setOnItemLongClickListener { _, _, position, _ ->
-            val dd = DialogDelite.getInstance(position, arrayList[position][1], "з нядаўніх кніг", arrayList[position][0])
-            dd.show(supportFragmentManager, "dialog_dilite")
-            true
-        }
 
         animInRight = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_right)
         animOutRight = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_out_right)
@@ -839,6 +835,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 listView.visibility = View.GONE
             }
         }
+    }
+
+    override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
+        val dd = DialogDelite.getInstance(position, arrayList[position][1], "з нядаўніх кніг", arrayList[position][0])
+        dd.show(supportFragmentManager, "dialog_dilite")
+        return true
     }
 
     private fun loadFilePDF() {
@@ -1250,9 +1252,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         autoscroll = k.getBoolean("autoscroll", false)
+        val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_trash).isVisible = listView.visibility == View.VISIBLE && idSelect == R.id.label1
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_update).isVisible = listView.visibility == View.VISIBLE && (idSelect == R.id.label2 || idSelect == R.id.label3 || idSelect == R.id.label4 || idSelect == R.id.label5)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
+        itemAuto.isVisible = false
         if (listView.visibility == View.GONE) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).isVisible = true
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_set_page).isVisible = true
@@ -1267,29 +1270,35 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 if (autoscroll) {
                     menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
                     menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
-                    menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title = (resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff))
+                    itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+                    itemAuto.title = getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
                 } else {
                     menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
                     menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
-                    menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title = (resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon))
+                    itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                    itemAuto.title = getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
                 }
                 when {
                     fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
                         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = false
-                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
+                        itemAuto.isVisible = false
                     }
                     fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
                         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = false
-                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = true
+                        itemAuto.isVisible = true
                     }
                     else -> {
                         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = true
-                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = true
+                        itemAuto.isVisible = true
                     }
                 }
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_set_page).isVisible = false
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isVisible = false
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_font).isVisible = true
+                val spanString = SpannableString(itemAuto.title.toString())
+                val end = spanString.length
+                spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                itemAuto.title = spanString
             }
         } else {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = false
@@ -1600,6 +1609,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
             label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
         }
+        if (idSelect == R.id.label1)
+            listView.onItemLongClickListener = this
+        else
+            listView.onItemLongClickListener = null
         when (idSelect) {
             R.id.label1 -> {
                 progressBar2.visibility = View.GONE
@@ -1880,6 +1893,19 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
+    override fun onMenuOpened(featureId: Int, menu: Menu?): Boolean {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = true
+        }
+        return menu?.let { super.onMenuOpened(featureId, it) } ?: true
+    }
+
+    override fun onPanelClosed(featureId: Int, menu: Menu) {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = false
+        }
+    }
+
     private fun stopProcent() {
         procentTimer.cancel()
         procentSchedule = null
@@ -1932,6 +1958,14 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 R.id.menu_delite -> {
                     val dd = DialogDelite.getInstance(0, arrayList[position][2], "з бібліятэкі", name)
                     dd.show(supportFragmentManager, "dialog_delite")
+                    return@setOnMenuItemClickListener true
+                }
+                R.id.menu_share -> {
+                    /*val sendIntent = Intent()
+                    sendIntent.action = Intent.ACTION_SEND
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=2&file=$resurs")
+                    sendIntent.type = "text/plain"
+                    startActivity(Intent.createChooser(sendIntent, null))*/
                     return@setOnMenuItemClickListener true
                 }
             }

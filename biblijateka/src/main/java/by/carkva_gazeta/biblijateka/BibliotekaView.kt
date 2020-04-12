@@ -1733,7 +1733,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 for (i in 0 until biblioteka.length()) {
                     val mySqlList: ArrayList<String> = ArrayList()
                     val kniga = biblioteka.getJSONObject(i)
-                    val rubrika = kniga.getString("rubryka").toInt()
+                    val id = kniga.getString("bib")
+                    val rubrika = kniga.getString("rubryka")
                     val link = kniga.getString("link")
                     var str = kniga.getString("str")
                     val pdf = kniga.getString("pdf")
@@ -1755,13 +1756,14 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         (conn as HttpURLConnection?)?.disconnect()
                     }
                     mySqlList.add(filesize)
-                    mySqlList.add(rubrika.toString())
+                    mySqlList.add(rubrika)
                     val im1 = image.indexOf("src=\"")
                     val im2 = image.indexOf("\"", im1 + 5)
                     image = "https://carkva-gazeta.by" + image.substring(im1 + 5, im2)
                     val t1 = pdf.lastIndexOf(".") //image.lastIndexOf("/")
                     val imageLocal: String = filesDir.toString() + "/image_temp/" + pdf.substring(0, t1) + ".png" //image.substring(t1 + 1)
                     mySqlList.add(imageLocal)
+                    mySqlList.add(id)
                     if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(this) == 2) {
                         val dir = File("$filesDir/image_temp")
                         if (!dir.exists()) dir.mkdir()
@@ -1775,7 +1777,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                             }
                         }
                     }
-                    if (rubrika == rub) {
+                    if (rubrika.toInt() == rub) {
                         arrayList.add(mySqlList)
                     }
                     temp.add(mySqlList)
@@ -1943,6 +1945,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
+        if (arrayList[position].size < 7)
+            popup.menu.getItem(3).isVisible = false
         popup.setOnMenuItemClickListener { menuItem: MenuItem ->
             popup.dismiss()
             when (menuItem.itemId) {
@@ -1961,11 +1965,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     return@setOnMenuItemClickListener true
                 }
                 R.id.menu_share -> {
-                    /*val sendIntent = Intent()
+                    val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=2&file=$resurs")
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/index.php?bib=${arrayList[position][6]}")
                     sendIntent.type = "text/plain"
-                    startActivity(Intent.createChooser(sendIntent, null))*/
+                    startActivity(Intent.createChooser(sendIntent, null))
                     return@setOnMenuItemClickListener true
                 }
             }

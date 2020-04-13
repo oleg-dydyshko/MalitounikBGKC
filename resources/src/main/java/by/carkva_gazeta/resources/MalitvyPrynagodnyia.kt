@@ -220,7 +220,7 @@ class MalitvyPrynagodnyia : AppCompatActivity() {
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
-    internal inner class MenuListAdaprer(private val context: Activity) : ArrayAdapter<MenuListData?>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, data as List<MenuListData>) {
+    private inner class MenuListAdaprer(private val context: Activity) : ArrayAdapter<MenuListData?>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, data as List<MenuListData>) {
         private val k: SharedPreferences = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private val origData: ArrayList<MenuListData> = ArrayList(data)
 

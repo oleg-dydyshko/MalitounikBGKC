@@ -1,10 +1,18 @@
 package by.carkva_gazeta.malitounik
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.ListView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.ListFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -21,7 +29,7 @@ class CaliandarNedzel : ListFragment() {
     private var count = 0
     private val strings = ArrayList<ArrayList<String>>()
     private val strings2 = ArrayList<ArrayList<String>>()
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         year = arguments?.getInt("year") ?: SettingsActivity.GET_CALIANDAR_YEAR_MIN
@@ -100,10 +108,9 @@ class CaliandarNedzel : ListFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         jsonFile
-        val str = arrayOfNulls<String>(7)
-        
+
         activity?.let {
-            listAdapter = CaliandarNedzelListAdapter(it, strings2, str)
+            listAdapter = CaliandarNedzelListAdapter(it)
         }
 
         if (setDenNedeli) {
@@ -133,6 +140,104 @@ class CaliandarNedzel : ListFragment() {
         intent.putExtra("year", strings2[position][3].toInt())
         activity?.setResult(Activity.RESULT_OK, intent)
         activity?.finish()
+    }
+
+    private inner class CaliandarNedzelListAdapter(private val mContext: Activity) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.calaindar_nedel, strings2) {
+        private val c: GregorianCalendar = Calendar.getInstance() as GregorianCalendar
+        private val chin: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        private val munName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
+        private val nedelName = arrayOf("", "нядзеля", "панядзелак", "аўторак", "серада", "чацьвер", "пятніца", "субота")
+
+        @SuppressLint("SetTextI18n")
+        override fun getView(position: Int, rootView: View?, parent: ViewGroup): View {
+            val view: View
+            val viewHolder: ViewHolder
+            if (rootView == null) {
+                view = mContext.layoutInflater.inflate(R.layout.calaindar_nedel, parent, false)
+                viewHolder = ViewHolder()
+                view.tag = viewHolder
+                viewHolder.textCalendar = view.findViewById(R.id.textCalendar)
+                viewHolder.textPraz = view.findViewById(R.id.textCviatyGlavnyia)
+                viewHolder.textSviat = view.findViewById(R.id.textSviatyia)
+                viewHolder.textPostS = view.findViewById(R.id.textPost)
+                viewHolder.linearLayout = view.findViewById(R.id.linearView)
+            } else {
+                view = rootView
+                viewHolder = view.tag as ViewHolder
+            }
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            //по умолчанию
+            viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+            viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorDivider))
+            viewHolder.textSviat?.visibility = View.VISIBLE
+            viewHolder.textPraz?.visibility = View.GONE
+            viewHolder.textPostS?.visibility = View.GONE
+            viewHolder.textPraz?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+            viewHolder.textPraz?.setTypeface(null, Typeface.BOLD)
+            if (dzenNoch) {
+                viewHolder.textSviat?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                viewHolder.textPraz?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
+            }
+            if (c[Calendar.YEAR] == strings2[position][3].toInt() && c[Calendar.DATE] == strings2[position][1].toInt() && c[Calendar.MONTH] == strings2[position][2].toInt()) {
+                if (dzenNoch) viewHolder.linearLayout?.setBackgroundResource(R.drawable.calendar_nedel_today_black) else viewHolder.linearLayout?.setBackgroundResource(R.drawable.calendar_nedel_today)
+            } else {
+                viewHolder.linearLayout?.setBackgroundResource(0)
+            }
+            if (strings2[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar?.text = nedelName[strings2[position][0].toInt()] + " " + strings2[position][1] + " " + munName[strings2[position][2].toInt()] + ", " + strings2[position][3] else viewHolder.textCalendar?.text = nedelName[strings2[position][0].toInt()] + " " + strings2[position][1] + " " + munName[strings2[position][2].toInt()]
+            //viewHolder.textPraz.setText(strings2.get(position).get(3)); Год
+            var sviatyia = strings2[position][4]
+            if (dzenNoch) {
+                sviatyia = sviatyia.replace("#d00505", "#f44336")
+            }
+            viewHolder.textSviat?.text = MainActivity.fromHtml(sviatyia)
+            if (strings2[position][4].contains("no_sviatyia")) viewHolder.textSviat?.visibility = View.GONE
+            viewHolder.textPraz?.text = strings2[position][6]
+            if (!strings2[position][6].contains("no_sviaty")) viewHolder.textPraz?.visibility = View.VISIBLE
+            // убот = субота
+            if (strings2[position][6].contains("Пачатак") || strings2[position][6].contains("Вялікі") || strings2[position][6].contains("Вялікая") || strings2[position][6].contains("убот") || strings2[position][6].contains("ВЕЧАР") || strings2[position][6].contains("Палова")) {
+                viewHolder.textPraz?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                viewHolder.textPraz?.setTypeface(null, Typeface.NORMAL)
+            }
+            if (strings2[position][5].contains("1") || strings2[position][5].contains("2") || strings2[position][5].contains("3")) {
+                viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                if (dzenNoch) viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black)) else viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+            } else if (strings2[position][7].contains("2")) {
+                viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
+                viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
+                viewHolder.textPostS?.text = mContext.resources.getString(R.string.Post)
+            } else if (strings2[position][7].contains("3")) {
+                viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
+            } else if (strings2[position][7].contains("1")) {
+                viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
+                viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
+                viewHolder.textPostS?.text = mContext.resources.getString(R.string.No_post)
+            }
+            if (strings2[position][5].contains("2")) {
+                viewHolder.textPraz?.setTypeface(null, Typeface.NORMAL)
+            }
+            if (strings2[position][7].contains("3")) {
+                viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
+                viewHolder.textPostS?.text = mContext.resources.getString(R.string.Strogi_post)
+                viewHolder.textPostS?.visibility = View.VISIBLE
+            } else if (strings2[position][0].contains("6")) { // Пятница
+                viewHolder.textPostS?.visibility = View.VISIBLE
+            }
+            return view
+        }
+    }
+
+    private class ViewHolder {
+        var linearLayout: LinearLayout? = null
+        var textCalendar: TextViewRobotoCondensed? = null
+        var textPraz: TextViewRobotoCondensed? = null
+        var textSviat: TextViewRobotoCondensed? = null
+        var textPostS: TextViewRobotoCondensed? = null
     }
 
     companion object {

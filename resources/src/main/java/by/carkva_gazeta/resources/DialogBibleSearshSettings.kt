@@ -124,7 +124,7 @@ class DialogBibleSearshSettings : DialogFragment() {
         return alert
     }
 
-    internal inner class DialogBibleAdapter(private val context: Activity, private val name: Array<String>) : ArrayAdapter<String?>(context, R.layout.simple_list_item_1, name) {
+    private inner class DialogBibleAdapter(private val context: Activity, private val name: Array<String>) : ArrayAdapter<String?>(context, R.layout.simple_list_item_1, name) {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val v = super.getDropDownView(position, convertView, parent)

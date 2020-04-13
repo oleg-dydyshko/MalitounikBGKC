@@ -293,34 +293,6 @@
     <string name="title_download_module">СПАМПОЎВАЕМ \"БІБЛІЯТЭКУ ЦАРКВЫ\"</string>
     <string name="title_resources">Рэсурсы Дадатка</string>
     <string name="settings_notifi_sviata">Налады апавяшчэньня сьвятаў</string>
-    <string-array name="mun_array">
-        <item>СТУДЗЕНЯ</item>
-        <item>ЛЮТАГА</item>
-        <item>САКАВІКА</item>
-        <item>КРАСАВІКА</item>
-        <item>ТРАЎНЯ</item>
-        <item>ЧЭРВЕНЯ</item>
-        <item>ЛІПЕНЯ</item>
-        <item>ЖНІЎНЯ</item>
-        <item>ВЕРАСЬНЯ</item>
-        <item>КАСТРЫЧНІКА</item>
-        <item>ЛІСТАПАДА</item>
-        <item>СЬНЕЖНЯ</item>
-    </string-array>
-    <string-array name="mun_array2">
-        <item>СТУДЗЕНЬ</item>
-        <item>ЛЮТЫ</item>
-        <item>САКАВІК</item>
-        <item>КРАСАВІК</item>
-        <item>ТРАВЕНЬ</item>
-        <item>ЧЭРВЕНЬ</item>
-        <item>ЛІПЕНЬ</item>
-        <item>ЖНІВЕНЬ</item>
-        <item>ВЕРАСЕНЬ</item>
-        <item>КАСТРЫЧНІК</item>
-        <item>ЛІСТАПАД</item>
-        <item>СЬНЕЖАНЬ</item>
-    </string-array>
     <string name="filter">Фільтр</string>
     <string name="notifi">Апавяшчэньні</string>
     <string name="notifi_full">Апавяшчэньні пра царкоўныя сьвяты</string>

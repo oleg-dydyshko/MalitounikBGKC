@@ -181,7 +181,7 @@ class MenuNatatki : ListFragment() {
         }
     }
 
-    internal inner class MyNatatkiAdapter(private val activity: Activity) : ArrayAdapter<MyNatatkiFiles>(activity, R.layout.simple_list_item_3, R.id.label, myNatatkiFiles) {
+    private inner class MyNatatkiAdapter(private val activity: Activity) : ArrayAdapter<MyNatatkiFiles>(activity, R.layout.simple_list_item_3, R.id.label, myNatatkiFiles) {
         private val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {

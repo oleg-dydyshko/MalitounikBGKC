@@ -56,8 +56,6 @@ animator mtrl_fab_hide_motion_spec
 animator mtrl_fab_show_motion_spec
 animator mtrl_fab_transformation_sheet_collapse_spec
 animator mtrl_fab_transformation_sheet_expand_spec
-array mun_array
-array mun_array2
 attr actionBarDivider
 attr actionBarItemBackground
 attr actionBarPopupTheme

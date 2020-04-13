@@ -1480,7 +1480,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         return res
     }
 
-    internal inner class MaranAtaListAdaprer(private val activity: Activity) : ArrayAdapter<String?>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_maranata, maranAta as List<String>) {
+    private inner class MaranAtaListAdaprer(private val activity: Activity) : ArrayAdapter<String?>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_maranata, maranAta as List<String>) {
         override fun isEnabled(position: Int): Boolean {
             return if (maranAta[position].contains("<!--no-->")) false else if (!autoscroll) super.isEnabled(position) else false
         }

@@ -32,6 +32,10 @@ class MenuCviaty : ListFragment() {
         outState.putInt("year", year)
     }
 
+    fun getCviatyYear(): Int {
+        return year
+    }
+
     fun setCviatyYear(year: Int) {
         this.year = year
         list = getPrazdnik(activity, year)
@@ -79,7 +83,7 @@ class MenuCviaty : ListFragment() {
         }
     }
 
-    private inner class MyArrayAdapter internal constructor(private val context: Activity) : ArrayAdapter<String>(context, R.layout.simple_list_item_sviaty, list) {
+    private inner class MyArrayAdapter(private val context: Activity) : ArrayAdapter<String>(context, R.layout.simple_list_item_sviaty, list) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)

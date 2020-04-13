@@ -51,7 +51,7 @@ class MenuPesnyPrasl : ListFragment() {
         }
     }
 
-    internal inner class MenuListAdaprer(private val activity: Activity) : ArrayAdapter<String>(activity, R.layout.simple_list_item_2, R.id.label, data as List<String>) {
+    private inner class MenuListAdaprer(private val activity: Activity) : ArrayAdapter<String>(activity, R.layout.simple_list_item_2, R.id.label, data as List<String>) {
         private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {

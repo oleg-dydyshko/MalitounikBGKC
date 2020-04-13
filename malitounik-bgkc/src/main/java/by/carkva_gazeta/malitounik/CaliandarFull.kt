@@ -98,7 +98,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
         data.addAll(gson.fromJson(getData(getmun(position)), type))
         val nedelName = arrayOf("", "нядзеля", "панядзелак", "аўторак", "серада", "чацьвер", "пятніца", "субота")
-        val monthName = resources.getStringArray(R.array.mun_array)
+        val monthName = arrayOf("СТУДЗЕНЯ", "ЛЮТАГА", "САКАВІКА", "КРАСАВІКА", "ТРАЎНЯ", "ЧЭРВЕНЯ", "ЛІПЕНЯ", "ЖНІЎНЯ", "ВЕРАСЬНЯ", "КАСТРЫЧНІКА", "ЛІСТАПАДА", "СЬНЕЖНЯ")
         val c = Calendar.getInstance() as GregorianCalendar
         val k = activity?.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k?.getBoolean("dzen_noch", false) ?: false
@@ -145,7 +145,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         }
         textDenNedeli.text = nedelName[data[day][0].toInt()]
         textChislo.text = data[day][1]
-        if (data[day][3].toInt() != c[Calendar.YEAR]) textMesiac.text = monthName[data[day][2].toInt()].toString() + ", " + data[day][3] else textMesiac.text = monthName[data[day][2].toInt()]
+        if (data[day][3].toInt() != c[Calendar.YEAR]) textMesiac.text = monthName[data[day][2].toInt()] + ", " + data[day][3] else textMesiac.text = monthName[data[day][2].toInt()]
         if (!data[day][4].contains("no_sviatyia")) {
             var dataSviatyia = data[day][4]
             if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")

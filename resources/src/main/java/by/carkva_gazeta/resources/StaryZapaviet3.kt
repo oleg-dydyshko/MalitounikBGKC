@@ -794,7 +794,7 @@ class StaryZapaviet3 : AppCompatActivity(), DialogFontSizeListener, DialogBibleR
         invalidateOptionsMenu()
     }
 
-    internal inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
+    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
         override fun getCount(): Int {
             var fullglav = 1
             when (kniga) {

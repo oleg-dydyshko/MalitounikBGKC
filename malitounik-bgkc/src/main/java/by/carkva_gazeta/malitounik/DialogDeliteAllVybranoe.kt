@@ -19,7 +19,7 @@ class DialogDeliteAllVybranoe : DialogFragment() {
     private lateinit var mListener: DialogDeliteAllVybranoeListener
     private lateinit var alert: AlertDialog
 
-    interface DialogDeliteAllVybranoeListener {
+    internal interface DialogDeliteAllVybranoeListener {
         fun deliteAllVybranoe()
     }
 

@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.nadsan_pravila3.*
 
-class PsalterNadsana3 internal constructor(private val activity: Activity) : Fragment(), View.OnClickListener {
+class PsalterNadsana3(private val activity: Activity) : Fragment(), View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.nadsan_pravila3, container, false)

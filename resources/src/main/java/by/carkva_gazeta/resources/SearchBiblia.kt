@@ -509,7 +509,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         }
     }
 
-    private inner class MyTextWatcher internal constructor(private val editText: EditText, private val filtep: Boolean) : TextWatcher {
+    private inner class MyTextWatcher(private val editText: EditText, private val filtep: Boolean) : TextWatcher {
         private var editPosition = 0
         private var check = 0
         private var editch = true

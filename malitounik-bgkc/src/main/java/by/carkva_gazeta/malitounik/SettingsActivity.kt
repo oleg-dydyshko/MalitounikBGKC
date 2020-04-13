@@ -1457,7 +1457,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private class TimeAdapter internal constructor(private val activity: Activity, private val dataTimes: ArrayList<DataTime>) : ArrayAdapter<DataTime>(activity, R.layout.simple_list_item_1, dataTimes as List<DataTime>) {
+    private class TimeAdapter(private val activity: Activity, private val dataTimes: ArrayList<DataTime>) : ArrayAdapter<DataTime>(activity, R.layout.simple_list_item_1, dataTimes as List<DataTime>) {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextViewRobotoCondensed
@@ -1493,5 +1493,5 @@ class SettingsActivity : AppCompatActivity() {
         var text: TextViewRobotoCondensed? = null
     }
 
-    private class DataTime internal constructor(val string: String, val data: Int)
+    private class DataTime(val string: String, val data: Int)
 }

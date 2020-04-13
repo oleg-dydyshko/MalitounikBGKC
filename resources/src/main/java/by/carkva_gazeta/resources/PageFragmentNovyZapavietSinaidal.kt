@@ -24,15 +24,15 @@ class PageFragmentNovyZapavietSinaidal : ListFragment(), OnItemLongClickListener
     private var longClicListiner: LongClicListiner? = null
     private var bible: ArrayList<String> = ArrayList()
 
-    interface ClicParalelListiner {
+    internal interface ClicParalelListiner {
         fun setOnClic(cytanneParalelnye: String?, cytanneSours: String?)
     }
 
-    interface ListPosition {
+    internal interface ListPosition {
         fun getListPosition(position: Int)
     }
 
-    interface LongClicListiner {
+    internal interface LongClicListiner {
         fun onLongClick()
     }
 

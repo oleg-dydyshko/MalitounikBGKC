@@ -85,7 +85,7 @@ class Naviny : AppCompatActivity() {
             mLastClickTime = SystemClock.elapsedRealtime()
             val re = arrayList[position]
             var htmlData = readerFile(File(filesDir.toString() + "/Site/" + re[0]))
-            htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+            htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
             val intent = Intent(this, NavinyView::class.java)
             intent.putExtra("htmlData", htmlData)
             intent.putExtra("url", re[1])
@@ -144,7 +144,7 @@ class Naviny : AppCompatActivity() {
                     }
                     file.exists() -> {
                         var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                         viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                     }
                     else -> error = true
@@ -163,7 +163,7 @@ class Naviny : AppCompatActivity() {
                     }
                     file.exists() -> {
                         var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                         viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                     }
                     else -> error = true
@@ -182,7 +182,7 @@ class Naviny : AppCompatActivity() {
                     }
                     file.exists() -> {
                         var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                         viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                     }
                     else -> error = true
@@ -201,7 +201,7 @@ class Naviny : AppCompatActivity() {
                     }
                     file.exists() -> {
                         var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                         viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                     }
                     else -> error = true
@@ -220,7 +220,7 @@ class Naviny : AppCompatActivity() {
                     }
                     file.exists() -> {
                         var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                         viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                     }
                     else -> error = true
@@ -239,7 +239,7 @@ class Naviny : AppCompatActivity() {
                     }
                     file.exists() -> {
                         var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                         viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                     }
                     else -> error = true
@@ -394,7 +394,7 @@ class Naviny : AppCompatActivity() {
                 }
                 file.exists() -> {
                     var htmlData = readerFile(file)
-                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                     viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                 }
                 else -> error = true
@@ -413,7 +413,7 @@ class Naviny : AppCompatActivity() {
                 }
                 file.exists() -> {
                     var htmlData = readerFile(file)
-                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                     viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                 }
                 else -> error = true
@@ -432,7 +432,7 @@ class Naviny : AppCompatActivity() {
                 }
                 file.exists() -> {
                     var htmlData = readerFile(file)
-                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                     viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                 }
                 else -> error = true
@@ -451,7 +451,7 @@ class Naviny : AppCompatActivity() {
                 }
                 file.exists() -> {
                     var htmlData = readerFile(file)
-                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                     viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                 }
                 else -> error = true
@@ -484,7 +484,7 @@ class Naviny : AppCompatActivity() {
                 }
                 file.exists() -> {
                     var htmlData = readerFile(file)
-                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                     viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                 }
                 else -> error = true
@@ -503,7 +503,7 @@ class Naviny : AppCompatActivity() {
                 }
                 file.exists() -> {
                     var htmlData = readerFile(file)
-                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                     viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                 }
                 else -> error = true
@@ -601,7 +601,7 @@ class Naviny : AppCompatActivity() {
                         }
                         file.exists() -> {
                             var htmlData = readerFile(file)
-                            htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                            htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                             viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                         }
                         else -> error = true
@@ -614,7 +614,7 @@ class Naviny : AppCompatActivity() {
                             }
                             file.exists() -> {
                                 var htmlData = readerFile(file)
-                                htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                                htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                                 viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                             }
                             else -> error = true
@@ -624,7 +624,7 @@ class Naviny : AppCompatActivity() {
                         when {
                             file.exists() -> {
                                 var htmlData = readerFile(file)
-                                htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                                htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                                 viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                             }
                             MainActivity.isNetworkAvailable(this@Naviny) -> {
@@ -724,7 +724,7 @@ class Naviny : AppCompatActivity() {
                     val file = File("$filesDir/Site/$filename")
                     if (file.exists()) {
                         var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.4.1.min.js\"></script>$htmlData"
+                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
                         viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                     } else {
                         viewWeb.loadUrl(mUrl)
@@ -739,7 +739,7 @@ class Naviny : AppCompatActivity() {
         return true
     }
 
-    internal inner class NavinyAdapter(context: Context) : ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_2, arrayList) {
+    private inner class NavinyAdapter(context: Context) : ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_2, arrayList) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder

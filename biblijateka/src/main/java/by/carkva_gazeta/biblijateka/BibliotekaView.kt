@@ -1620,34 +1620,34 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 arrayList.addAll(naidaunia)
                 arrayList.reverse()
                 adapter.notifyDataSetChanged()
-                nameRubrika = "Нядаўнія кнігі"
+                nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_niadaunia)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
                 if (dzenNoch) label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
             }
             R.id.label2 -> {
-                nameRubrika = "Гісторыя Царквы"
+                nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
                 rub = 1
                 if (dzenNoch) label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
             }
             R.id.label3 -> {
-                nameRubrika = "Малітоўнікі"
+                nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
                 rub = 2
                 if (dzenNoch) label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
             }
             R.id.label4 -> {
-                nameRubrika = "Сьпеўнікі"
+                nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
                 rub = 3
                 if (dzenNoch) label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
             }
             R.id.label5 -> {
-                nameRubrika = "Рэлігійная літаратура"
+                nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
                 rub = 4

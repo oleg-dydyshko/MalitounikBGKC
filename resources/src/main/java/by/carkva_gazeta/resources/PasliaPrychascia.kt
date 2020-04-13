@@ -420,18 +420,13 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
     }
 
-    internal inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
+    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
 
         override fun getCount(): Int {
             return title.size
         }
 
         override fun getItem(position: Int): Fragment {
-            /*for (pasliaPrychascia in 0 until count) {
-                if (position == pasliaPrychascia) {
-                    return PasliaPrychasciaFragment.newInstance(pasliaPrychascia, title[position], resurs[position], resursID[position])
-                }
-            }*/
             return PasliaPrychasciaFragment.newInstance(resursID[position])
         }
 

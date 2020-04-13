@@ -403,7 +403,7 @@ class SearchSviatyia : AppCompatActivity() {
         }
     }
 
-    private class SearchListAdapter internal constructor(private val mContext: Activity, private val adapterList: ArrayList<String>) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_2, R.id.label, adapterList as List<String>) {
+    private class SearchListAdapter(private val mContext: Activity, private val adapterList: ArrayList<String>) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_2, R.id.label, adapterList as List<String>) {
         private val k: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {

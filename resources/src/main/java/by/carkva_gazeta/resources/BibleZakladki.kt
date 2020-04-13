@@ -446,7 +446,7 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
         return true
     }
 
-    private inner class BibleZakladkiListAdaprer internal constructor(private val mContext: Activity, private val itemsL: ArrayList<String>) : ArrayAdapter<String>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_3, by.carkva_gazeta.malitounik.R.id.label, itemsL) {
+    private inner class BibleZakladkiListAdaprer(private val mContext: Activity, private val itemsL: ArrayList<String>) : ArrayAdapter<String>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_3, by.carkva_gazeta.malitounik.R.id.label, itemsL) {
         private val k: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         override fun add(string: String?) {
             super.add(string)

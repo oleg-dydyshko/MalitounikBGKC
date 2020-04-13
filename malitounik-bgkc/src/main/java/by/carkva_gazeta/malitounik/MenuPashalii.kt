@@ -49,7 +49,6 @@ class MenuPashalii : Fragment() {
         activity?.let {
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            val c = Calendar.getInstance() as GregorianCalendar
             val titlespan = SpannableString(title.text)
             titlespan.setSpan(UnderlineSpan(), 0, titlespan.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             title.text = titlespan
@@ -70,7 +69,7 @@ class MenuPashalii : Fragment() {
                 startActivity(intent)
             }
             if (savedInstanceState == null)
-                setArrayPasha(c[Calendar.YEAR])
+                setArrayPasha()
             else
                 setArrayPasha(savedInstanceState.getInt("year"))
             myArrayAdapter = MyArrayAdapter(it)
@@ -84,9 +83,9 @@ class MenuPashalii : Fragment() {
         myArrayAdapter.notifyDataSetChanged()
     }
 
-    private fun setArrayPasha(search: Int) {
+    private fun setArrayPasha(year: Int = Calendar.getInstance()[Calendar.YEAR]) {
         val c = Calendar.getInstance() as GregorianCalendar
-        var yearG = search
+        var yearG = year
         val yearG2: Int
         if (c[Calendar.YEAR] == yearG) {
             yearG -= 3
@@ -139,11 +138,11 @@ class MenuPashalii : Fragment() {
             var sovpadenie = false
             if (katolic[Calendar.DAY_OF_YEAR] == pravas[Calendar.DAY_OF_YEAR])
                 sovpadenie = true
-            pasxi.add(Pashalii(dataP.toString() + " " + monthName[monthP - 1] + " " + i, pravas[Calendar.DATE].toString() + " " + monthName[pravas[Calendar.MONTH]], i, search, sovpadenie))
+            pasxi.add(Pashalii(dataP.toString() + " " + monthName[monthP - 1] + " " + i, pravas[Calendar.DATE].toString() + " " + monthName[pravas[Calendar.MONTH]], i, year, sovpadenie))
         }
     }
 
-    private inner class MyArrayAdapter internal constructor(private val context: Activity) : ArrayAdapter<Pashalii>(context, R.layout.simple_list_item_sviaty, pasxi) {
+    private inner class MyArrayAdapter(private val context: Activity) : ArrayAdapter<Pashalii>(context, R.layout.simple_list_item_sviaty, pasxi) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)

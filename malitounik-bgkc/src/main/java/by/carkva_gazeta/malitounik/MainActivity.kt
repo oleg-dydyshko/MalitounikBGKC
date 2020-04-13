@@ -619,7 +619,9 @@ try {
             pasxa.show(supportFragmentManager, "pasxa")
         }
         if (id == R.id.prazdnik) {
-            val prazdnik = DialogPrazdnik()
+            val menuCviaty = supportFragmentManager.findFragmentByTag("MenuCviaty") as? MenuCviaty
+            val year = menuCviaty?.getCviatyYear()?: Calendar.getInstance()[Calendar.YEAR]
+            val prazdnik = DialogPrazdnik.getInstance(year)
             prazdnik.show(supportFragmentManager, "prazdnik")
         }
         if (id == R.id.tipicon) {

@@ -374,7 +374,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         title_toolbar.setText(getResources().getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours));
         supportInvalidateOptionsMenu();
     }*/
-    internal inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
+    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
         override fun getCount(): Int {
             return 151
         }

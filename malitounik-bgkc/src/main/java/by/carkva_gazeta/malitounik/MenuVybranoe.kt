@@ -120,7 +120,7 @@ class MenuVybranoe : ListFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    internal inner class MyVybranoeAdapter(private val activity: Activity) : ArrayAdapter<VybranoeData?>(activity, R.layout.simple_list_item_3, R.id.label, vybranoe as List<VybranoeData>) {
+    private inner class MyVybranoeAdapter(private val activity: Activity) : ArrayAdapter<VybranoeData?>(activity, R.layout.simple_list_item_3, R.id.label, vybranoe as List<VybranoeData>) {
         private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {

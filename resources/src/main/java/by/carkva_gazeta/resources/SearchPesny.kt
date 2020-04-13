@@ -295,7 +295,7 @@ class SearchPesny : AppCompatActivity() {
         }
     }
 
-    private class SearchListAdaprer internal constructor(private val mContext: Activity, private val adapterList: ArrayList<String?>) : ArrayAdapter<String?>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, adapterList) {
+    private class SearchListAdaprer(private val mContext: Activity, private val adapterList: ArrayList<String?>) : ArrayAdapter<String?>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, adapterList) {
         private val k: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {

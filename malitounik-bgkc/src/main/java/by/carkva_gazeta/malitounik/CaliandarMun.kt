@@ -36,7 +36,7 @@ class CaliandarMun : AppCompatActivity() {
     private var posMun = 0
     private var day = 0
     private lateinit var c: GregorianCalendar
-    private lateinit var names: Array<String?>
+    private val names = arrayOf("СТУДЗЕНЬ", "ЛЮТЫ", "САКАВІК", "КРАСАВІК", "ТРАВЕНЬ", "ЧЭРВЕНЬ", "ЛІПЕНЬ", "ЖНІВЕНЬ", "ВЕРАСЕНЬ", "КАСТРЫЧНІК", "ЛІСТАПАД", "СЬНЕЖАНЬ")
     private var dzenNoch = false
     private lateinit var chin: SharedPreferences
     private var sabytue = false
@@ -108,7 +108,6 @@ class CaliandarMun : AppCompatActivity() {
         for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) {
             data2.add(i.toString())
         }
-        names = resources.getStringArray(R.array.mun_array2)
         val adapter = CaliandarMunAdapter(this, names)
         spinner.adapter = adapter
         val adapter2 = CaliandarMunAdapter(this, data2)
@@ -334,10 +333,10 @@ class CaliandarMun : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    internal inner class CaliandarMunAdapter : ArrayAdapter<String> {
+    private inner class CaliandarMunAdapter : ArrayAdapter<String> {
         private var arrayList: List<String>? = null
 
-        constructor(context: Context, strings: Array<String?>) : super(context, R.layout.simple_list_item_4, strings)
+        constructor(context: Context, strings: Array<String>) : super(context, R.layout.simple_list_item_4, strings)
         constructor(context: Context, list: List<String>) : super(context, R.layout.simple_list_item_4, list) {
             arrayList = list
         }
@@ -400,7 +399,7 @@ class CaliandarMun : AppCompatActivity() {
         }
     }
 
-    internal inner class MyCalendarNedelAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
+    private inner class MyCalendarNedelAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
         private var currentFragment: Fragment? = null
         private var cor = 1
 
@@ -452,7 +451,7 @@ class CaliandarMun : AppCompatActivity() {
         }
     }
 
-    internal inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
+    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
         override fun getCount(): Int {
             return (SettingsActivity.GET_CALIANDAR_YEAR_MAX - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 1) * 12
         }

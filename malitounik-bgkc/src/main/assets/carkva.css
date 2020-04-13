@@ -54,10 +54,10 @@ margin-top: 10px
 
 .menu {
 border-radius:5px 5px 0 0;
-text-align:center;
+text-align:left;
 background-color:#D00505;
 margin:2px 0;
-padding:2px 0
+padding:2px 10px
 }
 
 .menu_a {
@@ -66,6 +66,51 @@ text-align:center;
 background-color:#600;
 margin:2px 0;
 padding:2px 0
+}
+
+.logotip {
+    float:left;
+    margin:5px 0;
+    height: 75px;
+    width: 175px;
+    background: url("https://m.carkva-gazeta.by/design/logotip.jpg") no-repeat;
+    background-size: cover
+}
+
+.search_img {
+    height: 35px;
+    width: 35px;
+    margin:5px;
+    background: url("https://m.carkva-gazeta.by/design/search.png") no-repeat;
+    background-size: cover;
+    float:right
+}
+
+.menu_img {
+    height: 35px;
+    width: 35px;
+    margin:5px;
+    background: url("https://m.carkva-gazeta.by/design/Knopka.png") no-repeat;
+    background-size: cover;
+    float:right
+}
+
+.caliandar_img {
+    height: 35px;
+    width: 35px;
+    margin:5px;
+    background: url("https://m.carkva-gazeta.by/design/calendar.png") no-repeat;
+    background-size: cover;
+    float:right
+}
+
+.bible_img {
+    height: 35px;
+    width: 35px;
+    margin:5px;
+    background: url("https://m.carkva-gazeta.by/design/Biblija.png") no-repeat;
+    background-size: cover;
+    float:right
 }
 
 .search {
@@ -182,7 +227,7 @@ padding:5px
 
 .kalendar_i {
 margin:0;
-float:right;
+clear: right
 }
 
 .kalendar_i img {
@@ -438,4 +483,26 @@ font-size:12px;
 .main-item2 {
 font-size:14px;
 padding-top: 30px
+}
+
+.brd {
+    border: 4px double black;
+    padding: 10px;
+}
+
+.wrapper {
+    display: flex;
+}
+
+.right, .left {
+    height: 100%;
+}
+
+.left{
+    width: 95%;
+    margin-bottom:10px;
+}
+
+.right{
+    width: 5%;
 }

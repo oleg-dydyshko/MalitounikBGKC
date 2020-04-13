@@ -380,7 +380,7 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
         }*/return rootView
     }
 
-    internal class ExpArrayAdapterParallelItems {
+    private class ExpArrayAdapterParallelItems {
         var textView: TextViewRobotoCondensed? = null
     }
 

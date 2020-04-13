@@ -319,7 +319,7 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
         return true
     }
 
-    private inner class ListAdaprer internal constructor(private val mContext: Activity, private val itemsL: ArrayList<ArrayList<String>>) : ArrayAdapter<ArrayList<String>?>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_3, by.carkva_gazeta.malitounik.R.id.label, itemsL as List<ArrayList<String>>) {
+    private inner class ListAdaprer(private val mContext: Activity, private val itemsL: ArrayList<ArrayList<String>>) : ArrayAdapter<ArrayList<String>?>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_3, by.carkva_gazeta.malitounik.R.id.label, itemsL as List<ArrayList<String>>) {
         private val k: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         override fun add(string: ArrayList<String>?) {
             super.add(string)

@@ -26,7 +26,7 @@ class NadsanContentPage : ListFragment(), OnItemLongClickListener {
     private var listPosition: ListPosition? = null
     private var bible: ArrayList<String> = ArrayList()
 
-    interface ListPosition {
+    internal interface ListPosition {
         fun getListPosition(position: Int)
     }
 
@@ -102,7 +102,7 @@ class NadsanContentPage : ListFragment(), OnItemLongClickListener {
 //getListView().setPadding(dpAsPixels, 0, dpAsPixels, dpAsPixels);
     }
 
-    internal inner class ListAdaprer(private val mContext: Activity) : ArrayAdapter<String?>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_bible, bible as List<String>) {
+    private inner class ListAdaprer(private val mContext: Activity) : ArrayAdapter<String?>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_bible, bible as List<String>) {
         private val k: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         override fun isEnabled(position: Int): Boolean {
             return false

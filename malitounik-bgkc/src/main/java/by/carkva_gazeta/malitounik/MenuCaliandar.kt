@@ -77,7 +77,7 @@ class MenuCaliandar : Fragment() {
         menu.findItem(R.id.search_sviatyia).isVisible = true
     }
 
-    private class MyCalendarAdapter internal constructor(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
+    private class MyCalendarAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
         var currentFragment: Fragment? = null
             private set
         private var mun = Calendar.JANUARY

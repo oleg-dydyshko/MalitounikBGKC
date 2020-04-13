@@ -8,8 +8,10 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
@@ -23,7 +25,7 @@ class DialogPrazdnik : DialogFragment() {
     private lateinit var mListener: DialogPrazdnikListener
     private lateinit var alert: AlertDialog
 
-    interface DialogPrazdnikListener {
+    internal interface DialogPrazdnikListener {
         fun setPrazdnik(year: Int)
     }
 
@@ -71,15 +73,15 @@ class DialogPrazdnik : DialogFragment() {
                     arrayList.add(i)
                 }
             }
-            val arrayAdapter = ListAdapter(it, arrayList)
+            val arrayAdapter = ListAdapter(it)
             val spinner = Spinner(it)
             spinner.adapter = arrayAdapter
-            spinner.setSelection(setid)
             for (i in arrayList.indices) {
-                if (arrayList[i] == c[Calendar.YEAR]) {
+                if (arrayList[i] == arguments?.getInt("year")?: c[Calendar.YEAR]) {
                     setid = i
                 }
             }
+            spinner.setSelection(setid)
             spinner.onItemSelectedListener = object : OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     setid = position
@@ -100,5 +102,63 @@ class DialogPrazdnik : DialogFragment() {
             }
         }
         return alert
+    }
+
+    companion object {
+        fun getInstance(year: Int): DialogPrazdnik {
+            val dialogPrazdnik = DialogPrazdnik()
+            val bundle = Bundle()
+            bundle.putInt("year", year)
+            dialogPrazdnik.arguments = bundle
+            return dialogPrazdnik
+        }
+    }
+
+    private inner class ListAdapter(private val mContext: Activity) : ArrayAdapter<Int>(mContext, R.layout.simple_list_item_1, arrayList) {
+        private val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        private val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        private val gc = Calendar.getInstance() as GregorianCalendar
+        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            if (mView == null) {
+                rootView = mContext.layoutInflater.inflate(R.layout.simple_list_item_1, parent, false)
+                viewHolder = ViewHolder()
+                rootView.tag = viewHolder
+                viewHolder.text = rootView.findViewById(R.id.text1)
+            } else {
+                rootView = mView
+                viewHolder = rootView.tag as ViewHolder
+            }
+            val dzenNoch = k.getBoolean("dzen_noch", false)
+            if (gc[Calendar.YEAR] == arrayList[position]) viewHolder.text?.setTypeface(null, Typeface.BOLD) else viewHolder.text?.setTypeface(null, Typeface.NORMAL)
+            viewHolder.text?.text = arrayList[position].toString()
+            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+            if (dzenNoch) {
+                viewHolder.text?.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
+                viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+            }
+            return rootView
+        }
+
+        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val v = super.getDropDownView(position, convertView, parent)
+            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val text: TextViewRobotoCondensed = v.findViewById(R.id.text1)
+            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+            if (gc[Calendar.YEAR] == arrayList[position]) text.setTypeface(null, Typeface.BOLD) else text.setTypeface(null, Typeface.NORMAL)
+            text.text = arrayList[position].toString()
+            if (dzenNoch) {
+                text.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
+                text.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+            } else {
+                text.setBackgroundResource(R.color.colorIcons)
+            }
+            return v
+        }
+    }
+
+    private class ViewHolder {
+        var text: TextViewRobotoCondensed? = null
     }
 }

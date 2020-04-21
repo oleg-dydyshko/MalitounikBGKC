@@ -18,4 +18,8 @@ abstract class SmartFragmentStatePagerAdapter(fragmentManager: FragmentManager) 
         registeredFragments.remove(position)
         super.destroyItem(container, position, `object`)
     }
+
+    fun getFragment(key: Int) : Fragment {
+        return registeredFragments.get(key)
+    }
 }

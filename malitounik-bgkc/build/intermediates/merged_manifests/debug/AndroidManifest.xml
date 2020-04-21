@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="by.carkva_gazeta.malitounik"
-    android:versionCode="43597"
-    android:versionName="3.7.5" >
+    android:versionCode="43598"
+    android:versionName="3.7.6" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -281,14 +281,14 @@
             android:label="Даведка"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="by.carkva_gazeta.malitounik.NovyZapaviet2"
+            android:name="by.carkva_gazeta.malitounik.NovyZapavietSemuxaList"
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.malitounik.StaryZapaviet2"
+            android:name="by.carkva_gazeta.malitounik.StaryZapavietSemuxaList"
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -297,14 +297,14 @@
 
         <!-- android:icon="@drawable/book_icon" -->
         <activity
-            android:name="by.carkva_gazeta.malitounik.NovyZapavietSinaidal2"
+            android:name="by.carkva_gazeta.malitounik.NovyZapavietSinaidalList"
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.malitounik.StaryZapavietSinaidal2"
+            android:name="by.carkva_gazeta.malitounik.StaryZapavietSinaidalList"
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -407,7 +407,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.StaryZapaviet3"
+            android:name="by.carkva_gazeta.resources.StaryZapavietSemuxa"
             android:label="@string/title_activity_stary_zapaviet2"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" >
@@ -416,7 +416,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.NovyZapaviet3"
+            android:name="by.carkva_gazeta.resources.NovyZapavietSemuxa"
             android:label="@string/novy_zapaviet"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" >
@@ -425,7 +425,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.StaryZapavietSinaidal3"
+            android:name="by.carkva_gazeta.resources.StaryZapavietSinaidal"
             android:label="@string/stsinaidal"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" >
@@ -434,7 +434,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.NovyZapavietSinaidal3"
+            android:name="by.carkva_gazeta.resources.NovyZapavietSinaidal"
             android:label="@string/novsinaidal"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" >

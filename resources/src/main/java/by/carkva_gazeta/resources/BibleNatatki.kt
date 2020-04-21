@@ -58,8 +58,7 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
 
     override fun fileAllNatatkiAlboZakladki(semuxa: Int) {
         if (semuxa == 1) {
-            MaranAtaGlobalList.natatkiSemuxa?.removeAll(MaranAtaGlobalList.natatkiSemuxa
-                    ?: ArrayList())
+            BibleGlobalList.natatkiSemuxa.removeAll(BibleGlobalList.natatkiSemuxa)
             adapter.notifyDataSetChanged()
             val fileNatatki = File("$filesDir/BibliaSemuxaNatatki.json")
             if (fileNatatki.exists()) {
@@ -67,22 +66,13 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
             }
         }
         if (semuxa == 2) {
-            MaranAtaGlobalList.natatkiSinodal?.removeAll(MaranAtaGlobalList.natatkiSinodal
-                    ?: ArrayList())
+            BibleGlobalList.natatkiSinodal.removeAll(BibleGlobalList.natatkiSinodal)
             adapter.notifyDataSetChanged()
             val fileNatatki = File("$filesDir/BibliaSinodalNatatki.json")
             if (fileNatatki.exists()) {
                 fileNatatki.delete()
             }
         }
-        /*if (semuxa == 3) {
-            MaranAta_Global_List.getNatatkiPsalterNadsana().removeAll(MaranAta_Global_List.getNatatkiPsalterNadsana());
-            adapter.notifyDataSetChanged();
-            File fileNatatki = new File(getFilesDir() + "/PsalterNadsanNatatki.json");
-            if (fileNatatki.exists()) {
-                fileNatatki.delete();
-            }
-        }*/
         help.visibility = View.VISIBLE
         ListView.visibility = View.GONE
         invalidateOptionsMenu()
@@ -99,13 +89,9 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         setContentView(R.layout.akafist_list_bible)
-        if (intent != null) {
-            semuxa = intent.getIntExtra("semuxa", 1)
-        }
-        if (semuxa == 1) data = MaranAtaGlobalList.natatkiSemuxa ?: ArrayList()
-        if (semuxa == 2) data = MaranAtaGlobalList.natatkiSinodal ?: ArrayList()
-        //if (semuxa == 3)
-//    data = MaranAta_Global_List.getNatatkiPsalterNadsana();
+        semuxa = intent.getIntExtra("semuxa", 1)
+        if (semuxa == 1) data = BibleGlobalList.natatkiSemuxa
+        if (semuxa == 2) data = BibleGlobalList.natatkiSinodal
         adapter = ListAdaprer(this, data)
         if (data.size == 0) {
             help.visibility = View.VISIBLE
@@ -181,65 +167,43 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
     }
 
     override fun zakladkadiliteItem(position: Int, semuxa: Int) {}
+
     override fun natatkidiliteItem(position: Int, semuxa: Int) {
         if (semuxa == 1) {
-            MaranAtaGlobalList.natatkiSemuxa?.removeAt(position)
+            BibleGlobalList.natatkiSemuxa.removeAt(position)
             adapter.notifyDataSetChanged()
             val fileNatatki = File("$filesDir/BibliaSemuxaNatatki.json")
-            if (MaranAtaGlobalList.natatkiSemuxa?.size == 0) {
+            if (BibleGlobalList.natatkiSemuxa.size == 0) {
                 if (fileNatatki.exists()) {
                     fileNatatki.delete()
                 }
                 help.visibility = View.VISIBLE
                 ListView.visibility = View.GONE
             } else {
-                if (MaranAtaGlobalList.natatkiSemuxa != null) {
-                    val gson = Gson()
-                    val outputStream = FileWriter(fileNatatki)
-                    outputStream.write(gson.toJson(MaranAtaGlobalList.natatkiSemuxa))
-                    outputStream.close()
-                }
+                val gson = Gson()
+                val outputStream = FileWriter(fileNatatki)
+                outputStream.write(gson.toJson(BibleGlobalList.natatkiSemuxa))
+                outputStream.close()
             }
         }
         if (semuxa == 2) {
-            MaranAtaGlobalList.natatkiSinodal?.removeAt(position)
+            BibleGlobalList.natatkiSinodal.removeAt(position)
             adapter.notifyDataSetChanged()
             val fileNatatki = File("$filesDir/BibliaSinodalNatatki.json")
-            if (MaranAtaGlobalList.natatkiSinodal?.size == 0) {
+            if (BibleGlobalList.natatkiSinodal.size == 0) {
                 if (fileNatatki.exists()) {
                     fileNatatki.delete()
                 }
                 help.visibility = View.VISIBLE
                 ListView.visibility = View.GONE
             } else {
-                if (MaranAtaGlobalList.natatkiSinodal != null) {
-                    val gson = Gson()
-                    val outputStream = FileWriter(fileNatatki)
-                    outputStream.write(gson.toJson(MaranAtaGlobalList.natatkiSinodal))
-                    outputStream.close()
-                }
+                val gson = Gson()
+                val outputStream = FileWriter(fileNatatki)
+                outputStream.write(gson.toJson(BibleGlobalList.natatkiSinodal))
+                outputStream.close()
             }
         }
-        /*if (semuxa == 3) {
-            MaranAta_Global_List.getNatatkiPsalterNadsana().remove(position);
-            adapter.notifyDataSetChanged();
-            File fileNatatki = new File(getFilesDir() + "/PsalterNadsanNatatki.json");
-            if (MaranAta_Global_List.getNatatkiPsalterNadsana().size() == 0) {
-                if (fileNatatki.exists()) {
-                    fileNatatki.delete();
-                }
-                help.setVisibility(View.VISIBLE);
-                listView.setVisibility(View.GONE);
-            } else {
-                Gson gson = new Gson();
-                try {
-                    FileWriter outputStream = new FileWriter(fileNatatki);
-                    outputStream.write(gson.toJson(MaranAta_Global_List.getNatatkiPsalterNadsana()));
-                    outputStream.close();
-                } catch (IOException ignored) {
-                }
-            }
-        }*/invalidateOptionsMenu()
+        invalidateOptionsMenu()
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -255,16 +219,16 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
             intent = new Intent(this, nadsanContentActivity.class);
         } else {*/if (kniga != -1) {
             if (semuxa == 1) {
-                intent = Intent(this, NovyZapaviet3::class.java)
+                intent = Intent(this, NovyZapavietSemuxa::class.java)
             }
             if (semuxa == 2) {
-                intent = Intent(this, NovyZapavietSinaidal3::class.java)
+                intent = Intent(this, NovyZapavietSinaidal::class.java)
             }
             intent.putExtra("kniga", kniga)
         }
         if (knigaS != -1) {
             if (semuxa == 1) {
-                intent = Intent(this, StaryZapaviet3::class.java)
+                intent = Intent(this, StaryZapavietSemuxa::class.java)
                 when (knigaS) {
                     19 -> knigaS = 16
                     20 -> knigaS = 17
@@ -292,7 +256,7 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
                 }
             }
             if (semuxa == 2) {
-                intent = Intent(this, StaryZapavietSinaidal3::class.java)
+                intent = Intent(this, StaryZapavietSinaidal::class.java)
             }
             intent.putExtra("kniga", knigaS)
         }

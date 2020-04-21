@@ -319,5 +319,10 @@
     <string name="share">Падзяліцца&#8230;</string>
     <string name="slugby_vialikaga_postu">Службы Вялікага посту</string>
     <string name="bad_internet">ДРЭННАЕ ІНТЭРНЭТ ЗЛУЧЭНЬНЕ/nПраверце якасьць сігналу</string>
+    <string name="copy_big">Cкапіяваць</string>
+    <string name="copy_big_full">Вылучыць усё</string>
+    <string name="set_versh">Выберыце верш</string>
+    <string name="add_to_zakladki">Дабаўлена у закладкі</string>
+    <string name="zakladka_exits">Закладка існуе</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

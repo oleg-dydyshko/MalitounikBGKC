@@ -64,14 +64,11 @@ class DialogBibleNatatkaEdit : DialogFragment() {
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             linearLayout.addView(textViewZaglavie)
             if (semuxa == 1) {
-                editText = MaranAtaGlobalList.natatkiSemuxa?.get(position)?.get(5) ?: ""
+                editText = BibleGlobalList.natatkiSemuxa[position][5]
             }
             if (semuxa == 2) {
-                editText = MaranAtaGlobalList.natatkiSinodal?.get(position)?.get(5) ?: ""
+                editText = BibleGlobalList.natatkiSinodal[position][5]
             }
-            /*if (semuxa == 3) {
-            editText = MaranAta_Global_List.getNatatkiPsalterNadsana().get(position).get(3);
-        }*/
             val editTextView = EditTextRobotoCondensed(it)
             editTextView.setPadding(realpadding, realpadding, realpadding, realpadding)
             editTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
@@ -91,27 +88,19 @@ class DialogBibleNatatkaEdit : DialogFragment() {
             ad.setView(linearLayout)
             ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int ->
                 if (semuxa == 1) {
-                    if (editTextView.text.toString() == "") MaranAtaGlobalList.natatkiSemuxa?.removeAt(position) else MaranAtaGlobalList.natatkiSemuxa?.get(position)?.set(5, editTextView.text.toString())
+                    if (editTextView.text.toString() == "") BibleGlobalList.natatkiSemuxa.removeAt(position) else BibleGlobalList.natatkiSemuxa[position][5] = editTextView.text.toString()
                 }
                 if (semuxa == 2) {
-                    if (editTextView.text.toString() == "") MaranAtaGlobalList.natatkiSinodal?.removeAt(position) else MaranAtaGlobalList.natatkiSinodal?.get(position)?.set(5, editTextView.text.toString())
+                    if (editTextView.text.toString() == "") BibleGlobalList.natatkiSinodal.removeAt(position) else BibleGlobalList.natatkiSinodal[position][5] = editTextView.text.toString()
                 }
-                /*if (semuxa == 3) {
-                if (editTextView.getText().toString().equals(""))
-                    MaranAta_Global_List.getNatatkiPsalterNadsana().remove(position);
-                else
-                    MaranAta_Global_List.getNatatkiPsalterNadsana().get(position).set(3, editTextView.getText().toString());
-            }*/
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(editTextView.windowToken, 0)
                 dialog.cancel()
                 edit?.setEdit()
             }
             ad.setNeutralButton(getString(R.string.bible_natatka)) { dialog: DialogInterface, _: Int ->
-                if (semuxa == 1 && MaranAtaGlobalList.natatkiSemuxa?.size ?: 0 > 0) MaranAtaGlobalList.natatkiSemuxa?.removeAt(position)
-                if (semuxa == 2 && MaranAtaGlobalList.natatkiSinodal?.size ?: 0 > 0) MaranAtaGlobalList.natatkiSinodal?.removeAt(position)
-                //if (semuxa == 3 && MaranAta_Global_List.getNatatkiPsalterNadsana().size() > 0)
-//    MaranAta_Global_List.getNatatkiPsalterNadsana().remove(position);
+                if (semuxa == 1 && BibleGlobalList.natatkiSemuxa.size > 0) BibleGlobalList.natatkiSemuxa.removeAt(position)
+                if (semuxa == 2 && BibleGlobalList.natatkiSinodal.size > 0) BibleGlobalList.natatkiSinodal.removeAt(position)
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(editTextView.windowToken, 0)
                 dialog.cancel()

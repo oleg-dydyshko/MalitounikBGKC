@@ -29,14 +29,14 @@ class MenuBibleSinoidal : Fragment() {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            startActivity(Intent(activity, NovyZapavietSinaidal2::class.java))
+            startActivity(Intent(activity, NovyZapavietSinaidalList::class.java))
         }
         staryZavet.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            startActivity(Intent(activity, StaryZapavietSinaidal2::class.java))
+            startActivity(Intent(activity, StaryZapavietSinaidalList::class.java))
         }
         prodolzych.setOnClickListener {
             val bibleTime = k?.getString("bible_time_sinodal", "")?: ""
@@ -50,7 +50,7 @@ class MenuBibleSinoidal : Fragment() {
                 val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
                 if (set["zavet"] == 1) {
                     if (MainActivity.checkmoduleResources(activity)) {
-                        val intent = Intent(activity, NovyZapavietSinaidal2::class.java)
+                        val intent = Intent(activity, NovyZapavietSinaidalList::class.java)
                         intent.putExtra("kniga", set["kniga"])
                         intent.putExtra("glava", set["glava"])
                         intent.putExtra("stix", set["stix"])
@@ -62,7 +62,7 @@ class MenuBibleSinoidal : Fragment() {
                     }
                 } else {
                     if (MainActivity.checkmoduleResources(activity)) {
-                        val intent = Intent(activity, StaryZapavietSinaidal2::class.java)
+                        val intent = Intent(activity, StaryZapavietSinaidalList::class.java)
                         intent.putExtra("kniga", set["kniga"])
                         intent.putExtra("glava", set["glava"])
                         intent.putExtra("stix", set["stix"])

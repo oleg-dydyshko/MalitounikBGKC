@@ -3,8 +3,8 @@
 3    xmlns:dist="http://schemas.android.com/apk/distribution"
 4    featureSplit="resources"
 5    package="by.carkva_gazeta.malitounik"
-6    android:versionCode="43597"
-7    android:versionName="3.7.5" >
+6    android:versionCode="43598"
+7    android:versionName="3.7.6" >
 8
 9    <uses-sdk
 10        android:minSdkVersion="14"
@@ -67,8 +67,8 @@
 42        </activity>
 43        <activity
 43-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:33:9-41:20
-44            android:name="by.carkva_gazeta.resources.StaryZapaviet3"
-44-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:34:13-69
+44            android:name="by.carkva_gazeta.resources.StaryZapavietSemuxa"
+44-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:34:13-74
 45            android:label="@string/title_activity_stary_zapaviet2"
 45-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:36:13-67
 46            android:theme="@style/AppTheme.NoActionBar"
@@ -84,8 +84,8 @@
 51        </activity>
 52        <activity
 52-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:42:9-50:20
-53            android:name="by.carkva_gazeta.resources.NovyZapaviet3"
-53-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:43:13-68
+53            android:name="by.carkva_gazeta.resources.NovyZapavietSemuxa"
+53-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:43:13-73
 54            android:label="@string/novy_zapaviet"
 54-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:45:13-50
 55            android:theme="@style/AppTheme.NoActionBar"
@@ -101,8 +101,8 @@
 60        </activity>
 61        <activity
 61-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:51:9-59:20
-62            android:name="by.carkva_gazeta.resources.StaryZapavietSinaidal3"
-62-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:52:13-77
+62            android:name="by.carkva_gazeta.resources.StaryZapavietSinaidal"
+62-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:52:13-76
 63            android:label="@string/stsinaidal"
 63-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:54:13-47
 64            android:theme="@style/AppTheme.NoActionBar"
@@ -118,8 +118,8 @@
 69        </activity>
 70        <activity
 70-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:60:9-68:20
-71            android:name="by.carkva_gazeta.resources.NovyZapavietSinaidal3"
-71-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:61:13-76
+71            android:name="by.carkva_gazeta.resources.NovyZapavietSinaidal"
+71-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:61:13-75
 72            android:label="@string/novsinaidal"
 72-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:63:13-48
 73            android:theme="@style/AppTheme.NoActionBar"

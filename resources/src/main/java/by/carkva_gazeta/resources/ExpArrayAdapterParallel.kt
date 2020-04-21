@@ -13,16 +13,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
-import by.carkva_gazeta.malitounik.MaranAtaGlobalList.Companion.checkPosition
-import by.carkva_gazeta.malitounik.MaranAtaGlobalList.Companion.getmPedakVisable
-import by.carkva_gazeta.malitounik.MaranAtaGlobalList.Companion.listPosition
-import by.carkva_gazeta.malitounik.MaranAtaGlobalList.Companion.vydelenie
 import by.carkva_gazeta.malitounik.R
 
 /**
  * Created by oleg on 7.12.16
  */
-internal class ExpArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val Zapavet: Boolean, private val mPerevod: Int) : ArrayAdapter<String?>(context, R.layout.simple_list_item_bible, stixi as List<String>) { // 1-Сёмуха, 2-Синоидальный, 3-Псалтырь Надсана
+internal class ExpArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val Zapavet: Boolean, private val mPerevod: Int) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi as List<String>) { // 1-Сёмуха, 2-Синоидальный, 3-Псалтырь Надсана
 
     @SuppressLint("SetTextI18n")
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup): View {
@@ -289,31 +285,31 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
             val end = start + 1 + res.length
             ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorSecondary_text)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             ssb.setSpan(RelativeSizeSpan(0.7f), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            val pos = checkPosition(glava, position)
+            val pos = BibleGlobalList.checkPosition(glava, position)
             if (pos != -1) {
-                if (vydelenie?.get(pos)?.get(2) == 1) {
+                if (BibleGlobalList.vydelenie[pos][2] == 1) {
                     if (k.getBoolean("dzen_noch", false)) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(context, R.color.colorYelloy)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
-                if (vydelenie?.get(pos)?.get(3) == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                if (vydelenie?.get(pos)?.get(4) == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (BibleGlobalList.vydelenie[pos][3] == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (BibleGlobalList.vydelenie[pos][4] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
             ea.textView?.text = ssb
         } else {
             val ssb = SpannableStringBuilder(ea.textView?.text) // + "\n");
             val end = ea.textView?.length() ?: 0
-            val pos = checkPosition(glava, position)
+            val pos = BibleGlobalList.checkPosition(glava, position)
             if (pos != -1) {
-                if (vydelenie?.get(pos)?.get(2) == 1) {
+                if (BibleGlobalList.vydelenie[pos][2] == 1) {
                     if (k.getBoolean("dzen_noch", false)) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(context, R.color.colorYelloy)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
-                if (vydelenie?.get(pos)?.get(3) == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                if (vydelenie?.get(pos)?.get(4) == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (BibleGlobalList.vydelenie[pos][3] == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (BibleGlobalList.vydelenie[pos][4] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
             ea.textView?.text = ssb
         }
-        if (position == listPosition && getmPedakVisable()) {
+        if (BibleGlobalList.bibleCopyList.size > 0 && BibleGlobalList.bibleCopyList.contains(position) && BibleGlobalList.mPedakVisable) {
             if (k.getBoolean("dzen_noch", false)) {
                 ea.textView?.setBackgroundResource(R.color.colorprimary_material_dark2)
                 ea.textView?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
@@ -331,13 +327,12 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
         if (mPerevod == 1) {
             var zav = "0"
             if (Zapavet) zav = "1"
-            if (MaranAtaGlobalList.natatkiSemuxa?.size ?: 0 > 0) {
-                for (i in MaranAtaGlobalList.natatkiSemuxa?.indices ?: 0..0) {
-                    if (MaranAtaGlobalList.natatkiSemuxa?.get(i)?.get(0)?.contains(zav) == true && MaranAtaGlobalList.natatkiSemuxa?.get(i)?.get(1)?.toInt() == kniga && MaranAtaGlobalList.natatkiSemuxa?.get(i)?.get(2)?.toInt() == glava && MaranAtaGlobalList.natatkiSemuxa?.get(i)?.get(3)?.toInt() == position) {
+            if (BibleGlobalList.natatkiSemuxa.size > 0) {
+                for (i in BibleGlobalList.natatkiSemuxa.indices) {
+                    if (BibleGlobalList.natatkiSemuxa[i][0].contains(zav) && BibleGlobalList.natatkiSemuxa[i][1].toInt() == kniga && BibleGlobalList.natatkiSemuxa[i][2].toInt() == glava && BibleGlobalList.natatkiSemuxa[i][3].toInt() == position) {
                         val ssb = SpannableStringBuilder(ea.textView?.text)
                         val nachalo = ssb.length
-                        ssb.append("\nНататка:\n").append(MaranAtaGlobalList.natatkiSemuxa?.get(i)?.get(5)
-                                ?: "").append("\n")
+                        ssb.append("\nНататка:\n").append(BibleGlobalList.natatkiSemuxa[i][5]).append("\n")
                         ssb.setSpan(StyleSpan(Typeface.ITALIC), nachalo, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         ea.textView?.text = ssb
                         break
@@ -348,13 +343,12 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
         if (mPerevod == 2) {
             var zav = "0"
             if (Zapavet) zav = "1"
-            if (MaranAtaGlobalList.natatkiSinodal?.size ?: 0 > 0) {
-                for (i in MaranAtaGlobalList.natatkiSinodal?.indices ?: 0..0) {
-                    if (MaranAtaGlobalList.natatkiSinodal?.get(i)?.get(0)?.contains(zav) == true && MaranAtaGlobalList.natatkiSinodal?.get(i)?.get(1)?.toInt() == kniga && MaranAtaGlobalList.natatkiSinodal?.get(i)?.get(2)?.toInt() == glava && MaranAtaGlobalList.natatkiSinodal?.get(i)?.get(3)?.toInt() == position) {
+            if (BibleGlobalList.natatkiSinodal.size > 0) {
+                for (i in BibleGlobalList.natatkiSinodal.indices) {
+                    if (BibleGlobalList.natatkiSinodal[i][0].contains(zav) && BibleGlobalList.natatkiSinodal[i][1].toInt() == kniga && BibleGlobalList.natatkiSinodal[i][2].toInt() == glava && BibleGlobalList.natatkiSinodal[i][3].toInt() == position) {
                         val ssb = SpannableStringBuilder(ea.textView?.text)
                         val nachalo = ssb.length
-                        ssb.append("\nНататка:\n").append(MaranAtaGlobalList.natatkiSinodal?.get(i)?.get(5)
-                                ?: "").append("\n")
+                        ssb.append("\nНататка:\n").append(BibleGlobalList.natatkiSinodal[i][5]).append("\n")
                         ssb.setSpan(StyleSpan(Typeface.ITALIC), nachalo, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         ea.textView?.text = ssb
                         break
@@ -362,22 +356,7 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
                 }
             }
         }
-        /*if (mPerevod == 3) {
-            String zav = "0";
-            if (Zapavet) zav = "1";
-            if (MaranAta_Global_List.getNatatkiPsalterNadsana().size() > 0) {
-                for (int i = 0; i < MaranAta_Global_List.getNatatkiPsalterNadsana().size(); i++) {
-                    if (MaranAta_Global_List.getNatatkiPsalterNadsana().get(i).get(0).contains(zav) && Integer.valueOf(MaranAta_Global_List.getNatatkiPsalterNadsana().get(i).get(1)) == kniga && Integer.valueOf(MaranAta_Global_List.getNatatkiPsalterNadsana().get(i).get(2)) == glava && Integer.valueOf(MaranAta_Global_List.getNatatkiPsalterNadsana().get(i).get(3)) == position) {
-                        SpannableStringBuilder ssb = new SpannableStringBuilder(ea.textView?.getText());
-                        int nachalo = ssb.length();
-                        ssb.append("\nНататка:\n").append(MaranAta_Global_List.getNatatkiPsalterNadsana().get(i).get(5)).append("\n");
-                        ssb.setSpan(new StyleSpan(Typeface.ITALIC), nachalo, ssb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        ea.textView?.setText(ssb);
-                        break;
-                    }
-                }
-            }
-        }*/return rootView
+        return rootView
     }
 
     private class ExpArrayAdapterParallelItems {

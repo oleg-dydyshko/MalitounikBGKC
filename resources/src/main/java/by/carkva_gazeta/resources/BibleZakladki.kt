@@ -24,7 +24,7 @@ import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.MaranAtaGlobalList
+import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
@@ -44,8 +44,7 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
     private var mLastClickTime: Long = 0
     override fun fileAllNatatkiAlboZakladki(semuxa: Int) {
         if (semuxa == 1) {
-            MaranAtaGlobalList.zakladkiSemuxa?.removeAll(MaranAtaGlobalList.zakladkiSemuxa
-                    ?: ArrayList())
+            BibleGlobalList.zakladkiSemuxa.removeAll(BibleGlobalList.zakladkiSemuxa)
             adapter.notifyDataSetChanged()
             val fileZakladki = File("$filesDir/BibliaSemuxaZakladki.json")
             if (fileZakladki.exists()) {
@@ -53,22 +52,13 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
             }
         }
         if (semuxa == 2) {
-            MaranAtaGlobalList.zakladkiSinodal?.removeAll(MaranAtaGlobalList.zakladkiSinodal
-                    ?: ArrayList())
+            BibleGlobalList.zakladkiSinodal.removeAll(BibleGlobalList.zakladkiSinodal)
             adapter.notifyDataSetChanged()
             val fileZakladki = File("$filesDir/BibliaSinodalZakladki.json")
             if (fileZakladki.exists()) {
                 fileZakladki.delete()
             }
         }
-        /*if (semuxa == 3) {
-            MaranAta_Global_List.getZakladkiPsalterNadsana().removeAll(MaranAta_Global_List.getZakladkiPsalterNadsana());
-            adapter.notifyDataSetChanged();
-            File fileZakladki = new File(getFilesDir() + "/PsalterNadsanZakladki.json");
-            if (fileZakladki.exists()) {
-                fileZakladki.delete();
-            }
-        }*/
         help.visibility = View.VISIBLE
         ListView.visibility = View.GONE
         invalidateOptionsMenu()
@@ -85,13 +75,9 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         setContentView(R.layout.akafist_list_bible)
-        if (intent != null) {
-            semuxa = intent.getIntExtra("semuxa", 1)
-        }
-        if (semuxa == 1) data = MaranAtaGlobalList.zakladkiSemuxa ?: ArrayList()
-        if (semuxa == 2) data = MaranAtaGlobalList.zakladkiSinodal ?: ArrayList()
-        //if (semuxa == 3)
-//data = MaranAta_Global_List.getZakladkiPsalterNadsana();
+        semuxa = intent.getIntExtra("semuxa", 1)
+        if (semuxa == 1) data = BibleGlobalList.zakladkiSemuxa
+        if (semuxa == 2) data = BibleGlobalList.zakladkiSinodal
         adapter = BibleZakladkiListAdaprer(this, data)
         if (data.size == 0) {
             help.visibility = View.VISIBLE
@@ -167,65 +153,43 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
     }
 
     override fun natatkidiliteItem(position: Int, semuxa: Int) {}
+
     override fun zakladkadiliteItem(position: Int, semuxa: Int) {
         if (semuxa == 1) {
-            MaranAtaGlobalList.zakladkiSemuxa?.removeAt(position)
+            BibleGlobalList.zakladkiSemuxa.removeAt(position)
             adapter.notifyDataSetChanged()
             val fileZakladki = File("$filesDir/BibliaSemuxaZakladki.json")
-            if (MaranAtaGlobalList.zakladkiSemuxa?.size == 0) {
+            if (BibleGlobalList.zakladkiSemuxa.size == 0) {
                 if (fileZakladki.exists()) {
                     fileZakladki.delete()
                 }
                 help.visibility = View.VISIBLE
                 ListView.visibility = View.GONE
             } else {
-                if (MaranAtaGlobalList.zakladkiSemuxa != null) {
-                    val gson = Gson()
-                    val outputStream = FileWriter(fileZakladki)
-                    outputStream.write(gson.toJson(MaranAtaGlobalList.zakladkiSemuxa))
-                    outputStream.close()
-                }
+                val gson = Gson()
+                val outputStream = FileWriter(fileZakladki)
+                outputStream.write(gson.toJson(BibleGlobalList.zakladkiSemuxa))
+                outputStream.close()
             }
         }
         if (semuxa == 2) {
-            MaranAtaGlobalList.zakladkiSinodal?.removeAt(position)
+            BibleGlobalList.zakladkiSinodal.removeAt(position)
             adapter.notifyDataSetChanged()
             val fileZakladki = File("$filesDir/BibliaSinodalZakladki.json")
-            if (MaranAtaGlobalList.zakladkiSinodal?.size == 0) {
+            if (BibleGlobalList.zakladkiSinodal.size == 0) {
                 if (fileZakladki.exists()) {
                     fileZakladki.delete()
                 }
                 help.visibility = View.VISIBLE
                 ListView.visibility = View.GONE
             } else {
-                if (MaranAtaGlobalList.zakladkiSinodal != null) {
-                    val gson = Gson()
-                    val outputStream = FileWriter(fileZakladki)
-                    outputStream.write(gson.toJson(MaranAtaGlobalList.zakladkiSinodal))
-                    outputStream.close()
-                }
+                val gson = Gson()
+                val outputStream = FileWriter(fileZakladki)
+                outputStream.write(gson.toJson(BibleGlobalList.zakladkiSinodal))
+                outputStream.close()
             }
         }
-        /*if (semuxa == 3) {
-            MaranAta_Global_List.getZakladkiPsalterNadsana().remove(position);
-            adapter.notifyDataSetChanged();
-            File fileZakladki = new File(getFilesDir() + "/PsalterNadsanZakladki.json");
-            if (MaranAta_Global_List.getZakladkiPsalterNadsana().size() == 0) {
-                if (fileZakladki.exists()) {
-                    fileZakladki.delete();
-                }
-                help.setVisibility(View.VISIBLE);
-                listView.setVisibility(View.GONE);
-            } else {
-                Gson gson = new Gson();
-                try {
-                    FileWriter outputStream = new FileWriter(fileZakladki);
-                    outputStream.write(gson.toJson(MaranAta_Global_List.getZakladkiPsalterNadsana()));
-                    outputStream.close();
-                } catch (IOException ignored) {
-                }
-            }
-        }*/invalidateOptionsMenu()
+        invalidateOptionsMenu()
     }
 
     override fun onItemClick(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
@@ -395,36 +359,26 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
             t3 = knigaName.indexOf("\n\n", t2)
             glava = knigaName.substring(t1 + 6, t2).toInt()
         }
-        /*if (semuxa == 3) {
-            knigaS = 18;
-            t1 = knigaName.indexOf("Разьдзел ");
-            t2 = knigaName.indexOf("/", t1);
-            t3 = knigaName.indexOf("\n\n");
-            glava = Integer.parseInt(knigaName.substring(t1 + 9, t2));
-        }*/
         val stix = knigaName.substring(t2 + 6, t3).toInt()
         var intent = Intent()
-        /*if (semuxa == 3) {
-            intent = new Intent(this, nadsanContentActivity.class);
-        } else {*/if (kniga != -1) {
+        if (kniga != -1) {
             if (semuxa == 1) {
-                intent = Intent(this, NovyZapaviet3::class.java)
+                intent = Intent(this, NovyZapavietSemuxa::class.java)
             }
             if (semuxa == 2) {
-                intent = Intent(this, NovyZapavietSinaidal3::class.java)
+                intent = Intent(this, NovyZapavietSinaidal::class.java)
             }
             intent.putExtra("kniga", kniga)
         }
         if (knigaS != -1) {
             if (semuxa == 1) {
-                intent = Intent(this, StaryZapaviet3::class.java)
+                intent = Intent(this, StaryZapavietSemuxa::class.java)
             }
             if (semuxa == 2) {
-                intent = Intent(this, StaryZapavietSinaidal3::class.java)
+                intent = Intent(this, StaryZapavietSinaidal::class.java)
             }
             intent.putExtra("kniga", knigaS)
         }
-        //}
         intent.putExtra("glava", glava - 1)
         intent.putExtra("stix", stix - 1)
         startActivityForResult(intent, 500)

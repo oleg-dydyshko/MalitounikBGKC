@@ -29,14 +29,14 @@ class MenuBibleSemuxa : Fragment() {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            startActivity(Intent(activity, NovyZapaviet2::class.java))
+            startActivity(Intent(activity, NovyZapavietSemuxaList::class.java))
         }
         staryZavet.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            startActivity(Intent(activity, StaryZapaviet2::class.java))
+            startActivity(Intent(activity, StaryZapavietSemuxaList::class.java))
         }
         prodolzych.setOnClickListener {
             val bibleTime = k?.getString("bible_time_semuxa", "")?: ""
@@ -50,7 +50,7 @@ class MenuBibleSemuxa : Fragment() {
                 val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
                 if (set["zavet"] == 1) {
                     if (MainActivity.checkmoduleResources(activity)) {
-                        val intent = Intent(activity, NovyZapaviet2::class.java)
+                        val intent = Intent(activity, NovyZapavietSemuxaList::class.java)
                         intent.putExtra("kniga", set["kniga"])
                         intent.putExtra("glava", set["glava"])
                         intent.putExtra("stix", set["stix"])
@@ -62,7 +62,7 @@ class MenuBibleSemuxa : Fragment() {
                     }
                 } else {
                     if (MainActivity.checkmoduleResources(activity)) {
-                        val intent = Intent(activity, StaryZapaviet2::class.java)
+                        val intent = Intent(activity, StaryZapavietSemuxaList::class.java)
                         intent.putExtra("kniga", set["kniga"])
                         intent.putExtra("glava", set["glava"])
                         intent.putExtra("stix", set["stix"])

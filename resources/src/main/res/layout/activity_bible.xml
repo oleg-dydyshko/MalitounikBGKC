@@ -40,18 +40,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout2">
 
-
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-            android:id="@+id/bible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textColor="@color/colorPrimary_text" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/pager"
@@ -85,58 +78,4 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal"
-        android:padding="5dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageView
-            android:id="@+id/copy"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/copy" />
-
-        <ImageView
-            android:id="@+id/yelloy"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/yelloy" />
-
-        <ImageView
-            android:id="@+id/underline"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/underline" />
-
-        <ImageView
-            android:id="@+id/bold"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/bold" />
-
-        <ImageView
-            android:id="@+id/zakladka"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/bookmark" />
-
-        <ImageView
-            android:id="@+id/zametka"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/sketch" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

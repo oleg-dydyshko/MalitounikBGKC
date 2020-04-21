@@ -772,6 +772,10 @@
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/znaki_ttk_black.png"
     },
     {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/debug/drawable_knopka_black.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/knopka_black.xml"
+    },
+    {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/debug/raw_caliandar10.json.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/raw/caliandar10.json"
     },

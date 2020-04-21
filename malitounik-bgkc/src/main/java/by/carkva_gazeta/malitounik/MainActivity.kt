@@ -620,7 +620,7 @@ try {
         }
         if (id == R.id.prazdnik) {
             val menuCviaty = supportFragmentManager.findFragmentByTag("MenuCviaty") as? MenuCviaty
-            val year = menuCviaty?.getCviatyYear()?: Calendar.getInstance()[Calendar.YEAR]
+            val year = menuCviaty?.getCviatyYear() ?: Calendar.getInstance()[Calendar.YEAR]
             val prazdnik = DialogPrazdnik.getInstance(year)
             prazdnik.show(supportFragmentManager, "prazdnik")
         }
@@ -1088,34 +1088,24 @@ try {
                     ftrans.replace(R.id.conteiner, menuNatatki, "MenuNatatki")
                 }
                 R.id.label8 -> {
-                    if (MaranAtaGlobalList.natatkiSemuxa == null) {
-                        val file = File("$filesDir/BibliaSemuxaNatatki.json")
-                        if (file.exists()) {
-                            try {
-                                val gson = Gson()
-                                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                                MaranAtaGlobalList.natatkiSemuxa = gson.fromJson(file.readText(), type)
-                            } catch (t: Throwable) {
-                                file.delete()
-                                MaranAtaGlobalList.natatkiSemuxa = ArrayList()
-                            }
-                        } else {
-                            MaranAtaGlobalList.natatkiSemuxa = ArrayList()
+                    val file = File("$filesDir/BibliaSemuxaNatatki.json")
+                    if (file.exists()) {
+                        try {
+                            val gson = Gson()
+                            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                            BibleGlobalList.natatkiSemuxa = gson.fromJson(file.readText(), type)
+                        } catch (t: Throwable) {
+                            file.delete()
                         }
                     }
-                    if (MaranAtaGlobalList.zakladkiSemuxa == null) {
-                        val file = File("$filesDir/BibliaSemuxaZakladki.json")
-                        if (file.exists()) {
-                            try {
-                                val gson = Gson()
-                                val type = object : TypeToken<ArrayList<String>>() {}.type
-                                MaranAtaGlobalList.zakladkiSemuxa = gson.fromJson(file.readText(), type)
-                            } catch (t: Throwable) {
-                                file.delete()
-                                MaranAtaGlobalList.zakladkiSemuxa = ArrayList()
-                            }
-                        } else {
-                            MaranAtaGlobalList.zakladkiSemuxa = ArrayList()
+                    val file2 = File("$filesDir/BibliaSemuxaZakladki.json")
+                    if (file2.exists()) {
+                        try {
+                            val gson = Gson()
+                            val type = object : TypeToken<ArrayList<String>>() {}.type
+                            BibleGlobalList.zakladkiSemuxa = gson.fromJson(file2.readText(), type)
+                        } catch (t: Throwable) {
+                            file2.delete()
                         }
                     }
                     prefEditors.putInt("id", idSelect)
@@ -1180,34 +1170,24 @@ try {
                     ftrans.replace(R.id.conteiner, menuPadryxtoukaDaSpovedzi, "MenuPadryxtoukaDaSpovedzi")
                 }
                 R.id.label11 -> {
-                    if (MaranAtaGlobalList.natatkiSinodal == null) {
-                        val file = File("$filesDir/BibliaSinodalNatatki.json")
-                        if (file.exists()) {
-                            try {
-                                val gson = Gson()
-                                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                                MaranAtaGlobalList.natatkiSinodal = gson.fromJson(file.readText(), type)
-                            } catch (t: Throwable) {
-                                file.delete()
-                                MaranAtaGlobalList.natatkiSinodal = ArrayList()
-                            }
-                        } else {
-                            MaranAtaGlobalList.natatkiSinodal = ArrayList()
+                    val file = File("$filesDir/BibliaSinodalNatatki.json")
+                    if (file.exists()) {
+                        try {
+                            val gson = Gson()
+                            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                            BibleGlobalList.natatkiSinodal = gson.fromJson(file.readText(), type)
+                        } catch (t: Throwable) {
+                            file.delete()
                         }
                     }
-                    if (MaranAtaGlobalList.zakladkiSinodal == null) {
-                        val file = File("$filesDir/BibliaSinodalZakladki.json")
-                        if (file.exists()) {
-                            try {
-                                val gson = Gson()
-                                val type = object : TypeToken<ArrayList<String>>() {}.type
-                                MaranAtaGlobalList.zakladkiSinodal = gson.fromJson(file.readText(), type)
-                            } catch (t: Throwable) {
-                                file.delete()
-                                MaranAtaGlobalList.zakladkiSinodal = ArrayList()
-                            }
-                        } else {
-                            MaranAtaGlobalList.zakladkiSinodal = ArrayList()
+                    val file2 = File("$filesDir/BibliaSinodalZakladki.json")
+                    if (file2.exists()) {
+                        try {
+                            val gson = Gson()
+                            val type = object : TypeToken<ArrayList<String>>() {}.type
+                            BibleGlobalList.zakladkiSinodal = gson.fromJson(file2.readText(), type)
+                        } catch (t: Throwable) {
+                            file2.delete()
                         }
                     }
                     prefEditors.putInt("id", idSelect)

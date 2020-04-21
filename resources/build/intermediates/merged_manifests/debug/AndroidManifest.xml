@@ -3,8 +3,8 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     featureSplit="resources"
     package="by.carkva_gazeta.malitounik"
-    android:versionCode="43597"
-    android:versionName="3.7.5" >
+    android:versionCode="43598"
+    android:versionName="3.7.6" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -41,7 +41,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.StaryZapaviet3"
+            android:name="by.carkva_gazeta.resources.StaryZapavietSemuxa"
             android:label="@string/title_activity_stary_zapaviet2"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" >
@@ -50,7 +50,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.NovyZapaviet3"
+            android:name="by.carkva_gazeta.resources.NovyZapavietSemuxa"
             android:label="@string/novy_zapaviet"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" >
@@ -59,7 +59,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.StaryZapavietSinaidal3"
+            android:name="by.carkva_gazeta.resources.StaryZapavietSinaidal"
             android:label="@string/stsinaidal"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" >
@@ -68,7 +68,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.NovyZapavietSinaidal3"
+            android:name="by.carkva_gazeta.resources.NovyZapavietSinaidal"
             android:label="@string/novsinaidal"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" >

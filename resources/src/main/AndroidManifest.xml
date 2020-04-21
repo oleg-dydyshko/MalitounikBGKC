@@ -31,7 +31,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.StaryZapaviet3"
+            android:name="by.carkva_gazeta.resources.StaryZapavietSemuxa"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:label="@string/title_activity_stary_zapaviet2"
             android:theme="@style/AppTheme.NoActionBar">
@@ -40,7 +40,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.NovyZapaviet3"
+            android:name="by.carkva_gazeta.resources.NovyZapavietSemuxa"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:label="@string/novy_zapaviet"
             android:theme="@style/AppTheme.NoActionBar">
@@ -49,7 +49,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.StaryZapavietSinaidal3"
+            android:name="by.carkva_gazeta.resources.StaryZapavietSinaidal"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:label="@string/stsinaidal"
             android:theme="@style/AppTheme.NoActionBar">
@@ -58,7 +58,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.NovyZapavietSinaidal3"
+            android:name="by.carkva_gazeta.resources.NovyZapavietSinaidal"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:label="@string/novsinaidal"
             android:theme="@style/AppTheme.NoActionBar">

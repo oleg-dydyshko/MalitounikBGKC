@@ -794,7 +794,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             textView1.setPadding(0, 10, 0, 0)
                             LinearButtom.addView(textView1)
                             cytannelist.add(textView1)
-
                             val isr = InputStreamReader(inputStream)
                             val reader = BufferedReader(isr)
                             var line: String
@@ -809,15 +808,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                     builder.append(line).append("\n")
                                 }
                             }
-                            /*while (reader.readLine()?.also { line = it } != null) {
-                        if (line.contains("//")) {
-                            val t1 = line.indexOf("//")
-                            line = line.substring(0, t1).trim()
-                            if (line != "") builder.append(line).append("\n")
-                            continue
-                        }
-                        builder.append(line).append("\n")
-                    }*/
                             inputStream.close()
                             val split2 = builder.toString().split("===").toTypedArray()
                             var spl: String
@@ -878,6 +868,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             }
                             val textView2 = TextViewRobotoCondensed(this)
                             textView2.isFocusable = false
+                            textView2.setTextIsSelectable(true)
                             textView2.text = textBiblia
                             textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
                             if (dzenNoch) textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))

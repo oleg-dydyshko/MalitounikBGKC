@@ -267,14 +267,14 @@
             android:label="Даведка"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="by.carkva_gazeta.malitounik.NovyZapaviet2"
+            android:name="by.carkva_gazeta.malitounik.NovyZapavietSemuxaList"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.malitounik.StaryZapaviet2"
+            android:name="by.carkva_gazeta.malitounik.StaryZapavietSemuxaList"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -283,14 +283,14 @@
 
         <!--android:icon="@drawable/book_icon"-->
         <activity
-            android:name="by.carkva_gazeta.malitounik.NovyZapavietSinaidal2"
+            android:name="by.carkva_gazeta.malitounik.NovyZapavietSinaidalList"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.malitounik.StaryZapavietSinaidal2"
+            android:name="by.carkva_gazeta.malitounik.StaryZapavietSinaidalList"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

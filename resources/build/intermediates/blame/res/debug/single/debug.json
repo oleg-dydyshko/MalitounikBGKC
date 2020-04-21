@@ -1664,6 +1664,10 @@
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/pesny_prasl_28.html"
     },
     {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/debug/layout_activity_bible_page_fragment.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_bible_page_fragment.xml"
+    },
+    {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/debug/raw_bogashlugbovya13_2.html.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya13_2.html"
     },

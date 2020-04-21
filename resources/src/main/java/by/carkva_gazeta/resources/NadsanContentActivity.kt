@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.activity_bible.*
 
 class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NadsanContentPage.ListPosition {
     private val mHideHandler = Handler()
+
     @SuppressLint("InlinedApi")
     private val mHidePart2Runnable = Runnable {
         linealLayoutTitle.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
@@ -117,7 +118,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         }
         val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
         pager.adapter = adapterViewPager
-        bible.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -130,20 +130,17 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
                 window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
             }
         }
-        bible.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
         if (dzenNoch) {
             window.setBackgroundDrawableResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            bible.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             pagerTabStrip.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            bible.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             pagerTabStrip.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
         }
-        bible.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma) + " " + getKafizma(glava)
+        title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2) + " " + getKafizma(glava)
         pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
             override fun onPageSelected(position: Int) {
                 if (glava != position) fierstPosition = 0
-                bible.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2) + " " + getKafizma(position)
+                title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2) + " " + getKafizma(position)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
@@ -178,7 +175,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.psalter)
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
             toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
@@ -252,6 +248,11 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             fullscreenPage -> {
                 fullscreenPage = false
                 show()
+            }
+            BibleGlobalList.mPedakVisable -> {
+                val adapter = pager.adapter as MyPagerAdapter
+                val fragment = adapter.getFragment(pager.currentItem) as BackPressedFragment
+                fragment.onBackPressedFragment()
             }
             checkSetDzenNoch -> {
                 onSupportNavigateUp()
@@ -358,28 +359,20 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
     }
 
-    /*private void setOnClic(String cytanneParalelnye, String cytanneSours) {
-        paralel = true;
-        this.cytanneParalelnye = cytanneParalelnye;
-        this.cytanneSours = cytanneSours;
-        Paralelnye_mesta pm = new Paralelnye_mesta();
-        linearLayout.removeAllViewsInLayout();
-        ArrayList<TextView_Roboto_Condensed> arrayList = pm.paralel(nadsanContentActivity.this, cytanneSours, cytanneParalelnye, true);
-        for (int i = 0; i < arrayList.size(); i++) {
-            linearLayout.addView(arrayList.get(i));
-        }
-        scrollView.setVisibility(View.VISIBLE);
-        bibleInfo.setVisibility(View.GONE);
-        vpPager.setVisibility(View.GONE);
-        title_toolbar.setText(getResources().getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours));
-        supportInvalidateOptionsMenu();
-    }*/
     private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
         override fun getCount(): Int {
             return 151
         }
 
         override fun getItem(position: Int): Fragment {
+            val pazicia: Int = if (trak) {
+                if (glava != position) 0
+                else fierstPosition
+            } else 0
+            return newInstance(position, pazicia)
+        }
+
+        /*override fun getItem(position: Int): Fragment {
             for (i in 0 until count) {
                 if (position == i) {
                     val pazicia: Int = if (trak) {
@@ -389,7 +382,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
                 }
             }
             return newInstance(0, 1)
-        }
+        }*/
 
         override fun getPageTitle(position: Int): CharSequence? {
             return resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2) + " " + (position + 1)

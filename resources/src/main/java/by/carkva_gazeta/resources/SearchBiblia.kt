@@ -15,7 +15,6 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import android.widget.TextView.OnEditorActionListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
@@ -333,7 +332,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             } else {
                 if (nazvaS != -1) {
                     if (zavet == 1) {
-                        val intent = Intent(this@SearchBiblia, StaryZapaviet3::class.java)
+                        val intent = Intent(this@SearchBiblia, StaryZapavietSemuxa::class.java)
                         intent.putExtra("kniga", nazvaS)
                         intent.putExtra("glava", glava - 1)
                         intent.putExtra("stix", stix - 1)
@@ -342,7 +341,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         prefEditors.apply()
                         startActivity(intent)
                     } else {
-                        val intent = Intent(this@SearchBiblia, StaryZapavietSinaidal3::class.java)
+                        val intent = Intent(this@SearchBiblia, StaryZapavietSinaidal::class.java)
                         intent.putExtra("kniga", nazvaS)
                         intent.putExtra("glava", glava - 1)
                         intent.putExtra("stix", stix - 1)
@@ -353,7 +352,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                     }
                 } else {
                     if (zavet == 1) {
-                        val intent = Intent(this@SearchBiblia, NovyZapaviet3::class.java)
+                        val intent = Intent(this@SearchBiblia, NovyZapavietSemuxa::class.java)
                         intent.putExtra("kniga", nazva)
                         intent.putExtra("glava", glava - 1)
                         intent.putExtra("stix", stix - 1)
@@ -362,7 +361,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         prefEditors.apply()
                         startActivity(intent)
                     } else {
-                        val intent = Intent(this@SearchBiblia, NovyZapavietSinaidal3::class.java)
+                        val intent = Intent(this@SearchBiblia, NovyZapavietSinaidal::class.java)
                         intent.putExtra("kniga", nazva)
                         intent.putExtra("glava", glava - 1)
                         intent.putExtra("stix", stix - 1)

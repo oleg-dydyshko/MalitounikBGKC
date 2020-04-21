@@ -150,33 +150,45 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
                 adapter.notifyDataSetChanged()
             }
             copyBig.setOnClickListener {
-                val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val copyString = java.lang.StringBuilder()
-                BibleGlobalList.bibleCopyList.sort()
-                BibleGlobalList.bibleCopyList.forEach {
-                    copyString.append("${bible[it]}<br>")
+                if (BibleGlobalList.bibleCopyList.size > 0) {
+                    val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val copyString = StringBuilder()
+                    BibleGlobalList.bibleCopyList.sort()
+                    BibleGlobalList.bibleCopyList.forEach {
+                        copyString.append("${bible[it]}<br>")
+                    }
+                    val clip = ClipData.newPlainText("", MainActivity.fromHtml(copyString.toString()).toString().trim())
+                    clipboard.setPrimaryClip(clip)
+                    messageView(getString(by.carkva_gazeta.malitounik.R.string.copy))
+                    linearLayout4.visibility = View.GONE
+                    BibleGlobalList.mPedakVisable = false
+                    BibleGlobalList.bibleCopyList.clear()
+                    adapter.notifyDataSetChanged()
+                } else {
+                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
-                val clip = ClipData.newPlainText("", MainActivity.fromHtml(copyString.toString()).toString().trim())
-                clipboard.setPrimaryClip(clip)
-                val layout = LinearLayout(activity)
-                if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
-                val density = resources.displayMetrics.density
-                val realpadding = (10 * density).toInt()
-                val toast = TextViewRobotoCondensed(activity)
-                toast.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                toast.text = getString(by.carkva_gazeta.malitounik.R.string.copy)
-                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
-                layout.addView(toast)
-                val mes = Toast(activity)
-                mes.duration = Toast.LENGTH_LONG
-                mes.view = layout
-                mes.show()
-                linearLayout4.visibility = View.GONE
-                BibleGlobalList.mPedakVisable = false
-                BibleGlobalList.bibleCopyList.clear()
-                adapter.notifyDataSetChanged()
             }
+        }
+    }
+
+    private fun messageView(message: String) {
+        activity?.let {
+            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val layout = LinearLayout(activity)
+            if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
+            val density = resources.displayMetrics.density
+            val realpadding = (10 * density).toInt()
+            val toast = TextViewRobotoCondensed(activity)
+            toast.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            toast.setPadding(realpadding, realpadding, realpadding, realpadding)
+            toast.text = message
+            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+            layout.addView(toast)
+            val mes = Toast(activity)
+            mes.duration = Toast.LENGTH_LONG
+            mes.view = layout
+            mes.show()
         }
     }
 

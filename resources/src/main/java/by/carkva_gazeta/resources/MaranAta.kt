@@ -241,7 +241,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 textView = textView.replace("+-+", "")
                 val t1 = textView.indexOf("$")
                 if (t1 != -1)
-                    textView = textView.substring(0,t1)
+                    textView = textView.substring(0, t1)
                 copyString.append("$textView<br>")
             }
             val clip = ClipData.newPlainText("", MainActivity.fromHtml(copyString.toString()).toString().trim())
@@ -255,9 +255,13 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         imageView1.setOnClickListener {
             if (BibleGlobalList.bibleCopyList.size > 0) {
                 val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("", MainActivity.fromHtml(maranAta[BibleGlobalList.bibleCopyList[0]]).toString())
+                var textView = maranAta[BibleGlobalList.bibleCopyList[0]]
+                textView = textView.replace("+-+", "")
+                val t1 = textView.indexOf("$")
+                if (t1 != -1)
+                    textView = textView.substring(0, t1)
+                val clip = ClipData.newPlainText("", MainActivity.fromHtml(textView).toString())
                 clipboard.setPrimaryClip(clip)
-                linearLayout4.visibility = View.GONE
                 val layout = LinearLayout(this)
                 if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
                 val density = resources.displayMetrics.density
@@ -272,6 +276,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 mes.duration = Toast.LENGTH_SHORT
                 mes.view = layout
                 mes.show()
+                linearLayout4.visibility = View.GONE
+                BibleGlobalList.mPedakVisable = false
+                BibleGlobalList.bibleCopyList.clear()
+                adapter.notifyDataSetChanged()
             } else {
                 messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }

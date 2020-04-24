@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="by.carkva_gazeta.malitounik"
-    android:versionCode="43598"
+    android:versionCode="43600"
     android:versionName="3.7.6" >
 
     <uses-sdk

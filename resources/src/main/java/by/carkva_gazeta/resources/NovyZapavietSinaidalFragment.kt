@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -106,7 +107,8 @@ class NovyZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickListe
             linearLayout4.visibility = View.VISIBLE
             copyBig.visibility = View.GONE
             copyBigFull.visibility = View.GONE
-            copy.visibility = View.VISIBLE
+            adpravit.visibility = View.GONE
+            spinnerCopy.visibility = View.VISIBLE
             yelloy.visibility = View.VISIBLE
             underline.visibility = View.VISIBLE
             bold.visibility = View.VISIBLE
@@ -114,17 +116,23 @@ class NovyZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickListe
             zametka.visibility = View.VISIBLE
             BibleGlobalList.mPedakVisable = true
         } else {
-            var find = false
-            BibleGlobalList.bibleCopyList.forEach {
-                if (it == position)
-                    find = true
+            if (BibleGlobalList.mPedakVisable) {
+                var find = false
+                BibleGlobalList.bibleCopyList.forEach {
+                    if (it == position)
+                        find = true
+                }
+                if (find) {
+                    BibleGlobalList.bibleCopyList.remove(position)
+                } else {
+                    BibleGlobalList.bibleCopyList.add(position)
+                }
+                adapter.notifyDataSetChanged()
+                if (BibleGlobalList.bibleCopyList.size == bible.size)
+                    copyBigFull.visibility = View.GONE
+                else
+                    copyBigFull.visibility = View.VISIBLE
             }
-            if (find) {
-                BibleGlobalList.bibleCopyList.remove(position)
-            } else {
-                BibleGlobalList.bibleCopyList.add(position)
-            }
-            adapter.notifyDataSetChanged()
         }
         return true
     }
@@ -290,17 +298,22 @@ class NovyZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickListe
         if (BibleGlobalList.mPedakVisable) {
             if (BibleGlobalList.bibleCopyList.size > 1) {
                 copyBig.visibility = View.VISIBLE
-                copyBigFull.visibility = View.VISIBLE
-                copy.visibility = View.GONE
+                adpravit.visibility = View.VISIBLE
+                spinnerCopy.visibility = View.GONE
                 yelloy.visibility = View.GONE
                 underline.visibility = View.GONE
                 bold.visibility = View.GONE
                 zakladka.visibility = View.GONE
                 zametka.visibility = View.GONE
+                if (BibleGlobalList.bibleCopyList.size == bible.size)
+                    copyBigFull.visibility = View.GONE
+                else
+                    copyBigFull.visibility = View.VISIBLE
             } else {
                 copyBig.visibility = View.GONE
                 copyBigFull.visibility = View.GONE
-                copy.visibility = View.VISIBLE
+                adpravit.visibility = View.GONE
+                spinnerCopy.visibility = View.VISIBLE
                 yelloy.visibility = View.VISIBLE
                 underline.visibility = View.VISIBLE
                 bold.visibility = View.VISIBLE
@@ -393,6 +406,7 @@ class NovyZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickListe
                     BibleGlobalList.bibleCopyList.add(index)
                 }
                 adapter.notifyDataSetChanged()
+                copyBigFull.visibility = View.GONE
             }
             copyBig.setOnClickListener {
                 val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -409,15 +423,22 @@ class NovyZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickListe
                 BibleGlobalList.bibleCopyList.clear()
                 adapter.notifyDataSetChanged()
             }
-            copy.setOnClickListener {
+            adpravit.setOnClickListener {
                 if (BibleGlobalList.bibleCopyList.size > 0) {
                     val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText("", MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString())
+                    val copyString = java.lang.StringBuilder()
+                    BibleGlobalList.bibleCopyList.sort()
+                    BibleGlobalList.bibleCopyList.forEach {
+                        copyString.append("${bible[it]}<br>")
+                    }
+                    val share = MainActivity.fromHtml(copyString.toString()).toString().trim()
+                    val clip = ClipData.newPlainText("", share)
                     clipboard.setPrimaryClip(clip)
-                    messageView(getString(by.carkva_gazeta.malitounik.R.string.copy))
-                    linearLayout4.visibility = View.GONE
-                    BibleGlobalList.bibleCopyList.clear()
-                    BibleGlobalList.mPedakVisable = false
+                    val sendIntent = Intent()
+                    sendIntent.action = Intent.ACTION_SEND
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, share)
+                    sendIntent.type = "text/plain"
+                    startActivity(Intent.createChooser(sendIntent, null))
                 } else {
                     messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
@@ -535,6 +556,64 @@ class NovyZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickListe
                     messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
+            val arrayList = arrayOf(by.carkva_gazeta.malitounik.R.drawable.share_bible, by.carkva_gazeta.malitounik.R.drawable.copy, by.carkva_gazeta.malitounik.R.drawable.select_all)
+            spinnerCopy.adapter = SpinnerImageAdapter(activity, arrayList)
+            var chekFirst = false
+            spinnerCopy.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    if (savedInstanceState == null && chekFirst) {
+                        when (position) {
+                            0 -> {
+                                if (BibleGlobalList.bibleCopyList.size > 0) {
+                                    val sendIntent = Intent()
+                                    sendIntent.action = Intent.ACTION_SEND
+                                    sendIntent.putExtra(Intent.EXTRA_TEXT, MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString())
+                                    sendIntent.type = "text/plain"
+                                    val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                    val clip = ClipData.newPlainText("", MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString())
+                                    clipboard.setPrimaryClip(clip)
+                                    startActivity(Intent.createChooser(sendIntent, null))
+                                } else {
+                                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                                }
+                            }
+                            1 -> {
+                                if (BibleGlobalList.bibleCopyList.size > 0) {
+                                    val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                    val clip = ClipData.newPlainText("", MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString())
+                                    clipboard.setPrimaryClip(clip)
+                                    messageView(getString(by.carkva_gazeta.malitounik.R.string.copy))
+                                    linearLayout4.visibility = View.GONE
+                                    BibleGlobalList.bibleCopyList.clear()
+                                    BibleGlobalList.mPedakVisable = false
+                                } else {
+                                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                                }
+                            }
+                            2 -> {
+                                BibleGlobalList.bibleCopyList.clear()
+                                bible.forEachIndexed { index, _ ->
+                                    BibleGlobalList.bibleCopyList.add(index)
+                                }
+                                adapter.notifyDataSetChanged()
+                                copyBig.visibility = View.VISIBLE
+                                copyBigFull.visibility = View.GONE
+                                adpravit.visibility = View.VISIBLE
+                                spinnerCopy.visibility = View.GONE
+                                yelloy.visibility = View.GONE
+                                underline.visibility = View.GONE
+                                bold.visibility = View.GONE
+                                zakladka.visibility = View.GONE
+                                zametka.visibility = View.GONE
+                            }
+                        }
+                    }
+                    chekFirst = true
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+            })
         }
     }
 

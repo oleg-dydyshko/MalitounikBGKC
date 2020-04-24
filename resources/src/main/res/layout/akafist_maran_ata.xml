@@ -20,15 +20,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/colorIcons"
-            android:textSize="18sp"
-            app:srcCompat="@drawable/copy" />
+        <by.carkva_gazeta.malitounik.SpinnerBible
+            android:id="@+id/spinnerCopy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -61,6 +56,18 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:srcCompat="@drawable/bold" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/adpravit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/knopka_red"
+            android:gravity="center"
+            android:text="@string/adpravit"
+            android:textColor="@color/colorIcons"
+            android:textSize="18sp"
+            android:visibility="gone" />
 
         <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
             android:id="@+id/copyBig"

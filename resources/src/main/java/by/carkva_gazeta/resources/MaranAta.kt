@@ -252,34 +252,22 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             BibleGlobalList.bibleCopyList.clear()
             adapter.notifyDataSetChanged()
         }
-        imageView1.setOnClickListener {
+        adpravit.setOnClickListener {
             if (BibleGlobalList.bibleCopyList.size > 0) {
                 val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                var textView = maranAta[BibleGlobalList.bibleCopyList[0]]
-                textView = textView.replace("+-+", "")
-                val t1 = textView.indexOf("$")
-                if (t1 != -1)
-                    textView = textView.substring(0, t1)
-                val clip = ClipData.newPlainText("", MainActivity.fromHtml(textView).toString())
+                val copyString = java.lang.StringBuilder()
+                BibleGlobalList.bibleCopyList.sort()
+                BibleGlobalList.bibleCopyList.forEach {
+                    copyString.append("${maranAta[it]}<br>")
+                }
+                val share = MainActivity.fromHtml(copyString.toString()).toString().trim()
+                val clip = ClipData.newPlainText("", share)
                 clipboard.setPrimaryClip(clip)
-                val layout = LinearLayout(this)
-                if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
-                val density = resources.displayMetrics.density
-                val realpadding = (10 * density).toInt()
-                val toast = TextViewRobotoCondensed(this)
-                toast.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                toast.setText(by.carkva_gazeta.malitounik.R.string.copy)
-                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
-                layout.addView(toast)
-                val mes = Toast(this)
-                mes.duration = Toast.LENGTH_SHORT
-                mes.view = layout
-                mes.show()
-                linearLayout4.visibility = View.GONE
-                BibleGlobalList.mPedakVisable = false
-                BibleGlobalList.bibleCopyList.clear()
-                adapter.notifyDataSetChanged()
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(Intent.EXTRA_TEXT, share)
+                sendIntent.type = "text/plain"
+                startActivity(Intent.createChooser(sendIntent, null))
             } else {
                 messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
@@ -359,6 +347,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         if (dzenNoch) {
             linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
             copyBig.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
+            adpravit.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
@@ -387,6 +376,48 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             prefEditor.putBoolean("help_str", false)
             prefEditor.apply()
         }
+        val arrayList = arrayOf(by.carkva_gazeta.malitounik.R.drawable.share_bible, by.carkva_gazeta.malitounik.R.drawable.copy)
+        spinnerCopy.adapter = SpinnerImageAdapter(this, arrayList)
+        var chekFirst = false
+        spinnerCopy.onItemSelectedListener = (object : OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (savedInstanceState == null && chekFirst) {
+                    when (position) {
+                        0 -> {
+                            if (BibleGlobalList.bibleCopyList.size > 0) {
+                                val sendIntent = Intent()
+                                sendIntent.action = Intent.ACTION_SEND
+                                sendIntent.putExtra(Intent.EXTRA_TEXT, MainActivity.fromHtml(maranAta[BibleGlobalList.bibleCopyList[0]]).toString())
+                                sendIntent.type = "text/plain"
+                                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                val clip = ClipData.newPlainText("", MainActivity.fromHtml(maranAta[BibleGlobalList.bibleCopyList[0]]).toString())
+                                clipboard.setPrimaryClip(clip)
+                                startActivity(Intent.createChooser(sendIntent, null))
+                            } else {
+                                messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                            }
+                        }
+                        1 -> {
+                            if (BibleGlobalList.bibleCopyList.size > 0) {
+                                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                val clip = ClipData.newPlainText("", MainActivity.fromHtml(maranAta[BibleGlobalList.bibleCopyList[0]]).toString())
+                                clipboard.setPrimaryClip(clip)
+                                messageView(getString(by.carkva_gazeta.malitounik.R.string.copy))
+                                linearLayout4.visibility = View.GONE
+                                BibleGlobalList.bibleCopyList.clear()
+                                BibleGlobalList.mPedakVisable = false
+                            } else {
+                                messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                            }
+                        }
+                    }
+                }
+                chekFirst = true
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        })
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -1259,13 +1290,15 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         if (BibleGlobalList.mPedakVisable) {
             if (BibleGlobalList.bibleCopyList.size > 1) {
                 copyBig.visibility = View.VISIBLE
-                imageView1.visibility = View.GONE
+                adpravit.visibility = View.VISIBLE
+                spinnerCopy.visibility = View.GONE
                 imageView2.visibility = View.GONE
                 imageView3.visibility = View.GONE
                 imageView4.visibility = View.GONE
             } else {
                 copyBig.visibility = View.GONE
-                imageView1.visibility = View.VISIBLE
+                adpravit.visibility = View.GONE
+                spinnerCopy.visibility = View.VISIBLE
                 imageView2.visibility = View.VISIBLE
                 imageView3.visibility = View.VISIBLE
                 imageView4.visibility = View.VISIBLE
@@ -1306,22 +1339,25 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     BibleGlobalList.bibleCopyList.add(position)
                     linearLayout4.visibility = View.VISIBLE
                     copyBig.visibility = View.GONE
-                    imageView1.visibility = View.VISIBLE
+                    adpravit.visibility = View.GONE
+                    spinnerCopy.visibility = View.VISIBLE
                     imageView2.visibility = View.VISIBLE
                     imageView3.visibility = View.VISIBLE
                     imageView4.visibility = View.VISIBLE
                 } else {
-                    var find = false
-                    BibleGlobalList.bibleCopyList.forEach {
-                        if (it == position)
-                            find = true
+                    if (BibleGlobalList.mPedakVisable) {
+                        var find = false
+                        BibleGlobalList.bibleCopyList.forEach {
+                            if (it == position)
+                                find = true
+                        }
+                        if (find) {
+                            BibleGlobalList.bibleCopyList.remove(position)
+                        } else {
+                            BibleGlobalList.bibleCopyList.add(position)
+                        }
+                        adapter.notifyDataSetChanged()
                     }
-                    if (find) {
-                        BibleGlobalList.bibleCopyList.remove(position)
-                    } else {
-                        BibleGlobalList.bibleCopyList.add(position)
-                    }
-                    adapter.notifyDataSetChanged()
                 }
             }
         }

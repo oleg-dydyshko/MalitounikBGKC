@@ -1,10 +1,7 @@
 package by.carkva_gazeta.resources
 
 import android.app.Activity
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.SharedPreferences
+import android.content.*
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -57,6 +54,14 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
         pazicia = arguments?.getInt("pos") ?: 0
     }
 
+    override fun onPause() {
+        super.onPause()
+        BibleGlobalList.mPedakVisable = false
+        BibleGlobalList.bibleCopyList.clear()
+        linearLayout4.visibility = View.GONE
+        adapter.notifyDataSetChanged()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.activity_bible_page_fragment, container, false)
     }
@@ -74,6 +79,10 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
                 BibleGlobalList.bibleCopyList.add(position)
             }
             adapter.notifyDataSetChanged()
+            if (BibleGlobalList.bibleCopyList.size == bible.size)
+                copyBigFull.visibility = View.GONE
+            else
+                copyBigFull.visibility = View.VISIBLE
         }
     }
 
@@ -83,7 +92,8 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
             linearLayout4.visibility = View.VISIBLE
             copyBig.visibility = View.VISIBLE
             copyBigFull.visibility = View.VISIBLE
-            copy.visibility = View.GONE
+            adpravit.visibility = View.VISIBLE
+            spinnerCopy.visibility = View.GONE
             yelloy.visibility = View.GONE
             underline.visibility = View.GONE
             bold.visibility = View.GONE
@@ -91,17 +101,23 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
             zametka.visibility = View.GONE
             BibleGlobalList.mPedakVisable = true
         } else {
-            var find = false
-            BibleGlobalList.bibleCopyList.forEach {
-                if (it == position)
-                    find = true
+            if (BibleGlobalList.mPedakVisable) {
+                var find = false
+                BibleGlobalList.bibleCopyList.forEach {
+                    if (it == position)
+                        find = true
+                }
+                if (find) {
+                    BibleGlobalList.bibleCopyList.remove(position)
+                } else {
+                    BibleGlobalList.bibleCopyList.add(position)
+                }
+                adapter.notifyDataSetChanged()
+                if (BibleGlobalList.bibleCopyList.size == bible.size)
+                    copyBigFull.visibility = View.GONE
+                else
+                    copyBigFull.visibility = View.VISIBLE
             }
-            if (find) {
-                BibleGlobalList.bibleCopyList.remove(position)
-            } else {
-                BibleGlobalList.bibleCopyList.add(position)
-            }
-            adapter.notifyDataSetChanged()
         }
         return true
     }
@@ -139,6 +155,7 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
             if (dzenNoch) {
                 copyBig.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
                 copyBigFull.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
+                adpravit.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
                 linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
                 listView.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             }
@@ -148,6 +165,7 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
                     BibleGlobalList.bibleCopyList.add(index)
                 }
                 adapter.notifyDataSetChanged()
+                copyBigFull.visibility = View.GONE
             }
             copyBig.setOnClickListener {
                 if (BibleGlobalList.bibleCopyList.size > 0) {
@@ -164,6 +182,26 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()
+                } else {
+                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                }
+            }
+            adpravit.setOnClickListener {
+                if (BibleGlobalList.bibleCopyList.size > 0) {
+                    val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val copyString = java.lang.StringBuilder()
+                    BibleGlobalList.bibleCopyList.sort()
+                    BibleGlobalList.bibleCopyList.forEach {
+                        copyString.append("${bible[it]}<br>")
+                    }
+                    val share = MainActivity.fromHtml(copyString.toString()).toString().trim()
+                    val clip = ClipData.newPlainText("", share)
+                    clipboard.setPrimaryClip(clip)
+                    val sendIntent = Intent()
+                    sendIntent.action = Intent.ACTION_SEND
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, share)
+                    sendIntent.type = "text/plain"
+                    startActivity(Intent.createChooser(sendIntent, null))
                 } else {
                     messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }

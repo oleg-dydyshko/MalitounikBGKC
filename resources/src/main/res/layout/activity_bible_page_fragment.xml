@@ -29,12 +29,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <ImageView
-            android:id="@+id/copy"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/copy" />
+        <by.carkva_gazeta.malitounik.SpinnerBible
+            android:id="@+id/spinnerCopy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/yelloy"
@@ -72,6 +70,18 @@
             app:srcCompat="@drawable/sketch" />
 
         <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/adpravit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/knopka_red"
+            android:gravity="center"
+            android:text="@string/adpravit"
+            android:textColor="@color/colorIcons"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
             android:id="@+id/copyBig"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,5 +104,6 @@
             android:textColor="@color/colorIcons"
             android:textSize="18sp"
             android:visibility="gone" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

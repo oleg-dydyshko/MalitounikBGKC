@@ -324,5 +324,6 @@
     <string name="set_versh">Выберыце верш</string>
     <string name="add_to_zakladki">Дабаўлена у закладкі</string>
     <string name="zakladka_exits">Закладка існуе</string>
+    <string name="adpravit">Адправіць</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

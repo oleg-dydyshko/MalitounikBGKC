@@ -43,6 +43,7 @@ class SettingsActivity : AppCompatActivity() {
         const val GET_DEFAULT_FONT_SIZE = 18F
         const val GET_FONT_SIZE_MIN = 14F
         const val GET_FONT_SIZE_MAX = 54F
+        const val GET_FONT_SIZE_TOAST = 12F
         const val GET_CALIANDAR_YEAR_MIN = 2017
         const val GET_CALIANDAR_YEAR_MAX = 2021
         private fun mkTime(year: Int, month: Int, day: Int, hour: Int): Long {
@@ -85,7 +86,7 @@ class SettingsActivity : AppCompatActivity() {
         fun setNotifications(context: Context, notifications: Int) {
             val c = Calendar.getInstance() as GregorianCalendar
             var intent: Intent
-            var pIntent: PendingIntent?
+            var pIntent: PendingIntent
             val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             var year = c[Calendar.YEAR]
             var dataP: Int
@@ -1132,7 +1133,7 @@ class SettingsActivity : AppCompatActivity() {
             toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             toast.setPadding(realpadding, realpadding, realpadding, realpadding)
             toast.text = "Захавана"
-            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN - 2.toFloat())
+            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_TOAST)
             layout.addView(toast)
             val mes = Toast(this)
             mes.duration = Toast.LENGTH_SHORT

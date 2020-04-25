@@ -123,9 +123,9 @@ class DialogPasxa : DialogFragment() {
             alert = builder.create()
             alert.setOnShowListener {
                 val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             }
         }
         return alert
@@ -139,7 +139,7 @@ class DialogPasxa : DialogFragment() {
             toast.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             toast.setPadding(realpadding, realpadding, realpadding, realpadding)
             toast.text = getString(R.string.error)
-            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             layout.addView(toast)
             val mes = Toast(it)
             mes.duration = Toast.LENGTH_SHORT

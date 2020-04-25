@@ -63,7 +63,7 @@ class SearchPesny : AppCompatActivity() {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
         }
-        TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, by.carkva_gazeta.malitounik.SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+        TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, by.carkva_gazeta.malitounik.SettingsActivity.GET_FONT_SIZE_TOAST)
         adapter = SearchListAdaprer(this, ArrayList())
         ListView.adapter = adapter
         ListView.setOnScrollListener(object : AbsListView.OnScrollListener {

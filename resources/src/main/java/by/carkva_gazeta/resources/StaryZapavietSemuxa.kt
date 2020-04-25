@@ -19,7 +19,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -618,7 +617,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
             return fullglav
         }
 
-        override fun getItem(position: Int): Fragment {
+        override fun getItem(position: Int): BackPressedFragment {
             for (i in 0 until count) {
                 if (position == i) {
                     val pazicia: Int = if (trak) {

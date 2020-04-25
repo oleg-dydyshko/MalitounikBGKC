@@ -568,7 +568,7 @@ try {
                 toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
                 toast.setPadding(realpadding, realpadding, realpadding, realpadding)
                 toast.text = getString(R.string.exit)
-                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 layout.addView(toast)
                 val mes = Toast(this)
                 mes.duration = Toast.LENGTH_SHORT
@@ -1374,7 +1374,7 @@ try {
                     toast.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
                     toast.setPadding(realpadding, realpadding, realpadding, realpadding)
                     toast.text = context.getString(R.string.no_internet)
-                    toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                    toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                     layout.addView(toast)
                     val mes = Toast(context)
                     mes.duration = Toast.LENGTH_LONG

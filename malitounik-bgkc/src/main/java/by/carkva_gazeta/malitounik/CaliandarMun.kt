@@ -321,7 +321,7 @@ class CaliandarMun : AppCompatActivity() {
             toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             toast.setPadding(realpadding, realpadding, realpadding, realpadding)
             toast.text = messege
-            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             layout.addView(toast)
             val mes = Toast(this)
             mes.duration = Toast.LENGTH_SHORT

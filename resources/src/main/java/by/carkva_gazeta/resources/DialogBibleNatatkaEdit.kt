@@ -115,11 +115,11 @@ class DialogBibleNatatkaEdit : DialogFragment() {
         val alert = ad.create()
         alert.setOnShowListener {
             val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-            btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+            btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             val btnNeutral = alert.getButton(Dialog.BUTTON_NEUTRAL)
-            btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+            btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
         }
         return alert
     }

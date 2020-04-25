@@ -166,7 +166,7 @@ class DialogFileExplorer : DialogFragment() {
             alert = builder.create()
             alert.setOnShowListener {
                 val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             }
             listViewCompat.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, i: Int, _: Long ->
                 if (sdCard) {

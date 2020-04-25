@@ -88,7 +88,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         editText.setSelection(editText.text.toString().length)
         editText2.visibility = View.VISIBLE
         editText2.addTextChangedListener(MyTextWatcher(editText2, true))
-        TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+        TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
         //if (savedInstanceState != null) {
 //seash = (ArrayList<String>) savedInstanceState.getSerializable("seash");
 //} else {
@@ -127,7 +127,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                     toast.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
                     toast.setPadding(realpadding, realpadding, realpadding, realpadding)
                     toast.text = getString(by.carkva_gazeta.malitounik.R.string.seashmin)
-                    toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                    toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                     layout.addView(toast)
                     val mes = Toast(this)
                     mes.duration = Toast.LENGTH_SHORT

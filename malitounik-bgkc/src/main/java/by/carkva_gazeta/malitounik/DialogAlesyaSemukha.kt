@@ -56,7 +56,7 @@ class DialogAlesyaSemukha : DialogFragment() {
         val alert = ad.create()
         alert.setOnShowListener {
             val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
         }
         return alert
     }

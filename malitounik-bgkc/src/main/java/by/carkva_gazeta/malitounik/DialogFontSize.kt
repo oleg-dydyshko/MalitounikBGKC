@@ -104,9 +104,9 @@ class DialogFontSize : DialogFragment() {
                 ok.setBackgroundResource(R.drawable.selector_dialog_font_dark)
             }
             textSize.text = "${fontBiblia.toInt()} sp"
-            zmauchanni.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
-            cansel.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
-            ok.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+            zmauchanni.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+            cansel.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+            ok.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             zmauchanni.setOnClickListener {
                 val prefEditors = k.edit()
                 prefEditors.putFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)

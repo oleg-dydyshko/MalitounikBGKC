@@ -791,7 +791,7 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
             toast.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorIcons))
             toast.setPadding(realpadding, realpadding, realpadding, realpadding)
             toast.text = message
-            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             layout.addView(toast)
             val mes = Toast(activity)
             mes.duration = Toast.LENGTH_LONG

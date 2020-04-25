@@ -299,9 +299,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val alert = ad.create()
             alert.setOnShowListener {
                 val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             }
             alert.show()
         }
@@ -386,9 +386,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val alert = ad.create()
             alert.setOnShowListener {
                 val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             }
             alert.show()
         }
@@ -607,7 +607,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
         toast.setPadding(realpadding, realpadding, realpadding, realpadding)
         toast.text = "Выдалена"
-        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
         layout.addView(toast)
         val mes = Toast(this@Sabytie)
         mes.duration = Toast.LENGTH_SHORT
@@ -792,7 +792,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
                         toast.setPadding(realpadding, realpadding, realpadding, realpadding)
                         toast.text = "Дата заканчэньня павінна быць пазней, чым дата пачатку"
-                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                         layout.addView(toast)
                         val mes = Toast(this@Sabytie)
                         mes.duration = Toast.LENGTH_LONG
@@ -820,7 +820,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
                         toast.setPadding(realpadding, realpadding, realpadding, realpadding)
                         toast.text = "Дата паўтору павінна быць пазней, чым дата пачатку"
-                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                         layout.addView(toast)
                         val mes = Toast(this@Sabytie)
                         mes.duration = Toast.LENGTH_LONG
@@ -1589,7 +1589,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
                 toast.setPadding(realpadding, realpadding, realpadding, realpadding)
                 toast.text = "Захавана"
-                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 layout.addView(toast)
                 val mes = Toast(this@Sabytie)
                 mes.duration = Toast.LENGTH_SHORT
@@ -2323,7 +2323,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
                 toast.setPadding(realpadding, realpadding, realpadding, realpadding)
                 toast.text = "Захавана"
-                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 layout.addView(toast)
                 val mes = Toast(this@Sabytie)
                 mes.duration = Toast.LENGTH_SHORT
@@ -2415,7 +2415,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
                 toast.setPadding(realpadding, realpadding, realpadding, realpadding)
                 toast.text = "Выдалена"
-                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 layout.addView(toast)
                 val mes = Toast(this@Sabytie)
                 mes.duration = Toast.LENGTH_SHORT
@@ -2506,11 +2506,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val alert = ad.create()
             alert.setOnShowListener {
                 val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 val btnNeutral = alert.getButton(Dialog.BUTTON_NEUTRAL)
-                btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 if (dzenNoch) {
                     btnPositive.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
                     btnNegative.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))

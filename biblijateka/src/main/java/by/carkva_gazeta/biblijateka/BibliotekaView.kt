@@ -557,7 +557,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     toast.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
                     toast.setPadding(realpadding, realpadding, realpadding, realpadding)
                     toast.text = "Файл не існуе"
-                    toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+                    toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                     layout.addView(toast)
                     val mes = Toast(this)
                     mes.duration = Toast.LENGTH_SHORT

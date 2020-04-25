@@ -38,8 +38,8 @@ class DialogBrightness : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
             zmauchanni.text = resources.getText(R.string.skid_brightness)
-            zmauchanni.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
-            ok.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2)
+            zmauchanni.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+            ok.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             cansel.visibility = View.GONE
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)

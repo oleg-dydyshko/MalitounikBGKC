@@ -183,7 +183,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
             trak = true
         }
         BibleGlobalList.mListGlava = 0
-        pagerTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+        pagerTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
         for (i in 0 until pagerTabStrip.childCount) {
             val nextChild = pagerTabStrip.getChildAt(i)
             if (nextChild is TextView) {
@@ -414,7 +414,8 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text = title
+        title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
+        subtitle_toolbar.text = title
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
             toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
@@ -436,7 +437,9 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         if (paralel) {
             scroll.visibility = View.GONE
             pager.visibility = View.VISIBLE
-            title_toolbar.text = title
+            subtitle_toolbar.visibility = View.VISIBLE
+            title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
+            subtitle_toolbar.text = title
             paralel = false
             invalidateOptionsMenu()
         } else if (fullscreenPage) {
@@ -565,6 +568,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         scroll.visibility = View.VISIBLE
         pager.visibility = View.GONE
         title_toolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)
+        subtitle_toolbar.visibility = View.GONE
         invalidateOptionsMenu()
     }
 

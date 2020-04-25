@@ -109,7 +109,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
             trak = true
         }
-        pagerTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN - 2.toFloat())
+        pagerTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
         for (i in 0 until pagerTabStrip.childCount) {
             val nextChild = pagerTabStrip.getChildAt(i)
             if (nextChild is TextView) {
@@ -130,17 +130,13 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
                 window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
             }
         }
-        if (dzenNoch) {
-            window.setBackgroundDrawableResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-            pagerTabStrip.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            pagerTabStrip.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-        }
-        title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2) + " " + getKafizma(glava)
+        title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.psalter)
+        subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2) + " " + getKafizma(glava)
         pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
             override fun onPageSelected(position: Int) {
                 if (glava != position) fierstPosition = 0
-                title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2) + " " + getKafizma(position)
+                subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2) + " " + getKafizma(position)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
@@ -371,18 +367,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             } else 0
             return newInstance(position, pazicia)
         }
-
-        /*override fun getItem(position: Int): Fragment {
-            for (i in 0 until count) {
-                if (position == i) {
-                    val pazicia: Int = if (trak) {
-                        if (glava != i) 0 else fierstPosition
-                    } else 0
-                    return newInstance(i, pazicia)
-                }
-            }
-            return newInstance(0, 1)
-        }*/
 
         override fun getPageTitle(position: Int): CharSequence? {
             return resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2) + " " + (position + 1)

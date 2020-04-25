@@ -564,7 +564,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             sabytie2.add(p.dat + " " + p.padz.replace("_", " "))
         }
         adapter.notifyDataSetChanged()
-        val thread = Thread(Runnable {
+        Thread(Runnable {
             if (sab.count == "0") {
                 if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
                     if (sab.sec != "-1") {
@@ -598,8 +598,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     }
                 }
             }
-        })
-        thread.start()
+        }).start()
         val layout = LinearLayout(this@Sabytie)
         if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
         val density = resources.displayMetrics.density

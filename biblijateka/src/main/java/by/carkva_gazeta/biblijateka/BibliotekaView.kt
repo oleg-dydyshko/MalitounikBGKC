@@ -311,7 +311,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     invalidateOptionsMenu()
                 }
             } catch (t: Throwable) {
-                DialogNoInternet().show(supportFragmentManager, "no_internet")
+                runOnUiThread {
+                    DialogNoInternet().show(supportFragmentManager, "no_internet")
+                }
             }
         }).start()
     }

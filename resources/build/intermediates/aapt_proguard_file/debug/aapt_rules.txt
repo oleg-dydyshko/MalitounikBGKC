@@ -81,10 +81,10 @@
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/search_biblia.xml:2
 -keep class androidx.constraintlayout.widget.ConstraintLayout { <init>(...); }
 
-# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_bible.xml:55
+# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_bible.xml:71
 -keep class androidx.viewpager.widget.PagerTabStrip { <init>(...); }
 
-# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_bible.xml:49
+# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_bible.xml:65
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_activity_paslia_prich.xml:38
 -keep class androidx.viewpager.widget.ViewPager { <init>(...); }
 
@@ -105,7 +105,7 @@
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_maran_ata.xml:23
 -keep class by.carkva_gazeta.malitounik.SpinnerBible { <init>(...); }
 
-# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_bible.xml:25
+# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_bible.xml:30
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_bible_page_fragment.xml:72
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_parafii_bgkc.xml:20
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_activity_paslia_prich.xml:25

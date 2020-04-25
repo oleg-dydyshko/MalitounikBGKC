@@ -350,7 +350,9 @@ class Naviny : AppCompatActivity() {
                         output.close()
                     }
                 } catch (t: Throwable) {
-                    DialogNoInternet().show(supportFragmentManager, "no_internet")
+                    runOnUiThread {
+                        DialogNoInternet().show(supportFragmentManager, "no_internet")
+                    }
                 }
             }).start()
         }

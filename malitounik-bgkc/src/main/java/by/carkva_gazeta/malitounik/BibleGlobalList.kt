@@ -7,12 +7,12 @@ class BibleGlobalList {
         var listPosition = 0
         var mListGlava = 0
         var mPedakVisable = false
-        var bibleCopyList: ArrayList<Int> = ArrayList()
-        var vydelenie: ArrayList<ArrayList<Int>> = ArrayList()
-        var zakladkiSemuxa: ArrayList<String> = ArrayList()
-        var zakladkiSinodal: ArrayList<String> = ArrayList()
-        var natatkiSemuxa: ArrayList<ArrayList<String>> = ArrayList()
-        var natatkiSinodal: ArrayList<ArrayList<String>> = ArrayList()
+        var bibleCopyList = ArrayList<Int>()
+        var vydelenie = ArrayList<ArrayList<Int>>()
+        var zakladkiSemuxa = ArrayList<String>()
+        var zakladkiSinodal = ArrayList<String>()
+        var natatkiSemuxa = ArrayList<ArrayList<String>>()
+        var natatkiSinodal = ArrayList<ArrayList<String>>()
 
         fun checkPosition(glava: Int = mListGlava, position: Int = bibleCopyList[0]): Int {
             for (i in vydelenie.indices) {

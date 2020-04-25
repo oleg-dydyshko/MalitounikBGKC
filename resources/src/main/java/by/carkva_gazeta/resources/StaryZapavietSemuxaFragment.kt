@@ -115,37 +115,42 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
     }
 
     override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
-        if (linearLayout4.visibility == View.GONE) {
+        BibleGlobalList.mPedakVisable = true
+        linearLayout4.visibility = View.VISIBLE
+        var find = false
+        BibleGlobalList.bibleCopyList.forEach {
+            if (it == position)
+                find = true
+        }
+        if (find) {
+            BibleGlobalList.bibleCopyList.remove(position)
+        } else {
             BibleGlobalList.bibleCopyList.add(position)
-            linearLayout4.visibility = View.VISIBLE
+        }
+        adapter.notifyDataSetChanged()
+        if (BibleGlobalList.bibleCopyList.size > 1) {
+            copyBig.visibility = View.VISIBLE
+            adpravit.visibility = View.VISIBLE
+            spinnerCopy.visibility = View.GONE
+            yelloy.visibility = View.GONE
+            underline.visibility = View.GONE
+            bold.visibility = View.GONE
+            zakladka.visibility = View.GONE
+            zametka.visibility = View.GONE
+            if (BibleGlobalList.bibleCopyList.size == bible.size)
+                copyBigFull.visibility = View.GONE
+            else
+                copyBigFull.visibility = View.VISIBLE
+        } else {
             copyBig.visibility = View.GONE
             copyBigFull.visibility = View.GONE
-            spinnerCopy.visibility = View.VISIBLE
             adpravit.visibility = View.GONE
+            spinnerCopy.visibility = View.VISIBLE
             yelloy.visibility = View.VISIBLE
             underline.visibility = View.VISIBLE
             bold.visibility = View.VISIBLE
             zakladka.visibility = View.VISIBLE
             zametka.visibility = View.VISIBLE
-            BibleGlobalList.mPedakVisable = true
-        } else {
-            if (BibleGlobalList.mPedakVisable) {
-                var find = false
-                BibleGlobalList.bibleCopyList.forEach {
-                    if (it == position)
-                        find = true
-                }
-                if (find) {
-                    BibleGlobalList.bibleCopyList.remove(position)
-                } else {
-                    BibleGlobalList.bibleCopyList.add(position)
-                }
-                adapter.notifyDataSetChanged()
-                if (BibleGlobalList.bibleCopyList.size == bible.size)
-                    copyBigFull.visibility = View.GONE
-                else
-                    copyBigFull.visibility = View.VISIBLE
-            }
         }
         return true
     }

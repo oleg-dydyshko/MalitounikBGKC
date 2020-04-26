@@ -102,7 +102,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
     }
 
     override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
-        BibleGlobalList.bibleCopyList.add(position)
+        BibleGlobalList.mPedakVisable = true
         linearLayout4.visibility = View.VISIBLE
         var find = false
         BibleGlobalList.bibleCopyList.forEach {

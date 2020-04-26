@@ -87,43 +87,37 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
     }
 
     override fun onItemLongClick(parent: AdapterView<*>, view: View?, position: Int, id: Long): Boolean {
-        if (linearLayout4.visibility == View.GONE) {
-            BibleGlobalList.bibleCopyList.add(position)
-            linearLayout4.visibility = View.VISIBLE
-            copyBig.visibility = View.VISIBLE
-            copyBigFull.visibility = View.VISIBLE
-            adpravit.visibility = View.VISIBLE
-            spinnerCopy.visibility = View.GONE
-            yelloy.visibility = View.GONE
-            underline.visibility = View.GONE
-            bold.visibility = View.GONE
-            zakladka.visibility = View.GONE
-            zametka.visibility = View.GONE
-            BibleGlobalList.mPedakVisable = true
-        } else {
-            if (BibleGlobalList.mPedakVisable) {
-                var find = false
-                BibleGlobalList.bibleCopyList.forEach {
-                    if (it == position)
-                        find = true
-                }
-                if (find) {
-                    BibleGlobalList.bibleCopyList.remove(position)
-                } else {
-                    BibleGlobalList.bibleCopyList.add(position)
-                }
-                adapter.notifyDataSetChanged()
-                if (BibleGlobalList.bibleCopyList.size == bible.size)
-                    copyBigFull.visibility = View.GONE
-                else
-                    copyBigFull.visibility = View.VISIBLE
-            }
+        BibleGlobalList.mPedakVisable = true
+        linearLayout4.visibility = View.VISIBLE
+        var find = false
+        BibleGlobalList.bibleCopyList.forEach {
+            if (it == position)
+                find = true
         }
+        if (find) {
+            BibleGlobalList.bibleCopyList.remove(position)
+        } else {
+            BibleGlobalList.bibleCopyList.add(position)
+        }
+        adapter.notifyDataSetChanged()
+        if (BibleGlobalList.bibleCopyList.size == bible.size)
+            copyBigFull.visibility = View.GONE
+        else
+            copyBigFull.visibility = View.VISIBLE
         return true
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        copyBig.visibility = View.VISIBLE
+        copyBigFull.visibility = View.VISIBLE
+        adpravit.visibility = View.VISIBLE
+        spinnerCopy.visibility = View.GONE
+        yelloy.visibility = View.GONE
+        underline.visibility = View.GONE
+        bold.visibility = View.GONE
+        zakladka.visibility = View.GONE
+        zametka.visibility = View.GONE
         listView.setSelection(NadsanContentActivity.fierstPosition)
         listView.onItemLongClickListener = this
         listView.onItemClickListener = this

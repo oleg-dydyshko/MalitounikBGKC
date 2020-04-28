@@ -723,7 +723,7 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
                     messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
-            val arrayList = arrayOf(by.carkva_gazeta.malitounik.R.drawable.share_bible, by.carkva_gazeta.malitounik.R.drawable.copy, by.carkva_gazeta.malitounik.R.drawable.select_all)
+            /*val arrayList = arrayOf(by.carkva_gazeta.malitounik.R.drawable.share_bible, by.carkva_gazeta.malitounik.R.drawable.copy, by.carkva_gazeta.malitounik.R.drawable.select_all)
             spinnerCopy.adapter = SpinnerImageAdapter(activity, arrayList)
             var chekFirst = false
             spinnerCopy.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener {
@@ -780,7 +780,7 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
-            })
+            })*/
         }
     }
 

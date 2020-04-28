@@ -18,6 +18,53 @@
     </ListView>
 
     <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/listView"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/share"
+            android:layout_width="34dp"
+            android:layout_height="39dp"
+            android:layout_weight="1"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="10dp"
+            app:srcCompat="@drawable/share_bible" />
+
+        <ImageView
+            android:id="@+id/copy"
+            android:layout_width="34dp"
+            android:layout_height="39dp"
+            android:layout_weight="1"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="10dp"
+            app:srcCompat="@drawable/copy" />
+
+        <ImageView
+            android:id="@+id/fullCopy"
+            android:layout_width="34dp"
+            android:layout_height="39dp"
+            android:layout_weight="1"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="10dp"
+            app:srcCompat="@drawable/select_all" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,10 +76,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <by.carkva_gazeta.malitounik.SpinnerBible
+        <ImageView
             android:id="@+id/spinnerCopy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="54dp"
+            android:layout_height="24dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            app:srcCompat="@drawable/arrow_down_float_bible" />
 
         <ImageView
             android:id="@+id/yelloy"

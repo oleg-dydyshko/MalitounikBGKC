@@ -10,13 +10,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.ListFragment
 import java.util.*
 
 /**
  * Created by oleg on 31.5.16
  */
-class MenuCviaty : ListFragment() {
+class MenuCviaty : CviatyListFragment() {
     private var year = Calendar.getInstance()[Calendar.YEAR]
     private lateinit var mListener: CarkvaCarkvaListener
     private var mLastClickTime: Long = 0
@@ -32,11 +31,11 @@ class MenuCviaty : ListFragment() {
         outState.putInt("year", year)
     }
 
-    fun getCviatyYear(): Int {
+    override fun getCviatyYear(): Int {
         return year
     }
 
-    fun setCviatyYear(year: Int) {
+    override fun setCviatyYear(year: Int) {
         this.year = year
         list = getPrazdnik(activity, year)
         myArrayAdapter.notifyDataSetChanged()

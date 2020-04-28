@@ -20,7 +20,6 @@ import android.widget.ImageView
 import android.widget.ListView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.ListFragment
 import by.carkva_gazeta.malitounik.DialogContextMenu.Companion.getInstance
 import by.carkva_gazeta.malitounik.DialogDelite.Companion.getInstance
 import java.io.BufferedReader
@@ -31,7 +30,7 @@ import java.util.*
 /**
  * Created by oleg on 13.6.16
  */
-class MenuNatatki : ListFragment() {
+class MenuNatatki : NatatkiListFragment() {
     private lateinit var adapter: MyNatatkiAdapter
     private val myNatatkiFiles = ArrayList<MyNatatkiFiles>()
     private var mLastClickTime: Long = 0
@@ -77,12 +76,12 @@ class MenuNatatki : ListFragment() {
         }
     }
 
-    fun sortAlfavit() {
+    override fun sortAlfavit() {
         myNatatkiFiles.sort()
         adapter.notifyDataSetChanged()
     }
 
-    fun fileDelite(position: Int) {
+    override fun fileDelite(position: Int) {
         val f = myNatatkiFiles[position]
         myNatatkiFiles.removeAt(position)
         f.file.delete()
@@ -90,7 +89,7 @@ class MenuNatatki : ListFragment() {
         adapter.notifyDataSetChanged()
     }
 
-    fun onDialogEditClick(position: Int) {
+    override fun onDialogEditClick(position: Int) {
         if (MainActivity.checkmoduleResources(activity)) {
             val f = myNatatkiFiles[position]
             val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.MyNatatkiAdd"))
@@ -103,7 +102,7 @@ class MenuNatatki : ListFragment() {
         }
     }
 
-    fun onDialogDeliteClick(position: Int, name: String) {
+    override fun onDialogDeliteClick(position: Int, name: String) {
         val dd = getInstance(position, "", "нататку", name)
         fragmentManager?.let { dd.show(it, "dialog_delite") }
     }

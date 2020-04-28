@@ -18,7 +18,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.pashalii.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -26,7 +25,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by oleg on 31.5.16
  */
-class MenuPashalii : Fragment() {
+class MenuPashalii : PashaliiFragment() {
     private val pasxi = ArrayList<Pashalii>()
     private lateinit var myArrayAdapter: MyArrayAdapter
     private var mLastClickTime: Long = 0
@@ -77,7 +76,7 @@ class MenuPashalii : Fragment() {
         }
     }
 
-    fun setPasha(year: Int) {
+    override fun setPasha(year: Int) {
         pasxi.clear()
         setArrayPasha(year)
         myArrayAdapter.notifyDataSetChanged()

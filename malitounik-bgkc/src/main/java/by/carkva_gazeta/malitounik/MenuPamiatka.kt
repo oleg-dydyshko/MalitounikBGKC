@@ -10,13 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.ListFragment
 import java.util.*
 
 /**
  * Created by oleg on 9.6.16
  */
-class MenuPamiatka : ListFragment() {
+class MenuPamiatka : PadryxtoukaPamiatkaListFragment() {
     private lateinit var adapter: MyArrayAdapter
     private var k: SharedPreferences? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +23,7 @@ class MenuPamiatka : ListFragment() {
         setHasOptionsMenu(true)
     }
 
-    fun onDialogFontSizePositiveClick() {
+    override fun onDialogFontSizePositiveClick() {
         adapter.notifyDataSetChanged()
     }
 

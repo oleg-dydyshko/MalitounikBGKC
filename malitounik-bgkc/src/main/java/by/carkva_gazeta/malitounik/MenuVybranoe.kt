@@ -16,7 +16,6 @@ import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.ListFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
@@ -25,7 +24,7 @@ import java.io.FileWriter
 /**
  * Created by oleg on 30.5.16
  */
-class MenuVybranoe : ListFragment() {
+class MenuVybranoe : VybranoeListFragment() {
     private lateinit var adapter: MyVybranoeAdapter
     private var mLastClickTime: Long = 0
 
@@ -34,7 +33,7 @@ class MenuVybranoe : ListFragment() {
         setHasOptionsMenu(true)
     }
 
-    fun fileDelite(position: Int) {
+    override fun fileDelite(position: Int) {
         vybranoe.removeAt(position)
         activity?.let {
             val gson = Gson()
@@ -46,7 +45,7 @@ class MenuVybranoe : ListFragment() {
         }
     }
 
-    fun deliteAllVybranoe() {
+    override fun deliteAllVybranoe() {
         activity?.let {
             vybranoe.clear()
             val gson = Gson()

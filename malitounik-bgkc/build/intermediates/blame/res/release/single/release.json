@@ -24,20 +24,24 @@
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/raw/caliandar45.json"
     },
     {
-        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_trash.png.flat",
-        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/trash.png"
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_cancel.png.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/cancel.png"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/layout_simple_list_item_maranata.xml.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/layout/simple_list_item_maranata.xml"
     },
     {
-        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_cancel.png.flat",
-        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/cancel.png"
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_trash.png.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/trash.png"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_calendar_nedel_today_black.xml.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/calendar_nedel_today_black.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_arrow_down_float_bible.png.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/arrow_down_float_bible.png"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_niz.png.flat",
@@ -112,12 +116,12 @@
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/raw/caliandar15.json"
     },
     {
-        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/layout_simple_list_item_1.xml.flat",
-        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/layout/simple_list_item_1.xml"
-    },
-    {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/layout_menu_bible.xml.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/layout/menu_bible.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/layout_simple_list_item_1.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/layout/simple_list_item_1.xml"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/raw_caliandar25.json.flat",
@@ -144,20 +148,20 @@
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/calendar_black_full.png"
     },
     {
-        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_calendar_bez_posta.xml.flat",
-        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/calendar_bez_posta.xml"
-    },
-    {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/menu_main.xml.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/menu/main.xml"
     },
     {
-        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/layout_dialog_widget_config.xml.flat",
-        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/layout/dialog_widget_config.xml"
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_calendar_bez_posta.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/calendar_bez_posta.xml"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_screenshot.png.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/screenshot.png"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/layout_dialog_widget_config.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/layout/dialog_widget_config.xml"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_calendar_full.png.flat",
@@ -176,12 +180,12 @@
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/raw_caliandar36.json.flat",
-        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/raw/caliandar36.json"
-    },
-    {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/layout_activity_main.xml.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/raw_caliandar36.json.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/raw/caliandar36.json"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_calendar_red_sabytie_black.xml.flat",
@@ -204,32 +208,36 @@
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/raw/caliandar26.json"
     },
     {
-        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_help_f.png.flat",
-        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/help_f.png"
-    },
-    {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/menu_site.xml.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/menu/site.xml"
     },
     {
-        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_znaki_krest_v_polukruge_black.png.flat",
-        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/znaki_krest_v_polukruge_black.png"
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_help_f.png.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/help_f.png"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_calendar_strogi_post_sabytie_today.xml.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/calendar_strogi_post_sabytie_today.xml"
     },
     {
-        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/mipmap-mdpi_ic_launcher_round.png.flat",
-        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/mipmap-mdpi/ic_launcher_round.png"
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_znaki_krest_v_polukruge_black.png.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/znaki_krest_v_polukruge_black.png"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_calendar_padzea_black_off.png.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/calendar_padzea_black_off.png"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/raw_caliandar16.json.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/raw/caliandar16.json"
     },
     {
-        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_calendar_padzea_black_off.png.flat",
-        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/calendar_padzea_black_off.png"
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/anim_slide_in_buttom.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/anim/slide_in_buttom.xml"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/menu_bibliotekaview.xml.flat",
@@ -286,6 +294,10 @@
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/raw_all_rights_reserved.html.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/raw/all_rights_reserved.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_bookmark_black.png.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/bookmark_black.png"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/layout_app_bar_main.xml.flat",
@@ -424,6 +436,10 @@
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/raw/caliandar7.json"
     },
     {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/anim_slide_in_top.xml.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/anim/slide_in_top.xml"
+    },
+    {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/anim_slide_in_right.xml.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/anim/slide_in_right.xml"
     },
@@ -474,6 +490,10 @@
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/raw_caliandar33.json.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/raw/caliandar33.json"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/drawable_arrow_up_float_bible.png.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/res/drawable/arrow_up_float_bible.png"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/res/merged/release/menu_sabytie.xml.flat",

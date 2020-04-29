@@ -37,8 +37,10 @@ anim mtrl_bottom_sheet_slide_out
 anim mtrl_card_lowers_interpolator
 anim scale
 anim shake
+anim slide_in_buttom
 anim slide_in_left
 anim slide_in_right
+anim slide_in_top
 anim slide_out_left
 anim slide_out_right
 animator design_appbar_state_list_animator
@@ -1357,8 +1359,10 @@ drawable abc_textfield_search_default_mtrl_alpha
 drawable abc_textfield_search_material
 drawable abc_vector_test
 drawable arrow_down_float
+drawable arrow_down_float_bible
 drawable arrow_down_float_sabytie
 drawable arrow_up_float
+drawable arrow_up_float_bible
 drawable arrow_up_float_black
 drawable avd_hide_password
 drawable avd_show_password
@@ -1367,6 +1371,7 @@ drawable bibliya
 drawable bold
 drawable book_icon
 drawable bookmark
+drawable bookmark_black
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
 drawable btn_checkbox_unchecked_mtrl
@@ -2848,7 +2853,6 @@ string vygliad
 string widget_day_d_n
 string widget_settings
 string wifi_error
-string zakladka_exits
 string zakladki_bible
 string zakladki_bible2
 string zmest

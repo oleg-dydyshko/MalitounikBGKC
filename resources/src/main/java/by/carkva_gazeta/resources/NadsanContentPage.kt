@@ -7,6 +7,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.core.content.ContextCompat
@@ -40,7 +41,10 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
     override fun onBackPressedFragment() {
         BibleGlobalList.mPedakVisable = false
         BibleGlobalList.bibleCopyList.clear()
-        linearLayout4.visibility = View.GONE
+        activity?.let {
+            linearLayout6.animation = AnimationUtils.loadAnimation(it.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+        }
+        linearLayout6.visibility = View.GONE
         adapter.notifyDataSetChanged()
     }
 
@@ -58,7 +62,7 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
         super.onPause()
         BibleGlobalList.mPedakVisable = false
         BibleGlobalList.bibleCopyList.clear()
-        linearLayout4.visibility = View.GONE
+        linearLayout6.visibility = View.GONE
         adapter.notifyDataSetChanged()
     }
 
@@ -88,7 +92,12 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
 
     override fun onItemLongClick(parent: AdapterView<*>, view: View?, position: Int, id: Long): Boolean {
         BibleGlobalList.mPedakVisable = true
-        linearLayout4.visibility = View.VISIBLE
+        activity?.let {
+            if (linearLayout6.visibility == View.GONE) {
+                linearLayout6.animation = AnimationUtils.loadAnimation(it.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_top)
+                linearLayout6.visibility = View.VISIBLE
+            }
+        }
         var find = false
         BibleGlobalList.bibleCopyList.forEach {
             if (it == position)
@@ -109,15 +118,6 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        copyBig.visibility = View.VISIBLE
-        copyBigFull.visibility = View.VISIBLE
-        adpravit.visibility = View.VISIBLE
-        spinnerCopy.visibility = View.GONE
-        yelloy.visibility = View.GONE
-        underline.visibility = View.GONE
-        bold.visibility = View.GONE
-        zakladka.visibility = View.GONE
-        zametka.visibility = View.GONE
         listView.setSelection(NadsanContentActivity.fierstPosition)
         listView.onItemLongClickListener = this
         listView.onItemClickListener = this
@@ -150,7 +150,7 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
                 copyBig.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
                 copyBigFull.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
                 adpravit.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
-                linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+                linearLayout6.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
                 listView.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             }
             copyBigFull.setOnClickListener {
@@ -172,7 +172,8 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
                     val clip = ClipData.newPlainText("", MainActivity.fromHtml(copyString.toString()).toString().trim())
                     clipboard.setPrimaryClip(clip)
                     messageView(getString(by.carkva_gazeta.malitounik.R.string.copy))
-                    linearLayout4.visibility = View.GONE
+                    linearLayout6.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                    linearLayout6.visibility = View.GONE
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()

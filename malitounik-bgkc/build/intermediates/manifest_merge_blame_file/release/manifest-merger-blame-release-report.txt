@@ -2,8 +2,8 @@
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 3    xmlns:dist="http://schemas.android.com/apk/distribution"
 4    package="by.carkva_gazeta.malitounik"
-5    android:versionCode="43603"
-6    android:versionName="3.7.7" >
+5    android:versionCode="43605"
+6    android:versionName="3.7.8" >
 7
 8    <uses-sdk
 9        android:minSdkVersion="14"

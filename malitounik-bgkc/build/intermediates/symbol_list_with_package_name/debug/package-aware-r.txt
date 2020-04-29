@@ -1371,6 +1371,7 @@ drawable bibliya
 drawable bold
 drawable book_icon
 drawable bookmark
+drawable bookmark_black
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
 drawable btn_checkbox_unchecked_mtrl
@@ -2852,7 +2853,6 @@ string vygliad
 string widget_day_d_n
 string widget_settings
 string wifi_error
-string zakladka_exits
 string zakladki_bible
 string zakladki_bible2
 string zmest

@@ -5,84 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:paddingTop="8dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="8dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <by.carkva_gazeta.malitounik.SpinnerBible
-            android:id="@+id/spinnerCopy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/colorIcons"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:srcCompat="@drawable/yelloy" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/colorIcons"
-            android:textSize="18sp"
-            app:srcCompat="@drawable/underline" />
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/colorIcons"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:srcCompat="@drawable/bold" />
-
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-            android:id="@+id/adpravit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/knopka_red"
-            android:gravity="center"
-            android:text="@string/adpravit"
-            android:textColor="@color/colorIcons"
-            android:textSize="18sp"
-            android:visibility="gone" />
-
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-            android:id="@+id/copyBig"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/knopka_red"
-            android:gravity="center"
-            android:text="@string/copy_big"
-            android:textColor="@color/colorIcons"
-            android:textSize="18sp"
-            android:visibility="gone" />
-
-    </LinearLayout>
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -163,6 +85,107 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="8dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/share"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/share_bible" />
+
+        <ImageView
+            android:id="@+id/copy"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/copy" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/colorIcons"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:srcCompat="@drawable/yelloy" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/colorIcons"
+            android:textSize="18sp"
+            app:srcCompat="@drawable/underline" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/colorIcons"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:srcCompat="@drawable/bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="8dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/adpravit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/knopka_red"
+            android:gravity="center"
+            android:text="@string/adpravit"
+            android:textColor="@color/colorIcons"
+            android:textSize="18sp" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/copyBig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/knopka_red"
+            android:gravity="center"
+            android:text="@string/copy_big"
+            android:textColor="@color/colorIcons"
+            android:textSize="18sp" />
+    </LinearLayout>
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
         android:id="@+id/progress"

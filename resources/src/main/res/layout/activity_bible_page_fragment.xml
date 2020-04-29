@@ -119,6 +119,20 @@
             android:layout_weight="1"
             app:srcCompat="@drawable/sketch" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
         <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
             android:id="@+id/adpravit"
             android:layout_width="wrap_content"
@@ -128,8 +142,7 @@
             android:gravity="center"
             android:text="@string/adpravit"
             android:textColor="@color/colorIcons"
-            android:textSize="18sp"
-            android:visibility="gone" />
+            android:textSize="18sp" />
 
         <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
             android:id="@+id/copyBig"
@@ -140,8 +153,7 @@
             android:gravity="center"
             android:text="@string/copy_big"
             android:textColor="@color/colorIcons"
-            android:textSize="18sp"
-            android:visibility="gone" />
+            android:textSize="18sp" />
 
         <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
             android:id="@+id/copyBigFull"
@@ -152,8 +164,6 @@
             android:gravity="center"
             android:text="@string/copy_big_full"
             android:textColor="@color/colorIcons"
-            android:textSize="18sp"
-            android:visibility="gone" />
-
+            android:textSize="18sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -57,7 +57,7 @@
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_activity_paslia_prich.xml:17
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_chytanne.xml:17
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_list_bible.xml:17
-# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_maran_ata.xml:95
+# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_maran_ata.xml:17
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_under.xml:19
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/bgkc_list.xml:13
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/bogasluzbovya.xml:17
@@ -101,17 +101,14 @@
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/my_malitva_view.xml:33
 -keep class by.carkva_gazeta.malitounik.InteractiveScrollView { <init>(...); }
 
-# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_maran_ata.xml:23
--keep class by.carkva_gazeta.malitounik.SpinnerBible { <init>(...); }
-
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_bible.xml:30
-# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_bible_page_fragment.xml:122
+# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_bible_page_fragment.xml:136
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/activity_parafii_bgkc.xml:20
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_activity_paslia_prich.xml:25
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_chytanne.xml:25
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_fragment_paslia_prich.xml:24
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_list_bible.xml:25
-# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_maran_ata.xml:60
+# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_maran_ata.xml:30
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_under.xml:27
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/bgkc_list.xml:20
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/bogasluzbovya.xml:25
@@ -135,7 +132,7 @@
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_activity_paslia_prich.xml:8
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_chytanne.xml:8
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_list_bible.xml:8
-# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_maran_ata.xml:86
+# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_maran_ata.xml:8
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_under.xml:10
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/bgkc_list.xml:8
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/bogasluzbovya.xml:8

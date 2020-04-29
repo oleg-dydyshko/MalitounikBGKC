@@ -19,6 +19,7 @@ import android.text.style.*
 import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
+import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.AdapterView.*
 import androidx.appcompat.app.AppCompatActivity
@@ -232,6 +233,36 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         constraint.setOnTouchListener(this)
         if (dzenNoch) progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+        share.setOnClickListener {
+            if (bibleCopyList.size > 0) {
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(Intent.EXTRA_TEXT, MainActivity.fromHtml(maranAta[bibleCopyList[0]]).toString())
+                sendIntent.type = "text/plain"
+                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("", MainActivity.fromHtml(maranAta[bibleCopyList[0]]).toString())
+                clipboard.setPrimaryClip(clip)
+                startActivity(Intent.createChooser(sendIntent, null))
+            } else {
+                messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+            }
+        }
+        copy.setOnClickListener {
+            if (bibleCopyList.size > 0) {
+                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("", MainActivity.fromHtml(maranAta[bibleCopyList[0]]).toString())
+                clipboard.setPrimaryClip(clip)
+                messageView(getString(by.carkva_gazeta.malitounik.R.string.copy))
+                linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                linearLayout4.visibility = View.GONE
+                bibleCopyList.clear()
+                mPedakVisable = false
+                linearLayout5.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                linearLayout5.visibility = View.GONE
+            } else {
+                messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+            }
+        }
         copyBig.setOnClickListener {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val copyString = java.lang.StringBuilder()
@@ -248,6 +279,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             clipboard.setPrimaryClip(clip)
             messageView(getString(by.carkva_gazeta.malitounik.R.string.copy))
             linearLayout4.visibility = View.GONE
+            linearLayout5.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+            linearLayout5.visibility = View.GONE
             mPedakVisable = false
             bibleCopyList.clear()
             adapter.notifyDataSetChanged()
@@ -289,6 +322,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     setVydelenie.add(0)
                     vydelenie.add(setVydelenie)
                 }
+                linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
@@ -313,6 +347,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     setVydelenie.add(1)
                     vydelenie.add(setVydelenie)
                 }
+                linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
@@ -337,6 +372,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     setVydelenie.add(0)
                     vydelenie.add(setVydelenie)
                 }
+                linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
@@ -346,6 +382,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         if (dzenNoch) {
             linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+            linearLayout5.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
             copyBig.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
             adpravit.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
         }
@@ -376,48 +413,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             prefEditor.putBoolean("help_str", false)
             prefEditor.apply()
         }
-        val arrayList = arrayOf(by.carkva_gazeta.malitounik.R.drawable.share_bible, by.carkva_gazeta.malitounik.R.drawable.copy)
-        spinnerCopy.adapter = SpinnerImageAdapter(this, arrayList)
-        var chekFirst = false
-        spinnerCopy.onItemSelectedListener = (object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (savedInstanceState == null && chekFirst) {
-                    when (position) {
-                        0 -> {
-                            if (bibleCopyList.size > 0) {
-                                val sendIntent = Intent()
-                                sendIntent.action = Intent.ACTION_SEND
-                                sendIntent.putExtra(Intent.EXTRA_TEXT, MainActivity.fromHtml(maranAta[bibleCopyList[0]]).toString())
-                                sendIntent.type = "text/plain"
-                                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                val clip = ClipData.newPlainText("", MainActivity.fromHtml(maranAta[bibleCopyList[0]]).toString())
-                                clipboard.setPrimaryClip(clip)
-                                startActivity(Intent.createChooser(sendIntent, null))
-                            } else {
-                                messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
-                            }
-                        }
-                        1 -> {
-                            if (bibleCopyList.size > 0) {
-                                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                val clip = ClipData.newPlainText("", MainActivity.fromHtml(maranAta[bibleCopyList[0]]).toString())
-                                clipboard.setPrimaryClip(clip)
-                                messageView(getString(by.carkva_gazeta.malitounik.R.string.copy))
-                                linearLayout4.visibility = View.GONE
-                                bibleCopyList.clear()
-                                mPedakVisable = false
-                            } else {
-                                messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
-                            }
-                        }
-                    }
-                }
-                chekFirst = true
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-        })
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -468,7 +463,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     @SuppressLint("SetTextI18n")
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        if (linearLayout4.visibility == View.VISIBLE) {
+        if (linearLayout4.visibility == View.VISIBLE || linearLayout5.visibility == View.VISIBLE) {
             return false
         }
         val heightConstraintLayout = constraint.height
@@ -489,7 +484,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             if (MainActivity.checkBrightness) {
                 MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
             }
-            linearLayout4.visibility = View.GONE
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
@@ -1036,7 +1030,15 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         } else if (mPedakVisable) {
             mPedakVisable = false
             bibleCopyList.clear()
-            linearLayout4.visibility = View.GONE
+            if (linearLayout5.visibility == View.VISIBLE) {
+                linearLayout4.visibility = View.GONE
+                linearLayout5.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                linearLayout5.visibility = View.GONE
+            } else {
+                linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                linearLayout4.visibility = View.GONE
+            }
+            invalidateOptionsMenu()
         } else {
             if (change) {
                 onSupportNavigateUp()
@@ -1069,6 +1071,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         mPedakVisable = false
         bibleCopyList.clear()
         linearLayout4.visibility = View.GONE
+        linearLayout5.visibility = View.GONE
         scrollTimer.cancel()
         resetTimer.cancel()
         procentTimer.cancel()
@@ -1092,12 +1095,19 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         super.onPrepareOptionsMenu(menu)
         autoscroll = k.getBoolean("autoscroll", false)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
-        if (linearLayout4.visibility == View.GONE) {
-            itemAuto.isVisible = true
-            mActionDown = false
-        } else {
+        if (linearLayout4.visibility == View.VISIBLE || linearLayout5.visibility == View.VISIBLE) {
             itemAuto.isVisible = false
+        } else {
+            if (paralel) {
+                subtitle_toolbar.visibility = View.GONE
+                itemAuto.isVisible = false
+            } else {
+                subtitle_toolbar.visibility = View.VISIBLE
+                itemAuto.isVisible = true
+            }
+            mActionDown = false
         }
+
         if (autoscroll) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
@@ -1111,13 +1121,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }
-        if (paralel) {
-            subtitle_toolbar.visibility = View.GONE
-            itemAuto.isVisible = false
-        } else {
-            subtitle_toolbar.visibility = View.VISIBLE
-            itemAuto.isVisible = true
-        }
+
         val spanString = SpannableString(itemAuto.title.toString())
         val end = spanString.length
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -1145,7 +1149,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        linearLayout4.visibility = View.GONE
         dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         if (id == android.R.id.home) {
@@ -1289,19 +1292,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         if (mPedakVisable) {
             if (bibleCopyList.size > 1) {
-                copyBig.visibility = View.VISIBLE
-                adpravit.visibility = View.VISIBLE
-                spinnerCopy.visibility = View.GONE
-                imageView2.visibility = View.GONE
-                imageView3.visibility = View.GONE
-                imageView4.visibility = View.GONE
+                linearLayout5.visibility = View.VISIBLE
             } else {
-                copyBig.visibility = View.GONE
-                adpravit.visibility = View.GONE
-                spinnerCopy.visibility = View.VISIBLE
-                imageView2.visibility = View.VISIBLE
-                imageView3.visibility = View.VISIBLE
-                imageView4.visibility = View.VISIBLE
+                linearLayout5.visibility = View.GONE
             }
         }
     }
@@ -1334,31 +1327,20 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
         if (!autoscroll) {
             if (!maranAta[position].contains("<!--no-->") && maranAta[position].trim() != "") {
-                if (linearLayout4.visibility == View.GONE) {
-                    mPedakVisable = true
-                    bibleCopyList.add(position)
-                    linearLayout4.visibility = View.VISIBLE
-                    copyBig.visibility = View.GONE
-                    adpravit.visibility = View.GONE
-                    spinnerCopy.visibility = View.VISIBLE
-                    imageView2.visibility = View.VISIBLE
-                    imageView3.visibility = View.VISIBLE
-                    imageView4.visibility = View.VISIBLE
-                } else {
-                    if (mPedakVisable) {
-                        var find = false
-                        bibleCopyList.forEach {
-                            if (it == position)
-                                find = true
-                        }
-                        if (find) {
-                            bibleCopyList.remove(position)
-                        } else {
-                            bibleCopyList.add(position)
-                        }
-                        adapter.notifyDataSetChanged()
-                    }
+                mPedakVisable = true
+                linearLayout4.visibility = View.VISIBLE
+                var find = false
+                bibleCopyList.forEach {
+                    if (it == position)
+                        find = true
                 }
+                if (find) {
+                    bibleCopyList.remove(position)
+                } else {
+                    bibleCopyList.add(position)
+                }
+                adapter.notifyDataSetChanged()
+                invalidateOptionsMenu()
             }
         }
         return true

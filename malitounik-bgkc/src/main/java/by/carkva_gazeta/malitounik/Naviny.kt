@@ -17,11 +17,8 @@ import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
-import android.webkit.ValueCallback
-import android.webkit.WebChromeClient
+import android.webkit.*
 import android.webkit.WebChromeClient.FileChooserParams
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
@@ -99,7 +96,7 @@ class Naviny : AppCompatActivity() {
         }
         val naviny = kq.getInt("naviny", 0)
         viewWeb.settings.javaScriptEnabled = true
-        viewWeb.settings.domStorageEnabled = true
+        //viewWeb.settings.domStorageEnabled = true
         viewWeb.webViewClient = MyWebViewClient()
         viewWeb.webChromeClient = object : WebChromeClient() {
             // For Android 4.1+
@@ -132,15 +129,15 @@ class Naviny : AppCompatActivity() {
         var error = false
         when (naviny) {
             0 -> {
-                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://m.carkva-gazeta.by/")
-                title_toolbar.text = "«Царква» — беларуская грэка-каталіцкая газета" //https://m.carkva-gazeta.by/
-                val file = File("$filesDir/Site/http:__m.carkva-gazeta.by_") //
+                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/")
+                title_toolbar.text = "«Царква» — беларуская грэка-каталіцкая газета" //https://carkva-gazeta.by/
+                val file = File("$filesDir/Site/http:__carkva-gazeta.by_") //
                 if (MainActivity.isNetworkAvailable(this)) {
-                    writeFile("https://m.carkva-gazeta.by/")
+                    writeFile("https://carkva-gazeta.by/")
                 }
                 when {
                     MainActivity.isNetworkAvailable(this) -> {
-                        viewWeb.loadUrl("https://m.carkva-gazeta.by/")
+                        viewWeb.loadUrl("https://carkva-gazeta.by/")
                     }
                     file.exists() -> {
                         var htmlData = readerFile(file)
@@ -151,15 +148,15 @@ class Naviny : AppCompatActivity() {
                 }
             }
             1 -> {
-                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://m.carkva-gazeta.by/index.php?his=")
-                title_toolbar.text = "Гісторыя Царквы" //https://m.carkva-gazeta.by/index.php?his=
-                val file = File("$filesDir/Site/http:__m.carkva-gazeta.by_index.php?his=") //
+                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?his=")
+                title_toolbar.text = "Гісторыя Царквы" //https://carkva-gazeta.by/index.php?his=
+                val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?his=") //
                 if (MainActivity.isNetworkAvailable(this)) {
-                    writeFile("https://m.carkva-gazeta.by/index.php?his=")
+                    writeFile("https://carkva-gazeta.by/index.php?his=")
                 }
                 when {
                     MainActivity.isNetworkAvailable(this) -> {
-                        viewWeb.loadUrl("https://m.carkva-gazeta.by/index.php?his=")
+                        viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
                     }
                     file.exists() -> {
                         var htmlData = readerFile(file)
@@ -170,15 +167,15 @@ class Naviny : AppCompatActivity() {
                 }
             }
             2 -> {
-                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://m.carkva-gazeta.by/index.php?sva=")
-                title_toolbar.text = "Сьвятло ўсходу" //https://m.carkva-gazeta.by/index.php?sva=
-                val file = File("$filesDir/Site/http:__m.carkva-gazeta.by_index.php?sva=") //
+                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?sva=")
+                title_toolbar.text = "Сьвятло ўсходу" //https://carkva-gazeta.by/index.php?sva=
+                val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?sva=") //
                 if (MainActivity.isNetworkAvailable(this)) {
-                    writeFile("https://m.carkva-gazeta.by/index.php?sva=")
+                    writeFile("https://carkva-gazeta.by/index.php?sva=")
                 }
                 when {
                     MainActivity.isNetworkAvailable(this) -> {
-                        viewWeb.loadUrl("https://m.carkva-gazeta.by/index.php?sva=")
+                        viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
                     }
                     file.exists() -> {
                         var htmlData = readerFile(file)
@@ -189,15 +186,15 @@ class Naviny : AppCompatActivity() {
                 }
             }
             3 -> {
-                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://m.carkva-gazeta.by/index.php?gra=")
-                title_toolbar.text = "Царква і грамадзтва" //https://m.carkva-gazeta.by/index.php?gra=
-                val file = File("$filesDir/Site/http:__m.carkva-gazeta.by_index.php?gra=")
+                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?gra=")
+                title_toolbar.text = "Царква і грамадзтва" //https://carkva-gazeta.by/index.php?gra=
+                val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?gra=")
                 if (MainActivity.isNetworkAvailable(this)) {
-                    writeFile("https://m.carkva-gazeta.by/index.php?gra=")
+                    writeFile("https://carkva-gazeta.by/index.php?gra=")
                 }
                 when {
                     MainActivity.isNetworkAvailable(this) -> {
-                        viewWeb.loadUrl("https://m.carkva-gazeta.by/index.php?gra=")
+                        viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
                     }
                     file.exists() -> {
                         var htmlData = readerFile(file)
@@ -208,15 +205,15 @@ class Naviny : AppCompatActivity() {
                 }
             }
             4 -> {
-                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://m.carkva-gazeta.by/index.php?it=")
-                title_toolbar.text = "Катэдральны пляц" //https://m.carkva-gazeta.by/index.php?it=
-                val file = File("$filesDir/Site/http:__m.carkva-gazeta.by_index.php?it=")
+                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?it=")
+                title_toolbar.text = "Катэдральны пляц" //https://carkva-gazeta.by/index.php?it=
+                val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?it=")
                 if (MainActivity.isNetworkAvailable(this)) {
-                    writeFile("https://m.carkva-gazeta.by/index.php?it=")
+                    writeFile("https://carkva-gazeta.by/index.php?it=")
                 }
                 when {
                     MainActivity.isNetworkAvailable(this) -> {
-                        viewWeb.loadUrl("https://m.carkva-gazeta.by/index.php?it=")
+                        viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
                     }
                     file.exists() -> {
                         var htmlData = readerFile(file)
@@ -227,15 +224,15 @@ class Naviny : AppCompatActivity() {
                 }
             }
             5 -> {
-                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://m.carkva-gazeta.by/index.php?ik=")
-                title_toolbar.text = "Відэа" //https://m.carkva-gazeta.by/index.php?ik=
-                val file = File("$filesDir/Site/http:__m.carkva-gazeta.by_index.php?ik=")
+                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?ik=")
+                title_toolbar.text = "Відэа" //https://carkva-gazeta.by/index.php?ik=
+                val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?ik=")
                 if (MainActivity.isNetworkAvailable(this)) {
-                    writeFile("https://m.carkva-gazeta.by/index.php?ik=")
+                    writeFile("https://carkva-gazeta.by/index.php?ik=")
                 }
                 when {
                     MainActivity.isNetworkAvailable(this) -> {
-                        viewWeb.loadUrl("https://m.carkva-gazeta.by/index.php?ik=")
+                        viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
                     }
                     file.exists() -> {
                         var htmlData = readerFile(file)
@@ -318,7 +315,7 @@ class Naviny : AppCompatActivity() {
     }
 
     private fun writeFile(url: String) {
-        if (Uri.parse(url).host?.contains("m.carkva-gazeta.by") == true) {
+        if (Uri.parse(url).host?.contains("carkva-gazeta.by") == true) {
             Thread(Runnable {
                 try {
                     val myUrl = URL(url)
@@ -384,15 +381,15 @@ class Naviny : AppCompatActivity() {
         val id = item.itemId
         var error = false
         if (id == R.id.num) {
-            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://m.carkva-gazeta.by/index.php?num=")
-            title_toolbar.text = "Навіны" //https://m.carkva-gazeta.by/
-            val file = File("$filesDir/Site/http:__m.carkva-gazeta.by_index.php?num=") //
+            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?num=")
+            title_toolbar.text = "Навіны" //https://carkva-gazeta.by/
+            val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?num=") //
             if (MainActivity.isNetworkAvailable(this)) {
-                writeFile("https://m.carkva-gazeta.by/index.php?num=")
+                writeFile("https://carkva-gazeta.by/index.php?num=")
             }
             when {
                 MainActivity.isNetworkAvailable(this) -> {
-                    viewWeb.loadUrl("https://m.carkva-gazeta.by/index.php?num=")
+                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
                 }
                 file.exists() -> {
                     var htmlData = readerFile(file)
@@ -403,15 +400,15 @@ class Naviny : AppCompatActivity() {
             }
         }
         if (id == R.id.sva) {
-            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://m.carkva-gazeta.by/index.php?sva=")
-            title_toolbar.text = "Сьвятло ўсходу" //https://m.carkva-gazeta.by/index.php?sva=
-            val file = File("$filesDir/Site/http:__m.carkva-gazeta.by_index.php?sva=") //
+            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?sva=")
+            title_toolbar.text = "Сьвятло ўсходу" //https://carkva-gazeta.by/index.php?sva=
+            val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?sva=") //
             if (MainActivity.isNetworkAvailable(this)) {
-                writeFile("https://m.carkva-gazeta.by/index.php?sva=")
+                writeFile("https://carkva-gazeta.by/index.php?sva=")
             }
             when {
                 MainActivity.isNetworkAvailable(this) -> {
-                    viewWeb.loadUrl("https://m.carkva-gazeta.by/index.php?sva=")
+                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
                 }
                 file.exists() -> {
                     var htmlData = readerFile(file)
@@ -422,15 +419,15 @@ class Naviny : AppCompatActivity() {
             }
         }
         if (id == R.id.his) {
-            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://m.carkva-gazeta.by/index.php?his=")
-            title_toolbar.text = "Гісторыя Царквы" //https://m.carkva-gazeta.by/index.php?his=
-            val file = File("$filesDir/Site/http:__m.carkva-gazeta.by_index.php?his=") //
+            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?his=")
+            title_toolbar.text = "Гісторыя Царквы" //https://carkva-gazeta.by/index.php?his=
+            val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?his=") //
             if (MainActivity.isNetworkAvailable(this)) {
-                writeFile("https://m.carkva-gazeta.by/index.php?his=")
+                writeFile("https://carkva-gazeta.by/index.php?his=")
             }
             when {
                 MainActivity.isNetworkAvailable(this) -> {
-                    viewWeb.loadUrl("https://m.carkva-gazeta.by/index.php?his=")
+                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
                 }
                 file.exists() -> {
                     var htmlData = readerFile(file)
@@ -441,15 +438,15 @@ class Naviny : AppCompatActivity() {
             }
         }
         if (id == R.id.gra) {
-            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://m.carkva-gazeta.by/index.php?gra=")
-            title_toolbar.text = "Царква і грамадзтва" //https://m.carkva-gazeta.by/index.php?gra=
-            val file = File("$filesDir/Site/http:__m.carkva-gazeta.by_index.php?gra=")
+            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?gra=")
+            title_toolbar.text = "Царква і грамадзтва" //https://carkva-gazeta.by/index.php?gra=
+            val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?gra=")
             if (MainActivity.isNetworkAvailable(this)) {
-                writeFile("https://m.carkva-gazeta.by/index.php?gra=")
+                writeFile("https://carkva-gazeta.by/index.php?gra=")
             }
             when {
                 MainActivity.isNetworkAvailable(this) -> {
-                    viewWeb.loadUrl("https://m.carkva-gazeta.by/index.php?gra=")
+                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
                 }
                 file.exists() -> {
                     var htmlData = readerFile(file)
@@ -474,15 +471,15 @@ class Naviny : AppCompatActivity() {
             startActivity(intent)
         }
         if (id == R.id.it) {
-            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://m.carkva-gazeta.by/index.php?it=")
-            title_toolbar.text = "Катэдральны пляц" //https://m.carkva-gazeta.by/index.php?it=
-            val file = File("$filesDir/Site/http:__m.carkva-gazeta.by_index.php?it=")
+            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?it=")
+            title_toolbar.text = "Катэдральны пляц" //https://carkva-gazeta.by/index.php?it=
+            val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?it=")
             if (MainActivity.isNetworkAvailable(this)) {
-                writeFile("https://m.carkva-gazeta.by/index.php?it=")
+                writeFile("https://carkva-gazeta.by/index.php?it=")
             }
             when {
                 MainActivity.isNetworkAvailable(this) -> {
-                    viewWeb.loadUrl("https://m.carkva-gazeta.by/index.php?it=")
+                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
                 }
                 file.exists() -> {
                     var htmlData = readerFile(file)
@@ -493,15 +490,15 @@ class Naviny : AppCompatActivity() {
             }
         }
         if (id == R.id.ik) {
-            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://m.carkva-gazeta.by/index.php?ik=")
-            title_toolbar.text = "Відэа" //https://m.carkva-gazeta.by/index.php?ik=
-            val file = File("$filesDir/Site/http:__m.carkva-gazeta.by_index.php?ik=")
+            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?ik=")
+            title_toolbar.text = "Відэа" //https://carkva-gazeta.by/index.php?ik=
+            val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?ik=")
             if (MainActivity.isNetworkAvailable(this)) {
-                writeFile("https://m.carkva-gazeta.by/index.php?ik=")
+                writeFile("https://carkva-gazeta.by/index.php?ik=")
             }
             when {
                 MainActivity.isNetworkAvailable(this) -> {
-                    viewWeb.loadUrl("https://m.carkva-gazeta.by/index.php?ik=")
+                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
                 }
                 file.exists() -> {
                     var htmlData = readerFile(file)
@@ -560,7 +557,7 @@ class Naviny : AppCompatActivity() {
                 prefEditors.apply()
                 val intent = Intent(this@Naviny, MainActivity::class.java)
                 startActivity(intent)
-                return false
+                return true
             }
             if (url.contains("https://malitounik.page.link/biblija")) {
                 val prefEditors = kq.edit()
@@ -568,9 +565,9 @@ class Naviny : AppCompatActivity() {
                 prefEditors.apply()
                 val intent = Intent(this@Naviny, MainActivity::class.java)
                 startActivity(intent)
-                return false
+                return true
             }
-            if (url.contains("https://m.carkva-gazeta.by/index.php?bib=")) {
+            if (url.contains("https://carkva-gazeta.by/index.php?bib=")) {
                 if (MainActivity.checkmoduleResources(this@Naviny)) {
                     if (MainActivity.checkmodulesBiblijateka(this@Naviny)) {
                         val intent = Intent(this@Naviny, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
@@ -579,16 +576,16 @@ class Naviny : AppCompatActivity() {
                     } else {
                         MainActivity.downloadDynamicModule(this@Naviny)
                     }
-                    return false
+                    return true
                 }
             }
             var error = false
             try {
-                if (!url.contains("m.carkva-gazeta.by")) {
+                if (!url.contains("carkva-gazeta.by")) {
                     error = if (MainActivity.isNetworkAvailable(this@Naviny)) {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                         view.context.startActivity(intent)
-                        return true
+                        true
                     } else true
                 }
                 mUrl = url
@@ -596,7 +593,7 @@ class Naviny : AppCompatActivity() {
                 var filename = url
                 filename = filename.replace("/", "_")
                 val file = File("$filesDir/Site/$filename")
-                if (view.url == "https://m.carkva-gazeta.by/") {
+                if (view.url == "https://carkva-gazeta.by/") {
                     when {
                         MainActivity.isNetworkAvailable(this@Naviny) -> {
                             view.loadUrl(url)

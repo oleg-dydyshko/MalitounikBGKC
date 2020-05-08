@@ -551,7 +551,12 @@ class Naviny : AppCompatActivity() {
         }
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-            if (url.contains("https://malitounik.page.link/caliandar")) {
+            var myurl = url
+            if (myurl.contains("file:///index.php")) {
+                val t1 = myurl.indexOf("//")
+                myurl =  "https://carkva-gazeta.by/" + myurl.substring(t1 + 3)
+            }
+            if (myurl.contains("https://malitounik.page.link/caliandar")) {
                 val prefEditors = kq.edit()
                 prefEditors.putInt("id", R.id.label1)
                 prefEditors.apply()
@@ -559,7 +564,7 @@ class Naviny : AppCompatActivity() {
                 startActivity(intent)
                 return true
             }
-            if (url.contains("https://malitounik.page.link/biblija")) {
+            if (myurl.contains("https://malitounik.page.link/biblija")) {
                 val prefEditors = kq.edit()
                 prefEditors.putInt("id", R.id.label8)
                 prefEditors.apply()
@@ -567,7 +572,7 @@ class Naviny : AppCompatActivity() {
                 startActivity(intent)
                 return true
             }
-            if (url.contains("https://carkva-gazeta.by/index.php?bib=")) {
+            if (myurl.contains("https://carkva-gazeta.by/index.php?bib=")) {
                 if (MainActivity.checkmoduleResources(this@Naviny)) {
                     if (MainActivity.checkmodulesBiblijateka(this@Naviny)) {
                         val intent = Intent(this@Naviny, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
@@ -581,22 +586,22 @@ class Naviny : AppCompatActivity() {
             }
             var error = false
             try {
-                if (!url.contains("carkva-gazeta.by")) {
+                if (!myurl.contains("carkva-gazeta.by")) {
                     error = if (MainActivity.isNetworkAvailable(this@Naviny)) {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(myurl))
                         view.context.startActivity(intent)
                         true
                     } else true
                 }
-                mUrl = url
-                if (MainActivity.isNetworkAvailable(this@Naviny)) searchHistory.add(url)
-                var filename = url
+                mUrl = myurl
+                if (MainActivity.isNetworkAvailable(this@Naviny)) searchHistory.add(myurl)
+                var filename = myurl
                 filename = filename.replace("/", "_")
                 val file = File("$filesDir/Site/$filename")
                 if (view.url == "https://carkva-gazeta.by/") {
                     when {
                         MainActivity.isNetworkAvailable(this@Naviny) -> {
-                            view.loadUrl(url)
+                            view.loadUrl(myurl)
                         }
                         file.exists() -> {
                             var htmlData = readerFile(file)
@@ -609,7 +614,7 @@ class Naviny : AppCompatActivity() {
                     if (kq.getInt("trafic", 0) == 0) {
                         when {
                             MainActivity.isNetworkAvailable(this@Naviny) -> {
-                                view.loadUrl(url)
+                                view.loadUrl(myurl)
                             }
                             file.exists() -> {
                                 var htmlData = readerFile(file)
@@ -627,7 +632,7 @@ class Naviny : AppCompatActivity() {
                                 viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
                             }
                             MainActivity.isNetworkAvailable(this@Naviny) -> {
-                                view.loadUrl(url)
+                                view.loadUrl(myurl)
                             }
                             else -> error = true
                         }

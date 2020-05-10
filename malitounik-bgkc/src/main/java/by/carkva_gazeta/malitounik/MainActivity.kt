@@ -164,6 +164,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             idSelect = savedInstanceState.getInt("id")
             idOld = savedInstanceState.getInt("idOld")
         }
+        // Удаление кеша интернета
+        val file = File("$filesDir/Site")
+        if (file.exists())
+            file.deleteRecursively()
 /*InputStream inputStream2 = getResources().openRawResource(R.raw.nadsan_psaltyr)
 String[] split
 try {

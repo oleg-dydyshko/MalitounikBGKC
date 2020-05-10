@@ -271,7 +271,6 @@
     <string name="end_fabreary_be">Чытаецца 28.02 альбо 1.03</string>
     <string name="end_fabreary_ru">Читается 28.02 или 1.03</string>
     <string name="get_date">Выберыце дату</string>
-    <string name="keshstar">Кэшаваныя старонкі</string>
     <string name="title_psalter">ПСАЛТЫР (пераклад А. Надсана)</string>
     <string name="title_psalter_privila">Правілы чытаньня Псалтыра</string>
     <string name="dalshe">Далей</string>
@@ -324,5 +323,6 @@
     <string name="set_versh">Выберыце верш</string>
     <string name="add_to_zakladki">Дабаўлена у закладкі</string>
     <string name="adpravit">Адправіць</string>
+    <string name="open_chrome">Адчыніць у Chrome</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

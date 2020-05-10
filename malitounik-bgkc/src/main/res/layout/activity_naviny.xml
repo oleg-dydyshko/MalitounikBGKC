@@ -39,15 +39,6 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/appbar" />
 
-    <ListView
-        android:id="@+id/dynamic"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/appbar"
-        android:visibility="gone" >
-
-    </ListView>
-
     <LinearLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"

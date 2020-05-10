@@ -10,26 +10,21 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.SystemClock
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
-import android.webkit.*
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
 import android.webkit.WebChromeClient.FileChooserParams
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
-import android.widget.ArrayAdapter
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
-import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_naviny.*
-import java.io.*
-import java.net.URL
 import java.util.*
-import java.util.regex.Pattern
 
 class Naviny : AppCompatActivity() {
     private val mHideHandler = Handler()
@@ -48,14 +43,10 @@ class Naviny : AppCompatActivity() {
     }
     private lateinit var kq: SharedPreferences
     private val searchHistory = ArrayList<String>()
-    private var mUrl: String = ""
-    private val arrayList = ArrayList<ArrayList<String>>()
     private var fullscreenPage = false
     private var dzenNoch = false
-    private var errorInternet = false
     private var mUploadMessage: ValueCallback<Uri?>? = null
     private var mUploadMessageArr: ValueCallback<Array<Uri>>? = null
-    private var mLastClickTime = 0L
     private val uiAnimationDelay = 300L
 
     @SuppressLint("SetTextI18n", "SetJavaScriptEnabled")
@@ -74,20 +65,6 @@ class Naviny : AppCompatActivity() {
             }
             viewWeb.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
         }
-        dynamic.adapter = NavinyAdapter(this)
-        dynamic.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@OnItemClickListener
-            }
-            mLastClickTime = SystemClock.elapsedRealtime()
-            val re = arrayList[position]
-            var htmlData = readerFile(File(filesDir.toString() + "/Site/" + re[0]))
-            htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-            val intent = Intent(this, NavinyView::class.java)
-            intent.putExtra("htmlData", htmlData)
-            intent.putExtra("url", re[1])
-            startActivity(intent)
-        }
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             if (savedInstanceState.getBoolean("getModule")) {
@@ -96,25 +73,13 @@ class Naviny : AppCompatActivity() {
         }
         val naviny = kq.getInt("naviny", 0)
         viewWeb.settings.javaScriptEnabled = true
-        //viewWeb.settings.domStorageEnabled = true
         viewWeb.webViewClient = MyWebViewClient()
         viewWeb.webChromeClient = object : WebChromeClient() {
-            // For Android 4.1+
-            /*fun openFileChooser(uploadMsg: ValueCallback<Uri?>?, acceptType: String?, capture: String?) {
-                mUploadMessage = uploadMsg
-                val i = Intent(Intent.ACTION_GET_CONTENT)
-                i.addCategory(Intent.CATEGORY_OPENABLE)
-                i.type = acceptType
-                startActivityForResult(Intent.createChooser(i, "SELECT"), 100)
-            }*/
-
             // For Android 5.0+
             @SuppressLint("NewApi")
             override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams: FileChooserParams): Boolean {
-                if (mUploadMessageArr != null) {
-                    mUploadMessageArr?.onReceiveValue(null)
-                    mUploadMessageArr = null
-                }
+                mUploadMessageArr?.onReceiveValue(null)
+                mUploadMessageArr = null
                 mUploadMessageArr = filePathCallback
                 val intent = fileChooserParams.createIntent()
                 try {
@@ -129,118 +94,46 @@ class Naviny : AppCompatActivity() {
         var error = false
         when (naviny) {
             0 -> {
-                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/")
-                title_toolbar.text = "«Царква» — беларуская грэка-каталіцкая газета" //https://carkva-gazeta.by/
-                val file = File("$filesDir/Site/http:__carkva-gazeta.by_") //
                 if (MainActivity.isNetworkAvailable(this)) {
-                    writeFile("https://carkva-gazeta.by/")
-                }
-                when {
-                    MainActivity.isNetworkAvailable(this) -> {
-                        viewWeb.loadUrl("https://carkva-gazeta.by/")
-                    }
-                    file.exists() -> {
-                        var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                        viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                    }
-                    else -> error = true
-                }
+                    searchHistory.add("https://carkva-gazeta.by/")
+                    viewWeb.loadUrl("https://carkva-gazeta.by/")
+                } else error = true
+                title_toolbar.text = "«Царква» — беларуская грэка-каталіцкая газета"
             }
             1 -> {
-                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?his=")
-                title_toolbar.text = "Гісторыя Царквы" //https://carkva-gazeta.by/index.php?his=
-                val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?his=") //
                 if (MainActivity.isNetworkAvailable(this)) {
-                    writeFile("https://carkva-gazeta.by/index.php?his=")
-                }
-                when {
-                    MainActivity.isNetworkAvailable(this) -> {
-                        viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
-                    }
-                    file.exists() -> {
-                        var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                        viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                    }
-                    else -> error = true
-                }
+                    searchHistory.add("https://carkva-gazeta.by/index.php?his=")
+                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
+                } else error = true
+                title_toolbar.text = "Гісторыя Царквы"
             }
             2 -> {
-                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?sva=")
-                title_toolbar.text = "Сьвятло ўсходу" //https://carkva-gazeta.by/index.php?sva=
-                val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?sva=") //
                 if (MainActivity.isNetworkAvailable(this)) {
-                    writeFile("https://carkva-gazeta.by/index.php?sva=")
-                }
-                when {
-                    MainActivity.isNetworkAvailable(this) -> {
-                        viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
-                    }
-                    file.exists() -> {
-                        var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                        viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                    }
-                    else -> error = true
-                }
+                    searchHistory.add("https://carkva-gazeta.by/index.php?sva=")
+                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
+                } else error = true
+                title_toolbar.text = "Сьвятло ўсходу"
             }
             3 -> {
-                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?gra=")
-                title_toolbar.text = "Царква і грамадзтва" //https://carkva-gazeta.by/index.php?gra=
-                val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?gra=")
                 if (MainActivity.isNetworkAvailable(this)) {
-                    writeFile("https://carkva-gazeta.by/index.php?gra=")
-                }
-                when {
-                    MainActivity.isNetworkAvailable(this) -> {
-                        viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
-                    }
-                    file.exists() -> {
-                        var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                        viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                    }
-                    else -> error = true
-                }
+                    searchHistory.add("https://carkva-gazeta.by/index.php?gra=")
+                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
+                } else error = true
+                title_toolbar.text = "Царква і грамадзтва"
             }
             4 -> {
-                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?it=")
-                title_toolbar.text = "Катэдральны пляц" //https://carkva-gazeta.by/index.php?it=
-                val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?it=")
                 if (MainActivity.isNetworkAvailable(this)) {
-                    writeFile("https://carkva-gazeta.by/index.php?it=")
-                }
-                when {
-                    MainActivity.isNetworkAvailable(this) -> {
-                        viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
-                    }
-                    file.exists() -> {
-                        var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                        viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                    }
-                    else -> error = true
-                }
+                    searchHistory.add("https://carkva-gazeta.by/index.php?it=")
+                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
+                } else error = true
+                title_toolbar.text = "Катэдральны пляц"
             }
             5 -> {
-                if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?ik=")
-                title_toolbar.text = "Відэа" //https://carkva-gazeta.by/index.php?ik=
-                val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?ik=")
                 if (MainActivity.isNetworkAvailable(this)) {
-                    writeFile("https://carkva-gazeta.by/index.php?ik=")
-                }
-                when {
-                    MainActivity.isNetworkAvailable(this) -> {
-                        viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
-                    }
-                    file.exists() -> {
-                        var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                        viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                    }
-                    else -> error = true
-                }
+                    searchHistory.add("https://carkva-gazeta.by/index.php?ik=")
+                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
+                } else error = true
+                title_toolbar.text = "Відэа"
             }
         }
         if (error) {
@@ -314,147 +207,47 @@ class Naviny : AppCompatActivity() {
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
     }
 
-    private fun writeFile(url: String) {
-        if (Uri.parse(url).host?.contains("carkva-gazeta.by") == true) {
-            Thread(Runnable {
-                try {
-                    val myUrl = URL(url)
-                    var filename = url
-                    filename = filename.replace("/", "_")
-                    val inpstr = myUrl.openStream()
-                    val file = File("$filesDir/Site/$filename")
-                    val outputStream = FileOutputStream("$filesDir/Site/$filename")
-                    val buffer = ByteArray(1024)
-                    var bytesRead: Int
-                    while (inpstr.read(buffer).also { bytesRead = it } != -1) {
-                        outputStream.write(buffer, 0, bytesRead)
-                    }
-                    outputStream.close()
-                    val htmlData = readerFile(file)
-                    if (htmlData.contains("iframe")) {
-                        val r1 = htmlData.indexOf("<iframe")
-                        val r2 = htmlData.indexOf("</iframe>", r1 + 7)
-                        var s2 = htmlData.substring(r1, r2 + 9)
-                        if (!s2.contains("https://")) {
-                            s2 = s2.replace("//", "https://")
-                        }
-                        val s1 = htmlData.substring(0, r1)
-                        val s3 = htmlData.substring(r2 + 9)
-                        val fileNew = File("$filesDir/Site/$filename")
-                        val output: FileWriter
-                        output = FileWriter(fileNew)
-                        output.write(s1 + s2 + s3)
-                        output.close()
-                    }
-                } catch (t: Throwable) {
-                    runOnUiThread {
-                        DialogNoInternet().show(supportFragmentManager, "no_internet")
-                    }
-                }
-            }).start()
-        }
-    }
-
-    private fun readerFile(file: File): String {
-        val inputStream = FileReader(file)
-        val reader = BufferedReader(inputStream)
-        return reader.readText()
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
-        if (errorInternet) {
-            menu.findItem(R.id.num).isVisible = false
-            menu.findItem(R.id.sva).isVisible = false
-            menu.findItem(R.id.his).isVisible = false
-            menu.findItem(R.id.gra).isVisible = false
-            menu.findItem(R.id.calendar).isVisible = false
-            menu.findItem(R.id.biblia).isVisible = false
-            menu.findItem(R.id.it).isVisible = false
-            menu.findItem(R.id.ik).isVisible = false
-            menu.findItem(R.id.bib).isVisible = false
-        }
-        return true
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         var error = false
+        if (id == R.id.action_chrome) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(searchHistory[searchHistory.size - 1]))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.setPackage("com.android.chrome")
+            try {
+                startActivity(intent)
+            } catch (ex: ActivityNotFoundException) {
+                intent.setPackage(null)
+                startActivity(intent)
+            }
+        }
         if (id == R.id.num) {
-            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?num=")
-            title_toolbar.text = "Навіны" //https://carkva-gazeta.by/
-            val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?num=") //
             if (MainActivity.isNetworkAvailable(this)) {
-                writeFile("https://carkva-gazeta.by/index.php?num=")
-            }
-            when {
-                MainActivity.isNetworkAvailable(this) -> {
-                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
-                }
-                file.exists() -> {
-                    var htmlData = readerFile(file)
-                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                    viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                }
-                else -> error = true
-            }
+                searchHistory.add("https://carkva-gazeta.by/index.php?num=")
+                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
+            } else error = true
+            title_toolbar.text = "Навіны"
         }
         if (id == R.id.sva) {
-            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?sva=")
-            title_toolbar.text = "Сьвятло ўсходу" //https://carkva-gazeta.by/index.php?sva=
-            val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?sva=") //
             if (MainActivity.isNetworkAvailable(this)) {
-                writeFile("https://carkva-gazeta.by/index.php?sva=")
-            }
-            when {
-                MainActivity.isNetworkAvailable(this) -> {
-                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
-                }
-                file.exists() -> {
-                    var htmlData = readerFile(file)
-                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                    viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                }
-                else -> error = true
-            }
+                searchHistory.add("https://carkva-gazeta.by/index.php?sva=")
+                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
+            } else error = true
+            title_toolbar.text = "Сьвятло ўсходу"
         }
         if (id == R.id.his) {
-            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?his=")
-            title_toolbar.text = "Гісторыя Царквы" //https://carkva-gazeta.by/index.php?his=
-            val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?his=") //
             if (MainActivity.isNetworkAvailable(this)) {
-                writeFile("https://carkva-gazeta.by/index.php?his=")
-            }
-            when {
-                MainActivity.isNetworkAvailable(this) -> {
-                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
-                }
-                file.exists() -> {
-                    var htmlData = readerFile(file)
-                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                    viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                }
-                else -> error = true
-            }
+                searchHistory.add("https://carkva-gazeta.by/index.php?his=")
+                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
+            } else error = true
+            title_toolbar.text = "Гісторыя Царквы"
         }
         if (id == R.id.gra) {
-            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?gra=")
-            title_toolbar.text = "Царква і грамадзтва" //https://carkva-gazeta.by/index.php?gra=
-            val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?gra=")
             if (MainActivity.isNetworkAvailable(this)) {
-                writeFile("https://carkva-gazeta.by/index.php?gra=")
-            }
-            when {
-                MainActivity.isNetworkAvailable(this) -> {
-                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
-                }
-                file.exists() -> {
-                    var htmlData = readerFile(file)
-                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                    viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                }
-                else -> error = true
-            }
+                searchHistory.add("https://carkva-gazeta.by/index.php?gra=")
+                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
+            } else error = true
+            title_toolbar.text = "Царква і грамадзтва"
         }
         if (id == R.id.calendar) {
             val prefEditors = kq.edit()
@@ -471,42 +264,18 @@ class Naviny : AppCompatActivity() {
             startActivity(intent)
         }
         if (id == R.id.it) {
-            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?it=")
-            title_toolbar.text = "Катэдральны пляц" //https://carkva-gazeta.by/index.php?it=
-            val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?it=")
             if (MainActivity.isNetworkAvailable(this)) {
-                writeFile("https://carkva-gazeta.by/index.php?it=")
-            }
-            when {
-                MainActivity.isNetworkAvailable(this) -> {
-                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
-                }
-                file.exists() -> {
-                    var htmlData = readerFile(file)
-                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                    viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                }
-                else -> error = true
-            }
+                searchHistory.add("https://carkva-gazeta.by/index.php?it=")
+                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
+            } else error = true
+            title_toolbar.text = "Катэдральны пляц"
         }
         if (id == R.id.ik) {
-            if (MainActivity.isNetworkAvailable(this)) searchHistory.add("https://carkva-gazeta.by/index.php?ik=")
-            title_toolbar.text = "Відэа" //https://carkva-gazeta.by/index.php?ik=
-            val file = File("$filesDir/Site/http:__carkva-gazeta.by_index.php?ik=")
             if (MainActivity.isNetworkAvailable(this)) {
-                writeFile("https://carkva-gazeta.by/index.php?ik=")
-            }
-            when {
-                MainActivity.isNetworkAvailable(this) -> {
-                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
-                }
-                file.exists() -> {
-                    var htmlData = readerFile(file)
-                    htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                    viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                }
-                else -> error = true
-            }
+                searchHistory.add("https://carkva-gazeta.by/index.php?ik=")
+                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
+            } else error = true
+            title_toolbar.text = "Відэа"
         }
         if (id == R.id.bib) {
             if (MainActivity.checkmoduleResources(this)) {
@@ -545,18 +314,10 @@ class Naviny : AppCompatActivity() {
             super.onPageFinished(view, url)
             val title = view.title
             title_toolbar.text = title
-            if (MainActivity.isNetworkAvailable(this@Naviny)) {
-                writeFile(url)
-            }
         }
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-            var myurl = url
-            if (myurl.contains("file:///index.php")) {
-                val t1 = myurl.indexOf("//")
-                myurl =  "https://carkva-gazeta.by/" + myurl.substring(t1 + 3)
-            }
-            if (myurl.contains("https://malitounik.page.link/caliandar")) {
+            if (url.contains("https://malitounik.page.link/caliandar")) {
                 val prefEditors = kq.edit()
                 prefEditors.putInt("id", R.id.label1)
                 prefEditors.apply()
@@ -564,7 +325,7 @@ class Naviny : AppCompatActivity() {
                 startActivity(intent)
                 return true
             }
-            if (myurl.contains("https://malitounik.page.link/biblija")) {
+            if (url.contains("https://malitounik.page.link/biblija")) {
                 val prefEditors = kq.edit()
                 prefEditors.putInt("id", R.id.label8)
                 prefEditors.apply()
@@ -572,7 +333,7 @@ class Naviny : AppCompatActivity() {
                 startActivity(intent)
                 return true
             }
-            if (myurl.contains("https://carkva-gazeta.by/index.php?bib=")) {
+            if (url.contains("https://carkva-gazeta.by/index.php?bib=")) {
                 if (MainActivity.checkmoduleResources(this@Naviny)) {
                     if (MainActivity.checkmodulesBiblijateka(this@Naviny)) {
                         val intent = Intent(this@Naviny, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
@@ -585,110 +346,25 @@ class Naviny : AppCompatActivity() {
                 }
             }
             var error = false
-            try {
-                if (!myurl.contains("carkva-gazeta.by")) {
-                    error = if (MainActivity.isNetworkAvailable(this@Naviny)) {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(myurl))
-                        view.context.startActivity(intent)
-                        true
-                    } else true
-                }
-                mUrl = myurl
-                if (MainActivity.isNetworkAvailable(this@Naviny)) searchHistory.add(myurl)
-                var filename = myurl
-                filename = filename.replace("/", "_")
-                val file = File("$filesDir/Site/$filename")
-                if (view.url == "https://carkva-gazeta.by/") {
-                    when {
-                        MainActivity.isNetworkAvailable(this@Naviny) -> {
-                            view.loadUrl(myurl)
-                        }
-                        file.exists() -> {
-                            var htmlData = readerFile(file)
-                            htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                            viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                        }
-                        else -> error = true
-                    }
-                } else {
-                    if (kq.getInt("trafic", 0) == 0) {
-                        when {
-                            MainActivity.isNetworkAvailable(this@Naviny) -> {
-                                view.loadUrl(myurl)
-                            }
-                            file.exists() -> {
-                                var htmlData = readerFile(file)
-                                htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                                viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                            }
-                            else -> error = true
-                        }
-                    }
-                    if (kq.getInt("trafic", 0) == 1) {
-                        when {
-                            file.exists() -> {
-                                var htmlData = readerFile(file)
-                                htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                                viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                            }
-                            MainActivity.isNetworkAvailable(this@Naviny) -> {
-                                view.loadUrl(myurl)
-                            }
-                            else -> error = true
-                        }
-                    }
-                }
-                if (error) {
-                    error()
-                }
-            } catch (e: ActivityNotFoundException) {
-                File("$filesDir/Site").walk().forEach {
-                    if (it.isFile)
-                        it.delete()
-                }
-                /*val dir1 = File("$filesDir/Site")
-                val dirContents1 = dir1.list()
-                for (aDirContents1 in dirContents1) {
-                    File("$filesDir/Site/$aDirContents1").delete()
-                }*/
+            /*if (!url.contains("carkva-gazeta.by")) {
+                error = if (MainActivity.isNetworkAvailable(this@Naviny)) {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    view.context.startActivity(intent)
+                    true
+                } else true
+            }*/
+            if (MainActivity.isNetworkAvailable(this@Naviny)) {
+                searchHistory.add(url)
+                view.loadUrl(url)
+            } else error = true
+            if (error) {
+                error()
             }
             return true
         }
     }
 
     private fun error() {
-        errorInternet = true
-        invalidateOptionsMenu()
-        arrayList.clear()
-        val files = ArrayList<File>()
-        /*val dir = File("$filesDir/Site")
-        for (i in 0 until dir.list().length) {
-            files.add(File(filesDir.toString() + "/Site/" + dir.list()[i]))
-        }*/
-        File("$filesDir/Site").walk().forEach {
-            if (it.isFile)
-                files.add(it)
-        }
-        files.sortWith(Comparator { o1: File, o2: File ->
-            o1.lastModified().compareTo(o2.lastModified())
-        })
-        files.reverse()
-        //Collections.sort(files, Comparator<*> { o1: Any, o2: Any -> compare(o1.lastModified(), o2.lastModified()) })
-        //Collections.reverse(files)
-        for (file1 in files) {
-            var res: String
-            val htmlData = readerFile(file1)
-            val seaN = htmlData.indexOf("<title>")
-            val seaK = htmlData.indexOf("</title>")
-            res = htmlData.substring(seaN + 7, seaK).trim()
-            val arrayList1 = ArrayList<String>()
-            arrayList1.add(file1.name)
-            arrayList1.add(res)
-            arrayList.add(arrayList1)
-        }
-        dynamic.visibility = View.VISIBLE
-        viewWeb.visibility = View.GONE
-        title_toolbar.setText(R.string.keshstar)
         val dialogNoInternet = DialogNoInternet()
         dialogNoInternet.show(supportFragmentManager, "no_internet")
     }
@@ -723,16 +399,7 @@ class Naviny : AppCompatActivity() {
             if (keyCode == KeyEvent.KEYCODE_BACK && searchHistory.size > 0) {
                 searchHistory.removeAt(searchHistory.size - 1)
                 if (searchHistory.size > 0) {
-                    val filenameUrl = searchHistory[searchHistory.size - 1]
-                    val filename = filenameUrl.replace("/", "_")
-                    val file = File("$filesDir/Site/$filename")
-                    if (file.exists()) {
-                        var htmlData = readerFile(file)
-                        htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"carkva.css\" /><script src=\"jquery-3.5.0.min.js\"></script>$htmlData"
-                        viewWeb.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null)
-                    } else {
-                        viewWeb.loadUrl(mUrl)
-                    }
+                    viewWeb.loadUrl(searchHistory[searchHistory.size - 1])
                 } else {
                     onBackPressed()
                 }
@@ -741,47 +408,5 @@ class Naviny : AppCompatActivity() {
             }
         }
         return true
-    }
-
-    private inner class NavinyAdapter(context: Context) : ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_2, arrayList) {
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val rootView: View
-            val viewHolder: ViewHolder
-            if (convertView == null) {
-                rootView = this@Naviny.layoutInflater.inflate(R.layout.simple_list_item_2, parent, false)
-                viewHolder = ViewHolder()
-                rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(R.id.label)
-            } else {
-                rootView = convertView
-                viewHolder = rootView.tag as ViewHolder
-            }
-            val re = arrayList[position]
-            val mnemonics = ArrayMap<String, String>()
-            mnemonics["&amp;"] = "\u0026"
-            mnemonics["&lt;"] = "\u003C"
-            mnemonics["&gt;"] = "\u003E"
-            mnemonics["&laquo;"] = "\u00AB"
-            mnemonics["&raquo;"] = "\u00BB"
-            mnemonics["&nbsp;"] = "\u0020"
-            mnemonics["&mdash;"] = "\u0020-\u0020"
-            var output = re[1]
-            mnemonics.forEach {
-                val matcher = Pattern.compile(it.key).matcher(output)
-                output = matcher.replaceAll(mnemonics[it.key] ?: it.key)
-            }
-            /*for (key in mnemonics.keys) {
-                val matcher = Pattern.compile(key).matcher(output)
-                output = matcher.replaceAll(mnemonics[key])
-            }*/
-            if (dzenNoch) viewHolder.text?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            viewHolder.text?.text = output
-            return rootView
-        }
-    }
-
-    private class ViewHolder {
-        var text: TextViewRobotoCondensed? = null
     }
 }

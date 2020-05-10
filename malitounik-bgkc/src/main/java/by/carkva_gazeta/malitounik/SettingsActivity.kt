@@ -24,9 +24,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.settings_activity.*
 import java.io.File
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.text.DecimalFormat
 import java.util.*
 
 /**
@@ -874,10 +871,10 @@ class SettingsActivity : AppCompatActivity() {
         onSupportNavigateUp()
     }
 
-    private fun formatFigureTwoPlaces(value: Float): String {
+    /*private fun formatFigureTwoPlaces(value: Float): String {
         val myFormatter = DecimalFormat("##0.00")
         return myFormatter.format(value.toDouble())
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
@@ -973,24 +970,24 @@ class SettingsActivity : AppCompatActivity() {
         textView14.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         textView15.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         notificationView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        textView57.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        //textView57.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (dzenNoch) {
             textView14.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             textView15.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             notificationView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            textView57.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            //textView57.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             secret.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             line.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             line1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             line2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             line3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            //line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
         }
-        var dirCount: Long = 0
+        /*var dirCount: Long = 0
         File("$filesDir/Site").walk().forEach {
             if (it.isFile)
                 dirCount += it.length()
-        }
+        }*/
         /*val dir = File("$filesDir/Site")
         val dirContents = dir.listFiles()
         for (dirContent in dirContents) {
@@ -1056,16 +1053,16 @@ class SettingsActivity : AppCompatActivity() {
         if (k.getInt("gosud", 0) == 1) dzair.isChecked = true
         if (k.getInt("pafesii", 0) == 1) praf.isChecked = true
         maranataOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        button.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        //button.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         notificationOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         notificationFull.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         notificationNon.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        textView58.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        /*textView58.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (dirCount / 1024 > 1000) {
             textView58.text = resources.getString(R.string.QUOTA_M, formatFigureTwoPlaces(BigDecimal.valueOf(dirCount.toFloat() / 1024 / 1024.toDouble()).setScale(2, RoundingMode.HALF_UP).toFloat()))
         } else {
             textView58.text = resources.getString(R.string.QUOTA, formatFigureTwoPlaces(BigDecimal.valueOf(dirCount.toFloat() / 1024.toDouble()).setScale(2, RoundingMode.HALF_UP).toFloat()))
-        }
+        }*/
         if (Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
             val helpNotifi: TextViewRobotoCondensed = findViewById(R.id.help_notifi)
             helpNotifi.visibility = View.VISIBLE
@@ -1108,10 +1105,10 @@ class SettingsActivity : AppCompatActivity() {
         if (dzenNoch) checkBox5.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         checkBox5.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (dzenNochSettings) checkBox5.isChecked = true
-        val trafik = k.getInt("trafic", 0)
+        /*val trafik = k.getInt("trafic", 0)
         if (dzenNoch) checkBox2.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         checkBox2.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        if (trafik == 1) checkBox2.isChecked = true
+        if (trafik == 1) checkBox2.isChecked = true*/
         if (dzenNoch) reset.setBackgroundResource(R.drawable.knopka_red_black)
         reset.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         reset.setOnClickListener {
@@ -1179,7 +1176,7 @@ class SettingsActivity : AppCompatActivity() {
             notificationNon.isChecked = false
             vibro.isChecked = true
             this.guk.isChecked = true
-            checkBox2.isChecked = false
+            //checkBox2.isChecked = false
             spinnerTime.setSelection(2)
             pkc.isChecked = false
             prav.isChecked = false
@@ -1199,7 +1196,7 @@ class SettingsActivity : AppCompatActivity() {
             notificationOnly.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             notificationFull.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             notificationNon.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            textView58.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            //textView58.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             checkBox5.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             this.sinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             this.maranata.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
@@ -1208,7 +1205,7 @@ class SettingsActivity : AppCompatActivity() {
                 maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
                 maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             }
-            checkBox2.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            //checkBox2.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
         }
         maranataGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             when (checkedId) {
@@ -1382,14 +1379,14 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        checkBox2.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        /*checkBox2.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("trafic", 1)
             } else {
                 prefEditor.putInt("trafic", 0)
             }
             prefEditor.apply()
-        }
+        }*/
         checkBox5.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putBoolean("dzen_noch", true)
@@ -1399,15 +1396,15 @@ class SettingsActivity : AppCompatActivity() {
             prefEditor.apply()
             recreate()
         }
-        button.setOnClickListener {
+        /*button.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            File("$filesDir/Site").walk().forEach {
+            /*File("$filesDir/Site").walk().forEach {
                 if (it.isFile)
                     it.delete()
-            }
+            }*/
             /*for (aDirContents1 in dirContents) {
                 aDirContents1.delete()
             }*/
@@ -1415,12 +1412,12 @@ class SettingsActivity : AppCompatActivity() {
                 aDirContents2.delete();
             }*/
             textView58.text = resources.getString(R.string.QUOTA, formatFigureTwoPlaces(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_UP).toFloat()))
-        }
+        }*/
         vibro.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         this.guk.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         this.sinoidal.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         this.maranata.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        checkBox2.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        //checkBox2.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         prav.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         pkc.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         dzair.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)

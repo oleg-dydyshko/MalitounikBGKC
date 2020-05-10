@@ -353,62 +353,6 @@
                 android:text="@string/sviaty_pfes"
                 android:textSize="12sp" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-                android:id="@+id/textView57"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                android:paddingRight="10dp"
-                android:text="@string/INTERNET_CACHE"
-                android:textColor="@color/colorPrimary"
-                android:textSize="12sp" />
-
-            <View
-                android:id="@+id/line4"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/colorPrimary" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/checkBox2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:drawableStart="@drawable/stiker"
-                android:drawableLeft="@drawable/stiker"
-                android:drawablePadding="10dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:text="@string/trafic"
-                android:textSize="12sp" />
-
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-                android:id="@+id/textView58"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:paddingBottom="5dp"
-                android:text="@string/QUOTA"
-                android:textColor="@color/colorPrimary_text"
-                android:textSize="12sp" />
-
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/knopka_ser"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="@string/CLEAR_CACHE"
-                android:textColor="@color/colorPrimary_text"
-                android:textSize="12sp" />
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

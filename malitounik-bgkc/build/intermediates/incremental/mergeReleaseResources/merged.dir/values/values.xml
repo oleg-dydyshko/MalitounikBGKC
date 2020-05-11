@@ -997,7 +997,6 @@
     <string name="kafizma2">Катызма</string>
     <string name="kaliandar">Каляндар БГКЦ</string>
     <string name="kaliandar2">КАЛЯНДАР БГКЦ</string>
-    <string name="keshstar">Кэшаваныя старонкі</string>
     <string name="malitva">Нататка</string>
     <string name="malitva_edit">Рэдагаваць нататку</string>
     <string name="malitva_name">Назва нататкі</string>
@@ -1062,6 +1061,7 @@
     <string name="novsinaidal">Новый завет</string>
     <string name="novy_zapaviet">Новы Запавет</string>
     <string name="ok">Добра</string>
+    <string name="open_chrome">Адчыніць у Chrome</string>
     <string name="opisanie">Апісаньне</string>
     <string name="padzeia_off">Выключыць рэжым паказу Падзей</string>
     <string name="padzeia_on">Уключыць рэжым паказу Падзей</string>

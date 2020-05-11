@@ -1606,6 +1606,7 @@ id action_bar_subtitle
 id action_bar_title
 id action_bright
 id action_cansel
+id action_chrome
 id action_container
 id action_context_bar
 id action_delite
@@ -1657,7 +1658,6 @@ id bib
 id biblia
 id blocking
 id bottom
-id button
 id button1
 id button10
 id button10a
@@ -1754,7 +1754,6 @@ id center
 id center_horizontal
 id center_vertical
 id chains
-id checkBox2
 id checkBox20
 id checkBox5
 id checkbox
@@ -1791,7 +1790,6 @@ id direct
 id disableHome
 id drawer_layout
 id dropdown_menu
-id dynamic
 id dzair
 id editText
 id editText2
@@ -1893,7 +1891,6 @@ id line
 id line1
 id line2
 id line3
-id line4
 id linear
 id linear2
 id linearLayout
@@ -2153,8 +2150,6 @@ id textView20
 id textView3
 id textView4
 id textView5
-id textView57
-id textView58
 id textView6
 id textView7
 id textView8
@@ -2678,7 +2673,6 @@ string kafizma
 string kafizma2
 string kaliandar
 string kaliandar2
-string keshstar
 string malitva
 string malitva_edit
 string malitva_name
@@ -2743,6 +2737,7 @@ string notify_help
 string novsinaidal
 string novy_zapaviet
 string ok
+string open_chrome
 string opisanie
 string padzeia_off
 string padzeia_on

@@ -12,7 +12,7 @@ import androidx.fragment.app.ListFragment
  * Created by oleg on 30.5.16
  */
 class MenuGlavnoe : ListFragment() {
-    private val data = arrayOf("Апошнія навіны", "Гісторыя Царквы", "Сьвятло Ўсходу", "Царква і грамадзтва", "Катэдральны пляц", "Відэа", "Бібліятэка")
+    private val data = arrayOf("Апошнія навіны", "Навіны хрысьціянскага сьвету", "Гісторыя Царквы", "Сьвятло Ўсходу", "Царква і грамадзтва", "Катэдральны пляц", "Відэа", "Бібліятэка")
     private var mLastClickTime: Long = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +34,7 @@ class MenuGlavnoe : ListFragment() {
         val prefEditor = kq?.edit()
         prefEditor?.putInt("naviny", position)
         prefEditor?.apply()
-        if (position == 6) {
+        if (position == 7) {
             if (MainActivity.checkmoduleResources(activity)) {
                 if (MainActivity.checkmodulesBiblijateka(activity)) {
                     val intent = Intent(activity, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))

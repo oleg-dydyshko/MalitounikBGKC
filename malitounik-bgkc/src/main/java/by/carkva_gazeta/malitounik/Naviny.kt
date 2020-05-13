@@ -16,11 +16,8 @@ import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
-import android.webkit.ValueCallback
-import android.webkit.WebChromeClient
+import android.webkit.*
 import android.webkit.WebChromeClient.FileChooserParams
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_naviny.*
@@ -72,7 +69,18 @@ class Naviny : AppCompatActivity() {
             }
         }
         val naviny = kq.getInt("naviny", 0)
-        viewWeb.settings.javaScriptEnabled = true
+        val settings = viewWeb.settings
+        settings.javaScriptEnabled = true
+        settings.javaScriptCanOpenWindowsAutomatically = true
+        settings.domStorageEnabled = true
+        settings.loadWithOverviewMode = true
+        settings.useWideViewPort = true
+        settings.setSupportZoom(true)
+        settings.builtInZoomControls = true
+        settings.displayZoomControls = false
+        settings.setAppCachePath("$filesDir/cache")
+        settings.setAppCacheEnabled(true)
+        settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
         viewWeb.webViewClient = MyWebViewClient()
         viewWeb.webChromeClient = object : WebChromeClient() {
             // For Android 5.0+
@@ -102,33 +110,40 @@ class Naviny : AppCompatActivity() {
             }
             1 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
+                    searchHistory.add("https://carkva-gazeta.by/index.php?num=")
+                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
+                } else error = true
+                title_toolbar.text = "Навіны хрысьціянскага сьвету"
+            }
+            2 -> {
+                if (MainActivity.isNetworkAvailable(this)) {
                     searchHistory.add("https://carkva-gazeta.by/index.php?his=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
                 } else error = true
                 title_toolbar.text = "Гісторыя Царквы"
             }
-            2 -> {
+            3 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
                     searchHistory.add("https://carkva-gazeta.by/index.php?sva=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
                 } else error = true
                 title_toolbar.text = "Сьвятло ўсходу"
             }
-            3 -> {
+            4 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
                     searchHistory.add("https://carkva-gazeta.by/index.php?gra=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
                 } else error = true
                 title_toolbar.text = "Царква і грамадзтва"
             }
-            4 -> {
+            5 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
                     searchHistory.add("https://carkva-gazeta.by/index.php?it=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
                 } else error = true
                 title_toolbar.text = "Катэдральны пляц"
             }
-            5 -> {
+            6 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
                     searchHistory.add("https://carkva-gazeta.by/index.php?ik=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
@@ -210,6 +225,12 @@ class Naviny : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         var error = false
+        if (id == R.id.action_update) {
+            if (MainActivity.isNetworkAvailable(this)) {
+                viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+                viewWeb.reload()
+            } else error = true
+        }
         if (id == R.id.action_chrome) {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(searchHistory[searchHistory.size - 1]))
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -226,28 +247,24 @@ class Naviny : AppCompatActivity() {
                 searchHistory.add("https://carkva-gazeta.by/index.php?num=")
                 viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
             } else error = true
-            title_toolbar.text = "Навіны"
         }
         if (id == R.id.sva) {
             if (MainActivity.isNetworkAvailable(this)) {
                 searchHistory.add("https://carkva-gazeta.by/index.php?sva=")
                 viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
             } else error = true
-            title_toolbar.text = "Сьвятло ўсходу"
         }
         if (id == R.id.his) {
             if (MainActivity.isNetworkAvailable(this)) {
                 searchHistory.add("https://carkva-gazeta.by/index.php?his=")
                 viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
             } else error = true
-            title_toolbar.text = "Гісторыя Царквы"
         }
         if (id == R.id.gra) {
             if (MainActivity.isNetworkAvailable(this)) {
                 searchHistory.add("https://carkva-gazeta.by/index.php?gra=")
                 viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
             } else error = true
-            title_toolbar.text = "Царква і грамадзтва"
         }
         if (id == R.id.calendar) {
             val prefEditors = kq.edit()
@@ -268,14 +285,12 @@ class Naviny : AppCompatActivity() {
                 searchHistory.add("https://carkva-gazeta.by/index.php?it=")
                 viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
             } else error = true
-            title_toolbar.text = "Катэдральны пляц"
         }
         if (id == R.id.ik) {
             if (MainActivity.isNetworkAvailable(this)) {
                 searchHistory.add("https://carkva-gazeta.by/index.php?ik=")
                 viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
             } else error = true
-            title_toolbar.text = "Відэа"
         }
         if (id == R.id.bib) {
             if (MainActivity.checkmoduleResources(this)) {
@@ -314,6 +329,7 @@ class Naviny : AppCompatActivity() {
             super.onPageFinished(view, url)
             val title = view.title
             title_toolbar.text = title
+            viewWeb.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
         }
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {

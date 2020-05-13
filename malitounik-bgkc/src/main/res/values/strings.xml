@@ -324,5 +324,6 @@
     <string name="add_to_zakladki">Дабаўлена у закладкі</string>
     <string name="adpravit">Адправіць</string>
     <string name="open_chrome">Адчыніць у Chrome</string>
+    <string name="update_site">Абнавіць</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

@@ -78,7 +78,6 @@ class Naviny : AppCompatActivity() {
         settings.setSupportZoom(true)
         settings.builtInZoomControls = true
         settings.displayZoomControls = false
-        settings.setAppCachePath("$filesDir/cache")
         settings.setAppCacheEnabled(true)
         settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
         viewWeb.webViewClient = MyWebViewClient()

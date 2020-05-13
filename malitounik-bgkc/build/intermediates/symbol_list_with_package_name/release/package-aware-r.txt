@@ -2837,6 +2837,7 @@ string tools_item
 string trafic
 string type_signal_notif
 string update_bibliateka
+string update_site
 string uriAlarm
 string uriNotification
 string uriPicker

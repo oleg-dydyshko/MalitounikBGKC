@@ -1161,6 +1161,7 @@
     <string name="trafic">Эканоміць трафік</string>
     <string name="type_signal_notif">СІГНАЛ ДЛЯ АПАВЯШЧЭНЬНЯ ПРА ПАДЗЕЮ:</string>
     <string name="update_bibliateka">Сінхранізацыя</string>
+    <string name="update_site">Абнавіць</string>
     <string name="uriAlarm">Гук будзільніка: %1$s</string>
     <string name="uriNotification">Гук апавяшчэньня: %1$s</string>
     <string name="uriPicker">Іншая мелодыя: %1$s</string>

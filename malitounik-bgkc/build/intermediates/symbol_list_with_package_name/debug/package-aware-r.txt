@@ -2004,6 +2004,7 @@ id pravila
 id pravila_chtenia
 id prazdnik
 id prodolzych
+id progressBar
 id progressBarModule
 id progress_circular
 id progress_horizontal

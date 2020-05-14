@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -105,49 +106,42 @@ class Naviny : AppCompatActivity() {
                     searchHistory.add("https://carkva-gazeta.by/")
                     viewWeb.loadUrl("https://carkva-gazeta.by/")
                 } else error = true
-                title_toolbar.text = "«Царква» — беларуская грэка-каталіцкая газета"
             }
             1 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
                     searchHistory.add("https://carkva-gazeta.by/index.php?num=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
                 } else error = true
-                title_toolbar.text = "Навіны хрысьціянскага сьвету"
             }
             2 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
                     searchHistory.add("https://carkva-gazeta.by/index.php?his=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
                 } else error = true
-                title_toolbar.text = "Гісторыя Царквы"
             }
             3 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
                     searchHistory.add("https://carkva-gazeta.by/index.php?sva=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
                 } else error = true
-                title_toolbar.text = "Сьвятло ўсходу"
             }
             4 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
                     searchHistory.add("https://carkva-gazeta.by/index.php?gra=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
                 } else error = true
-                title_toolbar.text = "Царква і грамадзтва"
             }
             5 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
                     searchHistory.add("https://carkva-gazeta.by/index.php?it=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
                 } else error = true
-                title_toolbar.text = "Катэдральны пляц"
             }
             6 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
                     searchHistory.add("https://carkva-gazeta.by/index.php?ik=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
                 } else error = true
-                title_toolbar.text = "Відэа"
             }
         }
         if (error) {
@@ -324,11 +318,19 @@ class Naviny : AppCompatActivity() {
     }
 
     private inner class MyWebViewClient : WebViewClient() {
-        override fun onPageFinished(view: WebView, url: String) {
+
+        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+            super.onPageStarted(view, url, favicon)
+            progressBar.visibility = View.VISIBLE
+        }
+
+        override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
-            val title = view.title
+            val title = view?.title?: "«Царква» — беларуская грэка-каталіцкая газета"
             title_toolbar.text = title
-            viewWeb.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+            progressBar.visibility = View.GONE
+            if (viewWeb.settings.cacheMode != WebSettings.LOAD_CACHE_ELSE_NETWORK)
+                viewWeb.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
         }
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
@@ -369,7 +371,8 @@ class Naviny : AppCompatActivity() {
                 } else true
             }*/
             if (MainActivity.isNetworkAvailable(this@Naviny)) {
-                searchHistory.add(url)
+                if (!url.contains("translate.googleusercontent.com"))
+                    searchHistory.add(url)
                 view.loadUrl(url)
             } else error = true
             if (error) {
@@ -397,6 +400,7 @@ class Naviny : AppCompatActivity() {
                 title_toolbar.isSelected = true
             }
         }
+        title_toolbar.text = "«Царква» — беларуская грэка-каталіцкая газета"
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

@@ -225,15 +225,7 @@ class Naviny : AppCompatActivity() {
             } else error = true
         }
         if (id == R.id.action_chrome) {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(searchHistory[searchHistory.size - 1]))
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.setPackage("com.android.chrome")
-            try {
-                startActivity(intent)
-            } catch (ex: ActivityNotFoundException) {
-                intent.setPackage(null)
-                startActivity(intent)
-            }
+            onChrome(searchHistory[searchHistory.size - 1])
         }
         if (id == R.id.num) {
             if (MainActivity.isNetworkAvailable(this)) {
@@ -317,68 +309,15 @@ class Naviny : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class MyWebViewClient : WebViewClient() {
-
-        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-            super.onPageStarted(view, url, favicon)
-            progressBar.visibility = View.VISIBLE
-        }
-
-        override fun onPageFinished(view: WebView?, url: String?) {
-            super.onPageFinished(view, url)
-            val title = view?.title?: "«Царква» — беларуская грэка-каталіцкая газета"
-            title_toolbar.text = title
-            progressBar.visibility = View.GONE
-            if (viewWeb.settings.cacheMode != WebSettings.LOAD_CACHE_ELSE_NETWORK)
-                viewWeb.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
-        }
-
-        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-            if (url.contains("https://malitounik.page.link/caliandar")) {
-                val prefEditors = kq.edit()
-                prefEditors.putInt("id", R.id.label1)
-                prefEditors.apply()
-                val intent = Intent(this@Naviny, MainActivity::class.java)
-                startActivity(intent)
-                return true
-            }
-            if (url.contains("https://malitounik.page.link/biblija")) {
-                val prefEditors = kq.edit()
-                prefEditors.putInt("id", R.id.label8)
-                prefEditors.apply()
-                val intent = Intent(this@Naviny, MainActivity::class.java)
-                startActivity(intent)
-                return true
-            }
-            if (url.contains("https://carkva-gazeta.by/index.php?bib=")) {
-                if (MainActivity.checkmoduleResources(this@Naviny)) {
-                    if (MainActivity.checkmodulesBiblijateka(this@Naviny)) {
-                        val intent = Intent(this@Naviny, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
-                        intent.putExtra("site", true)
-                        startActivity(intent)
-                    } else {
-                        MainActivity.downloadDynamicModule(this@Naviny)
-                    }
-                    return true
-                }
-            }
-            var error = false
-            /*if (!url.contains("carkva-gazeta.by")) {
-                error = if (MainActivity.isNetworkAvailable(this@Naviny)) {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                    view.context.startActivity(intent)
-                    true
-                } else true
-            }*/
-            if (MainActivity.isNetworkAvailable(this@Naviny)) {
-                if (!url.contains("translate.googleusercontent.com"))
-                    searchHistory.add(url)
-                view.loadUrl(url)
-            } else error = true
-            if (error) {
-                error()
-            }
-            return true
+    private fun onChrome(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.setPackage("com.android.chrome")
+        try {
+            startActivity(intent)
+        } catch (ex: ActivityNotFoundException) {
+            intent.setPackage(null)
+            startActivity(intent)
         }
     }
 
@@ -427,5 +366,64 @@ class Naviny : AppCompatActivity() {
             }
         }
         return true
+    }
+
+    private inner class MyWebViewClient : WebViewClient() {
+
+        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+            super.onPageStarted(view, url, favicon)
+            progressBar.visibility = View.VISIBLE
+        }
+
+        override fun onPageFinished(view: WebView?, url: String?) {
+            super.onPageFinished(view, url)
+            val title = view?.title ?: "«Царква» — беларуская грэка-каталіцкая газета"
+            title_toolbar.text = title
+            progressBar.visibility = View.GONE
+            if (viewWeb.settings.cacheMode != WebSettings.LOAD_CACHE_ELSE_NETWORK)
+                viewWeb.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+        }
+
+        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            if (url.contains("https://malitounik.page.link/caliandar")) {
+                val prefEditors = kq.edit()
+                prefEditors.putInt("id", R.id.label1)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            if (url.contains("https://malitounik.page.link/biblija")) {
+                val prefEditors = kq.edit()
+                prefEditors.putInt("id", R.id.label8)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            if (url.contains("https://carkva-gazeta.by/index.php?bib=")) {
+                if (MainActivity.checkmoduleResources(this@Naviny)) {
+                    if (MainActivity.checkmodulesBiblijateka(this@Naviny)) {
+                        val intent = Intent(this@Naviny, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
+                        intent.putExtra("site", true)
+                        startActivity(intent)
+                    } else {
+                        MainActivity.downloadDynamicModule(this@Naviny)
+                    }
+                    return true
+                }
+            }
+            if (MainActivity.isNetworkAvailable(this@Naviny)) {
+                if (url.contains("translate.google.com")) {
+                    onChrome(url)
+                } else {
+                    searchHistory.add(url)
+                    view.loadUrl(url)
+                }
+            } else {
+                error()
+            }
+            return true
+        }
     }
 }

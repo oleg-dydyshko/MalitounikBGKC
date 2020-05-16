@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.InputFilter
 import android.text.InputType
 import android.util.TypedValue
 import android.view.inputmethod.EditorInfo
@@ -62,6 +63,7 @@ class DialogPasxa : DialogFragment() {
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             linear.addView(textViewZaglavie)
             input = EditTextRobotoCondensed(it)
+            input.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(4)}
             if (dzenNoch) {
                 input.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                 input.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
@@ -115,36 +117,36 @@ class DialogPasxa : DialogFragment() {
                         error()
                     }
                 }
-            }
-            builder.setNegativeButton(getString(R.string.CANCEL)) { _: DialogInterface?, _: Int ->
-                val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm12.hideSoftInputFromWindow(input.windowToken, 0)
-            }
-            alert = builder.create()
-            alert.setOnShowListener {
-                val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            }
         }
-        return alert
+        builder.setNegativeButton(getString(R.string.CANCEL)) { _: DialogInterface?, _: Int ->
+            val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm12.hideSoftInputFromWindow(input.windowToken, 0)
+        }
+        alert = builder.create()
+        alert.setOnShowListener {
+            val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
+            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+            val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
+            btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+        }
     }
+    return alert
+}
 
-    private fun error() {
-        activity?.let {
-            val layout = LinearLayout(it)
-            if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-            val toast = TextViewRobotoCondensed(it)
-            toast.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-            toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-            toast.text = getString(R.string.error)
-            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            layout.addView(toast)
-            val mes = Toast(it)
-            mes.duration = Toast.LENGTH_SHORT
-            mes.view = layout
-            mes.show()
-        }
+private fun error() {
+    activity?.let {
+        val layout = LinearLayout(it)
+        if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
+        val toast = TextViewRobotoCondensed(it)
+        toast.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
+        toast.text = getString(R.string.error)
+        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+        layout.addView(toast)
+        val mes = Toast(it)
+        mes.duration = Toast.LENGTH_SHORT
+        mes.view = layout
+        mes.show()
     }
+}
 }

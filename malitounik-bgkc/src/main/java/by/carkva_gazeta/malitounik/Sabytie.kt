@@ -1,10 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.*
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.graphics.Color
 import android.graphics.Typeface
 import android.media.AudioAttributes
@@ -913,10 +910,27 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 channel.enableLights(true)
                 val notificationManager = getSystemService(NotificationManager::class.java)
                 notificationManager?.createNotificationChannel(channel)
-                val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
-                intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-                intent.putExtra(Settings.EXTRA_CHANNEL_ID, "3000")
-                startActivity(intent)
+                try {
+                    val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                    intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                    intent.putExtra(Settings.EXTRA_CHANNEL_ID, "3000")
+                    startActivity(intent)
+                } catch (ex: ActivityNotFoundException) {
+                    val layout = LinearLayout(this)
+                    if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
+                    val density = resources.displayMetrics.density
+                    val realpadding = (10 * density).toInt()
+                    val toast = TextViewRobotoCondensed(this)
+                    toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+                    toast.setPadding(realpadding, realpadding, realpadding, realpadding)
+                    toast.text = getString(R.string.error_ch)
+                    toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+                    layout.addView(toast)
+                    val mes = Toast(this)
+                    mes.duration = Toast.LENGTH_LONG
+                    mes.view = layout
+                    mes.show()
+                }
                 notificationManager?.deleteNotificationChannel("by.carkva-gazeta")
             } else {
                 val settings = DialogSabytieSettings()

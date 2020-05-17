@@ -1811,6 +1811,7 @@ id filter_chip
 id fitToContents
 id fixed
 id forever
+id frameLayout2
 id fullCaliandar
 id ghost_view
 id ghost_view_holder
@@ -2004,7 +2005,6 @@ id pravila
 id pravila_chtenia
 id prazdnik
 id prodolzych
-id progressBar
 id progressBarModule
 id progress_circular
 id progress_horizontal
@@ -2171,6 +2171,7 @@ id titleLayout
 id title_template
 id title_toolbar
 id toolbar
+id toolbarprogress
 id top
 id topPanel
 id touch_outside

@@ -6,7 +6,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -82,23 +81,7 @@ class Naviny : AppCompatActivity() {
         settings.setAppCacheEnabled(true)
         settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
         viewWeb.webViewClient = MyWebViewClient()
-        viewWeb.webChromeClient = object : WebChromeClient() {
-            // For Android 5.0+
-            @SuppressLint("NewApi")
-            override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams: FileChooserParams): Boolean {
-                mUploadMessageArr?.onReceiveValue(null)
-                mUploadMessageArr = null
-                mUploadMessageArr = filePathCallback
-                val intent = fileChooserParams.createIntent()
-                try {
-                    startActivityForResult(intent, 101)
-                } catch (e: ActivityNotFoundException) {
-                    mUploadMessageArr = null
-                    return false
-                }
-                return true
-            }
-        }
+        viewWeb.webChromeClient = MyWebChromeClient()
         var error = false
         when (naviny) {
             0 -> {
@@ -368,21 +351,39 @@ class Naviny : AppCompatActivity() {
         return true
     }
 
+    private inner class MyWebChromeClient : WebChromeClient() {
+        // For Android 5.0+
+        @SuppressLint("NewApi")
+        override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams: FileChooserParams): Boolean {
+            mUploadMessageArr?.onReceiveValue(null)
+            mUploadMessageArr = null
+            mUploadMessageArr = filePathCallback
+            val intent = fileChooserParams.createIntent()
+            try {
+                startActivityForResult(intent, 101)
+            } catch (e: ActivityNotFoundException) {
+                mUploadMessageArr = null
+                return false
+            }
+            return true
+        }
+
+        override fun onProgressChanged(view: WebView?, newProgress: Int) {
+            super.onProgressChanged(view, newProgress)
+            toolbarprogress.progress = newProgress
+            if (newProgress == 100) {
+                frameLayout2.visibility = View.INVISIBLE
+                val title = view?.title ?: "«Царква» — беларуская грэка-каталіцкая газета"
+                title_toolbar.text = title
+                if (viewWeb.settings.cacheMode != WebSettings.LOAD_CACHE_ELSE_NETWORK)
+                    viewWeb.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+            } else {
+                frameLayout2.visibility = View.VISIBLE
+            }
+        }
+    }
+
     private inner class MyWebViewClient : WebViewClient() {
-
-        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-            super.onPageStarted(view, url, favicon)
-            progressBar.visibility = View.VISIBLE
-        }
-
-        override fun onPageFinished(view: WebView?, url: String?) {
-            super.onPageFinished(view, url)
-            val title = view?.title ?: "«Царква» — беларуская грэка-каталіцкая газета"
-            title_toolbar.text = title
-            progressBar.visibility = View.GONE
-            if (viewWeb.settings.cacheMode != WebSettings.LOAD_CACHE_ELSE_NETWORK)
-                viewWeb.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
-        }
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             if (url.contains("https://malitounik.page.link/caliandar")) {

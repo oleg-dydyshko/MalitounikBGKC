@@ -1,14 +1,12 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
@@ -21,7 +19,6 @@ import java.util.*
  * Created by oleg on 7.6.16
  */
 class ReceiverBroad : BroadcastReceiver() {
-    private var channelId = "2000"
     private var id = 205
     private var sabytieSet = false
     override fun onReceive(ctx: Context, intent: Intent) {
@@ -30,7 +27,6 @@ class ReceiverBroad : BroadcastReceiver() {
         val year = g[Calendar.YEAR]
         val sabytie = intent.getBooleanExtra("sabytieSet", false)
         if (sabytie) {
-            channelId = "3000"
             val idString = intent.extras?.getString("dataString", dayofyear.toString() + g[Calendar.MONTH].toString() + g[Calendar.HOUR_OF_DAY] + g[Calendar.MINUTE])
                     ?: "205"
             id = idString.toInt()
@@ -42,8 +38,6 @@ class ReceiverBroad : BroadcastReceiver() {
 
     private fun sendNotif(context: Context, Sviata: String?, Name: String, dayofyear: Int, year: Int) {
         val notificationIntent = Intent(context, SplashActivity::class.java)
-        //notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//notificationIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         notificationIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
         notificationIntent.putExtra("data", dayofyear)
         notificationIntent.putExtra("year", year)
@@ -56,29 +50,19 @@ class ReceiverBroad : BroadcastReceiver() {
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val uri: Uri
         var bigIcon = R.drawable.calendar_full
-        var name = context.resources.getString(R.string.sabytie)
         if (!sabytieSet) {
             bigIcon = R.drawable.krest
-            name = context.resources.getString(R.string.SVIATY)
         }
-        val vibrate = longArrayOf(0, 1000, 700, 1000, 700, 1000)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, name, NotificationManager.IMPORTANCE_HIGH)
-            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            channel.description = name
-            channel.importance = NotificationManager.IMPORTANCE_HIGH
-            channel.lightColor = ContextCompat.getColor(context, R.color.colorPrimary)
-            val att = AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build()
-            channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att)
-            channel.enableVibration(true)
-            channel.vibrationPattern = vibrate
-            channel.enableLights(true)
+            val builder = if (sabytieSet) {
+                SettingsActivity.notificationChannel(context, SettingsActivity.NOTIFICATION_CHANNEL_ID_SABYTIE)
+                Notification.Builder(context, SettingsActivity.NOTIFICATION_CHANNEL_ID_SABYTIE)
+            } else {
+                SettingsActivity.notificationChannel(context)
+                Notification.Builder(context, SettingsActivity.NOTIFICATION_CHANNEL_ID_SVIATY)
+            }
             val notificationManager = context.getSystemService(NotificationManager::class.java)
-            notificationManager?.createNotificationChannel(channel)
-            val builder = Notification.Builder(context, channelId)
+
             builder.setContentIntent(contentIntent)
                     .setWhen(System.currentTimeMillis())
                     .setShowWhen(true)
@@ -88,11 +72,11 @@ class ReceiverBroad : BroadcastReceiver() {
                     .setContentTitle(Name)
                     .setContentText(Sviata)
             if (sabytieSet)
-                builder.setStyle(Notification.BigTextStyle().bigText(Sviata))
+                builder.style = Notification.BigTextStyle().bigText(Sviata)
             val notification = builder.build()
             notificationManager?.notify(id, notification)
-            notificationManager?.deleteNotificationChannel("by.carkva-gazeta")
         } else {
+            val vibrate = longArrayOf(0, 1000, 700, 1000, 700, 1000)
             var sound = chin.getInt("soundnotification", 0)
             if (!sabytieSet) sound = 0
             uri = when (sound) {

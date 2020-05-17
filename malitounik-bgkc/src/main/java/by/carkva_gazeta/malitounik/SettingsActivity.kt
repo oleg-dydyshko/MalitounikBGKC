@@ -21,6 +21,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.settings_activity.*
@@ -44,6 +45,8 @@ class SettingsActivity : AppCompatActivity() {
         const val GET_FONT_SIZE_TOAST = 12F
         const val GET_CALIANDAR_YEAR_MIN = 2017
         const val GET_CALIANDAR_YEAR_MAX = 2021
+        const val NOTIFICATION_CHANNEL_ID_SABYTIE = "3000"
+        const val NOTIFICATION_CHANNEL_ID_SVIATY = "2000"
         private fun mkTime(year: Int, month: Int, day: Int, hour: Int): Long {
             val calendar = Calendar.getInstance() as GregorianCalendar
             calendar[year, month, day, hour, 0] = 0
@@ -853,6 +856,31 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
         }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun notificationChannel(context: Context, channelID: String = NOTIFICATION_CHANNEL_ID_SVIATY) {
+            val name = if (channelID == NOTIFICATION_CHANNEL_ID_SVIATY)
+                context.getString(R.string.SVIATY)
+            else
+                context.getString(R.string.sabytie)
+            val vibrate = longArrayOf(0, 1000, 700, 1000, 700, 1000)
+            val channel = NotificationChannel(channelID, name, NotificationManager.IMPORTANCE_HIGH)
+            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            channel.description = name
+            channel.importance = NotificationManager.IMPORTANCE_HIGH
+            channel.lightColor = ContextCompat.getColor(context, R.color.colorPrimary)
+            val att = AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build()
+            channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att)
+            channel.enableVibration(true)
+            channel.vibrationPattern = vibrate
+            channel.enableLights(true)
+            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            notificationManager?.createNotificationChannel(channel)
+            notificationManager?.deleteNotificationChannel("by.carkva-gazeta")
+        }
     }
 
     override fun onResume() {
@@ -928,32 +956,8 @@ class SettingsActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibro.visibility = View.GONE
             this.guk.visibility = View.GONE
-            val vibrate = longArrayOf(0, 1000, 700, 1000, 700, 1000)
-            val channel = NotificationChannel("3000", resources.getString(R.string.sabytie), NotificationManager.IMPORTANCE_HIGH)
-            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            channel.description = resources.getString(R.string.sabytie)
-            channel.importance = NotificationManager.IMPORTANCE_HIGH
-            channel.lightColor = ContextCompat.getColor(this, R.color.colorPrimary)
-            val att = AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build()
-            channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att)
-            channel.enableVibration(true)
-            channel.vibrationPattern = vibrate
-            channel.enableLights(true)
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager?.createNotificationChannel(channel)
-            val channel2 = NotificationChannel("2000", resources.getString(R.string.SVIATY), NotificationManager.IMPORTANCE_HIGH)
-            channel2.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            channel2.description = resources.getString(R.string.SVIATY)
-            channel.importance = NotificationManager.IMPORTANCE_HIGH
-            channel2.lightColor = ContextCompat.getColor(this, R.color.colorPrimary)
-            channel2.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att)
-            channel2.enableVibration(true)
-            channel2.vibrationPattern = vibrate
-            channel2.enableLights(true)
-            notificationManager?.createNotificationChannel(channel2)
+            notificationChannel(this)
+            notificationChannel(this, channelID = NOTIFICATION_CHANNEL_ID_SABYTIE)
             if (k.getInt("notification", 2) > 0) notifiSvizta.visibility = View.VISIBLE
             notifiSvizta.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             notifiSvizta.setOnClickListener {
@@ -964,26 +968,31 @@ class SettingsActivity : AppCompatActivity() {
                 try {
                     val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
                     intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-                    intent.putExtra(Settings.EXTRA_CHANNEL_ID, "2000")
+                    intent.putExtra(Settings.EXTRA_CHANNEL_ID, NOTIFICATION_CHANNEL_ID_SVIATY)
                     startActivity(intent)
                 } catch (ex: ActivityNotFoundException) {
-                    val layout = LinearLayout(this)
-                    if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-                    val density = resources.displayMetrics.density
-                    val realpadding = (10 * density).toInt()
-                    val toast = TextViewRobotoCondensed(this)
-                    toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                    toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                    toast.text = getString(R.string.error_ch)
-                    toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_TOAST)
-                    layout.addView(toast)
-                    val mes = Toast(this)
-                    mes.duration = Toast.LENGTH_LONG
-                    mes.view = layout
-                    mes.show()
+                    try {
+                        val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                        intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                        startActivity(intent)
+                    } catch (ex: ActivityNotFoundException) {
+                        val layout = LinearLayout(this)
+                        if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
+                        val density = resources.displayMetrics.density
+                        val realpadding = (10 * density).toInt()
+                        val toast = TextViewRobotoCondensed(this)
+                        toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+                        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
+                        toast.text = getString(R.string.error_ch)
+                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_TOAST)
+                        layout.addView(toast)
+                        val mes = Toast(this)
+                        mes.duration = Toast.LENGTH_LONG
+                        mes.view = layout
+                        mes.show()
+                    }
                 }
             }
-            notificationManager?.deleteNotificationChannel("by.carkva-gazeta")
         }
         textView14.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         textView15.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)

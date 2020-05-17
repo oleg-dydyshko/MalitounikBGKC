@@ -1,11 +1,12 @@
 package by.carkva_gazeta.malitounik
 
-import android.app.*
+import android.app.AlarmManager
+import android.app.AlertDialog
+import android.app.Dialog
+import android.app.PendingIntent
 import android.content.*
 import android.graphics.Color
 import android.graphics.Typeface
-import android.media.AudioAttributes
-import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -894,44 +895,34 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
         if (id == R.id.action_settings) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val vibrate = longArrayOf(0, 1000, 700, 1000, 700, 1000)
-                val channel = NotificationChannel("3000", resources.getString(R.string.sabytie), NotificationManager.IMPORTANCE_HIGH)
-                channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-                channel.description = resources.getString(R.string.sabytie)
-                channel.importance = NotificationManager.IMPORTANCE_HIGH
-                channel.lightColor = ContextCompat.getColor(this, R.color.colorPrimary)
-                val att = AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .build()
-                channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att)
-                channel.enableVibration(true)
-                channel.vibrationPattern = vibrate
-                channel.enableLights(true)
-                val notificationManager = getSystemService(NotificationManager::class.java)
-                notificationManager?.createNotificationChannel(channel)
+                SettingsActivity.notificationChannel(this, channelID = SettingsActivity.NOTIFICATION_CHANNEL_ID_SABYTIE)
                 try {
                     val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
                     intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-                    intent.putExtra(Settings.EXTRA_CHANNEL_ID, "3000")
+                    intent.putExtra(Settings.EXTRA_CHANNEL_ID, SettingsActivity.NOTIFICATION_CHANNEL_ID_SABYTIE)
                     startActivity(intent)
                 } catch (ex: ActivityNotFoundException) {
-                    val layout = LinearLayout(this)
-                    if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-                    val density = resources.displayMetrics.density
-                    val realpadding = (10 * density).toInt()
-                    val toast = TextViewRobotoCondensed(this)
-                    toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                    toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                    toast.text = getString(R.string.error_ch)
-                    toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                    layout.addView(toast)
-                    val mes = Toast(this)
-                    mes.duration = Toast.LENGTH_LONG
-                    mes.view = layout
-                    mes.show()
+                    try {
+                        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                        startActivity(intent)
+                    } catch (ex: ActivityNotFoundException) {
+                        val layout = LinearLayout(this)
+                        if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
+                        val density = resources.displayMetrics.density
+                        val realpadding = (10 * density).toInt()
+                        val toast = TextViewRobotoCondensed(this)
+                        toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+                        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
+                        toast.text = getString(R.string.error_ch)
+                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+                        layout.addView(toast)
+                        val mes = Toast(this)
+                        mes.duration = Toast.LENGTH_LONG
+                        mes.view = layout
+                        mes.show()
+                    }
                 }
-                notificationManager?.deleteNotificationChannel("by.carkva-gazeta")
             } else {
                 val settings = DialogSabytieSettings()
                 settings.show(supportFragmentManager, "settings")

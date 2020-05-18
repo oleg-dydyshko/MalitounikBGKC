@@ -15,13 +15,15 @@ import android.text.SpannableString
 import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.WindowManager
 import android.webkit.*
 import android.webkit.WebChromeClient.FileChooserParams
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_naviny.*
-import java.util.*
 
 class Naviny : AppCompatActivity() {
     private val mHideHandler = Handler()
@@ -39,7 +41,6 @@ class Naviny : AppCompatActivity() {
         supportActionBar?.show()
     }
     private lateinit var kq: SharedPreferences
-    private val searchHistory = ArrayList<String>()
     private var fullscreenPage = false
     private var dzenNoch = false
     private var mUploadMessage: ValueCallback<Uri?>? = null
@@ -86,43 +87,36 @@ class Naviny : AppCompatActivity() {
         when (naviny) {
             0 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    searchHistory.add("https://carkva-gazeta.by/")
                     viewWeb.loadUrl("https://carkva-gazeta.by/")
                 } else error = true
             }
             1 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    searchHistory.add("https://carkva-gazeta.by/index.php?num=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
                 } else error = true
             }
             2 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    searchHistory.add("https://carkva-gazeta.by/index.php?his=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
                 } else error = true
             }
             3 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    searchHistory.add("https://carkva-gazeta.by/index.php?sva=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
                 } else error = true
             }
             4 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    searchHistory.add("https://carkva-gazeta.by/index.php?gra=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
                 } else error = true
             }
             5 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    searchHistory.add("https://carkva-gazeta.by/index.php?it=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
                 } else error = true
             }
             6 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    searchHistory.add("https://carkva-gazeta.by/index.php?ik=")
                     viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
                 } else error = true
             }
@@ -198,9 +192,18 @@ class Naviny : AppCompatActivity() {
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(R.id.action_forward).isVisible = viewWeb.canGoForward()
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         var error = false
+        if (id == R.id.action_forward) {
+            viewWeb.goForward()
+        }
         if (id == R.id.action_update) {
             if (MainActivity.isNetworkAvailable(this)) {
                 viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
@@ -208,29 +211,27 @@ class Naviny : AppCompatActivity() {
             } else error = true
         }
         if (id == R.id.action_chrome) {
-            onChrome(searchHistory[searchHistory.size - 1])
+            val webBackForwardList = viewWeb.copyBackForwardList()
+            val webHistoryItem = webBackForwardList.currentItem
+            onChrome(webHistoryItem?.url ?: "https://carkva-gazeta.by")
         }
         if (id == R.id.num) {
             if (MainActivity.isNetworkAvailable(this)) {
-                searchHistory.add("https://carkva-gazeta.by/index.php?num=")
                 viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
             } else error = true
         }
         if (id == R.id.sva) {
             if (MainActivity.isNetworkAvailable(this)) {
-                searchHistory.add("https://carkva-gazeta.by/index.php?sva=")
                 viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
             } else error = true
         }
         if (id == R.id.his) {
             if (MainActivity.isNetworkAvailable(this)) {
-                searchHistory.add("https://carkva-gazeta.by/index.php?his=")
                 viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
             } else error = true
         }
         if (id == R.id.gra) {
             if (MainActivity.isNetworkAvailable(this)) {
-                searchHistory.add("https://carkva-gazeta.by/index.php?gra=")
                 viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
             } else error = true
         }
@@ -250,13 +251,11 @@ class Naviny : AppCompatActivity() {
         }
         if (id == R.id.it) {
             if (MainActivity.isNetworkAvailable(this)) {
-                searchHistory.add("https://carkva-gazeta.by/index.php?it=")
                 viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
             } else error = true
         }
         if (id == R.id.ik) {
             if (MainActivity.isNetworkAvailable(this)) {
-                searchHistory.add("https://carkva-gazeta.by/index.php?ik=")
                 viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
             } else error = true
         }
@@ -273,10 +272,6 @@ class Naviny : AppCompatActivity() {
                 val dadatak = DialogInstallDadatak()
                 dadatak.show(supportFragmentManager, "dadatak")
             }
-        }
-        if (id == android.R.id.home) {
-            onBackPressed()
-            return true
         }
         if (id == R.id.action_fullscreen) {
             if (kq.getBoolean("FullscreenHelp", true)) {
@@ -332,23 +327,20 @@ class Naviny : AppCompatActivity() {
         }
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if (fullscreenPage) {
-            fullscreenPage = false
-            show()
-        } else {
-            if (keyCode == KeyEvent.KEYCODE_BACK && searchHistory.size > 0) {
-                searchHistory.removeAt(searchHistory.size - 1)
-                if (searchHistory.size > 0) {
-                    viewWeb.loadUrl(searchHistory[searchHistory.size - 1])
-                } else {
-                    onBackPressed()
-                }
-            } else {
-                onBackPressed()
+    override fun onBackPressed() {
+        when {
+            fullscreenPage -> {
+                fullscreenPage = false
+                show()
+            }
+            viewWeb.canGoBack() -> {
+                viewWeb.goBack()
+                invalidateOptionsMenu()
+            }
+            else -> {
+                super.onBackPressed()
             }
         }
-        return true
     }
 
     private inner class MyWebChromeClient : WebChromeClient() {
@@ -418,8 +410,8 @@ class Naviny : AppCompatActivity() {
                 if (url.contains("translate.google.com")) {
                     onChrome(url)
                 } else {
-                    searchHistory.add(url)
                     view.loadUrl(url)
+                    invalidateOptionsMenu()
                 }
             } else {
                 error()

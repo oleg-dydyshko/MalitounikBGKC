@@ -1614,6 +1614,7 @@ id action_divider
 id action_dzen_noch
 id action_find
 id action_font
+id action_forward
 id action_fullscreen
 id action_glava
 id action_image

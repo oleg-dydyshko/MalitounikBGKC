@@ -3,7 +3,7 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     featureSplit="resources"
     package="by.carkva_gazeta.malitounik"
-    android:versionCode="43613"
+    android:versionCode="43615"
     android:versionName="3.7.9" >
 
     <uses-sdk android:targetSdkVersion="29" />

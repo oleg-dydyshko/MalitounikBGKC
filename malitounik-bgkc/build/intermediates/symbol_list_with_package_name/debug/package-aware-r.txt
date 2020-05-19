@@ -1766,6 +1766,7 @@ id clear_text
 id clip_horizontal
 id clip_vertical
 id collapseActionView
+id collapsingToolbarLayout
 id confirm_button
 id container
 id conteiner
@@ -1812,7 +1813,6 @@ id filter_chip
 id fitToContents
 id fixed
 id forever
-id frameLayout2
 id fullCaliandar
 id ghost_view
 id ghost_view_holder
@@ -2016,7 +2016,6 @@ id radioButton2
 id radioButton2a
 id radioButton3
 id radioGroup
-id relative
 id reset
 id right
 id right_icon
@@ -2374,11 +2373,11 @@ menu chtenia
 menu main
 menu malitvy_prynagodnyia
 menu nadsan_pravila
+menu naviny
 menu opisanie
 menu popup
 menu sabytie
 menu search_biblia
-menu site
 menu zakladki_i_natatki
 mipmap ic_launcher
 mipmap ic_launcher_foreground

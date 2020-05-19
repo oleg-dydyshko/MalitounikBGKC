@@ -358,7 +358,7 @@ try {
                 onClick(label2)
             }
         }
-        val extras: Bundle? = intent.extras
+        val extras = intent.extras
         if (extras != null) {
             val widgetday = "widget_day"
             val widgetmun = "widget_mun"
@@ -1047,13 +1047,15 @@ try {
                 }
                 R.id.label2 -> {
                     prefEditors.putInt("id", idSelect)
-                    if (shortcuts) {
+                    if (shortcuts || intent.extras?.containsKey("site") == true) {
                         if (checkmoduleResources(this)) {
                             if (checkmodulesBiblijateka(this)) {
                                 val intentBib = Intent(this, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
                                 intentBib.data = intent.data
                                 if (intent.extras?.containsKey("filePath") == true)
                                     intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
+                                if (intent.extras?.containsKey("site") == true)
+                                    intentBib.putExtra("site", true)
                                 startActivity(intentBib)
                             } else {
                                 downloadDynamicModule(this)
@@ -1332,9 +1334,9 @@ try {
                                     intent.data = context.intent.data
                                     if (intent.extras?.containsKey("filePath") == true) {
                                         intent.putExtra("filePath", intent.extras?.getString("filePath"))
-                                    } else {
-                                        intent.putExtra("site", true)
                                     }
+                                    if (intent.extras?.containsKey("site") == true)
+                                        intent.putExtra("site", true)
                                     context.startActivity(intent)
                                 }
                             } else {
@@ -1343,9 +1345,9 @@ try {
                                 intent.data = context.intent.data
                                 if (intent.extras?.containsKey("filePath") == true) {
                                     intent.putExtra("filePath", intent.extras?.getString("filePath"))
-                                } else {
-                                    intent.putExtra("site", true)
                                 }
+                                if (intent.extras?.containsKey("site") == true)
+                                    intent.putExtra("site", true)
                                 context.startActivity(intent)
                             }
                         }

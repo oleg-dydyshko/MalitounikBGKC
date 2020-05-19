@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -9,7 +8,6 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextUtils
@@ -19,33 +17,18 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import android.webkit.*
-import android.webkit.WebChromeClient.FileChooserParams
+import android.webkit.WebChromeClient
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_naviny.*
 
 class Naviny : AppCompatActivity() {
-    private val mHideHandler = Handler()
 
-    @SuppressLint("InlinedApi")
-    private val mHidePart2Runnable = Runnable {
-        relative.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-    }
-    private val mShowPart2Runnable = Runnable {
-        supportActionBar?.show()
-    }
     private lateinit var kq: SharedPreferences
-    private var fullscreenPage = false
     private var dzenNoch = false
-    private var mUploadMessage: ValueCallback<Uri?>? = null
-    private var mUploadMessageArr: ValueCallback<Array<Uri>>? = null
-    private val uiAnimationDelay = 300L
 
     @SuppressLint("SetTextI18n", "SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,12 +45,6 @@ class Naviny : AppCompatActivity() {
                 window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
             }
             viewWeb.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-        }
-        if (savedInstanceState != null) {
-            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            if (savedInstanceState.getBoolean("getModule")) {
-                linear.visibility = View.VISIBLE
-            }
         }
         val naviny = kq.getInt("naviny", 0)
         val settings = viewWeb.settings
@@ -126,27 +103,10 @@ class Naviny : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 150 && resultCode == Activity.RESULT_OK) {
-            MainActivity.downloadDynamicModule(this)
-        }
-        if (requestCode == 100) {
-            val result = if (data == null || resultCode != Activity.RESULT_OK) null else data.data
-            mUploadMessage?.onReceiveValue(result)
-            mUploadMessage = null
-        } else if (requestCode == 101) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mUploadMessageArr?.onReceiveValue(FileChooserParams.parseResult(resultCode, data))
-            }
-            mUploadMessageArr = null
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         val infl = menuInflater
-        infl.inflate(R.menu.site, menu)
+        infl.inflate(R.menu.naviny, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -157,29 +117,6 @@ class Naviny : AppCompatActivity() {
         return true
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean("fullscreen", fullscreenPage)
-        if (linear.visibility == View.VISIBLE) {
-            outState.putBoolean("getModule", true)
-        } else {
-            outState.putBoolean("getModule", false)
-        }
-    }
-
-    private fun hide() {
-        val actionBar = supportActionBar
-        actionBar?.hide()
-        mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelay)
-    }
-
-    private fun show() {
-        relative.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
-    }
-
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
@@ -188,7 +125,6 @@ class Naviny : AppCompatActivity() {
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        if (fullscreenPage) hide()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
     }
 
@@ -261,25 +197,15 @@ class Naviny : AppCompatActivity() {
         }
         if (id == R.id.bib) {
             if (MainActivity.checkmoduleResources(this)) {
-                if (MainActivity.checkmodulesBiblijateka(this)) {
-                    val intent = Intent(this, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
-                    intent.putExtra("site", true)
-                    startActivity(intent)
-                } else {
-                    MainActivity.downloadDynamicModule(this)
-                }
+                val prefEditors = kq.edit()
+                prefEditors.putInt("id", R.id.label2)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                intent.putExtra("site", true)
+                startActivity(intent)
             } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(supportFragmentManager, "dadatak")
+                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?bib=")
             }
-        }
-        if (id == R.id.action_fullscreen) {
-            if (kq.getBoolean("FullscreenHelp", true)) {
-                val dialogHelpFullscreen = DialogHelpFullscreen()
-                dialogHelpFullscreen.show(supportFragmentManager, "FullscreenHelp")
-            }
-            fullscreenPage = true
-            hide()
         }
         if (error) {
             error()
@@ -328,49 +254,27 @@ class Naviny : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        when {
-            fullscreenPage -> {
-                fullscreenPage = false
-                show()
-            }
-            viewWeb.canGoBack() -> {
-                viewWeb.goBack()
-                invalidateOptionsMenu()
-            }
-            else -> {
-                super.onBackPressed()
-            }
+        if (viewWeb.canGoBack()) {
+            viewWeb.goBack()
+            invalidateOptionsMenu()
+        } else {
+            super.onBackPressed()
         }
     }
 
     private inner class MyWebChromeClient : WebChromeClient() {
-        // For Android 5.0+
-        @SuppressLint("NewApi")
-        override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams: FileChooserParams): Boolean {
-            mUploadMessageArr?.onReceiveValue(null)
-            mUploadMessageArr = null
-            mUploadMessageArr = filePathCallback
-            val intent = fileChooserParams.createIntent()
-            try {
-                startActivityForResult(intent, 101)
-            } catch (e: ActivityNotFoundException) {
-                mUploadMessageArr = null
-                return false
-            }
-            return true
-        }
 
         override fun onProgressChanged(view: WebView?, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
             toolbarprogress.progress = newProgress
             if (newProgress == 100) {
-                frameLayout2.visibility = View.INVISIBLE
+                toolbarprogress.visibility = View.INVISIBLE
                 val title = view?.title ?: "«Царква» — беларуская грэка-каталіцкая газета"
                 title_toolbar.text = title
                 if (viewWeb.settings.cacheMode != WebSettings.LOAD_CACHE_ELSE_NETWORK)
                     viewWeb.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             } else {
-                frameLayout2.visibility = View.VISIBLE
+                toolbarprogress.visibility = View.VISIBLE
             }
         }
     }
@@ -396,18 +300,24 @@ class Naviny : AppCompatActivity() {
             }
             if (url.contains("https://carkva-gazeta.by/index.php?bib=")) {
                 if (MainActivity.checkmoduleResources(this@Naviny)) {
-                    if (MainActivity.checkmodulesBiblijateka(this@Naviny)) {
-                        val intent = Intent(this@Naviny, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
-                        intent.putExtra("site", true)
-                        startActivity(intent)
+                    val prefEditors = kq.edit()
+                    prefEditors.putInt("id", R.id.label2)
+                    prefEditors.apply()
+                    val intent = Intent(this@Naviny, MainActivity::class.java)
+                    intent.putExtra("site", true)
+                    startActivity(intent)
+                } else {
+                    if (MainActivity.isNetworkAvailable(this@Naviny)) {
+                        view.loadUrl(url)
+                        invalidateOptionsMenu()
                     } else {
-                        MainActivity.downloadDynamicModule(this@Naviny)
+                        error()
                     }
-                    return true
                 }
+                return true
             }
             if (MainActivity.isNetworkAvailable(this@Naviny)) {
-                if (url.contains("translate.google.com")) {
+                if (url.contains("translate.google.com") || url.contains("carkva-gazeta.by/download.php")) {
                     onChrome(url)
                 } else {
                     view.loadUrl(url)

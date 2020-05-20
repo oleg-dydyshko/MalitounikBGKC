@@ -978,8 +978,7 @@ try {
                 if (dzenNoch)
                     label103.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else
-                    label103
-                            .setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                    label103.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label104 -> {
                 tolbarTitle = getString(R.string.KALIANDAR_BEL)
@@ -993,8 +992,7 @@ try {
                 if (dzenNoch)
                     label105.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else
-                    label105
-                            .setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                    label105.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label102 -> {
                 tolbarTitle = getString(R.string.pamiatka)
@@ -1127,28 +1125,28 @@ try {
                 }
                 R.id.label91 -> {
                     prefEditors.putInt("id", idSelect)
-                    val menuPesnyPrasl = MenuPesnyPrasl()
-                    ftrans.replace(R.id.conteiner, menuPesnyPrasl)
+                    val menuPesny = MenuPesny.getInstance("prasl")
+                    ftrans.replace(R.id.conteiner, menuPesny)
                 }
                 R.id.label92 -> {
                     prefEditors.putInt("id", idSelect)
-                    val menuPesnyBel = MenuPesnyBel()
-                    ftrans.replace(R.id.conteiner, menuPesnyBel)
+                    val menuPesny = MenuPesny.getInstance("bel")
+                    ftrans.replace(R.id.conteiner, menuPesny)
                 }
                 R.id.label93 -> {
                     prefEditors.putInt("id", idSelect)
-                    val menuPesnyBag = MenuPesnyBag()
-                    ftrans.replace(R.id.conteiner, menuPesnyBag)
+                    val menuPesny = MenuPesny.getInstance("bag")
+                    ftrans.replace(R.id.conteiner, menuPesny)
                 }
                 R.id.label94 -> {
                     prefEditors.putInt("id", idSelect)
-                    val menuPesnyKal = MenuPesnyKal()
-                    ftrans.replace(R.id.conteiner, menuPesnyKal)
+                    val menuPesny = MenuPesny.getInstance("kal")
+                    ftrans.replace(R.id.conteiner, menuPesny)
                 }
                 R.id.label95 -> {
                     prefEditors.putInt("id", idSelect)
-                    val menuPesnyTaize = MenuPesnyTaize()
-                    ftrans.replace(R.id.conteiner, menuPesnyTaize)
+                    val menuPesny = MenuPesny.getInstance("taize")
+                    ftrans.replace(R.id.conteiner, menuPesny)
                 }
                 R.id.label103 -> {
                     prefEditors.putInt("id", idSelect)

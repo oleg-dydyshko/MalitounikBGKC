@@ -25,7 +25,6 @@ import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.R.raw
-import by.carkva_gazeta.resources.SearchPesny.Companion.getPesniaID
 import kotlinx.android.synthetic.main.akafist_under.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -119,7 +118,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         }
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         title = intent.extras?.getString("pesny", "") ?: ""
-        val pedsny = getPesniaID(this, title)
+        val pedsny = SearchPesny.getPesniaID(this, title)
         val fields = raw::class.java.fields
         for (field in fields) {
             if (field.getInt(null) == pedsny) {

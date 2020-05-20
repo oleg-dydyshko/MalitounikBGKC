@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.InputFilter
 import android.text.InputType
 import android.util.TypedValue
 import android.view.inputmethod.EditorInfo
@@ -77,6 +78,7 @@ class DialogBibleRazdel : DialogFragment() {
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             linearLayout.addView(textViewZaglavie)
             input = EditTextRobotoCondensed(it)
+            input.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(3)}
             input.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (savedInstanceState != null) {
                 input.setText(savedInstanceState.getString("glava"))

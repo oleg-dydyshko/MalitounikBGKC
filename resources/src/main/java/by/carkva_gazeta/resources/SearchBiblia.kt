@@ -470,6 +470,16 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.search_biblia, menu)
         val searchViewItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.search)
+        searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                finish()
+                return false
+            }
+        })
         searchViewItem.expandActionView()
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = title

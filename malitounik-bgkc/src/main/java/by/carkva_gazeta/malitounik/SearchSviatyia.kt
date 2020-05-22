@@ -88,6 +88,16 @@ class SearchSviatyia : AppCompatActivity() {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.pesny, menu)
         val searchViewItem = menu.findItem(R.id.search)
+        searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                finish()
+                return false
+            }
+        })
         searchViewItem.expandActionView()
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = getString(R.string.search_svityia)

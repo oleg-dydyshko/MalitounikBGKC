@@ -987,7 +987,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         webView.loadUrl("file://" + dir.absolutePath.toString() + "/" + split[0])
         webView.scrollTo(0, positionY)
         bookTitle.clear()
-        bookTitle.addAll(biblioteka?.contentList as List<String>)
+        bookTitle.addAll(biblioteka?.contentList as ArrayList<String>)
         title_toolbar.text = biblioteka?.bookTitle
         page_toolbar.visibility = View.GONE
         for (i in 0 until naidaunia.size) {

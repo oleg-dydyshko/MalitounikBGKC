@@ -181,7 +181,7 @@ class MenuPamiatka : PadryxtoukaPamiatkaListFragment() {
         }
     }
 
-    private class MyArrayAdapter(private val activity: Activity, private val list: ArrayList<String>) : ArrayAdapter<String>(activity, R.layout.simple_list_item_maranata, list as List<String>) {
+    private class MyArrayAdapter(private val activity: Activity, private val list: ArrayList<String>) : ArrayAdapter<String>(activity, R.layout.simple_list_item_maranata, list) {
         override fun isEnabled(position: Int): Boolean {
             return false
         }

@@ -6,20 +6,19 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
+import android.text.*
+import android.text.style.AbsoluteSizeSpan
 import android.util.SparseIntArray
 import android.util.TypedValue
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.AbsListView
-import android.widget.AdapterView
+import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -37,6 +36,10 @@ class SearchSviatyia : AppCompatActivity() {
     private var dzenNoch = false
     private var posukPesenTimer: Timer? = null
     private var posukPesenSchedule: TimerTask? = null
+    private var editText: AutoCompleteTextView? = null
+    private var textViewCount: TextViewRobotoCondensed? = null
+    private var searchView: SearchView? = null
+    private var searchViewQwery = ""
     private var arrayLists: ArrayList<ArrayList<String>> = ArrayList()
     private var arrayRes: ArrayList<String> = ArrayList()
     private lateinit var chin: SharedPreferences
@@ -56,6 +59,57 @@ class SearchSviatyia : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun changeSearchViewElements(view: View?) {
+        if (view == null) return
+        if (view.id == R.id.search_edit_frame || view.id == R.id.search_mag_icon) {
+            val p = view.layoutParams as LinearLayout.LayoutParams
+            p.leftMargin = 0
+            p.rightMargin = 0
+            view.layoutParams = p
+        } else if (view.id == R.id.search_src_text) {
+            editText = view as AutoCompleteTextView
+            editText?.setBackgroundResource(R.drawable.underline_white)
+            val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
+            f.isAccessible = true
+            f.set(editText, 0)
+            val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            editText?.setText(chin.getString("search_svityx_string", ""))
+            editText?.setSelection(editText?.text?.length ?: 0)
+            editText?.addTextChangedListener(MyTextWatcher())
+        }
+        if (view is ViewGroup) {
+            for (i in 0 until view.childCount) {
+                changeSearchViewElements(view.getChildAt(i))
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.pesny, menu)
+        val searchViewItem = menu.findItem(R.id.search)
+        searchViewItem.expandActionView()
+        searchView = searchViewItem.actionView as SearchView
+        searchView?.queryHint = getString(R.string.search_svityia)
+        textViewCount = menu.findItem(R.id.count).actionView as TextViewRobotoCondensed
+        menu.findItem(R.id.count).isVisible = true
+        textViewCount?.text = resources.getString(R.string.seash, arrayRes.size)
+        changeSearchViewElements(searchView)
+        if (searchViewQwery != "") {
+            menu.findItem(R.id.search).expandActionView()
+            searchView?.setQuery(searchViewQwery, true)
+            searchView?.clearFocus()
+        }
+        for (i in 0 until menu.size()) {
+            val item = menu.getItem(i)
+            val spanString = SpannableString(menu.getItem(i).title.toString())
+            val end = spanString.length
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            item.title = spanString
+        }
+        return true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
@@ -68,7 +122,7 @@ class SearchSviatyia : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         setContentView(R.layout.search_sviatyia)
-        if (dzenNoch) {
+        /*if (dzenNoch) {
             buttonx.setImageResource(R.drawable.cancel)
         }
         buttonx.setOnClickListener {
@@ -85,20 +139,19 @@ class SearchSviatyia : AppCompatActivity() {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
         }
-        TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+        TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)*/
         if (chin.getString("search_svityx_string", "") != "") {
             if (savedInstanceState == null) {
                 val gson = Gson()
                 val json = chin.getString("search_svityx_array", "")
                 val type = object : TypeToken<ArrayList<String?>?>() {}.type
                 arrayRes.addAll(gson.fromJson(json, type))
-                TextView.text = resources.getString(R.string.seash, arrayRes.size)
+                //TextView.text = resources.getString(R.string.seash, arrayRes.size)
                 for (i in arrayRes.indices) {
                     if (dzenNoch) arrayRes[i] = arrayRes[i].replace("#d00505", "#f44336") else arrayRes[i] = arrayRes[i].replace("#f44336", "#d00505")
                 }
-                editText.setText(chin.getString("search_svityx_string", ""))
-                val editPosition: Int = editText.text?.length ?: 0
-                editText.setSelection(editPosition)
+                //val editPosition: Int = editText.text?.length ?: 0
+                //editText.setSelection(editPosition)
             }
         }
         adapter = SearchListAdapter(this, arrayRes)
@@ -107,16 +160,16 @@ class SearchSviatyia : AppCompatActivity() {
             override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                 if (i == 1) { // Скрываем клавиатуру
                     val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm1.hideSoftInputFromWindow(editText.windowToken, 0)
+                    imm1.hideSoftInputFromWindow(editText?.windowToken, 0)
                 }
             }
 
             override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
         })
-        TextView.text = resources.getString(R.string.seash, adapter.count)
-        if (dzenNoch) {
+        //TextView.text = resources.getString(R.string.seash, adapter.count)
+        /*if (dzenNoch) {
             TextView.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-        }
+        }*/
         ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnItemClickListener
@@ -134,7 +187,6 @@ class SearchSviatyia : AppCompatActivity() {
         }
         file
         MenuCviaty.getPrazdnik(this, c[Calendar.YEAR])
-        editText.addTextChangedListener(MyTextWatcher())
         setTollbarTheme()
     }
 
@@ -356,7 +408,7 @@ class SearchSviatyia : AppCompatActivity() {
                 }
             }
         }
-        TextView.text = resources.getString(R.string.seash, arrayRes.size)
+        textViewCount?.text = resources.getString(R.string.seash, arrayRes.size)
         val gson = Gson()
         val json = gson.toJson(arrayRes)
         val prefEditors = chin.edit()
@@ -391,19 +443,19 @@ class SearchSviatyia : AppCompatActivity() {
                 } else {
                     arrayRes.clear()
                     adapter.notifyDataSetChanged()
-                    TextView.text = resources.getString(R.string.seash, 0)
+                    textViewCount?.text = resources.getString(R.string.seash, 0)
                 }
                 if (check != 0) {
-                    editText.removeTextChangedListener(this)
-                    editText.setText(edit)
-                    editText.setSelection(editPosition)
-                    editText.addTextChangedListener(this)
+                    editText?.removeTextChangedListener(this)
+                    editText?.setText(edit)
+                    editText?.setSelection(editPosition)
+                    editText?.addTextChangedListener(this)
                 }
             }
         }
     }
 
-    private class SearchListAdapter(private val mContext: Activity, private val adapterList: ArrayList<String>) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_2, R.id.label, adapterList as List<String>) {
+    private class SearchListAdapter(private val mContext: Activity, private val adapterList: ArrayList<String>) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_2, R.id.label, adapterList) {
         private val k: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {

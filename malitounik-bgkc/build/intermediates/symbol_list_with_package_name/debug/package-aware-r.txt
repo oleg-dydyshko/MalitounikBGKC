@@ -1747,8 +1747,6 @@ id button9
 id button9a
 id buttonPanel
 id button_popup
-id buttonx
-id buttonx2
 id calendar
 id cancel_button
 id cansel

@@ -3,8 +3,8 @@
 3    xmlns:dist="http://schemas.android.com/apk/distribution"
 4    featureSplit="resources"
 5    package="by.carkva_gazeta.malitounik"
-6    android:versionCode="43615"
-7    android:versionName="3.7.9" >
+6    android:versionCode="43616"
+7    android:versionName="3.7.10" >
 8
 9    <uses-sdk
 10        android:minSdkVersion="14"
@@ -30,7 +30,7 @@
 21    </dist:module>
 22
 23    <application android:hardwareAccelerated="true" >
-23-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:15:5-237:19
+23-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:15:5-212:19
 23-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:16:8-42
 24        <activity
 24-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:17:9-24:20
@@ -373,82 +373,35 @@
 203-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 204        </activity>
 205        <activity
-205-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:196:9-204:20
-206            android:name="by.carkva_gazeta.resources.SearchPesny"
-206-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:197:13-66
-207            android:label="@string/search"
-207-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:198:13-43
-208            android:theme="@style/AppTheme.NoActionBar"
+205-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:196:9-203:20
+206            android:name="by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"
+206-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:197:13-79
+207            android:label="@string/slugby_vialikaga_postu"
+207-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:198:13-59
+208            android:theme="@style/AppTheme.NoActionBar" >
 208-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:199:13-56
-209            android:windowSoftInputMode="stateVisible|adjustPan" >
-209-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:200:13-65
-210            <meta-data
-210-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
-211                android:name="android.support.PARENT_ACTIVITY"
-211-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
-212                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-212-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
-213        </activity>
-214        <activity
-214-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:205:9-212:20
-215            android:name="by.carkva_gazeta.resources.SearchPesnyViewResult"
-215-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:206:13-76
-216            android:label="@string/search"
-216-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:207:13-43
-217            android:theme="@style/AppTheme.NoActionBar" >
-217-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:208:13-56
-218            <meta-data
-218-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
-219                android:name="android.support.PARENT_ACTIVITY"
-219-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
-220                android:value="by.carkva_gazeta.resources.SearchPesny" />
-220-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
-221        </activity>
-222        <activity
-222-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:213:9-220:20
-223            android:name="by.carkva_gazeta.resources.PesnyAll"
-223-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:214:13-63
-224            android:label="@string/pesny3"
-224-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:215:13-43
-225            android:theme="@style/AppTheme.NoActionBar" >
-225-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:216:13-56
-226            <meta-data
-226-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
-227                android:name="android.support.PARENT_ACTIVITY"
-227-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
-228                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-228-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
-229        </activity>
-230        <activity
-230-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:221:9-228:20
-231            android:name="by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"
-231-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:222:13-79
-232            android:label="@string/slugby_vialikaga_postu"
-232-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:223:13-59
-233            android:theme="@style/AppTheme.NoActionBar" >
-233-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:224:13-56
-234            <meta-data
-234-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
-235                android:name="android.support.PARENT_ACTIVITY"
-235-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
-236                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-236-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
-237        </activity>
-238        <activity
-238-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:229:9-236:20
-239            android:name="by.carkva_gazeta.resources.SlugbyVialikagaPostu"
-239-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:230:13-75
-240            android:label="@string/slugby_vialikaga_postu"
-240-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:231:13-59
-241            android:theme="@style/AppTheme.NoActionBar" >
-241-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:232:13-56
-242            <meta-data
-242-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
-243                android:name="android.support.PARENT_ACTIVITY"
-243-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
-244                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-244-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
-245        </activity>
-246    </application>
-247
-248</manifest>
+209            <meta-data
+209-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
+210                android:name="android.support.PARENT_ACTIVITY"
+210-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
+211                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+211-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
+212        </activity>
+213        <activity
+213-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:204:9-211:20
+214            android:name="by.carkva_gazeta.resources.SlugbyVialikagaPostu"
+214-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:205:13-75
+215            android:label="@string/slugby_vialikaga_postu"
+215-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:206:13-59
+216            android:theme="@style/AppTheme.NoActionBar" >
+216-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:207:13-56
+217            <meta-data
+217-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
+218                android:name="android.support.PARENT_ACTIVITY"
+218-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
+219                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+219-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
+220        </activity>
+221    </application>
+222
+223</manifest>

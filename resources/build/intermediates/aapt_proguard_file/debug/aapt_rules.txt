@@ -85,7 +85,7 @@
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_list_bible.xml:72
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/bogasluzbovya.xml:104
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/my_malitva_add.xml:48
-# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/search_biblia.xml:39
+# Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/search_biblia.xml:66
 -keep class by.carkva_gazeta.malitounik.EditTextRobotoCondensed { <init>(...); }
 
 # Referenced at /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_chytanne.xml:38

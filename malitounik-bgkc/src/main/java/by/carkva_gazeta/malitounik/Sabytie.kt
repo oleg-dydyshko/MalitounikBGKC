@@ -2582,7 +2582,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         outState.putBoolean("back", back)
     }
 
-    private inner class SabytieAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_3, R.id.label, sabytie2 as List<String>) {
+    private inner class SabytieAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_3, R.id.label, sabytie2) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder

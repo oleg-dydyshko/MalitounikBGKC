@@ -225,7 +225,7 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
         }
     }
 
-    private inner class ListAdaprer(private val mContext: Activity) : ArrayAdapter<String?>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_bible, bible as List<String>) {
+    private inner class ListAdaprer(private val mContext: Activity) : ArrayAdapter<String>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_bible, bible) {
         private val k: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View

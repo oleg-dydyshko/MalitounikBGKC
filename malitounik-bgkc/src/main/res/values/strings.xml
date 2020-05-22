@@ -176,7 +176,7 @@
     <string name="error_ch">Памылка, даруйце</string>
     <string name="error_ch_email">carkva@carkva-gazeta.by\nНапішыце пра памылку ў праграме\n\nЗагадзя шчыра дзякуем!</string>
     <string name="Sabytie">%1$s%2$d.%3$s%4$d.%5$d</string>
-    <string name="seash">Знайшлося %1$d</string>
+    <string name="seash">(%1$d)</string>
     <string name="sabytie_name">Назва падзеі</string>
     <string name="sabytie_pachatak">Пачатак:</string>
     <string name="Sabytie_end">Канец:</string>

@@ -4,8 +4,8 @@
     featureSplit="resources"
     package="by.carkva_gazeta.malitounik"
     android:targetSandboxVersion="2"
-    android:versionCode="43615"
-    android:versionName="3.7.9" >
+    android:versionCode="43616"
+    android:versionName="3.7.10" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -222,34 +222,6 @@
         <activity
             android:name="by.carkva_gazeta.resources.NadsanMalitvyIPesni"
             android:label="@string/title_psalter"
-            android:splitName="resources"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.SearchPesny"
-            android:label="@string/search"
-            android:splitName="resources"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible|adjustPan" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.SearchPesnyViewResult"
-            android:label="@string/search"
-            android:splitName="resources"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.resources.SearchPesny" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.PesnyAll"
-            android:label="@string/pesny3"
             android:splitName="resources"
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data

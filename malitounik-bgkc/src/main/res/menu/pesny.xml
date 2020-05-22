@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/search"
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        android:icon="@drawable/search"
+        android:orderInCategory="100"
+        android:title="@string/search" />
+    <item
+        android:id="@+id/count"
+        android:orderInCategory="100"
+        android:title="(0)"
+        android:visible="false"
+        app:actionViewClass="by.carkva_gazeta.malitounik.TextViewRobotoCondensed"
+        app:showAsAction="always" />
+</menu>

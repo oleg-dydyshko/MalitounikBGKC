@@ -632,7 +632,7 @@ try {
             val tipicon = DialogTipicon.getInstance(0)
             tipicon.show(supportFragmentManager, "tipicon")
         }
-        if (id == R.id.search) {
+        /*if (id == R.id.search) {
             if (checkmoduleResources(this)) {
                 val intent = Intent(this, Class.forName("by.carkva_gazeta.resources.SearchPesny"))
                 startActivity(intent)
@@ -640,7 +640,7 @@ try {
                 val dadatak = DialogInstallDadatak()
                 dadatak.show(supportFragmentManager, "dadatak")
             }
-        }
+        }*/
         if (id == R.id.sabytie) {
             val i = Intent(this, Sabytie::class.java)
             startActivityForResult(i, 105)
@@ -734,7 +734,6 @@ try {
             menu.findItem(R.id.action_glava).isVisible = false
             menu.findItem(R.id.tipicon).isVisible = false
             menu.findItem(R.id.pasxa).isVisible = false
-            menu.findItem(R.id.search).isVisible = false
             menu.findItem(R.id.trash).isVisible = false
             menu.findItem(R.id.sabytie).isVisible = false
             menu.findItem(R.id.prazdnik).isVisible = false
@@ -765,9 +764,6 @@ try {
                 }
                 R.id.label12 -> menu.findItem(R.id.trash).isVisible = true
                 R.id.label13 -> menu.findItem(R.id.search_nadsan).isVisible = true
-            }
-            if (idSelect == R.id.label91 || idSelect == R.id.label92 || idSelect == R.id.label93 || idSelect == R.id.label94 || idSelect == R.id.label95) {
-                menu.findItem(R.id.search).isVisible = true
             }
             if (dzenNoch) {
                 menu.findItem(R.id.action_mun).setIcon(R.drawable.calendar_black_full)
@@ -1132,6 +1128,7 @@ try {
                     prefEditors.putInt("id", idSelect)
                     val menuPesny = MenuPesny.getInstance("bel")
                     ftrans.replace(R.id.conteiner, menuPesny)
+
                 }
                 R.id.label93 -> {
                     prefEditors.putInt("id", idSelect)
@@ -1142,6 +1139,7 @@ try {
                     prefEditors.putInt("id", idSelect)
                     val menuPesny = MenuPesny.getInstance("kal")
                     ftrans.replace(R.id.conteiner, menuPesny)
+
                 }
                 R.id.label95 -> {
                     prefEditors.putInt("id", idSelect)

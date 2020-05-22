@@ -299,6 +299,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
+        <activity
+            android:name="by.carkva_gazeta.malitounik.PesnyAll"
+            android:label="@string/pesny3"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
 
         <meta-data
             android:name="com.google.android.backup.api_key"

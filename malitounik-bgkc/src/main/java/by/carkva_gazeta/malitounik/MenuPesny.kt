@@ -106,6 +106,9 @@ class MenuPesny : ListFragment() {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 search = true
                 menuList.clear()
+                menuList.addAll(menuListData)
+                menuList.sort()
+                textViewCount?.text = getString(R.string.seash, menuList.size)
                 adapter.notifyDataSetChanged()
                 menu.findItem(R.id.count).isVisible = search
                 searchView?.setOnQueryTextListener(MyQueryTextListener())
@@ -295,8 +298,10 @@ class MenuPesny : ListFragment() {
                 startPosukPesen(edit)
             } else {
                 menuList.clear()
+                menuList.addAll(menuListData)
+                menuList.sort()
                 adapter.notifyDataSetChanged()
-                textViewCount?.text = getString(R.string.seash, 0)
+                textViewCount?.text = getString(R.string.seash, menuList.size)
             }
             searchView?.setOnQueryTextListener(null)
             searchView?.setQuery(edit, false)

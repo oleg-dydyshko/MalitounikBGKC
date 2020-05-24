@@ -4,7 +4,7 @@
     featureSplit="resources"
     package="by.carkva_gazeta.malitounik"
     android:targetSandboxVersion="2"
-    android:versionCode="43616"
+    android:versionCode="43618"
     android:versionName="3.7.10" >
 
     <uses-sdk

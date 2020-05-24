@@ -102,6 +102,8 @@ class SearchSviatyia : AppCompatActivity() {
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = getString(R.string.search_svityia)
         textViewCount = menu.findItem(R.id.count).actionView as TextViewRobotoCondensed
+        val density = resources.displayMetrics.density.toInt()
+        textViewCount?.setPadding(0, 0, 10 * density, 0)
         menu.findItem(R.id.count).isVisible = true
         textViewCount?.text = resources.getString(R.string.seash, arrayRes.size)
         changeSearchViewElements(searchView)

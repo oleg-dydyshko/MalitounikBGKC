@@ -8,7 +8,7 @@ MERGED from [com.google.android.material:material:1.1.0] /home/oleg/.gradle/cach
 MERGED from [androidx.appcompat:appcompat:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/bd9eaa2992ad422b7eac643b0aac27f7/appcompat-1.1.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/85fa2711bb2ad134a23924a267c31046/constraintlayout-1.1.3/AndroidManifest.xml:2:1-11:12
 MERGED from [com.google.android.play:core:1.7.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/94af8e1b34e8b7664b58ff8b0ca496fa/jetified-core-1.7.3/AndroidManifest.xml:2:1-19:12
-MERGED from [androidx.core:core-ktx:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/9bb335e4785cfec91958375c7c0d4aa2/jetified-core-ktx-1.2.0/AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.core:core-ktx:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a8f374263810ac0944425b939e77fa29/jetified-core-ktx-1.3.0/AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a8b5f2f918ccd5b61b38ba8ba7a0ef9d/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/000ad8ee5f29acfc65944a32f3753966/jetified-viewpager2-1.0.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.fragment:fragment:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/035f3ead55434a936fac43666c47076e/fragment-1.1.0/AndroidManifest.xml:17:1-24:12
@@ -24,7 +24,7 @@ MERGED from [androidx.loader:loader:1.0.0] /home/oleg/.gradle/caches/transforms-
 MERGED from [androidx.activity:activity:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6151e126586f4a83f38912a51e2a7b82/jetified-activity-1.0.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/01e4967e0f2302a16a9b2fcd8f96fcc1/recyclerview-1.1.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.customview:customview:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/e09806fedcaf73ee0e22595e708735dc/customview-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.core:core:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a3eef63a1949ce565e26a68908e433ce/core-1.2.0/AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.core:core:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/3680f33e943d101e1f4a17441664df75/core-1.3.0/AndroidManifest.xml:17:1-26:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/2b5a4cd18c0e85677b51f808520e4d53/versionedparcelable-1.1.0/AndroidManifest.xml:17:1-27:12
 MERGED from [androidx.lifecycle:lifecycle-runtime:2.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/bc3d08ee1c4710b4b0c8f772d2326f42/lifecycle-runtime-2.1.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/61045485808293e5346b591a420d3959/lifecycle-viewmodel-2.1.0/AndroidManifest.xml:17:1-22:12
@@ -92,8 +92,8 @@ MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradl
 MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/85fa2711bb2ad134a23924a267c31046/constraintlayout-1.1.3/AndroidManifest.xml:9:5-20
 MERGED from [com.google.android.play:core:1.7.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/94af8e1b34e8b7664b58ff8b0ca496fa/jetified-core-1.7.3/AndroidManifest.xml:10:3-17:17
 MERGED from [com.google.android.play:core:1.7.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/94af8e1b34e8b7664b58ff8b0ca496fa/jetified-core-1.7.3/AndroidManifest.xml:10:3-17:17
-MERGED from [androidx.core:core:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a3eef63a1949ce565e26a68908e433ce/core-1.2.0/AndroidManifest.xml:24:5-89
-MERGED from [androidx.core:core:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a3eef63a1949ce565e26a68908e433ce/core-1.2.0/AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/3680f33e943d101e1f4a17441664df75/core-1.3.0/AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/3680f33e943d101e1f4a17441664df75/core-1.3.0/AndroidManifest.xml:24:5-89
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/2b5a4cd18c0e85677b51f808520e4d53/versionedparcelable-1.1.0/AndroidManifest.xml:24:5-25:19
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/2b5a4cd18c0e85677b51f808520e4d53/versionedparcelable-1.1.0/AndroidManifest.xml:24:5-25:19
 MERGED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-30:19
@@ -109,7 +109,7 @@ MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/b
 	android:icon
 		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:20:9-43
 	android:appComponentFactory
-		ADDED from [androidx.core:core:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a3eef63a1949ce565e26a68908e433ce/core-1.2.0/AndroidManifest.xml:24:18-86
+		ADDED from [androidx.core:core:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/3680f33e943d101e1f4a17441664df75/core-1.3.0/AndroidManifest.xml:24:18-86
 	android:label
 		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:22:9-35
 	android:hardwareAccelerated
@@ -450,8 +450,8 @@ MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradl
 MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/85fa2711bb2ad134a23924a267c31046/constraintlayout-1.1.3/AndroidManifest.xml:5:5-7:41
 MERGED from [com.google.android.play:core:1.7.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/94af8e1b34e8b7664b58ff8b0ca496fa/jetified-core-1.7.3/AndroidManifest.xml:4:3-70
 MERGED from [com.google.android.play:core:1.7.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/94af8e1b34e8b7664b58ff8b0ca496fa/jetified-core-1.7.3/AndroidManifest.xml:4:3-70
-MERGED from [androidx.core:core-ktx:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/9bb335e4785cfec91958375c7c0d4aa2/jetified-core-ktx-1.2.0/AndroidManifest.xml:5:5-7:41
-MERGED from [androidx.core:core-ktx:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/9bb335e4785cfec91958375c7c0d4aa2/jetified-core-ktx-1.2.0/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core-ktx:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a8f374263810ac0944425b939e77fa29/jetified-core-ktx-1.3.0/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core-ktx:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a8f374263810ac0944425b939e77fa29/jetified-core-ktx-1.3.0/AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a8b5f2f918ccd5b61b38ba8ba7a0ef9d/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a8b5f2f918ccd5b61b38ba8ba7a0ef9d/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/000ad8ee5f29acfc65944a32f3753966/jetified-viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
@@ -482,8 +482,8 @@ MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/oleg/.gradle/caches
 MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/01e4967e0f2302a16a9b2fcd8f96fcc1/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.customview:customview:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/e09806fedcaf73ee0e22595e708735dc/customview-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.customview:customview:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/e09806fedcaf73ee0e22595e708735dc/customview-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a3eef63a1949ce565e26a68908e433ce/core-1.2.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.core:core:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a3eef63a1949ce565e26a68908e433ce/core-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/3680f33e943d101e1f4a17441664df75/core-1.3.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/3680f33e943d101e1f4a17441664df75/core-1.3.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/2b5a4cd18c0e85677b51f808520e4d53/versionedparcelable-1.1.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/2b5a4cd18c0e85677b51f808520e4d53/versionedparcelable-1.1.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.lifecycle:lifecycle-runtime:2.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/bc3d08ee1c4710b4b0c8f772d2326f42/lifecycle-runtime-2.1.0/AndroidManifest.xml:20:5-44

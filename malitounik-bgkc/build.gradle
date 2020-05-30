@@ -10,7 +10,7 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 43620
+        versionCode 43621
         versionName "3.7.10"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -42,7 +42,7 @@ dependencies {
     api 'com.google.android.material:material:1.1.0'
     api 'com.google.android.play:core:1.7.3'
     api 'com.google.code.gson:gson:2.8.6'
-    api 'androidx.core:core-ktx:1.2.0'
+    api 'androidx.core:core-ktx:1.3.0'
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     //implementation 'com.google.firebase:firebase-invites:16.0.4'
 }

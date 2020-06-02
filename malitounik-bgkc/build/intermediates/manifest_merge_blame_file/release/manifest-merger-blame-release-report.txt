@@ -2,7 +2,7 @@
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 3    xmlns:dist="http://schemas.android.com/apk/distribution"
 4    package="by.carkva_gazeta.malitounik"
-5    android:versionCode="43620"
+5    android:versionCode="43621"
 6    android:versionName="3.7.10" >
 7
 8    <uses-sdk
@@ -46,7 +46,7 @@
 26        android:allowBackup="true"
 26-->/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:18:9-35
 27        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-27-->[androidx.core:core:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a3eef63a1949ce565e26a68908e433ce/core-1.2.0/AndroidManifest.xml:24:18-86
+27-->[androidx.core:core:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/3680f33e943d101e1f4a17441664df75/core-1.3.0/AndroidManifest.xml:24:18-86
 28        android:fullBackupContent="@xml/backup_descriptor"
 28-->/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:19:9-59
 29        android:hardwareAccelerated="true"

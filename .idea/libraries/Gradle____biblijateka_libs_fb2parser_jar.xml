@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: ./biblijateka/libs/fb2parser.jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/biblijateka/libs/fb2parser.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

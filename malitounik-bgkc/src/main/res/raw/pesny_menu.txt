@@ -55,7 +55,7 @@ pesny_prasl_5<>Бог блаславіў гэты дзень
 pesny_prasl_6<>Бог ёсьць любоў
 pesny_prasl_7<>Богу сьпявай, уся зямля!
 pesny_prasl_8<>Божа мой
-pesny_prasl_9<>Браце мой
+pesny_prasl_9<>Браце мой, мы знайшлі Месію
 pesny_prasl_10<>Весяліся і пляскай у далоні
 pesny_prasl_11<>Вольная воля
 pesny_prasl_12<>Вось маё сэрца

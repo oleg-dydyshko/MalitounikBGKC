@@ -778,16 +778,12 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
                 itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-                itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             } else {
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
                 itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             }
-        } else {
-            itemAuto.isVisible = false
         }
         var spanString = SpannableString(itemAuto.title.toString())
         var end = spanString.length

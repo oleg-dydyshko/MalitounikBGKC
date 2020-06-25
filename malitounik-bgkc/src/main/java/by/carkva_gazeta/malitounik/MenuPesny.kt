@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Spannable
@@ -43,7 +44,7 @@ class MenuPesny : ListFragment() {
             if (!menuListDataIsInitialized())
                 menuListData = getMenuListData(it)
             if (savedInstanceState != null)
-                searchViewQwery = savedInstanceState.getString("SearchViewQwery")?: ""
+                searchViewQwery = savedInstanceState.getString("SearchViewQwery") ?: ""
             pesny = arguments?.getString("pesny") ?: "prasl"
             menuList = getMenuListData(it, pesny)
             adapter = MenuPesnyListAdapter(it)
@@ -72,9 +73,13 @@ class MenuPesny : ListFragment() {
         } else if (view.id == R.id.search_src_text) {
             editText = view as AutoCompleteTextView
             editText?.setBackgroundResource(R.drawable.underline_white)
-            val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
-            f.isAccessible = true
-            f.set(editText, 0)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                editText?.setTextCursorDrawable(R.color.colorIcons)
+            } else {
+                val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
+                f.isAccessible = true
+                f.set(editText, 0)
+            }
         }
         if (view is ViewGroup) {
             for (i in 0 until view.childCount) {

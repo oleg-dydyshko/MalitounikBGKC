@@ -1,1 +1,6 @@
-[]
+{
+  "version": 1,
+  "applicationId": "by.carkva_gazeta.malitounik",
+  "variantType": "BASE_APK",
+  "elements": []
+}

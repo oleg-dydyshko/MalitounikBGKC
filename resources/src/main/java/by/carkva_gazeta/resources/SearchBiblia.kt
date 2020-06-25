@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.*
@@ -420,9 +421,13 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         } else if (view.id == by.carkva_gazeta.malitounik.R.id.search_src_text) {
             autoCompleteTextView = view as AutoCompleteTextView
             autoCompleteTextView?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)
-            val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
-            f.isAccessible = true
-            f.set(autoCompleteTextView, 0)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                autoCompleteTextView?.setTextCursorDrawable(by.carkva_gazeta.malitounik.R.color.colorIcons)
+            } else {
+                val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
+                f.isAccessible = true
+                f.set(autoCompleteTextView, 0)
+            }
             val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
             autoCompleteTextView?.setText(chin.getString("search_string", ""))
             autoCompleteTextView?.setSelection(autoCompleteTextView?.text?.length ?: 0)

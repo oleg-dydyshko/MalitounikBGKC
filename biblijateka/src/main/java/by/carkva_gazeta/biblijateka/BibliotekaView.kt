@@ -1272,12 +1272,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 if (autoscroll) {
                     menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
                     menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
-                    itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
                     itemAuto.title = getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
                 } else {
                     menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
                     menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
-                    itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
                     itemAuto.title = getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
                 }
                 when {

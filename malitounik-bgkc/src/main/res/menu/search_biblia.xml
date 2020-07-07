@@ -5,7 +5,12 @@
         android:id="@+id/action_settings"
         android:icon="@drawable/settings"
         android:orderInCategory="100"
-        android:title="Налады пошуку"
+        android:title="@string/srttengs_serce"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_clean_histopy"
+        android:orderInCategory="100"
+        android:title="@string/clean_histopy"
         app:showAsAction="never" />
     <item
         android:id="@+id/search"

@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.*
@@ -15,15 +16,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.AbsListView
-import android.widget.ArrayAdapter
-import android.widget.Filter
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.MenuListData
-import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+import by.carkva_gazeta.malitounik.*
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.akafist_list_bible.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,58 +32,84 @@ import kotlin.collections.ArrayList
 /**
  * Created by oleg on 30.5.16
  */
-class MalitvyPrynagodnyia : AppCompatActivity() {
+class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearHistopyListener {
 
-    private val data: ArrayList<MenuListData> = ArrayList()
+    private val data = ArrayList<MenuListData>()
     private lateinit var adapter: MenuListAdaprer
+    private lateinit var searchView: SearchView
+    private lateinit var chin: SharedPreferences
     private var mLastClickTime: Long = 0
+    private lateinit var autoCompleteTextView: AutoCompleteTextView
+    private var searchViewQwery = ""
+    private var history = ArrayList<String>()
+    private lateinit var historyAdapter: HistoryAdapter
+    private var actionExpandOn = false
+
+    /*private fun loadHistory() {
+        val columns = arrayOf("_id", "text")
+        val temp = arrayOf(0, "default")
+        val cursor = MatrixCursor(columns)
+        for (i in 0 until history.size) {
+            temp[0] = i
+            temp[1] = history[i]
+            cursor.addRow(temp)
+        }
+        //searchView.suggestionsAdapter = ExampleCursorAdapter(this, cursor, history)
+    }*/
+
+    private fun addHistory(item: String) {
+        val temp = ArrayList<String>()
+        for (i in 0 until history.size) {
+            if (history[i] != item) {
+                temp.add(history[i])
+            }
+        }
+        history.clear()
+        history.add(item)
+        for (i in 0 until temp.size) {
+            history.add(temp[i])
+            if (history.size == 10)
+                break
+        }
+    }
+
+    private fun saveHistopy() {
+        val gson = Gson()
+        val json = gson.toJson(history)
+        val prefEditors = chin.edit()
+        prefEditors.putString("history_prynagodnyia", json)
+        prefEditors.apply()
+        invalidateOptionsMenu()
+    }
+
+    override fun cleanHistopy() {
+        history.clear()
+        saveHistopy()
+        invalidateOptionsMenu()
+        actionExpandOn = false
+        //loadHistory()
+    }
+
+    private fun getIdHistory(item: String): Int {
+        var id = 0
+        for (i in 0 until data.size) {
+            if (data[i].data == item) {
+                id = data[i].id
+            }
+        }
+        return id
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val chin = getSharedPreferences("biblia", MODE_PRIVATE)
+        chin = getSharedPreferences("biblia", MODE_PRIVATE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.akafist_list_bible)
-        textSearch.addTextChangedListener(object : TextWatcher {
-
-            var editPosition = 0
-            var check = 0
-            var editch = true
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                editch = count != after
-                check = after
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                editPosition = start + count
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                var edit = s.toString()
-                if (editch) {
-                    edit = edit.replace("и", "і")
-                    edit = edit.replace("щ", "ў")
-                    edit = edit.replace("ъ", "'")
-                    edit = edit.replace("И", "І")
-                    edit = edit.replace("Щ", "Ў")
-                    edit = edit.replace("Ъ", "'")
-                    if (check != 0) {
-                        textSearch.removeTextChangedListener(this)
-                        textSearch.setText(edit)
-                        textSearch.setSelection(editPosition)
-                        textSearch.addTextChangedListener(this)
-                    }
-                }
-                adapter.filter.filter(edit)
-            }
-        })
-        if (savedInstanceState?.getBoolean("edittext") == true) {
-            textSearch.visibility = View.VISIBLE
-        }
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        if (savedInstanceState != null)
+            searchViewQwery = savedInstanceState.getString("SearchViewQwery", "")
         title_toolbar.setOnClickListener {
             title_toolbar.setHorizontallyScrolling(true)
             title_toolbar.freezesText = true
@@ -139,7 +165,7 @@ class MalitvyPrynagodnyia : AppCompatActivity() {
                 if (firstVisibleItem == 1) {
                     // Скрываем клавиатуру
                     val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm1.hideSoftInputFromWindow(textSearch.windowToken, 0)
+                    imm1.hideSoftInputFromWindow(ListView.windowToken, 0)
                 }
             }
 
@@ -157,14 +183,112 @@ class MalitvyPrynagodnyia : AppCompatActivity() {
             intent.putExtra("prynagodnyiaID", data[position].id)
             startActivity(intent)
             val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(textSearch.windowToken, 0)
+            imm.hideSoftInputFromWindow(ListView.windowToken, 0)
+            if (autoCompleteTextView.text.toString() != "") {
+                addHistory(data[position].data)
+                saveHistopy()
+            }
+            actionExpandOn = false
         }
+        if (chin.getString("history_prynagodnyia", "") != "") {
+            val gson = Gson()
+            val json = chin.getString("history_prynagodnyia", "")
+            val type = object : TypeToken<ArrayList<String>>() {}.type
+            history.addAll(gson.fromJson(json, type))
+        }
+        //loadHistory()
+        historyAdapter = HistoryAdapter(this)
+        Histopy.adapter = historyAdapter
+        Histopy.setOnItemClickListener { _, _, position, _ ->
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return@setOnItemClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime()
+            val intent = Intent(this@MalitvyPrynagodnyia, Prynagodnyia::class.java)
+            intent.putExtra("prynagodnyia", history[position])
+            intent.putExtra("prynagodnyiaID", getIdHistory(history[position]))
+            startActivity(intent)
+            val edit = history[position]
+            addHistory(edit)
+            saveHistopy()
+            actionExpandOn = false
+        }
+    }
+
+    private fun changeSearchViewElements(view: View?) {
+        if (view == null) return
+        if (view.id == by.carkva_gazeta.malitounik.R.id.search_edit_frame || view.id == by.carkva_gazeta.malitounik.R.id.search_mag_icon) {
+            val p = view.layoutParams as LinearLayout.LayoutParams
+            p.leftMargin = 0
+            p.rightMargin = 0
+            view.layoutParams = p
+        } else if (view.id == by.carkva_gazeta.malitounik.R.id.search_src_text) {
+            autoCompleteTextView = view as AutoCompleteTextView
+            val p = view.layoutParams as LinearLayout.LayoutParams
+            val density = resources.displayMetrics.density
+            val margin = (10 * density).toInt()
+            p.rightMargin = margin
+            autoCompleteTextView.layoutParams = p
+            autoCompleteTextView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                autoCompleteTextView.setTextCursorDrawable(by.carkva_gazeta.malitounik.R.color.colorIcons)
+            } else {
+                val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
+                f.isAccessible = true
+                f.set(autoCompleteTextView, 0)
+            }
+            autoCompleteTextView.addTextChangedListener(MyTextWatcher())
+        }
+        if (view is ViewGroup) {
+            for (i in 0 until view.childCount) {
+                changeSearchViewElements(view.getChildAt(i))
+            }
+        }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        val histopy = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_clean_histopy)
+        histopy.isVisible = history.size != 0
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == by.carkva_gazeta.malitounik.R.id.action_clean_histopy) {
+            val dialogClearHishory = DialogClearHishory()
+            dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(by.carkva_gazeta.malitounik.R.menu.malitvy_prynagodnyia, menu)
+        menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.malitvy_prynagodnyia, menu)
+        val searchViewItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_seashe_text)
+        searchView = searchViewItem.actionView as SearchView
+        searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                //Histopy.visibility = View.VISIBLE
+                //ListView.visibility = View.GONE
+                if (history.size > 0)
+                    actionExpandOn = true
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                //Histopy.visibility = View.GONE
+                //ListView.visibility = View.VISIBLE
+                actionExpandOn = false
+                return true
+            }
+        })
+        searchView.queryHint = getString(by.carkva_gazeta.malitounik.R.string.search_malitv)
+        changeSearchViewElements(searchView)
+        if (searchViewQwery != "") {
+            searchViewItem.expandActionView()
+            autoCompleteTextView.setText(searchViewQwery)
+        }
         for (i in 0 until menu.size()) {
             val item: MenuItem = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -173,41 +297,6 @@ class MalitvyPrynagodnyia : AppCompatActivity() {
             item.title = spanString
         }
         return true
-    }
-
-    @SuppressLint("SetTextI18n")
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id: Int = item.itemId
-        if (id == by.carkva_gazeta.malitounik.R.id.action_seashe_text) {
-            count.visibility = View.VISIBLE
-            count.text = "(" + data.size.toString() + ")"
-            textSearch.visibility = View.VISIBLE
-            textSearch.requestFocus()
-            val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        if (textSearch.visibility == View.VISIBLE) {
-            textSearch.setText("")
-            textSearch.visibility = View.GONE
-            count.visibility = View.GONE
-            val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(textSearch.windowToken, 0)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        if (textSearch.visibility == View.VISIBLE) {
-            outState.putBoolean("edittext", true)
-        } else {
-            outState.putBoolean("edittext", false)
-        }
     }
 
     override fun onResume() {
@@ -220,8 +309,81 @@ class MalitvyPrynagodnyia : AppCompatActivity() {
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("SearchViewQwery", autoCompleteTextView.text.toString())
+    }
+
+    private inner class MyTextWatcher : TextWatcher {
+        var editPosition = 0
+        var check = 0
+        var editch = true
+
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            editch = count != after
+            check = after
+        }
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            editPosition = start + count
+        }
+
+        override fun afterTextChanged(s: Editable) {
+            var edit = s.toString()
+            if (editch) {
+                edit = edit.replace("и", "і")
+                edit = edit.replace("щ", "ў")
+                edit = edit.replace("ъ", "'")
+                edit = edit.replace("И", "І")
+                edit = edit.replace("Щ", "Ў")
+                edit = edit.replace("Ъ", "'")
+                if (check != 0) {
+                    autoCompleteTextView.removeTextChangedListener(this)
+                    autoCompleteTextView.setText(edit)
+                    autoCompleteTextView.setSelection(editPosition)
+                    autoCompleteTextView.addTextChangedListener(this)
+                }
+            }
+            if (editPosition == 0 && actionExpandOn) {
+                Histopy.visibility = View.VISIBLE
+                ListView.visibility = View.GONE
+            } else {
+                Histopy.visibility = View.GONE
+                ListView.visibility = View.VISIBLE
+            }
+            adapter.filter.filter(edit)
+        }
+    }
+
+    private inner class HistoryAdapter(private val context: Activity) : ArrayAdapter<String>(context, R.layout.example_adapter, history) {
+        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolderHistory
+            if (mView == null) {
+                rootView = context.layoutInflater.inflate(R.layout.example_adapter, parent, false)
+                viewHolder = ViewHolderHistory()
+                rootView.tag = viewHolder
+                viewHolder.text = rootView.findViewById(R.id.item)
+                viewHolder.rootView = rootView.findViewById(R.id.layout)
+                viewHolder.image = rootView.findViewById(R.id.search)
+            } else {
+                rootView = mView
+                viewHolder = rootView.tag as ViewHolderHistory
+            }
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            viewHolder.text?.text = history[position]
+            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            if (dzenNoch) {
+                viewHolder.rootView?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                viewHolder.text?.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                viewHolder.image?.setImageDrawable(ContextCompat.getDrawable(context, by.carkva_gazeta.malitounik.R.drawable.search))
+            }
+            return rootView
+        }
+    }
+
     private inner class MenuListAdaprer(private val context: Activity) : ArrayAdapter<MenuListData?>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, data as List<MenuListData>) {
-        private val k: SharedPreferences = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private val origData: ArrayList<MenuListData> = ArrayList(data)
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
@@ -236,7 +398,7 @@ class MalitvyPrynagodnyia : AppCompatActivity() {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
             viewHolder.text?.text = data[position].data
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
@@ -275,7 +437,6 @@ class MalitvyPrynagodnyia : AppCompatActivity() {
                     for (item in results.values as ArrayList<*>) {
                         add(item as MenuListData)
                     }
-                    if (results.count > 0) this@MalitvyPrynagodnyia.count.text = "(" + results.count.toString() + ")" else this@MalitvyPrynagodnyia.count.setText(by.carkva_gazeta.malitounik.R.string.niama)
                     notifyDataSetChanged()
                 }
             }
@@ -284,5 +445,11 @@ class MalitvyPrynagodnyia : AppCompatActivity() {
 
     private class ViewHolder {
         var text: TextViewRobotoCondensed? = null
+    }
+
+    private class ViewHolderHistory {
+        var rootView: ConstraintLayout? = null
+        var text: TextViewRobotoCondensed? = null
+        var image: ImageView? = null
     }
 }

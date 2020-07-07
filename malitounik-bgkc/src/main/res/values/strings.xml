@@ -325,5 +325,10 @@
     <string name="adpravit">Адправіць</string>
     <string name="open_chrome">Адчыніць у Chrome</string>
     <string name="update_site">Абнавіць</string>
+    <string name="srttengs_serce">Налады пошуку</string>
+    <string name="clean_histopy">Ачысьціць гісторыю пошуку</string>
+    <string name="clean_histopy_title">АЧЫСЬЦІЦЬ ГІСТОРЫЮ?</string>
+    <string name="all_clean_histopy">Вы сапраўды жадаеце выдаліць усю гісторыю пошуку?</string>
+    <string name="search_malitv">Пошук малітвы</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

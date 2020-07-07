@@ -1483,11 +1483,17 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private class TimeAdapter(private val activity: Activity, private val dataTimes: ArrayList<DataTime>) : ArrayAdapter<DataTime>(activity, R.layout.simple_list_item_1, dataTimes) {
+        private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        private val dzenNoch = k.getBoolean("dzen_noch", false)
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextViewRobotoCondensed
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             textView.text = dataTimes[position].string
+            if (dzenNoch) {
+                textView.setBackgroundResource(R.drawable.selector_dark)
+                textView.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
+            }
             return v
         }
 
@@ -1509,6 +1515,10 @@ class SettingsActivity : AppCompatActivity() {
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             viewHolder.text?.text = dataTimes[position].string
+            if (dzenNoch) {
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
+                viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
+            }
             return rootView
         }
 

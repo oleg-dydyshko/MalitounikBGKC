@@ -5,10 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
-import android.os.AsyncTask
-import android.os.Build
-import android.os.Bundle
-import android.os.SystemClock
+import android.os.*
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
@@ -22,11 +19,9 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.collection.ArrayMap
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.EditTextRobotoCondensed
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.DialogBibleSearshSettings.DiallogBibleSearshListiner
 import by.carkva_gazeta.resources.R.raw
 import com.google.gson.Gson
@@ -41,17 +36,20 @@ import kotlin.collections.ArrayList
 /**
  * Created by oleg on 5.10.16
  */
-class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSearshListiner {
+class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSearshListiner, DialogClearHishory.DialogClearHistopyListener {
     private var seash: ArrayList<String> = ArrayList()
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
+    private lateinit var chin: SharedPreferences
     private var dzenNoch = false
     private var mLastClickTime: Long = 0
     private var autoCompleteTextView: AutoCompleteTextView? = null
     private var textViewCount: TextViewRobotoCondensed? = null
     private var searchView: SearchView? = null
-    private var searchViewQwery = ""
     private var title = ""
+    private var history = ArrayList<String>()
+    private lateinit var historyAdapter: HistoryAdapter
+    private var actionExpandOn = false
 
     override fun onPause() {
         super.onPause()
@@ -64,15 +62,18 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
-    /*@Override
-    protected void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        //savedInstanceState.putSerializable("seash", seash);
-    }*/
     override fun onSetSettings(edit: String?) {
-        if (edit?.length ?: 0 >= 3) {
-            val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
-            poshuk.execute(edit)
+        edit?.let {
+            if (edit.length >= 3) {
+                addHistory(it)
+                //loadHistory()
+                searchView?.clearFocus()
+                actionExpandOn = true
+                val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
+                poshuk.execute(edit)
+                Histopy.visibility = View.GONE
+                ListView.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -82,74 +83,58 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         prefEditors = chin.edit()
         dzenNoch = chin.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.search_biblia)
         buttonx2.visibility = View.VISIBLE
-        //buttonx.setOnClickListener(this)
         buttonx2.setOnClickListener(this)
         if (dzenNoch) {
-            //buttonx.setImageResource(by.carkva_gazeta.malitounik.R.drawable.cancel)
             buttonx2.setImageResource(by.carkva_gazeta.malitounik.R.drawable.cancel)
         }
-        //editText.addTextChangedListener(MyTextWatcher(editText, false))
-        //editText.setSelection(editText.text.toString().length)
         editText2.visibility = View.VISIBLE
         editText2.addTextChangedListener(MyTextWatcher(editText2, true))
-        //TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-        //if (savedInstanceState != null) {
-//seash = (ArrayList<String>) savedInstanceState.getSerializable("seash");
-//} else {
-//seash = new ArrayList<>();
-//}
         if (intent.getIntExtra("zavet", 1) != zavet) {
             prefEditors.putString("search_string", "")
             prefEditors.putString("search_string_filter", "")
             prefEditors.apply()
         }
-        if (chin.getString("search_string", "") != "") { //if (savedInstanceState == null) {
-            val gson = Gson()
-            val json = chin.getString("search_array", "")
-            val type = object : TypeToken<ArrayList<String?>?>() {}.type
-            seash.addAll(gson.fromJson(json, type))
-            //textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, seash.size)
-            //}
-        }
-        zavet = intent.getIntExtra("zavet", 1)
-        if (zavet == 1) title = resources.getString(by.carkva_gazeta.malitounik.R.string.poshuk_semuxa)
-        if (zavet == 2) title = resources.getString(by.carkva_gazeta.malitounik.R.string.poshuk_sinoidal)
-        if (zavet == 3) title = resources.getString(by.carkva_gazeta.malitounik.R.string.poshuk_nadsan)
-        /*editText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                val edit = editText.text.toString()
-                if (edit.length >= 3) {
-                    val poshuk = Poshuk(this)
-                    poshuk.execute(edit)
-                } else {
-                    val layout = LinearLayout(this)
-                    if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
-                    val density = resources.displayMetrics.density
-                    val realpadding = (10 * density).toInt()
-                    val toast = TextViewRobotoCondensed(this)
-                    toast.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                    toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                    toast.text = getString(by.carkva_gazeta.malitounik.R.string.seashmin)
-                    toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                    layout.addView(toast)
-                    val mes = Toast(this)
-                    mes.duration = Toast.LENGTH_SHORT
-                    mes.view = layout
-                    mes.show()
-                }
-                editText.setSelection(edit.length)
+        if (chin.getString("search_string", "") != "") {
+            if (chin.getString("search_array", "") != "") {
+                val gson = Gson()
+                val json = chin.getString("search_array", "")
+                val type = object : TypeToken<ArrayList<String?>?>() {}.type
+                seash.addAll(gson.fromJson(json, type))
+                actionExpandOn = true
             }
-            false
+        }/* else {
+            Histopy.visibility = View.VISIBLE
+            ListView.visibility = View.GONE
+        }*/
+        zavet = intent.getIntExtra("zavet", 1)
+        var biblia = "semuxa"
+        when (zavet) {
+            1 -> {
+                title = resources.getString(by.carkva_gazeta.malitounik.R.string.poshuk_semuxa)
+                biblia = "semuxa"
+            }
+            2 -> {
+                title = resources.getString(by.carkva_gazeta.malitounik.R.string.poshuk_sinoidal)
+                biblia = "sinoidal"
+            }
+            3 -> {
+                title = resources.getString(by.carkva_gazeta.malitounik.R.string.poshuk_nadsan)
+                biblia = "nadsan"
+            }
         }
-        editText.imeOptions = EditorInfo.IME_ACTION_SEARCH*/
-        //textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, seash.size)
+        if (chin.getString("history_bible_$biblia", "") != "") {
+            val gson = Gson()
+            val json = chin.getString("history_bible_$biblia", "")
+            val type = object : TypeToken<ArrayList<String>>() {}.type
+            history.addAll(gson.fromJson(json, type))
+        }
         adapter = SearchBibliaListAdaprer(this)
         ListView.adapter = adapter
         ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
@@ -162,10 +147,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
             override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
         })
-        //editText.setText(chin.getString("search_string", ""))
         editText2.setText(chin.getString("search_string_filter", ""))
         adapterReference = WeakReference(adapter)
-        //if (dzenNoch) TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
         ListView.setOnItemClickListener { adapterView: AdapterView<*>, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
@@ -383,6 +366,24 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 }
             }
         }
+        historyAdapter = HistoryAdapter(this)
+        Histopy.adapter = historyAdapter
+        Histopy.setOnItemClickListener { _, _, position, _ ->
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return@setOnItemClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime()
+            val edit = history[position]
+            addHistory(edit)
+            saveHistopy()
+            Histopy.visibility = View.GONE
+            ListView.visibility = View.VISIBLE
+            autoCompleteTextView?.setText(edit)
+            searchView?.clearFocus()
+            actionExpandOn = true
+            val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
+            poshuk.execute(edit)
+        }
         setBibleSinodal()
         setBibleSemuxa()
         setTollbarTheme(title)
@@ -429,15 +430,22 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 f.set(autoCompleteTextView, 0)
             }
             val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            autoCompleteTextView?.addTextChangedListener(MyTextWatcher(autoCompleteTextView, false))
             autoCompleteTextView?.setText(chin.getString("search_string", ""))
             autoCompleteTextView?.setSelection(autoCompleteTextView?.text?.length ?: 0)
-            autoCompleteTextView?.addTextChangedListener(MyTextWatcher(autoCompleteTextView, false))
             autoCompleteTextView?.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     val edit = autoCompleteTextView?.text.toString()
                     if (edit.length >= 3) {
+                        addHistory(edit)
+                        //loadHistory()
+                        Histopy.visibility = View.GONE
+                        ListView.visibility = View.VISIBLE
+                        searchView?.clearFocus()
+                        actionExpandOn = true
                         val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
                         poshuk.execute(edit)
+                        saveHistopy()
                     } else {
                         val layout = LinearLayout(this)
                         if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
@@ -454,7 +462,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         mes.view = layout
                         mes.show()
                     }
-                    autoCompleteTextView?.setSelection(edit.length)
                 }
                 false
             }
@@ -464,11 +471,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 changeSearchViewElements(view.getChildAt(i))
             }
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("SearchViewQwery", searchView?.query.toString())
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -488,14 +490,27 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         searchViewItem.expandActionView()
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = title
+        //loadHistory()
+        /*searchView?.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
+            override fun onSuggestionSelect(position: Int): Boolean {
+                return true
+            }
+
+            override fun onSuggestionClick(position: Int): Boolean {
+                val edit = history[position]
+                addHistory(edit)
+                //loadHistory()
+                searchView?.clearFocus()
+                autoCompleteTextView?.setText(edit)
+                val poshuk = Poshuk(this@SearchBiblia, autoCompleteTextView, textViewCount)
+                poshuk.execute(edit)
+                saveHistopy()
+                return true
+            }
+        })*/
         textViewCount = menu.findItem(by.carkva_gazeta.malitounik.R.id.count).actionView as TextViewRobotoCondensed
         textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, seash.size)
         changeSearchViewElements(searchView)
-        if (searchViewQwery != "") {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.search).expandActionView()
-            searchView?.setQuery(searchViewQwery, true)
-            searchView?.clearFocus()
-        }
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -506,13 +521,75 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         return true
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        val histopy = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_clean_histopy)
+        histopy.isVisible = history.size != 0
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == by.carkva_gazeta.malitounik.R.id.action_settings) {
             val dialogBiblesearshsettings = DialogBibleSearshSettings.getInstance(autoCompleteTextView?.text.toString())
             dialogBiblesearshsettings.show(supportFragmentManager, "bible_searsh_settings")
         }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_clean_histopy) {
+            val dialogClearHishory = DialogClearHishory()
+            dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
+        }
         return super.onOptionsItemSelected(item)
+    }
+
+    /*private fun loadHistory() {
+        val tempHistory = ArrayList<String>()
+        val columns = arrayOf("_id", "text")
+        val temp = arrayOf(0, "default")
+        val cursor = MatrixCursor(columns)
+        for (i in 0 until history.size) {
+            temp[0] = i
+            temp[1] = history[i]
+            cursor.addRow(temp)
+            tempHistory.add(history[i])
+        }
+        searchView?.suggestionsAdapter = ExampleCursorAdapter(this, cursor, tempHistory)
+    }*/
+
+    private fun addHistory(item: String) {
+        val temp = ArrayList<String>()
+        for (i in 0 until history.size) {
+            if (history[i] != item)
+                temp.add(history[i])
+        }
+        history.clear()
+        history.add(item)
+        for (i in 0 until temp.size) {
+            history.add(temp[i])
+            if (history.size == 10)
+                break
+        }
+    }
+
+    private fun saveHistopy() {
+        var biblia = "semuxa"
+        when (zavet) {
+            1 -> biblia = "semuxa"
+            2 -> biblia = "sinoidal"
+            3 -> biblia = "nadsan"
+        }
+        val gson = Gson()
+        val json = gson.toJson(history)
+        prefEditors.putString("history_bible_$biblia", json)
+        prefEditors.apply()
+        //invalidateOptionsMenu()
+    }
+
+    override fun cleanHistopy() {
+        history.clear()
+        saveHistopy()
+        invalidateOptionsMenu()
+        actionExpandOn = true
+        //loadHistory()
     }
 
     override fun onClick(view: View?) {
@@ -520,6 +597,13 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         if (idSelect == R.id.buttonx2) {
             editText2.setText("")
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        prefEditors.putString("search_string", autoCompleteTextView?.text.toString())
+        prefEditors.putString("search_array", "")
+        prefEditors.apply()
     }
 
     private class Poshuk(context: Activity, editText: AutoCompleteTextView?, textViewCount: TextViewRobotoCondensed?) : AsyncTask<String, Void, ArrayList<String>>() {
@@ -533,7 +617,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             searche = true
             prefEditors = chin.edit()
             val progressBar = activityReference.get()?.findViewById<ProgressBar>(R.id.progressBar)
-            //val textView: TextViewRobotoCondensed? = activityReference.get()?.findViewById(R.id.TextView)
             val listView = activityReference.get()?.findViewById<ListView>(R.id.ListView)
             adapterReference?.get()?.clear()
             textViewCount.get()?.text = activityReference.get()?.resources?.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
@@ -615,9 +698,45 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                     editText?.addTextChangedListener(this)
                 }
             }
+            if (actionExpandOn && editPosition != 0) {
+                Histopy.visibility = View.GONE
+                ListView.visibility = View.VISIBLE
+                actionExpandOn = false
+            } else {
+                Histopy.visibility = View.VISIBLE
+                ListView.visibility = View.GONE
+            }
             if (filtep) adapter.filter.filter(edit)
         }
 
+    }
+
+    private inner class HistoryAdapter(private val context: Activity) : ArrayAdapter<String>(context, R.layout.example_adapter, history) {
+        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolderHistory
+            if (mView == null) {
+                rootView = context.layoutInflater.inflate(R.layout.example_adapter, parent, false)
+                viewHolder = ViewHolderHistory()
+                rootView.tag = viewHolder
+                viewHolder.text = rootView.findViewById(R.id.item)
+                viewHolder.rootView = rootView.findViewById(R.id.layout)
+                viewHolder.image = rootView.findViewById(R.id.search)
+            } else {
+                rootView = mView
+                viewHolder = rootView.tag as ViewHolderHistory
+            }
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            viewHolder.text?.text = history[position]
+            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            if (dzenNoch) {
+                viewHolder.rootView?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                viewHolder.text?.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                viewHolder.image?.setImageDrawable(ContextCompat.getDrawable(context, by.carkva_gazeta.malitounik.R.drawable.search))
+            }
+            return rootView
+        }
     }
 
     internal inner class SearchBibliaListAdaprer(context: Activity) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, seash) {
@@ -696,6 +815,12 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     private class ViewHolder {
         var text: TextViewRobotoCondensed? = null
+    }
+    
+    private class ViewHolderHistory {
+        var rootView: ConstraintLayout? = null
+        var text: TextViewRobotoCondensed? = null
+        var image: ImageView? = null
     }
 
     companion object {

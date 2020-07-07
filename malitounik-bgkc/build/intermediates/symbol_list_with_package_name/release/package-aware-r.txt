@@ -1502,6 +1502,7 @@ drawable screenshot
 drawable screenshot_mun
 drawable scroll_icon
 drawable search
+drawable search_black
 drawable select_all
 drawable selector_bez_posta
 drawable selector_dark
@@ -1611,6 +1612,7 @@ id action_bar_title
 id action_bright
 id action_cansel
 id action_chrome
+id action_clean_histopy
 id action_container
 id action_context_bar
 id action_delite
@@ -2711,6 +2713,7 @@ string akafist7
 string akafisty
 string alesyaSemukha
 string alesyaSemukha2
+string all_clean_histopy
 string apav_only
 string app_name
 string appbar_scrolling_view_behavior
@@ -2778,6 +2781,8 @@ string chtinia_7
 string chtinia_8
 string chtinia_9
 string chtinia_zag
+string clean_histopy
+string clean_histopy_title
 string clear_text_end_icon_content_description
 string content_open_popup
 string copy
@@ -2936,6 +2941,7 @@ string sabytie_kaliandar
 string sabytie_name
 string sabytie_pachatak
 string search
+string search_malitv
 string search_menu_title
 string search_svityia
 string searche_text
@@ -2954,6 +2960,7 @@ string slugby_vialikaga_postu
 string song
 string sort_alf
 string spovedz
+string srttengs_serce
 string stary_zapaviet
 string status_bar_notification_info_overflow
 string stix_by

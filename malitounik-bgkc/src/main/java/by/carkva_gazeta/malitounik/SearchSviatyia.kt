@@ -171,6 +171,10 @@ class SearchSviatyia : AppCompatActivity() {
                 //editText.setSelection(editPosition)
             }
         }
+        if (savedInstanceState != null) {
+            stopPosukPesen()
+            startPosukPesen(chin.getString("search_svityx_string", "") ?: "")
+        }
         adapter = SearchListAdapter(this, arrayRes)
         ListView.adapter = adapter
         ListView.setOnScrollListener(object : AbsListView.OnScrollListener {

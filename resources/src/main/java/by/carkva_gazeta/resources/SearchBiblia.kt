@@ -50,10 +50,12 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
     private var actionExpandOn = false
+    private var fierstPosition = 0
 
     override fun onPause() {
         super.onPause()
         prefEditors.putString("search_string_filter", editText2.text.toString())
+        prefEditors.putInt("search_bible_fierstPosition", fierstPosition)
         prefEditors.apply()
     }
 
@@ -139,6 +141,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         ListView.adapter = adapter
         ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
+                fierstPosition = absListView.firstVisiblePosition
                 if (i == 1) { // Скрываем клавиатуру
                     val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm1.hideSoftInputFromWindow(autoCompleteTextView?.windowToken, 0)
@@ -384,6 +387,14 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
             poshuk.execute(edit)
         }
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getBoolean("list_view"))
+                ListView.visibility = View.VISIBLE
+            fierstPosition = savedInstanceState.getInt("fierstPosition")
+        } else {
+            fierstPosition = chin.getInt("search_bible_fierstPosition", 0)
+        }
+        ListView.setSelection(fierstPosition)
         setBibleSinodal()
         setBibleSemuxa()
         setTollbarTheme(title)
@@ -601,8 +612,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putBoolean("list_view", ListView.visibility == View.VISIBLE)
+        outState.putInt("fierstPosition", fierstPosition)
         prefEditors.putString("search_string", autoCompleteTextView?.text.toString())
-        prefEditors.putString("search_array", "")
+        //prefEditors.putString("search_array", "")
         prefEditors.apply()
     }
 

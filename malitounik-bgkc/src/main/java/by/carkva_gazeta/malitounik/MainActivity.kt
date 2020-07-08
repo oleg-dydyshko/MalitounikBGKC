@@ -554,6 +554,7 @@ try {
                 prefEditors.putString("search_svityx_string", "")
                 prefEditors.putString("search_string", "")
                 prefEditors.putString("search_array", "")
+                prefEditors.putInt("search_bible_fierstPosition", 0)
                 prefEditors.putInt("search_position", 0)
                 prefEditors.putInt("pegistr", 0)
                 prefEditors.putInt("slovocalkam", 0)

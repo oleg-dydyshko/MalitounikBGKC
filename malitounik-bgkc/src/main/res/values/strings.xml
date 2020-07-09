@@ -286,13 +286,13 @@
     <string name="sabytie_kaliandar">У каляндары</string>
     <string name="poshuk_nadsan">Пошук па перакладу А. Надсана</string>
     <string name="niama">Няма</string>
-    <string name="searche_text">Пошук по тэксьце</string>
+    <string name="searche_text">Пошук у тэксьце</string>
     <string name="sort_alf">Сарціроўка па алфавіце</string>
     <string name="title_biblijateka">Бібліятэка Царквы</string>
     <string name="title_download_module">СПАМПОЎВАЕМ \"БІБЛІЯТЭКУ ЦАРКВЫ\"</string>
     <string name="title_resources">Рэсурсы Дадатка</string>
     <string name="settings_notifi_sviata">Налады апавяшчэньня сьвятаў</string>
-    <string name="filter">Фільтр</string>
+    <string name="filter">Фільтар</string>
     <string name="notifi">Апавяшчэньні</string>
     <string name="notifi_full">Апавяшчэньні пра царкоўныя сьвяты</string>
     <string name="notify_help">На вашай прыладзе не спрацоўваюць своечасова апавяшчэньні, трэба зрабіць наступнае:\n\n1. Налады -> батарэя -> запуск прыкладаньняў -> Малітоўнік: выключыць аўтаматычнае кіраваньне і ў ручным рэжыме ўсё ўключыць.\n\n2. Налады -> Прыкладаньні -> сьпецыяльны доступ (меню ўверсе справа) -> аптымізацыя працы батарэі -> Малітоўнік: забараніць.</string>
@@ -330,5 +330,7 @@
     <string name="clean_histopy_title">АЧЫСЬЦІЦЬ ГІСТОРЫЮ?</string>
     <string name="all_clean_histopy">Вы сапраўды жадаеце выдаліць усю гісторыю пошуку?</string>
     <string name="search_malitv">Пошук малітвы</string>
+    <string name="registr">Улічваць рэгістар</string>
+    <string name="dakladnae_supadzenne">Дакладнае супадзеньне</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

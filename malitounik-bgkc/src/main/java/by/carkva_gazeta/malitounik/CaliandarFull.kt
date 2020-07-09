@@ -161,12 +161,14 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             textCviatyGlavnyia.visibility = View.VISIBLE
             if (data[day][6].contains("Пачатак") || data[day][6].contains("Вялікі") || data[day][6].contains("Вялікая") || data[day][6].contains("ВЕЧАР") || data[day][6].contains("Палова")) {
                 activity?.let {
-                    if (dzenNoch) textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                    if (dzenNoch) textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    else textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                 }
                 textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
                 textCviatyGlavnyia.isEnabled = false
             } else {
-                if (data[day][6].toLowerCase(Locale.getDefault()).contains("нядзел") || data[day][6].toLowerCase(Locale.getDefault()).contains("дзень")) textCviatyGlavnyia.isEnabled = false else textCviatyGlavnyia.setOnClickListener(this)
+                if (data[day][6].toLowerCase(Locale.getDefault()).contains("нядзел") || data[day][6].toLowerCase(Locale.getDefault()).contains("дзень") || data[day][6].toLowerCase(Locale.getDefault()).contains("сьветл")) textCviatyGlavnyia.isEnabled = false
+                else textCviatyGlavnyia.setOnClickListener(this)
             }
         }
         activity?.let {

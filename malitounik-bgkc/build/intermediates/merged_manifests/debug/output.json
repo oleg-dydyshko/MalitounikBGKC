@@ -10,8 +10,8 @@
       "apkData": {
         "type": "MAIN",
         "splits": [],
-        "versionCode": 43625,
-        "versionName": "3.7.14",
+        "versionCode": 43627,
+        "versionName": "3.7.15",
         "outputFile": "malitounik-bgkc-debug.apk",
         "fullName": "debug",
         "baseName": "debug",

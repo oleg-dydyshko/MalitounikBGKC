@@ -71,7 +71,7 @@ class DialogBibleSearshSettings : DialogFragment() {
             val checkBox = CheckBox(it)
             checkBox.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
             if (chin.getInt("pegistr", 0) == 1) checkBox.isChecked = true
-            checkBox.text = "Улічваць рэгістр"
+            checkBox.text = resources.getString(R.string.registr)
             checkBox.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
                 if (isChecked) {
                     prefEditors.putInt("pegistr", 1)
@@ -84,7 +84,7 @@ class DialogBibleSearshSettings : DialogFragment() {
             val checkBox1 = CheckBox(it)
             checkBox1.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
             if (chin.getInt("slovocalkam", 0) == 1) checkBox1.isChecked = true
-            checkBox1.text = "Дакладнае супадзеньне"
+            checkBox1.text = resources.getString(R.string.dakladnae_supadzenne)
             checkBox1.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
                 if (isChecked) {
                     prefEditors.putInt("slovocalkam", 1)

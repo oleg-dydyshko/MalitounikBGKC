@@ -101,6 +101,8 @@ class MenuPesny : ListFragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.count).isVisible = search
+        val histopy = menu.findItem(R.id.action_clean_histopy)
+        histopy.isVisible = false//history.size != 0
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

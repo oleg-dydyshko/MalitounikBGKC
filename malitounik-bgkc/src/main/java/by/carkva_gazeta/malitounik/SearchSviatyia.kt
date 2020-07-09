@@ -32,7 +32,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by oleg on 21.10.18
  */
-class SearchSviatyia : AppCompatActivity() {
+class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistopyListener {
     private lateinit var adapter: SearchListAdapter
     private var dzenNoch = false
     private var posukPesenTimer: Timer? = null
@@ -47,6 +47,9 @@ class SearchSviatyia : AppCompatActivity() {
     private lateinit var c: GregorianCalendar
     private var mLastClickTime: Long = 0
     private val munName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
+    private var history = ArrayList<String>()
+    private lateinit var historyAdapter: HistoryAdapter
+
     override fun onResume() {
         super.onResume()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
@@ -56,6 +59,10 @@ class SearchSviatyia : AppCompatActivity() {
         if (item.itemId == android.R.id.home) {
             onBackPressed()
             return true
+        }
+        if (item.itemId == R.id.action_clean_histopy) {
+            val dialogClearHishory = DialogClearHishory()
+            dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
         }
         return super.onOptionsItemSelected(item)
     }
@@ -100,7 +107,7 @@ class SearchSviatyia : AppCompatActivity() {
 
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                 finish()
-                return false
+                return true
             }
         })
         searchViewItem.expandActionView()
@@ -170,6 +177,34 @@ class SearchSviatyia : AppCompatActivity() {
                 //val editPosition: Int = editText.text?.length ?: 0
                 //editText.setSelection(editPosition)
             }
+        } else {
+            Histopy.visibility = View.VISIBLE
+            ListView.visibility = View.GONE
+        }
+        historyAdapter = HistoryAdapter(this, history, true)
+        Histopy.adapter = historyAdapter
+        Histopy.setOnItemClickListener { _, _, position, _ ->
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return@setOnItemClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime()
+            val result = history[position]
+            val t1 = result.indexOf("<!--")
+            val t2 = result.indexOf(":")
+            val t3 = result.indexOf("-->")
+            val g = GregorianCalendar(c[Calendar.YEAR], result.substring(t2 + 1, t3).toInt(), result.substring(t1 + 4, t2).toInt())
+            val intent = Intent()
+            intent.putExtra("data", g[Calendar.DAY_OF_YEAR] - 1)
+            setResult(140, intent)
+            addHistory(result)
+            saveHistopy()
+            finish()
+        }
+        if (chin.getString("history_sviatyia", "") != "") {
+            val gson = Gson()
+            val json = chin.getString("history_sviatyia", "")
+            val type = object : TypeToken<ArrayList<String>>() {}.type
+            history.addAll(gson.fromJson(json, type))
         }
         if (savedInstanceState != null) {
             stopPosukPesen()
@@ -204,6 +239,8 @@ class SearchSviatyia : AppCompatActivity() {
             val intent = Intent()
             intent.putExtra("data", g[Calendar.DAY_OF_YEAR] - 1)
             setResult(140, intent)
+            addHistory(result)
+            saveHistopy()
             finish()
         }
         file
@@ -277,6 +314,47 @@ class SearchSviatyia : AppCompatActivity() {
             toolbar.setBackgroundResource(R.color.colorPrimary)
             title_toolbar.setBackgroundResource(R.color.colorPrimary)
         }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        val histopy = menu.findItem(R.id.action_clean_histopy)
+        histopy.isVisible = history.size != 0
+        return true
+    }
+
+    private fun addHistory(item: String) {
+        var st = item.replace("<font color=#d00505>", "")
+        st = st.replace("</font>", "")
+        val temp = ArrayList<String>()
+        for (i in 0 until history.size) {
+            if (history[i] != st) {
+                temp.add(history[i])
+            }
+        }
+        history.clear()
+        history.add(st)
+        for (i in 0 until temp.size) {
+            history.add(temp[i])
+            if (history.size == 10)
+                break
+        }
+    }
+
+    private fun saveHistopy() {
+        val gson = Gson()
+        val json = gson.toJson(history)
+        val prefEditors = chin.edit()
+        prefEditors.putString("history_sviatyia", json)
+        prefEditors.apply()
+        invalidateOptionsMenu()
+    }
+
+    override fun cleanHistopy() {
+        history.clear()
+        saveHistopy()
+        invalidateOptionsMenu()
+        //loadHistory()
     }
 
     private fun stopPosukPesen() {
@@ -461,10 +539,14 @@ class SearchSviatyia : AppCompatActivity() {
                 if (edit.length >= 3) {
                     stopPosukPesen()
                     startPosukPesen(edit)
+                    Histopy.visibility = View.GONE
+                    ListView.visibility = View.VISIBLE
                 } else {
                     arrayRes.clear()
                     adapter.notifyDataSetChanged()
                     textViewCount?.text = resources.getString(R.string.seash, 0)
+                    Histopy.visibility = View.VISIBLE
+                    ListView.visibility = View.GONE
                 }
                 if (check != 0) {
                     editText?.removeTextChangedListener(this)

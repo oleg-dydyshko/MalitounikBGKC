@@ -19,7 +19,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import com.google.gson.Gson
@@ -91,10 +90,11 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
     }
 
     private fun getIdHistory(item: String): Int {
-        var id = 0
+        var id = R.raw.prynagodnyia_0
         for (i in 0 until data.size) {
             if (data[i].data == item) {
                 id = data[i].id
+                break
             }
         }
         return id
@@ -157,6 +157,12 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         data.add(MenuListData(R.raw.prynagodnyia_26, "Намер ісьці за Хрыстом", "prynagodnyia"))
         data.add(MenuListData(R.raw.prynagodnyia_27, "Цябе, Бога, хвалім", "prynagodnyia"))
         data.add(MenuListData(R.raw.prynagodnyia_28, "Малітва падчас згубнай пошасьці", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_29,"Малітва вучняў перад навучаньнем", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_30,"Малітва да Маці Божай Берасьцейскай", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_31,"Малітва да Маці Божай Лагішынскай", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_32,"Малітва пілігрыма", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_33,"Малітва сям’і аб Божым бласлаўленьні на час адпачынку і вакацыяў", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_34,"Малітва ў час адпачынку", "prynagodnyia"))
         data.sort()
         adapter = MenuListAdaprer(this)
         ListView.adapter = adapter
@@ -197,7 +203,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             history.addAll(gson.fromJson(json, type))
         }
         //loadHistory()
-        historyAdapter = HistoryAdapter(this)
+        historyAdapter = HistoryAdapter(this, history)
         Histopy.adapter = historyAdapter
         Histopy.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -355,34 +361,6 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         }
     }
 
-    private inner class HistoryAdapter(private val context: Activity) : ArrayAdapter<String>(context, R.layout.example_adapter, history) {
-        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
-            val rootView: View
-            val viewHolder: ViewHolderHistory
-            if (mView == null) {
-                rootView = context.layoutInflater.inflate(R.layout.example_adapter, parent, false)
-                viewHolder = ViewHolderHistory()
-                rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(R.id.item)
-                viewHolder.rootView = rootView.findViewById(R.id.layout)
-                viewHolder.image = rootView.findViewById(R.id.search)
-            } else {
-                rootView = mView
-                viewHolder = rootView.tag as ViewHolderHistory
-            }
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
-            viewHolder.text?.text = history[position]
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) {
-                viewHolder.rootView?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                viewHolder.image?.setImageDrawable(ContextCompat.getDrawable(context, by.carkva_gazeta.malitounik.R.drawable.search))
-            }
-            return rootView
-        }
-    }
-
     private inner class MenuListAdaprer(private val context: Activity) : ArrayAdapter<MenuListData?>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, data as List<MenuListData>) {
         private val origData: ArrayList<MenuListData> = ArrayList(data)
 
@@ -445,11 +423,5 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
 
     private class ViewHolder {
         var text: TextViewRobotoCondensed? = null
-    }
-
-    private class ViewHolderHistory {
-        var rootView: ConstraintLayout? = null
-        var text: TextViewRobotoCondensed? = null
-        var image: ImageView? = null
     }
 }

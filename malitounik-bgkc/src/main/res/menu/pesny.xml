@@ -15,4 +15,9 @@
         android:visible="false"
         app:actionViewClass="by.carkva_gazeta.malitounik.TextViewRobotoCondensed"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_clean_histopy"
+        android:orderInCategory="100"
+        android:title="@string/clean_histopy"
+        app:showAsAction="never" />
 </menu>

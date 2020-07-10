@@ -1553,6 +1553,7 @@ id BOTTOM_END
 id BOTTOM_START
 id CTRL
 id FUNCTION
+id Histopy
 id Layout
 id LinearButtom
 id ListView
@@ -1861,6 +1862,7 @@ id info
 id invisible
 id it
 id italic
+id item
 id item_touch_helper_previous_elevation
 id kanec
 id label
@@ -1893,6 +1895,7 @@ id label9a
 id labelbutton12
 id labeled
 id largeLabel
+id layout
 id left
 id line
 id line1
@@ -2297,11 +2300,13 @@ layout design_text_input_start_icon
 layout dialog_font
 layout dialog_sabytie_settings
 layout dialog_widget_config
+layout example_adapter
 layout group_view
 layout help
 layout help_text
 layout menu_bible
 layout menu_caliandar
+layout menu_pesny
 layout menu_psalter
 layout mtrl_alert_dialog
 layout mtrl_alert_dialog_actions
@@ -2789,6 +2794,7 @@ string copy
 string copy_big
 string copy_big_full
 string copynadsan
+string dakladnae_supadzenne
 string dalshe
 string dazvolic
 string default_font
@@ -2928,6 +2934,7 @@ string psalom2
 string psalter
 string psinaidal
 string redagaktirovat
+string registr
 string remove
 string rsinaidal
 string ruzanec

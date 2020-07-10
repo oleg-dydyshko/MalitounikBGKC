@@ -18,11 +18,12 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.android.synthetic.main.menu_pesny.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlinx.android.synthetic.main.menu_pesny.*
 
 /**
  * Created by oleg on 30.5.16
@@ -53,13 +54,12 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
             chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (!menuListDataIsInitialized())
                 menuListData = getMenuListData(it)
-            if (savedInstanceState != null)
-                searchViewQwery = savedInstanceState.getString("SearchViewQwery") ?: ""
             pesny = arguments?.getString("pesny") ?: "prasl"
             menuList = getMenuListData(it, pesny)
             adapter = MenuPesnyListAdapter(it)
             ListView.adapter = adapter
             ListView.isVerticalScrollBarEnabled = false
+            ListView.onItemClickListener = this
             ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
                 override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                     if (i == 1) { // Скрываем клавиатуру
@@ -70,6 +70,30 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
 
                 override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
             })
+            if (chin.getString("history_pesny", "") != "") {
+                val gson = Gson()
+                val json = chin.getString("history_pesny", "")
+                val type = object : TypeToken<ArrayList<String>>() {}.type
+                history.addAll(gson.fromJson(json, type))
+            }
+            if (savedInstanceState != null) {
+                search = savedInstanceState.getBoolean("search", false)
+                searchViewQwery = savedInstanceState.getString("SearchViewQwery") ?: ""
+                when {
+                    searchViewQwery.length >= 3 -> {
+                        stopPosukPesen()
+                        startPosukPesen(searchViewQwery)
+                    }
+                    searchViewQwery.length in 1..2 -> {
+                        Histopy.visibility = View.VISIBLE
+                        ListView.visibility = View.GONE
+                    }
+                    else -> {
+                        Histopy.visibility = View.GONE
+                        ListView.visibility = View.VISIBLE
+                    }
+                }
+            }
             historyAdapter = HistoryAdapter(it, history, true)
             Histopy.adapter = historyAdapter
             Histopy.setOnItemClickListener { _, _, position, _ ->
@@ -163,6 +187,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("SearchViewQwery", searchView?.query.toString())
+        outState.putBoolean("search", search)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -181,6 +206,16 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.pesny, menu)
         val searchViewItem = menu.findItem(R.id.search)
+        textViewCount = menu.findItem(R.id.count).actionView as TextViewRobotoCondensed
+        if (search) {
+            searchViewItem.expandActionView()
+            menuList.clear()
+            menuList.addAll(menuListData)
+            menuList.sort()
+            textViewCount?.text = getString(R.string.seash, menuList.size)
+            adapter.notifyDataSetChanged()
+            menu.findItem(R.id.count).isVisible = search
+        }
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 search = true
@@ -203,12 +238,13 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
                     adapter.notifyDataSetChanged()
                     menu.findItem(R.id.count).isVisible = search
                 }
+                Histopy.visibility = View.GONE
+                ListView.visibility = View.VISIBLE
                 return true
             }
         })
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = getString(R.string.search)
-        textViewCount = menu.findItem(R.id.count).actionView as TextViewRobotoCondensed
         changeSearchViewElements(searchView)
         if (searchViewQwery != "") {
             menu.findItem(R.id.search).expandActionView()
@@ -233,6 +269,10 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
             val intent = Intent(activity, PesnyAll::class.java)
             intent.putExtra("pesny", menuList[position].data)
             startActivity(intent)
+            if (search) {
+                addHistory(menuList[position].data)
+                saveHistopy()
+            }
         } else {
             val dadatak = DialogInstallDadatak()
             fragmentManager?.let { dadatak.show(it, "dadatak") }
@@ -375,12 +415,22 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
             if (edit.length >= 3) {
                 stopPosukPesen()
                 startPosukPesen(edit)
+                Histopy.visibility = View.GONE
+                ListView.visibility = View.VISIBLE
             } else {
                 menuList.clear()
                 menuList.addAll(menuListData)
                 menuList.sort()
                 adapter.notifyDataSetChanged()
-                textViewCount?.text = getString(R.string.seash, menuList.size)
+                if (edit.length in 1..2) {
+                    Histopy.visibility = View.VISIBLE
+                    ListView.visibility = View.GONE
+                    textViewCount?.text = "(0)"
+                } else {
+                    textViewCount?.text = getString(R.string.seash, menuList.size)
+                    Histopy.visibility = View.GONE
+                    ListView.visibility = View.VISIBLE
+                }
             }
             searchView?.setOnQueryTextListener(null)
             searchView?.setQuery(edit, false)
@@ -394,7 +444,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
     }
 
     private inner class MenuPesnyListAdapter(private val activity: Activity) : ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
-        
+
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder

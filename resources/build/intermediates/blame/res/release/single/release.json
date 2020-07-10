@@ -492,6 +492,10 @@
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals3.txt"
     },
     {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_30.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_30.html"
+    },
+    {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_paslia_prychascia2.html.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/paslia_prychascia2.html"
     },
@@ -692,6 +696,10 @@
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblian11.txt"
     },
     {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_34.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_34.html"
+    },
+    {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln19.txt.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln19.txt"
     },
@@ -778,6 +786,10 @@
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_akafist_under.xml.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/akafist_under.xml"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_32.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_32.html"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_1.html.flat",
@@ -874,6 +886,10 @@
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_ton1.html.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/ton1.html"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_29.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_29.html"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_19.html.flat",
@@ -1072,10 +1088,6 @@
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidals5.txt"
     },
     {
-        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/layout_example_adapter.xml.flat",
-        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/layout/example_adapter.xml"
-    },
-    {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya4.html.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya4.html"
     },
@@ -1188,6 +1200,10 @@
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/biblias2.txt"
     },
     {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_31.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_31.html"
+    },
+    {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_bogashlugbovya1_2.html.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/bogashlugbovya1_2.html"
     },
@@ -1266,6 +1282,10 @@
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_sinaidaln10.txt.flat",
         "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/sinaidaln10.txt"
+    },
+    {
+        "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_33.html.flat",
+        "source": "/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/res/raw/prynagodnyia_33.html"
     },
     {
         "merged": "/home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/res/merged/release/raw_prynagodnyia_26.html.flat",

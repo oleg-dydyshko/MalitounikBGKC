@@ -164,7 +164,8 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
         }
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)*/
-        if (chin.getString("search_svityx_string", "") != "") {
+        val searchSvityxString = chin.getString("search_svityx_string", "") ?: ""
+        if (searchSvityxString != "") {
             if (savedInstanceState == null) {
                 val gson = Gson()
                 val json = chin.getString("search_svityx_array", "")
@@ -207,8 +208,16 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
             history.addAll(gson.fromJson(json, type))
         }
         if (savedInstanceState != null) {
-            stopPosukPesen()
-            startPosukPesen(chin.getString("search_svityx_string", "") ?: "")
+            if (searchSvityxString.length >= 3) {
+                stopPosukPesen()
+                startPosukPesen(searchSvityxString)
+            } else {
+                Histopy.visibility = View.VISIBLE
+                ListView.visibility = View.GONE
+            }
+        } else if (searchSvityxString.length < 3) {
+            Histopy.visibility = View.VISIBLE
+            ListView.visibility = View.GONE
         }
         adapter = SearchListAdapter(this, arrayRes)
         ListView.adapter = adapter
@@ -515,6 +524,16 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
         prefEditors.putString("search_svityx_string", posukOrig)
         prefEditors.apply()
         adapter.notifyDataSetChanged()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val gson = Gson()
+        val json = gson.toJson(arrayRes)
+        val prefEditors = chin.edit()
+        prefEditors.putString("search_svityx_array", json)
+        prefEditors.putString("search_svityx_string", editText?.text.toString())
+        prefEditors.apply()
     }
 
     private inner class MyTextWatcher : TextWatcher {

@@ -2306,6 +2306,7 @@ layout help
 layout help_text
 layout menu_bible
 layout menu_caliandar
+layout menu_pesny
 layout menu_psalter
 layout mtrl_alert_dialog
 layout mtrl_alert_dialog_actions

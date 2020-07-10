@@ -16,16 +16,18 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.ListFragment
+import androidx.fragment.app.Fragment
+import com.google.gson.Gson
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.menu_pesny.*
 
 /**
  * Created by oleg on 30.5.16
  */
-class MenuPesny : ListFragment() {
+class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishory.DialogClearHistopyListener {
     private var mLastClickTime: Long = 0
     private var posukPesenTimer: Timer? = null
     private var posukPesenSchedule: TimerTask? = null
@@ -37,10 +39,18 @@ class MenuPesny : ListFragment() {
     private var pesny = "prasl"
     private lateinit var adapter: MenuPesnyListAdapter
     private lateinit var menuList: ArrayList<MenuListData>
+    private var history = ArrayList<String>()
+    private lateinit var historyAdapter: HistoryAdapter
+    private lateinit var chin: SharedPreferences
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.menu_pesny, container, false)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {
+            chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (!menuListDataIsInitialized())
                 menuListData = getMenuListData(it)
             if (savedInstanceState != null)
@@ -48,9 +58,9 @@ class MenuPesny : ListFragment() {
             pesny = arguments?.getString("pesny") ?: "prasl"
             menuList = getMenuListData(it, pesny)
             adapter = MenuPesnyListAdapter(it)
-            listAdapter = adapter
-            listView.isVerticalScrollBarEnabled = false
-            listView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            ListView.adapter = adapter
+            ListView.isVerticalScrollBarEnabled = false
+            ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
                 override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                     if (i == 1) { // Скрываем клавиатуру
                         val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -60,7 +70,59 @@ class MenuPesny : ListFragment() {
 
                 override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
             })
+            historyAdapter = HistoryAdapter(it, history, true)
+            Histopy.adapter = historyAdapter
+            Histopy.setOnItemClickListener { _, _, position, _ ->
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return@setOnItemClickListener
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                val result = history[position]
+                /*val t1 = result.indexOf("<!--")
+            val t2 = result.indexOf(":")
+            val t3 = result.indexOf("-->")
+            val g = GregorianCalendar(c[Calendar.YEAR], result.substring(t2 + 1, t3).toInt(), result.substring(t1 + 4, t2).toInt())
+            val intent = Intent()
+            intent.putExtra("data", g[Calendar.DAY_OF_YEAR] - 1)
+            setResult(140, intent)*/
+                addHistory(result)
+                saveHistopy()
+            }
         }
+    }
+
+    private fun addHistory(item: String) {
+        var st = item.replace("<font color=#d00505>", "")
+        st = st.replace("</font>", "")
+        val temp = ArrayList<String>()
+        for (i in 0 until history.size) {
+            if (history[i] != st) {
+                temp.add(history[i])
+            }
+        }
+        history.clear()
+        history.add(st)
+        for (i in 0 until temp.size) {
+            history.add(temp[i])
+            if (history.size == 10)
+                break
+        }
+    }
+
+    private fun saveHistopy() {
+        val gson = Gson()
+        val json = gson.toJson(history)
+        val prefEditors = chin.edit()
+        prefEditors.putString("history_pesny", json)
+        prefEditors.apply()
+        activity?.invalidateOptionsMenu()
+    }
+
+    override fun cleanHistopy() {
+        history.clear()
+        saveHistopy()
+        activity?.invalidateOptionsMenu()
+        //loadHistory()
     }
 
     private fun changeSearchViewElements(view: View?) {
@@ -88,6 +150,16 @@ class MenuPesny : ListFragment() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_clean_histopy) {
+            fragmentManager?.let {
+                val dialogClearHishory = DialogClearHishory()
+                dialogClearHishory.show(it, "dialogClearHishory")
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("SearchViewQwery", searchView?.query.toString())
@@ -102,7 +174,7 @@ class MenuPesny : ListFragment() {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.count).isVisible = search
         val histopy = menu.findItem(R.id.action_clean_histopy)
-        histopy.isVisible = false//history.size != 0
+        histopy.isVisible = history.size != 0
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -152,7 +224,7 @@ class MenuPesny : ListFragment() {
         }
     }
 
-    override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return
         }
@@ -322,8 +394,7 @@ class MenuPesny : ListFragment() {
     }
 
     private inner class MenuPesnyListAdapter(private val activity: Activity) : ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
-        private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-
+        
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -336,7 +407,7 @@ class MenuPesny : ListFragment() {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
             viewHolder.text?.text = menuList[position].data
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {

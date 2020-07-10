@@ -581,6 +581,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             if (history.size == 10)
                 break
         }
+        if (history.size == 1)
+            invalidateOptionsMenu()
     }
 
     private fun saveHistopy() {

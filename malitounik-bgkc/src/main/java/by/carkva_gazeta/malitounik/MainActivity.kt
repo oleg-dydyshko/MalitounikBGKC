@@ -46,7 +46,7 @@ import kotlin.math.roundToLong
 
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
-class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistopyListener {
 
     private lateinit var c: GregorianCalendar
     private lateinit var k: SharedPreferences
@@ -728,6 +728,11 @@ try {
         }
     }
 
+    override fun cleanHistopy() {
+        val fragment = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesnyHistory
+        fragment?.cleanHistopy()
+    }
+
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
@@ -1124,29 +1129,29 @@ try {
                 R.id.label91 -> {
                     prefEditors.putInt("id", idSelect)
                     val menuPesny = MenuPesny.getInstance("prasl")
-                    ftrans.replace(R.id.conteiner, menuPesny)
+                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesny")
                 }
                 R.id.label92 -> {
                     prefEditors.putInt("id", idSelect)
                     val menuPesny = MenuPesny.getInstance("bel")
-                    ftrans.replace(R.id.conteiner, menuPesny)
+                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesny")
 
                 }
                 R.id.label93 -> {
                     prefEditors.putInt("id", idSelect)
                     val menuPesny = MenuPesny.getInstance("bag")
-                    ftrans.replace(R.id.conteiner, menuPesny)
+                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesny")
                 }
                 R.id.label94 -> {
                     prefEditors.putInt("id", idSelect)
                     val menuPesny = MenuPesny.getInstance("kal")
-                    ftrans.replace(R.id.conteiner, menuPesny)
+                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesny")
 
                 }
                 R.id.label95 -> {
                     prefEditors.putInt("id", idSelect)
                     val menuPesny = MenuPesny.getInstance("taize")
-                    ftrans.replace(R.id.conteiner, menuPesny)
+                    ftrans.replace(R.id.conteiner, menuPesny, "menuPesny")
                 }
                 R.id.label103 -> {
                     prefEditors.putInt("id", idSelect)

@@ -348,6 +348,8 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
             if (history.size == 10)
                 break
         }
+        if (history.size == 1)
+            invalidateOptionsMenu()
     }
 
     private fun saveHistopy() {
@@ -356,7 +358,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
         val prefEditors = chin.edit()
         prefEditors.putString("history_sviatyia", json)
         prefEditors.apply()
-        invalidateOptionsMenu()
+        //invalidateOptionsMenu()
     }
 
     override fun cleanHistopy() {
@@ -524,6 +526,13 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
         prefEditors.putString("search_svityx_string", posukOrig)
         prefEditors.apply()
         adapter.notifyDataSetChanged()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val prefEditors = chin.edit()
+        prefEditors.putString("search_svityx_string", editText?.text.toString())
+        prefEditors.apply()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

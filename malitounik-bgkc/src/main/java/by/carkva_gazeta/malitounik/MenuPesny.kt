@@ -16,7 +16,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.menu_pesny.*
@@ -28,7 +27,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by oleg on 30.5.16
  */
-class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishory.DialogClearHistopyListener {
+class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     private var mLastClickTime: Long = 0
     private var posukPesenTimer: Timer? = null
     private var posukPesenSchedule: TimerTask? = null
@@ -50,20 +49,20 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        activity?.let {
-            chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        activity?.let { fraragment ->
+            chin = fraragment.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (!menuListDataIsInitialized())
-                menuListData = getMenuListData(it)
+                menuListData = getMenuListData(fraragment)
             pesny = arguments?.getString("pesny") ?: "prasl"
-            menuList = getMenuListData(it, pesny)
-            adapter = MenuPesnyListAdapter(it)
+            menuList = getMenuListData(fraragment, pesny)
+            adapter = MenuPesnyListAdapter(fraragment)
             ListView.adapter = adapter
             ListView.isVerticalScrollBarEnabled = false
             ListView.onItemClickListener = this
             ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
                 override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                     if (i == 1) { // Скрываем клавиатуру
-                        val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        val imm1 = fraragment.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm1.hideSoftInputFromWindow(editText?.windowToken, 0)
                     }
                 }
@@ -94,23 +93,31 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
                     }
                 }
             }
-            historyAdapter = HistoryAdapter(it, history, true)
+            historyAdapter = HistoryAdapter(fraragment, history, true)
             Histopy.adapter = historyAdapter
             Histopy.setOnItemClickListener { _, _, position, _ ->
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnItemClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                val result = history[position]
-                /*val t1 = result.indexOf("<!--")
-            val t2 = result.indexOf(":")
-            val t3 = result.indexOf("-->")
-            val g = GregorianCalendar(c[Calendar.YEAR], result.substring(t2 + 1, t3).toInt(), result.substring(t1 + 4, t2).toInt())
-            val intent = Intent()
-            intent.putExtra("data", g[Calendar.DAY_OF_YEAR] - 1)
-            setResult(140, intent)*/
-                addHistory(result)
-                saveHistopy()
+                if (MainActivity.checkmoduleResources(activity)) {
+                    val result = history[position]
+                    val intent = Intent(activity, PesnyAll::class.java)
+                    intent.putExtra("pesny", result)
+                    startActivity(intent)
+                    /*val t1 = result.indexOf("<!--")
+                val t2 = result.indexOf(":")
+                val t3 = result.indexOf("-->")
+                val g = GregorianCalendar(c[Calendar.YEAR], result.substring(t2 + 1, t3).toInt(), result.substring(t1 + 4, t2).toInt())
+                val intent = Intent()
+                intent.putExtra("data", g[Calendar.DAY_OF_YEAR] - 1)
+                setResult(140, intent)*/
+                    addHistory(result)
+                    saveHistopy()
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    fragmentManager?.let { dadatak.show(it, "dadatak") }
+                }
             }
         }
     }
@@ -131,6 +138,9 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
             if (history.size == 10)
                 break
         }
+        historyAdapter.notifyDataSetChanged()
+        if (history.size == 1)
+            activity?.invalidateOptionsMenu()
     }
 
     private fun saveHistopy() {
@@ -139,7 +149,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
         val prefEditors = chin.edit()
         prefEditors.putString("history_pesny", json)
         prefEditors.apply()
-        activity?.invalidateOptionsMenu()
+        //activity?.invalidateOptionsMenu()
     }
 
     override fun cleanHistopy() {
@@ -225,7 +235,6 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
                 textViewCount?.text = getString(R.string.seash, menuList.size)
                 adapter.notifyDataSetChanged()
                 menu.findItem(R.id.count).isVisible = search
-                searchView?.setOnQueryTextListener(MyQueryTextListener())
                 return true
             }
 
@@ -244,6 +253,7 @@ class MenuPesny : Fragment(), AdapterView.OnItemClickListener, DialogClearHishor
             }
         })
         searchView = searchViewItem.actionView as SearchView
+        searchView?.setOnQueryTextListener(MyQueryTextListener())
         searchView?.queryHint = getString(R.string.search)
         changeSearchViewElements(searchView)
         if (searchViewQwery != "") {

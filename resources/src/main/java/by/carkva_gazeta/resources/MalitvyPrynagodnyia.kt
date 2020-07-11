@@ -108,8 +108,10 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         setContentView(R.layout.akafist_list_bible)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        if (savedInstanceState != null)
+        if (savedInstanceState != null) {
             searchViewQwery = savedInstanceState.getString("SearchViewQwery", "")
+            actionExpandOn = savedInstanceState.getBoolean("actionExpandOn")
+        }
         title_toolbar.setOnClickListener {
             title_toolbar.setHorizontallyScrolling(true)
             title_toolbar.freezesText = true
@@ -273,6 +275,13 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.malitvy_prynagodnyia, menu)
         val searchViewItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_seashe_text)
         searchView = searchViewItem.actionView as SearchView
+        if (actionExpandOn) {
+            searchViewItem.expandActionView()
+            if (history.size > 0) {
+                Histopy.visibility = View.VISIBLE
+                ListView.visibility = View.GONE
+            }
+        }
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 //Histopy.visibility = View.VISIBLE
@@ -318,6 +327,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("SearchViewQwery", autoCompleteTextView.text.toString())
+        outState.putBoolean("actionExpandOn", actionExpandOn)
     }
 
     private inner class MyTextWatcher : TextWatcher {

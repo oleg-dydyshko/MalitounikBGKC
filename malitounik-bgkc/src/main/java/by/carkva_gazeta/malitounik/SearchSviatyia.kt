@@ -49,6 +49,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
     private val munName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
+    private var actionExpandOn = true
 
     override fun onResume() {
         super.onResume()
@@ -107,6 +108,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
 
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                 finish()
+                actionExpandOn = false
                 return true
             }
         })
@@ -209,8 +211,8 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
         }
         if (savedInstanceState != null) {
             if (searchSvityxString.length >= 3) {
-                stopPosukPesen()
-                startPosukPesen(searchSvityxString)
+                stopPosukSviatyx()
+                startPosukSviatyx(searchSvityxString)
             } else {
                 Histopy.visibility = View.VISIBLE
                 ListView.visibility = View.GONE
@@ -368,7 +370,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
         //loadHistory()
     }
 
-    private fun stopPosukPesen() {
+    private fun stopPosukSviatyx() {
         if (posukPesenTimer != null) {
             posukPesenTimer?.cancel()
             posukPesenTimer = null
@@ -376,7 +378,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
         posukPesenSchedule = null
     }
 
-    private fun startPosukPesen(poshuk: String) {
+    private fun startPosukSviatyx(poshuk: String) {
         if (posukPesenTimer == null) {
             posukPesenTimer = Timer()
             if (posukPesenSchedule != null) {
@@ -528,12 +530,12 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
         adapter.notifyDataSetChanged()
     }
 
-    override fun onPause() {
+    /*override fun onPause() {
         super.onPause()
         val prefEditors = chin.edit()
         prefEditors.putString("search_svityx_string", editText?.text.toString())
         prefEditors.apply()
-    }
+    }*/
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -565,16 +567,24 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
                 edit = edit.replace("щ", "ў")
                 edit = edit.replace("ъ", "'")
                 if (edit.length >= 3) {
-                    stopPosukPesen()
-                    startPosukPesen(edit)
+                    stopPosukSviatyx()
+                    startPosukSviatyx(edit)
                     Histopy.visibility = View.GONE
                     ListView.visibility = View.VISIBLE
                 } else {
-                    arrayRes.clear()
-                    adapter.notifyDataSetChanged()
-                    textViewCount?.text = resources.getString(R.string.seash, 0)
-                    Histopy.visibility = View.VISIBLE
-                    ListView.visibility = View.GONE
+                    if (actionExpandOn) {
+                        arrayRes.clear()
+                        adapter.notifyDataSetChanged()
+                        textViewCount?.text = resources.getString(R.string.seash, 0)
+                        val gson = Gson()
+                        val json = gson.toJson(arrayRes)
+                        val prefEditors = chin.edit()
+                        prefEditors.putString("search_svityx_array", json)
+                        prefEditors.putString("search_svityx_string", edit)
+                        prefEditors.apply()
+                        Histopy.visibility = View.VISIBLE
+                        ListView.visibility = View.GONE
+                    }
                 }
                 if (check != 0) {
                     editText?.removeTextChangedListener(this)

@@ -722,6 +722,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             } else {
                 Histopy.visibility = View.VISIBLE
                 ListView.visibility = View.GONE
+                textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
             }
             if (filtep) adapter.filter.filter(edit)
         }

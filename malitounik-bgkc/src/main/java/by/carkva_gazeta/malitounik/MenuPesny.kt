@@ -7,8 +7,10 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
+import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
@@ -168,6 +170,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             view.layoutParams = p
         } else if (view.id == R.id.search_src_text) {
             editText = view as AutoCompleteTextView
+            editText?.addTextChangedListener(MyTextWatcher())
             editText?.setBackgroundResource(R.drawable.underline_white)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 editText?.setTextCursorDrawable(R.color.colorIcons)
@@ -253,7 +256,6 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             }
         })
         searchView = searchViewItem.actionView as SearchView
-        searchView?.setOnQueryTextListener(MyQueryTextListener())
         searchView?.queryHint = getString(R.string.search)
         changeSearchViewElements(searchView)
         if (searchViewQwery != "") {
@@ -415,41 +417,55 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         textViewCount?.text = resources.getString(R.string.seash, menuList.size)
     }
 
-    private inner class MyQueryTextListener : SearchView.OnQueryTextListener {
-        override fun onQueryTextChange(newText: String?): Boolean {
-            var edit = newText ?: ""
-            edit = edit.replace("и", "і")
-            edit = edit.replace("И", "І")
-            edit = edit.replace("щ", "ў")
-            edit = edit.replace("ъ", "'")
-            if (edit.length >= 3) {
-                stopPosukPesen()
-                startPosukPesen(edit)
-                Histopy.visibility = View.GONE
-                ListView.visibility = View.VISIBLE
-            } else {
-                menuList.clear()
-                menuList.addAll(menuListData)
-                menuList.sort()
-                adapter.notifyDataSetChanged()
-                if (edit.length in 1..2) {
-                    Histopy.visibility = View.VISIBLE
-                    ListView.visibility = View.GONE
-                    textViewCount?.text = "(0)"
-                } else {
-                    textViewCount?.text = getString(R.string.seash, menuList.size)
-                    Histopy.visibility = View.GONE
-                    ListView.visibility = View.VISIBLE
-                }
-            }
-            searchView?.setOnQueryTextListener(null)
-            searchView?.setQuery(edit, false)
-            searchView?.setOnQueryTextListener(this)
-            return false
+    private inner class MyTextWatcher : TextWatcher {
+        private var editPosition = 0
+        private var check = 0
+        private var editch = true
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            editch = count != after
+            check = after
         }
 
-        override fun onQueryTextSubmit(query: String?): Boolean {
-            return false
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            editPosition = start + count
+        }
+
+        override fun afterTextChanged(s: Editable) {
+            if (editch) {
+                var edit = s.toString()
+                edit = edit.replace("и", "і")
+                edit = edit.replace("И", "І")
+                edit = edit.replace("щ", "ў")
+                edit = edit.replace("ъ", "'")
+                when {
+                    edit.length >= 3 -> {
+                        stopPosukPesen()
+                        startPosukPesen(edit)
+                        Histopy.visibility = View.GONE
+                        ListView.visibility = View.VISIBLE
+                    }
+                    edit.length in 1..2 -> {
+                        Histopy.visibility = View.VISIBLE
+                        ListView.visibility = View.GONE
+                        textViewCount?.text = "(0)"
+                    }
+                    else -> {
+                        menuList.clear()
+                        menuList.addAll(menuListData)
+                        menuList.sort()
+                        adapter.notifyDataSetChanged()
+                        textViewCount?.text = getString(R.string.seash, menuList.size)
+                        Histopy.visibility = View.GONE
+                        ListView.visibility = View.VISIBLE
+                    }
+                }
+                if (check != 0) {
+                    editText?.removeTextChangedListener(null)
+                    editText?.setText(edit)
+                    editText?.setSelection(editPosition)
+                    editText?.addTextChangedListener(this)
+                }
+            }
         }
     }
 

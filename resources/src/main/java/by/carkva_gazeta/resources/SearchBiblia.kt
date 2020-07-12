@@ -72,7 +72,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 addHistory(it)
                 //loadHistory()
                 searchView?.clearFocus()
-                actionExpandOn = true
+                //actionExpandOn = true
                 val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
                 poshuk.execute(edit)
                 Histopy.visibility = View.GONE
@@ -385,7 +385,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             ListView.visibility = View.VISIBLE
             autoCompleteTextView?.setText(edit)
             searchView?.clearFocus()
-            actionExpandOn = true
+            //actionExpandOn = true
             val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
             poshuk.execute(edit)
         }
@@ -455,7 +455,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         Histopy.visibility = View.GONE
                         ListView.visibility = View.VISIBLE
                         searchView?.clearFocus()
-                        actionExpandOn = true
+                        //actionExpandOn = true
                         val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
                         poshuk.execute(edit)
                         saveHistopy()
@@ -645,8 +645,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 editText.get()?.setText(edit)
                 prefEditors.putString("search_string", edit)
                 prefEditors.apply()
-                val imm = activityReference.get()?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(editText.get()?.windowToken, 0)
+                //val imm = activityReference.get()?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                //imm.hideSoftInputFromWindow(editText.get()?.windowToken, 0)
             }
         }
 
@@ -720,9 +720,15 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 ListView.visibility = View.VISIBLE
                 actionExpandOn = false
             } else {
-                Histopy.visibility = View.VISIBLE
-                ListView.visibility = View.GONE
-                textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
+                if (searche && editPosition != 0) {
+                    Histopy.visibility = View.GONE
+                    ListView.visibility = View.VISIBLE
+                    //actionExpandOn = false
+                } else {
+                    Histopy.visibility = View.VISIBLE
+                    ListView.visibility = View.GONE
+                    textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
+                }
             }
             if (filtep) adapter.filter.filter(edit)
         }

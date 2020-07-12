@@ -431,7 +431,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         }
 
         override fun afterTextChanged(s: Editable) {
-            if (editch) {
+            if (editch && search) {
                 var edit = s.toString()
                 edit = edit.replace("и", "і")
                 edit = edit.replace("И", "І")

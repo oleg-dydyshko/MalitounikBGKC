@@ -390,8 +390,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             poshuk.execute(edit)
         }
         if (savedInstanceState != null) {
-            if (savedInstanceState.getBoolean("list_view"))
+            val list_view = savedInstanceState.getBoolean("list_view")
+            if (list_view)
                 ListView.visibility = View.VISIBLE
+            actionExpandOn = list_view
             fierstPosition = savedInstanceState.getInt("fierstPosition")
         } else {
             fierstPosition = chin.getInt("search_bible_fierstPosition", 0)

@@ -32,7 +32,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by oleg on 21.10.18
  */
-class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistopyListener {
+class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistoryListener {
     private lateinit var adapter: SearchListAdapter
     private var dzenNoch = false
     private var posukPesenTimer: Timer? = null
@@ -62,7 +62,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
             return true
         }
         if (item.itemId == R.id.action_clean_histopy) {
-            val dialogClearHishory = DialogClearHishory()
+            val dialogClearHishory = DialogClearHishory.getInstance()
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
         }
         return super.onOptionsItemSelected(item)
@@ -202,6 +202,17 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
             addHistory(result)
             saveHistopy()
             finish()
+        }
+        Histopy.setOnItemLongClickListener { _, _, position, _ ->
+            var t1 = history[position].indexOf("</em><br>")
+            if (t1 == -1)
+                t1 = 0
+            else
+                t1 += 9
+            val hishoryResult = history[position].substring(t1)
+            val dialogClearHishory = DialogClearHishory.getInstance(position, MainActivity.fromHtml(hishoryResult).toString())
+            dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
+            return@setOnItemLongClickListener true
         }
         if (chin.getString("history_sviatyia", "") != "") {
             val gson = Gson()
@@ -363,11 +374,19 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistop
         //invalidateOptionsMenu()
     }
 
-    override fun cleanHistopy() {
+    override fun cleanFullHistory() {
         history.clear()
         saveHistopy()
         invalidateOptionsMenu()
         //loadHistory()
+    }
+
+    override fun cleanHistory(position: Int) {
+        history.removeAt(position)
+        saveHistopy()
+        if (history.size == 0)
+            invalidateOptionsMenu()
+        historyAdapter.notifyDataSetChanged()
     }
 
     private fun stopPosukSviatyx() {

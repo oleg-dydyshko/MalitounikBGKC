@@ -24,6 +24,11 @@ import by.carkva_gazeta.malitounik.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.akafist_list_bible.*
+import kotlinx.android.synthetic.main.akafist_list_bible.Histopy
+import kotlinx.android.synthetic.main.akafist_list_bible.ListView
+import kotlinx.android.synthetic.main.akafist_list_bible.title_toolbar
+import kotlinx.android.synthetic.main.akafist_list_bible.toolbar
+import kotlinx.android.synthetic.main.search_biblia.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -31,7 +36,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by oleg on 30.5.16
  */
-class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearHistopyListener {
+class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearHistoryListener {
 
     private val data = ArrayList<MenuListData>()
     private lateinit var adapter: MenuListAdaprer
@@ -81,12 +86,21 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         invalidateOptionsMenu()
     }
 
-    override fun cleanHistopy() {
+    override fun cleanFullHistory() {
         history.clear()
         saveHistopy()
         invalidateOptionsMenu()
         actionExpandOn = false
         //loadHistory()
+    }
+
+    override fun cleanHistory(position: Int) {
+        history.removeAt(position)
+        saveHistopy()
+        if (history.size == 0)
+            invalidateOptionsMenu()
+        historyAdapter.notifyDataSetChanged()
+        //actionExpandOn = false
     }
 
     private fun getIdHistory(item: String): Int {
@@ -221,6 +235,11 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             saveHistopy()
             actionExpandOn = false
         }
+        Histopy.setOnItemLongClickListener { _, _, position, _ ->
+            val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
+            dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
+            return@setOnItemLongClickListener true
+        }
     }
 
     private fun changeSearchViewElements(view: View?) {
@@ -264,7 +283,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == by.carkva_gazeta.malitounik.R.id.action_clean_histopy) {
-            val dialogClearHishory = DialogClearHishory()
+            val dialogClearHishory = DialogClearHishory.getInstance()
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
         }
         return super.onOptionsItemSelected(item)

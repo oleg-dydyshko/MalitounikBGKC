@@ -329,6 +329,7 @@
     <string name="clean_histopy">Ачысьціць гісторыю пошуку</string>
     <string name="clean_histopy_title">АЧЫСЬЦІЦЬ ГІСТОРЫЮ?</string>
     <string name="all_clean_histopy">Вы сапраўды жадаеце выдаліць усю гісторыю пошуку?</string>
+    <string name="all_clean_item_histopy">Вы сапраўды жадаеце выдаліць \"%1$s\" із гісторыі пошуку?</string>
     <string name="search_malitv">Пошук малітвы</string>
     <string name="registr">Улічваць рэгістар</string>
     <string name="dakladnae_supadzenne">Дакладнае супадзеньне</string>

@@ -1,6 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -48,9 +49,13 @@ class DialogHelpNotification : DialogFragment() {
             val prefEditor = k.edit()
             prefEditor.putBoolean("check_notifi", false)
             prefEditor.apply()
-            builder.setPositiveButton(resources.getText(R.string.tools_item)) { _: DialogInterface?, _: Int ->
-                val intent = Intent(Settings.ACTION_SETTINGS)
-                startActivity(intent)
+            builder.setPositiveButton(resources.getText(R.string.tools_item)) { dialog: DialogInterface, _: Int ->
+                try {
+                    val intent = Intent(Settings.ACTION_SETTINGS)
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    dialog.cancel()
+                }
             }
             builder.setNegativeButton(resources.getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()

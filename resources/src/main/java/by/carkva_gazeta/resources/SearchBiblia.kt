@@ -38,7 +38,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by oleg on 5.10.16
  */
-class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSearshListiner, DialogClearHishory.DialogClearHistopyListener {
+class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSearshListiner, DialogClearHishory.DialogClearHistoryListener {
     private var seash: ArrayList<String> = ArrayList()
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
@@ -389,11 +389,16 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
             poshuk.execute(edit)
         }
+        Histopy.setOnItemLongClickListener { _, _, position, _ ->
+            val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
+            dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
+            return@setOnItemLongClickListener true
+        }
         if (savedInstanceState != null) {
-            val list_view = savedInstanceState.getBoolean("list_view")
-            if (list_view)
+            val listView = savedInstanceState.getBoolean("list_view")
+            if (listView)
                 ListView.visibility = View.VISIBLE
-            actionExpandOn = list_view
+            actionExpandOn = listView
             fierstPosition = savedInstanceState.getInt("fierstPosition")
         } else {
             fierstPosition = chin.getInt("search_bible_fierstPosition", 0)
@@ -550,7 +555,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             dialogBiblesearshsettings.show(supportFragmentManager, "bible_searsh_settings")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_clean_histopy) {
-            val dialogClearHishory = DialogClearHishory()
+            val dialogClearHishory = DialogClearHishory.getInstance()
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
         }
         return super.onOptionsItemSelected(item)
@@ -601,12 +606,21 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         //invalidateOptionsMenu()
     }
 
-    override fun cleanHistopy() {
+    override fun cleanFullHistory() {
         history.clear()
         saveHistopy()
         invalidateOptionsMenu()
         actionExpandOn = true
         //loadHistory()
+    }
+
+    override fun cleanHistory(position: Int) {
+        history.removeAt(position)
+        saveHistopy()
+        if (history.size == 0)
+            invalidateOptionsMenu()
+        historyAdapter.notifyDataSetChanged()
+        //actionExpandOn = true
     }
 
     override fun onClick(view: View?) {
@@ -650,6 +664,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 //val imm = activityReference.get()?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 //imm.hideSoftInputFromWindow(editText.get()?.windowToken, 0)
             }
+            editText.get()?.clearFocus()
         }
 
         override fun doInBackground(vararg params: String): ArrayList<String> {

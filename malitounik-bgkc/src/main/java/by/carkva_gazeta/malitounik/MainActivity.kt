@@ -46,7 +46,7 @@ import kotlin.math.roundToLong
 
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
-class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistopyListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
 
     private lateinit var c: GregorianCalendar
     private lateinit var k: SharedPreferences
@@ -728,9 +728,14 @@ try {
         }
     }
 
-    override fun cleanHistopy() {
+    override fun cleanFullHistory() {
         val fragment = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesnyHistory
-        fragment?.cleanHistopy()
+        fragment?.cleanFullHistory()
+    }
+
+    override fun cleanHistory(position: Int) {
+        val fragment = supportFragmentManager.findFragmentByTag("menuPesny") as? MenuPesnyHistory
+        fragment?.cleanHistory(position)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {

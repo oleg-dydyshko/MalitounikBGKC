@@ -16,20 +16,21 @@ import androidx.fragment.app.DialogFragment
  * Created by oleg on 8.3.18
  */
 class DialogClearHishory : DialogFragment() {
-    private lateinit var mListener: DialogClearHistopyListener
+    private lateinit var mListener: DialogClearHistoryListener
     private lateinit var alert: AlertDialog
 
-    interface DialogClearHistopyListener {
-        fun cleanHistopy()
+    interface DialogClearHistoryListener {
+        fun cleanFullHistory()
+        fun cleanHistory(position: Int)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is Activity) {
             mListener = try {
-                context as DialogClearHistopyListener
+                context as DialogClearHistoryListener
             } catch (e: ClassCastException) {
-                throw ClassCastException("$activity must implement DialogClearHistopyListener")
+                throw ClassCastException("$activity must implement DialogClearHistoryListener")
             }
         }
     }
@@ -53,11 +54,17 @@ class DialogClearHishory : DialogFragment() {
             linearLayout.addView(textViewZaglavie)
             val textView = TextViewRobotoCondensed(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView.text = getString(R.string.all_clean_histopy)
+            if (arguments?.getString("itemName")?: "" == "")
+                textView.text = getString(R.string.all_clean_histopy)
+            else
+                textView.text = getString(R.string.all_clean_item_histopy, arguments?.getString("itemName")?: "")
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             linearLayout.addView(textView)
-            builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener.cleanHistopy() }
+            if (arguments?.getInt("position")?: -1 == -1)
+                builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener.cleanFullHistory() }
+            else
+                builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener.cleanHistory(arguments?.getInt("position")?: -1) }
             builder.setNegativeButton(resources.getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             builder.setView(linearLayout)
             alert = builder.create()
@@ -69,5 +76,16 @@ class DialogClearHishory : DialogFragment() {
             }
         }
         return alert
+    }
+
+    companion object {
+        fun getInstance(position: Int = -1, itemName: String = ""): DialogClearHishory {
+            val dialogClearHishory = DialogClearHishory()
+            val bundle = Bundle()
+            bundle.putInt("position", position)
+            bundle.putString("itemName", itemName)
+            dialogClearHishory.arguments = bundle
+            return dialogClearHishory
+        }
     }
 }

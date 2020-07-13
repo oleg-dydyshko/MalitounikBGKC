@@ -121,6 +121,13 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                     fragmentManager?.let { dadatak.show(it, "dadatak") }
                 }
             }
+            Histopy.setOnItemLongClickListener { _, _, position, _ ->
+                fragmentManager?.let {
+                    val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
+                    dialogClearHishory.show(it, "dialogClearHishory")
+                }
+                return@setOnItemLongClickListener true
+            }
         }
     }
 
@@ -154,11 +161,19 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         //activity?.invalidateOptionsMenu()
     }
 
-    override fun cleanHistopy() {
+    override fun cleanFullHistory() {
         history.clear()
         saveHistopy()
         activity?.invalidateOptionsMenu()
         //loadHistory()
+    }
+
+    override fun cleanHistory(position: Int) {
+        history.removeAt(position)
+        saveHistopy()
+        if (history.size == 0)
+            activity?.invalidateOptionsMenu()
+        historyAdapter.notifyDataSetChanged()
     }
 
     private fun changeSearchViewElements(view: View?) {
@@ -190,7 +205,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_clean_histopy) {
             fragmentManager?.let {
-                val dialogClearHishory = DialogClearHishory()
+                val dialogClearHishory = DialogClearHishory.getInstance()
                 dialogClearHishory.show(it, "dialogClearHishory")
             }
         }

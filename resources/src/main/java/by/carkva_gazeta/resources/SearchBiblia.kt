@@ -70,8 +70,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         edit?.let {
             if (edit.length >= 3) {
                 addHistory(it)
+                saveHistory()
                 //loadHistory()
-                searchView?.clearFocus()
+                //searchView?.clearFocus()
                 //actionExpandOn = true
                 val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
                 poshuk.execute(edit)
@@ -380,7 +381,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             mLastClickTime = SystemClock.elapsedRealtime()
             val edit = history[position]
             addHistory(edit)
-            saveHistopy()
+            saveHistory()
             Histopy.visibility = View.GONE
             ListView.visibility = View.VISIBLE
             autoCompleteTextView?.setText(edit)
@@ -458,14 +459,14 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                     val edit = autoCompleteTextView?.text.toString()
                     if (edit.length >= 3) {
                         addHistory(edit)
+                        saveHistory()
                         //loadHistory()
                         Histopy.visibility = View.GONE
                         ListView.visibility = View.VISIBLE
-                        searchView?.clearFocus()
+                        //searchView?.clearFocus()
                         //actionExpandOn = true
                         val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
                         poshuk.execute(edit)
-                        saveHistopy()
                     } else {
                         val layout = LinearLayout(this)
                         if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
@@ -592,7 +593,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             invalidateOptionsMenu()
     }
 
-    private fun saveHistopy() {
+    private fun saveHistory() {
         var biblia = "semuxa"
         when (zavet) {
             1 -> biblia = "semuxa"
@@ -608,7 +609,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     override fun cleanFullHistory() {
         history.clear()
-        saveHistopy()
+        saveHistory()
         invalidateOptionsMenu()
         actionExpandOn = true
         //loadHistory()
@@ -616,9 +617,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     override fun cleanHistory(position: Int) {
         history.removeAt(position)
-        saveHistopy()
-        if (history.size == 0)
+        saveHistory()
+        if (history.size == 0) {
+            actionExpandOn = true
             invalidateOptionsMenu()
+        }
         historyAdapter.notifyDataSetChanged()
         //actionExpandOn = true
     }
@@ -640,9 +643,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
     }
 
     private class Poshuk(context: Activity, editText: AutoCompleteTextView?, textViewCount: TextViewRobotoCondensed?) : AsyncTask<String, Void, ArrayList<String>>() {
-        private val activityReference: WeakReference<Activity> = WeakReference(context)
-        private val editText: WeakReference<AutoCompleteTextView?> = WeakReference(editText)
-        private var textViewCount: WeakReference<TextViewRobotoCondensed?> = WeakReference(textViewCount)
+        private val activityReference = WeakReference(context)
+        private val editText = WeakReference(editText)
+        private var textViewCount = WeakReference(textViewCount)
         private val chin: SharedPreferences = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private var prefEditors: Editor = chin.edit()
         override fun onPreExecute() {
@@ -664,7 +667,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 //val imm = activityReference.get()?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 //imm.hideSoftInputFromWindow(editText.get()?.windowToken, 0)
             }
-            editText.get()?.clearFocus()
         }
 
         override fun doInBackground(vararg params: String): ArrayList<String> {
@@ -683,12 +685,12 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             super.onPostExecute(result)
             val progressBar = activityReference.get()?.findViewById<ProgressBar>(R.id.progressBar)
             val listView = activityReference.get()?.findViewById<ListView>(R.id.ListView)
-            val editText2: EditTextRobotoCondensed? = activityReference.get()?.findViewById(R.id.editText2)
+            val editText2 = activityReference.get()?.findViewById<EditTextRobotoCondensed>(R.id.editText2)
             adapterReference?.get()?.addAll(result)
             adapterReference?.get()?.filter?.filter(editText2?.text.toString())
             textViewCount.get()?.text = activityReference.get()?.resources?.getString(by.carkva_gazeta.malitounik.R.string.seash, adapterReference?.get()?.count)
             if (chin.getString("search_string", "") != "") {
-                listView?.clearFocus()
+                //listView?.clearFocus()
                 listView?.post { listView.setSelection(chin.getInt("search_position", 0)) }
             }
             progressBar?.visibility = View.GONE
@@ -740,6 +742,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 if (searche && editPosition != 0) {
                     Histopy.visibility = View.GONE
                     ListView.visibility = View.VISIBLE
+                    editText?.clearFocus()
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(editText?.windowToken, 0)
                     //actionExpandOn = false
                 } else {
                     Histopy.visibility = View.VISIBLE

@@ -204,12 +204,8 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             finish()
         }
         Histopy.setOnItemLongClickListener { _, _, position, _ ->
-            var t1 = history[position].indexOf("</em><br>")
-            if (t1 == -1)
-                t1 = 0
-            else
-                t1 += 9
-            val hishoryResult = history[position].substring(t1)
+            val t1 = history[position].indexOf("</em><br>")
+            val hishoryResult = history[position].substring(t1 + 9)
             val dialogClearHishory = DialogClearHishory.getInstance(position, MainActivity.fromHtml(hishoryResult).toString())
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
             return@setOnItemLongClickListener true

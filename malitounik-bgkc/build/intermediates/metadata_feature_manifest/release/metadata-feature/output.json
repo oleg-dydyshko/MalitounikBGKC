@@ -10,8 +10,8 @@
       "apkData": {
         "type": "MAIN",
         "splits": [],
-        "versionCode": 43630,
-        "versionName": "3.7.15",
+        "versionCode": 43631,
+        "versionName": "3.8.0",
         "outputFile": "malitounik-bgkc-release.apk",
         "fullName": "release",
         "baseName": "release",

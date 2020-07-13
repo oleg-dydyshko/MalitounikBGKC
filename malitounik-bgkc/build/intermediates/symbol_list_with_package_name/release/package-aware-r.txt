@@ -2719,6 +2719,7 @@ string akafisty
 string alesyaSemukha
 string alesyaSemukha2
 string all_clean_histopy
+string all_clean_item_histopy
 string apav_only
 string app_name
 string appbar_scrolling_view_behavior

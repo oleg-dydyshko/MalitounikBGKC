@@ -451,7 +451,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 f.set(autoCompleteTextView, 0)
             }
             val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            autoCompleteTextView?.addTextChangedListener(MyTextWatcher(autoCompleteTextView, false))
+            autoCompleteTextView?.addTextChangedListener(MyTextWatcher(autoCompleteTextView))
             autoCompleteTextView?.setText(chin.getString("search_string", ""))
             autoCompleteTextView?.setSelection(autoCompleteTextView?.text?.length ?: 0)
             autoCompleteTextView?.setOnEditorActionListener { _, actionId, _ ->
@@ -703,7 +703,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         }
     }
 
-    private inner class MyTextWatcher(private val editText: EditText?, private val filtep: Boolean) : TextWatcher {
+    private inner class MyTextWatcher(private val editText: EditText?, private val filtep: Boolean = false) : TextWatcher {
         private var editPosition = 0
         private var check = 0
         private var editch = true
@@ -734,22 +734,24 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                     editText?.addTextChangedListener(this)
                 }
             }
-            if (actionExpandOn && editPosition != 0) {
-                Histopy.visibility = View.GONE
-                ListView.visibility = View.VISIBLE
-                actionExpandOn = false
-            } else {
-                if (searche && editPosition != 0) {
+            if (editText?.id == by.carkva_gazeta.malitounik.R.id.search_src_text) {
+                if (actionExpandOn && editPosition != 0) {
                     Histopy.visibility = View.GONE
                     ListView.visibility = View.VISIBLE
-                    editText?.clearFocus()
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(editText?.windowToken, 0)
-                    //actionExpandOn = false
+                    actionExpandOn = false
                 } else {
-                    Histopy.visibility = View.VISIBLE
-                    ListView.visibility = View.GONE
-                    textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
+                    if (searche && editPosition != 0) {
+                        Histopy.visibility = View.GONE
+                        ListView.visibility = View.VISIBLE
+                        editText.clearFocus()
+                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(editText.windowToken, 0)
+                        //actionExpandOn = false
+                    } else {
+                        Histopy.visibility = View.VISIBLE
+                        ListView.visibility = View.GONE
+                        textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
+                    }
                 }
             }
             if (filtep) adapter.filter.filter(edit)

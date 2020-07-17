@@ -308,8 +308,9 @@ class Naviny : AppCompatActivity() {
                     startActivity(intent)
                 } else {
                     if (MainActivity.isNetworkAvailable(this@Naviny)) {
-                        view.loadUrl(url)
+                        //view.loadUrl(url)
                         invalidateOptionsMenu()
+                        return false
                     } else {
                         error()
                     }
@@ -320,8 +321,9 @@ class Naviny : AppCompatActivity() {
                 if (url.contains("translate.google.com") || url.contains("carkva-gazeta.by/download.php")) {
                     onChrome(url)
                 } else {
-                    view.loadUrl(url)
+                    //view.loadUrl(url)
                     invalidateOptionsMenu()
+                    return false
                 }
             } else {
                 error()

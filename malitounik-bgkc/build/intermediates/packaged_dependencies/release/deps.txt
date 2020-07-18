@@ -24,12 +24,14 @@ androidx.lifecycle:lifecycle-viewmodel
 androidx.loader:loader
 androidx.recyclerview:recyclerview
 androidx.savedstate:savedstate
+androidx.swiperefreshlayout:swiperefreshlayout
 androidx.transition:transition
 androidx.vectordrawable:vectordrawable
 androidx.vectordrawable:vectordrawable-animated
 androidx.versionedparcelable:versionedparcelable
 androidx.viewpager2:viewpager2
 androidx.viewpager:viewpager
+androidx.webkit:webkit
 com.google.android.material:material
 com.google.android.play:core
 com.google.code.gson:gson

@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Message
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextUtils
@@ -17,12 +18,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewFeature
 import kotlinx.android.synthetic.main.activity_naviny.*
 
 class Naviny : AppCompatActivity() {
@@ -37,7 +37,18 @@ class Naviny : AppCompatActivity() {
         dzenNoch = kq.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         setContentView(R.layout.activity_naviny)
+        swipeRefreshLayout.setOnRefreshListener {
+            if (MainActivity.isNetworkAvailable(this)) {
+                viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+                viewWeb.reload()
+            } else error()
+            swipeRefreshLayout.isRefreshing = false
+        }
         if (dzenNoch) {
+            swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark)
+            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                WebSettingsCompat.setForceDark(viewWeb.settings, WebSettingsCompat.FORCE_DARK_ON)
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -45,19 +56,24 @@ class Naviny : AppCompatActivity() {
                 window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
             }
             viewWeb.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+        } else {
+            swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         }
         val naviny = kq.getInt("naviny", 0)
-        val settings = viewWeb.settings
-        settings.javaScriptEnabled = true
-        settings.javaScriptCanOpenWindowsAutomatically = true
-        settings.domStorageEnabled = true
-        settings.loadWithOverviewMode = true
-        settings.useWideViewPort = true
-        settings.setSupportZoom(true)
-        settings.builtInZoomControls = true
-        settings.displayZoomControls = false
-        settings.setAppCacheEnabled(true)
-        settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+        viewWeb.apply {
+            settings.apply {
+                javaScriptEnabled = true
+                javaScriptCanOpenWindowsAutomatically = true
+                domStorageEnabled = true
+                loadWithOverviewMode = true
+                useWideViewPort = true
+                setSupportZoom(true)
+                builtInZoomControls = true
+                displayZoomControls = false
+                setAppCacheEnabled(true)
+                cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+            }
+        }
         viewWeb.webViewClient = MyWebViewClient()
         viewWeb.webChromeClient = MyWebChromeClient()
         var error = false
@@ -126,6 +142,17 @@ class Naviny : AppCompatActivity() {
             window.attributes = lp
         }
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        viewWeb.onResume()
+    }
+
+    override fun onPause() {
+        viewWeb.onPause()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        viewWeb?.destroy()
+        super.onDestroy()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
@@ -214,6 +241,7 @@ class Naviny : AppCompatActivity() {
     }
 
     private fun onChrome(url: String) {
+        viewWeb.stopLoading()
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.setPackage("com.android.chrome")
@@ -276,6 +304,23 @@ class Naviny : AppCompatActivity() {
             } else {
                 toolbarprogress.visibility = View.VISIBLE
             }
+        }
+
+        override fun onCreateWindow(view: WebView?, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message?): Boolean {
+            view?: return false
+            val href = view.handler.obtainMessage()
+            view.requestFocusNodeHref(href)
+            val url = href.data.getString("url")?: ""
+            onChrome(url)
+            return true
+        }
+
+        override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+            return false
+        }
+
+        override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
+            return false
         }
     }
 

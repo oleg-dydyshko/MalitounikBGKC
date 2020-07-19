@@ -44,8 +44,8 @@ class Naviny : AppCompatActivity() {
             } else error()
             swipeRefreshLayout.isRefreshing = false
         }
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         if (dzenNoch) {
-            swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark)
             if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
                 WebSettingsCompat.setForceDark(viewWeb.settings, WebSettingsCompat.FORCE_DARK_ON)
             }
@@ -56,8 +56,6 @@ class Naviny : AppCompatActivity() {
                 window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
             }
             viewWeb.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-        } else {
-            swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         }
         val naviny = kq.getInt("naviny", 0)
         viewWeb.apply {

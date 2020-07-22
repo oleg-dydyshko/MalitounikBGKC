@@ -97,9 +97,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
                 android:contentDescription="TODO"
                 android:src="@drawable/znaki_krest"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/imageView4"

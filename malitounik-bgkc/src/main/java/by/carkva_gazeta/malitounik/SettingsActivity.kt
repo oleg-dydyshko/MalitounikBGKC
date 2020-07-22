@@ -929,7 +929,7 @@ class SettingsActivity : AppCompatActivity() {
         if (k.getInt("notification", 2) == 0) spinnerTime.visibility = View.GONE
         val dataTimes = ArrayList<DataTime>()
         for (i in 6..17) {
-            dataTimes.add(DataTime("Паведамляць а $i-й гадзіне", i))
+            dataTimes.add(DataTime(getString(R.string.pavedamic, i), i))
         }
         for (time in dataTimes) {
             if (time.data == k.getInt("timeNotification", 8)) break
@@ -1145,7 +1145,7 @@ class SettingsActivity : AppCompatActivity() {
             mLastClickTime = SystemClock.elapsedRealtime()
             val id = k.getInt("id", R.id.label1)
             k.all.forEach {
-                if (!it.key.contains("WIDGET", ignoreCase = true))
+                if (!(it.key.contains("WIDGET", ignoreCase = true) || it.key.contains("history", ignoreCase = true)))
                     prefEditor.remove(it.key)
             }
             File("$filesDir/Book").deleteRecursively()
@@ -1156,7 +1156,7 @@ class SettingsActivity : AppCompatActivity() {
             val toast = TextViewRobotoCondensed(this)
             toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-            toast.text = "Захавана"
+            toast.text = getString(R.string.save)
             toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_TOAST)
             layout.addView(toast)
             val mes = Toast(this)

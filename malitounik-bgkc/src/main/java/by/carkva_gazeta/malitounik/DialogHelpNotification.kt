@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.TypedValue
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -54,6 +55,18 @@ class DialogHelpNotification : DialogFragment() {
                     val intent = Intent(Settings.ACTION_SETTINGS)
                     startActivity(intent)
                 } catch (e: ActivityNotFoundException) {
+                    val layout = LinearLayout(it)
+                    if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
+                    val toast = TextViewRobotoCondensed(it)
+                    toast.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    toast.setPadding(realpadding, realpadding, realpadding, realpadding)
+                    toast.text = getString(R.string.error_ch)
+                    toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+                    layout.addView(toast)
+                    val mes = Toast(it)
+                    mes.duration = Toast.LENGTH_SHORT
+                    mes.view = layout
+                    mes.show()
                     dialog.cancel()
                 }
             }

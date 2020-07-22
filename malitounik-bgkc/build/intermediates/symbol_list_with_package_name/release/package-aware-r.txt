@@ -2913,6 +2913,7 @@ string path_password_eye
 string path_password_eye_mask_strike_through
 string path_password_eye_mask_visible
 string path_password_strike_through
+string pavedamic
 string pdf_error
 string peryiady
 string pesni
@@ -2950,6 +2951,7 @@ string sabytie_enable_mun
 string sabytie_kaliandar
 string sabytie_name
 string sabytie_pachatak
+string save
 string search
 string search_malitv
 string search_menu_title

@@ -74,6 +74,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var cytannelist = ArrayList<TextViewRobotoCondensed>()
     private var nedelia = -1
     private var toTwoList = 0
+    private val uiAnimationDelay: Long = 300
     private val orientation: Int
         get() {
             val rotation = windowManager.defaultDisplay.rotation
@@ -1140,22 +1141,18 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         val actionBar = supportActionBar
         actionBar?.hide()
         mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelay)
     }
 
     private fun show() {
         LinearButtom.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("change", change)
-    }
-
-    companion object {
-        private const val UI_ANIMATION_DELAY = 300
     }
 }

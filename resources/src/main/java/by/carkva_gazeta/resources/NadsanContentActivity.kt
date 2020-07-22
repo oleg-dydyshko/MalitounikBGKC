@@ -55,6 +55,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     private var dzenNoch = false
     private var dialog = true
     private var checkSetDzenNoch = false
+    private val uiAnimationDelay: Long = 300
     private val orientation: Int
         get() {
             val rotation = windowManager.defaultDisplay.rotation
@@ -346,13 +347,13 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         val actionBar = supportActionBar
         actionBar?.hide()
         mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelay)
     }
 
     private fun show() {
         linealLayoutTitle.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
     }
 
     private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
@@ -378,7 +379,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     }
 
     companion object {
-        private const val UI_ANIMATION_DELAY = 300
         var fierstPosition = 0
     }
 }

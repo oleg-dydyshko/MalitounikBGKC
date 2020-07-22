@@ -58,6 +58,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
     private var pravo = false
     private var procentTimer: Timer = Timer()
     private var procentSchedule: TimerTask? = null
+    private val uiAnimationDelay: Long = 300
     private val orientation: Int
         get() {
             val rotation = windowManager.defaultDisplay.rotation
@@ -421,22 +422,18 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         val actionBar = supportActionBar
         actionBar?.hide()
         mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelay)
     }
 
     private fun show() {
         scrollView2.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("traker", traker)
-    }
-
-    companion object {
-        private const val UI_ANIMATION_DELAY = 300
     }
 }

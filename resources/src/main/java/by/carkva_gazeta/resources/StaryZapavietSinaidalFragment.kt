@@ -143,7 +143,10 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
     override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
         BibleGlobalList.mPedakVisable = true
         activity?.let { activity ->
-            linearLayout4.visibility = View.VISIBLE
+            if (linearLayout4.visibility == View.GONE) {
+                linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_top)
+                linearLayout4.visibility = View.VISIBLE
+            }
             var find = false
             BibleGlobalList.bibleCopyList.forEach {
                 if (it == position)

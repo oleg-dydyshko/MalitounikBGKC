@@ -62,6 +62,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     private var checkSetDzenNoch = false
     private var procentTimer: Timer = Timer()
     private var procentSchedule: TimerTask? = null
+    private val uiAnimationDelay: Long = 300
     private val orientation: Int
         get() {
             val rotation = windowManager.defaultDisplay.rotation
@@ -429,13 +430,13 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         val actionBar = supportActionBar
         actionBar?.hide()
         mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelay)
     }
 
     private fun show() {
         scrollView2.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -445,8 +446,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     }
 
     companion object {
-        private const val UI_ANIMATION_DELAY = 300
-
         private fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
             val gson = Gson()
             val file = File(context.filesDir.toString() + "/Vybranoe.json")

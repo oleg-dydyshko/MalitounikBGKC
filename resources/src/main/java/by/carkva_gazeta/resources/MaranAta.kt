@@ -83,6 +83,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var tollBarText = ""
     private var mPosition = 0
     private var mOffset = 0
+    private val uiAnimationDelay: Long = 300
     private val orientation: Int
         get() {
             val rotation = windowManager.defaultDisplay.rotation
@@ -1253,13 +1254,13 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         val actionBar = supportActionBar
         actionBar?.hide()
         mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelay)
     }
 
     private fun show() {
         constraint.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -1682,6 +1683,5 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         private var mPedakVisable = false
         private var vydelenie = ArrayList<ArrayList<Int>>()
         private var bibleCopyList = ArrayList<Int>()
-        private const val UI_ANIMATION_DELAY = 300
     }
 }

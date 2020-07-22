@@ -65,6 +65,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
     private var setedit = false
     private var checkSetDzenNoch = false
     private var title = ""
+    private val uiAnimationDelay: Long = 300
     private val orientation: Int
         get() {
             val rotation = windowManager.defaultDisplay.rotation
@@ -545,13 +546,13 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         val actionBar = supportActionBar
         actionBar?.hide()
         mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelay)
     }
 
     private fun show() {
         linealLayoutTitle.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
     }
 
     override fun setOnClic(cytanneParalelnye: String?, cytanneSours: String?) {
@@ -639,7 +640,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
     }
 
     companion object {
-        private const val UI_ANIMATION_DELAY = 300
         var fierstPosition = 0
     }
 }

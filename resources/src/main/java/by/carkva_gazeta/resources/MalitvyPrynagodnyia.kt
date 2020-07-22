@@ -24,11 +24,6 @@ import by.carkva_gazeta.malitounik.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.akafist_list_bible.*
-import kotlinx.android.synthetic.main.akafist_list_bible.Histopy
-import kotlinx.android.synthetic.main.akafist_list_bible.ListView
-import kotlinx.android.synthetic.main.akafist_list_bible.title_toolbar
-import kotlinx.android.synthetic.main.akafist_list_bible.toolbar
-import kotlinx.android.synthetic.main.search_biblia.*
 import java.util.*
 import kotlin.collections.ArrayList
 

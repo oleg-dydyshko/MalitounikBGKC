@@ -333,5 +333,7 @@
     <string name="search_malitv">Пошук малітвы</string>
     <string name="registr">Улічваць рэгістар</string>
     <string name="dakladnae_supadzenne">Дакладнае супадзеньне</string>
+    <string name="pavedamic">Паведамляць а %1$d-й гадзіне</string>
+    <string name="save">Захавана</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

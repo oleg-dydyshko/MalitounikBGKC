@@ -1593,7 +1593,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 val toast = TextViewRobotoCondensed(this@Sabytie)
                 toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
                 toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                toast.text = "Захавана"
+                toast.text = getString(R.string.save)
                 toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 layout.addView(toast)
                 val mes = Toast(this@Sabytie)
@@ -2327,7 +2327,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 val toast = TextViewRobotoCondensed(this@Sabytie)
                 toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
                 toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                toast.text = "Захавана"
+                toast.text = getString(R.string.save)
                 toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 layout.addView(toast)
                 val mes = Toast(this@Sabytie)

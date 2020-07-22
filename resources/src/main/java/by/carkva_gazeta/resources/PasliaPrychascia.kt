@@ -61,6 +61,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     private var procentTimer: Timer = Timer()
     private var procentSchedule: TimerTask? = null
     private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
+    private val uiAnimationDelay: Long = 300
     private val orientation: Int
         get() {
             val rotation = windowManager.defaultDisplay.rotation
@@ -405,13 +406,13 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         val actionBar = supportActionBar
         actionBar?.hide()
         mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelay)
     }
 
     private fun show() {
         pager.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -433,9 +434,5 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         override fun getItemPosition(`object`: Any): Int {
             return PagerAdapter.POSITION_NONE
         }
-    }
-
-    companion object {
-        private const val UI_ANIMATION_DELAY = 300
     }
 }

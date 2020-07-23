@@ -47,4 +47,8 @@
     <style name="SplashTheme" parent="AppTheme.NoActionBar">
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
+
+    <style name="ProgressBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorAccent">@color/colorIcons</item>
+    </style>
 </resources>

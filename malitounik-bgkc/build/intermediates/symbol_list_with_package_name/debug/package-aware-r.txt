@@ -1498,6 +1498,7 @@ drawable play
 drawable plus
 drawable pravo_catedra
 drawable pravo_catedra_black
+drawable progress_bar
 drawable save
 drawable screenshot
 drawable screenshot_mun
@@ -1661,6 +1662,8 @@ id appBarLayout2
 id appbar
 id async
 id auto
+id bar_background
+id bar_value
 id barrier
 id beginning
 id bib

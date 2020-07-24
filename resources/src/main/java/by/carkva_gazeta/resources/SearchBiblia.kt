@@ -652,7 +652,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             super.onPreExecute()
             searche = true
             prefEditors = chin.edit()
-            val progressBar = activityReference.get()?.findViewById<ProgressBar>(R.id.progressBar)
+            val progressBar = activityReference.get()?.findViewById<ProgressBarTextView>(R.id.progressBar)
             val listView = activityReference.get()?.findViewById<ListView>(R.id.ListView)
             adapterReference?.get()?.clear()
             textViewCount.get()?.text = activityReference.get()?.resources?.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
@@ -683,7 +683,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
         override fun onPostExecute(result: ArrayList<String>) {
             super.onPostExecute(result)
-            val progressBar = activityReference.get()?.findViewById<ProgressBar>(R.id.progressBar)
+            val progressBar = activityReference.get()?.findViewById<ProgressBarTextView>(R.id.progressBar)
             val listView = activityReference.get()?.findViewById<ListView>(R.id.ListView)
             val editText2 = activityReference.get()?.findViewById<EditTextRobotoCondensed>(R.id.editText2)
             adapterReference?.get()?.addAll(result)

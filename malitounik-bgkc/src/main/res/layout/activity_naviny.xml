@@ -44,13 +44,12 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ProgressBar
+    <by.carkva_gazeta.malitounik.ProgressBarTextView
         android:id="@+id/toolbarprogress"
-        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:max="100"
-        android:theme="@style/ProgressBar"
+        android:layout_height="3dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/progress_bar"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -292,7 +292,7 @@ class Naviny : AppCompatActivity() {
 
         override fun onProgressChanged(view: WebView?, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
-            toolbarprogress.progress = newProgress
+            toolbarprogress.setValue(newProgress)
             if (newProgress == 100) {
                 toolbarprogress.visibility = View.INVISIBLE
                 val title = view?.title ?: "«Царква» — беларуская грэка-каталіцкая газета"

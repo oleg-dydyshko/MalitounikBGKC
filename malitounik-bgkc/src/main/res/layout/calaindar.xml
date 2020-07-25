@@ -81,7 +81,7 @@
             <ImageView
                 android:id="@+id/PostFish"
                 android:layout_width="25dp"
-                android:layout_height="wrap_content"
+                android:layout_height="12dp"
                 android:layout_alignStart="@+id/znakTipicona"
                 android:layout_alignLeft="@+id/znakTipicona"
                 android:layout_alignParentTop="true"

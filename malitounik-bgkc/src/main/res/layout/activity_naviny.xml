@@ -48,7 +48,7 @@
         android:id="@+id/toolbarprogress"
         android:layout_width="match_parent"
         android:layout_height="3dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="52dp"
         android:background="@drawable/progress_bar"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"

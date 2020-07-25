@@ -14,7 +14,7 @@
     <item android:id="@+id/bar_value">
         <clip>
             <shape>
-                <solid android:color="@color/colorSecondary_text" />
+                <solid android:color="@color/colorIcons" />
                 <!--<corners android:radius="2dp" />
                 <gradient android:startColor="#cfb73f"
                     android:centerColor="#635a30"

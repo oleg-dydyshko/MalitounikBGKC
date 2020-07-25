@@ -56,6 +56,7 @@ class Naviny : AppCompatActivity() {
                 window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
             }
             viewWeb.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+            toolbarprogress.setBackgroundResource(R.drawable.progress_bar_black)
         }
         val naviny = kq.getInt("naviny", 0)
         viewWeb.apply {

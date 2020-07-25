@@ -1499,6 +1499,7 @@ drawable plus
 drawable pravo_catedra
 drawable pravo_catedra_black
 drawable progress_bar
+drawable progress_bar_black
 drawable save
 drawable screenshot
 drawable screenshot_mun

@@ -483,9 +483,14 @@ try {
         }
 
         if (setAlarm) {
-            val i = Intent(this, ReceiverUpdate::class.java)
+            Thread(Runnable {
+                val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+                val notify = chin.getInt("notification", 2)
+                SettingsActivity.setNotifications(this, notify)
+            }).start()
+            //val i = Intent(this, ReceiverUpdate::class.java)
             //i.action = "UPDATE"
-            sendBroadcast(i)
+            //sendBroadcast(i)
             /*val c2 = Calendar.getInstance() as GregorianCalendar
             val pServise = PendingIntent.getBroadcast(this, 10, i, PendingIntent.FLAG_UPDATE_CURRENT)
             val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager

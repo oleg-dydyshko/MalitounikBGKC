@@ -39,8 +39,8 @@ class SettingsActivity : AppCompatActivity() {
     private var itemDefault = 0
 
     companion object {
-        private const val updateAllWidgets = "update_all_widgets"
-        private const val resetMain = "reset_main"
+        private const val UPDATE_ALL_WIDGETS = "update_all_widgets"
+        private const val RESET_MAIN = "reset_main"
         const val GET_DEFAULT_FONT_SIZE = 18F
         const val GET_FONT_SIZE_MIN = 14F
         const val GET_FONT_SIZE_MAX = 54F
@@ -116,7 +116,7 @@ class SettingsActivity : AppCompatActivity() {
                 val yearAk = c[Calendar.YEAR]
                 var resetWid = false
                 intent = Intent(context, WidgetMun::class.java)
-                intent.action = updateAllWidgets
+                intent.action = UPDATE_ALL_WIDGETS
                 pIntent = PendingIntent.getBroadcast(context, 51, intent, 0)
                 when {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
@@ -139,7 +139,7 @@ class SettingsActivity : AppCompatActivity() {
                 }
                 if (resetWid) {
                     val reset = Intent(context, WidgetMun::class.java)
-                    reset.action = resetMain
+                    reset.action = RESET_MAIN
                     val pReset = PendingIntent.getBroadcast(context, 257, reset, PendingIntent.FLAG_UPDATE_CURRENT)
                     when {
                         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
@@ -156,7 +156,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             if (chin.getBoolean("WIDGET_ENABLED", false)) {
                 intent = Intent(context, Widget::class.java)
-                intent.action = updateAllWidgets
+                intent.action = UPDATE_ALL_WIDGETS
                 pIntent = PendingIntent.getBroadcast(context, 50, intent, 0)
                 when {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {

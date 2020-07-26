@@ -363,11 +363,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_mun_metadata" />
         </receiver>
-        <receiver android:name="by.carkva_gazeta.malitounik.ReceiverUpdate" >
-            <intent-filter>
-                <action android:name="android.intent.action.UPDATE" />
-            </intent-filter>
-        </receiver>
         <!-- The activities will be merged into the manifest of the hosting app. -->
         <activity
             android:name="com.google.android.play.core.missingsplits.PlayCoreMissingSplitsActivity"

@@ -23,7 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
-import kotlinx.android.synthetic.main.activity_naviny.*
+import kotlinx.android.synthetic.main.naviny.*
 
 class Naviny : AppCompatActivity() {
 
@@ -36,7 +36,7 @@ class Naviny : AppCompatActivity() {
         kq = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = kq.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
-        setContentView(R.layout.activity_naviny)
+        setContentView(R.layout.naviny)
         swipeRefreshLayout.setOnRefreshListener {
             if (MainActivity.isNetworkAvailable(this)) {
                 viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE

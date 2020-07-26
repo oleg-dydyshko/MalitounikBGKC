@@ -60,6 +60,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
     private var dzenNoch = false
     private var autoscroll = false
+    private var autoscrollAutostart = false
     private lateinit var adapter: MaranAtaListAdaprer
     private val maranAta = ArrayList<String>()
     private var n = 0
@@ -67,9 +68,11 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var spid = 60
     private var belarus = false
     private var scrollTimer = Timer()
+    private var autoscrollTimer = Timer()
     private var procentTimer = Timer()
     private var resetTimer = Timer()
     private var scrollerSchedule: TimerTask? = null
+    private var autoscrollSchedule: TimerTask? = null
     private var procentSchedule: TimerTask? = null
     private var resetSchedule: TimerTask? = null
     private var levo = false
@@ -82,6 +85,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var paralelPosition = 0
     private var tollBarText = ""
     private var mPosition = 0
+    private var maranAtaScrollPasition = 0
     private var mOffset = 0
     private val uiAnimationDelay: Long = 300
     private val orientation: Int
@@ -136,6 +140,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         belarus = k.getBoolean("belarus", false)
+        autoscrollAutostart = k.getBoolean("autoscrollAutostart", false)
+        spid = k.getInt("autoscrollSpid", 60)
+        maranAtaScrollPasition = k.getInt("maranAtaScrollPasition", 0)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         setContentView(R.layout.akafist_maran_ata)
@@ -145,9 +152,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
+        if (autoscrollAutostart)
+            autoStartScroll()
         bibleCopyList.clear()
-        autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getInt("autoscrollSpid", 60)
+        //autoscroll = k.getBoolean("autoscroll", false)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         ListView.onItemClickListener = this
         ListView.onItemLongClickListener = this
@@ -155,6 +163,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         adapter = MaranAtaListAdaprer(this)
         ListView.adapter = adapter
         ListView.divider = null
+        ListView.setSelection(maranAtaScrollPasition)
         cytanne = intent.extras?.getString("cytanneMaranaty") ?: ""
         setMaranata(cytanne)
         if (savedInstanceState != null) {
@@ -176,16 +185,19 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {}
                 override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
                     if (list.adapter == null || list.getChildAt(0) == null) return
+                    val position = list.firstVisiblePosition
+                    maranAtaScrollPasition = position
                     if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
                         autoscroll = false
+                        maranAtaScrollPasition = 0
                         stopAutoScroll()
                         val prefEditors = k.edit()
                         prefEditors.putBoolean("autoscroll", false)
+                        prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPasition)
                         prefEditors.apply()
                         invalidateOptionsMenu()
                     }
                     setFont = false
-                    val position = list.firstVisiblePosition
                     val offset = list.getChildAt(0).top
                     if (mPosition < position) {
                         mOffset = 0
@@ -964,8 +976,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     private fun startAutoScroll() {
         resetTimer.cancel()
+        autoscrollTimer.cancel()
         scrollTimer = Timer()
         resetSchedule = null
+        progress.visibility = View.GONE
         scrollerSchedule = object : TimerTask() {
             override fun run() {
                 runOnUiThread {
@@ -984,6 +998,29 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+    }
+
+    private fun autoStartScroll() {
+        stopAutoStartScroll()
+        autoscrollTimer = Timer()
+        autoscrollSchedule = object : TimerTask() {
+            override fun run() {
+                runOnUiThread {
+                    stopAutoScroll()
+                    startAutoScroll()
+                    val prefEditor: Editor = k.edit()
+                    prefEditor.putBoolean("autoscroll", true)
+                    prefEditor.apply()
+                    invalidateOptionsMenu()
+                }
+            }
+        }
+        autoscrollTimer.schedule(autoscrollSchedule, 10000)
+    }
+
+    private fun stopAutoStartScroll() {
+        autoscrollTimer.cancel()
+        autoscrollSchedule = null
     }
 
     private fun stopProcent() {
@@ -1073,10 +1110,16 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         bibleCopyList.clear()
         linearLayout4.visibility = View.GONE
         linearLayout5.visibility = View.GONE
+        val prefEditors = k.edit()
+        maranAtaScrollPasition = ListView.firstVisiblePosition
+        prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPasition)
+        prefEditors.apply()
         scrollTimer.cancel()
+        autoscrollTimer.cancel()
         resetTimer.cancel()
         procentTimer.cancel()
         scrollerSchedule = null
+        autoscrollSchedule = null
         procentSchedule = null
         resetSchedule = null
     }
@@ -1224,9 +1267,11 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             if (autoscroll) {
                 stopAutoScroll()
                 prefEditor.putBoolean("autoscroll", false)
+                prefEditor.putBoolean("autoscrollAutostart", false)
             } else {
                 startAutoScroll()
                 prefEditor.putBoolean("autoscroll", true)
+                prefEditor.putBoolean("autoscrollAutostart", true)
             }
             invalidateOptionsMenu()
         }
@@ -1605,7 +1650,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-
+            viewHolder.text?.tag = position
             var textView = maranAta[position]
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             textView = textView.replace("+-+", "")

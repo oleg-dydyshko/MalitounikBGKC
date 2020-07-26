@@ -2276,7 +2276,6 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_main
-layout activity_naviny
 layout akafist_list
 layout app_bar_main
 layout calaindar
@@ -2342,6 +2341,7 @@ layout mtrl_picker_header_title_text
 layout mtrl_picker_header_toggle
 layout mtrl_picker_text_input_date
 layout mtrl_picker_text_input_date_range
+layout naviny
 layout notification_action
 layout notification_action_tombstone
 layout notification_template_custom_big

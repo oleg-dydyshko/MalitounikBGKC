@@ -349,10 +349,5 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_mun_metadata" />
         </receiver>
-        <receiver android:name="by.carkva_gazeta.malitounik.ReceiverUpdate">
-            <intent-filter>
-                <action android:name="android.intent.action.UPDATE" />
-            </intent-filter>
-        </receiver>
     </application>
 </manifest>

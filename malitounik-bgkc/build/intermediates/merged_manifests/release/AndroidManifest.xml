@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="by.carkva_gazeta.malitounik"
-    android:versionCode="43635"
+    android:versionCode="43636"
     android:versionName="3.8.0" >
 
     <uses-sdk
@@ -359,11 +359,6 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_mun_metadata" />
-        </receiver>
-        <receiver android:name="by.carkva_gazeta.malitounik.ReceiverUpdate" >
-            <intent-filter>
-                <action android:name="android.intent.action.UPDATE" />
-            </intent-filter>
         </receiver>
         <!-- The activities will be merged into the manifest of the hosting app. -->
         <activity

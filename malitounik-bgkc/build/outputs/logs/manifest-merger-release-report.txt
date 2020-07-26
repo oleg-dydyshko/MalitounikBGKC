@@ -1,14 +1,14 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-358:12
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-358:12
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-358:12
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-358:12
+ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
 MERGED from [com.google.android.material:material:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/b3e1337ef64746055a8946b1a90b960a/material-1.1.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.appcompat:appcompat:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/38d73252397e14f6b2ca8374e68e18f7/appcompat-1.1.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/656c1ef9c96eb9844c4fefaa31eea625/constraintlayout-1.1.3/AndroidManifest.xml:2:1-11:12
 MERGED from [com.google.android.play:core:1.7.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/a21cafed6c4d34afd4205b6ecedb40e1/jetified-core-1.7.3/AndroidManifest.xml:2:1-19:12
-MERGED from [androidx.core:core-ktx:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/eb479fdffc910c6be917d68547a49099/jetified-core-ktx-1.3.0/AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.core:core-ktx:1.3.1] /home/oleg/.gradle/caches/transforms-2/files-2.1/8980d788014fcfbd6a5e16fdd30ae692/jetified-core-ktx-1.3.1/AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.webkit:webkit:1.3.0-rc01] /home/oleg/.gradle/caches/transforms-2/files-2.1/0c791b934ce9e2b3064e42fbf7ecedf0/webkit-1.3.0-rc01/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/353a9ee879e72d31c994ca52780022e0/swiperefreshlayout-1.1.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/22f084678c0c8123034752ff82b9a006/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
@@ -26,7 +26,7 @@ MERGED from [androidx.loader:loader:1.0.0] /home/oleg/.gradle/caches/transforms-
 MERGED from [androidx.activity:activity:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/f128d6cea3d455c774f9a9ff8c16c636/jetified-activity-1.0.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/17f3264973adbc27bc15b903e97c2276/recyclerview-1.1.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.customview:customview:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a30017872b14105a400314921d5cb62e/customview-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.core:core:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/e270a6e88d0fcab34dc57babf6858d5a/core-1.3.0/AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.core:core:1.3.1] /home/oleg/.gradle/caches/transforms-2/files-2.1/3fad7ea4f0b845c6f6667debb95e1494/core-1.3.1/AndroidManifest.xml:17:1-26:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6ba1de9be899b775fb2e622bcf9ee329/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6118f679eabfffe3c12f082544a87853/versionedparcelable-1.1.0/AndroidManifest.xml:17:1-27:12
 MERGED from [androidx.lifecycle:lifecycle-runtime:2.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/d86a462a03ac6ffb4f3ab144448281f8/lifecycle-runtime-2.1.0/AndroidManifest.xml:17:1-22:12
@@ -37,16 +37,16 @@ MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /home/oleg/.gradl
 MERGED from [androidx.arch.core:core-runtime:2.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/ef7f8b788d30752a01fb2308ec81e29a/core-runtime-2.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/release/metadata-feature/AndroidManifest.xml:2:1-30:12
 MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/release/metadata-feature/AndroidManifest.xml:2:1-245:12
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-358:12
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-358:12
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-358:12
+INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
 	package
 		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:5:5-42
 		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
 		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
 	android:versionName
 		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-358:12
+		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
 		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
 	xmlns:tools
 		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:4:5-51
@@ -54,7 +54,7 @@ INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/ma
 		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:3:5-61
 	android:versionCode
 		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-358:12
+		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
 		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
 	xmlns:android
 		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:11-69
@@ -87,15 +87,15 @@ ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/
 	dist:instant
 		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:14:18-37
 application
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:16:5-357:19
+ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:16:5-352:19
 MERGED from [com.google.android.material:material:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/b3e1337ef64746055a8946b1a90b960a/material-1.1.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/b3e1337ef64746055a8946b1a90b960a/material-1.1.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/656c1ef9c96eb9844c4fefaa31eea625/constraintlayout-1.1.3/AndroidManifest.xml:9:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/656c1ef9c96eb9844c4fefaa31eea625/constraintlayout-1.1.3/AndroidManifest.xml:9:5-20
 MERGED from [com.google.android.play:core:1.7.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/a21cafed6c4d34afd4205b6ecedb40e1/jetified-core-1.7.3/AndroidManifest.xml:10:3-17:17
 MERGED from [com.google.android.play:core:1.7.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/a21cafed6c4d34afd4205b6ecedb40e1/jetified-core-1.7.3/AndroidManifest.xml:10:3-17:17
-MERGED from [androidx.core:core:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/e270a6e88d0fcab34dc57babf6858d5a/core-1.3.0/AndroidManifest.xml:24:5-89
-MERGED from [androidx.core:core:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/e270a6e88d0fcab34dc57babf6858d5a/core-1.3.0/AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.3.1] /home/oleg/.gradle/caches/transforms-2/files-2.1/3fad7ea4f0b845c6f6667debb95e1494/core-1.3.1/AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.3.1] /home/oleg/.gradle/caches/transforms-2/files-2.1/3fad7ea4f0b845c6f6667debb95e1494/core-1.3.1/AndroidManifest.xml:24:5-89
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6118f679eabfffe3c12f082544a87853/versionedparcelable-1.1.0/AndroidManifest.xml:24:5-25:19
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6118f679eabfffe3c12f082544a87853/versionedparcelable-1.1.0/AndroidManifest.xml:24:5-25:19
 MERGED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/release/metadata-feature/AndroidManifest.xml:21:5-28:19
@@ -111,7 +111,7 @@ MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/b
 	android:icon
 		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:20:9-43
 	android:appComponentFactory
-		ADDED from [androidx.core:core:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/e270a6e88d0fcab34dc57babf6858d5a/core-1.3.0/AndroidManifest.xml:24:18-86
+		ADDED from [androidx.core:core:1.3.1] /home/oleg/.gradle/caches/transforms-2/files-2.1/3fad7ea4f0b845c6f6667debb95e1494/core-1.3.1/AndroidManifest.xml:24:18-86
 	android:label
 		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:22:9-35
 	android:hardwareAccelerated
@@ -426,16 +426,6 @@ receiver#by.carkva_gazeta.malitounik.WidgetMun
 ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:344:9-351:20
 	android:name
 		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:344:19-71
-receiver#by.carkva_gazeta.malitounik.ReceiverUpdate
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:352:9-356:20
-	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:352:19-76
-intent-filter#action:name:android.intent.action.UPDATE
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:353:13-355:29
-action#android.intent.action.UPDATE
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:354:17-71
-	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:354:25-68
 uses-sdk
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
@@ -448,8 +438,8 @@ MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradl
 MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/656c1ef9c96eb9844c4fefaa31eea625/constraintlayout-1.1.3/AndroidManifest.xml:5:5-7:41
 MERGED from [com.google.android.play:core:1.7.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/a21cafed6c4d34afd4205b6ecedb40e1/jetified-core-1.7.3/AndroidManifest.xml:4:3-70
 MERGED from [com.google.android.play:core:1.7.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/a21cafed6c4d34afd4205b6ecedb40e1/jetified-core-1.7.3/AndroidManifest.xml:4:3-70
-MERGED from [androidx.core:core-ktx:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/eb479fdffc910c6be917d68547a49099/jetified-core-ktx-1.3.0/AndroidManifest.xml:5:5-7:41
-MERGED from [androidx.core:core-ktx:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/eb479fdffc910c6be917d68547a49099/jetified-core-ktx-1.3.0/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core-ktx:1.3.1] /home/oleg/.gradle/caches/transforms-2/files-2.1/8980d788014fcfbd6a5e16fdd30ae692/jetified-core-ktx-1.3.1/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core-ktx:1.3.1] /home/oleg/.gradle/caches/transforms-2/files-2.1/8980d788014fcfbd6a5e16fdd30ae692/jetified-core-ktx-1.3.1/AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.webkit:webkit:1.3.0-rc01] /home/oleg/.gradle/caches/transforms-2/files-2.1/0c791b934ce9e2b3064e42fbf7ecedf0/webkit-1.3.0-rc01/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.webkit:webkit:1.3.0-rc01] /home/oleg/.gradle/caches/transforms-2/files-2.1/0c791b934ce9e2b3064e42fbf7ecedf0/webkit-1.3.0-rc01/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/353a9ee879e72d31c994ca52780022e0/swiperefreshlayout-1.1.0/AndroidManifest.xml:20:5-22:41
@@ -484,8 +474,8 @@ MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/oleg/.gradle/caches
 MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/17f3264973adbc27bc15b903e97c2276/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.customview:customview:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a30017872b14105a400314921d5cb62e/customview-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.customview:customview:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a30017872b14105a400314921d5cb62e/customview-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/e270a6e88d0fcab34dc57babf6858d5a/core-1.3.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.core:core:1.3.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/e270a6e88d0fcab34dc57babf6858d5a/core-1.3.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.3.1] /home/oleg/.gradle/caches/transforms-2/files-2.1/3fad7ea4f0b845c6f6667debb95e1494/core-1.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.3.1] /home/oleg/.gradle/caches/transforms-2/files-2.1/3fad7ea4f0b845c6f6667debb95e1494/core-1.3.1/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.interpolator:interpolator:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6ba1de9be899b775fb2e622bcf9ee329/interpolator-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.interpolator:interpolator:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6ba1de9be899b775fb2e622bcf9ee329/interpolator-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6118f679eabfffe3c12f082544a87853/versionedparcelable-1.1.0/AndroidManifest.xml:20:5-22:41

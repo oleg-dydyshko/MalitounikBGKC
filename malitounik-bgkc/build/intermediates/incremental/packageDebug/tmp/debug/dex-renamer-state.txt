@@ -1,4 +1,4 @@
-#Sun Jul 26 11:28:46 MSK 2020
+#Sun Jul 26 15:31:57 MSK 2020
 base.0=/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/dex/debug/mergeDexDebug/classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

@@ -1,1 +1,4 @@
-include ':malitounik-bgkc', ':biblijateka', ':resources'
+include ':biblijateka'
+include ':resources'
+include ':malitounik-bgkc'
+rootProject.name = "Malitounik"

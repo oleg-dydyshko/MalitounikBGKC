@@ -382,12 +382,6 @@
             android:exported="true" />
 
         <activity
-            android:name="by.carkva_gazeta.biblijateka.BibliotekaView"
-            android:label="Бібліятэка Царквы"
-            android:splitName="biblijateka"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-        <activity
             android:name="by.carkva_gazeta.resources.Chytanne"
             android:label="@string/CZYTANNE"
             android:splitName="resources"
@@ -607,6 +601,12 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
+            android:name="by.carkva_gazeta.biblijateka.BibliotekaView"
+            android:label="Бібліятэка Царквы"
+            android:splitName="biblijateka"
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
 

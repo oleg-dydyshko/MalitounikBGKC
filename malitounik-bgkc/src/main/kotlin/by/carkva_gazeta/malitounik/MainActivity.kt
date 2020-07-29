@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
@@ -1342,7 +1343,7 @@ try {
                             layoutDialod.visibility = View.GONE
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 SplitInstallHelper.updateAppInfo(context)
-                                Handler().post {
+                                Handler(Looper.getMainLooper()).post {
                                     val intent = Intent(context, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
                                     intent.data = context.intent.data
                                     if (intent.extras?.containsKey("filePath") == true) {

@@ -10,6 +10,7 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
@@ -38,7 +39,7 @@ import kotlin.collections.ArrayList
  * Created by oleg on 18.10.16
  */
 class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener {
-    private val mHideHandler = Handler()
+    private val mHideHandler = Handler(Looper.getMainLooper())
 
     @SuppressLint("InlinedApi")
     private val mHidePart2Runnable = Runnable {
@@ -400,7 +401,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             adpravit.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             if (dzenNoch) {
@@ -979,7 +979,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         autoscrollTimer.cancel()
         scrollTimer = Timer()
         resetSchedule = null
-        progress.visibility = View.GONE
         scrollerSchedule = object : TimerTask() {
             override fun run() {
                 runOnUiThread {
@@ -1132,6 +1131,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         if (autoscroll) {
             startAutoScroll()
         }
+        progress.visibility = View.GONE
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
@@ -1178,11 +1178,11 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         return true
     }
 
-    override fun onMenuOpened(featureId: Int, menu: Menu?): Boolean {
+    override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
         if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
             MainActivity.dialogVisable = true
         }
-        return menu?.let { super.onMenuOpened(featureId, it) } ?: true
+        return super.onMenuOpened(featureId, menu)
     }
 
     override fun onPanelClosed(featureId: Int, menu: Menu) {

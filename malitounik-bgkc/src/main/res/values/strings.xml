@@ -335,5 +335,7 @@
     <string name="dakladnae_supadzenne">Дакладнае супадзеньне</string>
     <string name="pavedamic">Паведамляць а %1$d-й гадзіне</string>
     <string name="save">Захавана</string>
+    <string name="mun">Месяц</string>
+    <string name="niadzelia">Тыдзень</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

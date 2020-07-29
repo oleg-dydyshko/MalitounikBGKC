@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="by.carkva_gazeta.malitounik"
-    android:versionCode="43636"
+    android:versionCode="43637"
     android:versionName="3.8.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="29" />
+        android:targetSdkVersion="30" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />

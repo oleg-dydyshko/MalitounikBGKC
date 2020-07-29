@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.calendar.*
+import kotlinx.android.synthetic.main.menu_caliandar.*
 import java.util.*
 
 /**
@@ -114,11 +115,11 @@ class MenuCaliandar : Fragment() {
             return dayyear
         }
 
-        override fun setPrimaryItem(container: ViewGroup, position: Int, `object`: Any) {
-            if (currentFragment !== `object`) {
-                currentFragment = `object` as Fragment
+        override fun setPrimaryItem(container: ViewGroup, position: Int, ob: Any) {
+            if (currentFragment !== ob) {
+                currentFragment = ob as Fragment
             }
-            super.setPrimaryItem(container, position, `object`)
+            super.setPrimaryItem(container, position, ob)
         }
     }
 

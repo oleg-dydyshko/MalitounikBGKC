@@ -45,7 +45,11 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     private lateinit var historyAdapter: HistoryAdapter
     private lateinit var chin: SharedPreferences
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.menu_pesny, container, false)
     }
 
@@ -64,7 +68,8 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
                 override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                     if (i == 1) { // Скрываем клавиатуру
-                        val imm1 = fraragment.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        val imm1 =
+                            fraragment.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm1.hideSoftInputFromWindow(editText?.windowToken, 0)
                     }
                 }
@@ -102,28 +107,17 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                     return@setOnItemClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources(activity)) {
-                    val result = history[position]
-                    val intent = Intent(activity, PesnyAll::class.java)
-                    intent.putExtra("pesny", result)
-                    startActivity(intent)
-                    /*val t1 = result.indexOf("<!--")
-                val t2 = result.indexOf(":")
-                val t3 = result.indexOf("-->")
-                val g = GregorianCalendar(c[Calendar.YEAR], result.substring(t2 + 1, t3).toInt(), result.substring(t1 + 4, t2).toInt())
-                val intent = Intent()
-                intent.putExtra("data", g[Calendar.DAY_OF_YEAR] - 1)
-                setResult(140, intent)*/
-                    addHistory(result)
-                    saveHistopy()
-                } else {
-                    val dadatak = DialogInstallDadatak()
-                    fragmentManager?.let { dadatak.show(it, "dadatak") }
-                }
+                val result = history[position]
+                val intent = Intent(activity, PesnyAll::class.java)
+                intent.putExtra("pesny", result)
+                startActivity(intent)
+                addHistory(result)
+                saveHistopy()
             }
             Histopy.setOnItemLongClickListener { _, _, position, _ ->
                 fragmentManager?.let {
-                    val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
+                    val dialogClearHishory =
+                        DialogClearHishory.getInstance(position, history[position])
                     dialogClearHishory.show(it, "dialogClearHishory")
                 }
                 return@setOnItemLongClickListener true
@@ -282,7 +276,12 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spanString.setSpan(
+                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
+                0,
+                end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
             item.title = spanString
         }
     }
@@ -292,17 +291,12 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        if (MainActivity.checkmoduleResources(activity)) {
-            val intent = Intent(activity, PesnyAll::class.java)
-            intent.putExtra("pesny", menuList[position].data)
-            startActivity(intent)
-            if (search) {
-                addHistory(menuList[position].data)
-                saveHistopy()
-            }
-        } else {
-            val dadatak = DialogInstallDadatak()
-            fragmentManager?.let { dadatak.show(it, "dadatak") }
+        val intent = Intent(activity, PesnyAll::class.java)
+        intent.putExtra("pesny", menuList[position].data)
+        startActivity(intent)
+        if (search) {
+            addHistory(menuList[position].data)
+            saveHistopy()
         }
     }
 
@@ -416,7 +410,9 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                     builder.append(line).append("\n")
                 }
                 inputStream.close()
-                if (builder.toString().toLowerCase(Locale.getDefault()).replace("ё", "е").contains(poshuk1.toLowerCase(Locale.getDefault()))) {
+                if (builder.toString().toLowerCase(Locale.getDefault()).replace("ё", "е")
+                        .contains(poshuk1.toLowerCase(Locale.getDefault()))
+                ) {
                     if (setClear) {
                         menuList.clear()
                         setClear = false
@@ -484,13 +480,15 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         }
     }
 
-    private inner class MenuPesnyListAdapter(private val activity: Activity) : ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
+    private inner class MenuPesnyListAdapter(private val activity: Activity) :
+        ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                rootView = activity.layoutInflater.inflate(R.layout.simple_list_item_2, parent, false)
+                rootView =
+                    activity.layoutInflater.inflate(R.layout.simple_list_item_2, parent, false)
                 viewHolder = ViewHolder()
                 rootView.tag = viewHolder
                 viewHolder.text = rootView.findViewById(R.id.label)
@@ -500,11 +498,19 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             }
             val dzenNoch = chin.getBoolean("dzen_noch", false)
             viewHolder.text?.text = menuList[position].data
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            viewHolder.text?.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                SettingsActivity.GET_FONT_SIZE_MIN
+            )
             if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
-                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.stiker_black,
+                    0,
+                    0,
+                    0
+                )
             }
             return rootView
         }
@@ -561,7 +567,13 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                 val split = line.split("<>").toTypedArray()
                 val t1 = split[0].indexOf("_")
                 val t2 = split[0].indexOf("_", t1 + 1)
-                menuListData.add(MenuListData(listRaw(split[0]), split[1], split[0].substring(t1 + 1, t2)))
+                menuListData.add(
+                    MenuListData(
+                        listRaw(split[0]),
+                        split[1],
+                        split[0].substring(t1 + 1, t2)
+                    )
+                )
             }
             return menuListData
         }

@@ -2112,7 +2112,9 @@ id t6
 id t7
 id t8
 id t9
+id tabLayout
 id tabMode
+id tabPager
 id tag_accessibility_actions
 id tag_accessibility_clickable_spans
 id tag_accessibility_heading
@@ -2282,6 +2284,8 @@ layout calaindar
 layout calaindar_nedel
 layout calendar
 layout calendar_mun
+layout calendat_tab1
+layout calendat_tab2
 layout child_view
 layout content_bible
 layout content_main
@@ -2884,6 +2888,7 @@ string mtrl_picker_toggle_to_calendar_input_mode
 string mtrl_picker_toggle_to_day_selection
 string mtrl_picker_toggle_to_text_input_mode
 string mtrl_picker_toggle_to_year_selection
+string mun
 string natatka_bersha_biblii
 string natatki_biblii
 string natatki_biblii2
@@ -2891,6 +2896,7 @@ string navigation_drawer_close
 string navigation_drawer_open
 string nazad
 string niadzeli_i_sviaty
+string niadzelia
 string niama
 string no_internet
 string notifi

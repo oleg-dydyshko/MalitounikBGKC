@@ -970,11 +970,11 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         return true
     }
 
-    override fun onMenuOpened(featureId: Int, menu: Menu?): Boolean {
+    override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
         if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
             MainActivity.dialogVisable = true
         }
-        return menu?.let { super.onMenuOpened(featureId, it) } ?: true
+        return super.onMenuOpened(featureId, menu)
     }
 
     override fun onPanelClosed(featureId: Int, menu: Menu) {

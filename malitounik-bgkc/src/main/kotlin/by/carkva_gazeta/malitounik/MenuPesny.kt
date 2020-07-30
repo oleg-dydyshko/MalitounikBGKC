@@ -44,6 +44,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
     private lateinit var chin: SharedPreferences
+    private val textWatcher: TextWatcher = MyTextWatcher()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -102,18 +103,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             }
             historyAdapter = HistoryAdapter(fraragment, history, true)
             Histopy.adapter = historyAdapter
-            Histopy.setOnItemClickListener { _, _, position, _ ->
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                    return@setOnItemClickListener
-                }
-                mLastClickTime = SystemClock.elapsedRealtime()
-                val result = history[position]
-                val intent = Intent(activity, PesnyAll::class.java)
-                intent.putExtra("pesny", result)
-                startActivity(intent)
-                addHistory(result)
-                saveHistopy()
-            }
+            Histopy.onItemClickListener = this
             Histopy.setOnItemLongClickListener { _, _, position, _ ->
                 fragmentManager?.let {
                     val dialogClearHishory =
@@ -179,7 +169,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             view.layoutParams = p
         } else if (view.id == R.id.search_src_text) {
             editText = view as AutoCompleteTextView
-            editText?.addTextChangedListener(MyTextWatcher())
+            editText?.addTextChangedListener(textWatcher)
             editText?.setBackgroundResource(R.drawable.underline_white)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 editText?.setTextCursorDrawable(R.color.colorIcons)
@@ -291,13 +281,25 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
+        editText?.removeTextChangedListener(textWatcher)
         val intent = Intent(activity, PesnyAll::class.java)
-        intent.putExtra("pesny", menuList[position].data)
-        startActivity(intent)
-        if (search) {
-            addHistory(menuList[position].data)
+        if (parent?.id == R.id.ListView) {
+            intent.putExtra("pesny", menuList[position].data)
+            if (search) {
+                addHistory(menuList[position].data)
+                saveHistopy()
+            }
+        } else {
+            intent.putExtra("pesny", history[position])
+            addHistory(history[position])
             saveHistopy()
         }
+        startActivity(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        editText?.addTextChangedListener(textWatcher)
     }
 
     private fun stopPosukPesen() {

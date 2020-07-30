@@ -157,9 +157,9 @@ class CaliandarMunTab2 : Fragment() {
     private inner class MyCalendarNedelAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
         private var currentFragment: Fragment? = null
         private var cor = 1
-        private var calendarStart = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
 
         override fun getItem(position: Int): Fragment {
+            val calendarStart = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
             for (i in 0..6) {
                 if (calendarStart[Calendar.DAY_OF_WEEK] == Calendar.SUNDAY) break
                 calendarStart.add(Calendar.DATE, 1)
@@ -201,6 +201,7 @@ class CaliandarMunTab2 : Fragment() {
         }
 
         init {
+            val calendarStart = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
             if (calendarStart[Calendar.DAY_OF_WEEK] == Calendar.SUNDAY) cor = 0
         }
     }

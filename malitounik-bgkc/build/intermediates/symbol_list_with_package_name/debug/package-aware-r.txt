@@ -2807,6 +2807,8 @@ string copy_big_full
 string copynadsan
 string dakladnae_supadzenne
 string dalshe
+string data_sabytie_error
+string data_sabytie_error2
 string dazvolic
 string default_font
 string del_all_vybranoe
@@ -2898,6 +2900,7 @@ string nazad
 string niadzeli_i_sviaty
 string niadzelia
 string niama
+string no_file
 string no_internet
 string notifi
 string notifi_fix
@@ -2950,6 +2953,8 @@ string psinaidal
 string redagaktirovat
 string registr
 string remove
+string remove_padzea
+string remove_sabytie_iak
 string rsinaidal
 string ruzanec
 string sabytie

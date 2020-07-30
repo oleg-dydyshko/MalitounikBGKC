@@ -49,7 +49,7 @@ class Pasxa : AppCompatActivity() {
         if (dzenNoch) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val window = window
-                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
                 window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)

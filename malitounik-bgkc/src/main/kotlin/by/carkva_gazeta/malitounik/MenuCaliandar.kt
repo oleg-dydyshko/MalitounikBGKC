@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
-import kotlinx.android.synthetic.main.calendar.*
 import kotlinx.android.synthetic.main.menu_caliandar.*
 import java.util.*
 

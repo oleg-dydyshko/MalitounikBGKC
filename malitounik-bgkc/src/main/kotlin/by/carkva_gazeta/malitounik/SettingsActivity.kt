@@ -1154,20 +1154,7 @@ class SettingsActivity : AppCompatActivity() {
                         intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
                         startActivity(intent)
                     } catch (ex: ActivityNotFoundException) {
-                        val layout = LinearLayout(this)
-                        if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-                        val density = resources.displayMetrics.density
-                        val realpadding = (10 * density).toInt()
-                        val toast = TextViewRobotoCondensed(this)
-                        toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        toast.text = getString(R.string.error_ch)
-                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_TOAST)
-                        layout.addView(toast)
-                        val mes = Toast(this)
-                        mes.duration = Toast.LENGTH_LONG
-                        mes.view = layout
-                        mes.show()
+                        MainActivity.toastView(this, getString(R.string.error_ch))
                     }
                 }
             }
@@ -1327,20 +1314,7 @@ class SettingsActivity : AppCompatActivity() {
                     prefEditor.remove(it.key)
             }
             File("$filesDir/Book").deleteRecursively()
-            val layout = LinearLayout(this)
-            if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            val toast = TextViewRobotoCondensed(this)
-            toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-            toast.text = getString(R.string.save)
-            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_TOAST)
-            layout.addView(toast)
-            val mes = Toast(this)
-            mes.duration = Toast.LENGTH_SHORT
-            mes.view = layout
-            mes.show()
+            MainActivity.toastView(this, getString(R.string.save))
             prefEditor.putInt("id", id)
             prefEditor.putBoolean("help_str", true)
             prefEditor.putFloat("font_biblia", GET_DEFAULT_FONT_SIZE)
@@ -1392,7 +1366,7 @@ class SettingsActivity : AppCompatActivity() {
         if (dzenNoch) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val window = window
-                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
                 window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)

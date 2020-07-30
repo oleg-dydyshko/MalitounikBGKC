@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package by.carkva_gazeta.resources
 
 import android.app.Activity
@@ -38,7 +40,8 @@ import kotlin.collections.ArrayList
 /**
  * Created by oleg on 5.10.16
  */
-class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSearshListiner, DialogClearHishory.DialogClearHistoryListener {
+class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSearshListiner,
+    DialogClearHishory.DialogClearHistoryListener {
     private var seash: ArrayList<String> = ArrayList()
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
@@ -63,7 +66,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     override fun onResume() {
         super.onResume()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        overridePendingTransition(
+            by.carkva_gazeta.malitounik.R.anim.alphain,
+            by.carkva_gazeta.malitounik.R.anim.alphaout
+        )
     }
 
     override fun onSetSettings(edit: String?) {
@@ -423,7 +429,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 title_toolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
+        title_toolbar.setTextSize(
+            TypedValue.COMPLEX_UNIT_SP,
+            SettingsActivity.GET_FONT_SIZE_MIN + 4
+        )
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title_toolbar.text = title
@@ -468,20 +477,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
                         poshuk.execute(edit)
                     } else {
-                        val layout = LinearLayout(this)
-                        if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
-                        val density = resources.displayMetrics.density
-                        val realpadding = (10 * density).toInt()
-                        val toast = TextViewRobotoCondensed(this)
-                        toast.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        toast.text = getString(by.carkva_gazeta.malitounik.R.string.seashmin)
-                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                        layout.addView(toast)
-                        val mes = Toast(this)
-                        mes.duration = Toast.LENGTH_SHORT
-                        mes.view = layout
-                        mes.show()
+                        MainActivity.toastView(
+                            this,
+                            getString(by.carkva_gazeta.malitounik.R.string.seashmin)
+                        )
                     }
                 }
                 false
@@ -529,14 +528,21 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 return true
             }
         })*/
-        textViewCount = menu.findItem(by.carkva_gazeta.malitounik.R.id.count).actionView as TextViewRobotoCondensed
-        textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, seash.size)
+        textViewCount =
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.count).actionView as TextViewRobotoCondensed
+        textViewCount?.text =
+            resources.getString(by.carkva_gazeta.malitounik.R.string.seash, seash.size)
         changeSearchViewElements(searchView)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spanString.setSpan(
+                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
+                0,
+                end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
             item.title = spanString
         }
         return true
@@ -552,7 +558,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == by.carkva_gazeta.malitounik.R.id.action_settings) {
-            val dialogBiblesearshsettings = DialogBibleSearshSettings.getInstance(autoCompleteTextView?.text.toString())
+            val dialogBiblesearshsettings =
+                DialogBibleSearshSettings.getInstance(autoCompleteTextView?.text.toString())
             dialogBiblesearshsettings.show(supportFragmentManager, "bible_searsh_settings")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_clean_histopy) {
@@ -642,20 +649,53 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         prefEditors.apply()
     }
 
-    private class Poshuk(context: Activity, editText: AutoCompleteTextView?, textViewCount: TextViewRobotoCondensed?) : AsyncTask<String, Void, ArrayList<String>>() {
+    /*private fun runTask() {
+        lifecycleScope.executeAsyncTask(onPreExecute = {
+            // ... runs in Main Thread
+        }, doInBackground = {
+            // ... runs in Worker(Background) Thread
+            "Result" // send data to "onPostExecute"
+        }, onPostExecute = {
+            // runs in Main Thread
+            // ... here "it" is the data returned from "doInBackground"
+        })
+    }
+
+    private fun <R> CoroutineScope.executeAsyncTask(
+        onPreExecute: () -> Unit,
+        doInBackground: () -> R,
+        onPostExecute: (R) -> Unit
+    ) = launch {
+        onPreExecute() // runs in Main Thread
+        val result = withContext(Dispatchers.IO) {
+            doInBackground() // runs in background thread without blocking the Main Thread
+        }
+        onPostExecute(result) // runs in Main Thread
+    }*/
+
+    private class Poshuk(
+        context: Activity,
+        editText: AutoCompleteTextView?,
+        textViewCount: TextViewRobotoCondensed?
+    ) : AsyncTask<String, Void, ArrayList<String>>() {
         private val activityReference = WeakReference(context)
         private val editText = WeakReference(editText)
         private var textViewCount = WeakReference(textViewCount)
-        private val chin: SharedPreferences = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        private val chin: SharedPreferences =
+            context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private var prefEditors: Editor = chin.edit()
         override fun onPreExecute() {
             super.onPreExecute()
             searche = true
             prefEditors = chin.edit()
-            val progressBar = activityReference.get()?.findViewById<ProgressBarTextView>(R.id.progressBar)
+            val progressBar =
+                activityReference.get()?.findViewById<ProgressBarTextView>(R.id.progressBar)
             val listView = activityReference.get()?.findViewById<ListView>(R.id.ListView)
             adapterReference?.get()?.clear()
-            textViewCount.get()?.text = activityReference.get()?.resources?.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
+            textViewCount.get()?.text = activityReference.get()?.resources?.getString(
+                by.carkva_gazeta.malitounik.R.string.seash,
+                0
+            )
             progressBar?.visibility = View.VISIBLE
             listView?.visibility = View.GONE
             var edit = editText.get()?.text.toString()
@@ -683,12 +723,17 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
         override fun onPostExecute(result: ArrayList<String>) {
             super.onPostExecute(result)
-            val progressBar = activityReference.get()?.findViewById<ProgressBarTextView>(R.id.progressBar)
+            val progressBar =
+                activityReference.get()?.findViewById<ProgressBarTextView>(R.id.progressBar)
             val listView = activityReference.get()?.findViewById<ListView>(R.id.ListView)
-            val editText2 = activityReference.get()?.findViewById<EditTextRobotoCondensed>(R.id.editText2)
+            val editText2 =
+                activityReference.get()?.findViewById<EditTextRobotoCondensed>(R.id.editText2)
             adapterReference?.get()?.addAll(result)
             adapterReference?.get()?.filter?.filter(editText2?.text.toString())
-            textViewCount.get()?.text = activityReference.get()?.resources?.getString(by.carkva_gazeta.malitounik.R.string.seash, adapterReference?.get()?.count)
+            textViewCount.get()?.text = activityReference.get()?.resources?.getString(
+                by.carkva_gazeta.malitounik.R.string.seash,
+                adapterReference?.get()?.count
+            )
             if (chin.getString("search_string", "") != "") {
                 //listView?.clearFocus()
                 listView?.post { listView.setSelection(chin.getInt("search_position", 0)) }
@@ -703,7 +748,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         }
     }
 
-    private inner class MyTextWatcher(private val editText: EditText?, private val filtep: Boolean = false) : TextWatcher {
+    private inner class MyTextWatcher(
+        private val editText: EditText?,
+        private val filtep: Boolean = false
+    ) : TextWatcher {
         private var editPosition = 0
         private var check = 0
         private var editch = true
@@ -744,13 +792,15 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         Histopy.visibility = View.GONE
                         ListView.visibility = View.VISIBLE
                         editText.clearFocus()
-                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        val imm =
+                            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(editText.windowToken, 0)
                         //actionExpandOn = false
                     } else {
                         Histopy.visibility = View.VISIBLE
                         ListView.visibility = View.GONE
-                        textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
+                        textViewCount?.text =
+                            resources.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
                     }
                 }
             }
@@ -759,8 +809,14 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     }
 
-    internal inner class SearchBibliaListAdaprer(context: Activity) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, seash) {
-        private val k: SharedPreferences = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+    internal inner class SearchBibliaListAdaprer(context: Activity) : ArrayAdapter<String>(
+        context,
+        by.carkva_gazeta.malitounik.R.layout.simple_list_item_2,
+        by.carkva_gazeta.malitounik.R.id.label,
+        seash
+    ) {
+        private val k: SharedPreferences =
+            context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private val origData: ArrayList<String> = ArrayList(seash)
         private val activity: Activity = context
         override fun addAll(collection: Collection<String>) {
@@ -777,7 +833,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                rootView = activity.layoutInflater.inflate(by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, parent, false)
+                rootView = activity.layoutInflater.inflate(
+                    by.carkva_gazeta.malitounik.R.layout.simple_list_item_2,
+                    parent,
+                    false
+                )
                 viewHolder = ViewHolder()
                 rootView.tag = viewHolder
                 viewHolder.text = rootView.findViewById(by.carkva_gazeta.malitounik.R.id.label)
@@ -787,11 +847,24 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
             viewHolder.text?.text = MainActivity.fromHtml(seash[position])
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            viewHolder.text?.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                SettingsActivity.GET_FONT_SIZE_MIN
+            )
             if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+                viewHolder.text?.setTextColor(
+                    ContextCompat.getColor(
+                        activity,
+                        by.carkva_gazeta.malitounik.R.color.colorIcons
+                    )
+                )
+                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(
+                    by.carkva_gazeta.malitounik.R.drawable.stiker_black,
+                    0,
+                    0,
+                    0
+                )
             }
             return rootView
         }
@@ -823,11 +896,19 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                     var color = "<font color=#d00505>"
                     if (dzenNoch) color = "<font color=#f44336>"
                     for (item in results.values as ArrayList<*>) {
-                        val itm = item.toString().toLowerCase(Locale.getDefault()).indexOf(constraint.toString().toLowerCase(Locale.getDefault()))
+                        val itm = item.toString().toLowerCase(Locale.getDefault())
+                            .indexOf(constraint.toString().toLowerCase(Locale.getDefault()))
                         val itmcount = constraint.toString().length
-                        add(item.toString().substring(0, itm) + color + item.toString().substring(itm, itm + itmcount) + "</font>" + item.toString().substring(itm + itmcount))
+                        add(
+                            item.toString().substring(0, itm) + color + item.toString()
+                                .substring(itm, itm + itmcount) + "</font>" + item.toString()
+                                .substring(itm + itmcount)
+                        )
                     }
-                    textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, results.count)
+                    textViewCount?.text = resources.getString(
+                        by.carkva_gazeta.malitounik.R.string.seash,
+                        results.count
+                    )
                 }
             }
         }
@@ -931,7 +1012,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             val seashpost = ArrayList<String>()
             if (poshuk1 != "") {
                 poshuk1 = zamena(poshuk1)
-                if (chin?.getInt("pegistr", 0) == 0) poshuk1 = poshuk1.toLowerCase(Locale.getDefault())
+                if (chin?.getInt("pegistr", 0) == 0) poshuk1 =
+                    poshuk1.toLowerCase(Locale.getDefault())
                 //String[] poshukchar = poshuk.split(" ");
                 if (chin?.getInt("slovocalkam", 0) == 0) {
                     val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
@@ -987,9 +1069,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         if (setSemuxaBible.keyAt(i).contains("biblias17")) nazva = "Эстэр"
                         if (setSemuxaBible.keyAt(i).contains("biblias18")) nazva = "Ёва"
                         if (setSemuxaBible.keyAt(i).contains("biblias19")) nazva = "Псалтыр"
-                        if (setSemuxaBible.keyAt(i).contains("biblias20")) nazva = "Выслоўяў Саламонавых"
+                        if (setSemuxaBible.keyAt(i).contains("biblias20")) nazva =
+                            "Выслоўяў Саламонавых"
                         if (setSemuxaBible.keyAt(i).contains("biblias21")) nazva = "Эклезіяста"
-                        if (setSemuxaBible.keyAt(i).contains("biblias22")) nazva = "Найвышэйшая Песьня Саламонава"
+                        if (setSemuxaBible.keyAt(i).contains("biblias22")) nazva =
+                            "Найвышэйшая Песьня Саламонава"
                         if (setSemuxaBible.keyAt(i).contains("biblias23")) nazva = "Ісаі"
                         if (setSemuxaBible.keyAt(i).contains("biblias24")) nazva = "Ераміі"
                         if (setSemuxaBible.keyAt(i).contains("biblias25")) nazva = "Ераміін Плач"
@@ -1015,27 +1099,36 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         if (setSemuxaBible.keyAt(i).contains("biblian6")) nazva = "Якава"
                         if (setSemuxaBible.keyAt(i).contains("biblian7")) nazva = "1-е Пятра"
                         if (setSemuxaBible.keyAt(i).contains("biblian8")) nazva = "2-е Пятра"
-                        if (setSemuxaBible.keyAt(i).contains("biblian9")) nazva = "1-е Яна Багаслова"
-                        if (setSemuxaBible.keyAt(i).contains("biblian10")) nazva = "2-е Яна Багаслова"
-                        if (setSemuxaBible.keyAt(i).contains("biblian11")) nazva = "3-е Яна Багаслова"
+                        if (setSemuxaBible.keyAt(i).contains("biblian9")) nazva =
+                            "1-е Яна Багаслова"
+                        if (setSemuxaBible.keyAt(i).contains("biblian10")) nazva =
+                            "2-е Яна Багаслова"
+                        if (setSemuxaBible.keyAt(i).contains("biblian11")) nazva =
+                            "3-е Яна Багаслова"
                         if (setSemuxaBible.keyAt(i).contains("biblian12")) nazva = "Юды"
                         if (setSemuxaBible.keyAt(i).contains("biblian13")) nazva = "Да Рымлянаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian14")) nazva = "1-е да Карынфянаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian15")) nazva = "2-е да Карынфянаў"
+                        if (setSemuxaBible.keyAt(i).contains("biblian14")) nazva =
+                            "1-е да Карынфянаў"
+                        if (setSemuxaBible.keyAt(i).contains("biblian15")) nazva =
+                            "2-е да Карынфянаў"
                         if (setSemuxaBible.keyAt(i).contains("biblian16")) nazva = "Да Галятаў"
                         if (setSemuxaBible.keyAt(i).contains("biblian17")) nazva = "Да Эфэсянаў"
                         if (setSemuxaBible.keyAt(i).contains("biblian18")) nazva = "Да Піліпянаў"
                         if (setSemuxaBible.keyAt(i).contains("biblian19")) nazva = "Да Каласянаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian20")) nazva = "1-е да Фесаланікійцаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian21")) nazva = "2-е да Фесаланікійцаў"
+                        if (setSemuxaBible.keyAt(i).contains("biblian20")) nazva =
+                            "1-е да Фесаланікійцаў"
+                        if (setSemuxaBible.keyAt(i).contains("biblian21")) nazva =
+                            "2-е да Фесаланікійцаў"
                         if (setSemuxaBible.keyAt(i).contains("biblian22")) nazva = "1-е да Цімафея"
                         if (setSemuxaBible.keyAt(i).contains("biblian23")) nazva = "2-е да Цімафея"
                         if (setSemuxaBible.keyAt(i).contains("biblian24")) nazva = "Да Ціта"
                         if (setSemuxaBible.keyAt(i).contains("biblian25")) nazva = "Да Філімона"
                         if (setSemuxaBible.keyAt(i).contains("biblian26")) nazva = "Да Габрэяў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian27")) nazva = "Адкрыцьцё (Апакаліпсіс)"
+                        if (setSemuxaBible.keyAt(i).contains("biblian27")) nazva =
+                            "Адкрыцьцё (Апакаліпсіс)"
                         context?.let { it ->
-                            val inputStream = it.resources.openRawResource(setSemuxaBible.valueAt(i))
+                            val inputStream =
+                                it.resources.openRawResource(setSemuxaBible.valueAt(i))
                             val isr = InputStreamReader(inputStream)
                             val reader = BufferedReader(isr)
                             var glava = 0
@@ -1049,11 +1142,15 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                     var prepinanie = bibleline[r]
                                     if (prepinanie.contains("//")) {
                                         val t1 = prepinanie.indexOf("//")
-                                        prepinanie = if (t1 == 0) continue else prepinanie.substring(0, t1).trim()
+                                        prepinanie =
+                                            if (t1 == 0) continue else prepinanie.substring(0, t1)
+                                                .trim()
                                     }
                                     stix++
-                                    if (chin?.getInt("slovocalkam", 0) == 1) prepinanie = " " + bibleline[r] + " "
-                                    if (chin?.getInt("pegistr", 0) == 0) prepinanie = prepinanie.toLowerCase(Locale.getDefault())
+                                    if (chin?.getInt("slovocalkam", 0) == 1) prepinanie =
+                                        " " + bibleline[r] + " "
+                                    if (chin?.getInt("pegistr", 0) == 0) prepinanie =
+                                        prepinanie.toLowerCase(Locale.getDefault())
                                     val t1a = prepinanie.indexOf(poshuk1)
                                     prepinanie = prepinanie.replace(",", "")
                                     prepinanie = prepinanie.replace(".", "")
@@ -1094,7 +1191,13 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                             var t1 = prepinanie.indexOf(poshuk1)
                                             t1 += count
                                             val t2 = poshuk1.length
-                                            aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
+                                            aSviatyia = aSviatyia.substring(
+                                                0,
+                                                t1
+                                            ) + color + aSviatyia.substring(
+                                                t1,
+                                                t1 + t2
+                                            ) + "</font>" + aSviatyia.substring(t1 + t2)
                                             seashpost.add("<!--stix.$stix--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                         }
                                         //}
@@ -1104,7 +1207,13 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                             var t1 = prepinanie.indexOf(poshuk1)
                                             t1 += count
                                             val t2 = poshuk1.length
-                                            aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
+                                            aSviatyia = aSviatyia.substring(
+                                                0,
+                                                t1
+                                            ) + color + aSviatyia.substring(
+                                                t1,
+                                                t1 + t2
+                                            ) + "</font>" + aSviatyia.substring(t1 + t2)
                                             seashpost.add("<!--stix.$stix--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                         }
                                     }
@@ -1124,7 +1233,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             val seashpost = ArrayList<String>()
             if (poshuk1 != "") {
                 poshuk1 = poshuk1.replace("ё", "е")
-                if (chin?.getInt("pegistr", 0) == 0) poshuk1 = poshuk1.toLowerCase(Locale.getDefault())
+                if (chin?.getInt("pegistr", 0) == 0) poshuk1 =
+                    poshuk1.toLowerCase(Locale.getDefault())
                 //String[] poshukchar = poshuk.split(" ");
                 if (chin?.getInt("slovocalkam", 0) == 0) {
                     val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
@@ -1165,14 +1275,17 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         if (setSinodalBible.keyAt(i).contains("sinaidals4")) nazva = "Числа"
                         if (setSinodalBible.keyAt(i).contains("sinaidals5")) nazva = "Второзаконие"
                         if (setSinodalBible.keyAt(i).contains("sinaidals6")) nazva = "Иисуса Навина"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals7")) nazva = "Судей израилевых"
+                        if (setSinodalBible.keyAt(i).contains("sinaidals7")) nazva =
+                            "Судей израилевых"
                         if (setSinodalBible.keyAt(i).contains("sinaidals8")) nazva = "Руфи"
                         if (setSinodalBible.keyAt(i).contains("sinaidals9")) nazva = "1-я Царств"
                         if (setSinodalBible.keyAt(i).contains("sinaidals10")) nazva = "2-я Царств"
                         if (setSinodalBible.keyAt(i).contains("sinaidals11")) nazva = "3-я Царств"
                         if (setSinodalBible.keyAt(i).contains("sinaidals12")) nazva = "4-я Царств"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals13")) nazva = "1-я Паралипоменон"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals14")) nazva = "2-я Паралипоменон"
+                        if (setSinodalBible.keyAt(i).contains("sinaidals13")) nazva =
+                            "1-я Паралипоменон"
+                        if (setSinodalBible.keyAt(i).contains("sinaidals14")) nazva =
+                            "2-я Паралипоменон"
                         if (setSinodalBible.keyAt(i).contains("sinaidals15")) nazva = "1-я Ездры"
                         if (setSinodalBible.keyAt(i).contains("sinaidals16")) nazva = "Неемии"
                         if (setSinodalBible.keyAt(i).contains("sinaidals17")) nazva = "2-я Ездры"
@@ -1181,15 +1294,20 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         if (setSinodalBible.keyAt(i).contains("sinaidals20")) nazva = "Есфири"
                         if (setSinodalBible.keyAt(i).contains("sinaidals21")) nazva = "Иова"
                         if (setSinodalBible.keyAt(i).contains("sinaidals22")) nazva = "Псалтирь"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals23")) nazva = "Притчи Соломона"
+                        if (setSinodalBible.keyAt(i).contains("sinaidals23")) nazva =
+                            "Притчи Соломона"
                         if (setSinodalBible.keyAt(i).contains("sinaidals24")) nazva = "Екклезиаста"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals25")) nazva = "Песнь песней Соломона"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals26")) nazva = "Премудрости Соломона"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals27")) nazva = "Премудрости Иисуса, сына Сирахова"
+                        if (setSinodalBible.keyAt(i).contains("sinaidals25")) nazva =
+                            "Песнь песней Соломона"
+                        if (setSinodalBible.keyAt(i).contains("sinaidals26")) nazva =
+                            "Премудрости Соломона"
+                        if (setSinodalBible.keyAt(i).contains("sinaidals27")) nazva =
+                            "Премудрости Иисуса, сына Сирахова"
                         if (setSinodalBible.keyAt(i).contains("sinaidals28")) nazva = "Исаии"
                         if (setSinodalBible.keyAt(i).contains("sinaidals29")) nazva = "Иеремии"
                         if (setSinodalBible.keyAt(i).contains("sinaidals30")) nazva = "Плач Иеремии"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals31")) nazva = "Послание Иеремии"
+                        if (setSinodalBible.keyAt(i).contains("sinaidals31")) nazva =
+                            "Послание Иеремии"
                         if (setSinodalBible.keyAt(i).contains("sinaidals32")) nazva = "Варуха"
                         if (setSinodalBible.keyAt(i).contains("sinaidals33")) nazva = "Иезекииля"
                         if (setSinodalBible.keyAt(i).contains("sinaidals34")) nazva = "Даниила"
@@ -1205,15 +1323,19 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         if (setSinodalBible.keyAt(i).contains("sinaidals44")) nazva = "Аггея"
                         if (setSinodalBible.keyAt(i).contains("sinaidals45")) nazva = "Захарии"
                         if (setSinodalBible.keyAt(i).contains("sinaidals46")) nazva = "Малахии"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals47")) nazva = "1-я Маккавейская"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals48")) nazva = "2-я Маккавейская"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals49")) nazva = "3-я Маккавейская"
+                        if (setSinodalBible.keyAt(i).contains("sinaidals47")) nazva =
+                            "1-я Маккавейская"
+                        if (setSinodalBible.keyAt(i).contains("sinaidals48")) nazva =
+                            "2-я Маккавейская"
+                        if (setSinodalBible.keyAt(i).contains("sinaidals49")) nazva =
+                            "3-я Маккавейская"
                         if (setSinodalBible.keyAt(i).contains("sinaidals50")) nazva = "3-я Ездры"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln1")) nazva = "От Матфея"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln2")) nazva = "От Марка"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln3")) nazva = "От Луки"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln4")) nazva = "От Иоанна"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln5")) nazva = "Деяния святых апостолов"
+                        if (setSinodalBible.keyAt(i).contains("sinaidaln5")) nazva =
+                            "Деяния святых апостолов"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln6")) nazva = "Иакова"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln7")) nazva = "1-е Петра"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln8")) nazva = "2-е Петра"
@@ -1222,22 +1344,28 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         if (setSinodalBible.keyAt(i).contains("sinaidaln11")) nazva = "3-е Иоанна"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln12")) nazva = "Иуды"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln13")) nazva = "Римлянам"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln14")) nazva = "1-е Коринфянам"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln15")) nazva = "2-е Коринфянам"
+                        if (setSinodalBible.keyAt(i).contains("sinaidaln14")) nazva =
+                            "1-е Коринфянам"
+                        if (setSinodalBible.keyAt(i).contains("sinaidaln15")) nazva =
+                            "2-е Коринфянам"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln16")) nazva = "Галатам"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln17")) nazva = "Эфэсянам"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln18")) nazva = "Филиппийцам"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln19")) nazva = "Колоссянам"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln20")) nazva = "1-е Фессалоникийцам (Солунянам)"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln21")) nazva = "2-е Фессалоникийцам (Солунянам)"
+                        if (setSinodalBible.keyAt(i).contains("sinaidaln20")) nazva =
+                            "1-е Фессалоникийцам (Солунянам)"
+                        if (setSinodalBible.keyAt(i).contains("sinaidaln21")) nazva =
+                            "2-е Фессалоникийцам (Солунянам)"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln22")) nazva = "1-е Тимофею"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln23")) nazva = "2-е Тимофею"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln24")) nazva = "Титу"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln25")) nazva = "Филимону"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln26")) nazva = "Евреям"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln27")) nazva = "Откровение (Апокалипсис)"
+                        if (setSinodalBible.keyAt(i).contains("sinaidaln27")) nazva =
+                            "Откровение (Апокалипсис)"
                         context?.let { it ->
-                            val inputStream = it.resources.openRawResource(setSinodalBible.valueAt(i))
+                            val inputStream =
+                                it.resources.openRawResource(setSinodalBible.valueAt(i))
                             val isr = InputStreamReader(inputStream)
                             val reader = BufferedReader(isr)
                             var glava = 0
@@ -1250,8 +1378,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                 for (r in 1 until bibleline.size) {
                                     stix++
                                     var prepinanie = bibleline[r]
-                                    if (chin?.getInt("slovocalkam", 0) == 1) prepinanie = " " + bibleline[r] + " "
-                                    if (chin?.getInt("pegistr", 0) == 0) prepinanie = prepinanie.toLowerCase(Locale.getDefault())
+                                    if (chin?.getInt("slovocalkam", 0) == 1) prepinanie =
+                                        " " + bibleline[r] + " "
+                                    if (chin?.getInt("pegistr", 0) == 0) prepinanie =
+                                        prepinanie.toLowerCase(Locale.getDefault())
                                     val t1a = prepinanie.indexOf(poshuk1)
                                     prepinanie = prepinanie.replace(",", "")
                                     prepinanie = prepinanie.replace(".", "")
@@ -1289,7 +1419,13 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                             var t1 = prepinanie.indexOf(poshuk1)
                                             t1 += count
                                             val t2 = poshuk1.length
-                                            aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
+                                            aSviatyia = aSviatyia.substring(
+                                                0,
+                                                t1
+                                            ) + color + aSviatyia.substring(
+                                                t1,
+                                                t1 + t2
+                                            ) + "</font>" + aSviatyia.substring(t1 + t2)
                                             seashpost.add("<!--stix.$stix--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                         }
                                         //}
@@ -1299,7 +1435,13 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                             var t1 = prepinanie.indexOf(poshuk1)
                                             t1 += count
                                             val t2 = poshuk1.length
-                                            aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
+                                            aSviatyia = aSviatyia.substring(
+                                                0,
+                                                t1
+                                            ) + color + aSviatyia.substring(
+                                                t1,
+                                                t1 + t2
+                                            ) + "</font>" + aSviatyia.substring(t1 + t2)
                                             seashpost.add("<!--stix.$stix--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                         }
                                     }
@@ -1319,7 +1461,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             val seashpost = ArrayList<String>()
             if (poshuk1 != "") {
                 poshuk1 = zamena(poshuk1)
-                if (chin?.getInt("pegistr", 0) == 0) poshuk1 = poshuk1.toLowerCase(Locale.getDefault())
+                if (chin?.getInt("pegistr", 0) == 0) poshuk1 =
+                    poshuk1.toLowerCase(Locale.getDefault())
                 //String[] poshukchar = poshuk.split(" ");
                 if (chin?.getInt("slovocalkam", 0) == 0) {
                     val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
@@ -1365,7 +1508,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         for (r in 1 until bibleline.size) {
                             stix++
                             var prepinanie = bibleline[r]
-                            if (chin?.getInt("pegistr", 0) == 0) prepinanie = prepinanie.toLowerCase(Locale.getDefault())
+                            if (chin?.getInt("pegistr", 0) == 0) prepinanie =
+                                prepinanie.toLowerCase(Locale.getDefault())
                             val t1a = prepinanie.indexOf(poshuk1)
                             prepinanie = prepinanie.replace(",", "")
                             prepinanie = prepinanie.replace(".", "")
@@ -1406,7 +1550,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                     var t1 = prepinanie.indexOf(poshuk1)
                                     t1 += count
                                     val t2 = poshuk1.length
-                                    aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
+                                    aSviatyia =
+                                        aSviatyia.substring(0, t1) + color + aSviatyia.substring(
+                                            t1,
+                                            t1 + t2
+                                        ) + "</font>" + aSviatyia.substring(t1 + t2)
                                     seashpost.add("<!--stix.$stix--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")
                                 }
                                 //}
@@ -1416,7 +1564,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                     var t1 = prepinanie.indexOf(poshuk1)
                                     t1 += count
                                     val t2 = poshuk1.length
-                                    aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
+                                    aSviatyia =
+                                        aSviatyia.substring(0, t1) + color + aSviatyia.substring(
+                                            t1,
+                                            t1 + t2
+                                        ) + "</font>" + aSviatyia.substring(t1 + t2)
                                     seashpost.add("<!--stix.$stix--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")
                                 }
                             }

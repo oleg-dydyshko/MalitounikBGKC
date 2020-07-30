@@ -50,7 +50,7 @@ class Naviny : AppCompatActivity() {
                 WebSettingsCompat.setForceDark(viewWeb.settings, WebSettingsCompat.FORCE_DARK_ON)
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
                 window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
@@ -69,7 +69,7 @@ class Naviny : AppCompatActivity() {
                 setSupportZoom(true)
                 builtInZoomControls = true
                 displayZoomControls = false
-                setAppCacheEnabled(true)
+                //setAppCacheEnabled(true)
                 cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             }
         }

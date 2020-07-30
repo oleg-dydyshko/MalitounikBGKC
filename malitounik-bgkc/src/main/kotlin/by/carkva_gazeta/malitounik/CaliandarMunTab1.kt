@@ -10,8 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -137,22 +135,7 @@ class CaliandarMunTab1 : Fragment() {
                 } else {
                     resources.getString(R.string.sabytie_enable_mun)
                 }
-                val layout = LinearLayout(it)
-                if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(
-                    R.color.colorPrimary
-                )
-                val density = resources.displayMetrics.density
-                val realpadding = (10 * density).toInt()
-                val toast = TextViewRobotoCondensed(it)
-                toast.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                toast.text = messege
-                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                layout.addView(toast)
-                val mes = Toast(it)
-                mes.duration = Toast.LENGTH_SHORT
-                mes.view = layout
-                mes.show()
+                MainActivity.toastView(it, messege)
                 adapterViewPager.notifyDataSetChanged()
                 it.invalidateOptionsMenu()
             }

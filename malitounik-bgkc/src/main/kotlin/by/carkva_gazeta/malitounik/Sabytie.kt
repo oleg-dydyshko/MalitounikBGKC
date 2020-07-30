@@ -597,20 +597,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 }
             }
         }).start()
-        val layout = LinearLayout(this@Sabytie)
-        if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-        val density = resources.displayMetrics.density
-        val realpadding = (10 * density).toInt()
-        val toast = TextViewRobotoCondensed(this@Sabytie)
-        toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-        toast.text = "Выдалена"
-        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-        layout.addView(toast)
-        val mes = Toast(this@Sabytie)
-        mes.duration = Toast.LENGTH_SHORT
-        mes.view = layout
-        mes.show()
+        MainActivity.toastView(this@Sabytie, getString(R.string.remove_padzea))
     }
 
     override fun onDialogDeliteClick(position: Int) {
@@ -782,20 +769,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     val kon = gc2.timeInMillis
                     result = gc.timeInMillis
                     if (kon - result < 0) {
-                        val layout = LinearLayout(this@Sabytie)
-                        if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-                        val density = resources.displayMetrics.density
-                        val realpadding = (10 * density).toInt()
-                        val toast = TextViewRobotoCondensed(this@Sabytie)
-                        toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        toast.text = "Дата заканчэньня павінна быць пазней, чым дата пачатку"
-                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                        layout.addView(toast)
-                        val mes = Toast(this@Sabytie)
-                        mes.duration = Toast.LENGTH_LONG
-                        mes.view = layout
-                        mes.show()
+                        MainActivity.toastView(this@Sabytie, getString(R.string.data_sabytie_error))
                         da = label1.text.toString()
                         label12.text = da
                     }
@@ -810,20 +784,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     val kon = gc2.timeInMillis
                     val resul = gc.timeInMillis
                     if (kon - resul < 0) {
-                        val layout = LinearLayout(this@Sabytie)
-                        if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-                        val density = resources.displayMetrics.density
-                        val realpadding = (10 * density).toInt()
-                        val toast = TextViewRobotoCondensed(this@Sabytie)
-                        toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        toast.text = "Дата паўтору павінна быць пазней, чым дата пачатку"
-                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                        layout.addView(toast)
-                        val mes = Toast(this@Sabytie)
-                        mes.duration = Toast.LENGTH_LONG
-                        mes.view = layout
-                        mes.show()
+                        MainActivity.toastView(this@Sabytie, getString(R.string.data_sabytie_error2))
                         nol1 = ""
                         nol2 = ""
                         if (gc[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
@@ -907,20 +868,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
                         startActivity(intent)
                     } catch (ex: ActivityNotFoundException) {
-                        val layout = LinearLayout(this)
-                        if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-                        val density = resources.displayMetrics.density
-                        val realpadding = (10 * density).toInt()
-                        val toast = TextViewRobotoCondensed(this)
-                        toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        toast.text = getString(R.string.error_ch)
-                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                        layout.addView(toast)
-                        val mes = Toast(this)
-                        mes.duration = Toast.LENGTH_LONG
-                        mes.view = layout
-                        mes.show()
+                        MainActivity.toastView(this, getString(R.string.error_ch))
                     }
                 }
             } else {
@@ -1586,20 +1534,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 adapter.notifyDataSetChanged()
                 editText.setText("")
                 editText2.setText("")
-                val layout = LinearLayout(this@Sabytie)
-                if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-                val density = resources.displayMetrics.density
-                val realpadding = (10 * density).toInt()
-                val toast = TextViewRobotoCondensed(this@Sabytie)
-                toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                toast.text = getString(R.string.save)
-                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                layout.addView(toast)
-                val mes = Toast(this@Sabytie)
-                mes.duration = Toast.LENGTH_SHORT
-                mes.view = layout
-                mes.show()
+                MainActivity.toastView(this@Sabytie, getString(R.string.save))
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(editText.windowToken, 0)
                 titleLayout.visibility = View.GONE
@@ -2320,20 +2255,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 label2.text = ta
                 label12.text = da
                 label22.text = ta
-                val layout = LinearLayout(this@Sabytie)
-                if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-                val density = resources.displayMetrics.density
-                val realpadding = (10 * density).toInt()
-                val toast = TextViewRobotoCondensed(this@Sabytie)
-                toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                toast.text = getString(R.string.save)
-                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                layout.addView(toast)
-                val mes = Toast(this@Sabytie)
-                mes.duration = Toast.LENGTH_SHORT
-                mes.view = layout
-                mes.show()
+                MainActivity.toastView(this@Sabytie, getString(R.string.save))
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(editText.windowToken, 0)
                 titleLayout.visibility = View.GONE
@@ -2389,7 +2311,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             linearLayout.addView(textViewZaglavie)
             val textView = TextViewRobotoCondensed(this)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView.text = "Якія падзеі Вы жадаеце выдаліць?"
+            textView.text = getString(R.string.remove_sabytie_iak)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
             linearLayout.addView(textView)
@@ -2414,18 +2336,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 }).start()
                 adapter.clear()
                 adapter.notifyDataSetChanged()
-                val layout = LinearLayout(this@Sabytie)
-                if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-                val toast = TextViewRobotoCondensed(this@Sabytie)
-                toast.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                toast.text = "Выдалена"
-                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                layout.addView(toast)
-                val mes = Toast(this@Sabytie)
-                mes.duration = Toast.LENGTH_SHORT
-                mes.view = layout
-                mes.show()
+                MainActivity.toastView(this@Sabytie, getString(R.string.remove_padzea))
             }
             ad.setNeutralButton("Старыя") { _: DialogInterface?, _: Int ->
                 c = Calendar.getInstance() as GregorianCalendar

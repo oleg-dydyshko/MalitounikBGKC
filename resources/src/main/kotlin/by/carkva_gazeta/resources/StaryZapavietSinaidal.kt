@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextUtils
@@ -35,17 +35,29 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.util.*
 
-class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, StaryZapavietSinaidalFragment.ClicParalelListiner, StaryZapavietSinaidalFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner {
-    private val mHideHandler = Handler()
+class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener,
+    DialogBibleRazdelListener, StaryZapavietSinaidalFragment.ClicParalelListiner,
+    StaryZapavietSinaidalFragment.ListPositionListiner,
+    DialogBibleNatatka.DialogBibleNatatkaListiner {
+    private val mHideHandler = Handler(Looper.getMainLooper())
 
     @SuppressLint("InlinedApi")
+    @Suppress("DEPRECATION")
     private val mHidePart2Runnable = Runnable {
-        linealLayoutTitle.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false)
+            val controller = window.insetsController
+            controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+            controller?.systemBarsBehavior =
+                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        } else {
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+        }
     }
     private val mShowPart2Runnable = Runnable {
         val actionBar = supportActionBar
@@ -68,12 +80,7 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
     private val uiAnimationDelay: Long = 300
     private val orientation: Int
         get() {
-            val rotation = windowManager.defaultDisplay.rotation
-            val displayOrientation = resources.configuration.orientation
-            if (displayOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-                return if (rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_180) ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE else ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            } else if (rotation == Surface.ROTATION_180 || rotation == Surface.ROTATION_90) return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-            return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            return MainActivity.getOrientation(this)
         }
 
     private fun clearEmptyPosition() {
@@ -190,22 +197,40 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
                 nextChild.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
             }
         }
-        val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
+        val adapterViewPager: SmartFragmentStatePagerAdapter =
+            MyPagerAdapter(supportFragmentManager)
         pager.adapter = adapterViewPager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
+                window.statusBarColor = ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
+                )
+                window.navigationBarColor = ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
+                )
             } else {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
+                window.statusBarColor = ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
+                )
+                window.navigationBarColor = ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
+                )
             }
         }
         pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+            }
+
             override fun onPageSelected(position: Int) {
                 BibleGlobalList.mListGlava = position
                 if (glava != position) fierstPosition = 0
@@ -455,7 +480,10 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
                 title_toolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        title_toolbar.setTextSize(
+            TypedValue.COMPLEX_UNIT_SP,
+            SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat()
+        )
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.stsinaidal)
@@ -506,8 +534,10 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_glava).isVisible = !paralel
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked =
+            k.getBoolean("orientation", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked =
+            k.getBoolean("dzen_noch", false)
         return true
     }
 
@@ -569,7 +599,10 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
         super.onResume()
         setTollbarTheme()
         if (fullscreenPage) hide()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        overridePendingTransition(
+            by.carkva_gazeta.malitounik.R.anim.alphain,
+            by.carkva_gazeta.malitounik.R.anim.alphaout
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -580,7 +613,12 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spanString.setSpan(
+                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
+                0,
+                end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
             item.title = spanString
         }
         return true
@@ -593,8 +631,16 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
         mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelay)
     }
 
+    @Suppress("DEPRECATION")
     private fun show() {
-        linealLayoutTitle.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(true)
+            val controller = window.insetsController
+            controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+            //controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        } else {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        }
         mHideHandler.removeCallbacks(mHidePart2Runnable)
         mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
     }
@@ -605,18 +651,21 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
         this.cytanneSours = cytanneSours ?: ""
         val pm = ParalelnyeMesta()
         conteiner.removeAllViewsInLayout()
-        val arrayList = pm.paralel(this@StaryZapavietSinaidal, this.cytanneSours, this.cytanneParalelnye, false)
+        val arrayList =
+            pm.paralel(this@StaryZapavietSinaidal, this.cytanneSours, this.cytanneParalelnye, false)
         for (textView in arrayList) {
             conteiner.addView(textView)
         }
         scroll.visibility = View.VISIBLE
         pager.visibility = View.GONE
-        title_toolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)
+        title_toolbar.text =
+            resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)
         subtitle_toolbar.visibility = View.GONE
         invalidateOptionsMenu()
     }
 
-    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
+    private inner class MyPagerAdapter(fragmentManager: FragmentManager) :
+        SmartFragmentStatePagerAdapter(fragmentManager) {
         override fun getCount(): Int {
             var fullglav = 1
             when (kniga) {
@@ -687,7 +736,9 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return if (kniga == 21) resources.getString(by.carkva_gazeta.malitounik.R.string.psinaidal) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (position + 1)
+            return if (kniga == 21) resources.getString(by.carkva_gazeta.malitounik.R.string.psinaidal) + " " + (position + 1) else resources.getString(
+                by.carkva_gazeta.malitounik.R.string.rsinaidal
+            ) + " " + (position + 1)
         }
 
         override fun getItemPosition(`object`: Any): Int {

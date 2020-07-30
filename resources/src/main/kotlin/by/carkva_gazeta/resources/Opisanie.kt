@@ -46,8 +46,7 @@ class Opisanie : AppCompatActivity() {
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         setContentView(R.layout.akafist_under)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             if (dzenNoch) {
                 window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)

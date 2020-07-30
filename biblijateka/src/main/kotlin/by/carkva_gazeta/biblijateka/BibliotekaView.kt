@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.content.res.Resources
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -70,20 +69,35 @@ import javax.xml.parsers.ParserConfigurationException
 import kotlin.collections.ArrayList
 
 
-class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
+class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener,
+    DialogSetPageBiblioteka.DialogSetPageBibliotekaListener,
+    DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener,
+    DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener,
+    DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener,
+    DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener,
+    WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener,
+    AdapterView.OnItemLongClickListener {
 
     private val uiAnimationDelaY = 300
-    private val mHideHandler: Handler = Handler()
+    private val mHideHandler: Handler = Handler(Looper.getMainLooper())
 
     @SuppressLint("InlinedApi")
+    @Suppress("DEPRECATION")
     private val mHidePart2Runnable = Runnable {
-        val decorView = window.decorView
-        decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false)
+            val controller = window.insetsController
+            controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+            controller?.systemBarsBehavior =
+                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        } else {
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+        }
     }
     private val mShowPart2Runnable = Runnable {
         supportActionBar?.show()
@@ -130,12 +144,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var mActionDown = false
     private val orientation: Int
         get() {
-            val rotation = windowManager.defaultDisplay.rotation
-            val displayOrientation = resources.configuration.orientation
-            if (displayOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-                return if (rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_180) ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE else ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            } else if (rotation == Surface.ROTATION_180 || rotation == Surface.ROTATION_90) return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-            return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            return MainActivity.getOrientation(this)
         }
     private val animationListenerOutRight: AnimationListener = object : AnimationListener {
         override fun onAnimationStart(animation: Animation) {}
@@ -147,7 +156,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 val dir = File("$filesDir/Book/$dirName/")
                 if (defaultPage - 1 >= 0) {
                     defaultPage--
-                    webView.loadUrl("file://" + dir.absolutePath + "/" + biblioteka?.getPageName(defaultPage))
+                    webView.loadUrl(
+                        "file://" + dir.absolutePath + "/" + biblioteka?.getPageName(
+                            defaultPage
+                        )
+                    )
                 }
             } else {
                 if (defaultPage - 1 >= 0) {
@@ -175,7 +188,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 val dir = File("$filesDir/Book/$dirName/")
                 if (defaultPage + 1 < biblioteka?.content?.size ?: 0) {
                     defaultPage++
-                    webView.loadUrl("file://" + dir.absolutePath + "/" + biblioteka?.getPageName(defaultPage))
+                    webView.loadUrl(
+                        "file://" + dir.absolutePath + "/" + biblioteka?.getPageName(
+                            defaultPage
+                        )
+                    )
                 }
             } else {
                 if (defaultPage + 1 < bookTitle.size) {
@@ -271,7 +288,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             invalidateOptionsMenu()
         } else {
             if (MainActivity.isIntNetworkAvailable(this) == 2) {
-                val bibliotekaWiFi: DialogBibliotekaWIFI = DialogBibliotekaWIFI.getInstance(listPosition)
+                val bibliotekaWiFi: DialogBibliotekaWIFI =
+                    DialogBibliotekaWIFI.getInstance(listPosition)
                 bibliotekaWiFi.show(supportFragmentManager, "biblioteka_WI_FI")
             } else {
                 writeFile("https://carkva-gazeta.by/data/bibliateka/$listPosition")
@@ -351,9 +369,22 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         invalidateOptionsMenu()
     }
 
-    private fun ajustCompoundDrawableSizeWithText(textView: TextViewRobotoCondensed, leftDrawable: Drawable?) {
+    private fun ajustCompoundDrawableSizeWithText(
+        textView: TextViewRobotoCondensed,
+        leftDrawable: Drawable?
+    ) {
         textView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
-            override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
+            override fun onLayoutChange(
+                v: View,
+                left: Int,
+                top: Int,
+                right: Int,
+                bottom: Int,
+                oldLeft: Int,
+                oldTop: Int,
+                oldRight: Int,
+                oldBottom: Int
+            ) {
                 leftDrawable?.setBounds(0, 0, textView.textSize.toInt(), textView.textSize.toInt())
                 textView.setCompoundDrawables(leftDrawable, null, null, null)
                 textView.removeOnLayoutChangeListener(this)
@@ -492,9 +523,16 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     filePath = file.absolutePath
                     fileName = file.name
                     if (!File(arrayList[position][2]).exists()) {
-                        val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        val permissionCheck = ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        )
                         if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                            ActivityCompat.requestPermissions(
+                                this,
+                                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                                myPermissionsWriteExternalStorage
+                            )
                             return@setOnItemClickListener
                         }
                     }
@@ -546,26 +584,13 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     val prefEditor = k.edit()
                     prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
                     prefEditor.apply()
-                    val layout = LinearLayout(this)
-                    if (dzenNoch)
-                        layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black)
-                    else
-                        layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
-                    val density = resources.displayMetrics.density
-                    val realpadding = (10 * density).toInt()
-                    val toast = TextViewRobotoCondensed(this)
-                    toast.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                    toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                    toast.text = "Файл не існуе"
-                    toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                    layout.addView(toast)
-                    val mes = Toast(this)
-                    mes.duration = Toast.LENGTH_SHORT
-                    mes.view = layout
-                    mes.show()
+                    MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_file))
                 }
             } else {
-                file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
+                file = File(
+                    getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                    arrayList[position][2]
+                )
                 if (file.exists()) {
                     filePath = file.absolutePath
                     fileName = file.name
@@ -576,16 +601,33 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     pdfView.visibility = View.VISIBLE
                     invalidateOptionsMenu()
                 } else {
-                    val dialogBibliateka = DialogBibliateka.getInstance(arrayList[position][2], arrayList[position][1], arrayList[position][0], arrayList[position][3])
+                    val dialogBibliateka = DialogBibliateka.getInstance(
+                        arrayList[position][2],
+                        arrayList[position][1],
+                        arrayList[position][0],
+                        arrayList[position][3]
+                    )
                     dialogBibliateka.show(supportFragmentManager, "dialog_bibliateka")
                 }
             }
         }
 
-        animInRight = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_right)
-        animOutRight = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_out_right)
-        animInLeft = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_left)
-        animOutLeft = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_out_left)
+        animInRight = AnimationUtils.loadAnimation(
+            baseContext,
+            by.carkva_gazeta.malitounik.R.anim.slide_in_right
+        )
+        animOutRight = AnimationUtils.loadAnimation(
+            baseContext,
+            by.carkva_gazeta.malitounik.R.anim.slide_out_right
+        )
+        animInLeft = AnimationUtils.loadAnimation(
+            baseContext,
+            by.carkva_gazeta.malitounik.R.anim.slide_in_left
+        )
+        animOutLeft = AnimationUtils.loadAnimation(
+            baseContext,
+            by.carkva_gazeta.malitounik.R.anim.slide_out_left
+        )
         animOutRight.setAnimationListener(animationListenerOutRight)
         animOutLeft.setAnimationListener(animationListenerOutLeft)
         positionY = k.getInt("webViewBibliotekaScroll", 0)
@@ -651,30 +693,141 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         var drawable = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.krest)
         val title = findViewById<TextViewRobotoCondensed>(R.id.title)
         if (dzenNoch) {
-            drawable = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.krest_black)
-            title.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            title.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label3.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label4.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label5.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label6.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            textViewB.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            drawable =
+                ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.krest_black)
+            title.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorPrimary_black
+                )
+            )
+            title.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
+            label1.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
+            label2.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
+            label3.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
+            label4.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
+            label5.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
+            label6.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
+            label1.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label2.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label3.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label4.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label5.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label6.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            textViewB.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
         } else {
-            title.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            title.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label1.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label2.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label3.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label4.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label5.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label6.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
         }
         ajustCompoundDrawableSizeWithText(label1, drawable)
         ajustCompoundDrawableSizeWithText(label2, drawable)
@@ -691,14 +844,26 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
+                window.statusBarColor = ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
+                )
+                window.navigationBarColor = ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
+                )
             } else {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
+                window.statusBarColor = ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
+                )
+                window.navigationBarColor = ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
+                )
             }
         }
 
@@ -761,7 +926,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     try {
                         val proj = arrayOf(MediaStore.Images.Media.DATA)
                         cursor = contentResolver.query(it, proj, null, null, null)
-                        val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                        val columnIndex =
+                            cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
                         cursor?.moveToFirst()
                         filePath = cursor?.getString(columnIndex ?: 0) ?: ""
                     } catch (t: Throwable) {
@@ -810,9 +976,14 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 val t1 = filePath.indexOf("raw:")
                 filePath = filePath.substring(t1 + 4)
             }
-            val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            val permissionCheck =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    myPermissionsWriteExternalStorage
+                )
             } else {
                 when {
                     fileName.toLowerCase(Locale.getDefault()).contains(".pdf") -> {
@@ -839,8 +1010,18 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
     }
 
-    override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
-        val dd = DialogDelite.getInstance(position, arrayList[position][1], "з нядаўніх кніг", arrayList[position][0])
+    override fun onItemLongClick(
+        parent: AdapterView<*>?,
+        view: View?,
+        position: Int,
+        id: Long
+    ): Boolean {
+        val dd = DialogDelite.getInstance(
+            position,
+            arrayList[position][1],
+            "з нядаўніх кніг",
+            arrayList[position][0]
+        )
         dd.show(supportFragmentManager, "dialog_dilite")
         return true
     }
@@ -857,36 +1038,36 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         val file = File(filePath)
         pdfView.fromFile(file)
-                .enableAntialiasing(true) //.pages(0, 2, 1, 3, 3, 3) // all pages are displayed by default
-                .enableSwipe(true) // allows to block changing pages using swipe
-                .swipeHorizontal(false)
-                .enableDoubletap(true)
-                .defaultPage(defaultPage) // allows to draw something on the current page, usually visible in the middle of the screen
-                //.onDraw(onDrawListener)
-                // allows to draw something on all pages, separately for every page. Called only for visible pages
-                //.onDrawAll(onDrawListener)
-                .onLoad(this) // called after document is loaded and starts to be rendered
-                .onPageChange(this) //.onPageChange(onPageChangeListener)
-                //.onPageScroll(onPageScrollListener)
-                .onError(this) //.onError(onErrorListener)
-                //.onPageError(onPageErrorListener)
-                //.onRender(onRenderListener) // called after document is rendered for the first time
-                // called on single tap, return true if handled, false to toggle scroll handle visibility
-                //.onTap(onTapListener)
-                //.onLongPress(onLongPressListener)
-                .enableAnnotationRendering(false) // render annotations (such as comments, colors or forms)
-                .password(null)
-                .scrollHandle(null)
-                .enableAntialiasing(true) // improve rendering a little bit on low-res screens
-                // spacing between pages in dp. To define spacing color, set view background
-                .spacing(2)
-                .autoSpacing(false) // add dynamic spacing to fit each page on its own on the screen
-                //.linkHandler(DefaultLinkHandler)
-                .pageFitPolicy(FitPolicy.WIDTH)
-                .pageSnap(false) // snap pages to screen boundaries
-                .pageFling(false) // make a fling change only a single page like ViewPager
-                .nightMode(k.getBoolean("inversion", false)) // toggle night mode
-                .load()
+            .enableAntialiasing(true) //.pages(0, 2, 1, 3, 3, 3) // all pages are displayed by default
+            .enableSwipe(true) // allows to block changing pages using swipe
+            .swipeHorizontal(false)
+            .enableDoubletap(true)
+            .defaultPage(defaultPage) // allows to draw something on the current page, usually visible in the middle of the screen
+            //.onDraw(onDrawListener)
+            // allows to draw something on all pages, separately for every page. Called only for visible pages
+            //.onDrawAll(onDrawListener)
+            .onLoad(this) // called after document is loaded and starts to be rendered
+            .onPageChange(this) //.onPageChange(onPageChangeListener)
+            //.onPageScroll(onPageScrollListener)
+            .onError(this) //.onError(onErrorListener)
+            //.onPageError(onPageErrorListener)
+            //.onRender(onRenderListener) // called after document is rendered for the first time
+            // called on single tap, return true if handled, false to toggle scroll handle visibility
+            //.onTap(onTapListener)
+            //.onLongPress(onLongPressListener)
+            .enableAnnotationRendering(false) // render annotations (such as comments, colors or forms)
+            .password(null)
+            .scrollHandle(null)
+            .enableAntialiasing(true) // improve rendering a little bit on low-res screens
+            // spacing between pages in dp. To define spacing color, set view background
+            .spacing(2)
+            .autoSpacing(false) // add dynamic spacing to fit each page on its own on the screen
+            //.linkHandler(DefaultLinkHandler)
+            .pageFitPolicy(FitPolicy.WIDTH)
+            .pageSnap(false) // snap pages to screen boundaries
+            .pageFling(false) // make a fling change only a single page like ViewPager
+            .nightMode(k.getBoolean("inversion", false)) // toggle night mode
+            .load()
     }
 
     private fun loadFileTXT() {
@@ -939,7 +1120,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     private fun loadFileEPUB() {
         val naidauCount: Int = naidaunia.size - 1
-        if (biblioteka == null || naidaunia.size <= 0 || !naidaunia[naidauCount][1].contains(filePath)) {
+        if (biblioteka == null || naidaunia.size <= 0 || !naidaunia[naidauCount][1].contains(
+                filePath
+            )
+        ) {
             val file = File(filePath)
             val t1 = fileName.lastIndexOf(".")
             val dirName = if (t1 != -1) fileName.substring(0, t1)
@@ -982,7 +1166,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             defaultPage = 0
             positionY = 0
         }
-        val split: Array<String> = biblioteka?.content?.get(defaultPage)?.get(1)?.split("#")?.toTypedArray()
+        val split: Array<String> =
+            biblioteka?.content?.get(defaultPage)?.get(1)?.split("#")?.toTypedArray()
                 ?: arrayOf("")
         webView.loadUrl("file://" + dir.absolutePath.toString() + "/" + split[0])
         webView.scrollTo(0, positionY)
@@ -1027,7 +1212,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     securityError.show(supportFragmentManager, "securityError")
                     return
                 }
-                FileOutputStream(file).use { fout -> while (zis.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count) }
+                FileOutputStream(file).use { fout ->
+                    while (zis.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count)
+                }
             }
             filePath = file.absolutePath
             loadFileFB2()
@@ -1130,7 +1317,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private fun getFB2Page(): String {
         val section: ArrayList<Section> = fb2?.body?.sections ?: ArrayList()
         val sb = StringBuilder()
-        sb.append("<style>::selection {background: #eb9b9a} img{display: inlineheight: automax-width: 100%} a{text-decoration: none}</style>").append("\n")
+        sb.append("<style>::selection {background: #eb9b9a} img{display: inlineheight: automax-width: 100%} a{text-decoration: none}</style>")
+            .append("\n")
         for (i in 0 until section.size) {
             val section2: ArrayList<Section> = section[i].sections
             if (section2.size > 0) {
@@ -1139,7 +1327,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     val titles: ArrayList<Title> = section2[q].titles
                     if (titles.size > 0 && bookTitle[defaultPage].contains(titles[0].paragraphs[0].text)) {
                         val notes: ArrayList<String> = ArrayList()
-                        if (titles.size > 0) sb.append("<strong>").append(titles[0].paragraphs[0].text).append("</strong>").append("<p>").append("\n")
+                        if (titles.size > 0) sb.append("<strong>")
+                            .append(titles[0].paragraphs[0].text).append("</strong>").append("<p>")
+                            .append("\n")
                         for (e in 0 until elements.size) {
                             if (elements[e] is P) {
                                 val p = elements[e] as P
@@ -1155,7 +1345,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                                                     imageRaw = value.binary
                                                 }
                                             }
-                                            sb.append("<img src=\"data:image/jpegbase64,").append(imageRaw).append("\" />").append("<p>").append("\n")
+                                            sb.append("<img src=\"data:image/jpegbase64,")
+                                                .append(imageRaw).append("\" />").append("<p>")
+                                                .append("\n")
                                         }
                                     }
                                     elements[e] is EmptyLine -> {
@@ -1167,7 +1359,19 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                                         if (t1 != -1) {
                                             val t2 = text.indexOf("]", t1 + 1)
                                             notes.add(text.substring(t1 + 1, t2))
-                                            text = text.substring(0, t1) + "<sup><a id=\"s_" + text.substring(t1 + 1, t2) + "\" href=\"#n_" + text.substring(t1 + 1, t2) + "\">" + text.substring(t1, t2 + 1) + "</a></sup>" + text.substring(t2 + 1)
+                                            text = text.substring(
+                                                0,
+                                                t1
+                                            ) + "<sup><a id=\"s_" + text.substring(
+                                                t1 + 1,
+                                                t2
+                                            ) + "\" href=\"#n_" + text.substring(
+                                                t1 + 1,
+                                                t2
+                                            ) + "\">" + text.substring(
+                                                t1,
+                                                t2 + 1
+                                            ) + "</a></sup>" + text.substring(t2 + 1)
                                         }
                                         sb.append(text).append("<p>").append("\n")
                                     }
@@ -1175,13 +1379,18 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                             }
                         }
                         if (notes.size > 0) {
-                            sb.append("<hr size=\"2\" color=\"#000000\">").append("<p>").append("\n")
+                            sb.append("<hr size=\"2\" color=\"#000000\">").append("<p>")
+                                .append("\n")
                             fb2?.let {
                                 val notesK: ArrayList<Section> = it.notes.sections
                                 for (r in 0 until notesK.size) {
                                     for (w in 0 until notes.size) {
                                         if (notesK[r].titles[0].paragraphs[0].text.contains(notes[w])) {
-                                            sb.append("[").append(notes[w]).append("] ").append(notesK[r].elements[0].text).append("<p>").append("\n").append(" <a id=\"n_").append(notes[w]).append("\" href=\"#s_").append(notes[w]).append("\">Назад</a>").append("<p>").append("\n")
+                                            sb.append("[").append(notes[w]).append("] ")
+                                                .append(notesK[r].elements[0].text).append("<p>")
+                                                .append("\n").append(" <a id=\"n_").append(notes[w])
+                                                .append("\" href=\"#s_").append(notes[w])
+                                                .append("\">Назад</a>").append("<p>").append("\n")
                                         }
                                     }
                                 }
@@ -1194,9 +1403,15 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 val elements: ArrayList<Element> = section[i].elements
                 val titles: ArrayList<Title> = section[i].titles
                 val t1: Int = bookTitle[defaultPage].indexOf(">")
-                if (titles.size > 0 && titles[0].paragraphs[0].text.contains(bookTitle[defaultPage].substring(t1 + 1))) {
+                if (titles.size > 0 && titles[0].paragraphs[0].text.contains(
+                        bookTitle[defaultPage].substring(
+                            t1 + 1
+                        )
+                    )
+                ) {
                     val notes: ArrayList<String> = ArrayList()
-                    sb.append("<strong>").append(titles[0].paragraphs[0].text).append("</strong>").append("<p>").append("\n")
+                    sb.append("<strong>").append(titles[0].paragraphs[0].text).append("</strong>")
+                        .append("<p>").append("\n")
                     for (e in 0 until elements.size) {
                         if (elements[e] is P) {
                             val p = elements[e] as P
@@ -1212,7 +1427,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                                                 imageRaw = value.binary
                                             }
                                         }
-                                        sb.append("<img src=\"data:image/jpegbase64,").append(imageRaw).append("\" />").append("<p>").append("\n")
+                                        sb.append("<img src=\"data:image/jpegbase64,")
+                                            .append(imageRaw).append("\" />").append("<p>")
+                                            .append("\n")
                                     }
                                 }
                                 elements[e] is EmptyLine -> {
@@ -1224,7 +1441,19 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                                     if (t3 != -1) {
                                         val t2 = text.indexOf("]", t3 + 1)
                                         notes.add(text.substring(t3 + 1, t2))
-                                        text = text.substring(0, t3) + "<sup><a id=\"s_" + text.substring(t3 + 1, t2) + "\" href=\"#n_" + text.substring(t3 + 1, t2) + "\">" + text.substring(t3, t2 + 1) + "</a></sup>" + text.substring(t2 + 1)
+                                        text = text.substring(
+                                            0,
+                                            t3
+                                        ) + "<sup><a id=\"s_" + text.substring(
+                                            t3 + 1,
+                                            t2
+                                        ) + "\" href=\"#n_" + text.substring(
+                                            t3 + 1,
+                                            t2
+                                        ) + "\">" + text.substring(
+                                            t3,
+                                            t2 + 1
+                                        ) + "</a></sup>" + text.substring(t2 + 1)
                                     }
                                     sb.append(text).append("<p>").append("\n")
                                 }
@@ -1238,7 +1467,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                             for (r in 0 until notesK.size) {
                                 for (w in 0 until notes.size) {
                                     if (notesK[r].titles[0].paragraphs[0].text.contains(notes[w])) {
-                                        sb.append("[").append(notes[w]).append("] ").append(notesK[r].elements[0].text).append("<p>").append("\n").append(" <a id=\"n_").append(notes[w]).append("\" href=\"#s_").append(notes[w]).append("\">Назад</a>").append("<p>").append("\n")
+                                        sb.append("[").append(notes[w]).append("] ")
+                                            .append(notesK[r].elements[0].text).append("<p>")
+                                            .append("\n").append(" <a id=\"n_").append(notes[w])
+                                            .append("\" href=\"#s_").append(notes[w])
+                                            .append("\">Назад</a>").append("<p>").append("\n")
                                     }
                                 }
                             }
@@ -1255,8 +1488,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         super.onPrepareOptionsMenu(menu)
         autoscroll = k.getBoolean("autoscroll", false)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_trash).isVisible = listView.visibility == View.VISIBLE && idSelect == R.id.label1
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_update).isVisible = listView.visibility == View.VISIBLE && (idSelect == R.id.label2 || idSelect == R.id.label3 || idSelect == R.id.label4 || idSelect == R.id.label5)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_trash).isVisible =
+            listView.visibility == View.VISIBLE && idSelect == R.id.label1
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_update).isVisible =
+            listView.visibility == View.VISIBLE && (idSelect == R.id.label2 || idSelect == R.id.label3 || idSelect == R.id.label4 || idSelect == R.id.label5)
         itemAuto.isVisible = false
         if (listView.visibility == View.GONE) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).isVisible = true
@@ -1267,7 +1502,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_set_page).isVisible = true
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isVisible = true
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_font).isVisible = false
-                if (this.menu) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = true
+                if (this.menu) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible =
+                    true
             } else {
                 if (autoscroll) {
                     menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
@@ -1280,15 +1516,18 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
                 when {
                     fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
-                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = false
+                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible =
+                            false
                         itemAuto.isVisible = false
                     }
                     fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
-                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = false
+                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible =
+                            false
                         itemAuto.isVisible = true
                     }
                     else -> {
-                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = true
+                        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible =
+                            true
                         itemAuto.isVisible = true
                     }
                 }
@@ -1297,7 +1536,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_font).isVisible = true
                 val spanString = SpannableString(itemAuto.title.toString())
                 val end = spanString.length
-                spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                spanString.setSpan(
+                    AbsoluteSizeSpan(
+                        SettingsActivity.GET_FONT_SIZE_MIN.toInt(),
+                        true
+                    ), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
                 itemAuto.title = spanString
             }
         } else {
@@ -1307,8 +1551,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_bright).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isVisible = false
         }
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isChecked = k.getBoolean("inversion", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked =
+            k.getBoolean("orientation", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isChecked =
+            k.getBoolean("inversion", false)
         return true
     }
 
@@ -1320,7 +1566,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             val item: MenuItem = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spanString.setSpan(
+                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
+                0,
+                end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
             item.title = spanString
         }
         return true
@@ -1339,18 +1590,31 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 title_toolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
+        title_toolbar.setTextSize(
+            TypedValue.COMPLEX_UNIT_SP,
+            SettingsActivity.GET_FONT_SIZE_MIN + 4
+        )
         setSupportActionBar(toolbar)
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
             toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
         }
-        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, by.carkva_gazeta.malitounik.R.string.navigation_drawer_open, by.carkva_gazeta.malitounik.R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(
+            this,
+            drawer_layout,
+            toolbar,
+            by.carkva_gazeta.malitounik.R.string.navigation_drawer_open,
+            by.carkva_gazeta.malitounik.R.string.navigation_drawer_close
+        )
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == myPermissionsWriteExternalStorage) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -1432,11 +1696,13 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }).start()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_title) {
-            val titleBiblioteka: DialogTitleBiblioteka = DialogTitleBiblioteka.getInstance(bookTitle)
+            val titleBiblioteka: DialogTitleBiblioteka =
+                DialogTitleBiblioteka.getInstance(bookTitle)
             titleBiblioteka.show(supportFragmentManager, "title_biblioteka")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_set_page) {
-            val biblioteka: DialogSetPageBiblioteka = DialogSetPageBiblioteka.getInstance(pdfView.currentPage, pdfView.pageCount)
+            val biblioteka: DialogSetPageBiblioteka =
+                DialogSetPageBiblioteka.getInstance(pdfView.currentPage, pdfView.pageCount)
             biblioteka.show(supportFragmentManager, "set_page_biblioteka")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_inversion) {
@@ -1477,7 +1743,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 spid -= 5
                 val proc = 100 - (spid - 15) * 100 / 215
                 progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                progress.text =
+                    resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 progress.visibility = View.VISIBLE
                 startProcent()
                 stopAutoScroll()
@@ -1490,7 +1757,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 spid += 5
                 val proc = 100 - (spid - 15) * 100 / 215
                 progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                progress.text =
+                    resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 progress.visibility = View.VISIBLE
                 startProcent()
                 stopAutoScroll()
@@ -1592,22 +1860,83 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         stopAutoScroll()
         idSelect = view?.id ?: 0
-        val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val permissionCheck =
+            ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
         var rub = -1
         if (dzenNoch) {
-            label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+            label1.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
+            label2.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
+            label3.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
+            label4.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
+            label5.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
+            label6.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark
+                )
+            )
         } else {
-            label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            label1.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label2.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label3.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label4.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label5.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
+            label6.setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    by.carkva_gazeta.malitounik.R.color.colorIcons
+                )
+            )
         }
         if (idSelect == R.id.label1)
             listView.onItemLongClickListener = this
@@ -1623,39 +1952,95 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_niadaunia)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
-                if (dzenNoch) label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+                if (dzenNoch) label1.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark
+                    )
+                ) else label1.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        by.carkva_gazeta.malitounik.R.color.colorDivider
+                    )
+                )
             }
             R.id.label2 -> {
-                nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy)
+                nameRubrika =
+                    getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
                 rub = 1
-                if (dzenNoch) label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+                if (dzenNoch) label2.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark
+                    )
+                ) else label2.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        by.carkva_gazeta.malitounik.R.color.colorDivider
+                    )
+                )
             }
             R.id.label3 -> {
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
                 rub = 2
-                if (dzenNoch) label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+                if (dzenNoch) label3.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark
+                    )
+                ) else label3.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        by.carkva_gazeta.malitounik.R.color.colorDivider
+                    )
+                )
             }
             R.id.label4 -> {
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
                 rub = 3
-                if (dzenNoch) label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+                if (dzenNoch) label4.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark
+                    )
+                ) else label4.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        by.carkva_gazeta.malitounik.R.color.colorDivider
+                    )
+                )
             }
             R.id.label5 -> {
-                nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura)
+                nameRubrika =
+                    getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
                 rub = 4
-                if (dzenNoch) label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+                if (dzenNoch) label5.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark
+                    )
+                ) else label5.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        by.carkva_gazeta.malitounik.R.color.colorDivider
+                    )
+                )
             }
             R.id.label6 -> {
                 if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        myPermissionsWriteExternalStorage
+                    )
                 } else {
                     progressBar2.visibility = View.GONE
                     val fileExplorer = DialogFileExplorer()
@@ -1676,7 +2061,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             val timeUpdateSave = k.getLong("BibliotekaTimeUpdate", timeUpdate)
             if (!(json == "" || timeUpdate - timeUpdateSave == 0L)) {
                 if (timeUpdate - timeUpdateSave > (30 * 24 * 60 * 60 * 1000L)) {
-                    if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(this) == 2) {
+                    if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(
+                            this
+                        ) == 2
+                    ) {
                         val prefEditors: SharedPreferences.Editor = k.edit()
                         prefEditors.putLong("BibliotekaTimeUpdate", timeUpdate)
                         prefEditors.apply()
@@ -1700,7 +2088,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     adapter.notifyDataSetChanged()
                 }
             } else {
-                if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(this) == 2) {
+                if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(
+                        this
+                    ) == 2
+                ) {
                     val prefEditors: SharedPreferences.Editor = k.edit()
                     prefEditors.putLong("BibliotekaTimeUpdate", timeUpdate)
                     prefEditors.apply()
@@ -1725,80 +2116,100 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         progressBar2.visibility = View.VISIBLE
         val requestQueue = Volley.newRequestQueue(applicationContext)
         val showUrl = "https://carkva-gazeta.by/biblioteka.php"
-        val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, showUrl, null, Response.Listener { response: JSONObject ->
-            Thread(Runnable {
-                val temp: ArrayList<ArrayList<String>> = ArrayList()
-                val biblioteka = response.getJSONArray("biblioteka")
-                val gson = Gson()
-                for (i in 0 until biblioteka.length()) {
-                    val mySqlList: ArrayList<String> = ArrayList()
-                    val kniga = biblioteka.getJSONObject(i)
-                    val id = kniga.getString("bib")
-                    val rubrika = kniga.getString("rubryka")
-                    val link = kniga.getString("link")
-                    var str = kniga.getString("str")
-                    val pdf = kniga.getString("pdf")
-                    var image = kniga.getString("image")
-                    mySqlList.add(link)
-                    val pos = str.indexOf("</span><br>")
-                    str = str.substring(pos + 11)
-                    mySqlList.add(str)
-                    mySqlList.add(pdf)
-                    val url = URL("https://carkva-gazeta.by/data/bibliateka/$pdf")
-                    var filesize: String
-                    var conn: URLConnection?
-                    conn = url.openConnection()
-                    if (conn is HttpURLConnection) {
-                        (conn as HttpURLConnection?)?.requestMethod = "HEAD"
-                    }
-                    filesize = java.lang.String.valueOf(conn.contentLength)
-                    if (conn is HttpURLConnection) {
-                        (conn as HttpURLConnection?)?.disconnect()
-                    }
-                    mySqlList.add(filesize)
-                    mySqlList.add(rubrika)
-                    val im1 = image.indexOf("src=\"")
-                    val im2 = image.indexOf("\"", im1 + 5)
-                    image = "https://carkva-gazeta.by" + image.substring(im1 + 5, im2)
-                    val t1 = pdf.lastIndexOf(".") //image.lastIndexOf("/")
-                    val imageLocal: String = filesDir.toString() + "/image_temp/" + pdf.substring(0, t1) + ".png" //image.substring(t1 + 1)
-                    mySqlList.add(imageLocal)
-                    mySqlList.add(id)
-                    if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(this) == 2) {
-                        val dir = File("$filesDir/image_temp")
-                        if (!dir.exists()) dir.mkdir()
-                        var mIcon11: Bitmap
-                        val file = File(imageLocal)
-                        if (!file.exists()) {
-                            FileOutputStream(filesDir.toString() + "/image_temp/" + pdf.substring(0, t1) + ".png").use { out ->
-                                val inputStream: InputStream = URL(image).openStream()
-                                mIcon11 = BitmapFactory.decodeStream(inputStream)
-                                mIcon11.compress(Bitmap.CompressFormat.PNG, 90, out)
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.POST,
+            showUrl,
+            null,
+            Response.Listener { response: JSONObject ->
+                Thread(Runnable {
+                    val temp: ArrayList<ArrayList<String>> = ArrayList()
+                    val biblioteka = response.getJSONArray("biblioteka")
+                    val gson = Gson()
+                    for (i in 0 until biblioteka.length()) {
+                        val mySqlList: ArrayList<String> = ArrayList()
+                        val kniga = biblioteka.getJSONObject(i)
+                        val id = kniga.getString("bib")
+                        val rubrika = kniga.getString("rubryka")
+                        val link = kniga.getString("link")
+                        var str = kniga.getString("str")
+                        val pdf = kniga.getString("pdf")
+                        var image = kniga.getString("image")
+                        mySqlList.add(link)
+                        val pos = str.indexOf("</span><br>")
+                        str = str.substring(pos + 11)
+                        mySqlList.add(str)
+                        mySqlList.add(pdf)
+                        val url = URL("https://carkva-gazeta.by/data/bibliateka/$pdf")
+                        var filesize: String
+                        var conn: URLConnection?
+                        conn = url.openConnection()
+                        if (conn is HttpURLConnection) {
+                            (conn as HttpURLConnection?)?.requestMethod = "HEAD"
+                        }
+                        filesize = java.lang.String.valueOf(conn.contentLength)
+                        if (conn is HttpURLConnection) {
+                            (conn as HttpURLConnection?)?.disconnect()
+                        }
+                        mySqlList.add(filesize)
+                        mySqlList.add(rubrika)
+                        val im1 = image.indexOf("src=\"")
+                        val im2 = image.indexOf("\"", im1 + 5)
+                        image = "https://carkva-gazeta.by" + image.substring(im1 + 5, im2)
+                        val t1 = pdf.lastIndexOf(".") //image.lastIndexOf("/")
+                        val imageLocal: String =
+                            "$filesDir/image_temp/" + pdf.substring(
+                                0,
+                                t1
+                            ) + ".png" //image.substring(t1 + 1)
+                        mySqlList.add(imageLocal)
+                        mySqlList.add(id)
+                        if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(
+                                this
+                            ) == 2
+                        ) {
+                            val dir = File("$filesDir/image_temp")
+                            if (!dir.exists()) dir.mkdir()
+                            var mIcon11: Bitmap
+                            val file = File(imageLocal)
+                            if (!file.exists()) {
+                                FileOutputStream(
+                                    "$filesDir/image_temp/" + pdf.substring(
+                                        0,
+                                        t1
+                                    ) + ".png"
+                                ).use { out ->
+                                    val inputStream: InputStream = URL(image).openStream()
+                                    mIcon11 = BitmapFactory.decodeStream(inputStream)
+                                    mIcon11.compress(Bitmap.CompressFormat.PNG, 90, out)
+                                }
                             }
                         }
+                        if (rubrika.toInt() == rub) {
+                            arrayList.add(mySqlList)
+                        }
+                        temp.add(mySqlList)
                     }
-                    if (rubrika.toInt() == rub) {
-                        arrayList.add(mySqlList)
+                    val json: String = gson.toJson(temp)
+                    val prefEditors: SharedPreferences.Editor = k.edit()
+                    prefEditors.putString("Biblioteka", json)
+                    prefEditors.apply()
+                    runOnUiThread {
+                        adapter.notifyDataSetChanged()
+                        progressBar2.visibility = View.GONE
                     }
-                    temp.add(mySqlList)
-                }
-                val json: String = gson.toJson(temp)
-                val prefEditors: SharedPreferences.Editor = k.edit()
-                prefEditors.putString("Biblioteka", json)
-                prefEditors.apply()
-                runOnUiThread {
-                    adapter.notifyDataSetChanged()
-                    progressBar2.visibility = View.GONE
-                }
-                runSql = false
-            }).start()
-        }, Response.ErrorListener { })
+                    runSql = false
+                }).start()
+            },
+            Response.ErrorListener { })
         requestQueue.add(jsonObjectRequest)
     }
 
     override fun onResume() {
         super.onResume()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        overridePendingTransition(
+            by.carkva_gazeta.malitounik.R.anim.alphain,
+            by.carkva_gazeta.malitounik.R.anim.alphaout
+        )
     }
 
     private fun hide() {
@@ -1807,9 +2218,16 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelaY.toLong())
     }
 
+    @Suppress("DEPRECATION")
     private fun show() {
-        val decorView = window.decorView
-        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(true)
+            val controller = window.insetsController
+            controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+            //controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        } else {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        }
         mHideHandler.removeCallbacks(mHidePart2Runnable)
         mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelaY.toLong())
     }
@@ -1817,7 +2235,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         val prefEditor: SharedPreferences.Editor = k.edit()
-        if (pdfView.visibility == View.VISIBLE) prefEditor.putInt(fileName, pdfView.currentPage) else prefEditor.putInt(fileName, defaultPage)
+        if (pdfView.visibility == View.VISIBLE) prefEditor.putInt(
+            fileName,
+            pdfView.currentPage
+        ) else prefEditor.putInt(fileName, defaultPage)
         prefEditor.apply()
         outState.putBoolean("fullscreen", fullscreenPage)
         when {
@@ -1858,7 +2279,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     targetDirectory.deleteRecursively()
                     return false
                 }
-                FileOutputStream(file).use { fout -> while (zis.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count) }
+                FileOutputStream(file).use { fout ->
+                    while (zis.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count)
+                }
             }
         }
         return true
@@ -1930,7 +2353,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         val popup = PopupMenu(this, view)
         val infl = popup.menuInflater
         infl.inflate(R.menu.popup_biblioteka, popup.menu)
-        val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
+        val file =
+            File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
         if (file.exists()) {
             popup.menu.getItem(1).isVisible = false
         } else {
@@ -1942,7 +2366,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             val item = popup.menu.getItem(i)
             val spanString = SpannableString(popup.menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spanString.setSpan(
+                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
+                0,
+                end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
             item.title = spanString
         }
         if (arrayList[position].size < 7)
@@ -1951,7 +2380,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             popup.dismiss()
             when (menuItem.itemId) {
                 R.id.menu_opisanie -> {
-                    val dialogBibliateka = DialogBibliateka.getInstance(arrayList[position][2], arrayList[position][1], arrayList[position][0], arrayList[position][3])
+                    val dialogBibliateka = DialogBibliateka.getInstance(
+                        arrayList[position][2],
+                        arrayList[position][1],
+                        arrayList[position][0],
+                        arrayList[position][3]
+                    )
                     dialogBibliateka.show(supportFragmentManager, "dialog_bibliateka")
                     return@setOnMenuItemClickListener true
                 }
@@ -1960,14 +2394,18 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     return@setOnMenuItemClickListener true
                 }
                 R.id.menu_delite -> {
-                    val dd = DialogDelite.getInstance(0, arrayList[position][2], "з бібліятэкі", name)
+                    val dd =
+                        DialogDelite.getInstance(0, arrayList[position][2], "з бібліятэкі", name)
                     dd.show(supportFragmentManager, "dialog_delite")
                     return@setOnMenuItemClickListener true
                 }
                 R.id.menu_share -> {
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/index.php?bib=${arrayList[position][6]}")
+                    sendIntent.putExtra(
+                        Intent.EXTRA_TEXT,
+                        "https://carkva-gazeta.by/index.php?bib=${arrayList[position][6]}"
+                    )
                     sendIntent.type = "text/plain"
                     startActivity(Intent.createChooser(sendIntent, null))
                     return@setOnMenuItemClickListener true
@@ -1988,20 +2426,28 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         override fun onPageFinished(view: WebView, url: String) {
             progressBar2.visibility = View.GONE
             view.visibility = View.VISIBLE
-            if (animationStoronaLeft) webView.startAnimation(animInLeft) else webView.startAnimation(animInRight)
+            if (animationStoronaLeft) webView.startAnimation(animInLeft) else webView.startAnimation(
+                animInRight
+            )
             super.onPageFinished(view, url)
         }
     }
 
-    internal inner class BibliotekaAdapter(context: Activity) : ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
-        private val k: SharedPreferences = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+    internal inner class BibliotekaAdapter(context: Activity) :
+        ArrayAdapter<ArrayList<String>>(context, R.layout.simple_list_item_biblioteka, arrayList) {
+        private val k: SharedPreferences =
+            context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private val activity: Activity = context
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             SplitCompat.install(activity)
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                rootView = activity.layoutInflater.inflate(R.layout.simple_list_item_biblioteka, parent, false)
+                rootView = activity.layoutInflater.inflate(
+                    R.layout.simple_list_item_biblioteka,
+                    parent,
+                    false
+                )
                 viewHolder = ViewHolder()
                 rootView.tag = viewHolder
                 viewHolder.text = rootView.findViewById(R.id.label)
@@ -2033,7 +2479,13 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             } else {
                 viewHolder.buttonPopup?.visibility = View.VISIBLE
                 viewHolder.buttonPopup?.let {
-                    viewHolder.buttonPopup?.setOnClickListener { showPopupMenu(it, position, arrayList[position][0]) }
+                    viewHolder.buttonPopup?.setOnClickListener {
+                        showPopupMenu(
+                            it,
+                            position,
+                            arrayList[position][0]
+                        )
+                    }
                 }
                 val t1 = arrayList[position][5].lastIndexOf("/")
                 val file = File("$filesDir/image_temp/" + arrayList[position][5].substring(t1 + 1))
@@ -2041,7 +2493,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     Runnable {
                         val options = BitmapFactory.Options()
                         options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                        val bitmap = BitmapFactory.decodeFile("$filesDir/image_temp/" + arrayList[position][5].substring(t1 + 1), options)
+                        val bitmap = BitmapFactory.decodeFile(
+                            "$filesDir/image_temp/" + arrayList[position][5].substring(t1 + 1),
+                            options
+                        )
                         runOnUiThread {
                             viewHolder.imageView?.setImageBitmap(bitmap)
                             viewHolder.imageView?.visibility = View.VISIBLE
@@ -2052,10 +2507,23 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+                viewHolder.text?.setTextColor(
+                    ContextCompat.getColor(
+                        activity,
+                        by.carkva_gazeta.malitounik.R.color.colorIcons
+                    )
+                )
+                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(
+                    by.carkva_gazeta.malitounik.R.drawable.stiker_black,
+                    0,
+                    0,
+                    0
+                )
             }
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            viewHolder.text?.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                SettingsActivity.GET_FONT_SIZE_MIN
+            )
             viewHolder.text?.text = arrayList[position][0]
             return rootView
         }

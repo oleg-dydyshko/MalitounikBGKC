@@ -6,18 +6,15 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.*
+import android.widget.AbsListView
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemLongClickListener
-import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import kotlinx.android.synthetic.main.activity_bible_page_fragment.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -440,7 +437,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                 }
                 val clip = ClipData.newPlainText("", MainActivity.fromHtml(copyString.toString()).toString().trim())
                 clipboard.setPrimaryClip(clip)
-                messageView(getString(by.carkva_gazeta.malitounik.R.string.copy))
+                MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.copy))
                 linearLayout4.visibility = View.GONE
                 linearLayout6.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 linearLayout6.visibility = View.GONE
@@ -465,7 +462,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                     sendIntent.type = "text/plain"
                     startActivity(Intent.createChooser(sendIntent, null))
                 } else {
-                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             yelloy.setOnClickListener {
@@ -492,7 +489,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()
                 } else {
-                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             underline.setOnClickListener {
@@ -518,7 +515,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                 } else {
-                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             bold.setOnClickListener {
@@ -544,7 +541,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                 } else {
-                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             zakladka.setOnClickListener {
@@ -558,7 +555,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                     }
                     if (index == -1) {
                         BibleGlobalList.zakladkiSemuxa.add(0, knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.RAZDZEL) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString())
-                        messageView(getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
+                        MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
                     } else {
                         BibleGlobalList.zakladkiSemuxa.removeAt(index)
                     }
@@ -568,7 +565,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                     listPositionListiner?.setEdit(true)
                     BibleGlobalList.bibleCopyList.clear()
                 } else {
-                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             zametka.setOnClickListener {
@@ -584,7 +581,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                     listPositionListiner?.setEdit(true)
                     BibleGlobalList.bibleCopyList.clear()
                 } else {
-                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             share.setOnClickListener {
@@ -599,7 +596,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                     startActivity(Intent.createChooser(sendIntent, null))
                     spinnerCopy.setImageResource(by.carkva_gazeta.malitounik.R.drawable.arrow_down_float_bible)
                 } else {
-                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             copy.setOnClickListener {
@@ -607,7 +604,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                     val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                     val clip = ClipData.newPlainText("", MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString())
                     clipboard.setPrimaryClip(clip)
-                    messageView(getString(by.carkva_gazeta.malitounik.R.string.copy))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.copy))
                     linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     linearLayout4.visibility = View.GONE
                     BibleGlobalList.bibleCopyList.clear()
@@ -616,7 +613,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                     linearLayout5.visibility = View.GONE
                     spinnerCopy.setImageResource(by.carkva_gazeta.malitounik.R.drawable.arrow_down_float_bible)
                 } else {
-                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             fullCopy.setOnClickListener {
@@ -642,27 +639,6 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                     spinnerCopy.setImageResource(by.carkva_gazeta.malitounik.R.drawable.arrow_down_float_bible)
                 }
             }
-        }
-    }
-
-    private fun messageView(message: String) {
-        activity?.let {
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
-            val layout = LinearLayout(activity)
-            if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            val toast = TextViewRobotoCondensed(activity)
-            toast.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-            toast.text = message
-            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            layout.addView(toast)
-            val mes = Toast(activity)
-            mes.duration = Toast.LENGTH_LONG
-            mes.view = layout
-            mes.show()
         }
     }
 

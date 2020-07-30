@@ -12,7 +12,6 @@ import android.util.TypedValue
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -135,18 +134,7 @@ class DialogPasxa : DialogFragment() {
 
 private fun error() {
     activity?.let {
-        val layout = LinearLayout(it)
-        if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-        val toast = TextViewRobotoCondensed(it)
-        toast.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-        toast.text = getString(R.string.error)
-        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-        layout.addView(toast)
-        val mes = Toast(it)
-        mes.duration = Toast.LENGTH_SHORT
-        mes.view = layout
-        mes.show()
+        MainActivity.toastView(it, getString(R.string.error))
     }
 }
 }

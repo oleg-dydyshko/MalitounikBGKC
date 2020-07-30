@@ -7,10 +7,10 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
@@ -18,8 +18,6 @@ import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.webkit.WebSettings
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -37,15 +35,25 @@ import kotlin.collections.ArrayList
 class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, InteractiveScrollView.OnScrollChangedCallback, MyWebViewClient.OnLinkListenner {
 
     private val ulAnimationDelay = 300
-    private val mHideHandler: Handler = Handler()
+    private val mHideHandler: Handler = Handler(Looper.getMainLooper())
+
     @SuppressLint("InlinedApi")
+    @Suppress("DEPRECATION")
     private val mHidePart2Runnable = Runnable {
-        constraint.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false)
+            val controller = window.insetsController
+            controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+            controller?.systemBarsBehavior =
+                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        } else {
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+        }
     }
     private val mShowPart2Runnable = Runnable {
         supportActionBar?.show()
@@ -77,12 +85,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var mAutoScroll = true
     private val orientation: Int
         get() {
-            val rotation = windowManager.defaultDisplay.rotation
-            val displayOrientation = resources.configuration.orientation
-            if (displayOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-                return if (rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_180) ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE else ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            } else if (rotation == Surface.ROTATION_180 || rotation == Surface.ROTATION_90) return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-            return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            return MainActivity.getOrientation(this)
         }
 
     companion object {
@@ -184,7 +187,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         } else {
             val webSettings = WebView.settings
             webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
-            webSettings.setAppCacheEnabled(false)
+            //webSettings.setAppCacheEnabled(false)
             webSettings.blockNetworkImage = true
             webSettings.loadsImagesAutomatically = true
             webSettings.setGeolocationEnabled(false)
@@ -241,7 +244,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         TextView.textSize = fontBiblia
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             if (dzenNoch) {
                 window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
@@ -672,7 +675,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             prefEditor.apply()
                             val webSettings = WebView.settings
                             webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
-                            webSettings.setAppCacheEnabled(false)
+                            //webSettings.setAppCacheEnabled(false)
                             webSettings.blockNetworkImage = true
                             webSettings.loadsImagesAutomatically = true
                             webSettings.setGeolocationEnabled(false)
@@ -692,7 +695,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             prefEditor.apply()
                             val webSettings = WebView.settings
                             webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
-                            webSettings.setAppCacheEnabled(false)
+                            //webSettings.setAppCacheEnabled(false)
                             webSettings.blockNetworkImage = true
                             webSettings.loadsImagesAutomatically = true
                             webSettings.setGeolocationEnabled(false)
@@ -913,20 +916,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             editVybranoe = true
             men = setVybranoe(this, resurs, title)
             if (men) {
-                val layout = LinearLayout(this)
-                layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
-                val density = resources.displayMetrics.density
-                val realpadding = (10 * density).toInt()
-                val toast = TextViewRobotoCondensed(this)
-                toast.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                toast.text = getString(by.carkva_gazeta.malitounik.R.string.addVybranoe)
-                toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                layout.addView(toast)
-                val mes = Toast(this)
-                mes.duration = Toast.LENGTH_SHORT
-                mes.view = layout
-                mes.show()
+                MainActivity.toastView(
+                    this,
+                    getString(by.carkva_gazeta.malitounik.R.string.addVybranoe)
+                )
             }
             invalidateOptionsMenu()
         }
@@ -1014,8 +1007,16 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         mHideHandler.postDelayed(mHidePart2Runnable, ulAnimationDelay.toLong())
     }
 
+    @Suppress("DEPRECATION")
     private fun show() {
-        constraint.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(true)
+            val controller = window.insetsController
+            controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+            //controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        } else {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        }
         mHideHandler.removeCallbacks(mHidePart2Runnable)
         mHideHandler.postDelayed(mShowPart2Runnable, ulAnimationDelay.toLong())
     }

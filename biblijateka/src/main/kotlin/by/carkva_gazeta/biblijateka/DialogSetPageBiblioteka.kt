@@ -10,14 +10,11 @@ import android.text.InputType
 import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 
 class DialogSetPageBiblioteka : DialogFragment() {
     private var page = 0
@@ -31,8 +28,8 @@ class DialogSetPageBiblioteka : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        page = arguments?.getInt("page")?: 0
-        pageCount = arguments?.getInt("pageCount")?: 0
+        page = arguments?.getInt("page") ?: 0
+        pageCount = arguments?.getInt("pageCount") ?: 0
     }
 
     override fun onAttach(context: Context) {
@@ -54,12 +51,25 @@ class DialogSetPageBiblioteka : DialogFragment() {
             val linear = LinearLayout(it)
             linear.orientation = LinearLayout.VERTICAL
             val textViewZaglavie = TextViewRobotoCondensed(it)
-            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
+            if (dzenNoch) textViewZaglavie.setBackgroundColor(
+                ContextCompat.getColor(
+                    it,
+                    R.color.colorPrimary_black
+                )
+            ) else textViewZaglavie.setBackgroundColor(
+                ContextCompat.getColor(
+                    it,
+                    R.color.colorPrimary
+                )
+            )
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.text = String.format("Увядзіце нумар старонкі. Усяго: %s", pageCount)
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textViewZaglavie.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                SettingsActivity.GET_FONT_SIZE_MIN
+            )
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             linear.addView(textViewZaglavie)
@@ -71,25 +81,17 @@ class DialogSetPageBiblioteka : DialogFragment() {
             input.requestFocus()
             // Показываем клавиатуру
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+            imm.toggleSoftInput(
+                InputMethodManager.SHOW_FORCED,
+                InputMethodManager.HIDE_IMPLICIT_ONLY
+            )
             builder.setView(linear)
             builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                 // Скрываем клавиатуру
                 val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm1.hideSoftInputFromWindow(input.windowToken, 0)
                 if (input.text.toString() == "") {
-                    val layout = LinearLayout(it)
-                    if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-                    val toast = TextViewRobotoCondensed(it)
-                    toast.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                    toast.text = getString(R.string.error)
-                    toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                    layout.addView(toast)
-                    val mes = Toast(it)
-                    mes.duration = Toast.LENGTH_SHORT
-                    mes.view = layout
-                    mes.show()
+                    MainActivity.toastView(it, getString(R.string.error))
                 } else {
                     val value: Int = try {
                         input.text.toString().toInt()
@@ -99,18 +101,7 @@ class DialogSetPageBiblioteka : DialogFragment() {
                     if (value in 1..pageCount) {
                         mListener?.onDialogSetPage(value)
                     } else {
-                        val layout = LinearLayout(it)
-                        if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black) else layout.setBackgroundResource(R.color.colorPrimary)
-                        val toast = TextViewRobotoCondensed(it)
-                        toast.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                        toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        toast.text = getString(R.string.error)
-                        toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                        layout.addView(toast)
-                        val mes = Toast(it)
-                        mes.duration = Toast.LENGTH_SHORT
-                        mes.view = layout
-                        mes.show()
+                        MainActivity.toastView(it, getString(R.string.error))
                     }
                 }
             }
@@ -127,9 +118,15 @@ class DialogSetPageBiblioteka : DialogFragment() {
         val alert = builder.create()
         alert.setOnShowListener {
             val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+            btnPositive.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                SettingsActivity.GET_FONT_SIZE_TOAST
+            )
             val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-            btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+            btnNegative.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                SettingsActivity.GET_FONT_SIZE_TOAST
+            )
             val btnNeutral = alert.getButton(Dialog.BUTTON_NEUTRAL)
             btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
         }

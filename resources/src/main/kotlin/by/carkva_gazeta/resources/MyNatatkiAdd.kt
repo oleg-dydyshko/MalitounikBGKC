@@ -69,8 +69,7 @@ class MyNatatkiAdd : AppCompatActivity() {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
         if (dzenNoch) { //getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.colorprimary_material_dark));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val window = window
-                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
                 window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)

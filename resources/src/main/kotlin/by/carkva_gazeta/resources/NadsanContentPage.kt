@@ -171,14 +171,14 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
                     }
                     val clip = ClipData.newPlainText("", MainActivity.fromHtml(copyString.toString()).toString().trim())
                     clipboard.setPrimaryClip(clip)
-                    messageView(getString(by.carkva_gazeta.malitounik.R.string.copy))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.copy))
                     linearLayout6.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     linearLayout6.visibility = View.GONE
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()
                 } else {
-                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
             adpravit.setOnClickListener {
@@ -198,30 +198,9 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
                     sendIntent.type = "text/plain"
                     startActivity(Intent.createChooser(sendIntent, null))
                 } else {
-                    messageView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
+                    MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
-        }
-    }
-
-    private fun messageView(message: String) {
-        activity?.let {
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
-            val layout = LinearLayout(activity)
-            if (dzenNoch) layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_black) else layout.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary)
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            val toast = TextViewRobotoCondensed(activity)
-            toast.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            toast.setPadding(realpadding, realpadding, realpadding, realpadding)
-            toast.text = message
-            toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            layout.addView(toast)
-            val mes = Toast(activity)
-            mes.duration = Toast.LENGTH_LONG
-            mes.view = layout
-            mes.show()
         }
     }
 

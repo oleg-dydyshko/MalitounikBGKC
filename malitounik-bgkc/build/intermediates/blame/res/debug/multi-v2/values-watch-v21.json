@@ -4,7 +4,7 @@
             "outputFile": "/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/build/intermediates/incremental/mergeDebugResources/merged.dir/values-watch-v21/values-watch-v21.xml",
             "map": [
                 {
-                    "source": "/home/oleg/.gradle/caches/transforms-2/files-2.1/38d73252397e14f6b2ca8374e68e18f7/appcompat-1.1.0/res/values-watch-v21/values-watch-v21.xml",
+                    "source": "/home/oleg/.gradle/caches/transforms-2/files-2.1/2015f01241e59eac6ed053c752da09b7/appcompat-1.3.0-alpha01/res/values-watch-v21/values-watch-v21.xml",
                     "from": {
                         "startLines": "2,6,10",
                         "startColumns": "4,4,4",

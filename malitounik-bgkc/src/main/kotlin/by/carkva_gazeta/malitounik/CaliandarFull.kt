@@ -460,69 +460,117 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         if (gc[Calendar.MINUTE] < 10) nol3 = "0"
                         res = "Паведаміць: " + nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR] + " у " + gc[Calendar.HOUR_OF_DAY] + ":" + nol3 + gc[Calendar.MINUTE]
                     }
-                    val density = resources.displayMetrics.density
-                    val realpadding = (5 * density).toInt()
-                    val textViewT = TextViewRobotoCondensed(activity)
-                    textViewT.text = title
-                    textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)
-                    textViewT.setTypeface(null, Typeface.BOLD)
-                    textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-                    textViewT.setTypeface(null, Typeface.BOLD)
                     activity?.let {
+                        val density = resources.displayMetrics.density
+                        val realpadding = (5 * density).toInt()
+                        val textViewT = TextViewRobotoCondensed(it)
+                        textViewT.text = title
+                        textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)
+                        textViewT.setTypeface(null, Typeface.BOLD)
+                        textViewT.setTextSize(
+                            TypedValue.COMPLEX_UNIT_SP,
+                            SettingsActivity.GET_DEFAULT_FONT_SIZE
+                        )
+                        textViewT.setTypeface(null, Typeface.BOLD)
+
                         textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                         textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(it)[p.color]))
-                    }
-                    sabytieList.add(textViewT)
-                    val textView = TextViewRobotoCondensed(activity)
-                    activity?.let {
+                        sabytieList.add(textViewT)
+                        val textView = TextViewRobotoCondensed(it)
                         textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                        textView.setBackgroundColor(ContextCompat.getColor(it, R.color.colorDivider))
-                    }
-                    textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                        textView.setBackgroundColor(
+                            ContextCompat.getColor(
+                                it,
+                                R.color.colorDivider
+                            )
+                        )
+                        textView.setPadding(realpadding, realpadding, realpadding, realpadding)
+                        textView.setTextSize(
+                            TypedValue.COMPLEX_UNIT_SP,
+                            SettingsActivity.GET_DEFAULT_FONT_SIZE
+                        )
 
-                    if (dzenNoch) {
-                        activity?.let { textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) }
-                        textView.setBackgroundResource(R.color.colorprimary_material_dark)
-                    }
-                    if (data == dataK && time == timeK) {
-                        textView.text = resources.getString(R.string.sabytieKali, data, time, res)
-                    } else {
-                        textView.text = resources.getString(R.string.sabytieDoKuda, data, time, dataK, timeK, res)
-                    }
-                    sabytieList.add(textView)
-                    val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-                    llp.setMargins(0, 0, 0, 10)
-                    textView.layoutParams = llp
-                    textViewT.layoutParams = llp
-                    textView.visibility = View.GONE
-                    textViewT.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0)
-                    textViewT.setOnClickListener {
-                        if (textView.visibility == View.GONE) {
-                            textViewT.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0)
+                        if (dzenNoch) {
+                            textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                            textView.setBackgroundResource(R.color.colorprimary_material_dark)
+                        }
+                        if (data == dataK && time == timeK) {
+                            textView.text =
+                                resources.getString(R.string.sabytieKali, data, time, res)
+                        } else {
+                            textView.text = resources.getString(
+                                R.string.sabytieDoKuda,
+                                data,
+                                time,
+                                dataK,
+                                timeK,
+                                res
+                            )
+                        }
+                        sabytieList.add(textView)
+                        val llp = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT
+                        )
+                        llp.setMargins(0, 0, 0, 10)
+                        textView.layoutParams = llp
+                        textViewT.layoutParams = llp
+                        textView.visibility = View.GONE
+                        textViewT.setCompoundDrawablesWithIntrinsicBounds(
+                            0,
+                            0,
+                            android.R.drawable.arrow_down_float,
+                            0
+                        )
+                        textViewT.setOnClickListener {
+                            if (textView.visibility == View.GONE) {
+                                textViewT.setCompoundDrawablesWithIntrinsicBounds(
+                                    0,
+                                    0,
+                                    android.R.drawable.arrow_up_float,
+                                    0
+                                )
+                                textView.visibility = View.VISIBLE
+                                val llp2 = LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.MATCH_PARENT
+                                )
+                                llp2.setMargins(0, 0, 0, 0)
+                                textViewT.layoutParams = llp2
+                                scroll?.post { scroll?.fullScroll(ScrollView.FOCUS_DOWN) }
+                            } else {
+                                textViewT.setCompoundDrawablesWithIntrinsicBounds(
+                                    0,
+                                    0,
+                                    android.R.drawable.arrow_down_float,
+                                    0
+                                )
+                                textViewT.layoutParams = llp
+                                textView.visibility = View.GONE
+                            }
+                        }
+                        if (title == sabytieTitle) {
+                            textViewT.setCompoundDrawablesWithIntrinsicBounds(
+                                0,
+                                0,
+                                android.R.drawable.arrow_up_float,
+                                0
+                            )
                             textView.visibility = View.VISIBLE
-                            val llp2 = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+                            val llp2 = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT
+                            )
                             llp2.setMargins(0, 0, 0, 0)
                             textViewT.layoutParams = llp2
-                            scroll?.post { scroll?.fullScroll(ScrollView.FOCUS_DOWN) }
-                        } else {
-                            textViewT.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0)
-                            textViewT.layoutParams = llp
-                            textView.visibility = View.GONE
-                        }
-                    }
-                    if (title == sabytieTitle) {
-                        textViewT.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0)
-                        textView.visibility = View.VISIBLE
-                        val llp2 = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-                        llp2.setMargins(0, 0, 0, 0)
-                        textViewT.layoutParams = llp2
-                        scroll?.post {
-                            activity?.intent?.removeExtra("sabytieView")
-                            scroll?.fullScroll(ScrollView.FOCUS_DOWN)
-                            val shakeanimation = AnimationUtils.loadAnimation(activity, R.anim.shake)
-                            textViewT.startAnimation(shakeanimation)
-                            textView.startAnimation(shakeanimation)
+                            scroll?.post {
+                                activity?.intent?.removeExtra("sabytieView")
+                                scroll?.fullScroll(ScrollView.FOCUS_DOWN)
+                                val shakeanimation =
+                                    AnimationUtils.loadAnimation(activity, R.anim.shake)
+                                textViewT.startAnimation(shakeanimation)
+                                textView.startAnimation(shakeanimation)
+                            }
                         }
                     }
                 }

@@ -9,7 +9,7 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 14
         targetSdkVersion 30
-        versionCode 43637
+        versionCode 43638
         versionName "3.8.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -50,7 +50,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     api 'com.google.android.material:material:1.1.0'
-    api 'com.google.android.play:core:1.7.3'
+    api 'com.google.android.play:core:1.8.0'
     api 'com.google.code.gson:gson:2.8.6'
     api 'androidx.webkit:webkit:1.3.0-rc01'
     api 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'

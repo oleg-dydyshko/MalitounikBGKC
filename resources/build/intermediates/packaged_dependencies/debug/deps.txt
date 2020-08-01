@@ -1,0 +1,3 @@
+androidx.lifecycle:lifecycle-runtime-ktx
+org.jetbrains.kotlinx:kotlinx-coroutines-android
+org.jetbrains.kotlinx:kotlinx-coroutines-core

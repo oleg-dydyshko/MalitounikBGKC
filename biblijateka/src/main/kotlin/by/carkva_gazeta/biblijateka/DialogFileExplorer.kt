@@ -223,7 +223,9 @@ class DialogFileExplorer : DialogFragment() {
 
     private inner class TitleListAdaprer(private val mContext: Activity) : ArrayAdapter<MyFile>(mContext, R.layout.biblijateka_simple_list_item, fileList) {
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
-            SplitCompat.install(activity)
+            activity?.let {
+                SplitCompat.install(it)
+            }
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {

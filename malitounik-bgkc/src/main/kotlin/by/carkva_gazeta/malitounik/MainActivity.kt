@@ -1699,10 +1699,12 @@ try {
         fun checkmodulesBiblijateka(context: Context?): Boolean {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
                 return true
-            val muduls = SplitInstallManagerFactory.create(context).installedModules
-            for (mod in muduls) {
-                if (mod == "biblijateka") {
-                    return true
+            context?.let {
+                val muduls = SplitInstallManagerFactory.create(it).installedModules
+                for (mod in muduls) {
+                    if (mod == "biblijateka") {
+                        return true
+                    }
                 }
             }
             return false
@@ -1711,10 +1713,12 @@ try {
         fun checkmoduleResources(context: Context?): Boolean {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
                 return true
-            val muduls = SplitInstallManagerFactory.create(context).installedModules
-            for (mod in muduls) {
-                if (mod == "resources") {
-                    return true
+            context?.let {
+                val muduls = SplitInstallManagerFactory.create(it).installedModules
+                for (mod in muduls) {
+                    if (mod == "resources") {
+                        return true
+                    }
                 }
             }
             return false

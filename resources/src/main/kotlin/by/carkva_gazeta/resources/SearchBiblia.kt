@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package by.carkva_gazeta.resources
 
 import android.app.Activity
@@ -7,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
-import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -31,11 +28,12 @@ import by.carkva_gazeta.resources.R.raw
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.search_biblia.*
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Created by oleg on 5.10.16
@@ -56,9 +54,12 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
     private lateinit var historyAdapter: HistoryAdapter
     private var actionExpandOn = false
     private var fierstPosition = 0
+    private val poshukBible: PoshukBible
+        get() = PoshukBible()
 
     override fun onPause() {
         super.onPause()
+        poshukBible.cancel()
         prefEditors.putString("search_string_filter", editText2.text.toString())
         prefEditors.putInt("search_bible_fierstPosition", fierstPosition)
         prefEditors.apply()
@@ -80,8 +81,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 //loadHistory()
                 //searchView?.clearFocus()
                 //actionExpandOn = true
-                val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
-                poshuk.execute(edit)
+                poshukBible.execute(edit)
+                //val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
+                //poshuk.execute(edit)
                 Histopy.visibility = View.GONE
                 ListView.visibility = View.VISIBLE
             }
@@ -160,7 +162,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
         })
         editText2.setText(chin.getString("search_string_filter", ""))
-        adapterReference = WeakReference(adapter)
         ListView.setOnItemClickListener { adapterView: AdapterView<*>, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
@@ -393,8 +394,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             autoCompleteTextView?.setText(edit)
             searchView?.clearFocus()
             //actionExpandOn = true
-            val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
-            poshuk.execute(edit)
+            poshukBible.execute(edit)
+            //val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
+            //poshuk.execute(edit)
         }
         Histopy.setOnItemLongClickListener { _, _, position, _ ->
             val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
@@ -474,8 +476,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         ListView.visibility = View.VISIBLE
                         //searchView?.clearFocus()
                         //actionExpandOn = true
-                        val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
-                        poshuk.execute(edit)
+                        poshukBible.execute(edit)
+                        //val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
+                        //poshuk.execute(edit)
                     } else {
                         MainActivity.toastView(
                             this,
@@ -651,11 +654,14 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     /*private fun runTask() {
         lifecycleScope.executeAsyncTask(onPreExecute = {
+            Log.d("Oleg", "onPreExecute")
             // ... runs in Main Thread
         }, doInBackground = {
+            Log.d("Oleg", "doInBackground")
             // ... runs in Worker(Background) Thread
-            "Result" // send data to "onPostExecute"
+            ArrayList<String>() // send data to "onPostExecute"
         }, onPostExecute = {
+            Log.d("Oleg", "onPostExecute")
             // runs in Main Thread
             // ... here "it" is the data returned from "doInBackground"
         })
@@ -673,7 +679,76 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         onPostExecute(result) // runs in Main Thread
     }*/
 
-    private class Poshuk(
+    private inner class PoshukBible : CoroutineScope {
+
+        private var job: Job = Job()
+
+        override val coroutineContext: CoroutineContext
+            get() = Dispatchers.Main + job
+
+        fun cancel() {
+            job.cancel()
+        }
+
+        fun execute(searche: String) = launch {
+            onPreExecute()
+            val result = doInBackground(searche)
+            onPostExecute(result)
+        }
+
+        private fun onPreExecute() {
+            searche = true
+            prefEditors = chin.edit()
+            adapter.clear()
+            textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
+            progressBar.visibility = View.VISIBLE
+            ListView.visibility = View.GONE
+            var edit = autoCompleteTextView?.text.toString()
+            if (edit != "") {
+                edit = edit.trim()
+                autoCompleteTextView?.setText(edit)
+                prefEditors.putString("search_string", edit)
+                prefEditors.apply()
+                //val imm = activityReference.get()?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                //imm.hideSoftInputFromWindow(editText.get()?.windowToken, 0)
+            }
+        }
+
+        private suspend fun doInBackground(searche: String): ArrayList<String> =
+            withContext(Dispatchers.IO) {
+                if (zavet == 1) {
+                    return@withContext semuxa(this@SearchBiblia, searche)
+                }
+                if (zavet == 2) {
+                    return@withContext sinoidal(this@SearchBiblia, searche)
+                }
+                return@withContext if (zavet == 3) {
+                    nadsan(this@SearchBiblia, searche)
+                } else ArrayList()
+            }
+
+        private fun onPostExecute(result: ArrayList<String>) {
+            adapter.addAll(result)
+            adapter.filter.filter(editText2?.text.toString())
+            textViewCount?.text = resources.getString(
+                by.carkva_gazeta.malitounik.R.string.seash,
+                adapter.count
+            )
+            if (chin.getString("search_string", "") != "") {
+                //listView?.clearFocus()
+                ListView?.post { ListView.setSelection(chin.getInt("search_position", 0)) }
+            }
+            progressBar.visibility = View.GONE
+            ListView.visibility = View.VISIBLE
+            val gson = Gson()
+            val json = gson.toJson(result)
+            prefEditors.putString("search_array", json)
+            prefEditors.apply()
+            searche = false
+        }
+    }
+
+    /*private class Poshuk(
         context: Activity,
         editText: AutoCompleteTextView?,
         textViewCount: TextViewRobotoCondensed?
@@ -746,7 +821,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             prefEditors.apply()
             searche = false
         }
-    }
+    }*/
 
     private inner class MyTextWatcher(
         private val editText: EditText?,
@@ -920,7 +995,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     companion object {
         private var zavet = 1
-        private var adapterReference: WeakReference<SearchBibliaListAdaprer>? = null
         private var setSinodalBible: ArrayMap<String, Int> = ArrayMap()
         private var setSemuxaBible: ArrayMap<String, Int> = ArrayMap()
         private var searche = false

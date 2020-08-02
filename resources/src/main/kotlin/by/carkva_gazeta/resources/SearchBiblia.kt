@@ -28,18 +28,16 @@ import by.carkva_gazeta.resources.R.raw
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.search_biblia.*
-import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.coroutines.CoroutineContext
 
 /**
  * Created by oleg on 5.10.16
  */
 class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSearshListiner,
-    DialogClearHishory.DialogClearHistoryListener {
+    DialogClearHishory.DialogClearHistoryListener, PoshukBible.Execute {
     private var seash: ArrayList<String> = ArrayList()
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
@@ -55,11 +53,14 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
     private var actionExpandOn = false
     private var fierstPosition = 0
     private val poshukBible: PoshukBible
-        get() = PoshukBible()
+        get() {
+            val poshukBible = PoshukBible()
+            poshukBible.setExecute(this)
+            return poshukBible
+        }
 
     override fun onPause() {
         super.onPause()
-        poshukBible.cancel()
         prefEditors.putString("search_string_filter", editText2.text.toString())
         prefEditors.putInt("search_bible_fierstPosition", fierstPosition)
         prefEditors.apply()
@@ -78,12 +79,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             if (edit.length >= 3) {
                 addHistory(it)
                 saveHistory()
-                //loadHistory()
-                //searchView?.clearFocus()
-                //actionExpandOn = true
                 poshukBible.execute(edit)
-                //val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
-                //poshuk.execute(edit)
                 Histopy.visibility = View.GONE
                 ListView.visibility = View.VISIBLE
             }
@@ -122,10 +118,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 seash.addAll(gson.fromJson(json, type))
                 actionExpandOn = true
             }
-        }/* else {
-            Histopy.visibility = View.VISIBLE
-            ListView.visibility = View.GONE
-        }*/
+        }
         zavet = intent.getIntExtra("zavet", 1)
         var biblia = "semuxa"
         when (zavet) {
@@ -393,10 +386,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             ListView.visibility = View.VISIBLE
             autoCompleteTextView?.setText(edit)
             searchView?.clearFocus()
-            //actionExpandOn = true
             poshukBible.execute(edit)
-            //val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
-            //poshuk.execute(edit)
         }
         Histopy.setOnItemLongClickListener { _, _, position, _ ->
             val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
@@ -471,14 +461,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                     if (edit.length >= 3) {
                         addHistory(edit)
                         saveHistory()
-                        //loadHistory()
                         Histopy.visibility = View.GONE
                         ListView.visibility = View.VISIBLE
-                        //searchView?.clearFocus()
-                        //actionExpandOn = true
                         poshukBible.execute(edit)
-                        //val poshuk = Poshuk(this, autoCompleteTextView, textViewCount)
-                        //poshuk.execute(edit)
                     } else {
                         MainActivity.toastView(
                             this,
@@ -513,24 +498,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         searchViewItem.expandActionView()
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = title
-        //loadHistory()
-        /*searchView?.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
-            override fun onSuggestionSelect(position: Int): Boolean {
-                return true
-            }
-
-            override fun onSuggestionClick(position: Int): Boolean {
-                val edit = history[position]
-                addHistory(edit)
-                //loadHistory()
-                searchView?.clearFocus()
-                autoCompleteTextView?.setText(edit)
-                val poshuk = Poshuk(this@SearchBiblia, autoCompleteTextView, textViewCount)
-                poshuk.execute(edit)
-                saveHistopy()
-                return true
-            }
-        })*/
         textViewCount =
             menu.findItem(by.carkva_gazeta.malitounik.R.id.count).actionView as TextViewRobotoCondensed
         textViewCount?.text =
@@ -572,20 +539,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         return super.onOptionsItemSelected(item)
     }
 
-    /*private fun loadHistory() {
-        val tempHistory = ArrayList<String>()
-        val columns = arrayOf("_id", "text")
-        val temp = arrayOf(0, "default")
-        val cursor = MatrixCursor(columns)
-        for (i in 0 until history.size) {
-            temp[0] = i
-            temp[1] = history[i]
-            cursor.addRow(temp)
-            tempHistory.add(history[i])
-        }
-        searchView?.suggestionsAdapter = ExampleCursorAdapter(this, cursor, tempHistory)
-    }*/
-
     private fun addHistory(item: String) {
         val temp = ArrayList<String>()
         for (i in 0 until history.size) {
@@ -614,7 +567,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         val json = gson.toJson(history)
         prefEditors.putString("history_bible_$biblia", json)
         prefEditors.apply()
-        //invalidateOptionsMenu()
     }
 
     override fun cleanFullHistory() {
@@ -622,7 +574,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         saveHistory()
         invalidateOptionsMenu()
         actionExpandOn = true
-        //loadHistory()
     }
 
     override fun cleanHistory(position: Int) {
@@ -633,7 +584,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             invalidateOptionsMenu()
         }
         historyAdapter.notifyDataSetChanged()
-        //actionExpandOn = true
     }
 
     override fun onClick(view: View?) {
@@ -648,180 +598,52 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         outState.putBoolean("list_view", ListView.visibility == View.VISIBLE)
         outState.putInt("fierstPosition", fierstPosition)
         prefEditors.putString("search_string", autoCompleteTextView?.text.toString())
-        //prefEditors.putString("search_array", "")
         prefEditors.apply()
     }
 
-    /*private fun runTask() {
-        lifecycleScope.executeAsyncTask(onPreExecute = {
-            Log.d("Oleg", "onPreExecute")
-            // ... runs in Main Thread
-        }, doInBackground = {
-            Log.d("Oleg", "doInBackground")
-            // ... runs in Worker(Background) Thread
-            ArrayList<String>() // send data to "onPostExecute"
-        }, onPostExecute = {
-            Log.d("Oleg", "onPostExecute")
-            // runs in Main Thread
-            // ... here "it" is the data returned from "doInBackground"
-        })
-    }
-
-    private fun <R> CoroutineScope.executeAsyncTask(
-        onPreExecute: () -> Unit,
-        doInBackground: () -> R,
-        onPostExecute: (R) -> Unit
-    ) = launch {
-        onPreExecute() // runs in Main Thread
-        val result = withContext(Dispatchers.IO) {
-            doInBackground() // runs in background thread without blocking the Main Thread
-        }
-        onPostExecute(result) // runs in Main Thread
-    }*/
-
-    private inner class PoshukBible : CoroutineScope {
-
-        private var job: Job = Job()
-
-        override val coroutineContext: CoroutineContext
-            get() = Dispatchers.Main + job
-
-        fun cancel() {
-            job.cancel()
-        }
-
-        fun execute(searche: String) = launch {
-            onPreExecute()
-            val result = doInBackground(searche)
-            onPostExecute(result)
-        }
-
-        private fun onPreExecute() {
-            searche = true
-            prefEditors = chin.edit()
-            adapter.clear()
-            textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
-            progressBar.visibility = View.VISIBLE
-            ListView.visibility = View.GONE
-            var edit = autoCompleteTextView?.text.toString()
-            if (edit != "") {
-                edit = edit.trim()
-                autoCompleteTextView?.setText(edit)
-                prefEditors.putString("search_string", edit)
-                prefEditors.apply()
-                //val imm = activityReference.get()?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                //imm.hideSoftInputFromWindow(editText.get()?.windowToken, 0)
-            }
-        }
-
-        private suspend fun doInBackground(searche: String): ArrayList<String> =
-            withContext(Dispatchers.IO) {
-                if (zavet == 1) {
-                    return@withContext semuxa(this@SearchBiblia, searche)
-                }
-                if (zavet == 2) {
-                    return@withContext sinoidal(this@SearchBiblia, searche)
-                }
-                return@withContext if (zavet == 3) {
-                    nadsan(this@SearchBiblia, searche)
-                } else ArrayList()
-            }
-
-        private fun onPostExecute(result: ArrayList<String>) {
-            adapter.addAll(result)
-            adapter.filter.filter(editText2?.text.toString())
-            textViewCount?.text = resources.getString(
-                by.carkva_gazeta.malitounik.R.string.seash,
-                adapter.count
-            )
-            if (chin.getString("search_string", "") != "") {
-                //listView?.clearFocus()
-                ListView?.post { ListView.setSelection(chin.getInt("search_position", 0)) }
-            }
-            progressBar.visibility = View.GONE
-            ListView.visibility = View.VISIBLE
-            val gson = Gson()
-            val json = gson.toJson(result)
-            prefEditors.putString("search_array", json)
+    override fun onPreExecute() {
+        searche = true
+        prefEditors = chin.edit()
+        adapter.clear()
+        textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
+        progressBar.visibility = View.VISIBLE
+        ListView.visibility = View.GONE
+        var edit = autoCompleteTextView?.text.toString()
+        if (edit != "") {
+            edit = edit.trim()
+            autoCompleteTextView?.setText(edit)
+            prefEditors.putString("search_string", edit)
             prefEditors.apply()
-            searche = false
         }
     }
 
-    /*private class Poshuk(
-        context: Activity,
-        editText: AutoCompleteTextView?,
-        textViewCount: TextViewRobotoCondensed?
-    ) : AsyncTask<String, Void, ArrayList<String>>() {
-        private val activityReference = WeakReference(context)
-        private val editText = WeakReference(editText)
-        private var textViewCount = WeakReference(textViewCount)
-        private val chin: SharedPreferences =
-            context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        private var prefEditors: Editor = chin.edit()
-        override fun onPreExecute() {
-            super.onPreExecute()
-            searche = true
-            prefEditors = chin.edit()
-            val progressBar =
-                activityReference.get()?.findViewById<ProgressBar>(R.id.progressBar)
-            val listView = activityReference.get()?.findViewById<ListView>(R.id.ListView)
-            adapterReference?.get()?.clear()
-            textViewCount.get()?.text = activityReference.get()?.resources?.getString(
-                by.carkva_gazeta.malitounik.R.string.seash,
-                0
-            )
-            progressBar?.visibility = View.VISIBLE
-            listView?.visibility = View.GONE
-            var edit = editText.get()?.text.toString()
-            if (edit != "") {
-                edit = edit.trim()
-                editText.get()?.setText(edit)
-                prefEditors.putString("search_string", edit)
-                prefEditors.apply()
-                //val imm = activityReference.get()?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                //imm.hideSoftInputFromWindow(editText.get()?.windowToken, 0)
-            }
+    override fun doInBackground(searche: String): ArrayList<String> {
+        return when (zavet) {
+            1 -> semuxa(this@SearchBiblia, searche)
+            2 -> sinoidal(this@SearchBiblia, searche)
+            3 -> nadsan(this@SearchBiblia, searche)
+            else -> ArrayList()
         }
+    }
 
-        override fun doInBackground(vararg params: String): ArrayList<String> {
-            if (zavet == 1) {
-                return semuxa(activityReference.get(), params[0])
-            }
-            if (zavet == 2) {
-                return sinoidal(activityReference.get(), params[0])
-            }
-            return if (zavet == 3) {
-                nadsan(activityReference.get(), params[0])
-            } else ArrayList()
+    override fun onPostExecute(result: ArrayList<String>) {
+        adapter.addAll(result)
+        adapter.filter.filter(editText2?.text.toString())
+        textViewCount?.text = resources.getString(
+            by.carkva_gazeta.malitounik.R.string.seash,
+            adapter.count
+        )
+        if (chin.getString("search_string", "") != "") {
+            ListView?.post { ListView.setSelection(chin.getInt("search_position", 0)) }
         }
-
-        override fun onPostExecute(result: ArrayList<String>) {
-            super.onPostExecute(result)
-            val progressBar =
-                activityReference.get()?.findViewById<ProgressBar>(R.id.progressBar)
-            val listView = activityReference.get()?.findViewById<ListView>(R.id.ListView)
-            val editText2 =
-                activityReference.get()?.findViewById<EditTextRobotoCondensed>(R.id.editText2)
-            adapterReference?.get()?.addAll(result)
-            adapterReference?.get()?.filter?.filter(editText2?.text.toString())
-            textViewCount.get()?.text = activityReference.get()?.resources?.getString(
-                by.carkva_gazeta.malitounik.R.string.seash,
-                adapterReference?.get()?.count
-            )
-            if (chin.getString("search_string", "") != "") {
-                //listView?.clearFocus()
-                listView?.post { listView.setSelection(chin.getInt("search_position", 0)) }
-            }
-            progressBar?.visibility = View.GONE
-            listView?.visibility = View.VISIBLE
-            val gson = Gson()
-            val json = gson.toJson(result)
-            prefEditors.putString("search_array", json)
-            prefEditors.apply()
-            searche = false
-        }
-    }*/
+        progressBar.visibility = View.GONE
+        ListView.visibility = View.VISIBLE
+        val gson = Gson()
+        val json = gson.toJson(result)
+        prefEditors.putString("search_array", json)
+        prefEditors.apply()
+        searche = false
+    }
 
     private inner class MyTextWatcher(
         private val editText: EditText?,
@@ -870,7 +692,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         val imm =
                             getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(editText.windowToken, 0)
-                        //actionExpandOn = false
                     } else {
                         Histopy.visibility = View.VISIBLE
                         ListView.visibility = View.GONE
@@ -1079,32 +900,18 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             return replase1
         }
 
-        private fun semuxa(context: Context?, poshuk: String): ArrayList<String> {
+        private fun semuxa(context: Context, poshuk: String): ArrayList<String> {
             var poshuk1 = poshuk
-            val chin = context?.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin?.getBoolean("dzen_noch", false)
             val seashpost = ArrayList<String>()
             if (poshuk1 != "") {
                 poshuk1 = zamena(poshuk1)
                 if (chin?.getInt("pegistr", 0) == 0) poshuk1 =
                     poshuk1.toLowerCase(Locale.getDefault())
-                //String[] poshukchar = poshuk.split(" ");
                 if (chin?.getInt("slovocalkam", 0) == 0) {
                     val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
-                    /*if (chin.getInt("kohnoeslovo", 0) == 1) {
-                    for (int e = 0; e < poshukchar.length; e++) {
-                        if (poshukchar[e].length() > 2) {
-                            for (char aM : m) {
-                                int r = poshukchar[e].length() - 1;
-                                if (poshukchar[e].length() >= 3) {
-                                    if (poshukchar[e].charAt(r) == aM) {
-                                        poshukchar[e] = poshukchar[e].replace(poshukchar[e], poshukchar[e].substring(0, r));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {*/for (aM in m) {
+                    for (aM in m) {
                         val r = poshuk1.length - 1
                         if (poshuk1.length >= 3) {
                             if (poshuk1[r] == aM) {
@@ -1112,7 +919,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                             }
                         }
                     }
-                    //}
                 } else {
                     poshuk1 = " $poshuk1 "
                 }
@@ -1200,37 +1006,36 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         if (setSemuxaBible.keyAt(i).contains("biblian26")) nazva = "Да Габрэяў"
                         if (setSemuxaBible.keyAt(i).contains("biblian27")) nazva =
                             "Адкрыцьцё (Апакаліпсіс)"
-                        context?.let { it ->
-                            val inputStream =
-                                it.resources.openRawResource(setSemuxaBible.valueAt(i))
-                            val isr = InputStreamReader(inputStream)
-                            val reader = BufferedReader(isr)
-                            var glava = 0
-                            val split = reader.readText().split("===").toTypedArray()
-                            inputStream.close()
-                            for (e in 1 until split.size) {
-                                glava++
-                                val bibleline = split[e].split("\n").toTypedArray()
-                                var stix = 0
-                                for (r in 1 until bibleline.size) {
-                                    var prepinanie = bibleline[r]
-                                    if (prepinanie.contains("//")) {
-                                        val t1 = prepinanie.indexOf("//")
-                                        prepinanie =
-                                            if (t1 == 0) continue else prepinanie.substring(0, t1)
-                                                .trim()
-                                    }
-                                    stix++
-                                    if (chin?.getInt("slovocalkam", 0) == 1) prepinanie =
-                                        " " + bibleline[r] + " "
-                                    if (chin?.getInt("pegistr", 0) == 0) prepinanie =
-                                        prepinanie.toLowerCase(Locale.getDefault())
-                                    val t1a = prepinanie.indexOf(poshuk1)
-                                    prepinanie = prepinanie.replace(",", "")
-                                    prepinanie = prepinanie.replace(".", "")
-                                    prepinanie = prepinanie.replace(";", "")
-                                    prepinanie = prepinanie.replace(":", "")
-                                    prepinanie = prepinanie.replace("-", "")
+                        val inputStream =
+                            context.resources.openRawResource(setSemuxaBible.valueAt(i))
+                        val isr = InputStreamReader(inputStream)
+                        val reader = BufferedReader(isr)
+                        var glava = 0
+                        val split = reader.readText().split("===").toTypedArray()
+                        inputStream.close()
+                        for (e in 1 until split.size) {
+                            glava++
+                            val bibleline = split[e].split("\n").toTypedArray()
+                            var stix = 0
+                            for (r in 1 until bibleline.size) {
+                                var prepinanie = bibleline[r]
+                                if (prepinanie.contains("//")) {
+                                    val t1 = prepinanie.indexOf("//")
+                                    prepinanie =
+                                        if (t1 == 0) continue else prepinanie.substring(0, t1)
+                                            .trim()
+                                }
+                                stix++
+                                if (chin?.getInt("slovocalkam", 0) == 1) prepinanie =
+                                    " " + bibleline[r] + " "
+                                if (chin?.getInt("pegistr", 0) == 0) prepinanie =
+                                    prepinanie.toLowerCase(Locale.getDefault())
+                                val t1a = prepinanie.indexOf(poshuk1)
+                                prepinanie = prepinanie.replace(",", "")
+                                prepinanie = prepinanie.replace(".", "")
+                                prepinanie = prepinanie.replace(";", "")
+                                prepinanie = prepinanie.replace(":", "")
+                                prepinanie = prepinanie.replace("-", "")
                                     prepinanie = prepinanie.replace("\"", "")
                                     var count = 0
                                     if (t1a != -1) count = t1a - prepinanie.indexOf(poshuk1)
@@ -1240,41 +1045,21 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                     prepinanie = prepinanie.replace("<br>", "    ")
                                     prepinanie = prepinanie.replace("<strong>", "        ")
                                     prepinanie = prepinanie.replace("</strong>", "         ")
-                                    if (chin?.getInt("slovocalkam", 0) == 0) { /*if (chin?.getInt("kohnoeslovo", 0) == 1) {
-                                        boolean add = true;
-                                        for (String aPoshukchar : poshukchar) {
-                                            if (aPoshukchar.length() > 2) {
-                                                if ((prepinanie.contains(aPoshukchar))) {
-                                                    if (add) {
-                                                        String aSviatyia = bibleline[r];
-                                                        if (chin?.getInt("pegistr", 0) == 0)
-                                                            aPoshukchar = aPoshukchar.toLowerCase();
-                                                        int t1 = prepinanie.indexOf(aPoshukchar);
-                                                        t1 = t1 + count;
-                                                        int t2 = aPoshukchar.length();
-                                                        aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2);
-                                                        seashpost.add("<!--stix." + stix + "--><strong>" + nazva + " Гл. " + glava + "</strong><br>" + aSviatyia);
-                                                        add = false;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } else {*/
-                                        if (prepinanie.contains(poshuk1)) {
-                                            var aSviatyia = bibleline[r]
-                                            var t1 = prepinanie.indexOf(poshuk1)
-                                            t1 += count
-                                            val t2 = poshuk1.length
-                                            aSviatyia = aSviatyia.substring(
-                                                0,
-                                                t1
-                                            ) + color + aSviatyia.substring(
-                                                t1,
+                                if (chin?.getInt("slovocalkam", 0) == 0) {
+                                    if (prepinanie.contains(poshuk1)) {
+                                        var aSviatyia = bibleline[r]
+                                        var t1 = prepinanie.indexOf(poshuk1)
+                                        t1 += count
+                                        val t2 = poshuk1.length
+                                        aSviatyia = aSviatyia.substring(
+                                            0,
+                                            t1
+                                        ) + color + aSviatyia.substring(
+                                            t1,
                                                 t1 + t2
                                             ) + "</font>" + aSviatyia.substring(t1 + t2)
                                             seashpost.add("<!--stix.$stix--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                         }
-                                        //}
                                     } else {
                                         if (prepinanie.contains(poshuk1)) {
                                             var aSviatyia = bibleline[r]
@@ -1292,7 +1077,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                         }
                                     }
                                 }
-                            }
                         }
                     }
                 }
@@ -1300,43 +1084,28 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             return seashpost
         }
 
-        private fun sinoidal(context: Context?, poshuk: String): ArrayList<String> {
+        private fun sinoidal(context: Context, poshuk: String): ArrayList<String> {
             var poshuk1 = poshuk
-            val chin = context?.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin?.getBoolean("dzen_noch", false)
+            val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
             val seashpost = ArrayList<String>()
             if (poshuk1 != "") {
                 poshuk1 = poshuk1.replace("ё", "е")
                 if (chin?.getInt("pegistr", 0) == 0) poshuk1 =
                     poshuk1.toLowerCase(Locale.getDefault())
-                //String[] poshukchar = poshuk.split(" ");
                 if (chin?.getInt("slovocalkam", 0) == 0) {
                     val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
-                    /*if (chin?.getInt("kohnoeslovo", 0) == 1) {
-                    for (int e = 0; e < poshukchar.length; e++) {
-                        if (poshukchar[e].length() > 2) {
-                            for (char aM : m) {
-                                int r = poshukchar[e].length() - 1;
-                                if (poshukchar[e].length() >= 0) {
-                                    if (poshukchar[e].charAt(r) == aM) {
-                                        poshukchar[e] = poshukchar[e].replace(poshukchar[e], poshukchar[e].substring(0, r));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {*/for (aM in m) {
+                    for (aM in m) {
                         val r = poshuk1.length - 1
                         if (poshuk1[r] == aM) {
                             poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r))
                         }
                     }
-                    //}
                 } else {
                     poshuk1 = " $poshuk1 "
                 }
                 var color = "<font color=#d00505>"
-                if (dzenNoch == true) color = "<font color=#f44336>"
+                if (dzenNoch) color = "<font color=#f44336>"
                 for (i in 0 until setSinodalBible.size) {
                     var biblia = "sinaidal"
                     if (chin?.getInt("biblia_seash", 0) == 1) biblia = "sinaidaln"
@@ -1437,72 +1206,51 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         if (setSinodalBible.keyAt(i).contains("sinaidaln26")) nazva = "Евреям"
                         if (setSinodalBible.keyAt(i).contains("sinaidaln27")) nazva =
                             "Откровение (Апокалипсис)"
-                        context?.let { it ->
-                            val inputStream =
-                                it.resources.openRawResource(setSinodalBible.valueAt(i))
-                            val isr = InputStreamReader(inputStream)
-                            val reader = BufferedReader(isr)
-                            var glava = 0
-                            val split = reader.readText().split("===").toTypedArray()
-                            inputStream.close()
-                            for (e in 1 until split.size) {
-                                glava++
-                                val bibleline = split[e].split("\n").toTypedArray()
-                                var stix = 0
-                                for (r in 1 until bibleline.size) {
-                                    stix++
-                                    var prepinanie = bibleline[r]
-                                    if (chin?.getInt("slovocalkam", 0) == 1) prepinanie =
-                                        " " + bibleline[r] + " "
-                                    if (chin?.getInt("pegistr", 0) == 0) prepinanie =
-                                        prepinanie.toLowerCase(Locale.getDefault())
-                                    val t1a = prepinanie.indexOf(poshuk1)
-                                    prepinanie = prepinanie.replace(",", "")
-                                    prepinanie = prepinanie.replace(".", "")
-                                    prepinanie = prepinanie.replace(";", "")
-                                    prepinanie = prepinanie.replace(":", "")
-                                    prepinanie = prepinanie.replace("[", "")
-                                    prepinanie = prepinanie.replace("]", "")
-                                    prepinanie = prepinanie.replace("-", "")
-                                    prepinanie = prepinanie.replace("\"", "")
-                                    var count = 0
-                                    if (t1a != -1) count = t1a - prepinanie.indexOf(poshuk1)
-                                    prepinanie = prepinanie.replace("ё", "е")
-                                    if (chin?.getInt("slovocalkam", 0) == 0) { /*if (chin?.getInt("kohnoeslovo", 0) == 1) {
-                                        boolean add = true;
-                                        for (String aPoshukchar : poshukchar) {
-                                            if (aPoshukchar.length() > 2) {
-                                                if (prepinanie.contains(aPoshukchar)) {
-                                                    if (add) {
-                                                        String aSviatyia = bibleline[r];
-                                                        if (chin?.getInt("pegistr", 0) == 0)
-                                                            aPoshukchar = aPoshukchar.toLowerCase();
-                                                        int t1 = prepinanie.indexOf(aPoshukchar);
-                                                        t1 = t1 + count;
-                                                        int t2 = aPoshukchar.length();
-                                                        aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2);
-                                                        seashpost.add("<!--stix." + stix + "--><strong>" + nazva + " Гл. " + glava + "</strong><br>" + aSviatyia);
-                                                        add = false;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } else {*/
-                                        if (prepinanie.contains(poshuk1)) {
-                                            var aSviatyia = bibleline[r]
-                                            var t1 = prepinanie.indexOf(poshuk1)
-                                            t1 += count
-                                            val t2 = poshuk1.length
-                                            aSviatyia = aSviatyia.substring(
-                                                0,
-                                                t1
-                                            ) + color + aSviatyia.substring(
-                                                t1,
+                        val inputStream =
+                            context.resources.openRawResource(setSinodalBible.valueAt(i))
+                        val isr = InputStreamReader(inputStream)
+                        val reader = BufferedReader(isr)
+                        var glava = 0
+                        val split = reader.readText().split("===").toTypedArray()
+                        inputStream.close()
+                        for (e in 1 until split.size) {
+                            glava++
+                            val bibleline = split[e].split("\n").toTypedArray()
+                            var stix = 0
+                            for (r in 1 until bibleline.size) {
+                                stix++
+                                var prepinanie = bibleline[r]
+                                if (chin?.getInt("slovocalkam", 0) == 1) prepinanie =
+                                    " " + bibleline[r] + " "
+                                if (chin?.getInt("pegistr", 0) == 0) prepinanie =
+                                    prepinanie.toLowerCase(Locale.getDefault())
+                                val t1a = prepinanie.indexOf(poshuk1)
+                                prepinanie = prepinanie.replace(",", "")
+                                prepinanie = prepinanie.replace(".", "")
+                                prepinanie = prepinanie.replace(";", "")
+                                prepinanie = prepinanie.replace(":", "")
+                                prepinanie = prepinanie.replace("[", "")
+                                prepinanie = prepinanie.replace("]", "")
+                                prepinanie = prepinanie.replace("-", "")
+                                prepinanie = prepinanie.replace("\"", "")
+                                var count = 0
+                                if (t1a != -1) count = t1a - prepinanie.indexOf(poshuk1)
+                                prepinanie = prepinanie.replace("ё", "е")
+                                if (chin?.getInt("slovocalkam", 0) == 0) {
+                                    if (prepinanie.contains(poshuk1)) {
+                                        var aSviatyia = bibleline[r]
+                                        var t1 = prepinanie.indexOf(poshuk1)
+                                        t1 += count
+                                        val t2 = poshuk1.length
+                                        aSviatyia = aSviatyia.substring(
+                                            0,
+                                            t1
+                                        ) + color + aSviatyia.substring(
+                                            t1,
                                                 t1 + t2
                                             ) + "</font>" + aSviatyia.substring(t1 + t2)
                                             seashpost.add("<!--stix.$stix--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                         }
-                                        //}
                                     } else {
                                         if (prepinanie.contains(poshuk1)) {
                                             var aSviatyia = bibleline[r]
@@ -1520,7 +1268,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                         }
                                     }
                                 }
-                            }
                         }
                     }
                 }
@@ -1528,32 +1275,18 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             return seashpost
         }
 
-        private fun nadsan(context: Context?, poshuk: String): ArrayList<String> {
+        private fun nadsan(context: Context, poshuk: String): ArrayList<String> {
             var poshuk1 = poshuk
-            val chin = context?.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin?.getBoolean("dzen_noch", false)
+            val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
             val seashpost = ArrayList<String>()
             if (poshuk1 != "") {
                 poshuk1 = zamena(poshuk1)
                 if (chin?.getInt("pegistr", 0) == 0) poshuk1 =
                     poshuk1.toLowerCase(Locale.getDefault())
-                //String[] poshukchar = poshuk.split(" ");
                 if (chin?.getInt("slovocalkam", 0) == 0) {
                     val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
-                    /*if (chin?.getInt("kohnoeslovo", 0) == 1) {
-                    for (int e = 0; e < poshukchar.length; e++) {
-                        if (poshukchar[e].length() >= 3) {
-                            for (char aM : m) {
-                                int r = poshukchar[e].length() - 1;
-                                if (poshukchar[e].length() >= 3) {
-                                    if (poshukchar[e].charAt(r) == aM) {
-                                        poshukchar[e] = poshukchar[e].replace(poshukchar[e], poshukchar[e].substring(0, r));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {*/for (aM in m) {
+                    for (aM in m) {
                         val r = poshuk1.length - 1
                         if (poshuk1.length >= 3) {
                             if (poshuk1[r] == aM) {
@@ -1561,77 +1294,55 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                             }
                         }
                     }
-                    //}
                 } else {
                     poshuk1 = " $poshuk1 "
                 }
                 var color = "<font color=#d00505>"
-                if (dzenNoch == true) color = "<font color=#f44336>"
+                if (dzenNoch) color = "<font color=#f44336>"
                 val nazva = "Псалтыр"
-                context?.let { it ->
-                    val inputStream = it.resources.openRawResource(raw.nadsan_psaltyr)
-                    val isr = InputStreamReader(inputStream)
-                    val reader = BufferedReader(isr)
-                    var glava = 0
-                    val split = reader.readText().split("===").toTypedArray()
-                    inputStream.close()
-                    for (e in 1 until split.size) {
-                        glava++
-                        val bibleline = split[e].split("\n").toTypedArray()
-                        var stix = 0
-                        for (r in 1 until bibleline.size) {
-                            stix++
-                            var prepinanie = bibleline[r]
-                            if (chin?.getInt("pegistr", 0) == 0) prepinanie =
-                                prepinanie.toLowerCase(Locale.getDefault())
-                            val t1a = prepinanie.indexOf(poshuk1)
-                            prepinanie = prepinanie.replace(",", "")
-                            prepinanie = prepinanie.replace(".", "")
-                            prepinanie = prepinanie.replace(";", "")
-                            prepinanie = prepinanie.replace(":", "")
-                            prepinanie = prepinanie.replace("-", "")
-                            prepinanie = prepinanie.replace("\"", "")
-                            var count = 0
-                            if (t1a != -1) count = t1a - prepinanie.indexOf(poshuk1)
-                            prepinanie = prepinanie.replace("ё", "е")
-                            prepinanie = prepinanie.replace("<em>", "    ")
-                            prepinanie = prepinanie.replace("</em>", "     ")
-                            prepinanie = prepinanie.replace("<br>", "    ")
-                            prepinanie = prepinanie.replace("<strong>", "        ")
-                            prepinanie = prepinanie.replace("</strong>", "         ")
-                            if (chin?.getInt("slovocalkam", 0) == 0) { /*if (chin?.getInt("kohnoeslovo", 0) == 1) {
-                                boolean add = true;
-                                for (String aPoshukchar : poshukchar) {
-                                    if (aPoshukchar.length() >= 3) {
-                                        if (prepinanie.contains(aPoshukchar)) {
-                                            if (add) {
-                                                String aSviatyia = bibleline[r];
-                                                if (chin?.getInt("pegistr", 0) == 0)
-                                                    aPoshukchar = aPoshukchar.toLowerCase();
-                                                int t1 = prepinanie.indexOf(aPoshukchar);
-                                                t1 = t1 + count;
-                                                int t2 = aPoshukchar.length();
-                                                aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2);
-                                                seashpost.add("<!--stix." + stix + "--><strong>" + nazva + " Пс. " + glava + "</strong><br>" + aSviatyia);
-                                                add = false;
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {*/
-                                if (prepinanie.contains(poshuk1)) {
-                                    var aSviatyia = bibleline[r]
-                                    var t1 = prepinanie.indexOf(poshuk1)
-                                    t1 += count
-                                    val t2 = poshuk1.length
-                                    aSviatyia =
-                                        aSviatyia.substring(0, t1) + color + aSviatyia.substring(
-                                            t1,
-                                            t1 + t2
-                                        ) + "</font>" + aSviatyia.substring(t1 + t2)
+                val inputStream = context.resources.openRawResource(raw.nadsan_psaltyr)
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                var glava = 0
+                val split = reader.readText().split("===").toTypedArray()
+                inputStream.close()
+                for (e in 1 until split.size) {
+                    glava++
+                    val bibleline = split[e].split("\n").toTypedArray()
+                    var stix = 0
+                    for (r in 1 until bibleline.size) {
+                        stix++
+                        var prepinanie = bibleline[r]
+                        if (chin?.getInt("pegistr", 0) == 0) prepinanie =
+                            prepinanie.toLowerCase(Locale.getDefault())
+                        val t1a = prepinanie.indexOf(poshuk1)
+                        prepinanie = prepinanie.replace(",", "")
+                        prepinanie = prepinanie.replace(".", "")
+                        prepinanie = prepinanie.replace(";", "")
+                        prepinanie = prepinanie.replace(":", "")
+                        prepinanie = prepinanie.replace("-", "")
+                        prepinanie = prepinanie.replace("\"", "")
+                        var count = 0
+                        if (t1a != -1) count = t1a - prepinanie.indexOf(poshuk1)
+                        prepinanie = prepinanie.replace("ё", "е")
+                        prepinanie = prepinanie.replace("<em>", "    ")
+                        prepinanie = prepinanie.replace("</em>", "     ")
+                        prepinanie = prepinanie.replace("<br>", "    ")
+                        prepinanie = prepinanie.replace("<strong>", "        ")
+                        prepinanie = prepinanie.replace("</strong>", "         ")
+                        if (chin?.getInt("slovocalkam", 0) == 0) {
+                            if (prepinanie.contains(poshuk1)) {
+                                var aSviatyia = bibleline[r]
+                                var t1 = prepinanie.indexOf(poshuk1)
+                                t1 += count
+                                val t2 = poshuk1.length
+                                aSviatyia =
+                                    aSviatyia.substring(0, t1) + color + aSviatyia.substring(
+                                        t1,
+                                        t1 + t2
+                                    ) + "</font>" + aSviatyia.substring(t1 + t2)
                                     seashpost.add("<!--stix.$stix--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")
                                 }
-                                //}
                             } else {
                                 if (prepinanie.contains(poshuk1)) {
                                     var aSviatyia = bibleline[r]
@@ -1646,7 +1357,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                     seashpost.add("<!--stix.$stix--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")
                                 }
                             }
-                        }
                     }
                 }
             }

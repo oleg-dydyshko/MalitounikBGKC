@@ -342,5 +342,7 @@
     <string name="data_sabytie_error2">Дата паўтору павінна быць пазней, чым дата пачатку</string>
     <string name="remove_sabytie_iak">Якія падзеі Вы жадаеце выдаліць?</string>
     <string name="no_file">Файл не існуе</string>
+    <string name="sabytie_del_all">Усё</string>
+    <string name="sabytie_del_old">Старыя</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

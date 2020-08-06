@@ -94,7 +94,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
             if (file.exists()) {
                 MenuVybranoe.vybranoe = try {
-                    val type: Type = object : TypeToken<ArrayList<VybranoeData?>?>() {}.type
+                    val type: Type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
                     gson.fromJson(file.readText(), type)
                 } catch (t: Throwable) {
                     file.delete()
@@ -143,7 +143,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
             if (file.exists()) {
                 try {
-                    val type: Type = object : TypeToken<ArrayList<VybranoeData?>?>() {}.type
+                    val type: Type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
                     MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
                 } catch (t: Throwable) {
                     file.delete()

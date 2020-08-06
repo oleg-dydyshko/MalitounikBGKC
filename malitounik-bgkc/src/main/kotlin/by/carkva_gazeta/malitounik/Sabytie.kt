@@ -39,7 +39,7 @@ import java.util.*
 /**
  * Created by oleg on 8.5.17
  */
-class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener {
+class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var konec = false
@@ -2296,144 +2296,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             //return true;
         }
         if (id == R.id.action_delite) {
-            val ad = AlertDialog.Builder(this)
-            val linearLayout = LinearLayout(this)
-            linearLayout.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextViewRobotoCondensed(this)
-            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(R.string.remove)
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            linearLayout.addView(textViewZaglavie)
-            val textView = TextViewRobotoCondensed(this)
-            textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView.text = getString(R.string.remove_sabytie_iak)
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-            linearLayout.addView(textView)
-            ad.setView(linearLayout)
-            ad.setPositiveButton("Усё") { _: DialogInterface?, _: Int ->
-                redak = true
-                Thread(Runnable {
-                    for (p in MainActivity.padzeia) {
-                        if (p.sec != "-1") {
-                            val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
-                            val londs3 = p.paznic / 100000L
-                            val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
-                            am.cancel(pIntent)
-                            pIntent.cancel()
-                        }
-                    }
-                    File("$filesDir/Sabytie").walk().forEach {
-                        if (it.isFile)
-                            it.delete()
-                    }
-                    MainActivity.padzeia.clear()
-                }).start()
-                adapter.clear()
-                adapter.notifyDataSetChanged()
-                MainActivity.toastView(this@Sabytie, getString(R.string.remove_padzea))
-            }
-            ad.setNeutralButton("Старыя") { _: DialogInterface?, _: Int ->
-                c = Calendar.getInstance() as GregorianCalendar
-                val c2 = GregorianCalendar(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH], c[Calendar.HOUR_OF_DAY], c[Calendar.MINUTE], 0)
-                val del = ArrayList<Padzeia>()
-                for (p in MainActivity.padzeia) {
-                    if (p.repit == 0) {
-                        val days = p.datK.split(".").toTypedArray()
-                        val time = p.timK.split(":").toTypedArray()
-                        val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), time[0].toInt(), time[1].toInt(), 0)
-                        if (c2.timeInMillis >= gc.timeInMillis) {
-                            if (p.sec != "-1") {
-                                val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
-                                val londs3 = p.paznic / 100000L
-                                val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
-                                am.cancel(pIntent)
-                                pIntent.cancel()
-                            }
-                            del.add(p)
-                        }
-                    } else {
-                        val days = p.dat.split(".").toTypedArray()
-                        val time = p.timK.split(":").toTypedArray()
-                        val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), time[0].toInt(), time[1].toInt(), 0)
-                        if (c2.timeInMillis >= gc.timeInMillis) {
-                            if (p.sec != "-1") {
-                                val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
-                                val londs3 = p.paznic / 100000L
-                                val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
-                                am.cancel(pIntent)
-                                pIntent.cancel()
-                            }
-                            del.add(p)
-                        }
-                    }
-                }
-                if (del.size != 0) {
-                    redak = true
-                    File("$filesDir/Sabytie").walk().forEach { file ->
-                        if (file.isFile) {
-                            var line: String
-                            val sb = StringBuilder()
-                            val inputStream = FileReader(file)
-                            val reader = BufferedReader(inputStream)
-                            reader.forEachLine {
-                                line = it
-                                if (line != "") {
-                                    val t1 = line.split(" ").toTypedArray()
-                                    val days = t1[1].split(".").toTypedArray()
-                                    val time = t1[7].split(":").toTypedArray()
-                                    val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), time[0].toInt(), time[1].toInt(), 0)
-                                    if (c2.timeInMillis <= gc.timeInMillis) {
-                                        sb.append(line).append("\n")
-                                    }
-                                }
-                            }
-                            inputStream.close()
-                            if (sb.isNotEmpty()) {
-                                val outputStream = FileWriter(file)
-                                outputStream.write(sb.toString())
-                                outputStream.close()
-                            } else {
-                                file.delete()
-                            }
-                        }
-                    }
-                    MainActivity.padzeia.removeAll(del)
-                    MainActivity.padzeia.sort()
-                    for (p in del) {
-                        if (p.repit == 0) {
-                            val file = File(filesDir.toString() + "/Sabytie/" + p.file)
-                            file.delete()
-                        }
-                    }
-                    sabytie2.clear()
-                    for (p2 in MainActivity.padzeia) {
-                        sabytie2.add(p2.dat + " " + p2.padz.replace("_", " "))
-                    }
-                    adapter.notifyDataSetChanged()
-                }
-            }
-            ad.setNegativeButton("Адмена") { dialog: DialogInterface, _: Int -> dialog.cancel() }
-            val alert = ad.create()
-            alert.setOnShowListener {
-                val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                val btnNeutral = alert.getButton(Dialog.BUTTON_NEUTRAL)
-                btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                if (dzenNoch) {
-                    btnPositive.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-                    btnNegative.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-                    btnNeutral.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-                }
-            }
-            alert.show()
+            val delite = DialogSabytieDelite()
+            delite.show(supportFragmentManager, "delite")
         }
         if (id == R.id.action_add) {
             save = false
@@ -2472,6 +2336,157 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             invalidateOptionsMenu()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun sabytieDelAll() {
+        redak = true
+        Thread(Runnable {
+            for (p in MainActivity.padzeia) {
+                if (p.sec != "-1") {
+                    val intent = createIntent(
+                        p.padz,
+                        "Падзея" + " " + p.dat + " у " + p.tim,
+                        p.dat,
+                        p.tim
+                    )
+                    val londs3 = p.paznic / 100000L
+                    val pIntent =
+                        PendingIntent.getBroadcast(this, londs3.toInt(), intent, 0)
+                    am.cancel(pIntent)
+                    pIntent.cancel()
+                }
+            }
+            File("$filesDir/Sabytie").walk().forEach {
+                if (it.isFile)
+                    it.delete()
+            }
+            MainActivity.padzeia.clear()
+        }).start()
+        adapter.clear()
+        adapter.notifyDataSetChanged()
+        MainActivity.toastView(this, getString(R.string.remove_padzea))
+    }
+
+    override fun sabytieDelOld() {
+        val c2 = Calendar.getInstance() as GregorianCalendar
+        c2.set(Calendar.SECOND, 0)
+        val del = ArrayList<Padzeia>()
+        for (p in MainActivity.padzeia) {
+            if (p.repit == 0) {
+                val days = p.datK.split(".").toTypedArray()
+                val time = p.timK.split(":").toTypedArray()
+                val gc = GregorianCalendar(
+                    days[2].toInt(),
+                    days[1].toInt() - 1,
+                    days[0].toInt(),
+                    time[0].toInt(),
+                    time[1].toInt(),
+                    0
+                )
+                if (c2.timeInMillis >= gc.timeInMillis) {
+                    if (p.sec != "-1") {
+                        val intent = createIntent(
+                            p.padz,
+                            "Падзея" + " " + p.dat + " у " + p.tim,
+                            p.dat,
+                            p.tim
+                        )
+                        val londs3 = p.paznic / 100000L
+                        val pIntent = PendingIntent.getBroadcast(
+                            this,
+                            londs3.toInt(),
+                            intent,
+                            0
+                        )
+                        am.cancel(pIntent)
+                        pIntent.cancel()
+                    }
+                    del.add(p)
+                }
+            } else {
+                val days = p.dat.split(".").toTypedArray()
+                val time = p.timK.split(":").toTypedArray()
+                val gc = GregorianCalendar(
+                    days[2].toInt(),
+                    days[1].toInt() - 1,
+                    days[0].toInt(),
+                    time[0].toInt(),
+                    time[1].toInt(),
+                    0
+                )
+                if (c2.timeInMillis >= gc.timeInMillis) {
+                    if (p.sec != "-1") {
+                        val intent = createIntent(
+                            p.padz,
+                            "Падзея" + " " + p.dat + " у " + p.tim,
+                            p.dat,
+                            p.tim
+                        )
+                        val londs3 = p.paznic / 100000L
+                        val pIntent = PendingIntent.getBroadcast(
+                            this,
+                            londs3.toInt(),
+                            intent,
+                            0
+                        )
+                        am.cancel(pIntent)
+                        pIntent.cancel()
+                    }
+                    del.add(p)
+                }
+            }
+        }
+        if (del.size != 0) {
+            redak = true
+            File("$filesDir/Sabytie").walk().forEach { file ->
+                if (file.isFile) {
+                    var line: String
+                    val sb = StringBuilder()
+                    val inputStream = FileReader(file)
+                    val reader = BufferedReader(inputStream)
+                    reader.forEachLine {
+                        line = it
+                        if (line != "") {
+                            val t1 = line.split(" ").toTypedArray()
+                            val days = t1[1].split(".").toTypedArray()
+                            val time = t1[7].split(":").toTypedArray()
+                            val gc = GregorianCalendar(
+                                days[2].toInt(),
+                                days[1].toInt() - 1,
+                                days[0].toInt(),
+                                time[0].toInt(),
+                                time[1].toInt(),
+                                0
+                            )
+                            if (c2.timeInMillis <= gc.timeInMillis) {
+                                sb.append(line).append("\n")
+                            }
+                        }
+                    }
+                    inputStream.close()
+                    if (sb.isNotEmpty()) {
+                        val outputStream = FileWriter(file)
+                        outputStream.write(sb.toString())
+                        outputStream.close()
+                    } else {
+                        file.delete()
+                    }
+                }
+            }
+            MainActivity.padzeia.removeAll(del)
+            MainActivity.padzeia.sort()
+            for (p in del) {
+                if (p.repit == 0) {
+                    val file = File(filesDir.toString() + "/Sabytie/" + p.file)
+                    file.delete()
+                }
+            }
+            sabytie2.clear()
+            for (p2 in MainActivity.padzeia) {
+                sabytie2.add(p2.dat + " " + p2.padz.replace("_", " "))
+            }
+            adapter.notifyDataSetChanged()
+        }
     }
 
     private fun createIntent(action: String, extra: String, data: String, time: String): Intent {

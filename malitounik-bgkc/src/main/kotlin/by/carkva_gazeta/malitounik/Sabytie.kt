@@ -562,41 +562,45 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             sabytie2.add(p.dat + " " + p.padz.replace("_", " "))
         }
         adapter.notifyDataSetChanged()
-        Thread(Runnable {
-            if (sab.count == "0") {
-                if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
-                    if (sab.sec != "-1") {
-                        val intent = createIntent(sab.padz.replace("_", " "), "Падзея" + " " + sab.dat + " у " + sab.tim, sab.dat, sab.tim)
-                        val londs3 = sab.paznic / 100000L
-                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
-                        am.cancel(pIntent)
-                        pIntent.cancel()
-                    }
-                } else {
-                    for (p in del) {
-                        if (p.file.contains(filen)) {
-                            if (p.sec != "-1") {
-                                val intent = createIntent(p.padz.replace("_", " "), "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
-                                val londs3 = p.paznic / 100000L
-                                val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
-                                am.cancel(pIntent)
-                                pIntent.cancel()
+        val asyncTask = AsyncTask()
+        asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+            override fun doInBackground() {
+                if (sab.count == "0") {
+                    if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
+                        if (sab.sec != "-1") {
+                            val intent = createIntent(sab.padz.replace("_", " "), "Падзея" + " " + sab.dat + " у " + sab.tim, sab.dat, sab.tim)
+                            val londs3 = sab.paznic / 100000L
+                            val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                            am.cancel(pIntent)
+                            pIntent.cancel()
+                        }
+                    } else {
+                        for (p in del) {
+                            if (p.file.contains(filen)) {
+                                if (p.sec != "-1") {
+                                    val intent = createIntent(p.padz.replace("_", " "), "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
+                                    val londs3 = p.paznic / 100000L
+                                    val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                    am.cancel(pIntent)
+                                    pIntent.cancel()
+                                }
                             }
                         }
                     }
-                }
-            } else {
-                for (p in del) {
-                    if (p.sec != "-1") {
-                        val intent = createIntent(p.padz.replace("_", " "), "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
-                        val londs3 = p.paznic / 100000L
-                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
-                        am.cancel(pIntent)
-                        pIntent.cancel()
+                } else {
+                    for (p in del) {
+                        if (p.sec != "-1") {
+                            val intent = createIntent(p.padz.replace("_", " "), "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
+                            val londs3 = p.paznic / 100000L
+                            val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                            am.cancel(pIntent)
+                            pIntent.cancel()
+                        }
                     }
                 }
             }
-        }).start()
+        })
+        asyncTask.execute()
         MainActivity.toastView(this@Sabytie, getString(R.string.remove_padzea))
     }
 
@@ -2340,28 +2344,32 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
     override fun sabytieDelAll() {
         redak = true
-        Thread(Runnable {
-            for (p in MainActivity.padzeia) {
-                if (p.sec != "-1") {
-                    val intent = createIntent(
-                        p.padz,
-                        "Падзея" + " " + p.dat + " у " + p.tim,
-                        p.dat,
-                        p.tim
-                    )
-                    val londs3 = p.paznic / 100000L
-                    val pIntent =
-                        PendingIntent.getBroadcast(this, londs3.toInt(), intent, 0)
-                    am.cancel(pIntent)
-                    pIntent.cancel()
+        val asyncTask = AsyncTask()
+        asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+            override fun doInBackground() {
+                for (p in MainActivity.padzeia) {
+                    if (p.sec != "-1") {
+                        val intent = createIntent(
+                            p.padz,
+                            "Падзея" + " " + p.dat + " у " + p.tim,
+                            p.dat,
+                            p.tim
+                        )
+                        val londs3 = p.paznic / 100000L
+                        val pIntent =
+                            PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                        am.cancel(pIntent)
+                        pIntent.cancel()
+                    }
                 }
+                File("$filesDir/Sabytie").walk().forEach {
+                    if (it.isFile)
+                        it.delete()
+                }
+                MainActivity.padzeia.clear()
             }
-            File("$filesDir/Sabytie").walk().forEach {
-                if (it.isFile)
-                    it.delete()
-            }
-            MainActivity.padzeia.clear()
-        }).start()
+        })
+        asyncTask.execute()
         adapter.clear()
         adapter.notifyDataSetChanged()
         MainActivity.toastView(this, getString(R.string.remove_padzea))
@@ -2448,7 +2456,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         line = it
                         if (line != "") {
                             val t1 = line.split(" ").toTypedArray()
-                            val days = t1[1].split(".").toTypedArray()
+                            val days = t1[6].split(".").toTypedArray()
                             val time = t1[7].split(":").toTypedArray()
                             val gc = GregorianCalendar(
                                 days[2].toInt(),

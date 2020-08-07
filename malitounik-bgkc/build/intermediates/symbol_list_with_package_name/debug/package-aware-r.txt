@@ -2965,6 +2965,8 @@ string sabytie
 string sabytieDoKuda
 string sabytieKali
 string sabytie_check_mun
+string sabytie_del_all
+string sabytie_del_old
 string sabytie_disable_mun
 string sabytie_enable_mun
 string sabytie_kaliandar

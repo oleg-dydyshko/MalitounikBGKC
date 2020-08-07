@@ -30,7 +30,10 @@ import android.view.animation.AnimationUtils
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.PopupMenu
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -38,6 +41,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.AsyncTask
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -299,41 +303,45 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     private fun writeFile(url: String) {
         progressBar2.visibility = View.VISIBLE
-        Thread(Runnable {
-            try {
-                val dir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                if (dir?.exists() != true) {
-                    dir?.mkdir()
-                }
-                val myUrl = URL(url)
-                val last = url.lastIndexOf("/")
-                val uplFilename = url.substring(last + 1)
-                val inpstr: InputStream = myUrl.openStream()
-                val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), uplFilename)
-                val outputStream = FileOutputStream(file)
-                val buffer = ByteArray(1024)
-                var bytesRead: Int
-                while (inpstr.read(buffer).also { bytesRead = it } != -1) {
-                    outputStream.write(buffer, 0, bytesRead)
-                }
-                outputStream.close()
-                runOnUiThread {
-                    adapter.notifyDataSetChanged()
-                    progressBar2.visibility = View.GONE
-                    filePath = file.path
-                    fileName = uplFilename
-                    loadFilePDF()
-                    listView.visibility = View.GONE
-                    webView.visibility = View.GONE
-                    scrollViewB.visibility = View.GONE
-                    invalidateOptionsMenu()
-                }
-            } catch (t: Throwable) {
-                runOnUiThread {
-                    DialogNoInternet().show(supportFragmentManager, "no_internet")
+        val asyncTask = AsyncTask()
+        asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+            override fun doInBackground() {
+                try {
+                    val dir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                    if (dir?.exists() != true) {
+                        dir?.mkdir()
+                    }
+                    val myUrl = URL(url)
+                    val last = url.lastIndexOf("/")
+                    val uplFilename = url.substring(last + 1)
+                    val inpstr: InputStream = myUrl.openStream()
+                    val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), uplFilename)
+                    val outputStream = FileOutputStream(file)
+                    val buffer = ByteArray(1024)
+                    var bytesRead: Int
+                    while (inpstr.read(buffer).also { bytesRead = it } != -1) {
+                        outputStream.write(buffer, 0, bytesRead)
+                    }
+                    outputStream.close()
+                    runOnUiThread {
+                        adapter.notifyDataSetChanged()
+                        progressBar2.visibility = View.GONE
+                        filePath = file.path
+                        fileName = uplFilename
+                        loadFilePDF()
+                        listView.visibility = View.GONE
+                        webView.visibility = View.GONE
+                        scrollViewB.visibility = View.GONE
+                        invalidateOptionsMenu()
+                    }
+                } catch (t: Throwable) {
+                    runOnUiThread {
+                        DialogNoInternet().show(supportFragmentManager, "no_internet")
+                    }
                 }
             }
-        }).start()
+        })
+        asyncTask.execute()
     }
 
     override fun onError(t: Throwable?) {
@@ -1132,16 +1140,20 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             if (!dir.exists()) {
                 progressBar2.visibility = View.VISIBLE
                 dir.mkdirs()
-                Thread(Runnable {
-                    if (unzip(file, dir)) {
-                        runOnUiThread {
-                            loadFileEPUB(dir)
+                val asyncTask = AsyncTask()
+                asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                    override fun doInBackground() {
+                        if (unzip(file, dir)) {
+                            runOnUiThread {
+                                loadFileEPUB(dir)
+                                progressBar2.visibility = View.GONE
+                            }
+                        } else {
                             progressBar2.visibility = View.GONE
                         }
-                    } else {
-                        progressBar2.visibility = View.GONE
                     }
-                }).start()
+                })
+                asyncTask.execute()
             } else {
                 loadFileEPUB(dir)
             }
@@ -1687,13 +1699,17 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             val gson = Gson()
             prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
             progressBar2.visibility = View.VISIBLE
-            Thread(Runnable {
-                val dir = File("$filesDir/Book")
-                if (dir.exists()) {
-                    dir.deleteRecursively()
+            val asyncTask = AsyncTask()
+            asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                override fun doInBackground() {
+                    val dir = File("$filesDir/Book")
+                    if (dir.exists()) {
+                        dir.deleteRecursively()
+                    }
+                    runOnUiThread { progressBar2.visibility = View.GONE }
                 }
-                runOnUiThread { progressBar2.visibility = View.GONE }
-            }).start()
+            })
+            asyncTask.execute()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_title) {
             val titleBiblioteka: DialogTitleBiblioteka =
@@ -2121,84 +2137,88 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             showUrl,
             null,
             Response.Listener { response: JSONObject ->
-                Thread(Runnable {
-                    val temp: ArrayList<ArrayList<String>> = ArrayList()
-                    val biblioteka = response.getJSONArray("biblioteka")
-                    val gson = Gson()
-                    for (i in 0 until biblioteka.length()) {
-                        val mySqlList: ArrayList<String> = ArrayList()
-                        val kniga = biblioteka.getJSONObject(i)
-                        val id = kniga.getString("bib")
-                        val rubrika = kniga.getString("rubryka")
-                        val link = kniga.getString("link")
-                        var str = kniga.getString("str")
-                        val pdf = kniga.getString("pdf")
-                        var image = kniga.getString("image")
-                        mySqlList.add(link)
-                        val pos = str.indexOf("</span><br>")
-                        str = str.substring(pos + 11)
-                        mySqlList.add(str)
-                        mySqlList.add(pdf)
-                        val url = URL("https://carkva-gazeta.by/data/bibliateka/$pdf")
-                        var filesize: String
-                        var conn: URLConnection?
-                        conn = url.openConnection()
-                        if (conn is HttpURLConnection) {
-                            (conn as HttpURLConnection?)?.requestMethod = "HEAD"
-                        }
-                        filesize = java.lang.String.valueOf(conn.contentLength)
-                        if (conn is HttpURLConnection) {
-                            (conn as HttpURLConnection?)?.disconnect()
-                        }
-                        mySqlList.add(filesize)
-                        mySqlList.add(rubrika)
-                        val im1 = image.indexOf("src=\"")
-                        val im2 = image.indexOf("\"", im1 + 5)
-                        image = "https://carkva-gazeta.by" + image.substring(im1 + 5, im2)
-                        val t1 = pdf.lastIndexOf(".") //image.lastIndexOf("/")
-                        val imageLocal: String =
-                            "$filesDir/image_temp/" + pdf.substring(
-                                0,
-                                t1
-                            ) + ".png" //image.substring(t1 + 1)
-                        mySqlList.add(imageLocal)
-                        mySqlList.add(id)
-                        if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(
-                                this
-                            ) == 2
-                        ) {
-                            val dir = File("$filesDir/image_temp")
-                            if (!dir.exists()) dir.mkdir()
-                            var mIcon11: Bitmap
-                            val file = File(imageLocal)
-                            if (!file.exists()) {
-                                FileOutputStream(
-                                    "$filesDir/image_temp/" + pdf.substring(
-                                        0,
-                                        t1
-                                    ) + ".png"
-                                ).use { out ->
-                                    val inputStream: InputStream = URL(image).openStream()
-                                    mIcon11 = BitmapFactory.decodeStream(inputStream)
-                                    mIcon11.compress(Bitmap.CompressFormat.PNG, 90, out)
+                val asyncTask = AsyncTask()
+                asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                    override fun doInBackground() {
+                        val temp: ArrayList<ArrayList<String>> = ArrayList()
+                        val biblioteka = response.getJSONArray("biblioteka")
+                        val gson = Gson()
+                        for (i in 0 until biblioteka.length()) {
+                            val mySqlList: ArrayList<String> = ArrayList()
+                            val kniga = biblioteka.getJSONObject(i)
+                            val id = kniga.getString("bib")
+                            val rubrika = kniga.getString("rubryka")
+                            val link = kniga.getString("link")
+                            var str = kniga.getString("str")
+                            val pdf = kniga.getString("pdf")
+                            var image = kniga.getString("image")
+                            mySqlList.add(link)
+                            val pos = str.indexOf("</span><br>")
+                            str = str.substring(pos + 11)
+                            mySqlList.add(str)
+                            mySqlList.add(pdf)
+                            val url = URL("https://carkva-gazeta.by/data/bibliateka/$pdf")
+                            var filesize: String
+                            var conn: URLConnection?
+                            conn = url.openConnection()
+                            if (conn is HttpURLConnection) {
+                                (conn as HttpURLConnection?)?.requestMethod = "HEAD"
+                            }
+                            filesize = java.lang.String.valueOf(conn.contentLength)
+                            if (conn is HttpURLConnection) {
+                                (conn as HttpURLConnection?)?.disconnect()
+                            }
+                            mySqlList.add(filesize)
+                            mySqlList.add(rubrika)
+                            val im1 = image.indexOf("src=\"")
+                            val im2 = image.indexOf("\"", im1 + 5)
+                            image = "https://carkva-gazeta.by" + image.substring(im1 + 5, im2)
+                            val t1 = pdf.lastIndexOf(".") //image.lastIndexOf("/")
+                            val imageLocal: String =
+                                "$filesDir/image_temp/" + pdf.substring(
+                                    0,
+                                    t1
+                                ) + ".png" //image.substring(t1 + 1)
+                            mySqlList.add(imageLocal)
+                            mySqlList.add(id)
+                            if (MainActivity.isIntNetworkAvailable(this@BibliotekaView) == 1 || MainActivity.isIntNetworkAvailable(
+                                    this@BibliotekaView
+                                ) == 2
+                            ) {
+                                val dir = File("$filesDir/image_temp")
+                                if (!dir.exists()) dir.mkdir()
+                                var mIcon11: Bitmap
+                                val file = File(imageLocal)
+                                if (!file.exists()) {
+                                    FileOutputStream(
+                                        "$filesDir/image_temp/" + pdf.substring(
+                                            0,
+                                            t1
+                                        ) + ".png"
+                                    ).use { out ->
+                                        val inputStream: InputStream = URL(image).openStream()
+                                        mIcon11 = BitmapFactory.decodeStream(inputStream)
+                                        mIcon11.compress(Bitmap.CompressFormat.PNG, 90, out)
+                                    }
                                 }
                             }
+                            if (rubrika.toInt() == rub) {
+                                arrayList.add(mySqlList)
+                            }
+                            temp.add(mySqlList)
                         }
-                        if (rubrika.toInt() == rub) {
-                            arrayList.add(mySqlList)
+                        val json: String = gson.toJson(temp)
+                        val prefEditors: SharedPreferences.Editor = k.edit()
+                        prefEditors.putString("Biblioteka", json)
+                        prefEditors.apply()
+                        runOnUiThread {
+                            adapter.notifyDataSetChanged()
+                            progressBar2.visibility = View.GONE
                         }
-                        temp.add(mySqlList)
+                        runSql = false
                     }
-                    val json: String = gson.toJson(temp)
-                    val prefEditors: SharedPreferences.Editor = k.edit()
-                    prefEditors.putString("Biblioteka", json)
-                    prefEditors.apply()
-                    runOnUiThread {
-                        adapter.notifyDataSetChanged()
-                        progressBar2.visibility = View.GONE
-                    }
-                    runSql = false
-                }).start()
+                })
+                asyncTask.execute()
             },
             Response.ErrorListener { })
         requestQueue.add(jsonObjectRequest)

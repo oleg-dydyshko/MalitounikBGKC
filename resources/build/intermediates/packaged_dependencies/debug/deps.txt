@@ -1,3 +1,0 @@
-androidx.lifecycle:lifecycle-viewmodel-ktx
-org.jetbrains.kotlinx:kotlinx-coroutines-android
-org.jetbrains.kotlinx:kotlinx-coroutines-core

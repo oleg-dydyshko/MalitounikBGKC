@@ -4,7 +4,6 @@ ADDED from /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/Androi
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:1:1-213:12
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:1:1-213:12
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:1:1-213:12
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha06] /home/oleg/.gradle/caches/transforms-2/files-2.1/b38c2b74d2d5996e17dcff68d83c651a/jetified-lifecycle-viewmodel-ktx-2.3.0-alpha06/AndroidManifest.xml:17:1-24:12
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:1:1-213:12
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:1:1-213:12
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:1:1-213:12
@@ -258,8 +257,6 @@ uses-sdk
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha06] /home/oleg/.gradle/caches/transforms-2/files-2.1/b38c2b74d2d5996e17dcff68d83c651a/jetified-lifecycle-viewmodel-ktx-2.3.0-alpha06/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha06] /home/oleg/.gradle/caches/transforms-2/files-2.1/b38c2b74d2d5996e17dcff68d83c651a/jetified-lifecycle-viewmodel-ktx-2.3.0-alpha06/AndroidManifest.xml:20:5-22:41
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml
 INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml
 	android:targetSdkVersion

@@ -17,8 +17,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.*
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
+import android.widget.CompoundButton
+import android.widget.RadioGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -1122,10 +1125,14 @@ class SettingsActivity : AppCompatActivity() {
                     prefEditor.apply()
                     itemDefault = i
                     spinnerTime.isEnabled = false
-                    Thread(Runnable {
-                        setNotifications(this@SettingsActivity, notification)
-                        runOnUiThread { spinnerTime.isEnabled = true }
-                    }).start()
+                    val asyncTask = AsyncTask()
+                    asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                        override fun doInBackground() {
+                            setNotifications(this@SettingsActivity, notification)
+                            runOnUiThread { spinnerTime.isEnabled = true }
+                        }
+                    })
+                    asyncTask.execute()
                 }
             }
 
@@ -1404,108 +1411,318 @@ class SettingsActivity : AppCompatActivity() {
                 R.id.notificationOnly -> {
                     notifiSvizta.visibility = View.VISIBLE
                     spinnerTime.visibility = View.VISIBLE
-                    if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
+                    if (k.getBoolean(
+                            "check_notifi",
+                            true
+                        ) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")
+                    ) {
                         val notifi = DialogHelpNotification()
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                     prefEditor.putInt("notification", 1)
-                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) vibro.setTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.colorIcons
+                        )
+                    ) else vibro.setTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.colorPrimary_text
+                        )
+                    )
                     this.guk.isClickable = true
-                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                    Thread(Runnable {
-                        runOnUiThread {
-                            if (dzenNoch) {
-                                vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                                this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                            } else {
-                                vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                                this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) this.guk.setTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.colorIcons
+                        )
+                    ) else this.guk.setTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.colorPrimary_text
+                        )
+                    )
+                    val asyncTask = AsyncTask()
+                    asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                        override fun doInBackground() {
+                            runOnUiThread {
+                                if (dzenNoch) {
+                                    vibro.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorIcons
+                                        )
+                                    )
+                                    this@SettingsActivity.guk.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorIcons
+                                        )
+                                    )
+                                } else {
+                                    vibro.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorPrimary_text
+                                        )
+                                    )
+                                    this@SettingsActivity.guk.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorPrimary_text
+                                        )
+                                    )
+                                }
+                                notificationNon.isClickable = false
+                                notificationFull.isClickable = false
+                                notificationNon.setTextColor(
+                                    ContextCompat.getColor(
+                                        this@SettingsActivity,
+                                        R.color.colorSecondary_text
+                                    )
+                                )
+                                notificationFull.setTextColor(
+                                    ContextCompat.getColor(
+                                        this@SettingsActivity,
+                                        R.color.colorSecondary_text
+                                    )
+                                )
                             }
-                            notificationNon.isClickable = false
-                            notificationFull.isClickable = false
-                            notificationNon.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-                            notificationFull.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-                        }
-                        setNotifications(this@SettingsActivity, 1)
-                        runOnUiThread {
-                            notificationNon.isClickable = true
-                            notificationFull.isClickable = true
-                            if (dzenNoch) {
-                                notificationNon.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                                notificationFull.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                            } else {
-                                notificationNon.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                                notificationFull.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                            setNotifications(this@SettingsActivity, 1)
+                            runOnUiThread {
+                                notificationNon.isClickable = true
+                                notificationFull.isClickable = true
+                                if (dzenNoch) {
+                                    notificationNon.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorIcons
+                                        )
+                                    )
+                                    notificationFull.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorIcons
+                                        )
+                                    )
+                                } else {
+                                    notificationNon.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorPrimary_text
+                                        )
+                                    )
+                                    notificationFull.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorPrimary_text
+                                        )
+                                    )
+                                }
                             }
                         }
-                    }).start()
+                    })
+                    asyncTask.execute()
                 }
                 R.id.notificationFull -> {
                     notifiSvizta.visibility = View.VISIBLE
                     spinnerTime.visibility = View.VISIBLE
-                    if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
+                    if (k.getBoolean(
+                            "check_notifi",
+                            true
+                        ) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")
+                    ) {
                         val notifi = DialogHelpNotification()
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                     prefEditor.putInt("notification", 2)
-                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) vibro.setTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.colorIcons
+                        )
+                    ) else vibro.setTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.colorPrimary_text
+                        )
+                    )
                     this.guk.isClickable = true
-                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                    Thread(Runnable {
-                        runOnUiThread {
-                            if (dzenNoch) {
-                                vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                                this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                            } else {
-                                vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                                this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) this.guk.setTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.colorIcons
+                        )
+                    ) else this.guk.setTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.colorPrimary_text
+                        )
+                    )
+                    val asyncTask = AsyncTask()
+                    asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                        override fun doInBackground() {
+                            runOnUiThread {
+                                if (dzenNoch) {
+                                    vibro.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorIcons
+                                        )
+                                    )
+                                    this@SettingsActivity.guk.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorIcons
+                                        )
+                                    )
+                                } else {
+                                    vibro.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorPrimary_text
+                                        )
+                                    )
+                                    this@SettingsActivity.guk.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorPrimary_text
+                                        )
+                                    )
+                                }
+                                notificationOnly.isClickable = false
+                                notificationOnly.setTextColor(
+                                    ContextCompat.getColor(
+                                        this@SettingsActivity,
+                                        R.color.colorSecondary_text
+                                    )
+                                )
+                                notificationNon.isClickable = false
+                                notificationNon.setTextColor(
+                                    ContextCompat.getColor(
+                                        this@SettingsActivity,
+                                        R.color.colorSecondary_text
+                                    )
+                                )
                             }
-                            notificationOnly.isClickable = false
-                            notificationOnly.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-                            notificationNon.isClickable = false
-                            notificationNon.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-                        }
-                        setNotifications(this@SettingsActivity, 2)
-                        runOnUiThread {
-                            notificationOnly.isClickable = true
-                            notificationNon.isClickable = true
-                            if (dzenNoch) {
-                                notificationOnly.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                                notificationNon.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                            } else {
-                                notificationOnly.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                                notificationNon.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                            setNotifications(this@SettingsActivity, 2)
+                            runOnUiThread {
+                                notificationOnly.isClickable = true
+                                notificationNon.isClickable = true
+                                if (dzenNoch) {
+                                    notificationOnly.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorIcons
+                                        )
+                                    )
+                                    notificationNon.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorIcons
+                                        )
+                                    )
+                                } else {
+                                    notificationOnly.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorPrimary_text
+                                        )
+                                    )
+                                    notificationNon.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorPrimary_text
+                                        )
+                                    )
+                                }
                             }
                         }
-                    }).start()
+                    })
+                    asyncTask.execute()
                 }
                 R.id.notificationNon -> {
                     notifiSvizta.visibility = View.GONE
                     spinnerTime.visibility = View.GONE
                     prefEditor.putInt("notification", 0)
-                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) vibro.setTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.colorIcons
+                        )
+                    ) else vibro.setTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.colorPrimary_text
+                        )
+                    )
                     this.guk.isClickable = true
-                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                    Thread(Runnable {
-                        runOnUiThread {
-                            notificationOnly.isClickable = false
-                            notificationOnly.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-                            notificationFull.isClickable = false
-                            notificationFull.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-                        }
-                        setNotifications(this@SettingsActivity, 0)
-                        runOnUiThread {
-                            notificationOnly.isClickable = true
-                            notificationFull.isClickable = true
-                            if (dzenNoch) {
-                                notificationOnly.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                                notificationFull.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                            } else {
-                                notificationOnly.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                                notificationFull.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) this.guk.setTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.colorIcons
+                        )
+                    ) else this.guk.setTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.colorPrimary_text
+                        )
+                    )
+                    val asyncTask = AsyncTask()
+                    asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                        override fun doInBackground() {
+                            runOnUiThread {
+                                notificationOnly.isClickable = false
+                                notificationOnly.setTextColor(
+                                    ContextCompat.getColor(
+                                        this@SettingsActivity,
+                                        R.color.colorSecondary_text
+                                    )
+                                )
+                                notificationFull.isClickable = false
+                                notificationFull.setTextColor(
+                                    ContextCompat.getColor(
+                                        this@SettingsActivity,
+                                        R.color.colorSecondary_text
+                                    )
+                                )
+                            }
+                            setNotifications(this@SettingsActivity, 0)
+                            runOnUiThread {
+                                notificationOnly.isClickable = true
+                                notificationFull.isClickable = true
+                                if (dzenNoch) {
+                                    notificationOnly.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorIcons
+                                        )
+                                    )
+                                    notificationFull.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorIcons
+                                        )
+                                    )
+                                } else {
+                                    notificationOnly.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorPrimary_text
+                                        )
+                                    )
+                                    notificationFull.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SettingsActivity,
+                                            R.color.colorPrimary_text
+                                        )
+                                    )
+                                }
                             }
                         }
-                    }).start()
+                    })
+                    asyncTask.execute()
                 }
             }
             prefEditor.apply()

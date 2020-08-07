@@ -9,7 +9,7 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 14
         targetSdkVersion 30
-        versionCode 43638
+        versionCode 43639
         versionName "3.8.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -54,4 +54,6 @@ dependencies {
     api 'com.google.code.gson:gson:2.8.6'
     api 'androidx.webkit:webkit:1.3.0-rc01'
     api 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    //implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha06'
+    api 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha06'
 }

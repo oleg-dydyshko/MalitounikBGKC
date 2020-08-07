@@ -78,14 +78,24 @@ class DialogBibliateka : DialogFragment() {
             } else {
                 textViewZaglavie.text = "СПАМПАВАЦЬ ФАЙЛ?"
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    Thread(Runnable {
-                        val format: String
-                        val storageManager = it.getSystemService(Context.STORAGE_SERVICE) as StorageManager
-                        val bates = storageManager.getAllocatableBytes(storageManager.getUuidForPath(it.filesDir))
-                        val bat = (bates.toFloat() / 1024).toDouble()
-                        format = if (bat < 10000f) ": ДАСТУПНА " + formatFigureTwoPlaces(BigDecimal(bat).setScale(2, RoundingMode.HALF_EVEN).toFloat()) + " КБ" else if (bates < 1000L) ": ДАСТУПНА $bates БАЙТ" else ""
-                        it.runOnUiThread { textViewZaglavie.text = textViewZaglavie.text.toString() + format }
-                    }).start()
+                    val asyncTask = AsyncTask()
+                    asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                        override fun doInBackground() {
+                            val format: String
+                            val storageManager =
+                                it.getSystemService(Context.STORAGE_SERVICE) as StorageManager
+                            val bates =
+                                storageManager.getAllocatableBytes(storageManager.getUuidForPath(it.filesDir))
+                            val bat = (bates.toFloat() / 1024).toDouble()
+                            format = if (bat < 10000f) ": ДАСТУПНА " + formatFigureTwoPlaces(
+                                BigDecimal(bat).setScale(2, RoundingMode.HALF_EVEN).toFloat()
+                            ) + " КБ" else if (bates < 1000L) ": ДАСТУПНА $bates БАЙТ" else ""
+                            it.runOnUiThread {
+                                textViewZaglavie.text = textViewZaglavie.text.toString() + format
+                            }
+                        }
+                    })
+                    asyncTask.execute()
                 }
             }
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)

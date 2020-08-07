@@ -1125,14 +1125,12 @@ class SettingsActivity : AppCompatActivity() {
                     prefEditor.apply()
                     itemDefault = i
                     spinnerTime.isEnabled = false
-                    val asyncTask = AsyncTask()
-                    asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                    AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
                         override fun doInBackground() {
                             setNotifications(this@SettingsActivity, notification)
                             runOnUiThread { spinnerTime.isEnabled = true }
                         }
                     })
-                    asyncTask.execute()
                 }
             }
 
@@ -1443,8 +1441,7 @@ class SettingsActivity : AppCompatActivity() {
                             R.color.colorPrimary_text
                         )
                     )
-                    val asyncTask = AsyncTask()
-                    asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                    AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
                         override fun doInBackground() {
                             runOnUiThread {
                                 if (dzenNoch) {
@@ -1523,7 +1520,6 @@ class SettingsActivity : AppCompatActivity() {
                             }
                         }
                     })
-                    asyncTask.execute()
                 }
                 R.id.notificationFull -> {
                     notifiSvizta.visibility = View.VISIBLE
@@ -1560,8 +1556,7 @@ class SettingsActivity : AppCompatActivity() {
                             R.color.colorPrimary_text
                         )
                     )
-                    val asyncTask = AsyncTask()
-                    asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                    AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
                         override fun doInBackground() {
                             runOnUiThread {
                                 if (dzenNoch) {
@@ -1640,7 +1635,6 @@ class SettingsActivity : AppCompatActivity() {
                             }
                         }
                     })
-                    asyncTask.execute()
                 }
                 R.id.notificationNon -> {
                     notifiSvizta.visibility = View.GONE
@@ -1669,8 +1663,7 @@ class SettingsActivity : AppCompatActivity() {
                             R.color.colorPrimary_text
                         )
                     )
-                    val asyncTask = AsyncTask()
-                    asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                    AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
                         override fun doInBackground() {
                             runOnUiThread {
                                 notificationOnly.isClickable = false
@@ -1722,7 +1715,6 @@ class SettingsActivity : AppCompatActivity() {
                             }
                         }
                     })
-                    asyncTask.execute()
                 }
             }
             prefEditor.apply()

@@ -525,15 +525,13 @@ try {
         }
 
         if (setAlarm) {
-            val asyncTask = AsyncTask()
-            asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+            AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
                 override fun doInBackground() {
                     val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
                     val notify = chin.getInt("notification", 2)
                     SettingsActivity.setNotifications(this@MainActivity, notify)
                 }
             })
-            asyncTask.execute()
             //val i = Intent(this, ReceiverUpdate::class.java)
             //i.action = "UPDATE"
             //sendBroadcast(i)
@@ -1529,8 +1527,7 @@ try {
         }
 
         fun setListPadzeia(activity: Activity) {
-            val asyncTask = AsyncTask()
-            asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+            AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
                 override fun doInBackground() {
                     padzeia.clear()
                     File(activity.filesDir.toString() + "/Sabytie").walk().forEach { file ->
@@ -1583,7 +1580,6 @@ try {
                     }
                 }
             })
-            asyncTask.execute()
         }
 
         @SuppressLint("SetTextI18n")

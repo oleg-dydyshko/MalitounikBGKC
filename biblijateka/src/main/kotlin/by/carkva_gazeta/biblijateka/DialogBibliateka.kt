@@ -78,8 +78,7 @@ class DialogBibliateka : DialogFragment() {
             } else {
                 textViewZaglavie.text = "СПАМПАВАЦЬ ФАЙЛ?"
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val asyncTask = AsyncTask()
-                    asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                    AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
                         override fun doInBackground() {
                             val format: String
                             val storageManager =
@@ -95,7 +94,6 @@ class DialogBibliateka : DialogFragment() {
                             }
                         }
                     })
-                    asyncTask.execute()
                 }
             }
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)

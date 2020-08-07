@@ -303,8 +303,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     private fun writeFile(url: String) {
         progressBar2.visibility = View.VISIBLE
-        val asyncTask = AsyncTask()
-        asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+        AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
             override fun doInBackground() {
                 try {
                     val dir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
@@ -341,7 +340,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
             }
         })
-        asyncTask.execute()
     }
 
     override fun onError(t: Throwable?) {
@@ -1140,8 +1138,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             if (!dir.exists()) {
                 progressBar2.visibility = View.VISIBLE
                 dir.mkdirs()
-                val asyncTask = AsyncTask()
-                asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
                     override fun doInBackground() {
                         if (unzip(file, dir)) {
                             runOnUiThread {
@@ -1153,7 +1150,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         }
                     }
                 })
-                asyncTask.execute()
             } else {
                 loadFileEPUB(dir)
             }
@@ -1699,8 +1695,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             val gson = Gson()
             prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
             progressBar2.visibility = View.VISIBLE
-            val asyncTask = AsyncTask()
-            asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+            AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
                 override fun doInBackground() {
                     val dir = File("$filesDir/Book")
                     if (dir.exists()) {
@@ -1709,7 +1704,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     runOnUiThread { progressBar2.visibility = View.GONE }
                 }
             })
-            asyncTask.execute()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_title) {
             val titleBiblioteka: DialogTitleBiblioteka =
@@ -2137,8 +2131,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             showUrl,
             null,
             Response.Listener { response: JSONObject ->
-                val asyncTask = AsyncTask()
-                asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+                AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
                     override fun doInBackground() {
                         val temp: ArrayList<ArrayList<String>> = ArrayList()
                         val biblioteka = response.getJSONArray("biblioteka")
@@ -2218,7 +2211,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         runSql = false
                     }
                 })
-                asyncTask.execute()
             },
             Response.ErrorListener { })
         requestQueue.add(jsonObjectRequest)

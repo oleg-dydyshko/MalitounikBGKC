@@ -16,14 +16,12 @@ class AsyncTask : ViewModel() {
 
     fun setViewModelListener(viewModelListener: ViewModelListener) {
         this.viewModelListener = viewModelListener
+        execute()
     }
 
-    fun execute() = viewModelScope.launch {
-        doInBackground()
-    }
-
-    private suspend fun doInBackground() =
+    private fun execute() = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             return@withContext viewModelListener?.doInBackground()
         }
+    }
 }

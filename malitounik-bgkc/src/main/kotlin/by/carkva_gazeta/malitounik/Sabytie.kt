@@ -562,8 +562,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             sabytie2.add(p.dat + " " + p.padz.replace("_", " "))
         }
         adapter.notifyDataSetChanged()
-        val asyncTask = AsyncTask()
-        asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+        AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
             override fun doInBackground() {
                 if (sab.count == "0") {
                     if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
@@ -600,7 +599,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 }
             }
         })
-        asyncTask.execute()
         MainActivity.toastView(this@Sabytie, getString(R.string.remove_padzea))
     }
 
@@ -2344,8 +2342,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
     override fun sabytieDelAll() {
         redak = true
-        val asyncTask = AsyncTask()
-        asyncTask.setViewModelListener(object : AsyncTask.ViewModelListener {
+        AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
             override fun doInBackground() {
                 for (p in MainActivity.padzeia) {
                     if (p.sec != "-1") {
@@ -2369,7 +2366,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 MainActivity.padzeia.clear()
             }
         })
-        asyncTask.execute()
         adapter.clear()
         adapter.notifyDataSetChanged()
         MainActivity.toastView(this, getString(R.string.remove_padzea))

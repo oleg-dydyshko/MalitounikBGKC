@@ -1,14 +1,11 @@
 package by.carkva_gazeta.malitounik
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
-class AsyncTask : ViewModel() {
+class AsyncTask {
 
     private var viewModelListener: ViewModelListener? = null
+    private val scope = CoroutineScope(Job() + Dispatchers.Main)
 
     interface ViewModelListener {
         fun doInBackground()
@@ -19,7 +16,7 @@ class AsyncTask : ViewModel() {
         execute()
     }
 
-    private fun execute() = viewModelScope.launch {
+    private fun execute() = scope.launch {
         withContext(Dispatchers.IO) {
             return@withContext viewModelListener?.doInBackground()
         }

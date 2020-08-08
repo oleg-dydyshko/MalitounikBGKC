@@ -1,6 +1,6 @@
 androidx.activity:activity
 androidx.annotation:annotation
-androidx.appcompat:appcompat
+androidx.annotation:annotation-experimental
 androidx.appcompat:appcompat
 androidx.appcompat:appcompat-resources
 androidx.arch.core:core-common

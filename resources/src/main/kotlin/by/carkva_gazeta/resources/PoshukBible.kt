@@ -1,12 +1,11 @@
 package by.carkva_gazeta.resources
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 
-internal class PoshukBible : ViewModel() {
+internal class PoshukBible {
 
     private var execute: Execute? = null
+    private val scope = CoroutineScope(Job() + Dispatchers.Main)
 
     internal interface Execute {
         fun onPreExecute()
@@ -18,7 +17,7 @@ internal class PoshukBible : ViewModel() {
         this.execute = execute
     }
 
-    internal fun execute(searche: String) = viewModelScope.launch {
+    internal fun execute(searche: String) = scope.launch {
         onPreExecute()
         val result = doInBackground(searche)
         onPostExecute(result)

@@ -24,12 +24,16 @@ import android.widget.*
 import android.widget.AdapterView.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.DialogContextMenuSabytie.Companion.getInstance
 import by.carkva_gazeta.malitounik.DialogContextMenuSabytie.DialogContextMenuSabytieListener
 import by.carkva_gazeta.malitounik.DialogDelite.DialogDeliteListener
 import by.carkva_gazeta.malitounik.DialogSabytieSave.DialogSabytieSaveListener
 import by.carkva_gazeta.malitounik.DialogSabytieShow.Companion.getInstance
 import kotlinx.android.synthetic.main.sabytie.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -562,14 +566,20 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             sabytie2.add(p.dat + " " + p.padz.replace("_", " "))
         }
         adapter.notifyDataSetChanged()
-        AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
-            override fun doInBackground() {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
                 if (sab.count == "0") {
                     if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
                         if (sab.sec != "-1") {
-                            val intent = createIntent(sab.padz.replace("_", " "), "Падзея" + " " + sab.dat + " у " + sab.tim, sab.dat, sab.tim)
+                            val intent = createIntent(
+                                sab.padz.replace("_", " "),
+                                "Падзея" + " " + sab.dat + " у " + sab.tim,
+                                sab.dat,
+                                sab.tim
+                            )
                             val londs3 = sab.paznic / 100000L
-                            val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                            val pIntent =
+                                PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                             am.cancel(pIntent)
                             pIntent.cancel()
                         }
@@ -589,16 +599,23 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 } else {
                     for (p in del) {
                         if (p.sec != "-1") {
-                            val intent = createIntent(p.padz.replace("_", " "), "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
+                            val intent = createIntent(
+                                p.padz.replace("_", " "),
+                                "Падзея" + " " + p.dat + " у " + p.tim,
+                                p.dat,
+                                p.tim
+                            )
                             val londs3 = p.paznic / 100000L
-                            val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                            val pIntent =
+                                PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                             am.cancel(pIntent)
                             pIntent.cancel()
                         }
                     }
                 }
+                return@withContext
             }
-        })
+        }
         MainActivity.toastView(this@Sabytie, getString(R.string.remove_padzea))
     }
 
@@ -2342,8 +2359,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
     override fun sabytieDelAll() {
         redak = true
-        AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
-            override fun doInBackground() {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
                 for (p in MainActivity.padzeia) {
                     if (p.sec != "-1") {
                         val intent = createIntent(
@@ -2364,8 +2381,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         it.delete()
                 }
                 MainActivity.padzeia.clear()
+                return@withContext
             }
-        })
+        }
         adapter.clear()
         adapter.notifyDataSetChanged()
         MainActivity.toastView(this, getString(R.string.remove_padzea))

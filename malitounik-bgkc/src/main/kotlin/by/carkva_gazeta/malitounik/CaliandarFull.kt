@@ -19,9 +19,11 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.calaindar.*
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
@@ -323,7 +325,9 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             if (extras?.getBoolean("sabytieView", false) == true) {
                 sabytieTitle = extras.getString("sabytieTitle", "") ?: ""
             }
-            activity?.runOnUiThread { sabytieView(sabytieTitle) }
+            lifecycleScope.launch {
+                sabytieView(sabytieTitle)
+            }
         }
     }
 

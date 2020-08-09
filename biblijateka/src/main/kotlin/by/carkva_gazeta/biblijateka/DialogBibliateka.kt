@@ -14,8 +14,12 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -78,22 +82,23 @@ class DialogBibliateka : DialogFragment() {
             } else {
                 textViewZaglavie.text = "СПАМПАВАЦЬ ФАЙЛ?"
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
-                        override fun doInBackground() {
-                            val format: String
+                    lifecycleScope.launch {
+                        val format = withContext(Dispatchers.IO) {
                             val storageManager =
                                 it.getSystemService(Context.STORAGE_SERVICE) as StorageManager
                             val bates =
                                 storageManager.getAllocatableBytes(storageManager.getUuidForPath(it.filesDir))
                             val bat = (bates.toFloat() / 1024).toDouble()
-                            format = if (bat < 10000f) ": ДАСТУПНА " + formatFigureTwoPlaces(
-                                BigDecimal(bat).setScale(2, RoundingMode.HALF_EVEN).toFloat()
-                            ) + " КБ" else if (bates < 1000L) ": ДАСТУПНА $bates БАЙТ" else ""
-                            it.runOnUiThread {
-                                textViewZaglavie.text = textViewZaglavie.text.toString() + format
+                            return@withContext when {
+                                bat < 10000f -> ": ДАСТУПНА " + formatFigureTwoPlaces(
+                                    BigDecimal(bat).setScale(2, RoundingMode.HALF_EVEN).toFloat()
+                                ) + " КБ"
+                                bates < 1000L -> ": ДАСТУПНА $bates БАЙТ"
+                                else -> ""
                             }
                         }
-                    })
+                        textViewZaglavie.text = textViewZaglavie.text.toString() + format
+                    }
                 }
             }
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)

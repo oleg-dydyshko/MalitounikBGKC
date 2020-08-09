@@ -30,6 +30,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.lifecycleScope
 import com.google.android.play.core.splitinstall.*
 import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
@@ -38,6 +39,9 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -525,13 +529,14 @@ try {
         }
 
         if (setAlarm) {
-            AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
-                override fun doInBackground() {
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
                     val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
                     val notify = chin.getInt("notification", 2)
                     SettingsActivity.setNotifications(this@MainActivity, notify)
+                    return@withContext
                 }
-            })
+            }
             //val i = Intent(this, ReceiverUpdate::class.java)
             //i.action = "UPDATE"
             //sendBroadcast(i)
@@ -1527,38 +1532,37 @@ try {
         }
 
         fun setListPadzeia(activity: Activity) {
-            AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
-                override fun doInBackground() {
-                    padzeia.clear()
-                    File(activity.filesDir.toString() + "/Sabytie").walk().forEach { file ->
-                        if (file.isFile && file.exists()) {
-                            val inputStream = FileReader(file)
-                            val reader = BufferedReader(inputStream)
-                            reader.forEachLine {
-                                val line = it.trim()// { it <= ' ' }
-                                if (line != "") {
-                                    val t1 = line.split(" ").toTypedArray()
-                                    try {
-                                        if (t1.size == 11) padzeia.add(
-                                            Padzeia(
-                                                t1[0].replace("_", " "),
-                                                t1[1],
-                                                t1[2],
-                                                t1[3].toLong(),
-                                                t1[4].toInt(),
-                                                t1[5],
-                                                t1[6],
-                                                t1[7],
-                                                t1[8].toInt(),
-                                                t1[9],
-                                                t1[10],
-                                                0
-                                            )
-                                        ) else padzeia.add(
-                                            Padzeia(
-                                                t1[0].replace("_", " "),
-                                                t1[1],
-                                                t1[2],
+            Thread(Runnable {
+                padzeia.clear()
+                File(activity.filesDir.toString() + "/Sabytie").walk().forEach { file ->
+                    if (file.isFile && file.exists()) {
+                        val inputStream = FileReader(file)
+                        val reader = BufferedReader(inputStream)
+                        reader.forEachLine {
+                            val line = it.trim()// { it <= ' ' }
+                            if (line != "") {
+                                val t1 = line.split(" ").toTypedArray()
+                                try {
+                                    if (t1.size == 11) padzeia.add(
+                                        Padzeia(
+                                            t1[0].replace("_", " "),
+                                            t1[1],
+                                            t1[2],
+                                            t1[3].toLong(),
+                                            t1[4].toInt(),
+                                            t1[5],
+                                            t1[6],
+                                            t1[7],
+                                            t1[8].toInt(),
+                                            t1[9],
+                                            t1[10],
+                                            0
+                                        )
+                                    ) else padzeia.add(
+                                        Padzeia(
+                                            t1[0].replace("_", " "),
+                                            t1[1],
+                                            t1[2],
                                                 t1[3].toLong(),
                                                 t1[4].toInt(),
                                                 t1[5],
@@ -1578,8 +1582,7 @@ try {
                             inputStream.close()
                         }
                     }
-                }
-            })
+            }).start()
         }
 
         @SuppressLint("SetTextI18n")

@@ -22,12 +22,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.DialogBibleSearshSettings.DiallogBibleSearshListiner
 import by.carkva_gazeta.resources.R.raw
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.search_biblia.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
@@ -37,7 +41,7 @@ import kotlin.collections.ArrayList
  * Created by oleg on 5.10.16
  */
 class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSearshListiner,
-    DialogClearHishory.DialogClearHistoryListener, PoshukBible.Execute {
+    DialogClearHishory.DialogClearHistoryListener {
     private var seash: ArrayList<String> = ArrayList()
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
@@ -52,12 +56,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
     private lateinit var historyAdapter: HistoryAdapter
     private var actionExpandOn = false
     private var fierstPosition = 0
-    private val poshukBible: PoshukBible
-        get() {
-            val poshukBible = PoshukBible()
-            poshukBible.setExecute(this)
-            return poshukBible
-        }
 
     override fun onPause() {
         super.onPause()
@@ -79,7 +77,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             if (edit.length >= 3) {
                 addHistory(it)
                 saveHistory()
-                poshukBible.execute(edit)
+                execute(edit)
                 Histopy.visibility = View.GONE
                 ListView.visibility = View.VISIBLE
             }
@@ -386,7 +384,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             ListView.visibility = View.VISIBLE
             autoCompleteTextView?.setText(edit)
             searchView?.clearFocus()
-            poshukBible.execute(edit)
+            execute(edit)
         }
         Histopy.setOnItemLongClickListener { _, _, position, _ ->
             val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
@@ -463,7 +461,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         saveHistory()
                         Histopy.visibility = View.GONE
                         ListView.visibility = View.VISIBLE
-                        poshukBible.execute(edit)
+                        execute(edit)
                     } else {
                         MainActivity.toastView(
                             this,
@@ -601,7 +599,17 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         prefEditors.apply()
     }
 
-    override fun onPreExecute() {
+    private fun execute(searche: String) {
+        lifecycleScope.launch {
+            onPreExecute()
+            val result = withContext(Dispatchers.IO) {
+                return@withContext doInBackground(searche)
+            }
+            onPostExecute(result)
+        }
+    }
+
+    private fun onPreExecute() {
         searche = true
         prefEditors = chin.edit()
         adapter.clear()
@@ -617,7 +625,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         }
     }
 
-    override fun doInBackground(searche: String): ArrayList<String> {
+    private fun doInBackground(searche: String): ArrayList<String> {
         return when (zavet) {
             1 -> semuxa(this@SearchBiblia, searche)
             2 -> sinoidal(this@SearchBiblia, searche)
@@ -626,7 +634,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         }
     }
 
-    override fun onPostExecute(result: ArrayList<String>) {
+    private fun onPostExecute(result: ArrayList<String>) {
         adapter.addAll(result)
         adapter.filter.filter(editText2?.text.toString())
         textViewCount?.text = resources.getString(

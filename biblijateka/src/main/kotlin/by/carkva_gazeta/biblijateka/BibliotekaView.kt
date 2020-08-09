@@ -40,8 +40,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.*
-import by.carkva_gazeta.malitounik.AsyncTask
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -59,6 +59,9 @@ import com.shockwave.pdfium.PdfDocument
 import kotlinx.android.synthetic.main.biblioteka_view.*
 import kotlinx.android.synthetic.main.biblioteka_view_app.*
 import kotlinx.android.synthetic.main.biblioteka_view_content.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import org.xml.sax.SAXException
 import java.io.*
@@ -303,8 +306,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     private fun writeFile(url: String) {
         progressBar2.visibility = View.VISIBLE
-        AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
-            override fun doInBackground() {
+        lifecycleScope.launch {
+            var error = false
+            withContext(Dispatchers.IO) {
                 try {
                     val dir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
                     if (dir?.exists() != true) {
@@ -322,24 +326,25 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         outputStream.write(buffer, 0, bytesRead)
                     }
                     outputStream.close()
-                    runOnUiThread {
-                        adapter.notifyDataSetChanged()
-                        progressBar2.visibility = View.GONE
-                        filePath = file.path
-                        fileName = uplFilename
-                        loadFilePDF()
-                        listView.visibility = View.GONE
-                        webView.visibility = View.GONE
-                        scrollViewB.visibility = View.GONE
-                        invalidateOptionsMenu()
-                    }
+                    filePath = file.path
+                    fileName = uplFilename
                 } catch (t: Throwable) {
-                    runOnUiThread {
-                        DialogNoInternet().show(supportFragmentManager, "no_internet")
-                    }
+                    error = true
                 }
+                return@withContext
             }
-        })
+            if (!error) {
+                adapter.notifyDataSetChanged()
+                progressBar2.visibility = View.GONE
+                loadFilePDF()
+                listView.visibility = View.GONE
+                webView.visibility = View.GONE
+                scrollViewB.visibility = View.GONE
+                invalidateOptionsMenu()
+            } else {
+                DialogNoInternet().show(supportFragmentManager, "no_internet")
+            }
+        }
     }
 
     override fun onError(t: Throwable?) {
@@ -1138,18 +1143,17 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             if (!dir.exists()) {
                 progressBar2.visibility = View.VISIBLE
                 dir.mkdirs()
-                AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
-                    override fun doInBackground() {
-                        if (unzip(file, dir)) {
-                            runOnUiThread {
-                                loadFileEPUB(dir)
-                                progressBar2.visibility = View.GONE
-                            }
-                        } else {
-                            progressBar2.visibility = View.GONE
-                        }
+                lifecycleScope.launch {
+                    val unzip = withContext(Dispatchers.IO) {
+                        return@withContext unzip(file, dir)
                     }
-                })
+                    if (unzip) {
+                        loadFileEPUB(dir)
+                        progressBar2.visibility = View.GONE
+                    } else {
+                        progressBar2.visibility = View.GONE
+                    }
+                }
             } else {
                 loadFileEPUB(dir)
             }
@@ -1695,15 +1699,16 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             val gson = Gson()
             prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
             progressBar2.visibility = View.VISIBLE
-            AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
-                override fun doInBackground() {
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
                     val dir = File("$filesDir/Book")
                     if (dir.exists()) {
                         dir.deleteRecursively()
                     }
-                    runOnUiThread { progressBar2.visibility = View.GONE }
+                    return@withContext
                 }
-            })
+                progressBar2.visibility = View.GONE
+            }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_title) {
             val titleBiblioteka: DialogTitleBiblioteka =
@@ -2131,8 +2136,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             showUrl,
             null,
             Response.Listener { response: JSONObject ->
-                AsyncTask().setViewModelListener(object : AsyncTask.ViewModelListener {
-                    override fun doInBackground() {
+                lifecycleScope.launch {
+                    withContext(Dispatchers.IO) {
                         val temp: ArrayList<ArrayList<String>> = ArrayList()
                         val biblioteka = response.getJSONArray("biblioteka")
                         val gson = Gson()
@@ -2204,13 +2209,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         val prefEditors: SharedPreferences.Editor = k.edit()
                         prefEditors.putString("Biblioteka", json)
                         prefEditors.apply()
-                        runOnUiThread {
-                            adapter.notifyDataSetChanged()
-                            progressBar2.visibility = View.GONE
-                        }
                         runSql = false
+                        return@withContext
                     }
-                })
+                    adapter.notifyDataSetChanged()
+                    progressBar2.visibility = View.GONE
+                }
             },
             Response.ErrorListener { })
         requestQueue.add(jsonObjectRequest)

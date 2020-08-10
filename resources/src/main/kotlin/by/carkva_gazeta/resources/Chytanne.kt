@@ -25,11 +25,13 @@ import android.view.View.OnTouchListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnNestedTouchListener
 import kotlinx.android.synthetic.main.akafist_chytanne.*
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
@@ -1450,7 +1452,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         procentTimer = Timer()
         procentSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread {
+                lifecycleScope.launch {
                     progress.visibility = View.GONE
                 }
             }
@@ -1464,7 +1466,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         scrollerSchedule = null
         resetSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+                lifecycleScope.launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
         }
         resetTimer.schedule(resetSchedule, 60000)
@@ -1476,7 +1478,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         resetSchedule = null
         scrollerSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread {
+                lifecycleScope.launch {
                     if (!mActionDown && !MainActivity.dialogVisable) {
                         InteractiveScroll.smoothScrollBy(0, 2)
                     }

@@ -21,11 +21,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import kotlinx.android.synthetic.main.akafist_activity_paslia_prich.*
+import kotlinx.coroutines.launch
 import java.util.*
 
 class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSizeListener {
@@ -450,7 +452,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         procentTimer = Timer()
         procentSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread {
+                lifecycleScope.launch {
                     progress.visibility = View.GONE
                 }
             }

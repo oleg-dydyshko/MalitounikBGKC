@@ -20,10 +20,12 @@ import android.view.*
 import android.view.View.OnTouchListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.R.raw
 import kotlinx.android.synthetic.main.akafist_under.*
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -328,7 +330,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         procentTimer = Timer()
         procentSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread {
+                lifecycleScope.launch {
                     progress.visibility = View.GONE
                 }
             }

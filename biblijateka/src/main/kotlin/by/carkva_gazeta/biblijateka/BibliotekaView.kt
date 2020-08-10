@@ -2310,7 +2310,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         scrollerSchedule = null
         resetSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+                lifecycleScope.launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
         }
         resetTimer.schedule(resetSchedule, 60000)
@@ -2323,7 +2323,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         resetSchedule = null
         scrollerSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread {
+                lifecycleScope.launch {
                     if (!mActionDown && !drawer_layout.isDrawerOpen(GravityCompat.START) && !MainActivity.dialogVisable) {
                         webView.scrollBy(0, 2)
                     }
@@ -2357,7 +2357,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         procentTimer = Timer()
         procentSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread {
+                lifecycleScope.launch {
                     progress.visibility = View.GONE
                 }
             }
@@ -2480,15 +2480,15 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             if (arrayList[position].size == 3) {
                 viewHolder.buttonPopup?.visibility = View.GONE
                 if (arrayList[position][2] != "") {
-                    Runnable {
-                        val options = BitmapFactory.Options()
-                        options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                        val bitmap = BitmapFactory.decodeFile(arrayList[position][2], options)
-                        runOnUiThread {
-                            viewHolder.imageView?.setImageBitmap(bitmap)
-                            viewHolder.imageView?.visibility = View.VISIBLE
+                    lifecycleScope.launch {
+                        val bitmap = withContext(Dispatchers.IO) {
+                            val options = BitmapFactory.Options()
+                            options.inPreferredConfig = Bitmap.Config.ARGB_8888
+                            return@withContext BitmapFactory.decodeFile(arrayList[position][2], options)
                         }
-                    }.run()
+                        viewHolder.imageView?.setImageBitmap(bitmap)
+                        viewHolder.imageView?.visibility = View.VISIBLE
+                    }
                 } else {
                     viewHolder.imageView?.visibility = View.GONE
                 }
@@ -2506,18 +2506,18 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 val t1 = arrayList[position][5].lastIndexOf("/")
                 val file = File("$filesDir/image_temp/" + arrayList[position][5].substring(t1 + 1))
                 if (file.exists()) {
-                    Runnable {
-                        val options = BitmapFactory.Options()
-                        options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                        val bitmap = BitmapFactory.decodeFile(
-                            "$filesDir/image_temp/" + arrayList[position][5].substring(t1 + 1),
-                            options
-                        )
-                        runOnUiThread {
-                            viewHolder.imageView?.setImageBitmap(bitmap)
-                            viewHolder.imageView?.visibility = View.VISIBLE
+                    lifecycleScope.launch {
+                        val bitmap = withContext(Dispatchers.IO) {
+                            val options = BitmapFactory.Options()
+                            options.inPreferredConfig = Bitmap.Config.ARGB_8888
+                            return@withContext BitmapFactory.decodeFile(
+                                "$filesDir/image_temp/" + arrayList[position][5].substring(t1 + 1),
+                                options
+                            )
                         }
-                    }.run()
+                        viewHolder.imageView?.setImageBitmap(bitmap)
+                        viewHolder.imageView?.visibility = View.VISIBLE
+                    }
                 }
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)

@@ -20,9 +20,11 @@ import android.view.*
 import android.view.View.OnTouchListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.pesny.*
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileWriter
@@ -194,7 +196,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         procentTimer = Timer()
         procentSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread {
+                lifecycleScope.launch {
                     progress.visibility = View.GONE
                 }
             }

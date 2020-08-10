@@ -27,11 +27,13 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.akafist_maran_ata.*
+import kotlinx.coroutines.launch
 import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -1109,7 +1111,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         scrollerSchedule = null
         resetSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+                lifecycleScope.launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
         }
         resetTimer.schedule(resetSchedule, 60000)
@@ -1122,14 +1124,14 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         resetSchedule = null
         scrollerSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread {
+                lifecycleScope.launch {
                     forceScroll()
                     if (!mActionDown && !MainActivity.dialogVisable) {
                         val firstPosition = ListView.firstVisiblePosition
                         if (firstPosition == INVALID_POSITION) {
-                            return@runOnUiThread
+                            return@launch
                         }
-                        val firstView = ListView.getChildAt(0) ?: return@runOnUiThread
+                        val firstView = ListView.getChildAt(0) ?: return@launch
                         val newTop = firstView.top - 2
                         ListView.setSelectionFromTop(firstPosition, newTop)
                     }
@@ -1145,7 +1147,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         autoscrollTimer = Timer()
         autoscrollSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread {
+                lifecycleScope.launch {
                     stopAutoScroll()
                     startAutoScroll()
                     val prefEditor: Editor = k.edit()
@@ -1173,7 +1175,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         procentTimer = Timer()
         procentSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread {
+                lifecycleScope.launch {
                     progress.visibility = View.GONE
                 }
             }

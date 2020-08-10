@@ -21,10 +21,12 @@ import android.webkit.WebSettings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.bogasluzbovya.*
+import kotlinx.coroutines.launch
 import java.io.*
 import java.lang.reflect.Field
 import java.lang.reflect.Type
@@ -543,7 +545,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         procentTimer = Timer()
         procentSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread {
+                lifecycleScope.launch {
                     progress.visibility = View.GONE
                 }
             }
@@ -557,7 +559,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         scrollerSchedule = null
         resetSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+                lifecycleScope.launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
         }
         resetTimer.schedule(resetSchedule, 60000)
@@ -569,7 +571,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         resetSchedule = null
         scrollerSchedule = object : TimerTask() {
             override fun run() {
-                runOnUiThread {
+                lifecycleScope.launch {
                     if (!mActionDown && !MainActivity.dialogVisable) {
                         WebView.scrollBy(0, 2)
                     }

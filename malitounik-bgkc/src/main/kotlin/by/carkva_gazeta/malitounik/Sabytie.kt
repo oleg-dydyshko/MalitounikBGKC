@@ -67,20 +67,20 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     private var vybtimeSave = 0
     private var repitSave = 0
     private var colorSave = 0
-    private var ta: String = ""
-    private var da: String = ""
-    private var taK: String = ""
-    private var daK: String = ""
-    private var filename: String = ""
+    private var ta = ""
+    private var da = ""
+    private var taK = ""
+    private var daK = ""
+    private var filename = ""
     private var time = "0"
-    private var editSave: String = ""
-    private var edit2Save: String = ""
-    private var daSave: String = ""
-    private var taSave: String = ""
-    private var daKSave: String = ""
-    private var taKSave: String = ""
-    private var editText4Save: String = ""
-    private var labelbutton12Save: String = ""
+    private var editSave = ""
+    private var edit2Save = ""
+    private var daSave = ""
+    private var taSave = ""
+    private var daKSave = ""
+    private var taKSave = ""
+    private var editText4Save = ""
+    private var labelbutton12Save = ""
     private var radioSave = 0
     private var result: Long = 0
     private lateinit var am: AlarmManager
@@ -2530,7 +2530,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         outState.putBoolean("back", back)
     }
 
-    private inner class SabytieAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_3, R.id.label, sabytie2) {
+    private inner class SabytieAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_sabytie, sabytie2) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -2539,9 +2539,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val gc = GregorianCalendar(data[2].toInt(), data[1].toInt() - 1, data[0].toInt())
             val day = Calendar.getInstance() as GregorianCalendar
             if (convertView == null) {
-                rootView = this@Sabytie.layoutInflater.inflate(R.layout.simple_list_item_3, parent, false)
+                rootView = this@Sabytie.layoutInflater.inflate(R.layout.simple_list_item_sabytie, parent, false)
                 viewHolder = ViewHolder()
                 rootView.tag = viewHolder
+                viewHolder.color = rootView.findViewById(R.id.color)
                 viewHolder.text = rootView.findViewById(R.id.label)
                 viewHolder.buttonPopup = rootView.findViewById(R.id.button_popup)
             } else {
@@ -2553,11 +2554,12 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             } else {
                 viewHolder.text?.setTypeface(null, Typeface.NORMAL)
             }
+            viewHolder.color?.setBackgroundColor(Color.parseColor(colors[MainActivity.padzeia[position].color]))
             viewHolder.buttonPopup?.setOnClickListener { viewHolder.buttonPopup?.let { showPopupMenu(it, position) } }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolder.text?.text = sabytie2[position]
             if (dzenNoch) {
-                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+                //viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
             }
             return rootView
@@ -2587,6 +2589,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     }
 
     private class ViewHolder {
+        var color: TextViewRobotoCondensed? = null
         var text: TextViewRobotoCondensed? = null
         var buttonPopup: ImageView? = null
     }

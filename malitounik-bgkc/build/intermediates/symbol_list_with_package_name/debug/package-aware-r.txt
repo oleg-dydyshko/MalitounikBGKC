@@ -1846,6 +1846,7 @@ id clip_horizontal
 id clip_vertical
 id collapseActionView
 id collapsingToolbarLayout
+id color
 id confirm_button
 id constraint
 id container
@@ -2451,6 +2452,7 @@ layout simple_list_item_bible
 layout simple_list_item_color
 layout simple_list_item_image
 layout simple_list_item_maranata
+layout simple_list_item_sabytie
 layout simple_list_item_sviaty
 layout support_simple_spinner_dropdown_item
 layout test_action_chip

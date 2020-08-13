@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.calendar_mun.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
+import kotlin.collections.ArrayList
 
 class PageFragmentMonth : Fragment(), View.OnClickListener {
     private var wik = 0

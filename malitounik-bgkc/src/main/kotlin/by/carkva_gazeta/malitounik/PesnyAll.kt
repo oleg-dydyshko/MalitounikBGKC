@@ -32,6 +32,7 @@ import java.io.InputStreamReader
 import java.lang.reflect.Field
 import java.lang.reflect.Type
 import java.util.*
+import kotlin.collections.ArrayList
 
 class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener {
     private val mHideHandler = Handler(Looper.getMainLooper())

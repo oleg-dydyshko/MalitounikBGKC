@@ -32,7 +32,6 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
-import java.util.*
 
 class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener,
     NovyZapavietSinaidalFragment.ClicParalelListiner,

@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.*
 
 class MenuPadryxtoukaDaSpovedzi : PadryxtoukaPamiatkaListFragment() {
     private lateinit var adapter: MyArrayAdapter

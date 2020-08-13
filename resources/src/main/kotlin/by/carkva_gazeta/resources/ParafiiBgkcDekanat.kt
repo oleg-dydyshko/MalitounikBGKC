@@ -13,7 +13,6 @@ import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuListAdaprer
 import by.carkva_gazeta.malitounik.SettingsActivity
 import kotlinx.android.synthetic.main.bgkc_list.*
-import java.util.*
 
 /**
  * Created by oleg on 30.5.16

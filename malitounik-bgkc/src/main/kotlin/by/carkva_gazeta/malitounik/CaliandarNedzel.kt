@@ -19,6 +19,7 @@ import com.google.gson.reflect.TypeToken
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
+import kotlin.collections.ArrayList
 
 class CaliandarNedzel : ListFragment() {
     private var year = 0

@@ -8,8 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.*
+import android.widget.AbsListView
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemLongClickListener
+import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.MainActivity
@@ -18,7 +20,6 @@ import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import kotlinx.android.synthetic.main.activity_bible_page_fragment.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.*
 
 class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, AdapterView.OnItemClickListener {
     private var page = 0

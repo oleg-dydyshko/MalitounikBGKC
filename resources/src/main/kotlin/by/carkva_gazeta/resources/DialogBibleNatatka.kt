@@ -14,7 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
-import java.util.*
 
 /**
  * Created by oleg on 29.3.19

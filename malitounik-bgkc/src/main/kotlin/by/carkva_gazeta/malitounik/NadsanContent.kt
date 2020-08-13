@@ -11,7 +11,6 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.content_psalter.*
-import java.util.*
 
 class NadsanContent : AppCompatActivity() {
     private var dzenNoch = false

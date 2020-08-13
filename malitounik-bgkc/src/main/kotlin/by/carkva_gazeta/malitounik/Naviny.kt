@@ -24,7 +24,6 @@ import androidx.core.content.ContextCompat
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import kotlinx.android.synthetic.main.naviny.*
-import java.util.*
 
 class Naviny : AppCompatActivity() {
 

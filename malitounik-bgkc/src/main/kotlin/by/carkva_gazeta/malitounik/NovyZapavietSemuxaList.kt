@@ -15,7 +15,6 @@ import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.content_bible.*
-import java.util.*
 
 class NovyZapavietSemuxaList : AppCompatActivity() {
     private var dzenNoch = false

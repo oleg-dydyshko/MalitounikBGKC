@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DialogPrazdnik : DialogFragment() {
     private var setid = 10

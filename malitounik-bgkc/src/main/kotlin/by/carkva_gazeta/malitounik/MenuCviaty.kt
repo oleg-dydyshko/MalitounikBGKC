@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.core.content.ContextCompat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by oleg on 31.5.16

@@ -19,7 +19,6 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.calendar.*
 import java.util.*
 
-
 /**
  * Created by oleg on 3.7.16
  */

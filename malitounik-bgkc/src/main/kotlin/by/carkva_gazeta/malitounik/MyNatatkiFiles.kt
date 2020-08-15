@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import java.io.File
 import java.util.*
 
-class MyNatatkiFiles(val context: Context, private val lastModified: Long, val name: String, val file: File) : Comparable<MyNatatkiFiles> {
+data class MyNatatkiFiles(val context: Context, private val lastModified: Long, val name: String, val file: File) : Comparable<MyNatatkiFiles> {
     private val chin: SharedPreferences = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
     override fun compareTo(other: MyNatatkiFiles): Int {
         val sort = chin.getInt("natatki_sort", 0)

@@ -20,7 +20,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.FileWriter
-import kotlin.collections.ArrayList
 
 /**
  * Created by oleg on 30.5.16

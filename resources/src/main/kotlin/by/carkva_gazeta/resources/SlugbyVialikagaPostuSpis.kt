@@ -186,5 +186,5 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
         var text: TextViewRobotoCondensed? = null
     }
 
-    class Data(val id: Int, val data: String)
+    data class Data(val id: Int, val data: String)
 }

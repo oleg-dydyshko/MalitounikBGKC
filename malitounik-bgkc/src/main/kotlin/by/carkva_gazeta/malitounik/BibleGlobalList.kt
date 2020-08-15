@@ -1,7 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import kotlin.collections.ArrayList
-
 class BibleGlobalList {
     companion object {
         var listPosition = 0

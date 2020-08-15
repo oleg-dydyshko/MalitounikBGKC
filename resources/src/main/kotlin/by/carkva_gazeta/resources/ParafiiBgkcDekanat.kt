@@ -3,6 +3,7 @@ package by.carkva_gazeta.resources
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.View
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.bgkc_list.*
  */
 class ParafiiBgkcDekanat : AppCompatActivity() {
     private var bgkc = 0
+    private var mLastClickTime: Long = 0
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -96,6 +98,10 @@ class ParafiiBgkcDekanat : AppCompatActivity() {
         val adapter = MenuListAdaprer(this, data)
         ListView.adapter = adapter
         ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return@OnItemClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime()
             val intent = Intent(this, ParafiiBgkc::class.java)
             intent.putExtra("bgkc_parafii", position)
             intent.putExtra("bgkc", bgkc)

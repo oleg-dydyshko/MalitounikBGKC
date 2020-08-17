@@ -64,9 +64,14 @@ class MenuVybranoe : VybranoeListFragment() {
             if (file.exists()) {
                 vybranoe = try {
                     val gson = Gson()
-                    val line = file.readText()
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    gson.fromJson(line, type)
+                    val arrayList = gson.fromJson<ArrayList<VybranoeData>>(file.readText(), type)
+                    if (arrayList is ArrayList<VybranoeData>) {
+                        arrayList
+                    } else {
+                        file.delete()
+                        ArrayList()
+                    }
                 } catch (t: Throwable) {
                     file.delete()
                     ArrayList()

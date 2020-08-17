@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.webkit:webkit:1.3.0-rc02@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4d7bf6fb1b4928d4a57ca2b5b74dedee/webkit-1.3.0-rc02/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d8c33f47aa23098b0ba803831a81a72b/webkit-1.3.0-rc02/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4d7bf6fb1b4928d4a57ca2b5b74dedee/webkit-1.3.0-rc02/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4d7bf6fb1b4928d4a57ca2b5b74dedee/webkit-1.3.0-rc02/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4d7bf6fb1b4928d4a57ca2b5b74dedee/webkit-1.3.0-rc02/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d8c33f47aa23098b0ba803831a81a72b/webkit-1.3.0-rc02/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d8c33f47aa23098b0ba803831a81a72b/webkit-1.3.0-rc02/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d8c33f47aa23098b0ba803831a81a72b/webkit-1.3.0-rc02/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

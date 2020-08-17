@@ -28,7 +28,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.bogasluzbovya.*
 import kotlinx.coroutines.launch
 import java.io.*
-import java.lang.reflect.Type
+import java.lang.reflect.Field
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -95,8 +95,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
             if (file.exists()) {
                 MenuVybranoe.vybranoe = try {
-                    val type: Type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    gson.fromJson(file.readText(), type)
+                    val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
+                    val arrayList = gson.fromJson<ArrayList<VybranoeData>>(file.readText(), type)
+                    if (arrayList is ArrayList<VybranoeData>) {
+                        arrayList
+                    } else {
+                        file.delete()
+                        ArrayList()
+                    }
                 } catch (t: Throwable) {
                     file.delete()
                     ArrayList()
@@ -139,13 +145,18 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
 
         fun checkVybranoe(context: Context, resurs: String): Boolean {
-            var check = false
             val gson = Gson()
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
             if (file.exists()) {
                 try {
-                    val type: Type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
+                    val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
+                    val arrayList = gson.fromJson<ArrayList<VybranoeData>>(file.readText(), type)
+                    if (arrayList is ArrayList<VybranoeData>) {
+                        MenuVybranoe.vybranoe = arrayList
+                    } else {
+                        file.delete()
+                        return false
+                    }
                 } catch (t: Throwable) {
                     file.delete()
                     return false
@@ -153,31 +164,27 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             } else {
                 return false
             }
-            val fields = R.raw::class.java.fields
+            val fields: Array<Field?> = R.raw::class.java.fields
             for (field in fields) {
-                if (field.name.intern() == resurs) {
+                if (field?.name?.intern() == resurs) {
                     for (i in 0 until MenuVybranoe.vybranoe.size) {
-                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) { //MenuVybranoe.vybranoe.remove(i)
-                            check = true
-                            break
-                        }
+                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs)
+                            return true
                     }
                     break
                 }
             }
-            val fields2 = by.carkva_gazeta.malitounik.R.raw::class.java.fields
+            val fields2: Array<Field?> = by.carkva_gazeta.malitounik.R.raw::class.java.fields
             for (field in fields2) {
-                if (field.name.intern() == resurs) {
+                if (field?.name?.intern() == resurs) {
                     for (i in 0 until MenuVybranoe.vybranoe.size) {
-                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) { //MenuVybranoe.vybranoe.remove(i)
-                            check = true
-                            break
-                        }
+                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs)
+                            return true
                     }
                     break
                 }
             }
-            return check
+            return false
         }
     }
 
@@ -263,6 +270,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         resurs = intent?.getStringExtra("resurs") ?: ""
         if (resurs.contains("pesny")) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         title = intent?.getStringExtra("title") ?: ""
+        men = checkVybranoe(this, resurs)
         val webSettings = WebView.settings
         webSettings.standardFontFamily = "sans-serif-condensed"
         webSettings.defaultFontSize = fontBiblia.toInt()

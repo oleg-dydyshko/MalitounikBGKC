@@ -476,7 +476,13 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             if (file.exists()) {
                 MenuVybranoe.vybranoe = try {
                     val type: Type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    gson.fromJson(file.readText(), type)
+                    val arrayList = gson.fromJson<ArrayList<VybranoeData>>(file.readText(), type)
+                    if (arrayList is ArrayList<VybranoeData>) {
+                        arrayList
+                    } else {
+                        file.delete()
+                        ArrayList()
+                    }
                 } catch (t: Throwable) {
                     file.delete()
                     ArrayList()
@@ -525,7 +531,13 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             if (file.exists()) {
                 try {
                     val type: Type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
+                    val arrayList = gson.fromJson<ArrayList<VybranoeData>>(file.readText(), type)
+                    if (arrayList is ArrayList<VybranoeData>) {
+                        MenuVybranoe.vybranoe = arrayList
+                    } else {
+                        file.delete()
+                        return false
+                    }
                 } catch (t: Throwable) {
                     file.delete()
                     return false

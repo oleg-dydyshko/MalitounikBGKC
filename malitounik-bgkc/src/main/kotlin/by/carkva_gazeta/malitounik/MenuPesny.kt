@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.menu_pesny.*
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.lang.reflect.Field
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -547,11 +548,11 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         }
 
         private fun listRaw(filename: String): Int {
-            val fields = R.raw::class.java.fields
+            val fields: Array<Field?> = R.raw::class.java.fields
             var id = 0
             run files@{
                 fields.forEach {
-                    if (it.name == filename) {
+                    if (it?.name == filename) {
                         id = it.getInt(it)
                         return@files
                     }

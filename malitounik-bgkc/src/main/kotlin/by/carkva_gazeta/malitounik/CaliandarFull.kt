@@ -136,6 +136,10 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             maranata.text = dataMaranAta
         }
         znakTipicona.setOnClickListener(this)
+        if (data[day][21] != "") {
+            textBlaslavenne.text = data[day][21]
+            textBlaslavenne.visibility = View.VISIBLE
+        }
         if (dzenNoch) {
             activity?.let {
                 textSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
@@ -144,6 +148,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
                 textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textBlaslavenne.setBackgroundResource(R.drawable.selector_dark)
             }
         }
         textDenNedeli.text = nedelName[data[day][0].toInt()]
@@ -187,6 +193,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     textChytanne.setBackgroundResource(R.drawable.selector_bez_posta)
                     textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_bez_posta)
                     textChytanneSviatyia.setBackgroundResource(R.drawable.selector_bez_posta)
+                    textBlaslavenne.setBackgroundResource(R.drawable.selector_bez_posta)
                     textPamerlyia.setBackgroundResource(R.drawable.selector_bez_posta)
                     if (data[day][0].contains("6")) {
                         textPost.visibility = View.VISIBLE
@@ -198,6 +205,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     textChytanne.setBackgroundResource(R.drawable.selector_post)
                     textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_post)
                     textChytanneSviatyia.setBackgroundResource(R.drawable.selector_post)
+                    textBlaslavenne.setBackgroundResource(R.drawable.selector_post)
                     textDenNedeli.setBackgroundResource(R.drawable.selector_post)
                     textChislo.setBackgroundResource(R.drawable.selector_post)
                     textMesiac.setBackgroundResource(R.drawable.selector_post)
@@ -225,6 +233,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     textChytanneSviatyiaDop.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                     textChytanneSviatyia.setBackgroundResource(R.drawable.selector_strogi_post)
                     textChytanneSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    textBlaslavenne.setBackgroundResource(R.drawable.selector_strogi_post)
+                    textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                     textPost.text = resources.getString(R.string.Strogi_post)
                     textPamerlyia.text = resources.getString(R.string.Strogi_post)
                     textPamerlyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))

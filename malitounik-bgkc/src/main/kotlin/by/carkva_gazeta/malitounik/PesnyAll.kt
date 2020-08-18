@@ -128,9 +128,9 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         title = intent.extras?.getString("pesny", "") ?: ""
         val pedsny = MenuPesny.getPesniaID(this, title)
-        val fields = R.raw::class.java.fields
+        val fields: Array<Field?> = R.raw::class.java.fields
         for (field in fields) {
-            if (field.getInt(null) == pedsny) {
+            if (field?.getInt(null) == pedsny) {
                 resurs = field.name
                 break
             }
@@ -530,7 +530,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
             if (file.exists()) {
                 try {
-                    val type: Type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
+                    val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
                     val arrayList = gson.fromJson<ArrayList<VybranoeData>>(file.readText(), type)
                     if (arrayList is ArrayList<VybranoeData>) {
                         MenuVybranoe.vybranoe = arrayList
@@ -545,9 +545,9 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             } else {
                 return false
             }
-            val fields: Array<Field> = R.raw::class.java.fields
+            val fields: Array<Field?> = R.raw::class.java.fields
             for (field in fields) {
-                if (field.name.intern() == resurs) {
+                if (field?.name?.intern() == resurs) {
                     for (i in 0 until MenuVybranoe.vybranoe.size) {
                         if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) { //MenuVybranoe.vybranoe.remove(i)
                             check = true

@@ -109,9 +109,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }
             }
             var check = true
-            val fields = R.raw::class.java.fields
+            val fields: Array<Field?> = R.raw::class.java.fields
             for (field in fields) {
-                if (field.name.intern() == resurs) {
+                if (field?.name?.intern() == resurs) {
                     for (i in 0 until MenuVybranoe.vybranoe.size) {
                         if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
                             MenuVybranoe.vybranoe.removeAt(i)
@@ -122,9 +122,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     break
                 }
             }
-            val fields2 = by.carkva_gazeta.malitounik.R.raw::class.java.fields
+            val fields2: Array<Field?> = by.carkva_gazeta.malitounik.R.raw::class.java.fields
             for (field in fields2) {
-                if (field.name.intern() == resurs) {
+                if (field?.name?.intern() == resurs) {
                     for (i in 0 until MenuVybranoe.vybranoe.size) {
                         if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
                             MenuVybranoe.vybranoe.removeAt(i)
@@ -352,16 +352,16 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private fun loadData(): String {
         val builder = StringBuilder()
         var id = R.raw.bogashlugbovya1
-        val fields = R.raw::class.java.fields
+        val fields: Array<Field?> = R.raw::class.java.fields
         for (field in fields) {
-            if (field.name.intern() == resurs) {
+            if (field?.name?.intern() == resurs) {
                 id = field.getInt(null)
                 break
             }
         }
-        val fields2 = by.carkva_gazeta.malitounik.R.raw::class.java.fields
+        val fields2: Array<Field?> = by.carkva_gazeta.malitounik.R.raw::class.java.fields
         for (field in fields2) {
-            if (field.name.intern() == resurs) {
+            if (field?.name?.intern() == resurs) {
                 id = field.getInt(null)
                 break
             }

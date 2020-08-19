@@ -380,8 +380,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(by.carkva_gazeta.malitounik.R.menu.akafist, menu)
+        menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.akafist, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())

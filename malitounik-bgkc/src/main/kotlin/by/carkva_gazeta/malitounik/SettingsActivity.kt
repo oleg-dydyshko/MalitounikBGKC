@@ -30,9 +30,7 @@ import kotlinx.android.synthetic.main.settings_activity.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.BufferedReader
 import java.io.File
-import java.io.FileReader
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -178,7 +176,7 @@ class SettingsActivity : AppCompatActivity() {
                     }
                 }
             }
-            File(context.filesDir.toString() + "/Sabytie").walk().forEach { file ->
+            /*File(context.filesDir.toString() + "/Sabytie").walk().forEach { file ->
                 if (file.isFile && file.exists()) {
                     val inputStream = FileReader(file)
                     val reader = BufferedReader(inputStream)
@@ -274,6 +272,155 @@ class SettingsActivity : AppCompatActivity() {
                         }
                     }
                     inputStream.close()
+                }
+            }*/
+            MainActivity.padzeia.forEach {
+                if (it.sec != "-1") {
+                    if (it.count == "0") {
+                        when (it.repit) {
+                            1 -> {
+                                var timerepit = it.paznic
+                                while (true) {
+                                    if (timerepit > c.timeInMillis) {
+                                        intent =
+                                            createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                        pIntent = PendingIntent.getBroadcast(
+                                            context,
+                                            (timerepit / 100000).toInt(),
+                                            intent,
+                                            0
+                                        )
+                                        am.setRepeating(
+                                            AlarmManager.RTC_WAKEUP,
+                                            timerepit,
+                                            86400000L,
+                                            pIntent
+                                        )
+                                        break
+                                    }
+                                    timerepit += 86400000L
+                                }
+                            }
+                            4 -> {
+                                var timerepit = it.paznic
+                                while (true) {
+                                    if (timerepit > c.timeInMillis) {
+                                        intent =
+                                            createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                        pIntent = PendingIntent.getBroadcast(
+                                            context,
+                                            (timerepit / 100000).toInt(),
+                                            intent,
+                                            0
+                                        )
+                                        am.setRepeating(
+                                            AlarmManager.RTC_WAKEUP,
+                                            timerepit,
+                                            604800000L,
+                                            pIntent
+                                        )
+                                        break
+                                    }
+                                    timerepit += 604800000L
+                                }
+                            }
+                            5 -> {
+                                var timerepit = it.paznic
+                                while (true) {
+                                    if (timerepit > c.timeInMillis) {
+                                        intent =
+                                            createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                        pIntent = PendingIntent.getBroadcast(
+                                            context,
+                                            (timerepit / 100000).toInt(),
+                                            intent,
+                                            0
+                                        )
+                                        am.setRepeating(
+                                            AlarmManager.RTC_WAKEUP,
+                                            timerepit,
+                                            1209600000L,
+                                            pIntent
+                                        )
+                                        break
+                                    }
+                                    timerepit += 1209600000L
+                                }
+                            }
+                            6 -> {
+                                var timerepit = it.paznic
+                                while (true) {
+                                    if (timerepit > c.timeInMillis) {
+                                        intent =
+                                            createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                        pIntent = PendingIntent.getBroadcast(
+                                            context,
+                                            (timerepit / 100000).toInt(),
+                                            intent,
+                                            0
+                                        )
+                                        am.setRepeating(
+                                            AlarmManager.RTC_WAKEUP,
+                                            timerepit,
+                                            2419200000L,
+                                            pIntent
+                                        )
+                                        break
+                                    }
+                                    timerepit += 2419200000L
+                                }
+                            }
+                            else -> if (it.paznic > c.timeInMillis) {
+                                intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                pIntent = PendingIntent.getBroadcast(
+                                    context,
+                                    (it.paznic / 100000).toInt(),
+                                    intent,
+                                    0
+                                )
+                                when {
+                                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+                                        am.setExactAndAllowWhileIdle(
+                                            AlarmManager.RTC_WAKEUP,
+                                            it.paznic,
+                                            pIntent
+                                        )
+                                    }
+                                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
+                                        am.setExact(AlarmManager.RTC_WAKEUP, it.paznic, pIntent)
+                                    }
+                                    else -> {
+                                        am[AlarmManager.RTC_WAKEUP, it.paznic] = pIntent
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        if (it.paznic > c.timeInMillis) {
+                            intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
+                            pIntent = PendingIntent.getBroadcast(
+                                context,
+                                (it.paznic / 100000).toInt(),
+                                intent,
+                                0
+                            )
+                            when {
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+                                    am.setExactAndAllowWhileIdle(
+                                        AlarmManager.RTC_WAKEUP,
+                                        it.paznic,
+                                        pIntent
+                                    )
+                                }
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
+                                    am.setExact(AlarmManager.RTC_WAKEUP, it.paznic, pIntent)
+                                }
+                                else -> {
+                                    am[AlarmManager.RTC_WAKEUP, it.paznic] = pIntent
+                                }
+                            }
+                        }
+                    }
                 }
             }
             var year = c[Calendar.YEAR]

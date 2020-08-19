@@ -45,6 +45,7 @@ import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
+import java.io.FileWriter
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToLong
@@ -555,11 +556,11 @@ try {
     }
 
     private fun mkDir() {
-        var dir = File("$filesDir/Sabytie")
+        /*var dir = File("$filesDir/Sabytie")
         if (!dir.exists()) {
             dir.mkdir()
-        }
-        dir = File("$filesDir/MaranAtaBel")
+        }*/
+        var dir = File("$filesDir/MaranAtaBel")
         if (!dir.exists()) {
             dir.mkdir()
         }
@@ -1532,37 +1533,25 @@ try {
         }
 
         fun setListPadzeia(activity: Activity) {
-            Thread(Runnable {
+            Thread {
                 padzeia.clear()
-                File(activity.filesDir.toString() + "/Sabytie").walk().forEach { file ->
-                    if (file.isFile && file.exists()) {
-                        val inputStream = FileReader(file)
-                        val reader = BufferedReader(inputStream)
-                        reader.forEachLine {
-                            val line = it.trim()// { it <= ' ' }
-                            if (line != "") {
-                                val t1 = line.split(" ").toTypedArray()
-                                try {
-                                    if (t1.size == 11) padzeia.add(
-                                        Padzeia(
-                                            t1[0].replace("_", " "),
-                                            t1[1],
-                                            t1[2],
-                                            t1[3].toLong(),
-                                            t1[4].toInt(),
-                                            t1[5],
-                                            t1[6],
-                                            t1[7],
-                                            t1[8].toInt(),
-                                            t1[9],
-                                            t1[10],
-                                            0
-                                        )
-                                    ) else padzeia.add(
-                                        Padzeia(
-                                            t1[0].replace("_", " "),
-                                            t1[1],
-                                            t1[2],
+                val gson = Gson()
+                val dir = File(activity.filesDir.toString() + "/Sabytie")
+                if (dir.exists()) {
+                    dir.walk().forEach { file ->
+                        if (file.isFile && file.exists()) {
+                            val inputStream = FileReader(file)
+                            val reader = BufferedReader(inputStream)
+                            reader.forEachLine {
+                                val line = it.trim()// { it <= ' ' }
+                                if (line != "") {
+                                    val t1 = line.split(" ").toTypedArray()
+                                    try {
+                                        if (t1.size == 11) padzeia.add(
+                                            Padzeia(
+                                                t1[0].replace("_", " "),
+                                                t1[1],
+                                                t1[2],
                                                 t1[3].toLong(),
                                                 t1[4].toInt(),
                                                 t1[5],
@@ -1570,7 +1559,20 @@ try {
                                                 t1[7],
                                                 t1[8].toInt(),
                                                 t1[9],
-                                                t1[10],
+                                                0
+                                            )
+                                        ) else padzeia.add(
+                                            Padzeia(
+                                                t1[0].replace("_", " "),
+                                                t1[1],
+                                                t1[2],
+                                                t1[3].toLong(),
+                                                t1[4].toInt(),
+                                                t1[5],
+                                                t1[6],
+                                                t1[7],
+                                                t1[8].toInt(),
+                                                t1[9],
                                                 t1[11].toInt()
                                             )
                                         )
@@ -1582,7 +1584,22 @@ try {
                             inputStream.close()
                         }
                     }
-            }).start()
+                    val outputStream = FileWriter(activity.filesDir.toString() + "/Sabytie.json")
+                    outputStream.write(gson.toJson(padzeia))
+                    outputStream.close()
+                    dir.deleteRecursively()
+                } else {
+                    val file = File(activity.filesDir.toString() + "/Sabytie.json")
+                    if (file.exists()) {
+                        try {
+                            val type = object : TypeToken<ArrayList<Padzeia>>() {}.type
+                            padzeia = gson.fromJson(file.readText(), type)
+                        } catch (t: Throwable) {
+                            file.delete()
+                        }
+                    }
+                }
+            }.start()
         }
 
         @SuppressLint("SetTextI18n")

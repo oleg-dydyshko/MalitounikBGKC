@@ -30,7 +30,6 @@ import kotlinx.coroutines.launch
 import java.io.*
 import java.lang.reflect.Field
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, InteractiveScrollView.OnScrollChangedCallback, MyWebViewClient.OnLinkListenner {
@@ -91,98 +90,86 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     companion object {
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
-            val gson = Gson()
-            val file = File(context.filesDir.toString() + "/Vybranoe.json")
-            if (file.exists()) {
-                MenuVybranoe.vybranoe = try {
-                    val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    val arrayList = gson.fromJson<ArrayList<VybranoeData>>(file.readText(), type)
-                    if (arrayList is ArrayList<VybranoeData>) {
-                        arrayList
-                    } else {
-                        file.delete()
-                        ArrayList()
-                    }
-                } catch (t: Throwable) {
-                    file.delete()
-                    ArrayList()
-                }
-            }
             var check = true
-            val fields: Array<Field?> = R.raw::class.java.fields
-            for (field in fields) {
-                if (field?.name?.intern() == resurs) {
-                    for (i in 0 until MenuVybranoe.vybranoe.size) {
-                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
-                            MenuVybranoe.vybranoe.removeAt(i)
-                            check = false
-                            break
-                        }
-                    }
-                    break
+            val file = File(context.filesDir.toString() + "/Vybranoe.json")
+            try {
+                val gson = Gson()
+                if (file.exists()) {
+                    val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
+                    MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
                 }
-            }
-            val fields2: Array<Field?> = by.carkva_gazeta.malitounik.R.raw::class.java.fields
-            for (field in fields2) {
-                if (field?.name?.intern() == resurs) {
-                    for (i in 0 until MenuVybranoe.vybranoe.size) {
-                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
-                            MenuVybranoe.vybranoe.removeAt(i)
-                            check = false
-                            break
+                val fields = R.raw::class.java.fields
+                for (field in fields) {
+                    if (field.name.intern() == resurs) {
+                        for (i in 0 until MenuVybranoe.vybranoe.size) {
+                            if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
+                                MenuVybranoe.vybranoe.removeAt(i)
+                                check = false
+                                break
+                            }
                         }
+                        break
                     }
-                    break
                 }
+                val fields2 = by.carkva_gazeta.malitounik.R.raw::class.java.fields
+                for (field in fields2) {
+                    if (field.name.intern() == resurs) {
+                        for (i in 0 until MenuVybranoe.vybranoe.size) {
+                            if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
+                                MenuVybranoe.vybranoe.removeAt(i)
+                                check = false
+                                break
+                            }
+                        }
+                        break
+                    }
+                }
+                if (check) {
+                    MenuVybranoe.vybranoe.add(VybranoeData(resurs, title))
+                }
+                val outputStream = FileWriter(file)
+                outputStream.write(gson.toJson(MenuVybranoe.vybranoe))
+                outputStream.close()
+            } catch (t: Throwable) {
+                file.delete()
+                check = true
             }
-            if (check) {
-                MenuVybranoe.vybranoe.add(VybranoeData(resurs, title))
-            }
-            val outputStream = FileWriter(file)
-            outputStream.write(gson.toJson(MenuVybranoe.vybranoe))
-            outputStream.close()
             return check
         }
 
         fun checkVybranoe(context: Context, resurs: String): Boolean {
-            val gson = Gson()
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
-            if (file.exists()) {
-                try {
+            try {
+                if (file.exists()) {
+                    val gson = Gson()
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    val arrayList = gson.fromJson<ArrayList<VybranoeData>>(file.readText(), type)
-                    if (arrayList is ArrayList<VybranoeData>) {
-                        MenuVybranoe.vybranoe = arrayList
-                    } else {
-                        file.delete()
-                        return false
-                    }
-                } catch (t: Throwable) {
-                    file.delete()
+                    MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
+                } else {
                     return false
                 }
-            } else {
+                val fields = R.raw::class.java.fields
+                for (field in fields) {
+                    if (field.name.intern() == resurs) {
+                        for (i in 0 until MenuVybranoe.vybranoe.size) {
+                            if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs)
+                                return true
+                        }
+                        break
+                    }
+                }
+                val fields2 = by.carkva_gazeta.malitounik.R.raw::class.java.fields
+                for (field in fields2) {
+                    if (field.name.intern() == resurs) {
+                        for (i in 0 until MenuVybranoe.vybranoe.size) {
+                            if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs)
+                                return true
+                        }
+                        break
+                    }
+                }
+            } catch (t: Throwable) {
+                file.delete()
                 return false
-            }
-            val fields: Array<Field?> = R.raw::class.java.fields
-            for (field in fields) {
-                if (field?.name?.intern() == resurs) {
-                    for (i in 0 until MenuVybranoe.vybranoe.size) {
-                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs)
-                            return true
-                    }
-                    break
-                }
-            }
-            val fields2: Array<Field?> = by.carkva_gazeta.malitounik.R.raw::class.java.fields
-            for (field in fields2) {
-                if (field?.name?.intern() == resurs) {
-                    for (i in 0 until MenuVybranoe.vybranoe.size) {
-                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs)
-                            return true
-                    }
-                    break
-                }
             }
             return false
         }

@@ -23,11 +23,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
-import by.carkva_gazeta.resources.R.raw
 import kotlinx.android.synthetic.main.akafist_under.*
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.lang.reflect.Field
 import java.util.*
 
 class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
@@ -146,10 +146,10 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
             )
         }
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        val id = intent.extras?.getInt("id", raw.bogashlugbovya12_1) ?: raw.bogashlugbovya12_1
-        val fields = raw::class.java.fields
+        val id = intent.extras?.getInt("id", R.raw.bogashlugbovya12_1) ?: R.raw.bogashlugbovya12_1
+        val fields: Array<Field?> = R.raw::class.java.fields
         for (field in fields) {
-            if (field.getInt(null) == id) {
+            if (field?.getInt(null) == id) {
                 resurs = field.name
                 break
             }

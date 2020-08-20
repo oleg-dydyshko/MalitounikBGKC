@@ -30,9 +30,7 @@ import java.io.File
 import java.io.FileWriter
 import java.io.InputStreamReader
 import java.lang.reflect.Field
-import java.lang.reflect.Type
 import java.util.*
-import kotlin.collections.ArrayList
 
 class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener {
     private val mHideHandler = Handler(Looper.getMainLooper())
@@ -471,38 +469,28 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
 
     companion object {
         private fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
-            val gson = Gson()
-            val file = File(context.filesDir.toString() + "/Vybranoe.json")
-            if (file.exists()) {
-                MenuVybranoe.vybranoe = try {
-                    val type: Type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    val arrayList = gson.fromJson<ArrayList<VybranoeData>>(file.readText(), type)
-                    if (arrayList is ArrayList<VybranoeData>) {
-                        arrayList
-                    } else {
-                        file.delete()
-                        ArrayList()
-                    }
-                } catch (t: Throwable) {
-                    file.delete()
-                    ArrayList()
-                }
-            }
             var check = true
-            val fields = R.raw::class.java.fields
-            for (field in fields) {
-                if (field.name.intern() == resurs) {
-                    for (i in 0 until MenuVybranoe.vybranoe.size) {
-                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
-                            MenuVybranoe.vybranoe.removeAt(i)
-                            check = false
-                            break
-                        }
-                    }
-                    break
+            val file = File(context.filesDir.toString() + "/Vybranoe.json")
+            try {
+                val gson = Gson()
+                if (file.exists()) {
+                    val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
+                    MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
                 }
-            }
-            /*val fields2 = R.raw::class.java.fields
+                val fields: Array<Field?> = R.raw::class.java.fields
+                for (field in fields) {
+                    if (field?.name?.intern() == resurs) {
+                        for (i in 0 until MenuVybranoe.vybranoe.size) {
+                            if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
+                                MenuVybranoe.vybranoe.removeAt(i)
+                                check = false
+                                break
+                            }
+                        }
+                        break
+                    }
+                }
+                /*val fields2 = R.raw::class.java.fields
             for (field in fields2) {
                 if (field.name.intern() == resurs) {
                     for (i in 0 until MenuVybranoe.vybranoe.size) {
@@ -515,49 +503,44 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                     break
                 }
             }*/
-            if (check) {
-                MenuVybranoe.vybranoe.add(VybranoeData(resurs, title))
+                if (check) {
+                    MenuVybranoe.vybranoe.add(VybranoeData(resurs, title))
+                }
+                val outputStream = FileWriter(file)
+                outputStream.write(gson.toJson(MenuVybranoe.vybranoe))
+                outputStream.close()
+            } catch (t: Throwable) {
+                file.delete()
+                check = false
             }
-            val outputStream = FileWriter(file)
-            outputStream.write(gson.toJson(MenuVybranoe.vybranoe))
-            outputStream.close()
             return check
         }
 
         private fun checkVybranoe(context: Context, resurs: String): Boolean {
             var check = false
-            val gson = Gson()
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
-            if (file.exists()) {
-                try {
+            try {
+                val gson = Gson()
+                if (file.exists()) {
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    val arrayList = gson.fromJson<ArrayList<VybranoeData>>(file.readText(), type)
-                    if (arrayList is ArrayList<VybranoeData>) {
-                        MenuVybranoe.vybranoe = arrayList
-                    } else {
-                        file.delete()
-                        return false
-                    }
-                } catch (t: Throwable) {
-                    file.delete()
+                    MenuVybranoe.vybranoe =
+                        gson.fromJson(file.readText(), type)
+                } else {
                     return false
                 }
-            } else {
-                return false
-            }
-            val fields: Array<Field?> = R.raw::class.java.fields
-            for (field in fields) {
-                if (field?.name?.intern() == resurs) {
-                    for (i in 0 until MenuVybranoe.vybranoe.size) {
-                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) { //MenuVybranoe.vybranoe.remove(i)
-                            check = true
-                            break
+                val fields: Array<Field?> = R.raw::class.java.fields
+                for (field in fields) {
+                    if (field?.name?.intern() == resurs) {
+                        for (i in 0 until MenuVybranoe.vybranoe.size) {
+                            if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) { //MenuVybranoe.vybranoe.remove(i)
+                                check = true
+                                break
+                            }
                         }
+                        break
                     }
-                    break
                 }
-            }
-            /*val fields2: Array<Field> = R.raw::class.java.fields
+                /*val fields2: Array<Field> = R.raw::class.java.fields
             for (field in fields2) {
                 if (field.name.intern() == resurs) {
                     for (i in 0 until MenuVybranoe.vybranoe.size) {
@@ -569,6 +552,10 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                     break
                 }
             }*/
+            } catch (t: Throwable) {
+                file.delete()
+                check = false
+            }
             return check
         }
     }

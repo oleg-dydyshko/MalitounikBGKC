@@ -2005,14 +2005,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     am.cancel(pIntent)
                     pIntent.cancel()
                 }*/
-                if (p.sec != "-1") {
-                    intent =
-                        createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
-                    val londs3 = p.paznic / 100000L
-                    pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
-                    am.cancel(pIntent)
-                    pIntent.cancel()
-                }
                 var londs: Long = 0
                 var londs2: Long = 0
                 val days = label1.text.toString().split(".").toTypedArray()
@@ -2052,7 +2044,21 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 } else {
                     edit2 = "-1"
                 }
-                MainActivity.padzeia.clear()
+                val del = ArrayList<Padzeia>()
+                MainActivity.padzeia.forEach {
+                    if (p.padz.contains(it.padz)) {
+                        del.add(it)
+                        if (it.sec != "-1") {
+                            intent =
+                                createIntent(it.padz, "Падзея" + " " + it.dat + " у " + it.tim, it.dat, it.tim)
+                            val londs3 = it.paznic / 100000L
+                            pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                            am.cancel(pIntent)
+                            pIntent.cancel()
+                        }
+                    }
+                }
+                MainActivity.padzeia.removeAll(del)
                 when (repitL) {
                     0 -> {
                         time = "0"

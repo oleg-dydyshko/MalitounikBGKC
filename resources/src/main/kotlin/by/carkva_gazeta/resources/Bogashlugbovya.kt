@@ -98,9 +98,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
                     MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
                 }
-                val fields = R.raw::class.java.fields
+                val fields: Array<Field?> = R.raw::class.java.fields
                 for (field in fields) {
-                    if (field.name.intern() == resurs) {
+                    if (field?.name?.intern() == resurs) {
                         for (i in 0 until MenuVybranoe.vybranoe.size) {
                             if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
                                 MenuVybranoe.vybranoe.removeAt(i)
@@ -111,9 +111,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         break
                     }
                 }
-                val fields2 = by.carkva_gazeta.malitounik.R.raw::class.java.fields
+                val fields2: Array<Field?> = by.carkva_gazeta.malitounik.R.raw::class.java.fields
                 for (field in fields2) {
-                    if (field.name.intern() == resurs) {
+                    if (field?.name?.intern() == resurs) {
                         for (i in 0 until MenuVybranoe.vybranoe.size) {
                             if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
                                 MenuVybranoe.vybranoe.removeAt(i)
@@ -132,7 +132,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 outputStream.close()
             } catch (t: Throwable) {
                 file.delete()
-                check = true
+                check = false
             }
             return check
         }
@@ -147,9 +147,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 } else {
                     return false
                 }
-                val fields = R.raw::class.java.fields
+                val fields: Array<Field?> = R.raw::class.java.fields
                 for (field in fields) {
-                    if (field.name.intern() == resurs) {
+                    if (field?.name?.intern() == resurs) {
                         for (i in 0 until MenuVybranoe.vybranoe.size) {
                             if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs)
                                 return true
@@ -157,9 +157,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         break
                     }
                 }
-                val fields2 = by.carkva_gazeta.malitounik.R.raw::class.java.fields
+                val fields2: Array<Field?> = by.carkva_gazeta.malitounik.R.raw::class.java.fields
                 for (field in fields2) {
-                    if (field.name.intern() == resurs) {
+                    if (field?.name?.intern() == resurs) {
                         for (i in 0 until MenuVybranoe.vybranoe.size) {
                             if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs)
                                 return true

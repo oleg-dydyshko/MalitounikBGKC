@@ -123,8 +123,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
             }
             var find = false
             BibleGlobalList.bibleCopyList.forEach {
-                if (it == position)
-                    find = true
+                if (it == position) find = true
             }
             if (find) {
                 BibleGlobalList.bibleCopyList.remove(position)
@@ -139,10 +138,8 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                     linearLayout5.visibility = View.GONE
                     spinnerCopy.setImageResource(by.carkva_gazeta.malitounik.R.drawable.arrow_down_float_bible)
                 }
-                if (BibleGlobalList.bibleCopyList.size == bible.size)
-                    copyBigFull.visibility = View.GONE
-                else
-                    copyBigFull.visibility = View.VISIBLE
+                if (BibleGlobalList.bibleCopyList.size == bible.size) copyBigFull.visibility = View.GONE
+                else copyBigFull.visibility = View.VISIBLE
             } else {
                 linearLayout6.visibility = View.GONE
             }
@@ -298,8 +295,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
         } else {
             var find = false
             BibleGlobalList.bibleCopyList.forEach {
-                if (it == position)
-                    find = true
+                if (it == position) find = true
             }
             if (find) {
                 BibleGlobalList.bibleCopyList.remove(position)
@@ -316,10 +312,8 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                     linearLayout5.visibility = View.GONE
                     spinnerCopy.setImageResource(by.carkva_gazeta.malitounik.R.drawable.arrow_down_float_bible)
                 }
-                if (BibleGlobalList.bibleCopyList.size == bible.size)
-                    copyBigFull.visibility = View.GONE
-                else
-                    copyBigFull.visibility = View.VISIBLE
+                if (BibleGlobalList.bibleCopyList.size == bible.size) copyBigFull.visibility = View.GONE
+                else copyBigFull.visibility = View.VISIBLE
             } else {
                 linearLayout6.visibility = View.GONE
             }
@@ -401,8 +395,7 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
         val split = builder.toString().split("===").toTypedArray()
         val bibleline = split[page + 1].split("\n").toTypedArray()
         bibleline.forEach {
-            if (it.trim() != "")
-                bible.add(it)
+            if (it.trim() != "") bible.add(it)
         }
         activity?.let { activity ->
             adapter = ExpArrayAdapterParallel(activity, bible, kniga, page, true, 1)

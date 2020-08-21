@@ -40,15 +40,9 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
             window.setDecorFitsSystemWindows(false)
             val controller = window.insetsController
             controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior =
-                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
     private val mShowPart2Runnable = Runnable {
@@ -78,10 +72,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         super.onResume()
         setTollbarTheme()
         if (fullscreenPage) hide()
-        overridePendingTransition(
-            by.carkva_gazeta.malitounik.R.anim.alphain,
-            by.carkva_gazeta.malitounik.R.anim.alphaout
-        )
+        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
     override fun onDialogFontSizePositiveClick() {
@@ -112,38 +103,16 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
             //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
-                )
-                window.navigationBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
-                )
+                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
+                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
             } else {
-                window.statusBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
-                )
-                window.navigationBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
-                )
+                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
+                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
             }
         }
         if (dzenNoch) {
-            TextView.setTextColor(
-                ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorIcons
-                )
-            )
-            progress.setTextColor(
-                ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimary_black
-                )
-            )
+            TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
         }
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         val id = intent.extras?.getInt("prynagodnyiaID", R.raw.prynagodnyia_0) ?: R.raw.prynagodnyia_0
@@ -194,10 +163,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                 title_toolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(
-            TypedValue.COMPLEX_UNIT_SP,
-            SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat()
-        )
+        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title_toolbar.text = title
@@ -234,10 +200,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         val prefEditor: Editor = k.edit()
         if (v?.id ?: 0 == R.id.constraint) {
             if (MainActivity.checkBrightness) {
-                MainActivity.brightness = Settings.System.getInt(
-                    contentResolver,
-                    Settings.System.SCREEN_BRIGHTNESS
-                ) * 100 / 255
+                MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
             }
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
@@ -245,10 +208,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                     if (x < otstup) {
                         levo = true
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        progress.text = resources.getString(
-                            by.carkva_gazeta.malitounik.R.string.procent,
-                            MainActivity.brightness
-                        )
+                        progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         progress.visibility = View.VISIBLE
                         startProcent()
                     }
@@ -270,10 +230,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text = resources.getString(
-                                by.carkva_gazeta.malitounik.R.string.procent,
-                                MainActivity.brightness
-                            )
+                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
                             progress.visibility = View.VISIBLE
                             startProcent()
@@ -285,10 +242,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text = resources.getString(
-                                by.carkva_gazeta.malitounik.R.string.procent,
-                                MainActivity.brightness
-                            )
+                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
                             progress.visibility = View.VISIBLE
                             startProcent()
@@ -350,30 +304,18 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
         if (men) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon =
-                ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title =
-                resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
         } else {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon =
-                ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title =
-                resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
         }
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked =
-            k.getBoolean("orientation", false)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked =
-            k.getBoolean("dzen_noch", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         val item = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
-        val spanString =
-            SpannableString(menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title.toString())
+        val spanString = SpannableString(menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title.toString())
         val end = spanString.length
-        spanString.setSpan(
-            AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
-            0,
-            end,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
+        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         item.title = spanString
         return true
     }
@@ -385,12 +327,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(
-                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
-                0,
-                end,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
         return true
@@ -425,10 +362,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             men = Bogashlugbovya.setVybranoe(this, resurs, title)
             if (men) {
-                MainActivity.toastView(
-                    this,
-                    getString(by.carkva_gazeta.malitounik.R.string.addVybranoe)
-                )
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
             }
             invalidateOptionsMenu()
         }
@@ -451,10 +385,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
-            sendIntent.putExtra(
-                Intent.EXTRA_TEXT,
-                "https://carkva-gazeta.by/share/index.php?pub=4&file=$resurs"
-            )
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=4&file=$resurs")
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
         }
@@ -467,7 +398,8 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
             fullscreenPage = false
             show()
         } else {
-            if (traker) onSupportNavigateUp() else super.onBackPressed()
+            if (traker) onSupportNavigateUp()
+            else super.onBackPressed()
         }
     }
 

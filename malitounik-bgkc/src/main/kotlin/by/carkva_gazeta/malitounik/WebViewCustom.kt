@@ -40,8 +40,6 @@ class WebViewCustom : WebView {
         fun onBottom()
     }
 
-
-
     companion object {
         @SuppressLint("NewApi")
         private fun getFixedContext(context: Context): Context {

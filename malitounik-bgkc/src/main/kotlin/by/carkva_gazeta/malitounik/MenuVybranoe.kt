@@ -62,24 +62,15 @@ class MenuVybranoe : VybranoeListFragment() {
         activity?.let { it ->
             val file = File(it.filesDir.toString() + "/Vybranoe.json")
             if (file.exists()) {
-                vybranoe = try {
+                try {
                     val gson = Gson()
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    val arrayList = gson.fromJson<ArrayList<VybranoeData>>(file.readText(), type)
-                    if (arrayList is ArrayList<VybranoeData>) {
-                        arrayList
-                    } else {
-                        file.delete()
-                        ArrayList()
-                    }
+                    vybranoe = gson.fromJson(file.readText(), type)
                 } catch (t: Throwable) {
                     file.delete()
-                    ArrayList()
                 }
             }
-        }
         vybranoe.sort()
-        activity?.let { it ->
             adapter = MyVybranoeAdapter(it)
             listAdapter = adapter
             listView.isVerticalScrollBarEnabled = false

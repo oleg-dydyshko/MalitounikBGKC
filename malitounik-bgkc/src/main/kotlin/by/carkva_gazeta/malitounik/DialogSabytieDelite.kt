@@ -41,22 +41,12 @@ class DialogSabytieDelite : DialogFragment() {
             val linearLayout = LinearLayout(activity)
             linearLayout.orientation = LinearLayout.VERTICAL
             val textViewZaglavie = TextViewRobotoCondensed(activity)
-            if (dzenNoch) textViewZaglavie.setBackgroundColor(
-                ContextCompat.getColor(
-                    activity,
-                    R.color.colorPrimary_black
-                )
-            ) else textViewZaglavie.setBackgroundColor(
-                ContextCompat.getColor(activity, R.color.colorPrimary)
-            )
+            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary))
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.text = resources.getString(R.string.remove)
-            textViewZaglavie.setTextSize(
-                TypedValue.COMPLEX_UNIT_SP,
-                SettingsActivity.GET_FONT_SIZE_MIN
-            )
+            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
             linearLayout.addView(textViewZaglavie)
@@ -64,14 +54,7 @@ class DialogSabytieDelite : DialogFragment() {
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
             textView.text = getString(R.string.remove_sabytie_iak)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) textView.setTextColor(
-                ContextCompat.getColor(
-                    activity,
-                    R.color.colorIcons
-                )
-            ) else textView.setTextColor(
-                ContextCompat.getColor(activity, R.color.colorPrimary_text)
-            )
+            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_text))
             linearLayout.addView(textView)
             ad.setView(linearLayout)
             ad.setPositiveButton(getString(R.string.sabytie_del_all)) { _: DialogInterface?, _: Int ->
@@ -84,39 +67,15 @@ class DialogSabytieDelite : DialogFragment() {
             alert = ad.create()
             alert.setOnShowListener {
                 val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(
-                    TypedValue.COMPLEX_UNIT_SP,
-                    SettingsActivity.GET_FONT_SIZE_TOAST
-                )
+                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                btnNegative.setTextSize(
-                    TypedValue.COMPLEX_UNIT_SP,
-                    SettingsActivity.GET_FONT_SIZE_TOAST
-                )
+                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 val btnNeutral = alert.getButton(Dialog.BUTTON_NEUTRAL)
-                btnNeutral.setTextSize(
-                    TypedValue.COMPLEX_UNIT_SP,
-                    SettingsActivity.GET_FONT_SIZE_TOAST
-                )
+                btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
                 if (dzenNoch) {
-                    btnPositive.setTextColor(
-                        ContextCompat.getColor(
-                            activity,
-                            R.color.colorPrimary_black
-                        )
-                    )
-                    btnNegative.setTextColor(
-                        ContextCompat.getColor(
-                            activity,
-                            R.color.colorPrimary_black
-                        )
-                    )
-                    btnNeutral.setTextColor(
-                        ContextCompat.getColor(
-                            activity,
-                            R.color.colorPrimary_black
-                        )
-                    )
+                    btnPositive.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
+                    btnNegative.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
+                    btnNeutral.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_black))
                 }
             }
         }

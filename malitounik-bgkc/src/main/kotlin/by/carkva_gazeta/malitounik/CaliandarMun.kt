@@ -133,10 +133,8 @@ class CaliandarMun : AppCompatActivity() {
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return if (position == 0)
-                getString(R.string.mun)
-            else
-                getString(R.string.niadzelia)
+            return if (position == 0) getString(R.string.mun)
+            else getString(R.string.niadzelia)
         }
 
         override fun getItem(position: Int): Fragment {

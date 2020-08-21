@@ -31,8 +31,7 @@ import by.carkva_gazeta.resources.NadsanContentPage.Companion.newInstance
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_bible.*
 
-class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener,
-    DialogBibleRazdelListener, NadsanContentPage.ListPosition {
+class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NadsanContentPage.ListPosition {
     private val mHideHandler = Handler(Looper.getMainLooper())
 
     @SuppressLint("InlinedApi")
@@ -42,15 +41,9 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener,
             window.setDecorFitsSystemWindows(false)
             val controller = window.insetsController
             controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior =
-                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
     private val mShowPart2Runnable = Runnable {
@@ -122,49 +115,28 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener,
                 nextChild.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
             }
         }
-        val adapterViewPager: SmartFragmentStatePagerAdapter =
-            MyPagerAdapter(supportFragmentManager)
+        val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
         pager.adapter = adapterViewPager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
-                )
-                window.navigationBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
-                )
+                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
+                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
             } else {
-                window.statusBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
-                )
-                window.navigationBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
-                )
+                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
+                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
             }
         }
         title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.psalter)
-        subtitle_toolbar.text =
-            getString(by.carkva_gazeta.malitounik.R.string.kafizma2) + " " + getKafizma(glava)
+        subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2) + " " + getKafizma(glava)
         pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             }
 
             override fun onPageSelected(position: Int) {
                 if (glava != position) fierstPosition = 0
-                subtitle_toolbar.text =
-                    getString(by.carkva_gazeta.malitounik.R.string.kafizma2) + " " + getKafizma(
-                        position
-                    )
+                subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2) + " " + getKafizma(position)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
@@ -196,22 +168,14 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener,
                 title_toolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(
-            TypedValue.COMPLEX_UNIT_SP,
-            SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat()
-        )
+        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
             toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
             title_toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-            title_toolbar.setTextColor(
-                ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorIcons
-                )
-            )
+            title_toolbar.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
         }
     }
 
@@ -298,10 +262,8 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener,
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_glava).isVisible = true
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked =
-            k.getBoolean("orientation", false)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked =
-            k.getBoolean("dzen_noch", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         return true
     }
 
@@ -363,10 +325,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener,
         super.onResume()
         setTollbarTheme()
         if (fullscreenPage) hide()
-        overridePendingTransition(
-            by.carkva_gazeta.malitounik.R.anim.alphain,
-            by.carkva_gazeta.malitounik.R.anim.alphaout
-        )
+        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -377,12 +336,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener,
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(
-                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
-                0,
-                end,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
         return true
@@ -409,8 +363,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener,
         mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
     }
 
-    private inner class MyPagerAdapter(fragmentManager: FragmentManager) :
-        SmartFragmentStatePagerAdapter(fragmentManager) {
+    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
         override fun getCount(): Int {
             return 151
         }

@@ -40,15 +40,9 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             window.setDecorFitsSystemWindows(false)
             val controller = window.insetsController
             controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior =
-                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
     private val mShowPart2Runnable = Runnable {
@@ -59,27 +53,9 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     private var checkSetDzenNoch = false
     private lateinit var k: SharedPreferences
     private var men = false
-    private val resursID = arrayOf(
-        R.raw.paslia_prychascia1,
-        R.raw.paslia_prychascia2,
-        R.raw.paslia_prychascia3,
-        R.raw.paslia_prychascia4,
-        R.raw.paslia_prychascia5
-    )
-    private var resurs = arrayOf(
-        "paslia_prychascia1",
-        "paslia_prychascia2",
-        "paslia_prychascia3",
-        "paslia_prychascia4",
-        "paslia_prychascia5"
-    )
-    private val title = arrayOf(
-        "Малітва падзякі",
-        "Малітва сьв. Васіля Вялікага",
-        "Малітва Сымона Мэтафраста",
-        "Iншая малітва",
-        "Малітва да Найсьвяцейшай Багародзіцы"
-    )
+    private val resursID = arrayOf(R.raw.paslia_prychascia1, R.raw.paslia_prychascia2, R.raw.paslia_prychascia3, R.raw.paslia_prychascia4, R.raw.paslia_prychascia5)
+    private var resurs = arrayOf("paslia_prychascia1", "paslia_prychascia2", "paslia_prychascia3", "paslia_prychascia4", "paslia_prychascia5")
+    private val title = arrayOf("Малітва падзякі", "Малітва сьв. Васіля Вялікага", "Малітва Сымона Мэтафраста", "Iншая малітва", "Малітва да Найсьвяцейшай Багародзіцы")
     private var dzenNoch = false
     private var pasliaPrychascia = 0
     private var n = 0
@@ -98,10 +74,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         super.onResume()
         setTollbarTheme()
         if (fullscreenPage) hide()
-        overridePendingTransition(
-            by.carkva_gazeta.malitounik.R.anim.alphain,
-            by.carkva_gazeta.malitounik.R.anim.alphaout
-        )
+        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
     override fun onDialogFontSizePositiveClick() {
@@ -124,8 +97,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         pasliaPrychascia = intent.extras?.getInt("paslia_prychascia") ?: 0
         men = Bogashlugbovya.checkVybranoe(this, resurs[pasliaPrychascia])
         constraint.setOnTouchListener(this)
-        val adapterViewPager: SmartFragmentStatePagerAdapter =
-            MyPagerAdapter(supportFragmentManager)
+        val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
         pager.adapter = adapterViewPager
         pager.currentItem = pasliaPrychascia
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -137,31 +109,15 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
-                )
-                window.navigationBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
-                )
+                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
+                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
             } else {
-                window.statusBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
-                )
-                window.navigationBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
-                )
+                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
+                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
             }
         }
         pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             }
 
             override fun onPageSelected(position: Int) {
@@ -172,13 +128,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-        if (dzenNoch)
-            progress.setTextColor(
-                ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimary_black
-                )
-            )
+        if (dzenNoch) progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -199,14 +149,10 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
                 title_toolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(
-            TypedValue.COMPLEX_UNIT_SP,
-            SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat()
-        )
+        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text =
-            resources.getString(by.carkva_gazeta.malitounik.R.string.pasliaPrychscia)
+        title_toolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.pasliaPrychscia)
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
             toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
@@ -222,12 +168,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(
-                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
-                0,
-                end,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
         return true
@@ -260,13 +201,9 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            men =
-                Bogashlugbovya.setVybranoe(this, resurs[pasliaPrychascia], title[pasliaPrychascia])
+            men = Bogashlugbovya.setVybranoe(this, resurs[pasliaPrychascia], title[pasliaPrychascia])
             if (men) {
-                MainActivity.toastView(
-                    this,
-                    getString(by.carkva_gazeta.malitounik.R.string.addVybranoe)
-                )
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
             }
             invalidateOptionsMenu()
         }
@@ -296,30 +233,18 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
         if (men) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon =
-                ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title =
-                resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
         } else {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon =
-                ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title =
-                resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
         }
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked =
-            k.getBoolean("orientation", false)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked =
-            k.getBoolean("dzen_noch", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         val item = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
-        val spanString =
-            SpannableString(menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title.toString())
+        val spanString = SpannableString(menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title.toString())
         val end = spanString.length
-        spanString.setSpan(
-            AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
-            0,
-            end,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
+        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         item.title = spanString
         return true
     }
@@ -333,10 +258,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         val prefEditor = k.edit()
         if (v?.id ?: 0 == R.id.constraint) {
             if (MainActivity.checkBrightness) {
-                MainActivity.brightness = Settings.System.getInt(
-                    contentResolver,
-                    Settings.System.SCREEN_BRIGHTNESS
-                ) * 100 / 255
+                MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
             }
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
@@ -344,10 +266,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
                     if (x < otstup) {
                         levo = true
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        progress.text = resources.getString(
-                            by.carkva_gazeta.malitounik.R.string.procent,
-                            MainActivity.brightness
-                        )
+                        progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         progress.visibility = View.VISIBLE
                         startProcent()
                     }
@@ -369,10 +288,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text = resources.getString(
-                                by.carkva_gazeta.malitounik.R.string.procent,
-                                MainActivity.brightness
-                            )
+                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
                             progress.visibility = View.VISIBLE
                             startProcent()
@@ -384,10 +300,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text = resources.getString(
-                                by.carkva_gazeta.malitounik.R.string.procent,
-                                MainActivity.brightness
-                            )
+                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
                             progress.visibility = View.VISIBLE
                             startProcent()
@@ -501,8 +414,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
     }
 
-    private inner class MyPagerAdapter(fragmentManager: FragmentManager) :
-        SmartFragmentStatePagerAdapter(fragmentManager) {
+    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
 
         override fun getCount(): Int {
             return title.size

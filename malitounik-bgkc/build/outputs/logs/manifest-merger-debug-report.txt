@@ -1,818 +1,818 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
-MERGED from [androidx.core:core-ktx:1.3.1] /home/oleg/.gradle/caches/transforms-2/files-2.1/8906de766a98770656c815a2ec3a5d7a/jetified-core-ktx-1.3.1/AndroidManifest.xml:2:1-9:12
-MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha06] /home/oleg/.gradle/caches/transforms-2/files-2.1/4811b35910a303b6b03c6e266d9dab2b/jetified-lifecycle-runtime-ktx-2.3.0-alpha06/AndroidManifest.xml:17:1-24:12
-MERGED from [com.google.android.material:material:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/b5be4783eefa9eb592dc81b39bdd30c2/material-1.2.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.appcompat:appcompat:1.3.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/3123eb302144e3120873b336640a9f0b/appcompat-1.3.0-alpha01/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/6fc64f0259807e201ef86ca2df8addd3/constraintlayout-1.1.3/AndroidManifest.xml:2:1-11:12
-MERGED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:2:1-19:12
-MERGED from [androidx.webkit:webkit:1.3.0-rc02] /home/oleg/.gradle/caches/transforms-2/files-2.1/d8c33f47aa23098b0ba803831a81a72b/webkit-1.3.0-rc02/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/b2f2986d131a819d83b879bbfeafe67e/swiperefreshlayout-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/bd8f691c65dc70be670287fb2d53ed69/jetified-viewpager2-1.0.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.fragment:fragment:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/809ce11e39de89bd681a9e583e6bfefc/fragment-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.appcompat:appcompat-resources:1.3.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/7dfba887349c8ddcd9622fc668b102b7/jetified-appcompat-resources-1.3.0-alpha01/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/8d51fe5b3a8a21190b4de617d30bb716/drawerlayout-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/05506c620f41a946d05981079ac33f8d/coordinatorlayout-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.transition:transition:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6ae153815f9294635b58daaed4457f81/transition-1.2.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/64cb9eead473e41644e81ef75f8c1c81/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/d938799bf2c7d4bd4e6a850f3bbf9452/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.viewpager:viewpager:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/8d34f5cf2d0f3dc213eb2efce5534067/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.loader:loader:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/499286cf300446741c00ec9824587a83/loader-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.activity:activity:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/fdf2b68f6893a32e75a4b00ee0159031/jetified-activity-1.0.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/0709a8e677ea17d884fc9db78f654b30/recyclerview-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.customview:customview:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/f60a664a476d8f539e517bdf798f3d2c/customview-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.core:core:1.4.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/ee5d203163be041137394e50035e9440/core-1.4.0-alpha01/AndroidManifest.xml:17:1-26:12
-MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6fc83fc652dcc87bc99a1736fb1d6a0b/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.0-alpha03] /home/oleg/.gradle/caches/transforms-2/files-2.1/c70d394e3b0637c59611bc0042347475/lifecycle-viewmodel-2.3.0-alpha03/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.savedstate:savedstate:1.1.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/f9d24a2942d1659666d50265a26198eb/jetified-savedstate-1.1.0-alpha01/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.cardview:cardview:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a67293c3d05ef07d6d8cb337786a628d/cardview-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.interpolator:interpolator:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/5ed205745f4b7cdc0a73c80446928e55/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.0-alpha06] /home/oleg/.gradle/caches/transforms-2/files-2.1/252d77665b003f1eb5cd65a34562500f/lifecycle-runtime-2.3.0-alpha06/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/0d2962d75836bec3bff240b317e7badc/versionedparcelable-1.1.0/AndroidManifest.xml:17:1-27:12
-MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/190fd911cad89211b0e89ed22ca4dbce/lifecycle-livedata-2.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/87ab7428d6053044425b189a8aa3cc88/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.arch.core:core-runtime:2.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/efac2d9422f6c48ba16bad7e50391351/core-runtime-2.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.annotation:annotation-experimental:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/d8f1233375d8460990f828e2811da43f/jetified-annotation-experimental-1.0.0/AndroidManifest.xml:17:1-24:12
-MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:2:1-248:12
-MERGED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:2:1-32:12
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+MERGED from [androidx.core:core-ktx:1.3.1] /home/serhij/.gradle/caches/transforms-2/files-2.1/8906de766a98770656c815a2ec3a5d7a/jetified-core-ktx-1.3.1/AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha06] /home/serhij/.gradle/caches/transforms-2/files-2.1/4811b35910a303b6b03c6e266d9dab2b/jetified-lifecycle-runtime-ktx-2.3.0-alpha06/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.material:material:1.2.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/b5be4783eefa9eb592dc81b39bdd30c2/material-1.2.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.appcompat:appcompat:1.3.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/3123eb302144e3120873b336640a9f0b/appcompat-1.3.0-alpha01/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/serhij/.gradle/caches/transforms-2/files-2.1/6fc64f0259807e201ef86ca2df8addd3/constraintlayout-1.1.3/AndroidManifest.xml:2:1-11:12
+MERGED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:2:1-19:12
+MERGED from [androidx.webkit:webkit:1.3.0-rc02] /home/serhij/.gradle/caches/transforms-2/files-2.1/d8c33f47aa23098b0ba803831a81a72b/webkit-1.3.0-rc02/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/b2f2986d131a819d83b879bbfeafe67e/swiperefreshlayout-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/bd8f691c65dc70be670287fb2d53ed69/jetified-viewpager2-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.fragment:fragment:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/809ce11e39de89bd681a9e583e6bfefc/fragment-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.appcompat:appcompat-resources:1.3.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/7dfba887349c8ddcd9622fc668b102b7/jetified-appcompat-resources-1.3.0-alpha01/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/8d51fe5b3a8a21190b4de617d30bb716/drawerlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/05506c620f41a946d05981079ac33f8d/coordinatorlayout-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.transition:transition:1.2.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/6ae153815f9294635b58daaed4457f81/transition-1.2.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/64cb9eead473e41644e81ef75f8c1c81/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/d938799bf2c7d4bd4e6a850f3bbf9452/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/8d34f5cf2d0f3dc213eb2efce5534067/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/499286cf300446741c00ec9824587a83/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.activity:activity:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/fdf2b68f6893a32e75a4b00ee0159031/jetified-activity-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/0709a8e677ea17d884fc9db78f654b30/recyclerview-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/f60a664a476d8f539e517bdf798f3d2c/customview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.4.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/ee5d203163be041137394e50035e9440/core-1.4.0-alpha01/AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/6fc83fc652dcc87bc99a1736fb1d6a0b/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.0-alpha03] /home/serhij/.gradle/caches/transforms-2/files-2.1/c70d394e3b0637c59611bc0042347475/lifecycle-viewmodel-2.3.0-alpha03/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate:1.1.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/f9d24a2942d1659666d50265a26198eb/jetified-savedstate-1.1.0-alpha01/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.cardview:cardview:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/a67293c3d05ef07d6d8cb337786a628d/cardview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/5ed205745f4b7cdc0a73c80446928e55/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.0-alpha06] /home/serhij/.gradle/caches/transforms-2/files-2.1/252d77665b003f1eb5cd65a34562500f/lifecycle-runtime-2.3.0-alpha06/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/0d2962d75836bec3bff240b317e7badc/versionedparcelable-1.1.0/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/190fd911cad89211b0e89ed22ca4dbce/lifecycle-livedata-2.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/87ab7428d6053044425b189a8aa3cc88/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/efac2d9422f6c48ba16bad7e50391351/core-runtime-2.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.annotation:annotation-experimental:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/d8f1233375d8460990f828e2811da43f/jetified-annotation-experimental-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:2:1-248:12
+MERGED from [:biblijateka] /home/serhij/MobApps/MalitounikBGKC/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:2:1-32:12
+INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
 	package
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:5:5-42
-		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:5:5-42
+		INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
+		INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
 	android:versionName
-		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
-		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
+		INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+		INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
 	xmlns:tools
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:4:5-51
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:4:5-51
 	xmlns:dist
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:3:5-61
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:3:5-61
 	android:versionCode
-		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
-		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
+		INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:2:1-353:12
+		INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:2:11-69
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:2:11-69
 uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:7:5-79
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:7:5-79
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:7:22-76
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:7:22-76
 uses-permission#android.permission.VIBRATE
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:8:5-66
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:8:5-66
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:8:22-63
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:8:22-63
 uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:9:5-81
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:9:5-81
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:9:22-78
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:9:22-78
 uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:10:5-81
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:10:5-81
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:10:22-78
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:10:22-78
 uses-permission#android.permission.QUICKBOOT_POWERON
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:11:5-76
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:11:5-76
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:11:22-73
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:11:22-73
 uses-permission#android.permission.INTERNET
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:12:5-67
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:12:5-67
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:12:22-64
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:12:22-64
 dist:module
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:14:5-40
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:14:5-40
 	dist:instant
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:14:18-37
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:14:18-37
 application
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:16:5-352:19
-MERGED from [com.google.android.material:material:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/b5be4783eefa9eb592dc81b39bdd30c2/material-1.2.0/AndroidManifest.xml:22:5-20
-MERGED from [com.google.android.material:material:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/b5be4783eefa9eb592dc81b39bdd30c2/material-1.2.0/AndroidManifest.xml:22:5-20
-MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/6fc64f0259807e201ef86ca2df8addd3/constraintlayout-1.1.3/AndroidManifest.xml:9:5-20
-MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/6fc64f0259807e201ef86ca2df8addd3/constraintlayout-1.1.3/AndroidManifest.xml:9:5-20
-MERGED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:10:3-17:17
-MERGED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:10:3-17:17
-MERGED from [androidx.core:core:1.4.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/ee5d203163be041137394e50035e9440/core-1.4.0-alpha01/AndroidManifest.xml:24:5-89
-MERGED from [androidx.core:core:1.4.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/ee5d203163be041137394e50035e9440/core-1.4.0-alpha01/AndroidManifest.xml:24:5-89
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/0d2962d75836bec3bff240b317e7badc/versionedparcelable-1.1.0/AndroidManifest.xml:24:5-25:19
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/0d2962d75836bec3bff240b317e7badc/versionedparcelable-1.1.0/AndroidManifest.xml:24:5-25:19
-MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-246:19
-MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-246:19
-MERGED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-30:19
-MERGED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-30:19
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:16:5-352:19
+MERGED from [com.google.android.material:material:1.2.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/b5be4783eefa9eb592dc81b39bdd30c2/material-1.2.0/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.material:material:1.2.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/b5be4783eefa9eb592dc81b39bdd30c2/material-1.2.0/AndroidManifest.xml:22:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/serhij/.gradle/caches/transforms-2/files-2.1/6fc64f0259807e201ef86ca2df8addd3/constraintlayout-1.1.3/AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/serhij/.gradle/caches/transforms-2/files-2.1/6fc64f0259807e201ef86ca2df8addd3/constraintlayout-1.1.3/AndroidManifest.xml:9:5-20
+MERGED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:10:3-17:17
+MERGED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:10:3-17:17
+MERGED from [androidx.core:core:1.4.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/ee5d203163be041137394e50035e9440/core-1.4.0-alpha01/AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.4.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/ee5d203163be041137394e50035e9440/core-1.4.0-alpha01/AndroidManifest.xml:24:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/0d2962d75836bec3bff240b317e7badc/versionedparcelable-1.1.0/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/0d2962d75836bec3bff240b317e7badc/versionedparcelable-1.1.0/AndroidManifest.xml:24:5-25:19
+MERGED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-246:19
+MERGED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-246:19
+MERGED from [:biblijateka] /home/serhij/MobApps/MalitounikBGKC/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-30:19
+MERGED from [:biblijateka] /home/serhij/MobApps/MalitounikBGKC/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:21:5-30:19
 	tools:ignore
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:27:9-48
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:27:9-48
 	android:roundIcon
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:24:9-54
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:24:9-54
 	android:restoreAnyVersion
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:23:9-41
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:23:9-41
 	android:icon
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:20:9-43
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:20:9-43
 	android:appComponentFactory
-		ADDED from [androidx.core:core:1.4.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/ee5d203163be041137394e50035e9440/core-1.4.0-alpha01/AndroidManifest.xml:24:18-86
+		ADDED from [androidx.core:core:1.4.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/ee5d203163be041137394e50035e9440/core-1.4.0-alpha01/AndroidManifest.xml:24:18-86
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:22:9-35
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:22:9-35
 	android:hardwareAccelerated
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:23:9-43
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:23:9-43
 	android:fullBackupContent
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:19:9-59
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:19:9-59
 	android:debuggable
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:22:9-34
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:22:9-34
 	android:testOnly
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:24:9-32
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:24:9-32
 	tools:targetApi
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:28:9-28
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:28:9-28
 	android:installLocation
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:21:9-47
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:21:9-47
 	android:allowBackup
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:18:9-35
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:18:9-35
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:25:9-40
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:25:9-40
 	android:usesCleartextTraffic
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:26:9-44
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:26:9-44
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:17:9-35
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:17:9-35
 activity#by.carkva_gazeta.malitounik.SplashActivity
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:29:9-156:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:29:9-156:20
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:31:13-45
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:31:13-45
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:32:13-47
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:32:13-47
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:30:13-70
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:30:13-70
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.DEFAULT+category:name:android.intent.category.LAUNCHER
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:33:13-38:29
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:33:13-38:29
 action#android.intent.action.MAIN
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:34:17-69
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:34:17-69
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:34:25-66
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:34:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:36:17-77
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:36:17-77
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:36:27-74
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:36:27-74
 category#android.intent.category.DEFAULT
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:37:17-76
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:37:17-76
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:37:27-73
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:37:27-73
 meta-data#android.app.shortcuts
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:40:13-42:53
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:40:13-42:53
 	android:resource
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:42:17-50
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:42:17-50
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:41:17-53
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:41:17-53
 intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:mimeType:application/pdf+data:scheme:content+data:scheme:file
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:73:13-82:29
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:73:13-82:29
 action#android.intent.action.VIEW
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:74:17-69
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:74:17-69
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:74:25-66
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:74:25-66
 category#android.intent.category.BROWSABLE
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:76:17-78
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:76:17-78
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:76:27-75
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:76:27-75
 data
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:79:17-50
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:79:17-50
 	android:host
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:111:23-39
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:111:23-39
 	android:scheme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:79:23-47
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:79:23-47
 	android:pathPattern
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:112:23-57
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:112:23-57
 	android:mimeType
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:81:23-57
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:81:23-57
 intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:mimeType:application/epub+zip+data:scheme:content+data:scheme:file
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:83:13-92:29
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:83:13-92:29
 intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:*+data:mimeType:application/zip+data:pathPattern:.*\\.fb2.zip+data:scheme:content+data:scheme:file
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:103:13-114:29
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:103:13-114:29
 intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:mimeType:text/plain+data:scheme:content+data:scheme:file
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:115:13-124:29
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:115:13-124:29
 intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:mimeType:text/html+data:scheme:content+data:scheme:file
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:125:13-134:29
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:125:13-134:29
 activity#by.carkva_gazeta.malitounik.MainActivity
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:158:9-161:59
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:158:9-161:59
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:160:13-45
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:160:13-45
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:161:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:161:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:159:13-68
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:159:13-68
 activity#by.carkva_gazeta.malitounik.Onas
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:162:9-169:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:162:9-169:20
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:164:13-44
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:164:13-44
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:165:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:165:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:163:13-60
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:163:13-60
 meta-data#android.support.PARENT_ACTIVITY
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:166:13-168:76
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:166:13-168:76
 	android:value
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:168:17-73
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:168:17-73
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:167:17-63
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:167:17-63
 activity#by.carkva_gazeta.malitounik.CaliandarMun
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:171:9-174:59
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:171:9-174:59
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:173:13-46
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:173:13-46
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:174:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:174:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:172:13-68
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:172:13-68
 activity#by.carkva_gazeta.malitounik.Pasxa
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:176:9-183:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:176:9-183:20
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:178:13-57
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:178:13-57
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:179:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:179:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:177:13-61
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:177:13-61
 activity#by.carkva_gazeta.malitounik.Sabytie
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:184:9-192:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:184:9-192:20
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:186:13-44
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:186:13-44
 	android:windowSoftInputMode
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:187:13-52
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:187:13-52
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:188:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:188:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:185:13-63
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:185:13-63
 activity#by.carkva_gazeta.malitounik.Help
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:193:9-200:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:193:9-200:20
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:195:13-41
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:195:13-41
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:196:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:196:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:194:13-60
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:194:13-60
 activity#by.carkva_gazeta.malitounik.SettingsActivity
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:201:9-208:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:201:9-208:20
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:203:13-47
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:203:13-47
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:204:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:204:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:202:13-72
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:202:13-72
 activity#by.carkva_gazeta.malitounik.Naviny
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:209:9-216:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:209:9-216:20
 	android:configChanges
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:211:13-74
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:211:13-74
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:212:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:212:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:210:13-62
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:210:13-62
 activity#by.carkva_gazeta.malitounik.SearchSviatyia
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:217:9-225:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:217:9-225:20
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:219:13-51
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:219:13-51
 	android:windowSoftInputMode
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:221:13-65
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:221:13-65
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:220:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:220:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:218:13-70
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:218:13-70
 activity#by.carkva_gazeta.malitounik.MalitvyPasliaPrychascia
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:226:9-233:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:226:9-233:20
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:228:13-52
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:228:13-52
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:229:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:229:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:227:13-79
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:227:13-79
 activity#by.carkva_gazeta.malitounik.TonNiadzelny
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:234:9-241:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:234:9-241:20
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:236:13-42
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:236:13-42
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:237:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:237:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:235:13-68
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:235:13-68
 activity#by.carkva_gazeta.malitounik.TonNaKoznyDzen
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:242:9-249:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:242:9-249:20
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:244:13-43
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:244:13-43
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:245:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:245:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:243:13-70
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:243:13-70
 activity#by.carkva_gazeta.malitounik.WidgetConfig
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:250:9-258:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:250:9-258:20
 	android:excludeFromRecents
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:252:13-46
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:252:13-46
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:254:13-53
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:254:13-53
 	android:taskAffinity
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:253:13-36
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:253:13-36
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:251:13-68
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:251:13-68
 intent-filter#action:name:android.appwidget.action.APPWIDGET_CONFIGURE
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:255:13-257:29
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:255:13-257:29
 action#android.appwidget.action.APPWIDGET_CONFIGURE
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:256:17-87
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:256:17-87
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:256:25-84
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:256:25-84
 activity#by.carkva_gazeta.malitounik.HelpText
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:259:9-262:59
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:259:9-262:59
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:261:13-36
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:261:13-36
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:262:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:262:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:260:13-64
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:260:13-64
 activity#by.carkva_gazeta.malitounik.NovyZapavietSemuxaList
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:263:9-269:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:263:9-269:20
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:265:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:265:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:264:13-78
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:264:13-78
 activity#by.carkva_gazeta.malitounik.StaryZapavietSemuxaList
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:270:9-276:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:270:9-276:20
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:272:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:272:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:271:13-79
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:271:13-79
 activity#by.carkva_gazeta.malitounik.NovyZapavietSinaidalList
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:279:9-285:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:279:9-285:20
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:281:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:281:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:280:13-80
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:280:13-80
 activity#by.carkva_gazeta.malitounik.StaryZapavietSinaidalList
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:286:9-292:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:286:9-292:20
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:288:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:288:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:287:13-81
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:287:13-81
 activity#by.carkva_gazeta.malitounik.NadsanContent
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:294:9-301:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:294:9-301:20
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:296:13-50
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:296:13-50
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:297:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:297:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:295:13-69
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:295:13-69
 activity#by.carkva_gazeta.malitounik.PesnyAll
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:302:9-309:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:302:9-309:20
 	android:label
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:304:13-43
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:304:13-43
 	android:theme
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:305:13-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:305:13-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:303:13-64
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:303:13-64
 meta-data#com.google.android.backup.api_key
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:311:9-313:82
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:311:9-313:82
 	android:value
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:313:13-79
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:313:13-79
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:312:13-61
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:312:13-61
 provider#androidx.core.content.FileProvider
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:314:9-324:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:314:9-324:20
 	android:grantUriPermissions
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:318:13-47
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:318:13-47
 	android:authorities
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:316:13-75
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:316:13-75
 	android:exported
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:317:13-37
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:317:13-37
 	tools:replace
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:319:13-48
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:319:13-48
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:315:13-62
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:315:13-62
 meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:320:13-323:52
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:320:13-323:52
 	android:resource
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:322:17-50
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:322:17-50
 	tools:replace
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:323:17-49
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:323:17-49
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:321:17-67
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:321:17-67
 receiver#by.carkva_gazeta.malitounik.ReceiverBroad
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:326:9-78
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:326:9-78
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:326:19-75
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:326:19-75
 receiver#by.carkva_gazeta.malitounik.ReceiverBoot
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:327:9-335:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:327:9-335:20
 	android:exported
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:329:13-37
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:329:13-37
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:328:13-68
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:328:13-68
 intent-filter#action:name:android.intent.action.BOOT_COMPLETED+action:name:android.intent.action.QUICKBOOT_POWERON+action:name:com.htc.intent.action.QUICKBOOT_POWERON
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:330:13-334:29
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:330:13-334:29
 action#android.intent.action.BOOT_COMPLETED
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:331:17-79
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:331:17-79
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:331:25-76
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:331:25-76
 action#android.intent.action.QUICKBOOT_POWERON
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:332:17-82
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:332:17-82
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:332:25-79
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:332:25-79
 action#com.htc.intent.action.QUICKBOOT_POWERON
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:333:17-82
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:333:17-82
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:333:25-79
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:333:25-79
 receiver#by.carkva_gazeta.malitounik.Widget
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:336:9-343:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:336:9-343:20
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:336:19-68
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:336:19-68
 intent-filter#action:name:android.appwidget.action.APPWIDGET_UPDATE
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:337:13-339:29
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:337:13-339:29
 action#android.appwidget.action.APPWIDGET_UPDATE
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:338:17-84
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:338:17-84
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:338:25-81
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:338:25-81
 meta-data#android.appwidget.provider
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:340:13-342:59
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:340:13-342:59
 	android:resource
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:342:17-56
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:342:17-56
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:341:17-58
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:341:17-58
 receiver#by.carkva_gazeta.malitounik.WidgetMun
-ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:344:9-351:20
+ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:344:9-351:20
 	android:name
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:344:19-71
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml:344:19-71
 uses-sdk
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-MERGED from [androidx.core:core-ktx:1.3.1] /home/oleg/.gradle/caches/transforms-2/files-2.1/8906de766a98770656c815a2ec3a5d7a/jetified-core-ktx-1.3.1/AndroidManifest.xml:5:5-7:41
-MERGED from [androidx.core:core-ktx:1.3.1] /home/oleg/.gradle/caches/transforms-2/files-2.1/8906de766a98770656c815a2ec3a5d7a/jetified-core-ktx-1.3.1/AndroidManifest.xml:5:5-7:41
-MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha06] /home/oleg/.gradle/caches/transforms-2/files-2.1/4811b35910a303b6b03c6e266d9dab2b/jetified-lifecycle-runtime-ktx-2.3.0-alpha06/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha06] /home/oleg/.gradle/caches/transforms-2/files-2.1/4811b35910a303b6b03c6e266d9dab2b/jetified-lifecycle-runtime-ktx-2.3.0-alpha06/AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.material:material:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/b5be4783eefa9eb592dc81b39bdd30c2/material-1.2.0/AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.material:material:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/b5be4783eefa9eb592dc81b39bdd30c2/material-1.2.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.appcompat:appcompat:1.3.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/3123eb302144e3120873b336640a9f0b/appcompat-1.3.0-alpha01/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.appcompat:appcompat:1.3.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/3123eb302144e3120873b336640a9f0b/appcompat-1.3.0-alpha01/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/6fc64f0259807e201ef86ca2df8addd3/constraintlayout-1.1.3/AndroidManifest.xml:5:5-7:41
-MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/oleg/.gradle/caches/transforms-2/files-2.1/6fc64f0259807e201ef86ca2df8addd3/constraintlayout-1.1.3/AndroidManifest.xml:5:5-7:41
-MERGED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:4:3-70
-MERGED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:4:3-70
-MERGED from [androidx.webkit:webkit:1.3.0-rc02] /home/oleg/.gradle/caches/transforms-2/files-2.1/d8c33f47aa23098b0ba803831a81a72b/webkit-1.3.0-rc02/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.webkit:webkit:1.3.0-rc02] /home/oleg/.gradle/caches/transforms-2/files-2.1/d8c33f47aa23098b0ba803831a81a72b/webkit-1.3.0-rc02/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/b2f2986d131a819d83b879bbfeafe67e/swiperefreshlayout-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/b2f2986d131a819d83b879bbfeafe67e/swiperefreshlayout-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/bd8f691c65dc70be670287fb2d53ed69/jetified-viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/bd8f691c65dc70be670287fb2d53ed69/jetified-viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.fragment:fragment:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/809ce11e39de89bd681a9e583e6bfefc/fragment-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.fragment:fragment:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/809ce11e39de89bd681a9e583e6bfefc/fragment-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.appcompat:appcompat-resources:1.3.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/7dfba887349c8ddcd9622fc668b102b7/jetified-appcompat-resources-1.3.0-alpha01/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.appcompat:appcompat-resources:1.3.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/7dfba887349c8ddcd9622fc668b102b7/jetified-appcompat-resources-1.3.0-alpha01/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/8d51fe5b3a8a21190b4de617d30bb716/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/8d51fe5b3a8a21190b4de617d30bb716/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/05506c620f41a946d05981079ac33f8d/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/05506c620f41a946d05981079ac33f8d/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.transition:transition:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6ae153815f9294635b58daaed4457f81/transition-1.2.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.transition:transition:1.2.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6ae153815f9294635b58daaed4457f81/transition-1.2.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/64cb9eead473e41644e81ef75f8c1c81/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/64cb9eead473e41644e81ef75f8c1c81/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/d938799bf2c7d4bd4e6a850f3bbf9452/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/d938799bf2c7d4bd4e6a850f3bbf9452/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.viewpager:viewpager:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/8d34f5cf2d0f3dc213eb2efce5534067/viewpager-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.viewpager:viewpager:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/8d34f5cf2d0f3dc213eb2efce5534067/viewpager-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.loader:loader:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/499286cf300446741c00ec9824587a83/loader-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.loader:loader:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/499286cf300446741c00ec9824587a83/loader-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.activity:activity:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/fdf2b68f6893a32e75a4b00ee0159031/jetified-activity-1.0.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.activity:activity:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/fdf2b68f6893a32e75a4b00ee0159031/jetified-activity-1.0.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/0709a8e677ea17d884fc9db78f654b30/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/0709a8e677ea17d884fc9db78f654b30/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.customview:customview:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/f60a664a476d8f539e517bdf798f3d2c/customview-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.customview:customview:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/f60a664a476d8f539e517bdf798f3d2c/customview-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core:1.4.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/ee5d203163be041137394e50035e9440/core-1.4.0-alpha01/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.core:core:1.4.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/ee5d203163be041137394e50035e9440/core-1.4.0-alpha01/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6fc83fc652dcc87bc99a1736fb1d6a0b/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/6fc83fc652dcc87bc99a1736fb1d6a0b/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.0-alpha03] /home/oleg/.gradle/caches/transforms-2/files-2.1/c70d394e3b0637c59611bc0042347475/lifecycle-viewmodel-2.3.0-alpha03/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.0-alpha03] /home/oleg/.gradle/caches/transforms-2/files-2.1/c70d394e3b0637c59611bc0042347475/lifecycle-viewmodel-2.3.0-alpha03/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.savedstate:savedstate:1.1.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/f9d24a2942d1659666d50265a26198eb/jetified-savedstate-1.1.0-alpha01/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.savedstate:savedstate:1.1.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/f9d24a2942d1659666d50265a26198eb/jetified-savedstate-1.1.0-alpha01/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.cardview:cardview:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a67293c3d05ef07d6d8cb337786a628d/cardview-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.cardview:cardview:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/a67293c3d05ef07d6d8cb337786a628d/cardview-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.interpolator:interpolator:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/5ed205745f4b7cdc0a73c80446928e55/interpolator-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.interpolator:interpolator:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/5ed205745f4b7cdc0a73c80446928e55/interpolator-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.0-alpha06] /home/oleg/.gradle/caches/transforms-2/files-2.1/252d77665b003f1eb5cd65a34562500f/lifecycle-runtime-2.3.0-alpha06/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.0-alpha06] /home/oleg/.gradle/caches/transforms-2/files-2.1/252d77665b003f1eb5cd65a34562500f/lifecycle-runtime-2.3.0-alpha06/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/0d2962d75836bec3bff240b317e7badc/versionedparcelable-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/0d2962d75836bec3bff240b317e7badc/versionedparcelable-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/190fd911cad89211b0e89ed22ca4dbce/lifecycle-livedata-2.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/190fd911cad89211b0e89ed22ca4dbce/lifecycle-livedata-2.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/87ab7428d6053044425b189a8aa3cc88/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/87ab7428d6053044425b189a8aa3cc88/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/efac2d9422f6c48ba16bad7e50391351/core-runtime-2.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.arch.core:core-runtime:2.1.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/efac2d9422f6c48ba16bad7e50391351/core-runtime-2.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.annotation:annotation-experimental:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/d8f1233375d8460990f828e2811da43f/jetified-annotation-experimental-1.0.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.annotation:annotation-experimental:1.0.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/d8f1233375d8460990f828e2811da43f/jetified-annotation-experimental-1.0.0/AndroidManifest.xml:20:5-22:41
-MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:9:5-47
-MERGED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:9:5-47
-MERGED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:9:5-47
-MERGED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:9:5-47
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
+INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
+INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
+MERGED from [androidx.core:core-ktx:1.3.1] /home/serhij/.gradle/caches/transforms-2/files-2.1/8906de766a98770656c815a2ec3a5d7a/jetified-core-ktx-1.3.1/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core-ktx:1.3.1] /home/serhij/.gradle/caches/transforms-2/files-2.1/8906de766a98770656c815a2ec3a5d7a/jetified-core-ktx-1.3.1/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha06] /home/serhij/.gradle/caches/transforms-2/files-2.1/4811b35910a303b6b03c6e266d9dab2b/jetified-lifecycle-runtime-ktx-2.3.0-alpha06/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha06] /home/serhij/.gradle/caches/transforms-2/files-2.1/4811b35910a303b6b03c6e266d9dab2b/jetified-lifecycle-runtime-ktx-2.3.0-alpha06/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.material:material:1.2.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/b5be4783eefa9eb592dc81b39bdd30c2/material-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.2.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/b5be4783eefa9eb592dc81b39bdd30c2/material-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.3.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/3123eb302144e3120873b336640a9f0b/appcompat-1.3.0-alpha01/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat:1.3.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/3123eb302144e3120873b336640a9f0b/appcompat-1.3.0-alpha01/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/serhij/.gradle/caches/transforms-2/files-2.1/6fc64f0259807e201ef86ca2df8addd3/constraintlayout-1.1.3/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.3] /home/serhij/.gradle/caches/transforms-2/files-2.1/6fc64f0259807e201ef86ca2df8addd3/constraintlayout-1.1.3/AndroidManifest.xml:5:5-7:41
+MERGED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:4:3-70
+MERGED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:4:3-70
+MERGED from [androidx.webkit:webkit:1.3.0-rc02] /home/serhij/.gradle/caches/transforms-2/files-2.1/d8c33f47aa23098b0ba803831a81a72b/webkit-1.3.0-rc02/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.webkit:webkit:1.3.0-rc02] /home/serhij/.gradle/caches/transforms-2/files-2.1/d8c33f47aa23098b0ba803831a81a72b/webkit-1.3.0-rc02/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/b2f2986d131a819d83b879bbfeafe67e/swiperefreshlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/b2f2986d131a819d83b879bbfeafe67e/swiperefreshlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/bd8f691c65dc70be670287fb2d53ed69/jetified-viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/bd8f691c65dc70be670287fb2d53ed69/jetified-viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/809ce11e39de89bd681a9e583e6bfefc/fragment-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/809ce11e39de89bd681a9e583e6bfefc/fragment-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat-resources:1.3.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/7dfba887349c8ddcd9622fc668b102b7/jetified-appcompat-resources-1.3.0-alpha01/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat-resources:1.3.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/7dfba887349c8ddcd9622fc668b102b7/jetified-appcompat-resources-1.3.0-alpha01/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/8d51fe5b3a8a21190b4de617d30bb716/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/8d51fe5b3a8a21190b4de617d30bb716/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/05506c620f41a946d05981079ac33f8d/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/05506c620f41a946d05981079ac33f8d/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.2.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/6ae153815f9294635b58daaed4457f81/transition-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.2.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/6ae153815f9294635b58daaed4457f81/transition-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/64cb9eead473e41644e81ef75f8c1c81/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/64cb9eead473e41644e81ef75f8c1c81/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/d938799bf2c7d4bd4e6a850f3bbf9452/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/d938799bf2c7d4bd4e6a850f3bbf9452/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/8d34f5cf2d0f3dc213eb2efce5534067/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/8d34f5cf2d0f3dc213eb2efce5534067/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/499286cf300446741c00ec9824587a83/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/499286cf300446741c00ec9824587a83/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/fdf2b68f6893a32e75a4b00ee0159031/jetified-activity-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/fdf2b68f6893a32e75a4b00ee0159031/jetified-activity-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/0709a8e677ea17d884fc9db78f654b30/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/0709a8e677ea17d884fc9db78f654b30/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/f60a664a476d8f539e517bdf798f3d2c/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/f60a664a476d8f539e517bdf798f3d2c/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.4.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/ee5d203163be041137394e50035e9440/core-1.4.0-alpha01/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.4.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/ee5d203163be041137394e50035e9440/core-1.4.0-alpha01/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/6fc83fc652dcc87bc99a1736fb1d6a0b/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/6fc83fc652dcc87bc99a1736fb1d6a0b/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.0-alpha03] /home/serhij/.gradle/caches/transforms-2/files-2.1/c70d394e3b0637c59611bc0042347475/lifecycle-viewmodel-2.3.0-alpha03/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.0-alpha03] /home/serhij/.gradle/caches/transforms-2/files-2.1/c70d394e3b0637c59611bc0042347475/lifecycle-viewmodel-2.3.0-alpha03/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.1.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/f9d24a2942d1659666d50265a26198eb/jetified-savedstate-1.1.0-alpha01/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.1.0-alpha01] /home/serhij/.gradle/caches/transforms-2/files-2.1/f9d24a2942d1659666d50265a26198eb/jetified-savedstate-1.1.0-alpha01/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cardview:cardview:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/a67293c3d05ef07d6d8cb337786a628d/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/a67293c3d05ef07d6d8cb337786a628d/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/5ed205745f4b7cdc0a73c80446928e55/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/5ed205745f4b7cdc0a73c80446928e55/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.0-alpha06] /home/serhij/.gradle/caches/transforms-2/files-2.1/252d77665b003f1eb5cd65a34562500f/lifecycle-runtime-2.3.0-alpha06/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.0-alpha06] /home/serhij/.gradle/caches/transforms-2/files-2.1/252d77665b003f1eb5cd65a34562500f/lifecycle-runtime-2.3.0-alpha06/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/0d2962d75836bec3bff240b317e7badc/versionedparcelable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/0d2962d75836bec3bff240b317e7badc/versionedparcelable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/190fd911cad89211b0e89ed22ca4dbce/lifecycle-livedata-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/190fd911cad89211b0e89ed22ca4dbce/lifecycle-livedata-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/87ab7428d6053044425b189a8aa3cc88/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/87ab7428d6053044425b189a8aa3cc88/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/efac2d9422f6c48ba16bad7e50391351/core-runtime-2.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/efac2d9422f6c48ba16bad7e50391351/core-runtime-2.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.annotation:annotation-experimental:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/d8f1233375d8460990f828e2811da43f/jetified-annotation-experimental-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.annotation:annotation-experimental:1.0.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/d8f1233375d8460990f828e2811da43f/jetified-annotation-experimental-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:9:5-47
+MERGED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:9:5-47
+MERGED from [:biblijateka] /home/serhij/MobApps/MalitounikBGKC/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:9:5-47
+MERGED from [:biblijateka] /home/serhij/MobApps/MalitounikBGKC/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:9:5-47
+INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
+INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
+		INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
+		INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-		ADDED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-		MERGED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-		MERGED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
-		INJECTED from /home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml
+		INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
+		ADDED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
+		MERGED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
+		MERGED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
+		INJECTED from /home/serhij/MobApps/MalitounikBGKC/malitounik-bgkc/src/main/AndroidManifest.xml
 uses-permission#android.permission.FOREGROUND_SERVICE
-ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:8:3-74
+ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:8:3-74
 	android:name
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:8:20-72
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:8:20-72
 activity#com.google.android.play.core.missingsplits.PlayCoreMissingSplitsActivity
-ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:12:5-271
+ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:12:5-271
 	android:process
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:12:152-203
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:12:152-203
 	android:enabled
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:12:103-126
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:12:103-126
 	android:stateNotNeeded
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:12:240-269
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:12:240-269
 	android:launchMode
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:12:204-239
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:12:204-239
 	android:exported
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:12:127-151
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:12:127-151
 	android:name
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:12:15-102
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:12:15-102
 activity#com.google.android.play.core.common.PlayCoreDialogWrapperActivity
-ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:13:5-226
+ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:13:5-226
 	android:enabled
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:13:96-119
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:13:96-119
 	android:stateNotNeeded
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:13:145-174
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:13:145-174
 	android:exported
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:13:120-144
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:13:120-144
 	android:theme
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:13:175-224
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:13:175-224
 	android:name
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:13:15-95
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:13:15-95
 service#com.google.android.play.core.assetpacks.AssetPackExtractionService
-ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:16:5-145
+ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:16:5-145
 	android:enabled
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:16:96-119
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:16:96-119
 	android:exported
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:16:120-143
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:16:120-143
 	android:name
-		ADDED from [com.google.android.play:core:1.8.0] /home/oleg/.gradle/caches/transforms-2/files-2.1/4c56fc9c2fb796e3cbc42f741ebf3dec/jetified-core-1.8.0/AndroidManifest.xml:16:14-95
+		ADDED from [com.google.android.play:core:1.8.0] /home/serhij/.gradle/caches/transforms-2/files-2.1/686ae2bc62dd0cfc88556d66ece4c420/jetified-core-1.8.0/AndroidManifest.xml:16:14-95
 activity#by.carkva_gazeta.resources.Chytanne
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:25:9-33:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:25:9-33:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:27:13-45
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:27:13-45
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:28:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:28:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:29:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:29:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:26:13-63
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:26:13-63
 activity#by.carkva_gazeta.resources.Opisanie
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:34:9-42:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:34:9-42:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:36:13-43
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:36:13-43
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:37:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:37:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:38:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:38:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:35:13-63
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:35:13-63
 activity#by.carkva_gazeta.resources.StaryZapavietSemuxa
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:43:9-52:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:43:9-52:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:45:13-67
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:45:13-67
 	android:windowSoftInputMode
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:48:13-60
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:48:13-60
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:46:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:46:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:47:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:47:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:44:13-74
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:44:13-74
 activity#by.carkva_gazeta.resources.NovyZapavietSemuxa
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:53:9-62:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:53:9-62:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:55:13-50
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:55:13-50
 	android:windowSoftInputMode
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:58:13-60
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:58:13-60
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:56:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:56:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:57:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:57:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:54:13-73
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:54:13-73
 activity#by.carkva_gazeta.resources.StaryZapavietSinaidal
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:63:9-72:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:63:9-72:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:65:13-47
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:65:13-47
 	android:windowSoftInputMode
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:68:13-60
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:68:13-60
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:66:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:66:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:67:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:67:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:64:13-76
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:64:13-76
 activity#by.carkva_gazeta.resources.NovyZapavietSinaidal
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:73:9-82:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:73:9-82:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:75:13-48
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:75:13-48
 	android:windowSoftInputMode
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:78:13-60
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:78:13-60
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:76:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:76:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:77:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:77:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:74:13-75
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:74:13-75
 activity#by.carkva_gazeta.resources.MaranAta
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:83:9-91:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:83:9-91:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:85:13-45
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:85:13-45
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:86:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:86:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:87:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:87:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:84:13-63
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:84:13-63
 activity#by.carkva_gazeta.resources.MyNatatkiAdd
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:92:9-101:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:92:9-101:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:94:13-48
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:94:13-48
 	android:windowSoftInputMode
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:97:13-68
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:97:13-68
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:95:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:95:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:96:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:96:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:93:13-67
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:93:13-67
 activity#by.carkva_gazeta.resources.MyNatatkiView
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:102:9-109:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:102:9-109:20
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:104:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:104:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:105:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:105:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:103:13-68
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:103:13-68
 activity#by.carkva_gazeta.resources.Bogashlugbovya
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:110:9-119:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:110:9-119:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:112:13-47
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:112:13-47
 	android:windowSoftInputMode
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:115:13-67
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:115:13-67
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:113:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:113:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:114:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:114:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:111:13-69
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:111:13-69
 activity#by.carkva_gazeta.resources.MalitvyPrynagodnyia
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:120:9-129:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:120:9-129:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:122:13-49
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:122:13-49
 	android:windowSoftInputMode
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:125:13-67
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:125:13-67
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:123:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:123:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:124:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:124:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:121:13-74
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:121:13-74
 activity#by.carkva_gazeta.resources.Prynagodnyia
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:130:9-138:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:130:9-138:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:132:13-49
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:132:13-49
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:133:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:133:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:134:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:134:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:131:13-67
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:131:13-67
 activity#by.carkva_gazeta.resources.SearchBiblia
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:139:9-148:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:139:9-148:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:141:13-43
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:141:13-43
 	android:windowSoftInputMode
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:144:13-68
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:144:13-68
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:142:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:142:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:143:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:143:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:140:13-67
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:140:13-67
 activity#by.carkva_gazeta.resources.PasliaPrychascia
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:149:9-157:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:149:9-157:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:151:13-52
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:151:13-52
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:152:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:152:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:153:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:153:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:150:13-71
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:150:13-71
 activity#by.carkva_gazeta.resources.Ton
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:158:9-166:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:158:9-166:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:160:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:160:13-42
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:161:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:161:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:162:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:162:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:159:13-58
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:159:13-58
 activity#by.carkva_gazeta.resources.ParafiiBgkcDekanat
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:167:9-175:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:167:9-175:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:169:13-44
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:169:13-44
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:170:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:170:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:171:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:171:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:168:13-73
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:168:13-73
 activity#by.carkva_gazeta.resources.ParafiiBgkc
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:176:9-184:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:176:9-184:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:178:13-44
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:178:13-44
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:179:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:179:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:180:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:180:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:177:13-66
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:177:13-66
 activity#by.carkva_gazeta.resources.BibleZakladki
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:185:9-192:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:185:9-192:20
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:187:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:187:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:188:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:188:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:186:13-68
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:186:13-68
 activity#by.carkva_gazeta.resources.BibleNatatki
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:193:9-200:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:193:9-200:20
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:195:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:195:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:196:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:196:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:194:13-67
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:194:13-67
 activity#by.carkva_gazeta.resources.PsalterNadsana
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:201:9-209:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:201:9-209:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:203:13-50
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:203:13-50
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:204:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:204:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:205:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:205:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:202:13-69
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:202:13-69
 activity#by.carkva_gazeta.resources.NadsanContentActivity
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:210:9-218:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:210:9-218:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:212:13-50
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:212:13-50
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:213:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:213:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:214:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:214:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:211:13-76
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:211:13-76
 activity#by.carkva_gazeta.resources.NadsanMalitvyIPesni
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:219:9-227:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:219:9-227:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:221:13-50
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:221:13-50
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:222:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:222:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:223:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:223:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:220:13-74
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:220:13-74
 activity#by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:228:9-236:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:228:9-236:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:230:13-59
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:230:13-59
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:231:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:231:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:232:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:232:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:229:13-79
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:229:13-79
 activity#by.carkva_gazeta.resources.SlugbyVialikagaPostu
-ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:237:9-245:20
+ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:237:9-245:20
 	android:label
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:239:13-59
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:239:13-59
 	android:splitName
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:240:13-42
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:240:13-42
 	android:theme
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:241:13-56
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:241:13-56
 	android:name
-		ADDED from [:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:238:13-75
+		ADDED from [:resources] /home/serhij/MobApps/MalitounikBGKC/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:238:13-75
 activity#by.carkva_gazeta.biblijateka.BibliotekaView
-ADDED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:24:9-29:20
+ADDED from [:biblijateka] /home/serhij/MobApps/MalitounikBGKC/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:24:9-29:20
 	android:label
-		ADDED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:26:13-46
+		ADDED from [:biblijateka] /home/serhij/MobApps/MalitounikBGKC/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:26:13-46
 	android:splitName
-		ADDED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:27:13-44
+		ADDED from [:biblijateka] /home/serhij/MobApps/MalitounikBGKC/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:27:13-44
 	android:theme
-		ADDED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:28:13-56
+		ADDED from [:biblijateka] /home/serhij/MobApps/MalitounikBGKC/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:28:13-56
 	android:name
-		ADDED from [:biblijateka] /home/oleg/AndroidStudioProjects/Malitounik/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:25:13-71
+		ADDED from [:biblijateka] /home/serhij/MobApps/MalitounikBGKC/biblijateka/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:25:13-71

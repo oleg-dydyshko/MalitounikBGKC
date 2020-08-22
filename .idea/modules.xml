@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Malitounik.iml" filepath="$PROJECT_DIR$/.idea/modules/Malitounik.iml" group="Malitounik" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/biblijateka/biblijateka.iml" filepath="$PROJECT_DIR$/.idea/modules/biblijateka/biblijateka.iml" group="Malitounik/biblijateka" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/malitounik-bgkc.iml" filepath="$PROJECT_DIR$/.idea/modules/app/malitounik-bgkc.iml" group="Malitounik/malitounik-bgkc" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/malitounik-bgkc/malitounik-bgkc.iml" filepath="$PROJECT_DIR$/.idea/modules/malitounik-bgkc/malitounik-bgkc.iml" group="Malitounik/malitounik-bgkc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/resources/resources.iml" filepath="$PROJECT_DIR$/.idea/modules/resources/resources.iml" group="Malitounik/resources" />
     </modules>
   </component>

@@ -52,12 +52,7 @@ import kotlin.math.roundToLong
 
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
-class MainActivity : AppCompatActivity(), View.OnClickListener,
-    DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener,
-    DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner,
-    DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener,
-    DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener,
-    DialogClearHishory.DialogClearHistoryListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
 
     private lateinit var c: GregorianCalendar
     private lateinit var k: SharedPreferences
@@ -82,8 +77,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     override fun onDialogFontSizePositiveClick() {
-        val menuPadryxtoukaDaSpovedzi =
-            supportFragmentManager.findFragmentByTag("MenuPadryxtoukaDaSpovedzi") as? MenuPadryxtoukaDaSpovedzi
+        val menuPadryxtoukaDaSpovedzi = supportFragmentManager.findFragmentByTag("MenuPadryxtoukaDaSpovedzi") as? MenuPadryxtoukaDaSpovedzi
         menuPadryxtoukaDaSpovedzi?.onDialogFontSizePositiveClick()
         val menuPamiatka = supportFragmentManager.findFragmentByTag("MenuPamiatka") as? MenuPamiatka
         menuPamiatka?.onDialogFontSizePositiveClick()
@@ -125,10 +119,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         super.onResume()
         if (checkBrightness) {
             brightness = try {
-                Settings.System.getInt(
-                    contentResolver,
-                    Settings.System.SCREEN_BRIGHTNESS
-                ) * 100 / 255
+                Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
             } catch (e: Settings.SettingNotFoundException) {
                 15
             }
@@ -142,8 +133,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         val density = resources.displayMetrics.density
 
         logosite.post {
-            val bd: BitmapDrawable =
-                ContextCompat.getDrawable(this, R.drawable.logotip) as BitmapDrawable
+            val bd: BitmapDrawable = ContextCompat.getDrawable(this, R.drawable.logotip) as BitmapDrawable
             val imageHeight = bd.bitmap.height / density
             val imageWidth = bd.bitmap.width / density
             val widthDp = logosite.width / density
@@ -156,34 +146,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
     }
 
-    private fun ajustCompoundDrawableSizeWithText(
-        textView: TextViewRobotoCondensed,
-        leftDrawable: Drawable?
-    ) {
-        textView.addOnLayoutChangeListener(
-            object : View.OnLayoutChangeListener {
-                override fun onLayoutChange(
-                    v: View?,
-                    left: Int,
-                    top: Int,
-                    right: Int,
-                    bottom: Int,
-                    oldLeft: Int,
-                    oldTop: Int,
-                    oldRight: Int,
-                    oldBottom: Int
-                ) {
-                    leftDrawable?.setBounds(
-                        0,
-                        0,
-                        textView.textSize.toInt(),
-                        textView.textSize.toInt()
-                    )
-                    textView.setCompoundDrawables(leftDrawable, null, null, null)
-                    textView.removeOnLayoutChangeListener(this)
-                }
+    private fun ajustCompoundDrawableSizeWithText(textView: TextViewRobotoCondensed, leftDrawable: Drawable?) {
+        textView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
+            override fun onLayoutChange(v: View?, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
+                leftDrawable?.setBounds(0, 0, textView.textSize.toInt(), textView.textSize.toInt())
+                textView.setCompoundDrawables(leftDrawable, null, null, null)
+                textView.removeOnLayoutChangeListener(this)
             }
-        )
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -200,38 +170,37 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         }
         // Удаление кеша интернета
         val file = File("$filesDir/Site")
-        if (file.exists())
-            file.deleteRecursively()
-/*InputStream inputStream2 = getResources().openRawResource(R.raw.nadsan_psaltyr)
-String[] split
-try {
-    InputStreamReader isr = new InputStreamReader(inputStream2)
-    BufferedReader reader = new BufferedReader(isr)
-    String line
-    StringBuilder builder = new StringBuilder()
-    while ((line = reader.readLine()) != null) {
+        if (file.exists()) file.deleteRecursively()
+        /*InputStream inputStream2 = getResources().openRawResource(R.raw.nadsan_psaltyr)
+        String[] split
+        try {
+        InputStreamReader isr = new InputStreamReader(inputStream2)
+        BufferedReader reader = new BufferedReader(isr)
+        String line
+        StringBuilder builder = new StringBuilder()
+        while ((line = reader.readLine()) != null) {
         /*if (line.contains("//")) {
-            int t1 = line.indexOf("//")
-            line = line.substring(0, t1).trim()
-            if (!line.equals(""))
-                builder.append(line).append("\n")
-            continue
+        int t1 = line.indexOf("//")
+        line = line.substring(0, t1).trim()
+        if (!line.equals(""))
+        builder.append(line).append("\n")
+        continue
         }*/
         builder.append(line).append("\n")
-    }
-    inputStream2.close()
-   split = builder.toString().split("===")
-   StringBuilder builder1 = new StringBuilder()
-   for (int e = 1 e < split.length e++) {
-       builder1.append("// Псалом ").append(e).append("\n").append("===").append(split[e])
-   }
-   File file = new File(this.getFilesDir() + "/caliandar_code.txt")
-   FileWriter outputStream = new FileWriter(file)
-   outputStream.write(builder1.toString())
-   outputStream.close()
-} catch (Throwable ignored) {
-}
-*/
+        }
+        inputStream2.close()
+         split = builder.toString().split("===")
+         StringBuilder builder1 = new StringBuilder()
+         for (int e = 1 e < split.length e++) {
+         builder1.append("// Псалом ").append(e).append("\n").append("===").append(split[e])
+         }
+         File file = new File(this.getFilesDir() + "/caliandar_code.txt")
+         FileWriter outputStream = new FileWriter(file)
+         outputStream.write(builder1.toString())
+         outputStream.close()
+        } catch (Throwable ignored) {
+        }
+        */
         title_toolbar.setOnClickListener {
             title_toolbar.setHorizontallyScrolling(true)
             title_toolbar.freezesText = true
@@ -244,10 +213,7 @@ try {
                 title_toolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(
-            TypedValue.COMPLEX_UNIT_SP,
-            SettingsActivity.GET_FONT_SIZE_MIN + 4
-        )
+        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         setSupportActionBar(toolbar)
         // Скрываем клавиатуру
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
@@ -256,13 +222,7 @@ try {
 
         idSelect = k.getInt("id", R.id.label1)
 
-        val toggle = ActionBarDrawerToggle(
-            this,
-            drawer_layout,
-            toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
+        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
         label1.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
@@ -409,15 +369,11 @@ try {
             if (extras.getBoolean(widgetmun, false) && savedInstanceState == null) {
                 idSelect = R.id.label1
                 var dayyear = 0
-                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until extras.getInt(
-                    "Year",
-                    c.get(Calendar.YEAR)
-                )) {
+                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until extras.getInt("Year", c.get(Calendar.YEAR))) {
                     dayyear += if (c.isLeapYear(i)) 366
                     else 365
                 }
-                setDataCalendar =
-                    dayyear + extras.getInt("DayYear", c.get(Calendar.DAY_OF_YEAR)) - 1
+                setDataCalendar = dayyear + extras.getInt("DayYear", c.get(Calendar.DAY_OF_YEAR)) - 1
             }
             if (extras.getBoolean(widgetday, false) && savedInstanceState == null) {
                 idSelect = R.id.label1
@@ -558,7 +514,7 @@ try {
     private fun mkDir() {
         /*var dir = File("$filesDir/Sabytie")
         if (!dir.exists()) {
-            dir.mkdir()
+        dir.mkdir()
         }*/
         var dir = File("$filesDir/MaranAtaBel")
         if (!dir.exists()) {
@@ -677,13 +633,13 @@ try {
             tipicon.show(supportFragmentManager, "tipicon")
         }
         /*if (id == R.id.search) {
-            if (checkmoduleResources(this)) {
-                val intent = Intent(this, Class.forName("by.carkva_gazeta.resources.SearchPesny"))
-                startActivity(intent)
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(supportFragmentManager, "dadatak")
-            }
+        if (checkmoduleResources(this)) {
+        val intent = Intent(this, Class.forName("by.carkva_gazeta.resources.SearchPesny"))
+        startActivity(intent)
+        } else {
+        val dadatak = DialogInstallDadatak()
+        dadatak.show(supportFragmentManager, "dadatak")
+        }
         }*/
         if (id == R.id.sabytie) {
             val i = Intent(this, Sabytie::class.java)
@@ -695,8 +651,7 @@ try {
         }
         if (id == R.id.action_mun) {
             if (onStart) {
-                val gregorianCalendar =
-                    GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
+                val gregorianCalendar = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
                 for (i in 0 until setDataCalendar) {
                     gregorianCalendar.add(Calendar.DATE, 1)
                 }
@@ -720,13 +675,10 @@ try {
         }
         if (id == R.id.sortdate) {
             prefEditors = k.edit()
-            if (item.isChecked)
-                prefEditors.putInt("natatki_sort", 0)
-            else
-                prefEditors.putInt("natatki_sort", 1)
+            if (item.isChecked) prefEditors.putInt("natatki_sort", 0)
+            else prefEditors.putInt("natatki_sort", 1)
             prefEditors.apply()
-            val menuNatatki =
-                supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
+            val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
             menuNatatki?.sortAlfavit()
         }
         return super.onOptionsItemSelected(item)
@@ -838,12 +790,7 @@ try {
             val item: MenuItem = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(
-                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
-                0,
-                end,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
         return true
@@ -857,132 +804,27 @@ try {
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
             if (dzenNoch) {
-                label1.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label2.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label3.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label4.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label5.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label6.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label7.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label8.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label91.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label92.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label93.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label94.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label95.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label101.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label102.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label103.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label104.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label105.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label11.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label12.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
-                label13.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.colorbackground_material_dark
-                    )
-                )
+                label1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label5.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label6.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label7.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label8.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label91.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label92.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label93.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label94.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label95.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label101.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label102.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label103.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label104.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label105.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label11.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label12.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
+                label13.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
             } else {
                 label1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
                 label2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
@@ -1011,17 +853,13 @@ try {
         prefEditors = k.edit()
         if (idSelect == R.id.label91 || idSelect == R.id.label92 || idSelect == R.id.label93 || idSelect == R.id.label94 || idSelect == R.id.label95) {
             title9.visibility = View.VISIBLE
-            if (dzenNoch)
-                image2.setImageResource(R.drawable.arrow_up_float_black)
-            else
-                image2.setImageResource(R.drawable.arrow_up_float)
+            if (dzenNoch) image2.setImageResource(R.drawable.arrow_up_float_black)
+            else image2.setImageResource(R.drawable.arrow_up_float)
         }
         if (idSelect == R.id.label101 || idSelect == R.id.label102 || idSelect == R.id.label103 || idSelect == R.id.label104 || idSelect == R.id.label105) {
             title10.visibility = View.VISIBLE
-            if (dzenNoch)
-                image3.setImageResource(R.drawable.arrow_up_float_black)
-            else
-                image3.setImageResource(R.drawable.arrow_up_float)
+            if (dzenNoch) image3.setImageResource(R.drawable.arrow_up_float_black)
+            else image3.setImageResource(R.drawable.arrow_up_float)
         }
 
         if (idSelect == R.id.label9a) {
@@ -1030,10 +868,8 @@ try {
                 image2.setImageResource(R.drawable.arrow_down_float)
             } else {
                 title9.visibility = View.VISIBLE
-                if (dzenNoch)
-                    image2.setImageResource(R.drawable.arrow_up_float_black)
-                else
-                    image2.setImageResource(R.drawable.arrow_up_float)
+                if (dzenNoch) image2.setImageResource(R.drawable.arrow_up_float_black)
+                else image2.setImageResource(R.drawable.arrow_up_float)
                 scrollView.post { scrollView.smoothScrollBy(0, title9.height) }
             }
         }
@@ -1043,249 +879,115 @@ try {
                 image3.setImageResource(R.drawable.arrow_down_float)
             } else {
                 title10.visibility = View.VISIBLE
-                if (dzenNoch)
-                    image3.setImageResource(R.drawable.arrow_up_float_black)
-                else
-                    image3.setImageResource(R.drawable.arrow_up_float)
+                if (dzenNoch) image3.setImageResource(R.drawable.arrow_up_float_black)
+                else image3.setImageResource(R.drawable.arrow_up_float)
                 scrollView.post { scrollView.smoothScrollBy(0, title10.height) }
             }
         }
         when (idSelect) {
             R.id.label1 -> {
                 tolbarTitle = getString(R.string.kaliandar2)
-                if (dzenNoch)
-                    label1.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label2 -> {
                 tolbarTitle = getString(R.string.SAJT)
-                if (dzenNoch)
-                    label2.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label3 -> {
                 tolbarTitle = getString(R.string.LITURGIKON)
-                if (dzenNoch)
-                    label3.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label4 -> {
                 tolbarTitle = getString(R.string.malitvy)
-                if (dzenNoch)
-                    label4.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label5 -> {
                 tolbarTitle = getString(R.string.akafisty)
-                if (dzenNoch)
-                    label5.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label5.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label5.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label6 -> {
                 tolbarTitle = getString(R.string.ruzanec)
-                if (dzenNoch)
-                    label6.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label6.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label6.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label7 -> {
                 tolbarTitle = getString(R.string.MAJE_MALITVY)
-                if (dzenNoch)
-                    label7.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label7.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label7.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label8 -> {
                 tolbarTitle = getString(R.string.title_biblia)
-                if (dzenNoch)
-                    label8.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label8.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label8.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label13 -> {
                 tolbarTitle = getString(R.string.title_psalter)
-                if (dzenNoch)
-                    label13.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label13.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label13.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label91 -> {
                 tolbarTitle = getString(R.string.pesny1)
-                if (dzenNoch)
-                    label91.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label91.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label91.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label92 -> {
                 tolbarTitle = getString(R.string.pesny2)
-                if (dzenNoch)
-                    label92.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label92.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label92.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label93 -> {
                 tolbarTitle = getString(R.string.pesny3)
-                if (dzenNoch)
-                    label93.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label93.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label93.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label94 -> {
                 tolbarTitle = getString(R.string.pesny4)
-                if (dzenNoch)
-                    label94.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label94.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label94.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label95 -> {
                 tolbarTitle = getString(R.string.pesny5)
-                if (dzenNoch)
-                    label95.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label95.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label95.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label103 -> {
                 tolbarTitle = getString(R.string.CARKVA_SVIATY)
-                if (dzenNoch)
-                    label103.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
-                else
-                    label103.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label103.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
+                else label103.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label104 -> {
                 tolbarTitle = getString(R.string.KALIANDAR_BEL)
-                if (dzenNoch)
-                    label104.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
-                else
-                    label104.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label104.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
+                else label104.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label105 -> {
                 tolbarTitle = getString(R.string.parafii)
-                if (dzenNoch)
-                    label105.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
-                else
-                    label105.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label105.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
+                else label105.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label102 -> {
                 tolbarTitle = getString(R.string.pamiatka)
-                if (dzenNoch)
-                    label102.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
-                else
-                    label102.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label102.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
+                else label102.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label101 -> {
                 tolbarTitle = getString(R.string.spovedz)
-                if (dzenNoch)
-                    label101.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
-                else
-                    label101
-                        .setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label101.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
+                else label101.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label11 -> {
                 tolbarTitle = getString(R.string.bsinaidal)
-                if (dzenNoch)
-                    label11.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label11.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label11.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
             R.id.label12 -> {
                 tolbarTitle = getString(R.string.MenuVybranoe)
-                if (dzenNoch)
-                    label12.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorprimary_material_dark
-                        )
-                    )
+                if (dzenNoch) label12.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
                 else label12.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
             }
         }
@@ -1295,8 +997,7 @@ try {
             ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
 
             c = Calendar.getInstance() as GregorianCalendar
-            if (idSelect != R.id.label2 && linear.visibility == View.VISIBLE)
-                linear.visibility = View.GONE
+            if (idSelect != R.id.label2 && linear.visibility == View.VISIBLE) linear.visibility = View.GONE
             when (idSelect) {
                 R.id.label1 -> {
                     var dayyear = 0
@@ -1304,8 +1005,7 @@ try {
                         dayyear += if (c.isLeapYear(i)) 366
                         else 365
                     }
-                    if (setDataCalendar == -1)
-                        setDataCalendar = dayyear + c.get(Calendar.DAY_OF_YEAR) - 1
+                    if (setDataCalendar == -1) setDataCalendar = dayyear + c.get(Calendar.DAY_OF_YEAR) - 1
                     val caliandar: MenuCaliandar = MenuCaliandar.newInstance(setDataCalendar)
                     ftrans.replace(R.id.conteiner, caliandar)
                     prefEditors.putInt("id", idSelect)
@@ -1315,18 +1015,10 @@ try {
                     if (shortcuts || intent.extras?.containsKey("site") == true) {
                         if (checkmoduleResources(this)) {
                             if (checkmodulesBiblijateka(this)) {
-                                val intentBib = Intent(
-                                    this,
-                                    Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView")
-                                )
+                                val intentBib = Intent(this, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
                                 intentBib.data = intent.data
-                                if (intent.extras?.containsKey("filePath") == true)
-                                    intentBib.putExtra(
-                                        "filePath",
-                                        intent.extras?.getString("filePath")
-                                    )
-                                if (intent.extras?.containsKey("site") == true)
-                                    intentBib.putExtra("site", true)
+                                if (intent.extras?.containsKey("filePath") == true) intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
+                                if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
                                 startActivity(intentBib)
                             } else {
                                 downloadDynamicModule(this)
@@ -1446,11 +1138,7 @@ try {
                 R.id.label101 -> {
                     prefEditors.putInt("id", idSelect)
                     val menuPadryxtoukaDaSpovedzi = MenuPadryxtoukaDaSpovedzi()
-                    ftrans.replace(
-                        R.id.conteiner,
-                        menuPadryxtoukaDaSpovedzi,
-                        "MenuPadryxtoukaDaSpovedzi"
-                    )
+                    ftrans.replace(R.id.conteiner, menuPadryxtoukaDaSpovedzi, "MenuPadryxtoukaDaSpovedzi")
                 }
                 R.id.label11 -> {
                     val file = File("$filesDir/BibliaSinodalNatatki.json")
@@ -1496,10 +1184,10 @@ try {
     }
 
     /*private fun mkTime(year: Int, month: Int, day: Int): Long {
-        val calendar = Calendar.getInstance() as GregorianCalendar
-        calendar.set(year, month, day, 10, 0, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-        return calendar.timeInMillis
+    val calendar = Calendar.getInstance() as GregorianCalendar
+    calendar.set(year, month, day, 10, 0, 0)
+    calendar.set(Calendar.MILLISECOND, 0)
+    return calendar.timeInMillis
     }*/
 
     companion object {
@@ -1516,18 +1204,15 @@ try {
 
         @Suppress("DEPRECATION")
         fun getOrientation(context: Activity): Int {
-            val rotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) context.display?.rotation
-                ?: Surface.ROTATION_0
+            val rotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) context.display?.rotation ?: Surface.ROTATION_0
             else context.windowManager.defaultDisplay.rotation
             val displayOrientation = context.resources.configuration.orientation
 
             if (displayOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-                if (rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_180)
-                    return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+                if (rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_180) return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
 
                 return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            } else if (rotation == Surface.ROTATION_180 || rotation == Surface.ROTATION_90)
-                return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+            } else if (rotation == Surface.ROTATION_180 || rotation == Surface.ROTATION_90) return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
 
             return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
@@ -1543,39 +1228,11 @@ try {
                             val inputStream = FileReader(file)
                             val reader = BufferedReader(inputStream)
                             reader.forEachLine {
-                                val line = it.trim()// { it <= ' ' }
+                                val line = it.trim() // { it <= ' ' }
                                 if (line != "") {
                                     val t1 = line.split(" ").toTypedArray()
                                     try {
-                                        if (t1.size == 11) padzeia.add(
-                                            Padzeia(
-                                                t1[0].replace("_", " "),
-                                                t1[1],
-                                                t1[2],
-                                                t1[3].toLong(),
-                                                t1[4].toInt(),
-                                                t1[5],
-                                                t1[6],
-                                                t1[7],
-                                                t1[8].toInt(),
-                                                t1[9],
-                                                0
-                                            )
-                                        ) else padzeia.add(
-                                            Padzeia(
-                                                t1[0].replace("_", " "),
-                                                t1[1],
-                                                t1[2],
-                                                t1[3].toLong(),
-                                                t1[4].toInt(),
-                                                t1[5],
-                                                t1[6],
-                                                t1[7],
-                                                t1[8].toInt(),
-                                                t1[9],
-                                                t1[11].toInt()
-                                            )
-                                        )
+                                        if (t1.size == 11) padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], 0)) else padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], t1[11].toInt()))
                                     } catch (e: Throwable) {
                                         file.delete()
                                     }
@@ -1612,16 +1269,12 @@ try {
             val dzenNoch: Boolean = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 layoutDialod2.setBackgroundResource(R.color.colorbackground_material_dark)
-                val maduleDownload: TextViewRobotoCondensed =
-                    context.findViewById(R.id.module_download)
+                val maduleDownload: TextViewRobotoCondensed = context.findViewById(R.id.module_download)
                 maduleDownload.setBackgroundResource(R.color.colorPrimary_black)
             }
             val splitInstallManager = SplitInstallManagerFactory.create(context)
 
-            val request = SplitInstallRequest
-                .newBuilder()
-                .addModule("biblijateka")
-                .build()
+            val request = SplitInstallRequest.newBuilder().addModule("biblijateka").build()
 
             val listener = SplitInstallStateUpdatedListener {
                 val state = it
@@ -1633,66 +1286,46 @@ try {
                     splitInstallManager.startConfirmationDialogForResult(state, context, 150)
                 }
                 if (state.sessionId() == SessionId) {
-                    val bytesDownload =
-                        (state.bytesDownloaded() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
-                    val total =
-                        (state.totalBytesToDownload() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
+                    val bytesDownload = (state.bytesDownloaded() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
+                    val total = (state.totalBytesToDownload() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
                     when (state.status()) {
                         SplitInstallSessionStatus.PENDING -> {
                             context.requestedOrientation = getOrientation(context)
                             layoutDialod.visibility = View.VISIBLE
-                            text.text =
-                                bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб")
+                            text.text = bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб")
                         }
                         SplitInstallSessionStatus.DOWNLOADED -> {
                             layoutDialod.visibility = View.GONE
-                            context.requestedOrientation =
-                                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                            context.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                         }
                         SplitInstallSessionStatus.DOWNLOADING -> {
                             context.requestedOrientation = getOrientation(context)
                             layoutDialod.visibility = View.VISIBLE
                             progressBarModule.max = state.totalBytesToDownload().toInt()
                             progressBarModule.progress = state.bytesDownloaded().toInt()
-                            text.text =
-                                bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб")
+                            text.text = bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб")
                         }
                         SplitInstallSessionStatus.INSTALLED -> {
                             layoutDialod.visibility = View.GONE
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 SplitInstallHelper.updateAppInfo(context)
                                 Handler(Looper.getMainLooper()).post {
-                                    val intent = Intent(
-                                        context,
-                                        Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView")
-                                    )
+                                    val intent = Intent(context, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
                                     intent.data = context.intent.data
                                     if (intent.extras?.containsKey("filePath") == true) {
-                                        intent.putExtra(
-                                            "filePath",
-                                            intent.extras?.getString("filePath")
-                                        )
+                                        intent.putExtra("filePath", intent.extras?.getString("filePath"))
                                     }
-                                    if (intent.extras?.containsKey("site") == true)
-                                        intent.putExtra("site", true)
+                                    if (intent.extras?.containsKey("site") == true) intent.putExtra("site", true)
                                     context.startActivity(intent)
                                 }
                             } else {
-                                val newContext =
-                                    context.createPackageContext(context.packageName, 0)
-                                val intent = Intent(
-                                    newContext,
-                                    Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView")
-                                )
+                                val newContext = context.createPackageContext(context.packageName, 0)
+                                val intent = Intent(newContext, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
                                 intent.data = context.intent.data
                                 if (intent.extras?.containsKey("filePath") == true) {
-                                    intent.putExtra(
-                                        "filePath",
-                                        intent.extras?.getString("filePath")
-                                    )
+                                    intent.putExtra("filePath", intent.extras?.getString("filePath"))
                                 }
-                                if (intent.extras?.containsKey("site") == true)
-                                    intent.putExtra("site", true)
+                                if (intent.extras?.containsKey("site") == true) intent.putExtra("site", true)
                                 context.startActivity(intent)
                             }
                         }
@@ -1724,8 +1357,7 @@ try {
         }
 
         fun checkmodulesBiblijateka(context: Context?): Boolean {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
-                return true
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return true
             context?.let {
                 val muduls = SplitInstallManagerFactory.create(it).installedModules
                 for (mod in muduls) {
@@ -1738,8 +1370,7 @@ try {
         }
 
         fun checkmoduleResources(context: Context?): Boolean {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
-                return true
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return true
             context?.let {
                 val muduls = SplitInstallManagerFactory.create(it).installedModules
                 for (mod in muduls) {
@@ -1753,8 +1384,7 @@ try {
 
         fun caliandar(context: Context?, mun: Int): Int {
             val filename = "caliandar".plus(mun)
-            return context?.resources?.getIdentifier(filename, "raw", context.packageName)
-                ?: return 0
+            return context?.resources?.getIdentifier(filename, "raw", context.packageName) ?: return 0
         }
 
         fun removeZnakiAndSlovy(ctenie: String): String {
@@ -1842,13 +1472,13 @@ try {
             paralel = paralel.replace("Лев", "Ляв")
             paralel = paralel.replace("Чис", "Лікі")
             paralel = paralel.replace("Втор", "Дрг")
-//paralel = paralel.replace("Нав", "Нав")
-//paralel = paralel.replace("Суд", "Суд")
+            //paralel = paralel.replace("Нав", "Нав")
+            //paralel = paralel.replace("Суд", "Суд")
             paralel = paralel.replace("Руфь", "Рут")
-//paralel = paralel.replace("1 Цар", "1 Цар")
-//paralel = paralel.replace("2 Цар", "2 Цар")
-//paralel = paralel.replace("3 Цар", "3 Цар")
-//paralel = paralel.replace("4 Цар", "4 Цар")
+            //paralel = paralel.replace("1 Цар", "1 Цар")
+            //paralel = paralel.replace("2 Цар", "2 Цар")
+            //paralel = paralel.replace("3 Цар", "3 Цар")
+            //paralel = paralel.replace("4 Цар", "4 Цар")
             paralel = paralel.replace("1 Пар", "1 Лет")
             paralel = paralel.replace("2 Пар", "2 Лет")
             paralel = paralel.replace("1 Езд", "1 Эзд")
@@ -1858,7 +1488,7 @@ try {
             paralel = paralel.replace("Иудифь", "Юдт")
             paralel = paralel.replace("Есф", "Эст")
             paralel = paralel.replace("Иов", "Ёва")
-//paralel = paralel.replace("Пс", "Пс")
+            //paralel = paralel.replace("Пс", "Пс")
             paralel = paralel.replace("Притч", "Высл")
             paralel = paralel.replace("Еккл", "Экл")
             paralel = paralel.replace("Песн", "Псн")
@@ -1866,14 +1496,14 @@ try {
             paralel = paralel.replace("Сир", "Сір")
             paralel = paralel.replace("Ис", "Іс")
             paralel = paralel.replace("Иер", "Ер")
-//paralel = paralel.replace("Плач", "Плач")
+            //paralel = paralel.replace("Плач", "Плач")
             paralel = paralel.replace("Посл Иер", "Пасл Ер")
-//paralel = paralel.replace("Вар", "Бар")
+            //paralel = paralel.replace("Вар", "Бар")
             paralel = paralel.replace("Иез", "Езк")
-//paralel = paralel.replace("Дан", "Дан")
+            //paralel = paralel.replace("Дан", "Дан")
             paralel = paralel.replace("Ос", "Ас")
             paralel = paralel.replace("Иоил", "Ёіл")
-//paralel = paralel.replace("Ам", "Ам")
+            //paralel = paralel.replace("Ам", "Ам")
             paralel = paralel.replace("Авд", "Аўдз")
             paralel = paralel.replace("Иона", "Ёны")
             paralel = paralel.replace("Мих", "Міх")
@@ -1881,15 +1511,15 @@ try {
             paralel = paralel.replace("Авв", "Абк")
             paralel = paralel.replace("Соф", "Саф")
             paralel = paralel.replace("Агг", "Аг")
-//paralel = paralel.replace("Зах", "Зах")
-//paralel = paralel.replace("Мал", "Мал")
-//paralel = paralel.replace("1 Мак", "1 Мак")
-//paralel = paralel.replace("2 Мак", "2 Мак")
-//paralel = paralel.replace("3 Мак", "3 Мак")
+            //paralel = paralel.replace("Зах", "Зах")
+            //paralel = paralel.replace("Мал", "Мал")
+            //paralel = paralel.replace("1 Мак", "1 Мак")
+            //paralel = paralel.replace("2 Мак", "2 Мак")
+            //paralel = paralel.replace("3 Мак", "3 Мак")
             paralel = paralel.replace("3 Езд", "3 Эзд")
             paralel = paralel.replace("Мф", "Мц")
-//paralel = paralel.replace("Мк", "Мк")
-//paralel = paralel.replace("Лк", "Лк")
+            //paralel = paralel.replace("Мк", "Мк")
+            //paralel = paralel.replace("Лк", "Лк")
             paralel = paralel.replace("Ин", "Ян")
             paralel = paralel.replace("Деян", "Дз")
             paralel = paralel.replace("Иак", "Як")
@@ -1902,16 +1532,16 @@ try {
             paralel = paralel.replace("Рим", "Рым")
             paralel = paralel.replace("1 Кор", "1 Кар")
             paralel = paralel.replace("2 Кор", "2 Кар")
-//paralel = paralel.replace("Гал", "Гал")
+            //paralel = paralel.replace("Гал", "Гал")
             paralel = paralel.replace("Еф", "Эф")
             paralel = paralel.replace("Флп", "Плп")
             paralel = paralel.replace("Кол", "Клс")
-//paralel = paralel.replace("1 Фес", "1 Фес")
-//paralel = paralel.replace("2 Фес", "2 Фес")
+            //paralel = paralel.replace("1 Фес", "1 Фес")
+            //paralel = paralel.replace("2 Фес", "2 Фес")
             paralel = paralel.replace("1 Тим", "1 Цім")
             paralel = paralel.replace("2 Тим", "2 Цім")
             paralel = paralel.replace("Тит", "Ціт")
-//paralel = paralel.replace("Флм", "Флм")
+            //paralel = paralel.replace("Флм", "Флм")
             paralel = paralel.replace("Евр", "Гбр")
             paralel = paralel.replace("Откр", "Адкр")
             return paralel
@@ -1949,8 +1579,7 @@ try {
 
         @Suppress("DEPRECATION")
         fun isNetworkAvailable(context: Context): Boolean {
-            val connectivityManager =
-                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val nw = connectivityManager.activeNetwork ?: return false
                 val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
@@ -1967,8 +1596,7 @@ try {
 
         @Suppress("DEPRECATION")
         fun isIntNetworkAvailable(context: Context): Int {
-            val connectivityManager =
-                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val nw = connectivityManager.activeNetwork ?: return 0
                 val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return 0

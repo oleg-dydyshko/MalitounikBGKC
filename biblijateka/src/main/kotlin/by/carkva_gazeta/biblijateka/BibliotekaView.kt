@@ -43,7 +43,6 @@ import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.*
 import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.github.barteksc.pdfviewer.PDFView
@@ -2131,92 +2130,75 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         progressBar2.visibility = View.VISIBLE
         val requestQueue = Volley.newRequestQueue(applicationContext)
         val showUrl = "https://carkva-gazeta.by/biblioteka.php"
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.POST,
-            showUrl,
-            null,
-            Response.Listener { response: JSONObject ->
-                lifecycleScope.launch {
-                    withContext(Dispatchers.IO) {
-                        val temp: ArrayList<ArrayList<String>> = ArrayList()
-                        val biblioteka = response.getJSONArray("biblioteka")
-                        val gson = Gson()
-                        for (i in 0 until biblioteka.length()) {
-                            val mySqlList: ArrayList<String> = ArrayList()
-                            val kniga = biblioteka.getJSONObject(i)
-                            val id = kniga.getString("bib")
-                            val rubrika = kniga.getString("rubryka")
-                            val link = kniga.getString("link")
-                            var str = kniga.getString("str")
-                            val pdf = kniga.getString("pdf")
-                            var image = kniga.getString("image")
-                            mySqlList.add(link)
-                            val pos = str.indexOf("</span><br>")
-                            str = str.substring(pos + 11)
-                            mySqlList.add(str)
-                            mySqlList.add(pdf)
-                            val url = URL("https://carkva-gazeta.by/data/bibliateka/$pdf")
-                            var filesize: String
-                            var conn: URLConnection?
-                            conn = url.openConnection()
-                            if (conn is HttpURLConnection) {
-                                (conn as HttpURLConnection?)?.requestMethod = "HEAD"
-                            }
-                            filesize = java.lang.String.valueOf(conn.contentLength)
-                            if (conn is HttpURLConnection) {
-                                (conn as HttpURLConnection?)?.disconnect()
-                            }
-                            mySqlList.add(filesize)
-                            mySqlList.add(rubrika)
-                            val im1 = image.indexOf("src=\"")
-                            val im2 = image.indexOf("\"", im1 + 5)
-                            image = "https://carkva-gazeta.by" + image.substring(im1 + 5, im2)
-                            val t1 = pdf.lastIndexOf(".") //image.lastIndexOf("/")
-                            val imageLocal: String =
-                                "$filesDir/image_temp/" + pdf.substring(
-                                    0,
-                                    t1
-                                ) + ".png" //image.substring(t1 + 1)
-                            mySqlList.add(imageLocal)
-                            mySqlList.add(id)
-                            if (MainActivity.isIntNetworkAvailable(this@BibliotekaView) == 1 || MainActivity.isIntNetworkAvailable(
-                                    this@BibliotekaView
-                                ) == 2
-                            ) {
-                                val dir = File("$filesDir/image_temp")
-                                if (!dir.exists()) dir.mkdir()
-                                var mIcon11: Bitmap
-                                val file = File(imageLocal)
-                                if (!file.exists()) {
-                                    FileOutputStream(
-                                        "$filesDir/image_temp/" + pdf.substring(
-                                            0,
-                                            t1
-                                        ) + ".png"
-                                    ).use { out ->
-                                        val inputStream: InputStream = URL(image).openStream()
-                                        mIcon11 = BitmapFactory.decodeStream(inputStream)
-                                        mIcon11.compress(Bitmap.CompressFormat.PNG, 90, out)
-                                    }
+        val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, showUrl, null, { response: JSONObject ->
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    val temp: ArrayList<ArrayList<String>> = ArrayList()
+                    val biblioteka = response.getJSONArray("biblioteka")
+                    val gson = Gson()
+                    for (i in 0 until biblioteka.length()) {
+                        val mySqlList: ArrayList<String> = ArrayList()
+                        val kniga = biblioteka.getJSONObject(i)
+                        val id = kniga.getString("bib")
+                        val rubrika = kniga.getString("rubryka")
+                        val link = kniga.getString("link")
+                        var str = kniga.getString("str")
+                        val pdf = kniga.getString("pdf")
+                        var image = kniga.getString("image")
+                        mySqlList.add(link)
+                        val pos = str.indexOf("</span><br>")
+                        str = str.substring(pos + 11)
+                        mySqlList.add(str)
+                        mySqlList.add(pdf)
+                        val url = URL("https://carkva-gazeta.by/data/bibliateka/$pdf")
+                        var filesize: String
+                        var conn: URLConnection?
+                        conn = url.openConnection()
+                        if (conn is HttpURLConnection) {
+                            (conn as HttpURLConnection?)?.requestMethod = "HEAD"
+                        }
+                        filesize = java.lang.String.valueOf(conn.contentLength)
+                        if (conn is HttpURLConnection) {
+                            (conn as HttpURLConnection?)?.disconnect()
+                        }
+                        mySqlList.add(filesize)
+                        mySqlList.add(rubrika)
+                        val im1 = image.indexOf("src=\"")
+                        val im2 = image.indexOf("\"", im1 + 5)
+                        image = "https://carkva-gazeta.by" + image.substring(im1 + 5, im2)
+                        val t1 = pdf.lastIndexOf(".") //image.lastIndexOf("/")
+                        val imageLocal: String = "$filesDir/image_temp/" + pdf.substring(0, t1) + ".png" //image.substring(t1 + 1)
+                        mySqlList.add(imageLocal)
+                        mySqlList.add(id)
+                        if (MainActivity.isIntNetworkAvailable(this@BibliotekaView) == 1 || MainActivity.isIntNetworkAvailable(this@BibliotekaView) == 2) {
+                            val dir = File("$filesDir/image_temp")
+                            if (!dir.exists()) dir.mkdir()
+                            var mIcon11: Bitmap
+                            val file = File(imageLocal)
+                            if (!file.exists()) {
+                                FileOutputStream("$filesDir/image_temp/" + pdf.substring(0, t1) + ".png").use { out ->
+                                    val inputStream: InputStream = URL(image).openStream()
+                                    mIcon11 = BitmapFactory.decodeStream(inputStream)
+                                    mIcon11.compress(Bitmap.CompressFormat.PNG, 90, out)
                                 }
                             }
-                            if (rubrika.toInt() == rub) {
-                                arrayList.add(mySqlList)
-                            }
-                            temp.add(mySqlList)
                         }
-                        val json: String = gson.toJson(temp)
-                        val prefEditors: SharedPreferences.Editor = k.edit()
-                        prefEditors.putString("Biblioteka", json)
-                        prefEditors.apply()
-                        runSql = false
-                        return@withContext
+                        if (rubrika.toInt() == rub) {
+                            arrayList.add(mySqlList)
+                        }
+                        temp.add(mySqlList)
                     }
-                    adapter.notifyDataSetChanged()
-                    progressBar2.visibility = View.GONE
+                    val json: String = gson.toJson(temp)
+                    val prefEditors: SharedPreferences.Editor = k.edit()
+                    prefEditors.putString("Biblioteka", json)
+                    prefEditors.apply()
+                    runSql = false
+                    return@withContext
                 }
-            },
-            Response.ErrorListener { })
+                adapter.notifyDataSetChanged()
+                progressBar2.visibility = View.GONE
+            }
+        }, { })
         requestQueue.add(jsonObjectRequest)
     }
 
@@ -2281,7 +2263,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private fun unzip(zipFile: File, targetDirectory: File): Boolean {
         ZipInputStream(BufferedInputStream(FileInputStream(zipFile))).use { zis ->
             var ze = ZipEntry("")
-            var count: Int
             val buffer = ByteArray(8192)
             while (zis.nextEntry?.also { ze = it } != null) {
                 val file = File(targetDirectory, ze.name)
@@ -2296,6 +2277,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     return false
                 }
                 FileOutputStream(file).use { fout ->
+                    var count: Int
                     while (zis.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count)
                 }
             }

@@ -16,17 +16,17 @@ import java.util.*
 
 class CaliandarMunTab2 : Fragment() {
 
-    companion object {
-        fun getInstance(posMun: Int, yearG: Int, day: Int): CaliandarMunTab2 {
-            val frag = CaliandarMunTab2()
-            val bundle = Bundle()
-            bundle.putInt("posMun", posMun)
-            bundle.putInt("yearG", yearG)
-            bundle.putInt("day", day)
-            frag.arguments = bundle
-            return frag
-        }
+companion object {
+    fun getInstance(posMun: Int, yearG: Int, day: Int): CaliandarMunTab2 {
+        val frag = CaliandarMunTab2()
+        val bundle = Bundle()
+        bundle.putInt("posMun", posMun)
+        bundle.putInt("yearG", yearG)
+        bundle.putInt("day", day)
+        frag.arguments = bundle
+        return frag
     }
+}
 
     private var dzenNoch = false
     private lateinit var adapterViewPagerNedel: SmartFragmentStatePagerAdapter
@@ -45,9 +45,9 @@ class CaliandarMunTab2 : Fragment() {
         activity?.let { activity ->
             val chin = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = chin.getBoolean("dzen_noch", false)
-            day = arguments?.getInt("day")?: 0
-            posMun = arguments?.getInt("posMun")?: 0
-            yearG = arguments?.getInt("yearG")?: 0
+            day = arguments?.getInt("day") ?: 0
+            posMun = arguments?.getInt("posMun") ?: 0
+            yearG = arguments?.getInt("yearG") ?: 0
             fragmentManager?.let {
                 adapterViewPagerNedel = MyCalendarNedelAdapter(it)
                 pagerNedel.adapter = adapterViewPagerNedel

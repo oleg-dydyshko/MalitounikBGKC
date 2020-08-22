@@ -42,15 +42,9 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             window.setDecorFitsSystemWindows(false)
             val controller = window.insetsController
             controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior =
-                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
     private val mShowPart2Runnable = Runnable {
@@ -172,10 +166,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 title_toolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(
-            TypedValue.COMPLEX_UNIT_SP,
-            SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat()
-        )
+        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title_toolbar.text = title
@@ -212,10 +203,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         val prefEditor: Editor = k.edit()
         if (v?.id ?: 0 == R.id.constraint) {
             if (MainActivity.checkBrightness) {
-                MainActivity.brightness = Settings.System.getInt(
-                    contentResolver,
-                    Settings.System.SCREEN_BRIGHTNESS
-                ) * 100 / 255
+                MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
             }
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
@@ -223,8 +211,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                     if (x < otstup) {
                         levo = true
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        progress.text =
-                            resources.getString(R.string.procent, MainActivity.brightness)
+                        progress.text = resources.getString(R.string.procent, MainActivity.brightness)
                         progress.visibility = View.VISIBLE
                         startProcent()
                     }
@@ -246,8 +233,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text =
-                                resources.getString(R.string.procent, MainActivity.brightness)
+                            progress.text = resources.getString(R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
                             progress.visibility = View.VISIBLE
                             startProcent()
@@ -259,8 +245,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text =
-                                resources.getString(R.string.procent, MainActivity.brightness)
+                            progress.text = resources.getString(R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
                             progress.visibility = View.VISIBLE
                             startProcent()
@@ -322,12 +307,10 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         menu.findItem(R.id.action_minus).isVisible = false
         menu.findItem(R.id.action_auto).isVisible = false
         if (men) {
-            menu.findItem(R.id.action_vybranoe).icon =
-                ContextCompat.getDrawable(this, R.drawable.star_big_on)
+            menu.findItem(R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, R.drawable.star_big_on)
             menu.findItem(R.id.action_vybranoe).title = resources.getString(R.string.vybranoe_del)
         } else {
-            menu.findItem(R.id.action_vybranoe).icon =
-                ContextCompat.getDrawable(this, R.drawable.star_big_off)
+            menu.findItem(R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, R.drawable.star_big_off)
             menu.findItem(R.id.action_vybranoe).title = resources.getString(R.string.vybranoe)
         }
         menu.findItem(R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
@@ -335,12 +318,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         val item = menu.findItem(R.id.action_vybranoe)
         val spanString = SpannableString(menu.findItem(R.id.action_vybranoe).title.toString())
         val end = spanString.length
-        spanString.setSpan(
-            AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
-            0,
-            end,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
+        spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         item.title = spanString
         return true
     }
@@ -353,12 +331,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(
-                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
-                0,
-                end,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
         return true
@@ -420,10 +393,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         if (id == R.id.action_share) {
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
-            sendIntent.putExtra(
-                Intent.EXTRA_TEXT,
-                "https://carkva-gazeta.by/share/index.php?pub=1&file=$resurs"
-            )
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=1&file=$resurs")
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
         }
@@ -491,18 +461,18 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                     }
                 }
                 /*val fields2 = R.raw::class.java.fields
-            for (field in fields2) {
+                for (field in fields2) {
                 if (field.name.intern() == resurs) {
-                    for (i in 0 until MenuVybranoe.vybranoe.size) {
-                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
-                            MenuVybranoe.vybranoe.removeAt(i)
-                            check = false
-                            break
-                        }
-                    }
-                    break
+                for (i in 0 until MenuVybranoe.vybranoe.size) {
+                if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
+                MenuVybranoe.vybranoe.removeAt(i)
+                check = false
+                break
                 }
-            }*/
+                }
+                break
+                }
+                }*/
                 if (check) {
                     MenuVybranoe.vybranoe.add(VybranoeData(resurs, title))
                 }
@@ -523,8 +493,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 val gson = Gson()
                 if (file.exists()) {
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
-                    MenuVybranoe.vybranoe =
-                        gson.fromJson(file.readText(), type)
+                    MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
                 } else {
                     return false
                 }
@@ -541,17 +510,17 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                     }
                 }
                 /*val fields2: Array<Field> = R.raw::class.java.fields
-            for (field in fields2) {
+                for (field in fields2) {
                 if (field.name.intern() == resurs) {
-                    for (i in 0 until MenuVybranoe.vybranoe.size) {
-                        if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) { //MenuVybranoe.vybranoe.remove(i)
-                            check = true
-                            break
-                        }
-                    }
-                    break
+                for (i in 0 until MenuVybranoe.vybranoe.size) {
+                if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) { //MenuVybranoe.vybranoe.remove(i)
+                check = true
+                break
                 }
-            }*/
+                }
+                break
+                }
+                }*/
             } catch (t: Throwable) {
                 file.delete()
                 check = false

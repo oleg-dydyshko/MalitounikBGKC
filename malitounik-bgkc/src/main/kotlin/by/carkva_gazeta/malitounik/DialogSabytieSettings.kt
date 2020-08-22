@@ -166,7 +166,7 @@ class DialogSabytieSettings : DialogFragment() {
 
     private fun stop(): View.OnClickListener {
         return View.OnClickListener {
-                ringTone.stop()
+            ringTone.stop()
         }
     }
 

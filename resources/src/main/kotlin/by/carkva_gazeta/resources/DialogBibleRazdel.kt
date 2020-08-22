@@ -65,25 +65,12 @@ class DialogBibleRazdel : DialogFragment() {
             linearLayout.orientation = LinearLayout.VERTICAL
             linearLayout2.addView(linearLayout)
             val textViewZaglavie = TextViewRobotoCondensed(it)
-            if (dzenNoch) textViewZaglavie.setBackgroundColor(
-                ContextCompat.getColor(
-                    it,
-                    R.color.colorPrimary_black
-                )
-            ) else textViewZaglavie.setBackgroundColor(
-                ContextCompat.getColor(
-                    it,
-                    R.color.colorPrimary
-                )
-            )
+            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.text = resources.getString(R.string.DATA_SEARCH, fullGlav)
-            textViewZaglavie.setTextSize(
-                TypedValue.COMPLEX_UNIT_SP,
-                SettingsActivity.GET_FONT_SIZE_MIN
-            )
+            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             linearLayout.addView(textViewZaglavie)
@@ -115,10 +102,7 @@ class DialogBibleRazdel : DialogFragment() {
             input.imeOptions = EditorInfo.IME_ACTION_GO
             // Показываем клавиатуру
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(
-                InputMethodManager.SHOW_FORCED,
-                InputMethodManager.HIDE_IMPLICIT_ONLY
-            )
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             linearLayout.addView(input)
             builder.setNegativeButton(resources.getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int ->
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -132,15 +116,9 @@ class DialogBibleRazdel : DialogFragment() {
         val alert = builder.create()
         alert.setOnShowListener {
             val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-            btnPositive.setTextSize(
-                TypedValue.COMPLEX_UNIT_SP,
-                SettingsActivity.GET_FONT_SIZE_TOAST
-            )
+            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-            btnNegative.setTextSize(
-                TypedValue.COMPLEX_UNIT_SP,
-                SettingsActivity.GET_FONT_SIZE_TOAST
-            )
+            btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
         }
         return alert
     }

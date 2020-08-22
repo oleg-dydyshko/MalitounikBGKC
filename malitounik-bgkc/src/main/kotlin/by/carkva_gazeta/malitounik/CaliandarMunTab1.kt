@@ -21,17 +21,17 @@ import kotlin.collections.ArrayList
 
 class CaliandarMunTab1 : Fragment() {
 
-    companion object {
-        fun getInstance(posMun: Int, yearG: Int, day: Int): CaliandarMunTab1 {
-            val frag = CaliandarMunTab1()
-            val bundle = Bundle()
-            bundle.putInt("posMun", posMun)
-            bundle.putInt("yearG", yearG)
-            bundle.putInt("day", day)
-            frag.arguments = bundle
-            return frag
-        }
+companion object {
+    fun getInstance(posMun: Int, yearG: Int, day: Int): CaliandarMunTab1 {
+        val frag = CaliandarMunTab1()
+        val bundle = Bundle()
+        bundle.putInt("posMun", posMun)
+        bundle.putInt("yearG", yearG)
+        bundle.putInt("day", day)
+        frag.arguments = bundle
+        return frag
     }
+}
 
     private lateinit var adapterViewPager: SmartFragmentStatePagerAdapter
     private var dzenNoch = false
@@ -54,9 +54,9 @@ class CaliandarMunTab1 : Fragment() {
         activity?.let { activity ->
             val chin = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = chin.getBoolean("dzen_noch", false)
-            day = arguments?.getInt("day")?: 0
-            posMun = arguments?.getInt("posMun")?: 0
-            yearG = arguments?.getInt("yearG")?: 0
+            day = arguments?.getInt("day") ?: 0
+            posMun = arguments?.getInt("posMun") ?: 0
+            yearG = arguments?.getInt("yearG") ?: 0
             val adapter = CaliandarMunAdapter(activity, names)
             spinner.adapter = adapter
             val data2 = ArrayList<String>()
@@ -157,8 +157,7 @@ class CaliandarMunTab1 : Fragment() {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextViewRobotoCondensed
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            if (dzenNoch)
-                textView.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
+            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
                     textView.setTypeface(null, Typeface.BOLD)
@@ -189,8 +188,7 @@ class CaliandarMunTab1 : Fragment() {
                 viewHolder = convert.tag as ViewHolder
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            if (dzenNoch)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
+            if (dzenNoch) viewHolder.text?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
                     viewHolder.text?.setTypeface(null, Typeface.BOLD)

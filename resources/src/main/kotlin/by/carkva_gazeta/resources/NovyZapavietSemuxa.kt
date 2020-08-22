@@ -33,9 +33,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 
-class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener,
-    NovyZapavietSemuxaFragment.ClicParalelListiner, NovyZapavietSemuxaFragment.ListPositionListiner,
-    DialogBibleNatatka.DialogBibleNatatkaListiner {
+class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NovyZapavietSemuxaFragment.ClicParalelListiner, NovyZapavietSemuxaFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner {
     private val mHideHandler = Handler(Looper.getMainLooper())
 
     @SuppressLint("InlinedApi")
@@ -45,15 +43,9 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             window.setDecorFitsSystemWindows(false)
             val controller = window.insetsController
             controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior =
-                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
     private val mShowPart2Runnable = Runnable {
@@ -200,31 +192,15 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
-                )
-                window.navigationBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
-                )
+                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
+                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
             } else {
-                window.statusBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
-                )
-                window.navigationBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
-                )
+                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
+                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
             }
         }
         pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             }
 
             override fun onPageSelected(position: Int) {
@@ -384,10 +360,7 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
                 title_toolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(
-            TypedValue.COMPLEX_UNIT_SP,
-            SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat()
-        )
+        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.novy_zapaviet)
@@ -438,10 +411,8 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_glava).isVisible = !paralel
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked =
-            k.getBoolean("orientation", false)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked =
-            k.getBoolean("dzen_noch", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         return true
     }
 
@@ -503,10 +474,7 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
         super.onResume()
         setTollbarTheme()
         if (fullscreenPage) hide()
-        overridePendingTransition(
-            by.carkva_gazeta.malitounik.R.anim.alphain,
-            by.carkva_gazeta.malitounik.R.anim.alphaout
-        )
+        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -517,12 +485,7 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(
-                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
-                0,
-                end,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
         return true
@@ -555,21 +518,18 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
         this.cytanneSours = cytanneSours
         val pm = ParalelnyeMesta()
         conteiner.removeAllViewsInLayout()
-        val arrayList =
-            pm.paralel(this@NovyZapavietSemuxa, this.cytanneSours, this.cytanneParalelnye, true)
+        val arrayList = pm.paralel(this@NovyZapavietSemuxa, this.cytanneSours, this.cytanneParalelnye, true)
         for (textView in arrayList) {
             conteiner.addView(textView)
         }
         scroll.visibility = View.VISIBLE
         pager.visibility = View.GONE
-        title_toolbar.text =
-            resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)
+        title_toolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)
         subtitle_toolbar.visibility = View.GONE
         invalidateOptionsMenu()
     }
 
-    private inner class MyPagerAdapter(fragmentManager: FragmentManager) :
-        SmartFragmentStatePagerAdapter(fragmentManager) {
+    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
         override fun getCount(): Int {
             var fullglav = 1
             when (kniga) {

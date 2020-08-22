@@ -50,15 +50,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             window.setDecorFitsSystemWindows(false)
             val controller = window.insetsController
             controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior =
-                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
     private val mShowPart2Runnable = Runnable {
@@ -135,12 +129,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 mActionDown = action
             }
         })
-        if (dzenNoch) progress.setTextColor(
-            ContextCompat.getColor(
-                this,
-                by.carkva_gazeta.malitounik.R.color.colorPrimary_black
-            )
-        )
+        if (dzenNoch) progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
@@ -149,23 +138,11 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
-                )
-                window.navigationBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
-                )
+                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
+                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
             } else {
-                window.statusBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
-                )
-                window.navigationBarColor = ContextCompat.getColor(
-                    this,
-                    by.carkva_gazeta.malitounik.R.color.colorPrimaryDark
-                )
+                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
+                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
             }
         }
         setChtenia(savedInstanceState)
@@ -195,10 +172,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 title_toolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(
-            TypedValue.COMPLEX_UNIT_SP,
-            SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat()
-        )
+        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.CZYTANNE)
@@ -218,10 +192,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         val prefEditor: Editor = k.edit()
         if (v?.id ?: 0 == R.id.constraint) {
             if (MainActivity.checkBrightness) {
-                MainActivity.brightness = Settings.System.getInt(
-                    contentResolver,
-                    Settings.System.SCREEN_BRIGHTNESS
-                ) * 100 / 255
+                MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
             }
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
@@ -231,10 +202,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                     if (x < otstup) {
                         levo = true
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        progress.text = resources.getString(
-                            by.carkva_gazeta.malitounik.R.string.procent,
-                            MainActivity.brightness
-                        )
+                        progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         progress.visibility = View.VISIBLE
                         startProcent()
                     }
@@ -253,8 +221,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         spid = k.getInt("autoscrollSpid", 60)
                         proc = 100 - (spid - 15) * 100 / 215
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        progress.text =
-                            resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                        progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                         progress.visibility = View.VISIBLE
                         startProcent()
                         autoscroll = k.getBoolean("autoscroll", false)
@@ -273,10 +240,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text = resources.getString(
-                                by.carkva_gazeta.malitounik.R.string.procent,
-                                MainActivity.brightness
-                            )
+                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
                             progress.visibility = View.VISIBLE
                             startProcent()
@@ -288,10 +252,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text = resources.getString(
-                                by.carkva_gazeta.malitounik.R.string.procent,
-                                MainActivity.brightness
-                            )
+                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
                             progress.visibility = View.VISIBLE
                             startProcent()
@@ -332,10 +293,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             spid -= 5
                             val proc = 100 - (spid - 15) * 100 / 215
                             progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                            progress.text = resources.getString(
-                                by.carkva_gazeta.malitounik.R.string.procent,
-                                proc
-                            )
+                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                             progress.visibility = View.VISIBLE
                             startProcent()
                             stopAutoScroll()
@@ -347,10 +305,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             spid += 5
                             val proc = 100 - (spid - 15) * 100 / 215
                             progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                            progress.text = resources.getString(
-                                by.carkva_gazeta.malitounik.R.string.procent,
-                                proc
-                            )
+                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                             progress.visibility = View.VISIBLE
                             startProcent()
                             stopAutoScroll()
@@ -519,742 +474,313 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             0 -> {
                                 inputStream = r.openRawResource(R.raw.biblian1)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_0,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_0, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             1 -> {
                                 inputStream = r.openRawResource(R.raw.biblian2)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_1,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_1, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             2 -> {
                                 inputStream = r.openRawResource(R.raw.biblian3)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_2,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_2, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             3 -> {
                                 inputStream = r.openRawResource(R.raw.biblian4)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_3,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_3, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             4 -> {
                                 inputStream = r.openRawResource(R.raw.biblian5)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_4,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_4, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             5 -> {
                                 inputStream = r.openRawResource(R.raw.biblian6)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_5,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_5, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             6 -> {
                                 inputStream = r.openRawResource(R.raw.biblian7)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_6,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_6, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             7 -> {
                                 inputStream = r.openRawResource(R.raw.biblian8)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_7,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_7, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             8 -> {
                                 inputStream = r.openRawResource(R.raw.biblian9)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_8,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_8, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             9 -> {
                                 inputStream = r.openRawResource(R.raw.biblian10)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_9,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_9, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             10 -> {
                                 inputStream = r.openRawResource(R.raw.biblian11)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_10,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_10, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             11 -> {
                                 inputStream = r.openRawResource(R.raw.biblian12)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_11,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_11, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             12 -> {
                                 inputStream = r.openRawResource(R.raw.biblian13)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_12,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_12, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             13 -> {
                                 inputStream = r.openRawResource(R.raw.biblian14)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_13,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_13, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             14 -> {
                                 inputStream = r.openRawResource(R.raw.biblian15)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_14,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_14, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             15 -> {
                                 inputStream = r.openRawResource(R.raw.biblian16)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_15,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_15, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             16 -> {
                                 inputStream = r.openRawResource(R.raw.biblian17)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_16,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_16, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             17 -> {
                                 inputStream = r.openRawResource(R.raw.biblian18)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_17,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_17, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             18 -> {
                                 inputStream = r.openRawResource(R.raw.biblian19)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_18,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_18, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             19 -> {
                                 inputStream = r.openRawResource(R.raw.biblian20)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_19,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_19, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             20 -> {
                                 inputStream = r.openRawResource(R.raw.biblian21)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_20,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_20, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             21 -> {
                                 inputStream = r.openRawResource(R.raw.biblian22)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_21,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_21, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             22 -> {
                                 inputStream = r.openRawResource(R.raw.biblian23)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_22,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_22, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             23 -> {
                                 inputStream = r.openRawResource(R.raw.biblian24)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_23,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_23, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             24 -> {
                                 inputStream = r.openRawResource(R.raw.biblian25)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_24,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_24, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             25 -> {
                                 inputStream = r.openRawResource(R.raw.biblian26)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_25,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_25, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             26 -> {
                                 inputStream = r.openRawResource(R.raw.biblias1)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_26,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_26, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             27 -> {
                                 inputStream = r.openRawResource(R.raw.biblias20)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_27,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_27, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             28 -> {
                                 inputStream = r.openRawResource(R.raw.biblias26)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_28,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_28, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             29 -> {
                                 inputStream = r.openRawResource(R.raw.biblias2)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_29,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_29, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             30 -> {
                                 inputStream = r.openRawResource(R.raw.biblias18)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_30,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_30, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             31 -> {
                                 inputStream = r.openRawResource(R.raw.biblias38)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_31,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_31, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             32 -> {
                                 inputStream = r.openRawResource(R.raw.biblias29)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_32,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_32, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             33 -> {
                                 inputStream = r.openRawResource(R.raw.biblias36)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_33,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_33, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             34 -> {
                                 inputStream = r.openRawResource(R.raw.biblias23)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_34,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_34, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             35 -> {
                                 inputStream = r.openRawResource(R.raw.biblias24)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_35,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_35, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             36 -> {
                                 inputStream = r.openRawResource(R.raw.biblias27)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_36,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_36, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             37 -> {
                                 inputStream = r.openRawResource(R.raw.biblias4)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_37,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_37, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             38 -> {
                                 inputStream = r.openRawResource(R.raw.biblias33)
                                 ssbTitle = if (e == 0) {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_38,
-                                            spln,
-                                            zaglavieName
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_38, spln, zaglavieName))
                                 } else {
-                                    SpannableStringBuilder(
-                                        resources.getString(
-                                            by.carkva_gazeta.malitounik.R.string.chtinia_zag,
-                                            spln.trim()
-                                        )
-                                    )
+                                    SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim()))
                                 }
                             }
                             else -> {
@@ -1262,27 +788,12 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             }
                         }
                         if (!errorChytanne) {
-                            if (e == 0) ssbTitle.setSpan(
-                                StyleSpan(Typeface.BOLD),
-                                0,
-                                ssbTitle.length,
-                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                            )
+                            if (e == 0) ssbTitle.setSpan(StyleSpan(Typeface.BOLD), 0, ssbTitle.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             val textView1 = TextViewRobotoCondensed(this)
                             textView1.isFocusable = false
                             textView1.text = ssbTitle
                             textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                            if (dzenNoch) textView1.setTextColor(
-                                ContextCompat.getColor(
-                                    this,
-                                    by.carkva_gazeta.malitounik.R.color.colorIcons
-                                )
-                            ) else textView1.setTextColor(
-                                ContextCompat.getColor(
-                                    this,
-                                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
-                                )
-                            )
+                            if (dzenNoch) textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
                             textView1.setPadding(0, 10, 0, 0)
                             LinearButtom.addView(textView1)
                             cytannelist.add(textView1)
@@ -1321,10 +832,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                     val des1 = spl1.length
                                     desN = spl1.indexOf("$knigaN.")
                                     desK1 = spl2.indexOf("$knigaK.")
-                                    var desN1: Int = spl2.indexOf(
-                                        (knigaK.toInt() + 1).toString().plus("."),
-                                        desK1
-                                    )
+                                    var desN1: Int = spl2.indexOf((knigaK.toInt() + 1).toString().plus("."), desK1)
                                     if (desN1 == -1) {
                                         desN1 = spl1.length
                                     }
@@ -1342,51 +850,25 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 val t2 = textBiblia.indexOf("$knigaK.")
                                 val t3 = textBiblia.indexOf(".", t2)
                                 var t1 = textBiblia.indexOf(":", t2)
-                                if (t1 == -1)
-                                    t1 = textBiblia.indexOf(";", t3 + 1)
-                                if (t1 == -1)
-                                    t1 = textBiblia.indexOf(".", t3 + 1)
-                                if (t1 != -1)
-                                    textBiblia.setSpan(
-                                        StrikethroughSpan(),
-                                        t1 + 1,
-                                        textBiblia.length,
-                                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                                    )
+                                if (t1 == -1) t1 = textBiblia.indexOf(";", t3 + 1)
+                                if (t1 == -1) t1 = textBiblia.indexOf(".", t3 + 1)
+                                if (t1 != -1) textBiblia.setSpan(StrikethroughSpan(), t1 + 1, textBiblia.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             }
                             if (polstixaB) {
                                 val t2 = textBiblia.indexOf("\n")
                                 val textPol = textBiblia.substring(0, t2 + 1)
                                 val t3 = textPol.indexOf(".")
                                 var t1 = textPol.indexOf(":")
-                                if (t1 == -1)
-                                    t1 = textPol.indexOf(";", t3 + 1)
-                                if (t1 == -1)
-                                    t1 = textPol.indexOf(".", t3 + 1)
-                                if (t1 != -1)
-                                    textBiblia.setSpan(
-                                        StrikethroughSpan(),
-                                        t3 + 1,
-                                        t1 + 1,
-                                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                                    )
+                                if (t1 == -1) t1 = textPol.indexOf(";", t3 + 1)
+                                if (t1 == -1) t1 = textPol.indexOf(".", t3 + 1)
+                                if (t1 != -1) textBiblia.setSpan(StrikethroughSpan(), t3 + 1, t1 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             }
                             val textView2 = TextViewRobotoCondensed(this)
                             textView2.isFocusable = false
                             textView2.setTextIsSelectable(true)
                             textView2.text = textBiblia
                             textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                            if (dzenNoch) textView2.setTextColor(
-                                ContextCompat.getColor(
-                                    this,
-                                    by.carkva_gazeta.malitounik.R.color.colorIcons
-                                )
-                            ) else textView2.setTextColor(
-                                ContextCompat.getColor(
-                                    this,
-                                    by.carkva_gazeta.malitounik.R.color.colorPrimary_text
-                                )
-                            )
+                            if (dzenNoch) textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
                             textView2.setPadding(0, 10, 0, 0)
                             cytannelist.add(textView2)
                             LinearButtom.addView(textView2)
@@ -1399,11 +881,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 }
                 if (i == 0) toTwoList = cytannelist.size
             }
-            if (k.getBoolean(
-                    "utran",
-                    true
-                ) && (nedelia == 1 || nedelia == 2 || nedelia == 3) && split.size > 2 && savedInstanceState == null
-            ) {
+            if (k.getBoolean("utran", true) && (nedelia == 1 || nedelia == 2 || nedelia == 3) && split.size > 2 && savedInstanceState == null) {
                 InteractiveScroll.postDelayed({
                     val y = LinearButtom.y + LinearButtom.getChildAt(toTwoList).y
                     InteractiveScroll.smoothScrollTo(0, y.toInt())
@@ -1415,29 +893,13 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     }
 
     private fun error() {
-        val ssb =
-            SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch))
-        ssb.setSpan(
-            StyleSpan(Typeface.BOLD),
-            0,
-            resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch).length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
+        val ssb = SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch))
+        ssb.setSpan(StyleSpan(Typeface.BOLD), 0, resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch).length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         val textView2 = TextViewRobotoCondensed(this)
         textView2.isFocusable = false
         textView2.text = ssb
         textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        if (dzenNoch) textView2.setTextColor(
-            ContextCompat.getColor(
-                this,
-                by.carkva_gazeta.malitounik.R.color.colorIcons
-            )
-        ) else textView2.setTextColor(
-            ContextCompat.getColor(
-                this,
-                by.carkva_gazeta.malitounik.R.color.colorPrimary_text
-            )
-        )
+        if (dzenNoch) textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
         textView2.setPadding(0, 10, 0, 0)
         cytannelist.add(textView2)
         LinearButtom.addView(textView2)
@@ -1498,12 +960,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(
-                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
-                0,
-                end,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
         return true
@@ -1528,25 +985,18 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         if (autoscroll) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title =
-                resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         } else {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title =
-                resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked =
-            k.getBoolean("orientation", false)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked =
-            k.getBoolean("dzen_noch", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         if (nedelia != -1) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_utran).isChecked =
-                k.getBoolean("utran", true)
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_utran).isChecked = k.getBoolean("utran", true)
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_utran).isVisible = true
         }
         return true
@@ -1586,10 +1036,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         if (autoscroll) {
             startAutoScroll()
         }
-        overridePendingTransition(
-            by.carkva_gazeta.malitounik.R.anim.alphain,
-            by.carkva_gazeta.malitounik.R.anim.alphaout
-        )
+        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -1630,8 +1077,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 spid -= 5
                 val proc = 100 - (spid - 15) * 100 / 215
                 progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                progress.text =
-                    resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 progress.visibility = View.VISIBLE
                 startProcent()
                 stopAutoScroll()
@@ -1646,8 +1092,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 spid += 5
                 val proc = 100 - (spid - 15) * 100 / 215
                 progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                progress.text =
-                    resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 progress.visibility = View.VISIBLE
                 startProcent()
                 stopAutoScroll()

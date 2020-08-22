@@ -177,102 +177,102 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
             /*File(context.filesDir.toString() + "/Sabytie").walk().forEach { file ->
-                if (file.isFile && file.exists()) {
-                    val inputStream = FileReader(file)
-                    val reader = BufferedReader(inputStream)
-                    reader.forEachLine {
-                        val line = it
-                        if (line != "") {
-                            val t1 = line.split(" ").toTypedArray()
-                            if (t1[5] != "-1") {
-                                if (t1[10] == "0") {
-                                    when (t1[9].toInt()) {
-                                        1 -> {
-                                            var timerepit = t1[3].toLong()
-                                            while (true) {
-                                                if (timerepit > c.timeInMillis) {
-                                                    intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
-                                                    pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
-                                                    am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 86400000L, pIntent)
-                                                    break
-                                                }
-                                                timerepit += 86400000L
-                                            }
-                                        }
-                                        4 -> {
-                                            var timerepit = t1[3].toLong()
-                                            while (true) {
-                                                if (timerepit > c.timeInMillis) {
-                                                    intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
-                                                    pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
-                                                    am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 604800000L, pIntent)
-                                                    break
-                                                }
-                                                timerepit += 604800000L
-                                            }
-                                        }
-                                        5 -> {
-                                            var timerepit = t1[3].toLong()
-                                            while (true) {
-                                                if (timerepit > c.timeInMillis) {
-                                                    intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
-                                                    pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
-                                                    am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 1209600000L, pIntent)
-                                                    break
-                                                }
-                                                timerepit += 1209600000L
-                                            }
-                                        }
-                                        6 -> {
-                                            var timerepit = t1[3].toLong()
-                                            while (true) {
-                                                if (timerepit > c.timeInMillis) {
-                                                    intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
-                                                    pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
-                                                    am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 2419200000L, pIntent)
-                                                    break
-                                                }
-                                                timerepit += 2419200000L
-                                            }
-                                        }
-                                        else -> if (t1[3].toLong() > c.timeInMillis) {
-                                            intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
-                                            pIntent = PendingIntent.getBroadcast(context, (t1[3].toLong() / 100000).toInt(), intent, 0)
-                                            when {
-                                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                                    am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, t1[3].toLong(), pIntent)
-                                                }
-                                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                                    am.setExact(AlarmManager.RTC_WAKEUP, t1[3].toLong(), pIntent)
-                                                }
-                                                else -> {
-                                                    am[AlarmManager.RTC_WAKEUP, t1[3].toLong()] = pIntent
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    if (t1[3].toLong() > c.timeInMillis) {
-                                        intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
-                                        pIntent = PendingIntent.getBroadcast(context, (t1[3].toLong() / 100000).toInt(), intent, 0)
-                                        when {
-                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, t1[3].toLong(), pIntent)
-                                            }
-                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                                am.setExact(AlarmManager.RTC_WAKEUP, t1[3].toLong(), pIntent)
-                                            }
-                                            else -> {
-                                                am[AlarmManager.RTC_WAKEUP, t1[3].toLong()] = pIntent
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    inputStream.close()
-                }
+            if (file.isFile && file.exists()) {
+            val inputStream = FileReader(file)
+            val reader = BufferedReader(inputStream)
+            reader.forEachLine {
+            val line = it
+            if (line != "") {
+            val t1 = line.split(" ").toTypedArray()
+            if (t1[5] != "-1") {
+            if (t1[10] == "0") {
+            when (t1[9].toInt()) {
+            1 -> {
+            var timerepit = t1[3].toLong()
+            while (true) {
+            if (timerepit > c.timeInMillis) {
+            intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
+            pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
+            am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 86400000L, pIntent)
+            break
+            }
+            timerepit += 86400000L
+            }
+            }
+            4 -> {
+            var timerepit = t1[3].toLong()
+            while (true) {
+            if (timerepit > c.timeInMillis) {
+            intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
+            pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
+            am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 604800000L, pIntent)
+            break
+            }
+            timerepit += 604800000L
+            }
+            }
+            5 -> {
+            var timerepit = t1[3].toLong()
+            while (true) {
+            if (timerepit > c.timeInMillis) {
+            intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
+            pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
+            am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 1209600000L, pIntent)
+            break
+            }
+            timerepit += 1209600000L
+            }
+            }
+            6 -> {
+            var timerepit = t1[3].toLong()
+            while (true) {
+            if (timerepit > c.timeInMillis) {
+            intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
+            pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
+            am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 2419200000L, pIntent)
+            break
+            }
+            timerepit += 2419200000L
+            }
+            }
+            else -> if (t1[3].toLong() > c.timeInMillis) {
+            intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
+            pIntent = PendingIntent.getBroadcast(context, (t1[3].toLong() / 100000).toInt(), intent, 0)
+            when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, t1[3].toLong(), pIntent)
+            }
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
+            am.setExact(AlarmManager.RTC_WAKEUP, t1[3].toLong(), pIntent)
+            }
+            else -> {
+            am[AlarmManager.RTC_WAKEUP, t1[3].toLong()] = pIntent
+            }
+            }
+            }
+            }
+            } else {
+            if (t1[3].toLong() > c.timeInMillis) {
+            intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
+            pIntent = PendingIntent.getBroadcast(context, (t1[3].toLong() / 100000).toInt(), intent, 0)
+            when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, t1[3].toLong(), pIntent)
+            }
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
+            am.setExact(AlarmManager.RTC_WAKEUP, t1[3].toLong(), pIntent)
+            }
+            else -> {
+            am[AlarmManager.RTC_WAKEUP, t1[3].toLong()] = pIntent
+            }
+            }
+            }
+            }
+            }
+            }
+            }
+            inputStream.close()
+            }
             }*/
             MainActivity.padzeia.forEach {
                 if (it.sec != "-1") {
@@ -282,20 +282,9 @@ class SettingsActivity : AppCompatActivity() {
                                 var timerepit = it.paznic
                                 while (true) {
                                     if (timerepit > c.timeInMillis) {
-                                        intent =
-                                            createIntentSabytie(context, it.padz, it.dat, it.tim)
-                                        pIntent = PendingIntent.getBroadcast(
-                                            context,
-                                            (timerepit / 100000).toInt(),
-                                            intent,
-                                            0
-                                        )
-                                        am.setRepeating(
-                                            AlarmManager.RTC_WAKEUP,
-                                            timerepit,
-                                            86400000L,
-                                            pIntent
-                                        )
+                                        intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
+                                        am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 86400000L, pIntent)
                                         break
                                     }
                                     timerepit += 86400000L
@@ -305,20 +294,9 @@ class SettingsActivity : AppCompatActivity() {
                                 var timerepit = it.paznic
                                 while (true) {
                                     if (timerepit > c.timeInMillis) {
-                                        intent =
-                                            createIntentSabytie(context, it.padz, it.dat, it.tim)
-                                        pIntent = PendingIntent.getBroadcast(
-                                            context,
-                                            (timerepit / 100000).toInt(),
-                                            intent,
-                                            0
-                                        )
-                                        am.setRepeating(
-                                            AlarmManager.RTC_WAKEUP,
-                                            timerepit,
-                                            604800000L,
-                                            pIntent
-                                        )
+                                        intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
+                                        am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 604800000L, pIntent)
                                         break
                                     }
                                     timerepit += 604800000L
@@ -328,20 +306,9 @@ class SettingsActivity : AppCompatActivity() {
                                 var timerepit = it.paznic
                                 while (true) {
                                     if (timerepit > c.timeInMillis) {
-                                        intent =
-                                            createIntentSabytie(context, it.padz, it.dat, it.tim)
-                                        pIntent = PendingIntent.getBroadcast(
-                                            context,
-                                            (timerepit / 100000).toInt(),
-                                            intent,
-                                            0
-                                        )
-                                        am.setRepeating(
-                                            AlarmManager.RTC_WAKEUP,
-                                            timerepit,
-                                            1209600000L,
-                                            pIntent
-                                        )
+                                        intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
+                                        am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 1209600000L, pIntent)
                                         break
                                     }
                                     timerepit += 1209600000L
@@ -351,20 +318,9 @@ class SettingsActivity : AppCompatActivity() {
                                 var timerepit = it.paznic
                                 while (true) {
                                     if (timerepit > c.timeInMillis) {
-                                        intent =
-                                            createIntentSabytie(context, it.padz, it.dat, it.tim)
-                                        pIntent = PendingIntent.getBroadcast(
-                                            context,
-                                            (timerepit / 100000).toInt(),
-                                            intent,
-                                            0
-                                        )
-                                        am.setRepeating(
-                                            AlarmManager.RTC_WAKEUP,
-                                            timerepit,
-                                            2419200000L,
-                                            pIntent
-                                        )
+                                        intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
+                                        am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 2419200000L, pIntent)
                                         break
                                     }
                                     timerepit += 2419200000L
@@ -372,19 +328,10 @@ class SettingsActivity : AppCompatActivity() {
                             }
                             else -> if (it.paznic > c.timeInMillis) {
                                 intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
-                                pIntent = PendingIntent.getBroadcast(
-                                    context,
-                                    (it.paznic / 100000).toInt(),
-                                    intent,
-                                    0
-                                )
+                                pIntent = PendingIntent.getBroadcast(context, (it.paznic / 100000).toInt(), intent, 0)
                                 when {
                                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                        am.setExactAndAllowWhileIdle(
-                                            AlarmManager.RTC_WAKEUP,
-                                            it.paznic,
-                                            pIntent
-                                        )
+                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, it.paznic, pIntent)
                                     }
                                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
                                         am.setExact(AlarmManager.RTC_WAKEUP, it.paznic, pIntent)
@@ -398,19 +345,10 @@ class SettingsActivity : AppCompatActivity() {
                     } else {
                         if (it.paznic > c.timeInMillis) {
                             intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
-                            pIntent = PendingIntent.getBroadcast(
-                                context,
-                                (it.paznic / 100000).toInt(),
-                                intent,
-                                0
-                            )
+                            pIntent = PendingIntent.getBroadcast(context, (it.paznic / 100000).toInt(), intent, 0)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                    am.setExactAndAllowWhileIdle(
-                                        AlarmManager.RTC_WAKEUP,
-                                        it.paznic,
-                                        pIntent
-                                    )
+                                    am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, it.paznic, pIntent)
                                 }
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
                                     am.setExact(AlarmManager.RTC_WAKEUP, it.paznic, pIntent)
@@ -1192,20 +1130,15 @@ class SettingsActivity : AppCompatActivity() {
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun notificationChannel(context: Context, channelID: String = NOTIFICATION_CHANNEL_ID_SVIATY) {
-            val name = if (channelID == NOTIFICATION_CHANNEL_ID_SVIATY)
-                context.getString(R.string.SVIATY)
-            else
-                context.getString(R.string.sabytie)
+            val name = if (channelID == NOTIFICATION_CHANNEL_ID_SVIATY) context.getString(R.string.SVIATY)
+            else context.getString(R.string.sabytie)
             val vibrate = longArrayOf(0, 1000, 700, 1000, 700, 1000)
             val channel = NotificationChannel(channelID, name, NotificationManager.IMPORTANCE_HIGH)
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             channel.description = name
             channel.importance = NotificationManager.IMPORTANCE_HIGH
             channel.lightColor = ContextCompat.getColor(context, R.color.colorPrimary)
-            val att = AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build()
+            val att = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build()
             channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att)
             channel.enableVibration(true)
             channel.vibrationPattern = vibrate
@@ -1234,8 +1167,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     /*private fun formatFigureTwoPlaces(value: Float): String {
-        val myFormatter = DecimalFormat("##0.00")
-        return myFormatter.format(value.toDouble())
+    val myFormatter = DecimalFormat("##0.00")
+    return myFormatter.format(value.toDouble())
     }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -1335,21 +1268,21 @@ class SettingsActivity : AppCompatActivity() {
         }
         /*var dirCount: Long = 0
         File("$filesDir/Site").walk().forEach {
-            if (it.isFile)
-                dirCount += it.length()
+        if (it.isFile)
+        dirCount += it.length()
         }*/
         /*val dir = File("$filesDir/Site")
         val dirContents = dir.listFiles()
         for (dirContent in dirContents) {
-            dirCount = dirCount + dirContent.length()
+        dirCount = dirCount + dirContent.length()
         }*/
         /*File dir2 = new File(getFilesDir() + "/image_temp");
         if (!dir2.exists()) {
-            dir2.mkdir();
+        dir2.mkdir();
         }
         File[] dirContents2 = dir2.listFiles();
         for (File aDirContents2 : dirContents2) {
-            dirCount = dirCount + aDirContents2.length();
+        dirCount = dirCount + aDirContents2.length();
         }*/
         if (dzenNoch) prav.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         prav.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
@@ -1409,9 +1342,9 @@ class SettingsActivity : AppCompatActivity() {
         notificationNon.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         /*textView58.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (dirCount / 1024 > 1000) {
-            textView58.text = resources.getString(R.string.QUOTA_M, formatFigureTwoPlaces(BigDecimal.valueOf(dirCount.toFloat() / 1024 / 1024.toDouble()).setScale(2, RoundingMode.HALF_UP).toFloat()))
+        textView58.text = resources.getString(R.string.QUOTA_M, formatFigureTwoPlaces(BigDecimal.valueOf(dirCount.toFloat() / 1024 / 1024.toDouble()).setScale(2, RoundingMode.HALF_UP).toFloat()))
         } else {
-            textView58.text = resources.getString(R.string.QUOTA, formatFigureTwoPlaces(BigDecimal.valueOf(dirCount.toFloat() / 1024.toDouble()).setScale(2, RoundingMode.HALF_UP).toFloat()))
+        textView58.text = resources.getString(R.string.QUOTA, formatFigureTwoPlaces(BigDecimal.valueOf(dirCount.toFloat() / 1024.toDouble()).setScale(2, RoundingMode.HALF_UP).toFloat()))
         }*/
         if (Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
             val helpNotifi: TextViewRobotoCondensed = findViewById(R.id.help_notifi)
@@ -1468,8 +1401,7 @@ class SettingsActivity : AppCompatActivity() {
             mLastClickTime = SystemClock.elapsedRealtime()
             val id = k.getInt("id", R.id.label1)
             k.all.forEach {
-                if (!(it.key.contains("WIDGET", ignoreCase = true) || it.key.contains("history", ignoreCase = true)))
-                    prefEditor.remove(it.key)
+                if (!(it.key.contains("WIDGET", ignoreCase = true) || it.key.contains("history", ignoreCase = true))) prefEditor.remove(it.key)
             }
             File("$filesDir/Book").deleteRecursively()
             MainActivity.toastView(this, getString(R.string.save))
@@ -1562,80 +1494,26 @@ class SettingsActivity : AppCompatActivity() {
                 R.id.notificationOnly -> {
                     notifiSvizta.visibility = View.VISIBLE
                     spinnerTime.visibility = View.VISIBLE
-                    if (k.getBoolean(
-                            "check_notifi",
-                            true
-                        ) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")
-                    ) {
+                    if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
                         val notifi = DialogHelpNotification()
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                     prefEditor.putInt("notification", 1)
-                    if (dzenNoch) vibro.setTextColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorIcons
-                        )
-                    ) else vibro.setTextColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorPrimary_text
-                        )
-                    )
+                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     this.guk.isClickable = true
-                    if (dzenNoch) this.guk.setTextColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorIcons
-                        )
-                    ) else this.guk.setTextColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorPrimary_text
-                        )
-                    )
+                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     lifecycleScope.launch {
                         if (dzenNoch) {
-                            vibro.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorIcons
-                                )
-                            )
-                            this@SettingsActivity.guk.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorIcons
-                                )
-                            )
+                            vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
+                            this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
                         } else {
-                            vibro.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorPrimary_text
-                                )
-                            )
-                            this@SettingsActivity.guk.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorPrimary_text
-                                )
-                            )
+                            vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                         }
                         notificationNon.isClickable = false
                         notificationFull.isClickable = false
-                        notificationNon.setTextColor(
-                            ContextCompat.getColor(
-                                this@SettingsActivity,
-                                R.color.colorSecondary_text
-                            )
-                        )
-                        notificationFull.setTextColor(
-                            ContextCompat.getColor(
-                                this@SettingsActivity,
-                                R.color.colorSecondary_text
-                            )
-                        )
+                        notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
+                        notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         withContext(Dispatchers.IO) {
                             setNotifications(this@SettingsActivity, 1)
                             return@withContext
@@ -1643,111 +1521,37 @@ class SettingsActivity : AppCompatActivity() {
                         notificationNon.isClickable = true
                         notificationFull.isClickable = true
                         if (dzenNoch) {
-                            notificationNon.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorIcons
-                                )
-                            )
-                            notificationFull.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorIcons
-                                )
-                            )
+                            notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
+                            notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
                         } else {
-                            notificationNon.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorPrimary_text
-                                )
-                            )
-                            notificationFull.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorPrimary_text
-                                )
-                            )
+                            notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                         }
                     }
                 }
                 R.id.notificationFull -> {
                     notifiSvizta.visibility = View.VISIBLE
                     spinnerTime.visibility = View.VISIBLE
-                    if (k.getBoolean(
-                            "check_notifi",
-                            true
-                        ) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")
-                    ) {
+                    if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
                         val notifi = DialogHelpNotification()
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                     prefEditor.putInt("notification", 2)
-                    if (dzenNoch) vibro.setTextColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorIcons
-                        )
-                    ) else vibro.setTextColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorPrimary_text
-                        )
-                    )
+                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     this.guk.isClickable = true
-                    if (dzenNoch) this.guk.setTextColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorIcons
-                        )
-                    ) else this.guk.setTextColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorPrimary_text
-                        )
-                    )
+                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     lifecycleScope.launch {
                         if (dzenNoch) {
-                            vibro.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorIcons
-                                )
-                            )
-                            this@SettingsActivity.guk.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorIcons
-                                )
-                            )
+                            vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
+                            this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
                         } else {
-                            vibro.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorPrimary_text
-                                )
-                            )
-                            this@SettingsActivity.guk.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorPrimary_text
-                                )
-                            )
+                            vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                         }
                         notificationOnly.isClickable = false
-                        notificationOnly.setTextColor(
-                            ContextCompat.getColor(
-                                this@SettingsActivity,
-                                R.color.colorSecondary_text
-                            )
-                        )
+                        notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         notificationNon.isClickable = false
-                        notificationNon.setTextColor(
-                            ContextCompat.getColor(
-                                this@SettingsActivity,
-                                R.color.colorSecondary_text
-                            )
-                        )
+                        notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         withContext(Dispatchers.IO) {
                             setNotifications(this@SettingsActivity, 2)
                             return@withContext
@@ -1755,31 +1559,11 @@ class SettingsActivity : AppCompatActivity() {
                         notificationOnly.isClickable = true
                         notificationNon.isClickable = true
                         if (dzenNoch) {
-                            notificationOnly.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorIcons
-                                )
-                            )
-                            notificationNon.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorIcons
-                                )
-                            )
+                            notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
+                            notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
                         } else {
-                            notificationOnly.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorPrimary_text
-                                )
-                            )
-                            notificationNon.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorPrimary_text
-                                )
-                            )
+                            notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                         }
                     }
                 }
@@ -1787,44 +1571,14 @@ class SettingsActivity : AppCompatActivity() {
                     notifiSvizta.visibility = View.GONE
                     spinnerTime.visibility = View.GONE
                     prefEditor.putInt("notification", 0)
-                    if (dzenNoch) vibro.setTextColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorIcons
-                        )
-                    ) else vibro.setTextColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorPrimary_text
-                        )
-                    )
+                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     this.guk.isClickable = true
-                    if (dzenNoch) this.guk.setTextColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorIcons
-                        )
-                    ) else this.guk.setTextColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.colorPrimary_text
-                        )
-                    )
+                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     lifecycleScope.launch {
                         notificationOnly.isClickable = false
-                        notificationOnly.setTextColor(
-                            ContextCompat.getColor(
-                                this@SettingsActivity,
-                                R.color.colorSecondary_text
-                            )
-                        )
+                        notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         notificationFull.isClickable = false
-                        notificationFull.setTextColor(
-                            ContextCompat.getColor(
-                                this@SettingsActivity,
-                                R.color.colorSecondary_text
-                            )
-                        )
+                        notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         withContext(Dispatchers.IO) {
                             setNotifications(this@SettingsActivity, 0)
                             return@withContext
@@ -1832,31 +1586,11 @@ class SettingsActivity : AppCompatActivity() {
                         notificationOnly.isClickable = true
                         notificationFull.isClickable = true
                         if (dzenNoch) {
-                            notificationOnly.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorIcons
-                                )
-                            )
-                            notificationFull.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorIcons
-                                )
-                            )
+                            notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
+                            notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
                         } else {
-                            notificationOnly.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorPrimary_text
-                                )
-                            )
-                            notificationFull.setTextColor(
-                                ContextCompat.getColor(
-                                    this@SettingsActivity,
-                                    R.color.colorPrimary_text
-                                )
-                            )
+                            notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                         }
                     }
                 }
@@ -1912,12 +1646,12 @@ class SettingsActivity : AppCompatActivity() {
             prefEditor.apply()
         }
         /*checkBox2.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            if (isChecked) {
-                prefEditor.putInt("trafic", 1)
-            } else {
-                prefEditor.putInt("trafic", 0)
-            }
-            prefEditor.apply()
+        if (isChecked) {
+        prefEditor.putInt("trafic", 1)
+        } else {
+        prefEditor.putInt("trafic", 0)
+        }
+        prefEditor.apply()
         }*/
         checkBox5.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             if (isChecked) {
@@ -1929,21 +1663,21 @@ class SettingsActivity : AppCompatActivity() {
             recreate()
         }
         /*button.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnClickListener
-            }
-            mLastClickTime = SystemClock.elapsedRealtime()
-            /*File("$filesDir/Site").walk().forEach {
-                if (it.isFile)
-                    it.delete()
-            }*/
-            /*for (aDirContents1 in dirContents) {
-                aDirContents1.delete()
-            }*/
-            /*for (File aDirContents2 : dirContents2) {
-                aDirContents2.delete();
-            }*/
-            textView58.text = resources.getString(R.string.QUOTA, formatFigureTwoPlaces(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_UP).toFloat()))
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+        return@setOnClickListener
+        }
+        mLastClickTime = SystemClock.elapsedRealtime()
+        /*File("$filesDir/Site").walk().forEach {
+        if (it.isFile)
+        it.delete()
+        }*/
+        /*for (aDirContents1 in dirContents) {
+        aDirContents1.delete()
+        }*/
+        /*for (File aDirContents2 : dirContents2) {
+        aDirContents2.delete();
+        }*/
+        textView58.text = resources.getString(R.string.QUOTA, formatFigureTwoPlaces(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_UP).toFloat()))
         }*/
         vibro.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         this.guk.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)

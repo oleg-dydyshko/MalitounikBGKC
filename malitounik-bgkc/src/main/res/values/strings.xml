@@ -344,5 +344,6 @@
     <string name="no_file">Файл не існуе</string>
     <string name="sabytie_del_all">Усё</string>
     <string name="sabytie_del_old">Старыя</string>
+    <string name="set_time_sabytie">Выберыце час</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

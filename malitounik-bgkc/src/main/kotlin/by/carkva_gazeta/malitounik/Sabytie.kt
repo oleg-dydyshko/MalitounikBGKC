@@ -1,10 +1,11 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.AlarmManager
-import android.app.AlertDialog
-import android.app.Dialog
 import android.app.PendingIntent
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
@@ -32,6 +33,7 @@ import by.carkva_gazeta.malitounik.DialogSabytieSave.DialogSabytieSaveListener
 import by.carkva_gazeta.malitounik.DialogSabytieShow.Companion.getInstance
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.sabytie.*
+import kotlinx.android.synthetic.main.simple_list_item_2.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,7 +44,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by oleg on 8.5.17
  */
-class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener {
+class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var konec = false
@@ -87,6 +89,64 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     private lateinit var colorAdapter: ColorAdapter
     private var nazvaPadzei = "Назва падзеі"
 
+    override fun sabytieTimePositive(nomerDialoga: Int, hour: Int, minute: Int) {
+        if (nomerDialoga == 1) {
+            da = label1.text.toString()
+            daK = label12.text.toString()
+            taK = label22.text.toString()
+            c = Calendar.getInstance() as GregorianCalendar
+            c.timeInMillis = result
+            timeH = hour
+            timeM = minute
+            c[c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH], timeH, timeM] = 0
+            result = c.timeInMillis
+            var tr = ""
+            if (timeM < 10) tr = "0"
+            ta = "$timeH:$tr$timeM"
+            val date = da.split(".").toTypedArray()
+            var gc12 = GregorianCalendar(date[2].toInt(), date[1].toInt() - 1, date[0].toInt(), 0, 0, 0)
+            val dateK = daK.split(".").toTypedArray()
+            val timeK = taK.split(":").toTypedArray()
+            var gcK = GregorianCalendar(dateK[2].toInt(), dateK[1].toInt() - 1, dateK[0].toInt(), 0, 0, 0)
+            if (gc12.timeInMillis == gcK.timeInMillis) {
+                gc12 = GregorianCalendar(date[2].toInt(), date[1].toInt() - 1, date[0].toInt(), timeH, timeM, 0)
+                gcK = GregorianCalendar(dateK[2].toInt(), dateK[1].toInt() - 1, dateK[0].toInt(), timeK[0].toInt(), timeK[1].toInt(), 0)
+                if (gc12.timeInMillis > gcK.timeInMillis) {
+                    label22.text = ta
+                }
+            }
+            label2.text = ta
+        }
+        if (nomerDialoga == 2) {
+            var tr = ""
+            if (minute < 10) tr = "0"
+            taK = "$hour:$tr$minute"
+            label22.text = taK
+            konec = true
+            val days = label1.text.toString().split(".").toTypedArray()
+            val gc1 = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
+            val days2 = label12.text.toString().split(".").toTypedArray()
+            val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
+            val kon = gc2[Calendar.DAY_OF_YEAR]
+            val res = gc1[Calendar.DAY_OF_YEAR]
+            if (kon - res == 0) {
+                val times = label2.text.toString().split(":").toTypedArray()
+                val times2 = label22.text.toString().split(":").toTypedArray()
+                val gc3 = GregorianCalendar(gc2[Calendar.YEAR], gc2[Calendar.MONTH], gc2[Calendar.DAY_OF_MONTH], times[0].toInt(), times[1].toInt(), 0)
+                val gc4 = GregorianCalendar(gc2[Calendar.YEAR], gc2[Calendar.MONTH], gc2[Calendar.DAY_OF_MONTH], times2[0].toInt(), times2[1].toInt(), 0)
+                if (gc4.timeInMillis - gc3.timeInMillis < 1000) {
+                    gc2.add(Calendar.DATE, 1)
+                    var nol112 = ""
+                    var nol212 = ""
+                    if (gc2[Calendar.DAY_OF_MONTH] < 10) nol112 = "0"
+                    if (gc2[Calendar.MONTH] < 9) nol212 = "0"
+                    val da1 = nol112 + gc2[Calendar.DAY_OF_MONTH] + "." + nol212 + (gc2[Calendar.MONTH] + 1) + "." + gc2[Calendar.YEAR]
+                    label12.text = da1
+                }
+            }
+        }
+    }
+
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
@@ -102,10 +162,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sabytie)
-        if (savedInstanceState != null) {
-            redak = savedInstanceState.getBoolean("redak")
-            back = savedInstanceState.getBoolean("back")
-        }
         labelbutton12.setOnClickListener(View.OnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnClickListener
@@ -247,64 +303,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val ad = AlertDialog.Builder(this@Sabytie)
-            val linearLayout = LinearLayout(this@Sabytie)
-            linearLayout.orientation = LinearLayout.VERTICAL
-            ad.setView(linearLayout)
-            val timePicker = TimePicker(this@Sabytie)
-            timePicker.setIs24HourView(true)
-            val settime = label2.text.toString().split(":").toTypedArray()
-            val gc = GregorianCalendar(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH], settime[0].toInt(), settime[1].toInt(), 0)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                timePicker.hour = gc[Calendar.HOUR_OF_DAY]
-                timePicker.minute = gc[Calendar.MINUTE]
-            } else {
-                timePicker.currentHour = gc[Calendar.HOUR_OF_DAY]
-                timePicker.currentMinute = gc[Calendar.MINUTE]
-            }
-            linearLayout.addView(timePicker)
-            ad.setTitle("Выберыце час")
-            ad.setPositiveButton(resources.getString(R.string.ok)) { _: DialogInterface?, _: Int ->
-                da = label1.text.toString()
-                daK = label12.text.toString()
-                taK = label22.text.toString()
-                c = Calendar.getInstance() as GregorianCalendar
-                c.timeInMillis = result
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    timeH = timePicker.hour
-                    timeM = timePicker.minute
-                } else {
-                    timeH = timePicker.currentHour
-                    timeM = timePicker.currentMinute
-                }
-                c[c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH], timeH, timeM] = 0
-                result = c.timeInMillis
-                var tr = ""
-                if (timeM < 10) tr = "0"
-                ta = "$timeH:$tr$timeM"
-                val date = da.split(".").toTypedArray()
-                var gc12 = GregorianCalendar(date[2].toInt(), date[1].toInt() - 1, date[0].toInt(), 0, 0, 0)
-                val dateK = daK.split(".").toTypedArray()
-                val timeK = taK.split(":").toTypedArray()
-                var gcK = GregorianCalendar(dateK[2].toInt(), dateK[1].toInt() - 1, dateK[0].toInt(), 0, 0, 0)
-                if (gc12.timeInMillis == gcK.timeInMillis) {
-                    gc12 = GregorianCalendar(date[2].toInt(), date[1].toInt() - 1, date[0].toInt(), timeH, timeM, 0)
-                    gcK = GregorianCalendar(dateK[2].toInt(), dateK[1].toInt() - 1, dateK[0].toInt(), timeK[0].toInt(), timeK[1].toInt(), 0)
-                    if (gc12.timeInMillis > gcK.timeInMillis) {
-                        label22.text = ta
-                    }
-                }
-                label2.text = ta
-            }
-            ad.setNegativeButton("Адмена") { dialog: DialogInterface, _: Int -> dialog.cancel() }
-            val alert = ad.create()
-            alert.setOnShowListener {
-                val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            }
-            alert.show()
+            val dialogSabytieTime = DialogSabytieTime.getInstance(1, label2.text.toString())
+            dialogSabytieTime.show(supportFragmentManager, "dialogSabytieTime")
         }
         label12.text = da
         label12.setOnClickListener {
@@ -329,69 +329,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val ad = AlertDialog.Builder(this@Sabytie)
-            val linearLayout = LinearLayout(this@Sabytie)
-            linearLayout.orientation = LinearLayout.VERTICAL
-            ad.setView(linearLayout)
-            val timePicker = TimePicker(this@Sabytie)
-            timePicker.setIs24HourView(true)
-            val settime = label22.text.toString().split(":").toTypedArray()
-            val gc = GregorianCalendar(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH], settime[0].toInt(), settime[1].toInt(), 0)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                timePicker.hour = gc[Calendar.HOUR_OF_DAY]
-                timePicker.minute = gc[Calendar.MINUTE]
-            } else {
-                timePicker.currentHour = gc[Calendar.HOUR_OF_DAY]
-                timePicker.currentMinute = gc[Calendar.MINUTE]
-            }
-            linearLayout.addView(timePicker)
-            ad.setTitle("Выберыце час")
-            ad.setPositiveButton(resources.getString(R.string.ok)) { _: DialogInterface?, _: Int ->
-                val timeHK: Int
-                val timeMK: Int
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    timeHK = timePicker.hour
-                    timeMK = timePicker.minute
-                } else {
-                    timeHK = timePicker.currentHour
-                    timeMK = timePicker.currentMinute
-                }
-                var tr = ""
-                if (timeMK < 10) tr = "0"
-                taK = "$timeHK:$tr$timeMK"
-                label22.text = taK
-                konec = true
-                val days = label1.text.toString().split(".").toTypedArray()
-                val gc1 = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
-                val days2 = label12.text.toString().split(".").toTypedArray()
-                val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
-                val kon = gc2[Calendar.DAY_OF_YEAR]
-                val res = gc1[Calendar.DAY_OF_YEAR]
-                if (kon - res == 0) {
-                    val times = label2.text.toString().split(":").toTypedArray()
-                    val times2 = label22.text.toString().split(":").toTypedArray()
-                    val gc3 = GregorianCalendar(gc2[Calendar.YEAR], gc2[Calendar.MONTH], gc2[Calendar.DAY_OF_MONTH], times[0].toInt(), times[1].toInt(), 0)
-                    val gc4 = GregorianCalendar(gc2[Calendar.YEAR], gc2[Calendar.MONTH], gc2[Calendar.DAY_OF_MONTH], times2[0].toInt(), times2[1].toInt(), 0)
-                    if (gc4.timeInMillis - gc3.timeInMillis < 1000) {
-                        gc2.add(Calendar.DATE, 1)
-                        var nol112 = ""
-                        var nol212 = ""
-                        if (gc2[Calendar.DAY_OF_MONTH] < 10) nol112 = "0"
-                        if (gc2[Calendar.MONTH] < 9) nol212 = "0"
-                        val da1 = nol112 + gc2[Calendar.DAY_OF_MONTH] + "." + nol212 + (gc2[Calendar.MONTH] + 1) + "." + gc2[Calendar.YEAR]
-                        label12.text = da1
-                    }
-                }
-            }
-            ad.setNegativeButton("Адмена") { dialog: DialogInterface, _: Int -> dialog.cancel() }
-            val alert = ad.create()
-            alert.setOnShowListener {
-                val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            }
-            alert.show()
+            val dialogSabytieTime = DialogSabytieTime.getInstance(2, label22.text.toString())
+            dialogSabytieTime.show(supportFragmentManager, "dialogSabytieTime")
         }
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -481,6 +420,24 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
             val dialogShowSabytie = getInstance(title, data, time, dataK, timeK, res)
             dialogShowSabytie.show(supportFragmentManager, "sabytie")
+        }
+        if (savedInstanceState != null) {
+            redak = savedInstanceState.getBoolean("redak")
+            back = savedInstanceState.getBoolean("back")
+            idMenu = savedInstanceState.getInt("idMenu")
+            if (savedInstanceState.getBoolean("titleLayout")) {
+                titleLayout.visibility = View.VISIBLE
+                listLayout.visibility = View.GONE
+                invalidateOptionsMenu()
+            }
+            ta = savedInstanceState.getString("ta")?: "0:0"
+            da = savedInstanceState.getString("da")?: "0.0.0"
+            taK = savedInstanceState.getString("taK")?: "0:0"
+            daK = savedInstanceState.getString("daK")?: "0.0.0"
+            label1.text = da
+            label2.text = ta
+            label12.text = daK
+            label22.text = taK
         }
         editText.addTextChangedListener(MyTextWatcher())
         editSave = editText.text.toString().trim()
@@ -2503,6 +2460,12 @@ file.delete()
         super.onSaveInstanceState(outState)
         outState.putBoolean("redak", redak)
         outState.putBoolean("back", back)
+        outState.putBoolean("titleLayout", titleLayout.visibility == View.VISIBLE)
+        outState.putInt("idMenu", idMenu)
+        outState.putString("ta", label1.text.toString())
+        outState.putString("da", label2.text.toString())
+        outState.putString("taK", label12.text.toString())
+        outState.putString("daK", label22.text.toString())
     }
 
     private inner class SabytieAdapter(context: Context) : ArrayAdapter<SabytieDataAdapter>(context, R.layout.simple_list_item_sabytie, sabytie2) {

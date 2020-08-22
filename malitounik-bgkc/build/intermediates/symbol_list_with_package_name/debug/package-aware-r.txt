@@ -3069,6 +3069,7 @@ string seashmin
 string security_error
 string semuxa_maran_ata_error
 string set_page_bibliateka
+string set_time_sabytie
 string set_versh
 string settings_default
 string settings_notifi_sviata

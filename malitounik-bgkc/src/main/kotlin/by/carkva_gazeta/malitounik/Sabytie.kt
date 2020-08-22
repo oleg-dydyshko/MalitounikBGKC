@@ -33,7 +33,6 @@ import by.carkva_gazeta.malitounik.DialogSabytieSave.DialogSabytieSaveListener
 import by.carkva_gazeta.malitounik.DialogSabytieShow.Companion.getInstance
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.sabytie.*
-import kotlinx.android.synthetic.main.simple_list_item_2.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

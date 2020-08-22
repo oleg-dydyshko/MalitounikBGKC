@@ -8,402 +8,402 @@
 8
 9    <uses-sdk
 10        android:minSdkVersion="14"
-10-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml
+10-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml
 11        android:targetSdkVersion="30" />
-11-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml
+11-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml
 12
 13    <dist:module
-13-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:6:5-13:19
+13-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:6:5-13:19
 14        dist:instant="false"
-14-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:7:9-29
+14-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:7:9-29
 15        dist:title="@string/title_resources" >
-15-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:8:9-45
+15-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:8:9-45
 16        <dist:delivery>
-16-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:9:9-11:25
+16-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:9:9-11:25
 17            <dist:install-time />
-17-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:10:13-34
+17-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:10:13-34
 18        </dist:delivery>
 19
 20        <dist:fusing dist:include="true" />
-20-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:12:9-44
-20-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:12:22-41
+20-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:12:9-44
+20-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:12:22-41
 21    </dist:module>
 22
 23    <application
-23-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:15:5-212:19
+23-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:15:5-212:19
 24        android:debuggable="true"
 25        android:hardwareAccelerated="true"
-25-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:16:8-42
+25-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:16:8-42
 26        android:testOnly="true" >
 27        <activity
-27-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:17:9-24:20
+27-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:17:9-24:20
 28            android:name="by.carkva_gazeta.resources.Chytanne"
-28-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:18:13-63
+28-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:18:13-63
 29            android:label="@string/CZYTANNE"
-29-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:19:13-45
+29-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:19:13-45
 30            android:theme="@style/AppTheme.NoActionBar" >
-30-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:20:13-56
+30-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:20:13-56
 31            <meta-data
-31-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+31-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 32                android:name="android.support.PARENT_ACTIVITY"
-32-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+32-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 33                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-33-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+33-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 34        </activity>
 35        <activity
-35-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:25:9-32:20
+35-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:25:9-32:20
 36            android:name="by.carkva_gazeta.resources.Opisanie"
-36-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:26:13-63
+36-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:26:13-63
 37            android:label="@string/zmiest"
-37-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:27:13-43
+37-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:27:13-43
 38            android:theme="@style/AppTheme.NoActionBar" >
-38-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:28:13-56
+38-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:28:13-56
 39            <meta-data
-39-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+39-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 40                android:name="android.support.PARENT_ACTIVITY"
-40-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+40-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 41                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-41-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+41-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 42        </activity>
 43        <activity
-43-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:33:9-41:20
+43-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:33:9-41:20
 44            android:name="by.carkva_gazeta.resources.StaryZapavietSemuxa"
-44-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:34:13-74
+44-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:34:13-74
 45            android:label="@string/title_activity_stary_zapaviet2"
-45-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:36:13-67
+45-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:36:13-67
 46            android:theme="@style/AppTheme.NoActionBar"
-46-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:37:13-56
+46-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:37:13-56
 47            android:windowSoftInputMode="stateAlwaysHidden" >
-47-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:35:13-60
+47-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:35:13-60
 48            <meta-data
-48-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+48-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 49                android:name="android.support.PARENT_ACTIVITY"
-49-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+49-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 50                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-50-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+50-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 51        </activity>
 52        <activity
-52-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:42:9-50:20
+52-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:42:9-50:20
 53            android:name="by.carkva_gazeta.resources.NovyZapavietSemuxa"
-53-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:43:13-73
+53-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:43:13-73
 54            android:label="@string/novy_zapaviet"
-54-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:45:13-50
+54-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:45:13-50
 55            android:theme="@style/AppTheme.NoActionBar"
-55-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:46:13-56
+55-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:46:13-56
 56            android:windowSoftInputMode="stateAlwaysHidden" >
-56-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:44:13-60
+56-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:44:13-60
 57            <meta-data
-57-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+57-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 58                android:name="android.support.PARENT_ACTIVITY"
-58-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+58-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 59                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-59-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+59-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 60        </activity>
 61        <activity
-61-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:51:9-59:20
+61-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:51:9-59:20
 62            android:name="by.carkva_gazeta.resources.StaryZapavietSinaidal"
-62-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:52:13-76
+62-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:52:13-76
 63            android:label="@string/stsinaidal"
-63-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:54:13-47
+63-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:54:13-47
 64            android:theme="@style/AppTheme.NoActionBar"
-64-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:55:13-56
+64-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:55:13-56
 65            android:windowSoftInputMode="stateAlwaysHidden" >
-65-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:53:13-60
+65-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:53:13-60
 66            <meta-data
-66-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+66-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 67                android:name="android.support.PARENT_ACTIVITY"
-67-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+67-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 68                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-68-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+68-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 69        </activity>
 70        <activity
-70-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:60:9-68:20
+70-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:60:9-68:20
 71            android:name="by.carkva_gazeta.resources.NovyZapavietSinaidal"
-71-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:61:13-75
+71-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:61:13-75
 72            android:label="@string/novsinaidal"
-72-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:63:13-48
+72-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:63:13-48
 73            android:theme="@style/AppTheme.NoActionBar"
-73-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:64:13-56
+73-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:64:13-56
 74            android:windowSoftInputMode="stateAlwaysHidden" >
-74-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:62:13-60
+74-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:62:13-60
 75            <meta-data
-75-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+75-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 76                android:name="android.support.PARENT_ACTIVITY"
-76-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+76-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 77                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-77-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+77-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 78        </activity>
 79        <activity
-79-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:69:9-76:20
+79-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:69:9-76:20
 80            android:name="by.carkva_gazeta.resources.MaranAta"
-80-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:70:13-63
+80-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:70:13-63
 81            android:label="@string/maranata"
-81-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:71:13-45
+81-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:71:13-45
 82            android:theme="@style/AppTheme.NoActionBar" >
-82-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:72:13-56
+82-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:72:13-56
 83            <meta-data
-83-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+83-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 84                android:name="android.support.PARENT_ACTIVITY"
-84-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+84-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 85                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-85-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+85-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 86        </activity>
 87        <activity
-87-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:77:9-85:20
+87-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:77:9-85:20
 88            android:name="by.carkva_gazeta.resources.MyNatatkiAdd"
-88-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:78:13-67
+88-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:78:13-67
 89            android:label="@string/MALITVA_ADD"
-89-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:79:13-48
+89-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:79:13-48
 90            android:theme="@style/AppTheme.NoActionBar"
-90-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:80:13-56
+90-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:80:13-56
 91            android:windowSoftInputMode="stateVisible|adjustResize" >
-91-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:81:13-68
+91-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:81:13-68
 92            <meta-data
-92-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+92-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 93                android:name="android.support.PARENT_ACTIVITY"
-93-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+93-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 94                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-94-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+94-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 95        </activity>
 96        <activity
-96-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:86:9-92:20
+96-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:86:9-92:20
 97            android:name="by.carkva_gazeta.resources.MyNatatkiView"
-97-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:87:13-68
+97-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:87:13-68
 98            android:theme="@style/AppTheme.NoActionBar" >
-98-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:88:13-56
+98-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:88:13-56
 99            <meta-data
-99-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+99-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 100                android:name="android.support.PARENT_ACTIVITY"
-100-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+100-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 101                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-101-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+101-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 102        </activity>
 103        <activity
-103-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:93:9-101:20
+103-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:93:9-101:20
 104            android:name="by.carkva_gazeta.resources.Bogashlugbovya"
-104-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:94:13-69
+104-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:94:13-69
 105            android:label="@string/LITURGIKON"
-105-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:95:13-47
+105-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:95:13-47
 106            android:theme="@style/AppTheme.NoActionBar"
-106-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:96:13-56
+106-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:96:13-56
 107            android:windowSoftInputMode="stateHidden|adjustResize" >
-107-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:97:13-67
+107-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:97:13-67
 108            <meta-data
-108-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+108-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 109                android:name="android.support.PARENT_ACTIVITY"
-109-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+109-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 110                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-110-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+110-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 111        </activity>
 112        <activity
-112-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:102:9-110:20
+112-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:102:9-110:20
 113            android:name="by.carkva_gazeta.resources.MalitvyPrynagodnyia"
-113-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:103:13-74
+113-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:103:13-74
 114            android:label="@string/prynagodnyia"
-114-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:104:13-49
+114-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:104:13-49
 115            android:theme="@style/AppTheme.NoActionBar"
-115-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:105:13-56
+115-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:105:13-56
 116            android:windowSoftInputMode="stateHidden|adjustResize" >
-116-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:106:13-67
+116-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:106:13-67
 117            <meta-data
-117-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+117-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 118                android:name="android.support.PARENT_ACTIVITY"
-118-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+118-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 119                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-119-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+119-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 120        </activity>
 121        <activity
-121-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:111:9-118:20
+121-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:111:9-118:20
 122            android:name="by.carkva_gazeta.resources.Prynagodnyia"
-122-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:112:13-67
+122-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:112:13-67
 123            android:label="@string/prynagodnyia"
-123-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:113:13-49
+123-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:113:13-49
 124            android:theme="@style/AppTheme.NoActionBar" >
-124-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:114:13-56
+124-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:114:13-56
 125            <meta-data
-125-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+125-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 126                android:name="android.support.PARENT_ACTIVITY"
-126-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+126-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 127                android:value="by.carkva_gazeta.resources.MalitvyPrynagodnyia" />
-127-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+127-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 128        </activity>
 129        <activity
-129-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:119:9-127:20
+129-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:119:9-127:20
 130            android:name="by.carkva_gazeta.resources.SearchBiblia"
-130-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:120:13-67
+130-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:120:13-67
 131            android:label="@string/search"
-131-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:121:13-43
+131-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:121:13-43
 132            android:theme="@style/AppTheme.NoActionBar"
-132-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:122:13-56
+132-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:122:13-56
 133            android:windowSoftInputMode="stateVisible|adjustResize" >
-133-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:123:13-68
+133-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:123:13-68
 134            <meta-data
-134-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+134-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 135                android:name="android.support.PARENT_ACTIVITY"
-135-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+135-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 136                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-136-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+136-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 137        </activity>
 138        <activity
-138-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:128:9-135:20
+138-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:128:9-135:20
 139            android:name="by.carkva_gazeta.resources.PasliaPrychascia"
-139-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:129:13-71
+139-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:129:13-71
 140            android:label="@string/pasliaPrychscia"
-140-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:130:13-52
+140-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:130:13-52
 141            android:theme="@style/AppTheme.NoActionBar" >
-141-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:131:13-56
+141-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:131:13-56
 142            <meta-data
-142-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+142-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 143                android:name="android.support.PARENT_ACTIVITY"
-143-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+143-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 144                android:value="by.carkva_gazeta.malitounik.MalitvyPasliaPrychascia" />
-144-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+144-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 145        </activity>
 146        <activity
-146-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:136:9-143:20
+146-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:136:9-143:20
 147            android:name="by.carkva_gazeta.resources.Ton"
-147-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:137:13-58
+147-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:137:13-58
 148            android:label="@string/ton_n"
-148-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:138:13-42
+148-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:138:13-42
 149            android:theme="@style/AppTheme.NoActionBar" >
-149-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:139:13-56
+149-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:139:13-56
 150            <meta-data
-150-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+150-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 151                android:name="android.support.PARENT_ACTIVITY"
-151-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+151-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 152                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-152-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+152-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 153        </activity>
 154        <activity
-154-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:144:9-151:20
+154-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:144:9-151:20
 155            android:name="by.carkva_gazeta.resources.ParafiiBgkcDekanat"
-155-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:145:13-73
+155-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:145:13-73
 156            android:label="@string/parafii"
-156-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:146:13-44
+156-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:146:13-44
 157            android:theme="@style/AppTheme.NoActionBar" >
-157-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:147:13-56
+157-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:147:13-56
 158            <meta-data
-158-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+158-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 159                android:name="android.support.PARENT_ACTIVITY"
-159-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+159-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 160                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-160-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+160-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 161        </activity>
 162        <activity
-162-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:152:9-159:20
+162-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:152:9-159:20
 163            android:name="by.carkva_gazeta.resources.ParafiiBgkc"
-163-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:153:13-66
+163-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:153:13-66
 164            android:label="@string/parafii"
-164-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:154:13-44
+164-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:154:13-44
 165            android:theme="@style/AppTheme.NoActionBar" >
-165-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:155:13-56
+165-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:155:13-56
 166            <meta-data
-166-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+166-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 167                android:name="android.support.PARENT_ACTIVITY"
-167-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+167-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 168                android:value="by.carkva_gazeta.resources.ParafiiBgkcDekanat" />
-168-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+168-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 169        </activity>
 170        <activity
-170-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:160:9-165:20
+170-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:160:9-165:20
 171            android:name="by.carkva_gazeta.resources.BibleZakladki"
-171-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:160:19-74
+171-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:160:19-74
 172            android:theme="@style/AppTheme.NoActionBar" >
-172-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:161:13-56
+172-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:161:13-56
 173            <meta-data
-173-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+173-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 174                android:name="android.support.PARENT_ACTIVITY"
-174-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+174-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 175                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-175-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+175-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 176        </activity>
 177        <activity
-177-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:166:9-171:20
+177-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:166:9-171:20
 178            android:name="by.carkva_gazeta.resources.BibleNatatki"
-178-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:166:19-73
+178-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:166:19-73
 179            android:theme="@style/AppTheme.NoActionBar" >
-179-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:167:13-56
+179-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:167:13-56
 180            <meta-data
-180-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+180-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 181                android:name="android.support.PARENT_ACTIVITY"
-181-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+181-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 182                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-182-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+182-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 183        </activity>
 184        <activity
-184-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:172:9-179:20
+184-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:172:9-179:20
 185            android:name="by.carkva_gazeta.resources.PsalterNadsana"
-185-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:173:13-69
+185-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:173:13-69
 186            android:label="@string/title_psalter"
-186-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:174:13-50
+186-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:174:13-50
 187            android:theme="@style/AppTheme.NoActionBar" >
-187-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:175:13-56
+187-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:175:13-56
 188            <meta-data
-188-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+188-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 189                android:name="android.support.PARENT_ACTIVITY"
-189-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+189-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 190                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-190-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+190-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 191        </activity>
 192        <activity
-192-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:180:9-187:20
+192-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:180:9-187:20
 193            android:name="by.carkva_gazeta.resources.NadsanContentActivity"
-193-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:181:13-76
+193-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:181:13-76
 194            android:label="@string/title_psalter"
-194-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:182:13-50
+194-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:182:13-50
 195            android:theme="@style/AppTheme.NoActionBar" >
-195-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:183:13-56
+195-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:183:13-56
 196            <meta-data
-196-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+196-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 197                android:name="android.support.PARENT_ACTIVITY"
-197-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+197-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 198                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-198-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+198-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 199        </activity>
 200        <activity
-200-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:188:9-195:20
+200-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:188:9-195:20
 201            android:name="by.carkva_gazeta.resources.NadsanMalitvyIPesni"
-201-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:189:13-74
+201-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:189:13-74
 202            android:label="@string/title_psalter"
-202-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:190:13-50
+202-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:190:13-50
 203            android:theme="@style/AppTheme.NoActionBar" >
-203-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:191:13-56
+203-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:191:13-56
 204            <meta-data
-204-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+204-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 205                android:name="android.support.PARENT_ACTIVITY"
-205-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+205-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 206                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-206-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+206-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 207        </activity>
 208        <activity
-208-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:196:9-203:20
+208-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:196:9-203:20
 209            android:name="by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"
-209-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:197:13-79
+209-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:197:13-79
 210            android:label="@string/slugby_vialikaga_postu"
-210-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:198:13-59
+210-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:198:13-59
 211            android:theme="@style/AppTheme.NoActionBar" >
-211-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:199:13-56
+211-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:199:13-56
 212            <meta-data
-212-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+212-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 213                android:name="android.support.PARENT_ACTIVITY"
-213-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+213-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 214                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-214-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+214-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 215        </activity>
 216        <activity
-216-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:204:9-211:20
+216-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:204:9-211:20
 217            android:name="by.carkva_gazeta.resources.SlugbyVialikagaPostu"
-217-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:205:13-75
+217-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:205:13-75
 218            android:label="@string/slugby_vialikaga_postu"
-218-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:206:13-59
+218-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:206:13-59
 219            android:theme="@style/AppTheme.NoActionBar" >
-219-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:207:13-56
+219-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:207:13-56
 220            <meta-data
-220-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:21:13-23:76
+220-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:21:13-23:76
 221                android:name="android.support.PARENT_ACTIVITY"
-221-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:22:17-63
+221-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:22:17-63
 222                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-222-->/home/serhij/MobApps/MalitounikBGKC/resources/src/main/AndroidManifest.xml:23:17-73
+222-->/home/oleg/AndroidStudioProjects/Malitounik/resources/src/main/AndroidManifest.xml:23:17-73
 223        </activity>
 224    </application>
 225

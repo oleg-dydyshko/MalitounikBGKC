@@ -2461,10 +2461,10 @@ file.delete()
         outState.putBoolean("back", back)
         outState.putBoolean("titleLayout", titleLayout.visibility == View.VISIBLE)
         outState.putInt("idMenu", idMenu)
-        outState.putString("ta", label1.text.toString())
-        outState.putString("da", label2.text.toString())
-        outState.putString("taK", label12.text.toString())
-        outState.putString("daK", label22.text.toString())
+        outState.putString("ta", label2.text.toString())
+        outState.putString("da", label1.text.toString())
+        outState.putString("taK", label22.text.toString())
+        outState.putString("daK", label12.text.toString())
     }
 
     private inner class SabytieAdapter(context: Context) : ArrayAdapter<SabytieDataAdapter>(context, R.layout.simple_list_item_sabytie, sabytie2) {

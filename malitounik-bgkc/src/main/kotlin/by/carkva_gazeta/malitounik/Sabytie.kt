@@ -26,11 +26,9 @@ import android.widget.AdapterView.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import by.carkva_gazeta.malitounik.DialogContextMenuSabytie.Companion.getInstance
 import by.carkva_gazeta.malitounik.DialogContextMenuSabytie.DialogContextMenuSabytieListener
 import by.carkva_gazeta.malitounik.DialogDelite.DialogDeliteListener
 import by.carkva_gazeta.malitounik.DialogSabytieSave.DialogSabytieSaveListener
-import by.carkva_gazeta.malitounik.DialogSabytieShow.Companion.getInstance
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.sabytie.*
 import kotlinx.coroutines.Dispatchers
@@ -379,7 +377,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         ListView.adapter = adapter
         ListView.onItemLongClickListener = OnItemLongClickListener { parent: AdapterView<*>, _: View?, position: Int, _: Long ->
             val name = (parent.getItemAtPosition(position) as SabytieDataAdapter).title
-            val contextMenuSabytie = getInstance(position, name)
+            val contextMenuSabytie = DialogContextMenuSabytie.getInstance(position, name)
             contextMenuSabytie.show(supportFragmentManager, "context_menu_sabytie")
             true
         }
@@ -417,7 +415,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 if (gc[Calendar.MINUTE] < 10) nol3 = "0"
                 res = "Паведаміць: " + nol11 + gc[Calendar.DAY_OF_MONTH] + "." + nol21 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR] + " у " + gc[Calendar.HOUR_OF_DAY] + ":" + nol3 + gc[Calendar.MINUTE]
             }
-            val dialogShowSabytie = getInstance(title, data, time, dataK, timeK, res)
+            val dialogShowSabytie = DialogSabytieShow.getInstance(title, data, time, dataK, timeK, res)
             dialogShowSabytie.show(supportFragmentManager, "sabytie")
         }
         if (savedInstanceState != null) {

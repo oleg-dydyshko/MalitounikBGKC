@@ -378,7 +378,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         adapter = SabytieAdapter(this)
         ListView.adapter = adapter
         ListView.onItemLongClickListener = OnItemLongClickListener { parent: AdapterView<*>, _: View?, position: Int, _: Long ->
-            val name = parent.getItemAtPosition(position).toString()
+            val name = (parent.getItemAtPosition(position) as SabytieDataAdapter).title
             val contextMenuSabytie = getInstance(position, name)
             contextMenuSabytie.show(supportFragmentManager, "context_menu_sabytie")
             true

@@ -46,7 +46,7 @@
 26        android:allowBackup="true"
 26-->/home/oleg/AndroidStudioProjects/Malitounik/malitounik-bgkc/src/main/AndroidManifest.xml:18:9-35
 27        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-27-->[androidx.core:core:1.4.0-alpha01] /home/oleg/.gradle/caches/transforms-2/files-2.1/ee5d203163be041137394e50035e9440/core-1.4.0-alpha01/AndroidManifest.xml:24:18-86
+27-->[androidx.core:core:1.3.1] /home/oleg/.gradle/caches/transforms-2/files-2.1/21d47dff16ccbe3d5a08083de58452c6/core-1.3.1/AndroidManifest.xml:24:18-86
 28        android:debuggable="true"
 28-->[:resources] /home/oleg/AndroidStudioProjects/Malitounik/resources/build/intermediates/metadata_feature_manifest/debug/metadata-feature/AndroidManifest.xml:22:9-34
 29        android:fullBackupContent="@xml/backup_descriptor"

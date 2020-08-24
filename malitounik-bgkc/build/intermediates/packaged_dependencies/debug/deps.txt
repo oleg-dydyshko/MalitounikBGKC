@@ -11,7 +11,6 @@ androidx.constraintlayout:constraintlayout
 androidx.constraintlayout:constraintlayout-solver
 androidx.coordinatorlayout:coordinatorlayout
 androidx.core:core
-androidx.core:core
 androidx.core:core-ktx
 androidx.cursoradapter:cursoradapter
 androidx.customview:customview
@@ -25,10 +24,8 @@ androidx.lifecycle:lifecycle-runtime
 androidx.lifecycle:lifecycle-runtime
 androidx.lifecycle:lifecycle-runtime-ktx
 androidx.lifecycle:lifecycle-viewmodel
-androidx.lifecycle:lifecycle-viewmodel
 androidx.loader:loader
 androidx.recyclerview:recyclerview
-androidx.savedstate:savedstate
 androidx.savedstate:savedstate
 androidx.swiperefreshlayout:swiperefreshlayout
 androidx.transition:transition

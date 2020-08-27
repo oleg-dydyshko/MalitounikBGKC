@@ -240,8 +240,6 @@
     <string name="zmest">Зьмест</string>
     <string name="pdf_error">Файл не ў фармаце %1$s або пашкоджаны</string>
     <string name="str_short_label1">Выбранае</string>
-    <string name="str_short_label2">Бібліятэка Царквы</string>
-    <string name="str_short_label3">Мае нататкі</string>
     <string name="str_disable_message">Выключана</string>
     <string name="sabytie_enable_mun">Рэжым прагляду Падзеяў уключаны</string>
     <string name="sabytie_disable_mun">Рэжым прагляду Падзеяў выключаны</string>

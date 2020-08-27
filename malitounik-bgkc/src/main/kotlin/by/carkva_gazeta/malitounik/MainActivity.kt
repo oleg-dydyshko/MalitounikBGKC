@@ -344,6 +344,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 onClick(label12)
             } else if (data.toString().contains("shortcuts=3")) {
                 idSelect = R.id.label7
+                shortcuts = true
                 onClick(label7)
             } else if (data.toString().contains("shortcuts=2")) {
                 idSelect = R.id.label2
@@ -1049,7 +1050,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 }
                 R.id.label7 -> {
                     prefEditors.putInt("id", idSelect)
-                    val menuNatatki = MenuNatatki()
+                    val menuNatatki = MenuNatatki.getInstance(shortcuts)
                     ftrans.replace(R.id.conteiner, menuNatatki, "MenuNatatki")
                 }
                 R.id.label8 -> {

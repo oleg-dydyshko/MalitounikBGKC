@@ -73,6 +73,8 @@ class MenuNatatki : NatatkiListFragment() {
             fragmentManager?.let { contextMenu.show(it, "context_menu") }
             true
         }
+        if (arguments?.getBoolean("shortcuts") == true)
+            addNatatka()
     }
 
     override fun sortAlfavit() {
@@ -149,15 +151,7 @@ class MenuNatatki : NatatkiListFragment() {
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_add) {
-            if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.MyNatatkiAdd"))
-                intent.putExtra("redak", false)
-                intent.putExtra("filename", "")
-                startActivityForResult(intent, 103)
-            } else {
-                val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
-            }
+            addNatatka()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -173,6 +167,18 @@ class MenuNatatki : NatatkiListFragment() {
             val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.MyNatatkiView"))
             intent.putExtra("filename", f.file.name)
             startActivity(intent)
+        } else {
+            val dadatak = DialogInstallDadatak()
+            fragmentManager?.let { dadatak.show(it, "dadatak") }
+        }
+    }
+
+    private fun addNatatka() {
+        if (MainActivity.checkmoduleResources(activity)) {
+            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.MyNatatkiAdd"))
+            intent.putExtra("redak", false)
+            intent.putExtra("filename", "")
+            startActivityForResult(intent, 103)
         } else {
             val dadatak = DialogInstallDadatak()
             fragmentManager?.let { dadatak.show(it, "dadatak") }
@@ -239,5 +245,15 @@ class MenuNatatki : NatatkiListFragment() {
     private class ViewHolder {
         var text: TextViewRobotoCondensed? = null
         var buttonPopup: ImageView? = null
+    }
+
+    companion object {
+        fun getInstance(shortcuts: Boolean): MenuNatatki {
+            val menuNatatki = MenuNatatki()
+            val bundl = Bundle()
+            bundl.putBoolean("shortcuts", shortcuts)
+            menuNatatki.arguments = bundl
+            return menuNatatki
+        }
     }
 }

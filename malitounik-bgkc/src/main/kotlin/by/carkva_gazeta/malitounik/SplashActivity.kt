@@ -13,6 +13,14 @@ import java.io.FileOutputStream
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        /*val k = getSharedPreferences("biblia", MODE_PRIVATE)
+        var countStar = k.getInt("star", 0)
+        if (countStar < 15) {
+            countStar++
+            val edit = k.edit()
+            edit.putInt("star", countStar)
+            edit.apply()
+        }*/
         val data = intent.data
         val intent1 = Intent(this, MainActivity::class.java)
         intent1.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK

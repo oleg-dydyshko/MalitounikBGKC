@@ -488,20 +488,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         if (setAlarm) {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) {
-                    val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-                    val notify = chin.getInt("notification", 2)
+                    val notify = k.getInt("notification", 2)
                     SettingsActivity.setNotifications(this@MainActivity, notify)
                     return@withContext
                 }
             }
-            //val i = Intent(this, ReceiverUpdate::class.java)
-            //i.action = "UPDATE"
-            //sendBroadcast(i)
-            /*val c2 = Calendar.getInstance() as GregorianCalendar
-            val pServise = PendingIntent.getBroadcast(this, 10, i, PendingIntent.FLAG_UPDATE_CURRENT)
-            val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            if (c2.timeInMillis > mkTime(c2[Calendar.YEAR], c2[Calendar.MONTH], c2[Calendar.DAY_OF_MONTH])) c2.add(Calendar.DATE, 1)
-            am.setRepeating(AlarmManager.RTC_WAKEUP, mkTime(c2[Calendar.YEAR], c2[Calendar.MONTH], c2[Calendar.DAY_OF_MONTH]), 86400000L, pServise)*/
             setAlarm = false
         }
         if (setPadzeia) {
@@ -509,13 +500,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             setListPadzeia(this)
         }
         if (scroll) scrollView.post { scrollView.smoothScrollBy(0, scrollView.height) }
+        /*if (k.getInt("star", 0) == 15) {
+            val manager = ReviewManagerFactory.create(this)
+            val request = manager.requestReviewFlow()
+            request.addOnCompleteListener {
+                if (request.isSuccessful) {
+                    val reviewInfo = request.result
+                    manager.launchReviewFlow(this, reviewInfo)
+                    prefEditors = k.edit()
+                    prefEditors.putInt("star", 16)
+                    prefEditors.apply()
+                }
+            }
+        }*/
     }
 
     private fun mkDir() {
-        /*var dir = File("$filesDir/Sabytie")
-        if (!dir.exists()) {
-        dir.mkdir()
-        }*/
         var dir = File("$filesDir/MaranAtaBel")
         if (!dir.exists()) {
             dir.mkdir()
@@ -541,10 +541,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             dir.mkdir()
         }
         dir = File("$filesDir/BibliaSinodalStaryZavet")
-        if (!dir.exists()) {
-            dir.mkdir()
-        }
-        dir = File("$filesDir/Site")
         if (!dir.exists()) {
             dir.mkdir()
         }

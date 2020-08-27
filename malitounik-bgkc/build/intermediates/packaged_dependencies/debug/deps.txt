@@ -37,10 +37,12 @@ androidx.viewpager:viewpager
 androidx.webkit:webkit
 com.google.android.material:material
 com.google.android.play:core
+com.google.android.play:core-ktx
 com.google.code.gson:gson
 org.jetbrains.kotlin:kotlin-android-extensions-runtime
 org.jetbrains.kotlin:kotlin-stdlib
 org.jetbrains.kotlin:kotlin-stdlib-common
+org.jetbrains.kotlin:kotlin-stdlib-jdk7
 org.jetbrains.kotlinx:kotlinx-coroutines-android
 org.jetbrains.kotlinx:kotlinx-coroutines-core
 org.jetbrains:annotations

@@ -3273,8 +3273,6 @@ string stix_by
 string stix_ru
 string str_disable_message
 string str_short_label1
-string str_short_label2
-string str_short_label3
 string stsinaidal
 string sviaty_dziar
 string sviaty_notifi

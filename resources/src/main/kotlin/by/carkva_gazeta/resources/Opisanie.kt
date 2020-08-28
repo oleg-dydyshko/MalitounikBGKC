@@ -17,7 +17,10 @@ import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import kotlinx.android.synthetic.main.akafist_under.*
+import kotlinx.android.synthetic.main.akafist_under.title_toolbar
+import kotlinx.android.synthetic.main.akafist_under.toolbar
 import java.io.BufferedReader
+import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.*
 
@@ -60,7 +63,7 @@ class Opisanie : AppCompatActivity() {
         mun = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         svity = intent.extras?.getString("svity", "") ?: ""
-        var inputStream = resources.openRawResource(R.raw.opisanie1)
+        var inputStream: InputStream? = null
         if (intent.extras?.getBoolean("glavnyia", false) == true) {
             if (svity.toLowerCase(Locale.getDefault()).contains("уваход у ерусалім")) inputStream = resources.openRawResource(R.raw.opisanie_sv0)
             if (svity.toLowerCase(Locale.getDefault()).contains("уваскрасеньне")) inputStream = resources.openRawResource(R.raw.opisanie_sv1)
@@ -77,31 +80,36 @@ class Opisanie : AppCompatActivity() {
             if (resFile.contains("25_2")) inputStream = resources.openRawResource(R.raw.opisanie25_2)
             if (resFile.contains("21_10")) inputStream = resources.openRawResource(R.raw.opisanie21_10)
             if (resFile.contains("25_11")) inputStream = resources.openRawResource(R.raw.opisanie25_11)
-            val isr = InputStreamReader(inputStream)
-            val reader = BufferedReader(isr)
-            var line: String
-            val builder = StringBuilder()
-            reader.forEachLine {
-                line = it.replace("h3", "h6")
-                builder.append(line)
+            if (inputStream != null) {
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                var line: String
+                val builder = StringBuilder()
+                reader.forEachLine {
+                    line = it.replace("h3", "h6")
+                    builder.append(line)
+                }
+                inputStream.close()
+                TextView.text = MainActivity.fromHtml(builder.toString())
+            } else {
+                TextView.text = getString(by.carkva_gazeta.malitounik.R.string.opisanie_error)
             }
-            inputStream.close()
             if (dzenNoch) TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-            TextView.text = MainActivity.fromHtml(builder.toString())
         } else {
-            when (mun) {
-                0 -> inputStream = resources.openRawResource(R.raw.opisanie1)
-                1 -> inputStream = resources.openRawResource(R.raw.opisanie2)
-                2 -> inputStream = resources.openRawResource(R.raw.opisanie3)
-                3 -> inputStream = resources.openRawResource(R.raw.opisanie4)
-                4 -> inputStream = resources.openRawResource(R.raw.opisanie5)
-                5 -> inputStream = resources.openRawResource(R.raw.opisanie6)
-                6 -> inputStream = resources.openRawResource(R.raw.opisanie7)
-                7 -> inputStream = resources.openRawResource(R.raw.opisanie8)
-                8 -> inputStream = resources.openRawResource(R.raw.opisanie9)
-                9 -> inputStream = resources.openRawResource(R.raw.opisanie10)
-                10 -> inputStream = resources.openRawResource(R.raw.opisanie11)
-                11 -> inputStream = resources.openRawResource(R.raw.opisanie12)
+            inputStream = when (mun) {
+                0 -> resources.openRawResource(R.raw.opisanie1)
+                1 -> resources.openRawResource(R.raw.opisanie2)
+                2 -> resources.openRawResource(R.raw.opisanie3)
+                3 -> resources.openRawResource(R.raw.opisanie4)
+                4 -> resources.openRawResource(R.raw.opisanie5)
+                5 -> resources.openRawResource(R.raw.opisanie6)
+                6 -> resources.openRawResource(R.raw.opisanie7)
+                7 -> resources.openRawResource(R.raw.opisanie8)
+                8 -> resources.openRawResource(R.raw.opisanie9)
+                9 -> resources.openRawResource(R.raw.opisanie10)
+                10 -> resources.openRawResource(R.raw.opisanie11)
+                11 -> resources.openRawResource(R.raw.opisanie12)
+                else -> resources.openRawResource(R.raw.opisanie1)
             }
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)

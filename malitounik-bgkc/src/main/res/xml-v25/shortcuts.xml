@@ -15,6 +15,20 @@
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
     <shortcut
+        android:enabled="true"
+        android:icon="@drawable/calendar_full"
+        android:shortcutDisabledMessage="@string/str_disable_message"
+        android:shortcutId="compose4"
+        android:shortcutLongLabel="@string/add_sabytie"
+        android:shortcutShortLabel="@string/add_sabytie">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="content://by.carkva_gazeta.malitounik?shortcuts=4"
+            android:targetClass="by.carkva_gazeta.malitounik.SplashActivity"
+            android:targetPackage="by.carkva_gazeta.malitounik" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <shortcut
         android:shortcutId="compose3"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher"

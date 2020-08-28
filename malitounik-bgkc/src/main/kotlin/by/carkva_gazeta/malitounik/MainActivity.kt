@@ -346,6 +346,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 idSelect = R.id.label7
                 shortcuts = true
                 onClick(label7)
+            } else if (data.toString().contains("shortcuts=4")) {
+                idSelect = R.id.label1
+                shortcuts = true
+                onClick(label1)
             } else if (data.toString().contains("shortcuts=2")) {
                 idSelect = R.id.label2
                 shortcuts = true
@@ -501,19 +505,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             setListPadzeia(this)
         }
         if (scroll) scrollView.post { scrollView.smoothScrollBy(0, scrollView.height) }
-        /*if (k.getInt("star", 0) == 15) {
-            val manager = ReviewManagerFactory.create(this)
-            val request = manager.requestReviewFlow()
-            request.addOnCompleteListener {
-                if (request.isSuccessful) {
-                    val reviewInfo = request.result
-                    manager.launchReviewFlow(this, reviewInfo)
-                    prefEditors = k.edit()
-                    prefEditors.putInt("star", 16)
-                    prefEditors.apply()
-                }
-            }
-        }*/
     }
 
     private fun mkDir() {
@@ -1006,6 +997,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     val caliandar: MenuCaliandar = MenuCaliandar.newInstance(setDataCalendar)
                     ftrans.replace(R.id.conteiner, caliandar)
                     prefEditors.putInt("id", idSelect)
+                    if (shortcuts) {
+                        val i = Intent(this, Sabytie::class.java)
+                        i.putExtra("shortcuts", shortcuts)
+                        startActivityForResult(i, 105)
+                    }
                 }
                 R.id.label2 -> {
                     prefEditors.putInt("id", idSelect)

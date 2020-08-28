@@ -343,5 +343,9 @@
     <string name="sabytie_del_all">Усё</string>
     <string name="sabytie_del_old">Старыя</string>
     <string name="set_time_sabytie">Выберыце час</string>
+    <string name="opisanie_error">Даруйце, апісаньня няма</string>
+    <string name="add_sabytie">Дадаць падзею</string>
+    <string name="del_sabytie">Выдаліць падзеі</string>
+    <string name="save_sabytie">Захаваць</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

@@ -25,15 +25,15 @@ import android.widget.*
 import android.widget.AdapterView.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.DialogContextMenuSabytie.DialogContextMenuSabytieListener
 import by.carkva_gazeta.malitounik.DialogDelite.DialogDeliteListener
 import by.carkva_gazeta.malitounik.DialogSabytieSave.DialogSabytieSaveListener
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.sabytie.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.io.File
 import java.io.FileWriter
 import java.util.*
 import kotlin.collections.ArrayList
@@ -447,6 +447,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         editText4Save = editText4.text.toString()
         colorSave = spinner5.selectedItemPosition
         radioSave = radio
+        if (intent.extras?.getBoolean("shortcuts", false) == true) {
+            addSabytie()
+        }
     }
 
     override fun onDialogEditClick(position: Int) {
@@ -522,18 +525,17 @@ file1.delete()
             sabytie2.add(SabytieDataAdapter(p.dat + " " + p.padz, p.color))
         }
         adapter.notifyDataSetChanged()
-        lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                if (sab.count == "0") {
-                    if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
-                        if (sab.sec != "-1") {
-                            val intent = createIntent(sab.padz, "Падзея" + " " + sab.dat + " у " + sab.tim, sab.dat, sab.tim)
-                            val londs3 = sab.paznic / 100000L
-                            val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
-                            am.cancel(pIntent)
-                            pIntent.cancel()
-                        }
-                    } else {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (sab.count == "0") {
+                if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
+                    if (sab.sec != "-1") {
+                        val intent = createIntent(sab.padz, "Падзея" + " " + sab.dat + " у " + sab.tim, sab.dat, sab.tim)
+                        val londs3 = sab.paznic / 100000L
+                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                        am.cancel(pIntent)
+                        pIntent.cancel()
+                    }
+                } else {
                         for (p in del) {
                             if (p.padz.contains(filen)) {
                                 if (p.sec != "-1") {
@@ -557,8 +559,6 @@ file1.delete()
                         }
                     }
                 }
-                return@withContext
-            }
         }
         MainActivity.toastView(this@Sabytie, getString(R.string.remove_padzea))
     }
@@ -2280,67 +2280,66 @@ fileReader.close()
             delite.show(supportFragmentManager, "delite")
         }
         if (id == R.id.action_add) {
-            save = false
-            back = true
-            var nol1 = ""
-            var nol2 = ""
-            if (c[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
-            if (c[Calendar.MONTH] < 9) nol2 = "0"
-            da = nol1 + c[Calendar.DAY_OF_MONTH] + "." + nol2 + (c[Calendar.MONTH] + 1) + "." + c[Calendar.YEAR]
-            c.add(Calendar.HOUR_OF_DAY, 1)
-            timeH = c[Calendar.HOUR_OF_DAY]
-            ta = "$timeH:00"
-            nol1 = ""
-            nol2 = ""
-            if (c[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
-            if (c[Calendar.MONTH] < 9) nol2 = "0"
-            daK = nol1 + c[Calendar.DAY_OF_MONTH] + "." + nol2 + (c[Calendar.MONTH] + 1) + "." + c[Calendar.YEAR]
-            taK = ta
-            titleLayout.visibility = View.VISIBLE
-            listLayout.visibility = View.GONE
-            label1.text = da
-            label2.text = ta
-            label12.text = daK
-            label22.text = taK
-            konec = false
-            idMenu = 2
-            spinner4.setSelection(0)
-            spinner5.setSelection(0)
-            color = 0
-            editSave = editText.text.toString().trim()
-            edit2Save = editText2.text.toString()
-            daSave = label1.text.toString()
-            taSave = label2.text.toString()
-            daKSave = label12.text.toString()
-            taKSave = label22.text.toString()
-            invalidateOptionsMenu()
+            addSabytie()
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun addSabytie() {
+        save = false
+        back = true
+        var nol1 = ""
+        var nol2 = ""
+        if (c[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
+        if (c[Calendar.MONTH] < 9) nol2 = "0"
+        da = nol1 + c[Calendar.DAY_OF_MONTH] + "." + nol2 + (c[Calendar.MONTH] + 1) + "." + c[Calendar.YEAR]
+        c.add(Calendar.HOUR_OF_DAY, 1)
+        timeH = c[Calendar.HOUR_OF_DAY]
+        ta = "$timeH:00"
+        nol1 = ""
+        nol2 = ""
+        if (c[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
+        if (c[Calendar.MONTH] < 9) nol2 = "0"
+        daK = nol1 + c[Calendar.DAY_OF_MONTH] + "." + nol2 + (c[Calendar.MONTH] + 1) + "." + c[Calendar.YEAR]
+        taK = ta
+        titleLayout.visibility = View.VISIBLE
+        listLayout.visibility = View.GONE
+        label1.text = da
+        label2.text = ta
+        label12.text = daK
+        label22.text = taK
+        konec = false
+        idMenu = 2
+        spinner4.setSelection(0)
+        spinner5.setSelection(0)
+        color = 0
+        editSave = editText.text.toString().trim()
+        edit2Save = editText2.text.toString()
+        daSave = label1.text.toString()
+        taSave = label2.text.toString()
+        daKSave = label12.text.toString()
+        taKSave = label22.text.toString()
+        invalidateOptionsMenu()
+    }
+
+    @Suppress("BlockingMethodInNonBlockingContext")
     override fun sabytieDelAll() {
         redak = true
-        lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                for (p in MainActivity.padzeia) {
-                    if (p.sec != "-1") {
-                        val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
-                        val londs3 = p.paznic / 100000L
-                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
-                        am.cancel(pIntent)
-                        pIntent.cancel()
-                    }
+        CoroutineScope(Dispatchers.IO).launch {
+            for (p in MainActivity.padzeia) {
+                if (p.sec != "-1") {
+                    val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
+                    val londs3 = p.paznic / 100000L
+                    val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                    am.cancel(pIntent)
+                    pIntent.cancel()
                 }
-                /*File("$filesDir/Sabytie").walk().forEach {
-if (it.isFile)
-it.delete()
-}*/
-                MainActivity.padzeia.clear()
-                val outputStream = FileWriter("$filesDir/Sabytie.json")
-                val gson = Gson()
-                outputStream.write(gson.toJson(MainActivity.padzeia))
-                outputStream.close()
-                return@withContext
+            }
+            MainActivity.padzeia.clear()
+            val file = File("$filesDir/Sabytie.json")
+            val gson = Gson()
+            file.writer().use {
+                it.write(gson.toJson(MainActivity.padzeia))
             }
         }
         adapter.clear()

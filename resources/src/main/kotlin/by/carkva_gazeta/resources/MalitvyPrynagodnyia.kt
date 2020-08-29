@@ -174,6 +174,8 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         data.add(MenuListData(R.raw.prynagodnyia_32,"Малітва пілігрыма", "prynagodnyia"))
         data.add(MenuListData(R.raw.prynagodnyia_33,"Малітва сям’і аб Божым бласлаўленьні на час адпачынку і вакацыяў", "prynagodnyia"))
         data.add(MenuListData(R.raw.prynagodnyia_34,"Малітва ў час адпачынку", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_35, "Малітва за бязьвінных ахвяраў перасьледу", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_36, "Малітва за Айчыну - Ян Павел II", "prynagodnyia"))
         data.sort()
         adapter = MenuListAdaprer(this)
         ListView.adapter = adapter

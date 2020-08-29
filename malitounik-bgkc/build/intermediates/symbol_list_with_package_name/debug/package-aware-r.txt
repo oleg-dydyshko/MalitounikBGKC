@@ -2987,6 +2987,7 @@ string abc_shareactionprovider_share_with
 string abc_shareactionprovider_share_with_application
 string abc_toolbar_collapse_description
 string addVybranoe
+string add_sabytie
 string add_to_zakladki
 string adpravit
 string akafist0
@@ -3010,7 +3011,6 @@ string autoScrollon
 string autotext
 string bad_internet
 string bible_natatka
-string bible_no_chtenia
 string bible_time
 string biblia
 string bibliateka_carkvy
@@ -3084,6 +3084,7 @@ string data_sabytie_error2
 string dazvolic
 string default_font
 string del_all_vybranoe
+string del_sabytie
 string delite
 string delite_all_natatki_i_zakladki
 string delite_full
@@ -3187,6 +3188,7 @@ string novy_zapaviet
 string ok
 string open_chrome
 string opisanie
+string opisanie_error
 string padzeia_off
 string padzeia_on
 string pamerlyia
@@ -3245,6 +3247,7 @@ string sabytie_kaliandar
 string sabytie_name
 string sabytie_pachatak
 string save
+string save_sabytie
 string search
 string search_malitv
 string search_menu_title

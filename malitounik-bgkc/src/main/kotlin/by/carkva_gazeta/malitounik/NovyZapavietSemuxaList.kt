@@ -204,6 +204,15 @@ class NovyZapavietSemuxaList : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if (MenuBibleSemuxa.bible_time) {
+            MenuBibleSemuxa.bible_time = false
+            onSupportNavigateUp()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {

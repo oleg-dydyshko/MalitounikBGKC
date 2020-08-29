@@ -38,9 +38,12 @@ class MenuBibleSemuxa : Fragment() {
             mLastClickTime = SystemClock.elapsedRealtime()
             startActivity(Intent(activity, StaryZapavietSemuxaList::class.java))
         }
+        val bibleTime = k?.getString("bible_time_semuxa", "")?: ""
+        if (bibleTime == "") {
+            bible_time = true
+            prodolzych.visibility = View.GONE
+        }
         prodolzych.setOnClickListener {
-            val bibleTime = k?.getString("bible_time_semuxa", "")?: ""
-            if (bibleTime != "") {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
@@ -73,10 +76,10 @@ class MenuBibleSemuxa : Fragment() {
                         fragmentManager?.let { dadatak.show(it, "dadatak") }
                     }
                 }
-            } else {
+            /*} else {
                 val chtenia = DialogNoBibleChtenia()
                 fragmentManager?.let { chtenia.show(it, "no_bible_chtenia") }
-            }
+            }*/
         }
         zakladki.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -134,5 +137,9 @@ class MenuBibleSemuxa : Fragment() {
                 staryZavet.setBackgroundResource(R.drawable.knopka_red_black)
             }
         }
+    }
+
+    companion object {
+        var bible_time = false
     }
 }

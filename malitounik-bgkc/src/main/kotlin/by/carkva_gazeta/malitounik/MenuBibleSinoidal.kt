@@ -38,18 +38,21 @@ class MenuBibleSinoidal : Fragment() {
             mLastClickTime = SystemClock.elapsedRealtime()
             startActivity(Intent(activity, StaryZapavietSinaidalList::class.java))
         }
+        val bibleTime = k?.getString("bible_time_sinodal", "") ?: ""
+        if (bibleTime == "") {
+            bible_time = true
+            prodolzych.visibility = View.GONE
+        }
         prodolzych.setOnClickListener {
-            val bibleTime = k?.getString("bible_time_sinodal", "")?: ""
-            if (bibleTime != "") {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                    return@setOnClickListener
-                }
-                mLastClickTime = SystemClock.elapsedRealtime()
-                val gson = Gson()
-                val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
-                val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
-                if (set["zavet"] == 1) {
-                    if (MainActivity.checkmoduleResources(activity)) {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime()
+            val gson = Gson()
+            val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
+            val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
+            if (set["zavet"] == 1) {
+                if (MainActivity.checkmoduleResources(activity)) {
                         val intent = Intent(activity, NovyZapavietSinaidalList::class.java)
                         intent.putExtra("kniga", set["kniga"])
                         intent.putExtra("glava", set["glava"])
@@ -73,10 +76,6 @@ class MenuBibleSinoidal : Fragment() {
                         fragmentManager?.let { dadatak.show(it, "dadatak") }
                     }
                 }
-            } else {
-                val chtenia = DialogNoBibleChtenia()
-                fragmentManager?.let { chtenia.show(it, "no_bible_chtenia") }
-            }
         }
         zakladki.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -127,5 +126,9 @@ class MenuBibleSinoidal : Fragment() {
                 staryZavet.setBackgroundResource(R.drawable.knopka_red_black)
             }
         }
+    }
+
+    companion object {
+        var bible_time = false
     }
 }

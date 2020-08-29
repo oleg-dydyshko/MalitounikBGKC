@@ -327,6 +327,15 @@ class StaryZapavietSinaidalList : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if (MenuBibleSinoidal.bible_time) {
+            MenuBibleSinoidal.bible_time = false
+            onSupportNavigateUp()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {

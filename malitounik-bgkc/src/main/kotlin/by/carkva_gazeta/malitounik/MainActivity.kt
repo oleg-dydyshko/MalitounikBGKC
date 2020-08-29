@@ -1001,6 +1001,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                         val i = Intent(this, Sabytie::class.java)
                         i.putExtra("shortcuts", shortcuts)
                         startActivityForResult(i, 105)
+                        shortcuts = false
                     }
                 }
                 R.id.label2 -> {
@@ -1020,6 +1021,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                             val dadatak = DialogInstallDadatak()
                             dadatak.show(supportFragmentManager, "dadatak")
                         }
+                        shortcuts = false
                     }
                     val menuGlavnoe = MenuGlavnoe()
                     ftrans.replace(R.id.conteiner, menuGlavnoe)
@@ -1048,6 +1050,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     prefEditors.putInt("id", idSelect)
                     val menuNatatki = MenuNatatki.getInstance(shortcuts)
                     ftrans.replace(R.id.conteiner, menuNatatki, "MenuNatatki")
+                    shortcuts = false
                 }
                 R.id.label8 -> {
                     val file = File("$filesDir/BibliaSemuxaNatatki.json")

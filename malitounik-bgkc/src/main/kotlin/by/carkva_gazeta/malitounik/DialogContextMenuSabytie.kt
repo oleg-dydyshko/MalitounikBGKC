@@ -61,15 +61,27 @@ class DialogContextMenuSabytie : DialogFragment() {
             linearLayout.addView(textViewZaglavie)
             val textView = TextViewRobotoCondensed(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView.text = "Рэдагаваць"
+            textView.text = getString(R.string.redagaktirovat)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+            if (dzenNoch) {
+                textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView.setBackgroundResource(R.drawable.selector_dark)
+            } else {
+                textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                textView.setBackgroundResource(R.drawable.selector_default)
+            }
             linearLayout.addView(textView)
             val textView2 = TextViewRobotoCondensed(it)
             textView2.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView2.text = "Выдаліць"
+            textView2.text = getString(R.string.delite)
             textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) textView2.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView2.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+            if (dzenNoch) {
+                textView2.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView2.setBackgroundResource(R.drawable.selector_dark)
+            } else {
+                textView2.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                textView2.setBackgroundResource(R.drawable.selector_default)
+            }
             linearLayout.addView(textView2)
             builder.setView(linearLayout)
             dialog = builder.create()

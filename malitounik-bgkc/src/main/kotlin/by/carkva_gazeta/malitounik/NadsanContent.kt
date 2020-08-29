@@ -81,4 +81,13 @@ class NadsanContent : AppCompatActivity() {
         }
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
     }
+
+    override fun onBackPressed() {
+        if (MenuPsalterNadsana.bible_time) {
+            MenuPsalterNadsana.bible_time = false
+            onSupportNavigateUp()
+        } else {
+            super.onBackPressed()
+        }
+    }
 }

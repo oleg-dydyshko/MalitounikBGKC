@@ -506,14 +506,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         val filen = sab.padz
         val del = ArrayList<Padzeia>()
         for (p in MainActivity.padzeia) {
-            if (p.padz.contains(filen)) {
+            if (p.padz == filen) {
                 del.add(p)
             }
         }
-        /*val file1 = File(filesDir.toString() + "/Sabytie/" + sab.file)
-if (file1.exists()) {
-file1.delete()
-}*/
         MainActivity.padzeia.removeAll(del)
         val outputStream = FileWriter("$filesDir/Sabytie.json")
         val gson = Gson()
@@ -2286,6 +2282,7 @@ fileReader.close()
     }
 
     private fun addSabytie() {
+        c = Calendar.getInstance() as GregorianCalendar
         save = false
         back = true
         var nol1 = ""

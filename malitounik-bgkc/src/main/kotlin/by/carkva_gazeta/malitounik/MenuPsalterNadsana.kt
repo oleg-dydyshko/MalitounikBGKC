@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.menu_psalter.*
 class MenuPsalterNadsana : Fragment(), View.OnClickListener {
     private lateinit var k: SharedPreferences
     private var mLastClickTime: Long = 0
+    private var bibleTime = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.menu_psalter, container, false)
@@ -28,6 +29,11 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
         activity?.let {
             k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
+            bibleTime = k.getString("psalter_time_psalter_nadsan", "") ?: ""
+            if (bibleTime == "") {
+                MenuBibleSemuxa.bible_time = true
+                prodolzych.visibility = View.GONE
+            }
             psalter.setOnClickListener(this)
             prodolzych.setOnClickListener(this)
             pravila_chtenia.setOnClickListener(this)
@@ -95,24 +101,18 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
             startActivity(Intent(activity, NadsanContent::class.java))
         }
         if (id == R.id.prodolzych) {
-            val bibleTime = k.getString("psalter_time_psalter_nadsan", "")?: ""
-            if (bibleTime != "") {
-                val gson = Gson()
-                val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
-                val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
-                if (MainActivity.checkmoduleResources(activity)) {
-                    val intent = Intent(activity, NadsanContent::class.java)
-                    intent.putExtra("glava", set["glava"])
-                    intent.putExtra("stix", set["stix"])
-                    intent.putExtra("prodolzyt", true)
-                    startActivity(intent)
-                } else {
-                    val dadatak = DialogInstallDadatak()
-                    fragmentManager?.let { dadatak.show(it, "dadatak") }
-                }
+            val gson = Gson()
+            val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
+            val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
+            if (MainActivity.checkmoduleResources(activity)) {
+                val intent = Intent(activity, NadsanContent::class.java)
+                intent.putExtra("glava", set["glava"])
+                intent.putExtra("stix", set["stix"])
+                intent.putExtra("prodolzyt", true)
+                startActivity(intent)
             } else {
-                val chtenia = DialogNoBibleChtenia()
-                fragmentManager?.let { chtenia.show(it, "no_bible_chtenia") }
+                val dadatak = DialogInstallDadatak()
+                fragmentManager?.let { dadatak.show(it, "dadatak") }
             }
         }
         if (id == R.id.pravila_chtenia) {
@@ -194,5 +194,9 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
             }
         }
+    }
+
+    companion object {
+        var bible_time = false
     }
 }

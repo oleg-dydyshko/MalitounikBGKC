@@ -78,7 +78,7 @@ import kotlin.collections.ArrayList
 class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback,
     WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
 
-    private val uiAnimationDelaY = 300
+    private val uiAnimationDelaY: Long = 300
     private val mHideHandler: Handler = Handler(Looper.getMainLooper())
 
     @SuppressLint("InlinedApi")
@@ -105,16 +105,16 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var dzenNoch = false
     private var filePath = ""
     private var fileName = ""
-    private val bookTitle: ArrayList<String> = ArrayList()
+    private val bookTitle = ArrayList<String>()
     private var menu = false
     private val popup: PopupMenu? = null
-    private val arrayList: ArrayList<ArrayList<String>> = ArrayList()
+    private val arrayList = ArrayList<ArrayList<String>>()
     private var width = 0
     private lateinit var adapter: BibliotekaAdapter
     private var nameRubrika = ""
     private var defaultPage = 0
     private var idSelect = R.id.label1
-    private val naidaunia: ArrayList<ArrayList<String>> = ArrayList()
+    private val naidaunia = ArrayList<ArrayList<String>>()
     private var saveindep = true
     private var runSql = false
     private var biblioteka: BibliotekaEpub? = null
@@ -234,21 +234,23 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 if (file1.exists()) file1.delete()
             }
         }
-        var position1 = 0
+        var position1 = -1
         naidaunia.forEachIndexed { index, arrayList1 ->
-            if (arrayList1[0] == arrayList[position][2]) {
+            if (arrayList1[0] == arrayList[position][0]) {
                 position1 = index
             }
         }
-        if (idSelect == R.id.label1) {
-            arrayList.removeAt(position)
-            adapter.notifyDataSetChanged()
+        if (position1 != -1) {
+            if (idSelect == R.id.label1) {
+                arrayList.removeAt(position)
+                adapter.notifyDataSetChanged()
+            }
+            naidaunia.removeAt(position1)
+            val gson = Gson()
+            val prefEditor: SharedPreferences.Editor = k.edit()
+            prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+            prefEditor.apply()
         }
-        naidaunia.removeAt(position1)
-        val gson = Gson()
-        val prefEditor: SharedPreferences.Editor = k.edit()
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
-        prefEditor.apply()
         popup?.menu?.getItem(2)?.isVisible = false
     }
 
@@ -1778,7 +1780,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private fun hide() {
         supportActionBar?.hide()
         mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelaY.toLong())
+        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelaY)
     }
 
     @Suppress("DEPRECATION")
@@ -1792,7 +1794,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
         mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelaY.toLong())
+        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelaY)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

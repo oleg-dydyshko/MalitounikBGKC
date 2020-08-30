@@ -10,10 +10,12 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:drawableLeft="@drawable/stiker"
+        android:drawableStart="@drawable/stiker"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:paddingTop="10dp"
         android:textColor="@color/colorPrimary_text" />
 

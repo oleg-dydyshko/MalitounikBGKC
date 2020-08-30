@@ -15,6 +15,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.ListFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
@@ -56,71 +60,70 @@ class CaliandarNedzel : ListFragment() {
         return (SettingsActivity.GET_CALIANDAR_YEAR_MAX - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 1) * 12
     }
 
-    private val jsonFile: Unit
-        get() {
-            val builder = StringBuilder()
-            var inputStream = resources.openRawResource(MainActivity.caliandar(activity, date))
-            var isr = InputStreamReader(inputStream)
-            var reader = BufferedReader(isr)
-            reader.forEachLine {
-                builder.append(it)
-            }
-            isr.close()
-            var out = builder.toString()
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
-            strings.addAll(gson.fromJson(out, type))
-            if (date != count - 1) {
-                for (i in strings.indices) {
-                    if (26 >= strings[i][1].toInt()) {
-                        val t1 = builder.toString().lastIndexOf("]")
-                        val builderN = StringBuilder()
-                        inputStream = resources.openRawResource(MainActivity.caliandar(activity, date + 1))
-                        isr = InputStreamReader(inputStream)
-                        reader = BufferedReader(isr)
-                        reader.forEachLine {
-                            builderN.append(it)
-                        }
-                        isr.close()
-                        val t2 = builderN.toString().indexOf("[")
-                        val out1 = out.substring(0, t1)
-                        val out2 = builderN.toString().substring(t2 + 1)
-                        out = "$out1,$out2"
-                        strings.clear()
-                        break
-                    }
-                }
-            }
-            strings.addAll(gson.fromJson(out, type))
-            var i = 0
-            while (i < strings.size) {
-                if (strings[i][1].toInt() == dateInt) {
-                    for (e in 0..6) {
-                        strings2.add(strings[i])
-                        i++
-                    }
-                    break
-                }
-                i++
-            }
-        }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        jsonFile
-
-        activity?.let {
-            listAdapter = CaliandarNedzelListAdapter(it)
-        }
-
-        if (setDenNedeli) {
-            val c = Calendar.getInstance() as GregorianCalendar
-            if (getNedzel(c[Calendar.WEEK_OF_YEAR] - 1) == position) {
-                listView.setSelection(c[Calendar.DAY_OF_WEEK] - 1)
-                setDenNedeli = false
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                val builder = StringBuilder()
+                var inputStream = resources.openRawResource(MainActivity.caliandar(activity, date))
+                var isr = InputStreamReader(inputStream)
+                var reader = BufferedReader(isr)
+                reader.forEachLine {
+                    builder.append(it)
+                }
+                isr.close()
+                var out = builder.toString()
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
+                strings.addAll(gson.fromJson(out, type))
+                if (date != count - 1) {
+                    for (i in strings.indices) {
+                        if (26 >= strings[i][1].toInt()) {
+                            val t1 = builder.toString().lastIndexOf("]")
+                            val builderN = StringBuilder()
+                            inputStream = resources.openRawResource(MainActivity.caliandar(activity, date + 1))
+                            isr = InputStreamReader(inputStream)
+                            reader = BufferedReader(isr)
+                            reader.forEachLine {
+                                builderN.append(it)
+                            }
+                            isr.close()
+                            val t2 = builderN.toString().indexOf("[")
+                            val out1 = out.substring(0, t1)
+                            val out2 = builderN.toString().substring(t2 + 1)
+                            out = "$out1,$out2"
+                            strings.clear()
+                            break
+                        }
+                    }
+                }
+                strings.addAll(gson.fromJson(out, type))
+                var i = 0
+                while (i < strings.size) {
+                    if (strings[i][1].toInt() == dateInt) {
+                        for (e in 0..6) {
+                            strings2.add(strings[i])
+                            i++
+                        }
+                        break
+                    }
+                    i++
+                }
             }
+
+            activity?.let {
+                listAdapter = CaliandarNedzelListAdapter(it, strings2)
+            }
+
+            if (setDenNedeli) {
+                val c = Calendar.getInstance() as GregorianCalendar
+                if (getNedzel(c[Calendar.WEEK_OF_YEAR] - 1) == position) {
+                    listView.setSelection(c[Calendar.DAY_OF_WEEK] - 1)
+                    setDenNedeli = false
+                }
+            }
+            listView.isVerticalScrollBarEnabled = false
         }
-        listView.isVerticalScrollBarEnabled = false
     }
 
     private fun getNedzel(WeekOfYear: Int): Int {
@@ -142,7 +145,7 @@ class CaliandarNedzel : ListFragment() {
         activity?.finish()
     }
 
-    private inner class CaliandarNedzelListAdapter(private val mContext: Activity) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.calaindar_nedel, strings2) {
+    private inner class CaliandarNedzelListAdapter(private val mContext: Activity, private val arrayList: ArrayList<ArrayList<String>>) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.calaindar_nedel, arrayList) {
         private val c: GregorianCalendar = Calendar.getInstance() as GregorianCalendar
         private val chin: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private val munName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
@@ -177,55 +180,55 @@ class CaliandarNedzel : ListFragment() {
                 viewHolder.textSviat?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
                 viewHolder.textPraz?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
             }
-            if (c[Calendar.YEAR] == strings2[position][3].toInt() && c[Calendar.DATE] == strings2[position][1].toInt() && c[Calendar.MONTH] == strings2[position][2].toInt()) {
+            if (c[Calendar.YEAR] == arrayList[position][3].toInt() && c[Calendar.DATE] == arrayList[position][1].toInt() && c[Calendar.MONTH] == arrayList[position][2].toInt()) {
                 if (dzenNoch) viewHolder.linearLayout?.setBackgroundResource(R.drawable.calendar_nedel_today_black) else viewHolder.linearLayout?.setBackgroundResource(R.drawable.calendar_nedel_today)
             } else {
                 viewHolder.linearLayout?.setBackgroundResource(0)
             }
-            if (strings2[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar?.text = getString(R.string.tydzen_name3, nedelName[strings2[position][0].toInt()], strings2[position][1], munName[strings2[position][2].toInt()], strings2[position][3])
-            else viewHolder.textCalendar?.text = getString(R.string.tydzen_name2, nedelName[strings2[position][0].toInt()], strings2[position][1], munName[strings2[position][2].toInt()])
-            //viewHolder.textPraz.setText(strings2.get(position).get(3)); Год
-            var sviatyia = strings2[position][4]
+            if (arrayList[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar?.text = getString(R.string.tydzen_name3, nedelName[arrayList[position][0].toInt()], arrayList[position][1], munName[arrayList[position][2].toInt()], arrayList[position][3])
+            else viewHolder.textCalendar?.text = getString(R.string.tydzen_name2, nedelName[arrayList[position][0].toInt()], arrayList[position][1], munName[arrayList[position][2].toInt()])
+            //viewHolder.textPraz.setText(arrayList.get(position).get(3)); Год
+            var sviatyia = arrayList[position][4]
             if (dzenNoch) {
                 sviatyia = sviatyia.replace("#d00505", "#f44336")
             }
             viewHolder.textSviat?.text = MainActivity.fromHtml(sviatyia)
-            if (strings2[position][4].contains("no_sviatyia")) viewHolder.textSviat?.visibility = View.GONE
-            viewHolder.textPraz?.text = strings2[position][6]
-            if (!strings2[position][6].contains("no_sviaty")) viewHolder.textPraz?.visibility = View.VISIBLE
+            if (arrayList[position][4].contains("no_sviatyia")) viewHolder.textSviat?.visibility = View.GONE
+            viewHolder.textPraz?.text = arrayList[position][6]
+            if (!arrayList[position][6].contains("no_sviaty")) viewHolder.textPraz?.visibility = View.VISIBLE
             // убот = субота
-            if (strings2[position][6].contains("Пачатак") || strings2[position][6].contains("Вялікі") || strings2[position][6].contains("Вялікая") || strings2[position][6].contains("убот") || strings2[position][6].contains("ВЕЧАР") || strings2[position][6].contains("Палова")) {
+            if (arrayList[position][6].contains("Пачатак") || arrayList[position][6].contains("Вялікі") || arrayList[position][6].contains("Вялікая") || arrayList[position][6].contains("убот") || arrayList[position][6].contains("ВЕЧАР") || arrayList[position][6].contains("Палова")) {
                 viewHolder.textPraz?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
                 viewHolder.textPraz?.setTypeface(null, Typeface.NORMAL)
             }
-            if (strings2[position][5].contains("1") || strings2[position][5].contains("2") || strings2[position][5].contains("3")) {
+            if (arrayList[position][5].contains("1") || arrayList[position][5].contains("2") || arrayList[position][5].contains("3")) {
                 viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
                 if (dzenNoch) viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black)) else viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-            } else if (strings2[position][7].contains("2")) {
+            } else if (arrayList[position][7].contains("2")) {
                 viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
                 viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
                 viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
                 viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
                 viewHolder.textPostS?.text = mContext.resources.getString(R.string.Post)
-            } else if (strings2[position][7].contains("3")) {
+            } else if (arrayList[position][7].contains("3")) {
                 viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
                 viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
-            } else if (strings2[position][7].contains("1")) {
+            } else if (arrayList[position][7].contains("1")) {
                 viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
                 viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
                 viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
                 viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
                 viewHolder.textPostS?.text = mContext.resources.getString(R.string.No_post)
             }
-            if (strings2[position][5].contains("2")) {
+            if (arrayList[position][5].contains("2")) {
                 viewHolder.textPraz?.setTypeface(null, Typeface.NORMAL)
             }
-            if (strings2[position][7].contains("3")) {
+            if (arrayList[position][7].contains("3")) {
                 viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
                 viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
                 viewHolder.textPostS?.text = mContext.resources.getString(R.string.Strogi_post)
                 viewHolder.textPostS?.visibility = View.VISIBLE
-            } else if (strings2[position][0].contains("6")) { // Пятница
+            } else if (arrayList[position][0].contains("6")) { // Пятница
                 viewHolder.textPostS?.visibility = View.VISIBLE
             }
             return view

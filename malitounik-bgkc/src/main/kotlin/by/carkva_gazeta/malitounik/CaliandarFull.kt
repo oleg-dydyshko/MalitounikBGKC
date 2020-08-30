@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.calaindar.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
@@ -97,247 +98,249 @@ class CaliandarFull : Fragment(), View.OnClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
-        data.addAll(gson.fromJson(getData(getmun(position)), type))
-        val nedelName = arrayOf("", "нядзеля", "панядзелак", "аўторак", "серада", "чацьвер", "пятніца", "субота")
-        val monthName = arrayOf("СТУДЗЕНЯ", "ЛЮТАГА", "САКАВІКА", "КРАСАВІКА", "ТРАЎНЯ", "ЧЭРВЕНЯ", "ЛІПЕНЯ", "ЖНІЎНЯ", "ВЕРАСЬНЯ", "КАСТРЫЧНІКА", "ЛІСТАПАДА", "СЬНЕЖНЯ")
-        val c = Calendar.getInstance() as GregorianCalendar
-        val k = activity?.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k?.getBoolean("dzen_noch", false) ?: false
-        if (dzenNoch) rColorColorprimary = R.color.colorPrimary_black
-        val tileMe = activity?.let { BitmapDrawable(it.resources, BitmapFactory.decodeResource(resources, R.drawable.calendar_fon)) }
-        tileMe?.tileModeX = Shader.TileMode.REPEAT
-        if (data[day][20] != "" && data[day][0].toInt() == 1) {
-            val ton = data[day][20]
-            textTitleChyt.text = getString(R.string.bible_natatki, ton, textTitleChyt.text)
-            textTitleChyt.setOnClickListener(this)
-        } else {
-            textTitleChyt.isEnabled = false
-        }
-        textChytanne.setOnClickListener(this)
-        textChytanneSviatyia.setOnClickListener(this)
-        textChytanneSviatyiaDop.setOnClickListener(this)
-        val maranataSh = k?.getInt("maranata", 0) ?: 0
-        if (maranataSh == 1) {
-            maranata.setOnClickListener(this)
+        CoroutineScope(Dispatchers.Main).launch {
+            val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
+            data.addAll(gson.fromJson(getData(getmun(position)), type))
+            val nedelName = arrayOf("", "нядзеля", "панядзелак", "аўторак", "серада", "чацьвер", "пятніца", "субота")
+            val monthName = arrayOf("СТУДЗЕНЯ", "ЛЮТАГА", "САКАВІКА", "КРАСАВІКА", "ТРАЎНЯ", "ЧЭРВЕНЯ", "ЛІПЕНЯ", "ЖНІЎНЯ", "ВЕРАСЬНЯ", "КАСТРЫЧНІКА", "ЛІСТАПАДА", "СЬНЕЖНЯ")
+            val c = Calendar.getInstance() as GregorianCalendar
+            val k = activity?.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            dzenNoch = k?.getBoolean("dzen_noch", false) ?: false
+            if (dzenNoch) rColorColorprimary = R.color.colorPrimary_black
+            val tileMe = activity?.let { BitmapDrawable(it.resources, BitmapFactory.decodeResource(resources, R.drawable.calendar_fon)) }
+            tileMe?.tileModeX = Shader.TileMode.REPEAT
+            if (data[day][20] != "" && data[day][0].toInt() == 1) {
+                val ton = data[day][20]
+                textTitleChyt.text = getString(R.string.bible_natatki, ton, textTitleChyt.text)
+                textTitleChyt.setOnClickListener(this@CaliandarFull)
+            } else {
+                textTitleChyt.isEnabled = false
+            }
+            textChytanne.setOnClickListener(this@CaliandarFull)
+            textChytanneSviatyia.setOnClickListener(this@CaliandarFull)
+            textChytanneSviatyiaDop.setOnClickListener(this@CaliandarFull)
+            val maranataSh = k?.getInt("maranata", 0) ?: 0
+            if (maranataSh == 1) {
+                maranata.setOnClickListener(this@CaliandarFull)
+                if (dzenNoch) {
+                    activity?.let {
+                        maranata.setBackgroundResource(R.drawable.selector_dark_maranata)
+                        maranata.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textTitleMaranata.setBackgroundResource(R.drawable.selector_dark_maranata)
+                        textTitleMaranata.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    }
+                }
+                maranata.visibility = View.VISIBLE
+                textTitleMaranata.visibility = View.VISIBLE
+                var dataMaranAta = data[day][13]
+                if (k?.getBoolean("belarus", false) == true) dataMaranAta = MainActivity.translateToBelarus(dataMaranAta)
+                maranata.text = dataMaranAta
+            }
+            znakTipicona.setOnClickListener(this@CaliandarFull)
+            if (data[day][21] != "") {
+                textBlaslavenne.text = data[day][21]
+                textBlaslavenne.visibility = View.VISIBLE
+            }
             if (dzenNoch) {
                 activity?.let {
-                    maranata.setBackgroundResource(R.drawable.selector_dark_maranata)
-                    maranata.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textTitleMaranata.setBackgroundResource(R.drawable.selector_dark_maranata)
-                    textTitleMaranata.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    textSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    textSviatyia.setBackgroundResource(R.drawable.selector_dark)
+                    textPost.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                    textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
+                    textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    textBlaslavenne.setBackgroundResource(R.drawable.selector_dark)
                 }
             }
-            maranata.visibility = View.VISIBLE
-            textTitleMaranata.visibility = View.VISIBLE
-            var dataMaranAta = data[day][13]
-            if (k?.getBoolean("belarus", false) == true) dataMaranAta = MainActivity.translateToBelarus(dataMaranAta)
-            maranata.text = dataMaranAta
-        }
-        znakTipicona.setOnClickListener(this)
-        if (data[day][21] != "") {
-            textBlaslavenne.text = data[day][21]
-            textBlaslavenne.visibility = View.VISIBLE
-        }
-        if (dzenNoch) {
-            activity?.let {
-                textSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textSviatyia.setBackgroundResource(R.drawable.selector_dark)
-                textPost.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
-                textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textBlaslavenne.setBackgroundResource(R.drawable.selector_dark)
-            }
-        }
-        textDenNedeli.text = nedelName[data[day][0].toInt()]
-        textChislo.text = data[day][1]
-        if (data[day][3].toInt() != c[Calendar.YEAR]) textMesiac.text = getString(R.string.mesiach, monthName[data[day][2].toInt()], data[day][3])
-        else textMesiac.text = monthName[data[day][2].toInt()]
-        if (!data[day][4].contains("no_sviatyia")) {
-            var dataSviatyia = data[day][4]
-            if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
-            textSviatyia.text = MainActivity.fromHtml(dataSviatyia)
-        } else {
-            polosa1.visibility = View.GONE
-            polosa2.visibility = View.GONE
-            textSviatyia.visibility = View.GONE
-        }
-        textSviatyia.setOnClickListener(this)
-        if (!data[day][6].contains("no_sviaty")) {
-            textCviatyGlavnyia.text = data[day][6]
-            textCviatyGlavnyia.visibility = View.VISIBLE
-            if (data[day][6].contains("Пачатак") || data[day][6].contains("Вялікі") || data[day][6].contains("Вялікая") || data[day][6].contains("ВЕЧАР") || data[day][6].contains("Палова")) {
-                activity?.let {
-                    if (dzenNoch) textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    else textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                }
-                textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
-                textCviatyGlavnyia.isEnabled = false
+            textDenNedeli.text = nedelName[data[day][0].toInt()]
+            textChislo.text = data[day][1]
+            if (data[day][3].toInt() != c[Calendar.YEAR]) textMesiac.text = getString(R.string.mesiach, monthName[data[day][2].toInt()], data[day][3])
+            else textMesiac.text = monthName[data[day][2].toInt()]
+            if (!data[day][4].contains("no_sviatyia")) {
+                var dataSviatyia = data[day][4]
+                if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
+                textSviatyia.text = MainActivity.fromHtml(dataSviatyia)
             } else {
-                if (data[day][6].toLowerCase(Locale.getDefault()).contains("нядзел") || data[day][6].toLowerCase(Locale.getDefault()).contains("дзень") || data[day][6].toLowerCase(Locale.getDefault()).contains("сьветл")) textCviatyGlavnyia.isEnabled = false
-                else textCviatyGlavnyia.setOnClickListener(this)
+                polosa1.visibility = View.GONE
+                polosa2.visibility = View.GONE
+                textSviatyia.visibility = View.GONE
             }
-        }
-        activity?.let {
-            when (data[day][7].toInt()) {
-                1 -> {
-                    textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                    textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                    textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                    textDenNedeli.setBackgroundResource(R.drawable.selector_bez_posta)
-                    textChislo.setBackgroundResource(R.drawable.selector_bez_posta)
-                    textMesiac.setBackgroundResource(R.drawable.selector_bez_posta)
-                    textTitleChyt.setBackgroundResource(R.drawable.selector_bez_posta)
-                    textChytanne.setBackgroundResource(R.drawable.selector_bez_posta)
-                    textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_bez_posta)
-                    textChytanneSviatyia.setBackgroundResource(R.drawable.selector_bez_posta)
-                    textBlaslavenne.setBackgroundResource(R.drawable.selector_bez_posta)
-                    textPamerlyia.setBackgroundResource(R.drawable.selector_bez_posta)
-                    if (data[day][0].contains("6")) {
-                        textPost.visibility = View.VISIBLE
-                        textPost.text = resources.getString(R.string.No_post)
+            textSviatyia.setOnClickListener(this@CaliandarFull)
+            if (!data[day][6].contains("no_sviaty")) {
+                textCviatyGlavnyia.text = data[day][6]
+                textCviatyGlavnyia.visibility = View.VISIBLE
+                if (data[day][6].contains("Пачатак") || data[day][6].contains("Вялікі") || data[day][6].contains("Вялікая") || data[day][6].contains("ВЕЧАР") || data[day][6].contains("Палова")) {
+                    activity?.let {
+                        if (dzenNoch) textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        else textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                     }
+                    textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
+                    textCviatyGlavnyia.isEnabled = false
+                } else {
+                    if (data[day][6].toLowerCase(Locale.getDefault()).contains("нядзел") || data[day][6].toLowerCase(Locale.getDefault()).contains("дзень") || data[day][6].toLowerCase(Locale.getDefault()).contains("сьветл")) textCviatyGlavnyia.isEnabled = false
+                    else textCviatyGlavnyia.setOnClickListener(this@CaliandarFull)
                 }
-                2 -> {
-                    textTitleChyt.setBackgroundResource(R.drawable.selector_post)
-                    textChytanne.setBackgroundResource(R.drawable.selector_post)
-                    textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_post)
-                    textChytanneSviatyia.setBackgroundResource(R.drawable.selector_post)
-                    textBlaslavenne.setBackgroundResource(R.drawable.selector_post)
-                    textDenNedeli.setBackgroundResource(R.drawable.selector_post)
-                    textChislo.setBackgroundResource(R.drawable.selector_post)
-                    textMesiac.setBackgroundResource(R.drawable.selector_post)
-                    textPamerlyia.setBackgroundResource(R.drawable.selector_post)
-                    if (data[day][0].contains("6")) {
-                        PostFish.visibility = View.VISIBLE
-                        textPost.visibility = View.VISIBLE
-                        if (dzenNoch) {
-                            PostFish.setImageResource(R.drawable.fishe_whate)
+            }
+            activity?.let {
+                when (data[day][7].toInt()) {
+                    1 -> {
+                        textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        textDenNedeli.setBackgroundResource(R.drawable.selector_bez_posta)
+                        textChislo.setBackgroundResource(R.drawable.selector_bez_posta)
+                        textMesiac.setBackgroundResource(R.drawable.selector_bez_posta)
+                        textTitleChyt.setBackgroundResource(R.drawable.selector_bez_posta)
+                        textChytanne.setBackgroundResource(R.drawable.selector_bez_posta)
+                        textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_bez_posta)
+                        textChytanneSviatyia.setBackgroundResource(R.drawable.selector_bez_posta)
+                        textBlaslavenne.setBackgroundResource(R.drawable.selector_bez_posta)
+                        textPamerlyia.setBackgroundResource(R.drawable.selector_bez_posta)
+                        if (data[day][0].contains("6")) {
+                            textPost.visibility = View.VISIBLE
+                            textPost.text = resources.getString(R.string.No_post)
                         }
                     }
+                    2 -> {
+                        textTitleChyt.setBackgroundResource(R.drawable.selector_post)
+                        textChytanne.setBackgroundResource(R.drawable.selector_post)
+                        textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_post)
+                        textChytanneSviatyia.setBackgroundResource(R.drawable.selector_post)
+                        textBlaslavenne.setBackgroundResource(R.drawable.selector_post)
+                        textDenNedeli.setBackgroundResource(R.drawable.selector_post)
+                        textChislo.setBackgroundResource(R.drawable.selector_post)
+                        textMesiac.setBackgroundResource(R.drawable.selector_post)
+                        textPamerlyia.setBackgroundResource(R.drawable.selector_post)
+                        if (data[day][0].contains("6")) {
+                            PostFish.visibility = View.VISIBLE
+                            textPost.visibility = View.VISIBLE
+                            if (dzenNoch) {
+                                PostFish.setImageResource(R.drawable.fishe_whate)
+                            }
+                        }
+                    }
+                    3 -> {
+                        textDenNedeli.setBackgroundResource(R.drawable.selector_strogi_post)
+                        textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textChislo.setBackgroundResource(R.drawable.selector_strogi_post)
+                        textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textMesiac.setBackgroundResource(R.drawable.selector_strogi_post)
+                        textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textTitleChyt.setBackgroundResource(R.drawable.selector_strogi_post)
+                        textTitleChyt.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textChytanne.setBackgroundResource(R.drawable.selector_strogi_post)
+                        textChytanne.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_strogi_post)
+                        textChytanneSviatyiaDop.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textChytanneSviatyia.setBackgroundResource(R.drawable.selector_strogi_post)
+                        textChytanneSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textBlaslavenne.setBackgroundResource(R.drawable.selector_strogi_post)
+                        textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textPost.text = resources.getString(R.string.Strogi_post)
+                        textPamerlyia.text = resources.getString(R.string.Strogi_post)
+                        textPamerlyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textPost.visibility = View.VISIBLE
+                        PostFish.visibility = View.VISIBLE
+                        if (dzenNoch) PostFish.setImageResource(R.drawable.fishe_red_black) else PostFish.setImageResource(R.drawable.fishe_red)
+                    }
+                }
+            }
+            if (data[day][5].contains("1") || data[day][5].contains("2") || data[day][5].contains("3")) {
+                textDenNedeli.setBackgroundResource(rColorColorprimary)
+                textChislo.setBackgroundResource(rColorColorprimary)
+                textMesiac.setBackgroundResource(rColorColorprimary)
+                activity?.let {
+                    textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                }
+            }
+            if (data[day][5].contains("2")) {
+                textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
+            }
+            if (data[day][8] != "") {
+                textPredsviaty.text = MainActivity.fromHtml(data[day][8])
+                textPredsviaty.visibility = View.VISIBLE
+            }
+            textChytanne.text = data[day][9]
+            if (data[day][9] == "Прабачьце, няма дадзеных" || data[day][9] == "Літургіі няма") textChytanne.isEnabled = false
+            if (data[day][9] == "") textChytanne.visibility = View.GONE
+            if (data[day][10] != "") {
+                textChytanneSviatyia.text = data[day][10]
+                textChytanneSviatyia.visibility = View.VISIBLE
+            }
+            if (data[day][11] != "") {
+                textChytanneSviatyiaDop.text = data[day][11]
+                textChytanneSviatyiaDop.visibility = View.VISIBLE
+            }
+            when (data[day][12].toInt()) {
+                1 -> {
+                    if (dzenNoch) znakTipicona.setImageResource(R.drawable.znaki_krest_black) else znakTipicona.setImageResource(R.drawable.znaki_krest)
+                    znakTipicona.visibility = View.VISIBLE
+                }
+                2 -> {
+                    if (dzenNoch) znakTipicona.setImageResource(R.drawable.znaki_krest_v_kruge_black)
+                    else znakTipicona.setImageResource(R.drawable.znaki_krest_v_kruge)
+                    znakTipicona.visibility = View.VISIBLE
                 }
                 3 -> {
-                    textDenNedeli.setBackgroundResource(R.drawable.selector_strogi_post)
-                    textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textChislo.setBackgroundResource(R.drawable.selector_strogi_post)
-                    textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textMesiac.setBackgroundResource(R.drawable.selector_strogi_post)
-                    textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textTitleChyt.setBackgroundResource(R.drawable.selector_strogi_post)
-                    textTitleChyt.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textChytanne.setBackgroundResource(R.drawable.selector_strogi_post)
-                    textChytanne.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_strogi_post)
-                    textChytanneSviatyiaDop.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textChytanneSviatyia.setBackgroundResource(R.drawable.selector_strogi_post)
-                    textChytanneSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textBlaslavenne.setBackgroundResource(R.drawable.selector_strogi_post)
-                    textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textPost.text = resources.getString(R.string.Strogi_post)
-                    textPamerlyia.text = resources.getString(R.string.Strogi_post)
-                    textPamerlyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textPost.visibility = View.VISIBLE
-                    PostFish.visibility = View.VISIBLE
-                    if (dzenNoch) PostFish.setImageResource(R.drawable.fishe_red_black) else PostFish.setImageResource(R.drawable.fishe_red)
+                    if (dzenNoch) znakTipicona.setImageResource(R.drawable.znaki_krest_v_polukruge_black) else znakTipicona.setImageResource(R.drawable.znaki_krest_v_polukruge)
+                    znakTipicona.visibility = View.VISIBLE
+                }
+                4 -> {
+                    if (dzenNoch) znakTipicona.setImageResource(R.drawable.znaki_ttk_black_black) else znakTipicona.setImageResource(R.drawable.znaki_ttk)
+                    znakTipicona.visibility = View.VISIBLE
+                }
+                5 -> {
+                    znakTipicona.visibility = View.VISIBLE
+                    if (dzenNoch) {
+                        znakTipicona.setImageResource(R.drawable.znaki_ttk_whate)
+                    } else {
+                        znakTipicona.setImageResource(R.drawable.znaki_ttk_black)
+                    }
                 }
             }
-        }
-        if (data[day][5].contains("1") || data[day][5].contains("2") || data[day][5].contains("3")) {
-            textDenNedeli.setBackgroundResource(rColorColorprimary)
-            textChislo.setBackgroundResource(rColorColorprimary)
-            textMesiac.setBackgroundResource(rColorColorprimary)
-            activity?.let {
-                textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-            }
-        }
-        if (data[day][5].contains("2")) {
-            textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
-        }
-        if (data[day][8] != "") {
-            textPredsviaty.text = MainActivity.fromHtml(data[day][8])
-            textPredsviaty.visibility = View.VISIBLE
-        }
-        textChytanne.text = data[day][9]
-        if (data[day][9] == "Прабачьце, няма дадзеных" || data[day][9] == "Літургіі няма") textChytanne.isEnabled = false
-        if (data[day][9] == "") textChytanne.visibility = View.GONE
-        if (data[day][10] != "") {
-            textChytanneSviatyia.text = data[day][10]
-            textChytanneSviatyia.visibility = View.VISIBLE
-        }
-        if (data[day][11] != "") {
-            textChytanneSviatyiaDop.text = data[day][11]
-            textChytanneSviatyiaDop.visibility = View.VISIBLE
-        }
-        when (data[day][12].toInt()) {
-            1 -> {
-                if (dzenNoch) znakTipicona.setImageResource(R.drawable.znaki_krest_black) else znakTipicona.setImageResource(R.drawable.znaki_krest)
-                znakTipicona.visibility = View.VISIBLE
-            }
-            2 -> {
-                if (dzenNoch) znakTipicona.setImageResource(R.drawable.znaki_krest_v_kruge_black)
-                else znakTipicona.setImageResource(R.drawable.znaki_krest_v_kruge)
-                znakTipicona.visibility = View.VISIBLE
-            }
-            3 -> {
-                if (dzenNoch) znakTipicona.setImageResource(R.drawable.znaki_krest_v_polukruge_black) else znakTipicona.setImageResource(R.drawable.znaki_krest_v_polukruge)
-                znakTipicona.visibility = View.VISIBLE
-            }
-            4 -> {
-                if (dzenNoch) znakTipicona.setImageResource(R.drawable.znaki_ttk_black_black) else znakTipicona.setImageResource(R.drawable.znaki_ttk)
-                znakTipicona.visibility = View.VISIBLE
-            }
-            5 -> {
-                znakTipicona.visibility = View.VISIBLE
-                if (dzenNoch) {
-                    znakTipicona.setImageResource(R.drawable.znaki_ttk_whate)
-                } else {
-                    znakTipicona.setImageResource(R.drawable.znaki_ttk_black)
+            if (k?.getInt("pravas", 0) == 1) {
+                if (data[day][14] != "") {
+                    pravaslavie.visibility = View.VISIBLE
+                    pravaslavie.text = data[day][14]
                 }
             }
-        }
-        if (k?.getInt("pravas", 0) == 1) {
-            if (data[day][14] != "") {
-                pravaslavie.visibility = View.VISIBLE
-                pravaslavie.text = data[day][14]
+            if (k?.getInt("pkc", 0) == 1) {
+                if (data[day][19] != "") {
+                    RKC.visibility = View.VISIBLE
+                    RKC.text = data[day][19]
+                }
             }
-        }
-        if (k?.getInt("pkc", 0) == 1) {
-            if (data[day][19] != "") {
-                RKC.visibility = View.VISIBLE
-                RKC.text = data[day][19]
+            if (k?.getInt("gosud", 0) == 1) {
+                if (data[day][16] != "") {
+                    gosudarstvo.visibility = View.VISIBLE
+                    gosudarstvo.text = data[day][16]
+                }
+                if (data[day][15] != "") {
+                    gosudarstvo.visibility = View.VISIBLE
+                    gosudarstvo.text = data[day][15]
+                    activity?.let { gosudarstvo.setTextColor(ContextCompat.getColor(it, rColorColorprimary)) }
+                }
             }
-        }
-        if (k?.getInt("gosud", 0) == 1) {
-            if (data[day][16] != "") {
-                gosudarstvo.visibility = View.VISIBLE
-                gosudarstvo.text = data[day][16]
+            if (k?.getInt("pafesii", 0) == 1) {
+                if (data[day][17] != "") {
+                    prafesional.visibility = View.VISIBLE
+                    prafesional.text = data[day][17]
+                }
             }
-            if (data[day][15] != "") {
-                gosudarstvo.visibility = View.VISIBLE
-                gosudarstvo.text = data[day][15]
-                activity?.let { gosudarstvo.setTextColor(ContextCompat.getColor(it, rColorColorprimary)) }
+            if (data[day][18].contains("1")) {
+                textPamerlyia.visibility = View.VISIBLE
             }
-        }
-        if (k?.getInt("pafesii", 0) == 1) {
-            if (data[day][17] != "") {
-                prafesional.visibility = View.VISIBLE
-                prafesional.text = data[day][17]
-            }
-        }
-        if (data[day][18].contains("1")) {
-            textPamerlyia.visibility = View.VISIBLE
-        }
-        if (MainActivity.padzeia.size > 0) {
-            val extras = activity?.intent?.extras
-            if (extras?.getBoolean("sabytieView", false) == true) {
-                sabytieTitle = extras.getString("sabytieTitle", "") ?: ""
-            }
-            CoroutineScope(Dispatchers.Main).launch {
-                sabytieView(sabytieTitle)
+            if (MainActivity.padzeia.size > 0) {
+                val extras = activity?.intent?.extras
+                if (extras?.getBoolean("sabytieView", false) == true) {
+                    sabytieTitle = extras.getString("sabytieTitle", "") ?: ""
+                }
+                withContext(Dispatchers.Main) {
+                    sabytieView(sabytieTitle)
+                }
             }
         }
     }

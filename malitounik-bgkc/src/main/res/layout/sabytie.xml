@@ -41,7 +41,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal|left"
+            android:gravity="center_horizontal|start"
             android:orientation="vertical">
 
             <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
@@ -64,10 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:padding="10dp"
                     android:text="@string/sabytie_pachatak"
                     android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
@@ -81,10 +78,7 @@
                     android:drawableRight="@drawable/arrow_down_float_sabytie"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:padding="10dp"
                     android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
 
@@ -97,10 +91,7 @@
                     android:drawableRight="@drawable/arrow_down_float_sabytie"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:padding="10dp"
                     android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
 
@@ -116,10 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:padding="10dp"
                     android:text="@string/Sabytie_end"
                     android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
@@ -133,10 +121,7 @@
                     android:drawableRight="@drawable/arrow_down_float_sabytie"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:padding="10dp"
                     android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
 
@@ -149,11 +134,7 @@
                     android:drawableRight="@drawable/arrow_down_float_sabytie"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-
+                    android:padding="10dp"
                     android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -207,9 +188,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:padding="10dp"
                     android:text="@string/Sabytie_repit"
                     android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
@@ -228,6 +207,8 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"
                 android:paddingLeft="10dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
                 android:visibility="gone">
 
                 <RadioButton
@@ -286,10 +267,7 @@
                     android:drawableRight="@drawable/arrow_down_float_sabytie"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:padding="10dp"
                     android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
             </RadioGroup>
@@ -305,9 +283,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:padding="10dp"
                     android:text="Колер: "
                     android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />

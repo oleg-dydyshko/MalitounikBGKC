@@ -52,7 +52,9 @@
             android:contentDescription="Права календаря"
             android:paddingBottom="5dp"
             android:paddingLeft="33dp"
+            android:paddingStart="33dp"
             android:paddingRight="10dp"
+            android:paddingEnd="10dp"
             android:paddingTop="5dp"
             android:src="@drawable/pravo_catedra" />
     </RelativeLayout>

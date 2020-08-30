@@ -27,6 +27,7 @@
         android:padding="5dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/listView"
+        android:layout_marginStart="10dp"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
@@ -38,6 +39,7 @@
             android:paddingTop="5dp"
             android:paddingRight="5dp"
             android:paddingBottom="10dp"
+            android:contentDescription="@string/share"
             app:srcCompat="@drawable/share_bible" />
 
         <ImageView
@@ -49,6 +51,7 @@
             android:paddingTop="5dp"
             android:paddingRight="5dp"
             android:paddingBottom="10dp"
+            android:contentDescription="@string/copy_big"
             app:srcCompat="@drawable/copy" />
 
         <ImageView
@@ -60,6 +63,7 @@
             android:paddingTop="5dp"
             android:paddingRight="5dp"
             android:paddingBottom="10dp"
+            android:contentDescription="@string/copy_big_full"
             app:srcCompat="@drawable/select_all" />
 
     </LinearLayout>
@@ -82,6 +86,7 @@
             android:layout_height="24dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
+            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/arrow_down_float_bible" />
 
         <ImageView
@@ -89,6 +94,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
+            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/yelloy" />
 
         <ImageView
@@ -96,6 +102,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
+            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/underline" />
 
         <ImageView
@@ -103,6 +110,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
+            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/bold" />
 
         <ImageView
@@ -110,6 +118,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
+            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/bookmark" />
 
         <ImageView
@@ -117,6 +126,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
+            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/sketch" />
 
     </LinearLayout>

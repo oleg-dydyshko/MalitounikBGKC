@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -29,7 +28,7 @@
                 android:id="@+id/textView1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
+                android:gravity="start"
                 android:text="@string/tipicon_fon"
                 android:textColor="@color/colorPrimary" />
 
@@ -52,7 +51,8 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_column="0"
-                    android:background="@color/colorPost" />
+                    android:background="@color/colorPost"
+                    android:contentDescription="@string/empty" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                     android:id="@+id/textView2"
@@ -61,6 +61,7 @@
                     android:layout_column="1"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:paddingStart="10dp"
                     android:text="@string/Post"
                     android:textColor="@color/colorPrimary_text" />
@@ -77,7 +78,8 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_column="0"
-                    android:background="@color/colorStrogiPost" />
+                    android:background="@color/colorStrogiPost"
+                    android:contentDescription="@string/empty" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                     android:id="@+id/textView3"
@@ -86,6 +88,7 @@
                     android:layout_column="1"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:paddingStart="10dp"
                     android:text="@string/Strogi_post"
                     android:textColor="@color/colorPrimary_text" />
@@ -103,8 +106,7 @@
                     android:layout_height="20dp"
                     android:layout_column="0"
                     android:background="@color/colorBezPosta"
-                    android:contentDescription="TODO"
-                    tools:ignore="ContentDescription" />
+                    android:contentDescription="@string/empty" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                     android:id="@+id/textView4"
@@ -113,6 +115,7 @@
                     android:layout_column="1"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:paddingStart="10dp"
                     android:text="@string/No_post"
                     android:textColor="@color/colorPrimary_text" />
@@ -141,6 +144,7 @@
                     android:layout_column="1"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:paddingStart="10dp"
                     android:text="@string/niadzeli_i_sviaty"
                     android:textColor="@color/colorPrimary_text" />
@@ -168,6 +172,7 @@
                     android:layout_column="1"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:paddingStart="10dp"
                     android:text="@string/zvychaynye_dny"
                     android:textColor="@color/colorPrimary_text" />
@@ -177,7 +182,7 @@
                 android:id="@+id/textView7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
+                android:gravity="start"
                 android:paddingTop="10dp"
                 android:text="@string/Znaki_cviat"
                 android:textColor="@color/colorPrimary" />
@@ -213,6 +218,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:paddingStart="10dp"
                     android:textColor="@color/colorPrimary" />
             </TableRow>
@@ -241,6 +247,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:paddingStart="10dp"
                     android:text="@string/Z_Lic_na_ve"
                     android:textColor="@color/colorPrimary_text" />
@@ -270,6 +277,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:paddingStart="10dp"
                     android:text="@string/Z_v_v_v_u_n_u"
                     android:textColor="@color/colorPrimary_text" />
@@ -299,6 +307,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:paddingStart="10dp"
                     android:text="@string/Z_sh_v_v_u_u"
                     android:textColor="@color/colorPrimary_text" />
@@ -328,6 +337,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:paddingStart="10dp"
                     android:text="@string/Z_sh_v_m_u_u"
                     android:textColor="@color/colorPrimary_text" />

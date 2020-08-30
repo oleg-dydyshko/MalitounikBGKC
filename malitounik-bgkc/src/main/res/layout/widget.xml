@@ -98,7 +98,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/empty"
                 android:src="@drawable/znaki_krest"
                 android:visibility="gone" />
 
@@ -110,7 +110,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="5dp"
-                android:contentDescription="TODO"
+                android:layout_marginRight="5dp"
+                android:contentDescription="@string/empty"
                 android:src="@drawable/fishe"
                 android:visibility="gone"
                 tools:ignore="ContentDescription" />
@@ -119,7 +120,7 @@
                 android:id="@+id/settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
+                android:gravity="end"
                 android:orientation="vertical">
 
                 <ImageView
@@ -128,7 +129,7 @@
                     android:layout_height="20dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:contentDescription="TODO"
+                    android:contentDescription="@string/empty"
                     android:src="@drawable/settings_black" />
 
             </LinearLayout>
@@ -173,6 +174,7 @@
             android:background="@color/colorDivider"
             android:gravity="start|center_vertical"
             android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:paddingLeft="5dp"
             android:textColor="@color/colorPrimary_text"
             android:textSize="14sp"

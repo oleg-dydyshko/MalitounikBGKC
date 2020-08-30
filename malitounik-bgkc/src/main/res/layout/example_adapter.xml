@@ -17,7 +17,8 @@
         app:layout_constraintEnd_toStartOf="@+id/item"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/search_black" />
+        app:srcCompat="@drawable/search_black"
+        android:contentDescription="@string/empty" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
         android:id="@+id/item"

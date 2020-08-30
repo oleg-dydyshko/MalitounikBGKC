@@ -11,5 +11,6 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_margin="10dp"
-        android:src="@drawable/share" />
+        android:src="@drawable/share"
+        android:contentDescription="@string/empty" />
 </LinearLayout>

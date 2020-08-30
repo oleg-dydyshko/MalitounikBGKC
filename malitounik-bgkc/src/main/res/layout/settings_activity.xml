@@ -117,6 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:paddingBottom="10dp"
                 android:soundEffectsEnabled="false"
                 android:text="@string/maranata_opis"
@@ -134,6 +135,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/bsinaidal"
                     android:textSize="12sp" />
@@ -143,6 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/title_biblia"
                     android:textSize="12sp" />
@@ -192,6 +195,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/apav_only"
                     android:textSize="12sp" />
@@ -201,6 +205,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/APAV_ALL"
                     android:textSize="12sp" />
@@ -210,6 +215,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:paddingBottom="5dp"
                     android:text="@string/APAV_NO"
                     android:textSize="12sp" />
@@ -219,6 +225,7 @@
                 android:id="@+id/spinnerTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp" />
 
             <androidx.appcompat.widget.SwitchCompat

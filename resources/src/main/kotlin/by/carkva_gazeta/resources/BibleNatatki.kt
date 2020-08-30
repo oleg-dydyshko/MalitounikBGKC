@@ -1,6 +1,5 @@
 package by.carkva_gazeta.resources
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -300,7 +299,6 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
             itemsL.clear()
         }
 
-        @SuppressLint("SetTextI18n")
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -316,7 +314,7 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
             viewHolder.buttonPopup?.setOnClickListener { viewHolder.buttonPopup?.let { showPopupMenu(it, position, itemsL[position][5]) } }
-            viewHolder.text?.text = itemsL[position][4] + "\n\n" + itemsL[position][5]
+            viewHolder.text?.text = getString(by.carkva_gazeta.malitounik.R.string.bible_natatki, itemsL[position][4], itemsL[position][5])
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)

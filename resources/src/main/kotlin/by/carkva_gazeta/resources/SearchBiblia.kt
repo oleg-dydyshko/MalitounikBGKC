@@ -22,13 +22,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.DialogBibleSearshSettings.DiallogBibleSearshListiner
 import by.carkva_gazeta.resources.R.raw
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.search_biblia.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -578,7 +578,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
     }
 
     private fun execute(searche: String) {
-        lifecycleScope.launch {
+        CoroutineScope(Dispatchers.Main).launch {
             onPreExecute()
             val result = withContext(Dispatchers.IO) {
                 return@withContext doInBackground(searche)

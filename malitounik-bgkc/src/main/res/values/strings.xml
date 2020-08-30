@@ -173,7 +173,7 @@
     <string name="chtinia_37">%1$sКніга Лікаў %2$s</string>
     <string name="chtinia_38">%1$sКніга Прарока Міхея %2$s</string>
     <string name="chtinia_zag">%1$s[&#8230;]</string>
-    <string name="error_ch">Памылка, даруйце</string>
+    <string name="error_ch">Памылка, даруйце\n</string>
     <string name="error_ch_email">carkva@carkva-gazeta.by\nНапішыце пра памылку ў праграме\n\nЗагадзя шчыра дзякуем!</string>
     <string name="Sabytie">%1$s%2$d.%3$s%4$d.%5$d</string>
     <string name="seash">(%1$d)</string>
@@ -264,7 +264,7 @@
     <string name="natatki_biblii2">нататку</string>
     <string name="stix_ru">/Стих</string>
     <string name="stix_by">/Верш</string>
-    <string name="semuxa_maran_ata_error">У перакладзе Бібліі В.Сёмухі такой кнігі не існуе</string>
+    <string name="semuxa_maran_ata_error">У перакладзе Бібліі В.Сёмухі такой кнігі не існуе\n</string>
     <string name="end_fabreary_be">Чытаецца 28.02 альбо 1.03</string>
     <string name="end_fabreary_ru">Читается 28.02 или 1.03</string>
     <string name="get_date">Выберыце дату</string>
@@ -275,7 +275,7 @@
     <string name="psalter">Псалтыр</string>
     <string name="peryiady">Царкоўныя перыяды</string>
     <string name="kafizma">КАТЫЗМЫ</string>
-    <string name="kafizma2">Катызма</string>
+    <string name="kafizma2">Катызма %1$d</string>
     <string name="pesni">Песьні Сьвятога Пісаньня</string>
     <string name="malitva_pered">Малітвы перад\nчытаньнем Псалтыра</string>
     <string name="malitva_posle">Малітвы пасьля\nчытаньня Псалтыра</string>
@@ -346,5 +346,17 @@
     <string name="add_sabytie">Дадаць падзею</string>
     <string name="del_sabytie">Выдаліць падзеі</string>
     <string name="save_sabytie">Захаваць</string>
+    <string name="download_file">СПАМПАВАЦЬ ФАЙЛ? %1$s</string>
+    <string name="dastupna_bat">: ДАСТУПНА %1$s КБ</string>
+    <string name="dastupna_bates">: ДАСТУПНА %1$d БАЙТ</string>
+    <string name="bible_natatki">%1$s \n\n %2$s</string>
+    <string name="font_sp">%1$d sp%2$s</string>
+    <string name="mesiach">%1$s, %2$s</string>
+    <string name="tydzen_name">%1$d тыдзень</string>
+    <string name="tydzen_name2">%1$s %2$s %3$s</string>
+    <string name="tydzen_name3">%1$s %2$s %3$s, %4$s</string>
+    <string name="get_font">%1$d sp</string>
+    <string name="sabytie_kali">Калі: %1$s %2$s\n%3$s</string>
+    <string name="sabytie_pachatak_show">Пачатак: %1$s %2$s\nКанец: %3$s %4$s\n%5$s</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

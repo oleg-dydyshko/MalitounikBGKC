@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -149,7 +148,6 @@ class CaliandarNedzel : ListFragment() {
         private val munName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
         private val nedelName = arrayOf("", "нядзеля", "панядзелак", "аўторак", "серада", "чацьвер", "пятніца", "субота")
 
-        @SuppressLint("SetTextI18n")
         override fun getView(position: Int, rootView: View?, parent: ViewGroup): View {
             val view: View
             val viewHolder: ViewHolder
@@ -184,7 +182,8 @@ class CaliandarNedzel : ListFragment() {
             } else {
                 viewHolder.linearLayout?.setBackgroundResource(0)
             }
-            if (strings2[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar?.text = nedelName[strings2[position][0].toInt()] + " " + strings2[position][1] + " " + munName[strings2[position][2].toInt()] + ", " + strings2[position][3] else viewHolder.textCalendar?.text = nedelName[strings2[position][0].toInt()] + " " + strings2[position][1] + " " + munName[strings2[position][2].toInt()]
+            if (strings2[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar?.text = getString(R.string.tydzen_name3, nedelName[strings2[position][0].toInt()], strings2[position][1], munName[strings2[position][2].toInt()], strings2[position][3])
+            else viewHolder.textCalendar?.text = getString(R.string.tydzen_name2, nedelName[strings2[position][0].toInt()], strings2[position][1], munName[strings2[position][2].toInt()])
             //viewHolder.textPraz.setText(strings2.get(position).get(3)); Год
             var sviatyia = strings2[position][4]
             if (dzenNoch) {

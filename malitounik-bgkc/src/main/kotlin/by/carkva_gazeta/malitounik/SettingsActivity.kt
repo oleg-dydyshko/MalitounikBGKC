@@ -25,8 +25,8 @@ import android.widget.RadioGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.settings_activity.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -1210,12 +1210,11 @@ class SettingsActivity : AppCompatActivity() {
                     prefEditor.apply()
                     itemDefault = i
                     spinnerTime.isEnabled = false
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            setNotifications(this@SettingsActivity, notification)
-                            return@withContext
+                    CoroutineScope(Dispatchers.IO).launch {
+                        setNotifications(this@SettingsActivity, notification)
+                        withContext(Dispatchers.Main) {
+                            spinnerTime.isEnabled = true
                         }
-                        spinnerTime.isEnabled = true
                     }
                 }
             }
@@ -1502,7 +1501,7 @@ class SettingsActivity : AppCompatActivity() {
                     if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     this.guk.isClickable = true
                     if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                    lifecycleScope.launch {
+                    CoroutineScope(Dispatchers.Main).launch {
                         if (dzenNoch) {
                             vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
                             this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
@@ -1516,7 +1515,6 @@ class SettingsActivity : AppCompatActivity() {
                         notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         withContext(Dispatchers.IO) {
                             setNotifications(this@SettingsActivity, 1)
-                            return@withContext
                         }
                         notificationNon.isClickable = true
                         notificationFull.isClickable = true
@@ -1540,7 +1538,7 @@ class SettingsActivity : AppCompatActivity() {
                     if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     this.guk.isClickable = true
                     if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                    lifecycleScope.launch {
+                    CoroutineScope(Dispatchers.Main).launch {
                         if (dzenNoch) {
                             vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
                             this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
@@ -1554,7 +1552,6 @@ class SettingsActivity : AppCompatActivity() {
                         notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         withContext(Dispatchers.IO) {
                             setNotifications(this@SettingsActivity, 2)
-                            return@withContext
                         }
                         notificationOnly.isClickable = true
                         notificationNon.isClickable = true
@@ -1574,14 +1571,13 @@ class SettingsActivity : AppCompatActivity() {
                     if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     this.guk.isClickable = true
                     if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                    lifecycleScope.launch {
+                    CoroutineScope(Dispatchers.Main).launch {
                         notificationOnly.isClickable = false
                         notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         notificationFull.isClickable = false
                         notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         withContext(Dispatchers.IO) {
                             setNotifications(this@SettingsActivity, 0)
-                            return@withContext
                         }
                         notificationOnly.isClickable = true
                         notificationFull.isClickable = true

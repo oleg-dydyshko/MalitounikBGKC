@@ -1,6 +1,5 @@
 package by.carkva_gazeta.resources
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Typeface
@@ -22,7 +21,6 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
     private val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
     private val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
 
-    @SuppressLint("SetTextI18n")
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup): View {
         val rootView: View
         val ea: ExpArrayAdapterParallelItems

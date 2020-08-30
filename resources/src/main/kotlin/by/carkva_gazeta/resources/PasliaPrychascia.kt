@@ -21,12 +21,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import kotlinx.android.synthetic.main.akafist_activity_paslia_prich.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -249,7 +250,6 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         return true
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         val widthConstraintLayout = constraint.width
         val otstup = (10 * resources.displayMetrics.density).toInt()
@@ -275,7 +275,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
                         var minmax = ""
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        progress.text = "${fontBiblia.toInt()} sp$minmax"
+                        progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.visibility = View.VISIBLE
                         startProcent()
@@ -314,7 +314,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
                             onDialogFontSizePositiveClick()
                             var min = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                            progress.text = "${fontBiblia.toInt()} sp$min"
+                            progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
                             progress.visibility = View.VISIBLE
                             startProcent()
                         }
@@ -327,7 +327,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
                             onDialogFontSizePositiveClick()
                             var max = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                            progress.text = "${fontBiblia.toInt()} sp$max"
+                            progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
                             progress.visibility = View.VISIBLE
                             startProcent()
                         }
@@ -365,7 +365,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         procentTimer = Timer()
         procentSchedule = object : TimerTask() {
             override fun run() {
-                lifecycleScope.launch {
+                CoroutineScope(Dispatchers.Main).launch {
                     progress.visibility = View.GONE
                 }
             }

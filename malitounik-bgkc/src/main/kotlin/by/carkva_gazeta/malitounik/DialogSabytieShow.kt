@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
@@ -37,7 +36,6 @@ class DialogSabytieShow : DialogFragment() {
         res = arguments?.getString("res") ?: ""
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -56,9 +54,9 @@ class DialogSabytieShow : DialogFragment() {
             linearLayout.addView(textViewT)
             val textView = TextViewRobotoCondensed(it)
             if (data == dataK && time == timeK) {
-                textView.text = "Калі: $data $time\n$res"
+                textView.text = getString(R.string.sabytie_kali, data, time, res)
             } else {
-                textView.text = "Пачатак: $data $time\nКанец: $dataK $timeK\n$res"
+                textView.text = getString(R.string.sabytie_pachatak_show, data, time, dataK, timeK, res)
             }
             if (dzenNoch) {
                 textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))

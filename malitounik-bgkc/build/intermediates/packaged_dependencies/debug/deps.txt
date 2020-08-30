@@ -21,8 +21,6 @@ androidx.lifecycle:lifecycle-common
 androidx.lifecycle:lifecycle-livedata
 androidx.lifecycle:lifecycle-livedata-core
 androidx.lifecycle:lifecycle-runtime
-androidx.lifecycle:lifecycle-runtime
-androidx.lifecycle:lifecycle-runtime-ktx
 androidx.lifecycle:lifecycle-viewmodel
 androidx.loader:loader
 androidx.recyclerview:recyclerview

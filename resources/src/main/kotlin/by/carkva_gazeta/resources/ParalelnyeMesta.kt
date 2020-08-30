@@ -1,6 +1,5 @@
 package by.carkva_gazeta.resources
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
 import android.util.TypedValue
@@ -16,7 +15,6 @@ import java.io.InputStreamReader
  * Created by oleg on 18.10.16
  */
 class ParalelnyeMesta {
-    @SuppressLint("SetTextI18n")
     fun paralel(context: Context, cytanneSours: String, cytanneParalelnye: String, semuxa: Boolean): ArrayList<TextViewRobotoCondensed> {
         var cytanneSours1 = cytanneSours
         val arrayList = ArrayList<TextViewRobotoCondensed>()
@@ -505,7 +503,7 @@ class ParalelnyeMesta {
                         }
                         textViewZag.text = kon
                         arrayList.add(textViewZag)
-                        textViewOpis.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "\n"
+                        textViewOpis.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error)
                     }
                     arrayList.add(textViewOpis)
                 } catch (t: Throwable) {
@@ -539,7 +537,7 @@ class ParalelnyeMesta {
                     }
                     textViewZag.text = kon
                     arrayList.add(textViewZag)
-                    textViewOpis.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch) + "\n"
+                    textViewOpis.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)
                     arrayList.add(textViewOpis)
                 }
             }

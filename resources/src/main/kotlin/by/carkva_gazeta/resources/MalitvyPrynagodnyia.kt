@@ -1,6 +1,5 @@
 package by.carkva_gazeta.resources
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -435,7 +434,6 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
                     return result
                 }
 
-                @SuppressLint("SetTextI18n")
                 override fun publishResults(constraint: CharSequence?, results: FilterResults) {
                     clear()
                     for (item in results.values as ArrayList<*>) {

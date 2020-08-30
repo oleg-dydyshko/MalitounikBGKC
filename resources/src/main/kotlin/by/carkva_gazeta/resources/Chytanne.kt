@@ -25,12 +25,13 @@ import android.view.View.OnTouchListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnNestedTouchListener
 import kotlinx.android.synthetic.main.akafist_chytanne.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -182,7 +183,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         val heightConstraintLayout = constraint.height
         val widthConstraintLayout = constraint.width
@@ -211,7 +211,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         var minmax = ""
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        progress.text = "${fontBiblia.toInt()} sp$minmax"
+                        progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.visibility = View.VISIBLE
                         startProcent()
@@ -268,7 +268,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             }
                             var min = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                            progress.text = "${fontBiblia.toInt()} sp$min"
+                            progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
                             progress.visibility = View.VISIBLE
                             startProcent()
                         }
@@ -283,7 +283,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             }
                             var max = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                            progress.text = "${fontBiblia.toInt()} sp$max"
+                            progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
                             progress.visibility = View.VISIBLE
                             startProcent()
                         }
@@ -915,7 +915,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         procentTimer = Timer()
         procentSchedule = object : TimerTask() {
             override fun run() {
-                lifecycleScope.launch {
+                CoroutineScope(Dispatchers.Main).launch {
                     progress.visibility = View.GONE
                 }
             }
@@ -929,7 +929,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         scrollerSchedule = null
         resetSchedule = object : TimerTask() {
             override fun run() {
-                lifecycleScope.launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+                CoroutineScope(Dispatchers.Main).launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
         }
         resetTimer.schedule(resetSchedule, 60000)
@@ -941,7 +941,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         resetSchedule = null
         scrollerSchedule = object : TimerTask() {
             override fun run() {
-                lifecycleScope.launch {
+                CoroutineScope(Dispatchers.Main).launch {
                     if (!mActionDown && !MainActivity.dialogVisable) {
                         InteractiveScroll.smoothScrollBy(0, 2)
                     }

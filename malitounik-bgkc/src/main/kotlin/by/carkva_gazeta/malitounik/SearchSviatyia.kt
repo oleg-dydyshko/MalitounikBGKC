@@ -21,10 +21,11 @@ import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.search_sviatyia.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -404,7 +405,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             }
             posukPesenSchedule = object : TimerTask() {
                 override fun run() {
-                    lifecycleScope.launch { rawAsset(poshuk) }
+                    CoroutineScope(Dispatchers.Main).launch { rawAsset(poshuk) }
                 }
             }
             posukPesenTimer?.schedule(posukPesenSchedule, 0)

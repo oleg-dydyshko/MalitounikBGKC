@@ -2476,7 +2476,6 @@ id useLogo
 id vibro
 id viewWeb
 id view_offset_helper
-id view_tree_lifecycle_owner
 id visible
 id withText
 id withinBounds
@@ -3011,6 +3010,7 @@ string autoScrollon
 string autotext
 string bad_internet
 string bible_natatka
+string bible_natatki
 string bible_time
 string biblia
 string bibliateka_carkvy
@@ -3079,6 +3079,8 @@ string copy_big_full
 string copynadsan
 string dakladnae_supadzenne
 string dalshe
+string dastupna_bat
+string dastupna_bates
 string data_sabytie_error
 string data_sabytie_error2
 string dazvolic
@@ -3091,6 +3093,7 @@ string delite_full
 string delite_natatki_i_zakladki
 string download
 string download_bibliateka
+string download_file
 string end_fabreary_be
 string end_fabreary_ru
 string error
@@ -3103,8 +3106,10 @@ string exposed_dropdown_menu_content_description
 string fab_transformation_scrim_behavior
 string fab_transformation_sheet_behavior
 string filter
+string font_sp
 string fullscreen
 string get_date
+string get_font
 string help
 string helpbible
 string hide_bottom_view_on_scroll_behavior
@@ -3132,6 +3137,7 @@ string maranata_opis
 string material_slider_range_end
 string material_slider_range_start
 string mc_5_3_12
+string mesiach
 string mtrl_badge_numberless_content_description
 string mtrl_chip_close_icon_content_description
 string mtrl_exceed_max_badge_number_content_description
@@ -3243,9 +3249,11 @@ string sabytie_del_all
 string sabytie_del_old
 string sabytie_disable_mun
 string sabytie_enable_mun
+string sabytie_kali
 string sabytie_kaliandar
 string sabytie_name
 string sabytie_pachatak
+string sabytie_pachatak_show
 string save
 string save_sabytie
 string search
@@ -3294,6 +3302,9 @@ string ton_n
 string ton_sh
 string tools_item
 string trafic
+string tydzen_name
+string tydzen_name2
+string tydzen_name3
 string type_signal_notif
 string update_bibliateka
 string update_site

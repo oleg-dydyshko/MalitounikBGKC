@@ -87,7 +87,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         fierstPosition = position
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
@@ -129,14 +128,14 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             }
         }
         title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.psalter)
-        subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2) + " " + getKafizma(glava)
+        subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2, getKafizma(glava))
         pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             }
 
             override fun onPageSelected(position: Int) {
                 if (glava != position) fierstPosition = 0
-                subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2) + " " + getKafizma(position)
+                subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2, getKafizma(position))
             }
 
             override fun onPageScrollStateChanged(state: Int) {}

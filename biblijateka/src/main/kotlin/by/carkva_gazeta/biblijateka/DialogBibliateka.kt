@@ -1,6 +1,5 @@
 package by.carkva_gazeta.biblijateka
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
@@ -14,9 +13,9 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,6 +23,7 @@ import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.util.*
 
 /**
  * Created by oleg on 23.3.18
@@ -59,7 +59,6 @@ class DialogBibliateka : DialogFragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -78,26 +77,22 @@ class DialogBibliateka : DialogFragment() {
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             val file = File(it.filesDir.toString() + "/Biblijateka/" + listPosition)
             if (file.exists()) {
-                textViewZaglavie.text = "АПІСАНЬНЕ"
+                textViewZaglavie.text = getString(R.string.opisanie).toUpperCase(Locale.getDefault()) //"АПІСАНЬНЕ"
             } else {
-                textViewZaglavie.text = "СПАМПАВАЦЬ ФАЙЛ?"
+                textViewZaglavie.text = getString(R.string.download_file)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    lifecycleScope.launch {
+                    CoroutineScope(Dispatchers.Main).launch {
                         val format = withContext(Dispatchers.IO) {
-                            val storageManager =
-                                it.getSystemService(Context.STORAGE_SERVICE) as StorageManager
-                            val bates =
-                                storageManager.getAllocatableBytes(storageManager.getUuidForPath(it.filesDir))
+                            val storageManager = it.getSystemService(Context.STORAGE_SERVICE) as StorageManager
+                            val bates = storageManager.getAllocatableBytes(storageManager.getUuidForPath(it.filesDir))
                             val bat = (bates.toFloat() / 1024).toDouble()
                             return@withContext when {
-                                bat < 10000f -> ": ДАСТУПНА " + formatFigureTwoPlaces(
-                                    BigDecimal(bat).setScale(2, RoundingMode.HALF_EVEN).toFloat()
-                                ) + " КБ"
-                                bates < 1000L -> ": ДАСТУПНА $bates БАЙТ"
+                                bat < 10000f -> getString(R.string.dastupna_bat, formatFigureTwoPlaces(BigDecimal(bat).setScale(2, RoundingMode.HALF_EVEN).toFloat()))
+                                bates < 1000L -> getString(R.string.dastupna_bates, bates)
                                 else -> ""
                             }
                         }
-                        textViewZaglavie.text = textViewZaglavie.text.toString() + format
+                        textViewZaglavie.text = getString(R.string.download_file, format)
                     }
                 }
             }

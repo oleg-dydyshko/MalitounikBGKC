@@ -27,12 +27,13 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.akafist_maran_ata.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.*
 import java.util.*
@@ -454,7 +455,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         if (linearLayout4.visibility == View.VISIBLE || linearLayout5.visibility == View.VISIBLE) {
             return false
@@ -494,7 +494,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         var minmax = ""
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        progress.text = "${fontBiblia.toInt()} sp$minmax"
+                        progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
                         progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         progress.visibility = View.VISIBLE
                         startProcent()
@@ -546,7 +546,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             fontBiblia -= 4
                             var min = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                            progress.text = "${fontBiblia.toInt()} sp$min"
+                            progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
                             progress.visibility = View.VISIBLE
                             startProcent()
                             prefEditor.putFloat("font_biblia", fontBiblia)
@@ -560,7 +560,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             fontBiblia += 4
                             var max = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                            progress.text = "${fontBiblia.toInt()} sp$max"
+                            progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
                             progress.visibility = View.VISIBLE
                             startProcent()
                             prefEditor.putFloat("font_biblia", fontBiblia)
@@ -626,7 +626,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         return true
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setMaranata(cytanne: String) {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         val chten = cytanne.split(";").toTypedArray()
@@ -946,7 +945,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         scrollerSchedule = null
         resetSchedule = object : TimerTask() {
             override fun run() {
-                lifecycleScope.launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+                CoroutineScope(Dispatchers.Main).launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
             }
         }
         resetTimer.schedule(resetSchedule, 60000)
@@ -959,7 +958,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         resetSchedule = null
         scrollerSchedule = object : TimerTask() {
             override fun run() {
-                lifecycleScope.launch {
+                CoroutineScope(Dispatchers.Main).launch {
                     forceScroll()
                     if (!mActionDown && !MainActivity.dialogVisable) {
                         val firstPosition = ListView.firstVisiblePosition
@@ -982,7 +981,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         autoscrollTimer = Timer()
         autoscrollSchedule = object : TimerTask() {
             override fun run() {
-                lifecycleScope.launch {
+                CoroutineScope(Dispatchers.Main).launch {
                     stopAutoScroll()
                     startAutoScroll()
                     val prefEditor: Editor = k.edit()
@@ -1010,7 +1009,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         procentTimer = Timer()
         procentSchedule = object : TimerTask() {
             override fun run() {
-                lifecycleScope.launch {
+                CoroutineScope(Dispatchers.Main).launch {
                     progress.visibility = View.GONE
                 }
             }

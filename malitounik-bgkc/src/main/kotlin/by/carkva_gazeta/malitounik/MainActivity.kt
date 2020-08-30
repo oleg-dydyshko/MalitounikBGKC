@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -30,7 +29,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.lifecycleScope
 import com.google.android.play.core.splitinstall.*
 import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
@@ -39,13 +37,13 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
-import java.io.FileWriter
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToLong
@@ -491,12 +489,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
 
         if (setAlarm) {
-            lifecycleScope.launch {
-                withContext(Dispatchers.IO) {
-                    val notify = k.getInt("notification", 2)
-                    SettingsActivity.setNotifications(this@MainActivity, notify)
-                    return@withContext
-                }
+            CoroutineScope(Dispatchers.IO).launch {
+                val notify = k.getInt("notification", 2)
+                SettingsActivity.setNotifications(this@MainActivity, notify)
             }
             setAlarm = false
         }
@@ -1214,7 +1209,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
 
         fun setListPadzeia(activity: Activity) {
-            Thread {
+            CoroutineScope(Dispatchers.IO).launch {
                 padzeia.clear()
                 val gson = Gson()
                 val dir = File(activity.filesDir.toString() + "/Sabytie")
@@ -1237,9 +1232,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                             inputStream.close()
                         }
                     }
-                    val outputStream = FileWriter(activity.filesDir.toString() + "/Sabytie.json")
-                    outputStream.write(gson.toJson(padzeia))
-                    outputStream.close()
+                    val file = File(activity.filesDir.toString() + "/Sabytie.json")
+                    file.writer().use {
+                        withContext(Dispatchers.IO) {
+                            it.write(gson.toJson(padzeia))
+                        }
+                    }
                     dir.deleteRecursively()
                 } else {
                     val file = File(activity.filesDir.toString() + "/Sabytie.json")
@@ -1252,10 +1250,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                         }
                     }
                 }
-            }.start()
+            }
         }
 
-        @SuppressLint("SetTextI18n")
         fun downloadDynamicModule(context: Activity) {
             val progressBarModule: ProgressBar = context.findViewById(R.id.progressBarModule)
             val layoutDialod: LinearLayout = context.findViewById(R.id.linear)

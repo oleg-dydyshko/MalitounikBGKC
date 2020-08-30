@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -41,7 +40,6 @@ class CaliandarMun : AppCompatActivity() {
         SabytieOnView = false
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes

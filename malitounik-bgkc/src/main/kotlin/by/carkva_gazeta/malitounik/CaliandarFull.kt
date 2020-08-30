@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -19,10 +18,11 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.calaindar.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -95,7 +95,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         return inflater.inflate(R.layout.calaindar, container, false)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
@@ -110,7 +109,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         tileMe?.tileModeX = Shader.TileMode.REPEAT
         if (data[day][20] != "" && data[day][0].toInt() == 1) {
             val ton = data[day][20]
-            textTitleChyt.text = ton + "\n\n" + textTitleChyt.text
+            textTitleChyt.text = getString(R.string.bible_natatki, ton, textTitleChyt.text)
             textTitleChyt.setOnClickListener(this)
         } else {
             textTitleChyt.isEnabled = false
@@ -154,7 +153,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         }
         textDenNedeli.text = nedelName[data[day][0].toInt()]
         textChislo.text = data[day][1]
-        if (data[day][3].toInt() != c[Calendar.YEAR]) textMesiac.text = monthName[data[day][2].toInt()] + ", " + data[day][3] else textMesiac.text = monthName[data[day][2].toInt()]
+        if (data[day][3].toInt() != c[Calendar.YEAR]) textMesiac.text = getString(R.string.mesiach, monthName[data[day][2].toInt()], data[day][3])
+        else textMesiac.text = monthName[data[day][2].toInt()]
         if (!data[day][4].contains("no_sviatyia")) {
             var dataSviatyia = data[day][4]
             if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
@@ -336,13 +336,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             if (extras?.getBoolean("sabytieView", false) == true) {
                 sabytieTitle = extras.getString("sabytieTitle", "") ?: ""
             }
-            lifecycleScope.launch {
+            CoroutineScope(Dispatchers.Main).launch {
                 sabytieView(sabytieTitle)
             }
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onClick(v: View?) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return

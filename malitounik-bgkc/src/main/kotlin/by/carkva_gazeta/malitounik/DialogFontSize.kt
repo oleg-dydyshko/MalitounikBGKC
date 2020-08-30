@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
@@ -86,7 +85,6 @@ class DialogFontSize : DialogFragment() {
         return font
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
@@ -103,7 +101,7 @@ class DialogFontSize : DialogFragment() {
                 cansel.setBackgroundResource(R.drawable.selector_dialog_font_dark)
                 ok.setBackgroundResource(R.drawable.selector_dialog_font_dark)
             }
-            textSize.text = "${fontBiblia.toInt()} sp"
+            textSize.text = getString(R.string.get_font, fontBiblia.toInt())
             zmauchanni.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             cansel.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             ok.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
@@ -140,7 +138,7 @@ class DialogFontSize : DialogFragment() {
                     val prefEditors = k.edit()
                     prefEditors.putFloat("font_biblia", getFont(progress))
                     prefEditors.apply()
-                    textSize.text = getFont(progress).toInt().toString() + " sp"
+                    textSize.text = getString(R.string.get_font, getFont(progress).toInt())
                     mListener.onDialogFontSizePositiveClick()
                 }
 

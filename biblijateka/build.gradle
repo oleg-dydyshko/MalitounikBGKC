@@ -28,12 +28,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
+    //implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(":malitounik-bgkc")
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    androidTestImplementation 'androidx.annotation:annotation:1.1.0'
     implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
     implementation files('libs/fb2parser.jar')
     implementation 'com.android.volley:volley:1.1.0'

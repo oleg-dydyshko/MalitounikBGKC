@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -39,7 +38,6 @@ companion object {
         return inflater.inflate(R.layout.calendat_tab2, container, false)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let { activity ->
@@ -75,7 +73,7 @@ companion object {
                 var ned = start[Calendar.WEEK_OF_YEAR]
                 for (i in 0 until adapterViewPagerNedel.count) {
                     if (position == i) {
-                        nedelName.text = "$ned тыдзень"
+                        nedelName.text = getString(R.string.tydzen_name, ned)
                     }
                     start.add(Calendar.DATE, 7)
                     ned = start[Calendar.WEEK_OF_YEAR]
@@ -118,7 +116,7 @@ companion object {
                     if (dayFull < 0) dayFull = 0
                     if (e == dayFull) {
                         pagerNedel.currentItem = count2
-                        nedelName.text = calendarEnd[Calendar.WEEK_OF_YEAR].toString() + " тыдзень"
+                        nedelName.text = getString(R.string.tydzen_name, calendarEnd[Calendar.WEEK_OF_YEAR])
                     }
                     if (e % 7 == 0) {
                         count2++
@@ -131,7 +129,7 @@ companion object {
                     if (dayFull < 0) dayFull = 0
                     if (e == dayFull) {
                         pagerNedel.currentItem = count2
-                        nedelName.text = c2[Calendar.WEEK_OF_YEAR].toString() + " тыдзень"
+                        nedelName.text = getString(R.string.tydzen_name, c2[Calendar.WEEK_OF_YEAR])
                     }
                     if (e % 7 == 0) {
                         count2++
@@ -144,7 +142,7 @@ companion object {
                     if (dayFull < 0) dayFull = 0
                     if (e == dayFull) {
                         pagerNedel.currentItem = count2
-                        nedelName.text = calendarStart[Calendar.WEEK_OF_YEAR].toString() + " тыдзень"
+                        nedelName.text = getString(R.string.tydzen_name, calendarStart[Calendar.WEEK_OF_YEAR])
                     }
                     if (e % 7 == 0) {
                         count2++

@@ -18,10 +18,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.menu_pesny.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -322,7 +323,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             }
             posukPesenSchedule = object : TimerTask() {
                 override fun run() {
-                    lifecycleScope.launch {
+                    CoroutineScope(Dispatchers.Main).launch {
                         rawAsset(poshuk)
                     }
                 }

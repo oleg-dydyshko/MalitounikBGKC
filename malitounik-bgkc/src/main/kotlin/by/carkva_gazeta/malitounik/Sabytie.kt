@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.sabytie.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileWriter
 import java.util.*
@@ -2319,7 +2320,6 @@ fileReader.close()
         invalidateOptionsMenu()
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     override fun sabytieDelAll() {
         redak = true
         CoroutineScope(Dispatchers.IO).launch {
@@ -2336,7 +2336,9 @@ fileReader.close()
             val file = File("$filesDir/Sabytie.json")
             val gson = Gson()
             file.writer().use {
-                it.write(gson.toJson(MainActivity.padzeia))
+                withContext(Dispatchers.IO) {
+                    it.write(gson.toJson(MainActivity.padzeia))
+                }
             }
         }
         adapter.clear()

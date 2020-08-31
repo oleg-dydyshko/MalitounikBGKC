@@ -451,6 +451,14 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         if (intent.extras?.getBoolean("shortcuts", false) == true) {
             addSabytie()
         }
+        if (intent.extras?.getBoolean("edit", false) == true) {
+            val position = intent.extras?.getInt("position")?: 0
+            onPopupRedaktor(position)
+        }
+        if (intent.extras?.getBoolean("remove", false) == true) {
+            val position = intent.extras?.getInt("position")?: 0
+            onDialogDeliteClick(position)
+        }
     }
 
     override fun onDialogEditClick(position: Int) {

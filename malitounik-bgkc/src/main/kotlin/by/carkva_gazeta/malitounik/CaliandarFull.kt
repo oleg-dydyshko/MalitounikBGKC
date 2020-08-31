@@ -450,10 +450,11 @@ class CaliandarFull : Fragment(), View.OnClickListener {
 
     private fun sabytieView(sabytieTitle: String) {
         val gc = Calendar.getInstance() as GregorianCalendar
-        var title: String
+        //var title: String
         val sabytieList = ArrayList<TextViewRobotoCondensed>()
         MainActivity.padzeia.sort()
-        for (p in MainActivity.padzeia) {
+        for (index in 0 until MainActivity.padzeia.size) {
+            val p = MainActivity.padzeia[index]
             val r1 = p.dat.split(".").toTypedArray()
             val r2 = p.datK.split(".").toTypedArray()
             gc[r1[2].toInt(), r1[1].toInt() - 1] = r1[0].toInt()
@@ -471,7 +472,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             gc[r1[2].toInt(), r1[1].toInt() - 1] = r1[0].toInt()
             for (i in 0 until rezkK) {
                 if (gc[Calendar.DAY_OF_YEAR] - 1 == dayYear && gc[Calendar.YEAR] == year) {
-                    title = p.padz
+                    val title = p.padz
                     val data = p.dat
                     val time = p.tim
                     val dataK = p.datK
@@ -488,27 +489,32 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         if (gc[Calendar.MINUTE] < 10) nol3 = "0"
                         res = "Паведаміць: " + nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR] + " у " + gc[Calendar.HOUR_OF_DAY] + ":" + nol3 + gc[Calendar.MINUTE]
                     }
-                    activity?.let {
+                    activity?.let { activity ->
                         val density = resources.displayMetrics.density
                         val realpadding = (5 * density).toInt()
-                        val textViewT = TextViewRobotoCondensed(it)
+                        val textViewT = TextViewRobotoCondensed(activity)
                         textViewT.text = title
                         textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)
                         textViewT.setTypeface(null, Typeface.BOLD)
                         textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
                         textViewT.setTypeface(null, Typeface.BOLD)
 
-                        textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(it)[p.color]))
+                        textViewT.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
+                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(activity)[p.color]))
                         sabytieList.add(textViewT)
-                        val textView = TextViewRobotoCondensed(it)
-                        textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                        textView.setBackgroundColor(ContextCompat.getColor(it, R.color.colorDivider))
+                        val textView = TextViewRobotoCondensed(activity)
+                        textView.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_text))
+                        textView.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorDivider))
                         textView.setPadding(realpadding, realpadding, realpadding, realpadding)
                         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-
+                        textView.setOnClickListener {
+                            fragmentManager?.let {
+                                val dialogSabytieContextMenu = DialogSabytieContextMenu.getInstance(index, title)
+                                dialogSabytieContextMenu.show(it, "dialogSabytieContextMenu")
+                            }
+                        }
                         if (dzenNoch) {
-                            textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                            textView.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
                             textView.setBackgroundResource(R.color.colorprimary_material_dark)
                         }
                         if (data == dataK && time == timeK) {
@@ -544,7 +550,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             llp2.setMargins(0, 0, 0, 0)
                             textViewT.layoutParams = llp2
                             scroll?.post {
-                                activity?.intent?.removeExtra("sabytieView")
+                                activity.intent?.removeExtra("sabytieView")
                                 scroll?.fullScroll(ScrollView.FOCUS_DOWN)
                                 val shakeanimation = AnimationUtils.loadAnimation(activity, R.anim.shake)
                                 textViewT.startAnimation(shakeanimation)

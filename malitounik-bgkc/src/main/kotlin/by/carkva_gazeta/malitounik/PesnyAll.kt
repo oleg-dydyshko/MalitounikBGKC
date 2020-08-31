@@ -28,7 +28,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.File
-import java.io.FileWriter
 import java.io.InputStreamReader
 import java.lang.reflect.Field
 import java.util.*
@@ -476,9 +475,10 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 if (check) {
                     MenuVybranoe.vybranoe.add(VybranoeData(resurs, title))
                 }
-                val outputStream = FileWriter(file)
-                outputStream.write(gson.toJson(MenuVybranoe.vybranoe))
-                outputStream.close()
+                MenuVybranoe.vybranoe.sort()
+                file.writer().use {
+                    it.write(gson.toJson(MenuVybranoe.vybranoe))
+                }
             } catch (t: Throwable) {
                 file.delete()
                 check = false

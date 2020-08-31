@@ -36,14 +36,11 @@
                 android:layout_alignEnd="@+id/textChislo"
                 android:layout_alignRight="@+id/textChislo"
                 android:layout_gravity="center_horizontal"
-                android:background="@color/colorDivider"
                 android:gravity="center"
                 android:paddingLeft="5dp"
                 android:paddingTop="5dp"
                 android:paddingRight="5dp"
                 android:singleLine="false"
-                android:text="пятніца"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -57,12 +54,9 @@
                 android:layout_alignEnd="@+id/textMesiac"
                 android:layout_alignRight="@+id/textMesiac"
                 android:layout_gravity="center_horizontal"
-                android:background="@color/colorDivider"
                 android:gravity="center_vertical|center_horizontal"
                 android:minHeight="110dp"
                 android:singleLine="false"
-                android:text="30"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="80sp"
                 android:textStyle="bold" />
 
@@ -97,15 +91,12 @@
                 android:layout_below="@+id/textChislo"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
-                android:background="@color/colorDivider"
                 android:gravity="center"
                 android:minWidth="190dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingBottom="5dp"
                 android:singleLine="false"
-                android:text="КАСТРЫЧНІКА"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -119,7 +110,7 @@
                 android:layout_gravity="start|bottom"
                 android:layout_marginTop="0dp"
                 android:gravity="start"
-                android:text="Пост"
+                android:text="@string/Post"
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="12sp"
                 android:visibility="gone" />
@@ -201,7 +192,7 @@
             android:paddingEnd="10dp"
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
-            android:text="Чытаньне:"
+            android:text="@string/chytanne"
             android:textColor="@color/colorPrimary_text"
             android:textSize="18sp"
             android:textStyle="italic" />

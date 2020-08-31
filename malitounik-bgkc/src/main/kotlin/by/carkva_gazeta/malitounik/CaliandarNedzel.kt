@@ -181,7 +181,8 @@ class CaliandarNedzel : ListFragment() {
                 viewHolder.textPraz?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
             }
             if (c[Calendar.YEAR] == arrayList[position][3].toInt() && c[Calendar.DATE] == arrayList[position][1].toInt() && c[Calendar.MONTH] == arrayList[position][2].toInt()) {
-                if (dzenNoch) viewHolder.linearLayout?.setBackgroundResource(R.drawable.calendar_nedel_today_black) else viewHolder.linearLayout?.setBackgroundResource(R.drawable.calendar_nedel_today)
+                if (dzenNoch) viewHolder.linearLayout?.setBackgroundResource(R.drawable.calendar_nedel_today_black)
+                else viewHolder.linearLayout?.setBackgroundResource(R.drawable.calendar_nedel_today)
             } else {
                 viewHolder.linearLayout?.setBackgroundResource(0)
             }

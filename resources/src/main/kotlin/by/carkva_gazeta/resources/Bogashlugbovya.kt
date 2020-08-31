@@ -129,9 +129,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 if (check) {
                     MenuVybranoe.vybranoe.add(VybranoeData(resurs, title))
                 }
-                val outputStream = FileWriter(file)
-                outputStream.write(gson.toJson(MenuVybranoe.vybranoe))
-                outputStream.close()
+                MenuVybranoe.vybranoe.sort()
+                file.writer().use {
+                    it.write(gson.toJson(MenuVybranoe.vybranoe))
+                }
             } catch (t: Throwable) {
                 file.delete()
                 check = false
@@ -217,6 +218,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         setContentView(R.layout.bogasluzbovya)
+        resurs = intent?.getStringExtra("resurs") ?: ""
+        if (resurs.contains("pesny")) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        title = intent?.getStringExtra("title") ?: ""
         loadData()
         autoscroll = k.getBoolean("autoscroll", false)
         spid =  k.getInt("autoscrollSpid", 60)
@@ -257,9 +261,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             WebView.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
         }
-        resurs = intent?.getStringExtra("resurs") ?: ""
-        if (resurs.contains("pesny")) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        title = intent?.getStringExtra("title") ?: ""
         men = checkVybranoe(this, resurs)
         val webSettings = WebView.settings
         webSettings.standardFontFamily = "sans-serif-condensed"

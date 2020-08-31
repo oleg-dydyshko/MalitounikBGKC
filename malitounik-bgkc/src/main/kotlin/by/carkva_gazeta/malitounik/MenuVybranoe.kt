@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
-import java.io.FileWriter
 
 /**
  * Created by oleg on 30.5.16
@@ -38,9 +37,10 @@ class MenuVybranoe : VybranoeListFragment() {
         activity?.let {
             val gson = Gson()
             val file = File(it.filesDir.toString() + "/Vybranoe.json")
-            val outputStream = FileWriter(file)
-            outputStream.write(gson.toJson(vybranoe))
-            outputStream.close()
+            vybranoe.sort()
+            file.writer().use {
+                it.write(gson.toJson(vybranoe))
+            }
             adapter.notifyDataSetChanged()
         }
     }
@@ -50,9 +50,9 @@ class MenuVybranoe : VybranoeListFragment() {
             vybranoe.clear()
             val gson = Gson()
             val file = File(it.filesDir.toString() + "/Vybranoe.json")
-            val outputStream = FileWriter(file)
-            outputStream.write(gson.toJson(vybranoe))
-            outputStream.close()
+            file.writer().use {
+                it.write(gson.toJson(vybranoe))
+            }
             adapter.notifyDataSetChanged()
         }
     }
@@ -70,7 +70,6 @@ class MenuVybranoe : VybranoeListFragment() {
                     file.delete()
                 }
             }
-        vybranoe.sort()
             adapter = MyVybranoeAdapter(it)
             listAdapter = adapter
             listView.isVerticalScrollBarEnabled = false
@@ -115,7 +114,7 @@ class MenuVybranoe : VybranoeListFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class MyVybranoeAdapter(private val activity: Activity) : ArrayAdapter<VybranoeData>(activity, R.layout.simple_list_item_3, R.id.label, vybranoe as List<VybranoeData>) {
+    private inner class MyVybranoeAdapter(private val activity: Activity) : ArrayAdapter<VybranoeData>(activity, R.layout.simple_list_item_3, R.id.label, vybranoe) {
         private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {

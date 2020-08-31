@@ -3069,6 +3069,7 @@ string chtinia_7
 string chtinia_8
 string chtinia_9
 string chtinia_zag
+string chytanne
 string clean_histopy
 string clean_histopy_title
 string clear_text_end_icon_content_description

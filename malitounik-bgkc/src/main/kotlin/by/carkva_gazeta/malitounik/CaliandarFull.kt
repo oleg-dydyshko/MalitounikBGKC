@@ -209,8 +209,11 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         textChytanneSviatyia.setBackgroundResource(R.drawable.selector_post)
                         textBlaslavenne.setBackgroundResource(R.drawable.selector_post)
                         textDenNedeli.setBackgroundResource(R.drawable.selector_post)
+                        textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                         textChislo.setBackgroundResource(R.drawable.selector_post)
+                        textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                         textMesiac.setBackgroundResource(R.drawable.selector_post)
+                        textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                         textPamerlyia.setBackgroundResource(R.drawable.selector_post)
                         if (data[day][0].contains("6")) {
                             PostFish.visibility = View.VISIBLE
@@ -243,6 +246,14 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         textPost.visibility = View.VISIBLE
                         PostFish.visibility = View.VISIBLE
                         if (dzenNoch) PostFish.setImageResource(R.drawable.fishe_red_black) else PostFish.setImageResource(R.drawable.fishe_red)
+                    }
+                    else -> {
+                        textDenNedeli.setBackgroundResource(R.color.colorDivider)
+                        textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        textChislo.setBackgroundResource(R.color.colorDivider)
+                        textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        textMesiac.setBackgroundResource(R.color.colorDivider)
+                        textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                     }
                 }
             }

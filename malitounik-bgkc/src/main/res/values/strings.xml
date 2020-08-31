@@ -359,5 +359,6 @@
     <string name="sabytie_kali">Калі: %1$s %2$s\n%3$s</string>
     <string name="sabytie_pachatak_show">Пачатак: %1$s %2$s\nКанец: %3$s %4$s\n%5$s</string>
     <string name="empty"> </string>
+    <string name="chytanne">Чытаньне:</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

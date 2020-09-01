@@ -159,6 +159,25 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {
+        if (semuxa == 1) {
+            if (MenuBibleSemuxa.bible_time) {
+                MenuBibleSemuxa.bible_time = false
+                onSupportNavigateUp()
+            } else {
+                super.onBackPressed()
+            }
+        }
+        if (semuxa == 2) {
+            if (MenuBibleSinoidal.bible_time) {
+                MenuBibleSinoidal.bible_time = false
+                onSupportNavigateUp()
+            } else {
+                super.onBackPressed()
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         setTollbarTheme()

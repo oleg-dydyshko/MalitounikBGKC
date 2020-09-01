@@ -23,10 +23,7 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.BibleGlobalList
-import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
 import by.carkva_gazeta.resources.DialogZakladkaDelite.ZakladkaDeliteListiner
 import com.google.gson.Gson
@@ -144,6 +141,25 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
             natatki.show(supportFragmentManager, "delite_all_zakladki_i_natatki")
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        if (semuxa == 1) {
+            if (MenuBibleSemuxa.bible_time) {
+                MenuBibleSemuxa.bible_time = false
+                onSupportNavigateUp()
+            } else {
+                super.onBackPressed()
+            }
+        }
+        if (semuxa == 2) {
+            if (MenuBibleSinoidal.bible_time) {
+                MenuBibleSinoidal.bible_time = false
+                onSupportNavigateUp()
+            } else {
+                super.onBackPressed()
+            }
+        }
     }
 
     override fun onResume() {

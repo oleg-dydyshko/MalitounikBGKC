@@ -10,6 +10,9 @@
         <item name="android:colorBackground">@color/colorIcons</item>
         <item name="android:textColorPrimary">@color/colorPrimary_text</item>
         <item name="android:textColorSecondary">@color/colorSecondary_text</item>
+        <!--<item name="colorControlNormal">#d32f2f</item>
+        <item name="colorControlActivated">#ff5722</item>
+        <item name="colorControlHighlight">#f44336</item>-->
         <!--<item name="android:colorForeground">@color/colorforeground_material_light</item>-->
         <item name="fontFamily">sans-serif-condensed</item>
     </style>

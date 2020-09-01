@@ -378,6 +378,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             saveHistory()
             Histopy.visibility = View.GONE
             ListView.visibility = View.VISIBLE
+            searche = true
+            prefEditors.putString("search_string", edit)
+            prefEditors.apply()
             autoCompleteTextView?.setText(edit)
             searchView?.clearFocus()
             execute(edit)
@@ -516,6 +519,33 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        if (zavet == 1) {
+            if (MenuBibleSemuxa.bible_time) {
+                MenuBibleSemuxa.bible_time = false
+                onSupportNavigateUp()
+            } else {
+                super.onBackPressed()
+            }
+        }
+        if (zavet == 2) {
+            if (MenuBibleSinoidal.bible_time) {
+                MenuBibleSinoidal.bible_time = false
+                onSupportNavigateUp()
+            } else {
+                super.onBackPressed()
+            }
+        }
+        if (zavet == 3) {
+            if (MenuPsalterNadsana.bible_time) {
+                MenuPsalterNadsana.bible_time = false
+                onSupportNavigateUp()
+            } else {
+                super.onBackPressed()
+            }
+        }
     }
 
     private fun addHistory(item: String) {

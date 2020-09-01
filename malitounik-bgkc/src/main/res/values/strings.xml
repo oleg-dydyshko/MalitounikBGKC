@@ -131,8 +131,8 @@
     <string name="poshuk">Пошук</string>
     <string name="poshuk_sinoidal">Пошук па Сінадальным расейскім перакладзе</string>
     <string name="procent">%1$d%%</string>
-    <string name="sabytieKali">Калі: %1$s %2$s \n%3$s</string>
-    <string name="sabytieDoKuda">Пачатак: %1$s %2$s \nКанец: %3$s %4$s \n%5$s</string>
+    <string name="sabytieKali">Калі: %1$s %2$s \n%3$s\nРэдагаваць/Выдаліць</string>
+    <string name="sabytieDoKuda">Пачатак: %1$s %2$s \nКанец: %3$s %4$s \n%5$s\nРэдагаваць/Выдаліць</string>
     <string name="chtinia_0">%1$sЕвангельле паводле Мацьвея %2$s</string>
     <string name="chtinia_1">%1$sЕвангельле паводле Марка %2$s</string>
     <string name="chtinia_2">%1$sЕвангельле паводле Лукаша %2$s</string>

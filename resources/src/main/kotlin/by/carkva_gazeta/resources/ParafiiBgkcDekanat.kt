@@ -93,7 +93,6 @@ class ParafiiBgkcDekanat : AppCompatActivity() {
             data.add("Прага (Чэхія)")
             data.add("Рым (Італія)")
             data.add("Санкт-Пецярбург (Расея)")
-            data.add("Мінеапаліс (ЗША)")
         }
         val adapter = MenuListAdaprer(this, data)
         ListView.adapter = adapter

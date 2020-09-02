@@ -161,28 +161,28 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
             }
         }
-        var glava = -1
-        when (id) {
-            R.id.textView1 -> glava = 1
-            R.id.textView2 -> glava = 2
-            R.id.textView3 -> glava = 3
-            R.id.textView4 -> glava = 4
-            R.id.textView5 -> glava = 5
-            R.id.textView6 -> glava = 6
-            R.id.textView7 -> glava = 7
-            R.id.textView8 -> glava = 8
-            R.id.textView9 -> glava = 9
-            R.id.textView10 -> glava = 10
-            R.id.textView11 -> glava = 11
-            R.id.textView12 -> glava = 12
-            R.id.textView13 -> glava = 13
-            R.id.textView14 -> glava = 14
-            R.id.textView15 -> glava = 15
-            R.id.textView16 -> glava = 16
-            R.id.textView17 -> glava = 17
-            R.id.textView18 -> glava = 18
-            R.id.textView19 -> glava = 19
-            R.id.textView20 -> glava = 20
+        val glava = when (id) {
+            R.id.textView1 -> 1
+            R.id.textView2 -> 2
+            R.id.textView3 -> 3
+            R.id.textView4 -> 4
+            R.id.textView5 -> 5
+            R.id.textView6 -> 6
+            R.id.textView7 -> 7
+            R.id.textView8 -> 8
+            R.id.textView9 -> 9
+            R.id.textView10 -> 10
+            R.id.textView11 -> 11
+            R.id.textView12 -> 12
+            R.id.textView13 -> 13
+            R.id.textView14 -> 14
+            R.id.textView15 -> 15
+            R.id.textView16 -> 16
+            R.id.textView17 -> 17
+            R.id.textView18 -> 18
+            R.id.textView19 -> 19
+            R.id.textView20 -> 20
+            else -> -1
         }
         if (glava != -1) {
             if (MainActivity.checkmoduleResources(activity)) {

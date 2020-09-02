@@ -252,6 +252,10 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             checkSetDzenNoch -> {
                 onSupportNavigateUp()
             }
+            MenuBibleSemuxa.bible_time -> {
+                MenuBibleSemuxa.bible_time = false
+                onSupportNavigateUp()
+            }
             else -> {
                 super.onBackPressed()
             }

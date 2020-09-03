@@ -2506,6 +2506,9 @@ file.delete()
             if (dzenNoch) {
                 //viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
+            } else {
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
             }
             return rootView
         }

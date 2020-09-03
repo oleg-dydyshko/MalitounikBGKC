@@ -50,11 +50,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     private lateinit var chin: SharedPreferences
     private val textWatcher: TextWatcher = MyTextWatcher()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.menu_pesny, container, false)
     }
 
@@ -62,8 +58,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         super.onActivityCreated(savedInstanceState)
         activity?.let { fraragment ->
             chin = fraragment.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            if (!menuListDataIsInitialized())
-                menuListData = getMenuListData(fraragment)
+            if (!menuListDataIsInitialized()) menuListData = getMenuListData(fraragment)
             pesny = arguments?.getString("pesny") ?: "prasl"
             menuList = getMenuListData(fraragment, pesny)
             adapter = MenuPesnyListAdapter(fraragment)
@@ -73,8 +68,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
                 override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                     if (i == 1) { // Скрываем клавиатуру
-                        val imm1 =
-                            fraragment.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        val imm1 = fraragment.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm1.hideSoftInputFromWindow(editText?.windowToken, 0)
                     }
                 }
@@ -110,8 +104,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             Histopy.onItemClickListener = this
             Histopy.setOnItemLongClickListener { _, _, position, _ ->
                 fragmentManager?.let {
-                    val dialogClearHishory =
-                        DialogClearHishory.getInstance(position, history[position])
+                    val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
                     dialogClearHishory.show(it, "dialogClearHishory")
                 }
                 return@setOnItemLongClickListener true
@@ -132,12 +125,10 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         history.add(st)
         for (i in 0 until temp.size) {
             history.add(temp[i])
-            if (history.size == 10)
-                break
+            if (history.size == 10) break
         }
         historyAdapter.notifyDataSetChanged()
-        if (history.size == 1)
-            activity?.invalidateOptionsMenu()
+        if (history.size == 1) activity?.invalidateOptionsMenu()
     }
 
     private fun saveHistopy() {
@@ -159,8 +150,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     override fun cleanHistory(position: Int) {
         history.removeAt(position)
         saveHistopy()
-        if (history.size == 0)
-            activity?.invalidateOptionsMenu()
+        if (history.size == 0) activity?.invalidateOptionsMenu()
         historyAdapter.notifyDataSetChanged()
     }
 
@@ -270,12 +260,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(
-                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
-                0,
-                end,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
     }
@@ -416,9 +401,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                     builder.append(line).append("\n")
                 }
                 inputStream.close()
-                if (builder.toString().toLowerCase(Locale.getDefault()).replace("ё", "е")
-                        .contains(poshuk1.toLowerCase(Locale.getDefault()))
-                ) {
+                if (builder.toString().toLowerCase(Locale.getDefault()).replace("ё", "е").contains(poshuk1.toLowerCase(Locale.getDefault()))) {
                     if (setClear) {
                         menuList.clear()
                         setClear = false
@@ -486,15 +469,13 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         }
     }
 
-    private inner class MenuPesnyListAdapter(private val activity: Activity) :
-        ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
+    private inner class MenuPesnyListAdapter(private val activity: Activity) : ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                rootView =
-                    activity.layoutInflater.inflate(R.layout.simple_list_item_2, parent, false)
+                rootView = activity.layoutInflater.inflate(R.layout.simple_list_item_2, parent, false)
                 viewHolder = ViewHolder()
                 rootView.tag = viewHolder
                 viewHolder.text = rootView.findViewById(R.id.label)
@@ -504,19 +485,13 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             }
             val dzenNoch = chin.getBoolean("dzen_noch", false)
             viewHolder.text?.text = menuList[position].data
-            viewHolder.text?.setTextSize(
-                TypedValue.COMPLEX_UNIT_SP,
-                SettingsActivity.GET_FONT_SIZE_MIN
-            )
+            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
-                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.stiker_black,
-                    0,
-                    0,
-                    0
-                )
+                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            } else {
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
             }
             return rootView
         }
@@ -540,8 +515,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         private fun menuListDataIsInitialized() = ::menuListData.isInitialized
 
         fun getPesniaID(context: Context, name: String): Int {
-            if (!::menuListData.isInitialized)
-                menuListData = getMenuListData(context)
+            if (!::menuListData.isInitialized) menuListData = getMenuListData(context)
             for (list_data in menuListData) {
                 if (list_data.data == name) return list_data.id
             }
@@ -573,20 +547,13 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                 val split = line.split("<>").toTypedArray()
                 val t1 = split[0].indexOf("_")
                 val t2 = split[0].indexOf("_", t1 + 1)
-                menuListData.add(
-                    MenuListData(
-                        listRaw(split[0]),
-                        split[1],
-                        split[0].substring(t1 + 1, t2)
-                    )
-                )
+                menuListData.add(MenuListData(listRaw(split[0]), split[1], split[0].substring(t1 + 1, t2)))
             }
             return menuListData
         }
 
         private fun getMenuListData(context: Context, pesny: String): ArrayList<MenuListData> {
-            if (!::menuListData.isInitialized)
-                menuListData = getMenuListData(context)
+            if (!::menuListData.isInitialized) menuListData = getMenuListData(context)
 
             val menuList = menuListData.filter {
                 it.type.contains(pesny)

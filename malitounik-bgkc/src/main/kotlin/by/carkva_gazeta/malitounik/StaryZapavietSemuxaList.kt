@@ -336,7 +336,12 @@ class StaryZapavietSemuxaList : AppCompatActivity() {
             val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch) textGroup.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+            if (dzenNoch) {
+                textGroup.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                textGroup.setBackgroundResource(R.drawable.selector_dark)
+            } else {
+                textGroup.setBackgroundResource(R.drawable.selector_white)
+            }
             when (groupPosition) {
                 0 -> textGroup.text = "Быцьцё"
                 1 -> textGroup.text = "Выхад"
@@ -389,7 +394,10 @@ class StaryZapavietSemuxaList : AppCompatActivity() {
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 textChild.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                textChild.setBackgroundResource(R.drawable.selector_dark)
                 textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            } else {
+                textChild.setBackgroundResource(R.drawable.selector_white)
             }
             textChild.text = groups[groupPosition][childPosition]
             return rootView

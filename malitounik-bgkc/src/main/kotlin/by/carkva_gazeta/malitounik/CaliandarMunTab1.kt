@@ -157,7 +157,12 @@ companion object {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextViewRobotoCondensed
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
+            if (dzenNoch) {
+                textView.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
+                textView.setBackgroundResource(R.drawable.selector_dark)
+            } else {
+                textView.setBackgroundResource(R.drawable.selector_white)
+            }
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
                     textView.setTypeface(null, Typeface.BOLD)

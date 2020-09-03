@@ -67,6 +67,8 @@ class MenuListAdaprer : ArrayAdapter<String> {
             viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
             viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
             viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        } else {
+            viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
         }
         return rootView
     }

@@ -26,6 +26,8 @@
 
 -keep class androidx.constraintlayout.widget.ConstraintLayout { <init>(android.content.Context, android.util.AttributeSet); }
 
+-keep class androidx.gridlayout.widget.GridLayout { <init>(android.content.Context, android.util.AttributeSet); }
+
 -keep class androidx.viewpager.widget.PagerTabStrip { <init>(android.content.Context, android.util.AttributeSet); }
 
 -keep class androidx.viewpager.widget.ViewPager { <init>(android.content.Context, android.util.AttributeSet); }

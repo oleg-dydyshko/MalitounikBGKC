@@ -515,12 +515,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         textView.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorDivider))
                         textView.setPadding(realpadding, realpadding, realpadding, realpadding)
                         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-                        /*textView.setOnClickListener {
-                            fragmentManager?.let {
-                                val dialogSabytieContextMenu = DialogSabytieContextMenu.getInstance(index, title)
-                                dialogSabytieContextMenu.show(it, "dialogSabytieContextMenu")
-                            }
-                        }*/
                         if (dzenNoch) {
                             textView.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
                             textView.setBackgroundResource(R.color.colorprimary_material_dark)

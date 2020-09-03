@@ -7,14 +7,6 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.Layout
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.TextPaint
-import android.text.method.LinkMovementMethod
-import android.text.style.AlignmentSpan
-import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -2977,50 +2969,13 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                             textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                             textView.setBackgroundResource(R.color.colorprimary_material_dark)
                         }
-                        val clickableSpanEdit = object : ClickableSpan() {
-                            override fun onClick(p0: View) {
-                                fragmentManager?.let {
-                                    val intent = Intent(activity, Sabytie::class.java)
-                                    intent.putExtra("edit", true)
-                                    intent.putExtra("position", index)
-                                    startActivity(intent)
-                                }
-                            }
-
-                            override fun updateDrawState(ds: TextPaint) {
-                                super.updateDrawState(ds)
-                                ds.isUnderlineText = false
-                            }
-                        }
-                        val clickableSpanRemove = object : ClickableSpan() {
-                            override fun onClick(p0: View) {
-                                fragmentManager?.let {
-                                    val intent = Intent(activity, Sabytie::class.java)
-                                    intent.putExtra("remove", true)
-                                    intent.putExtra("position", index)
-                                    startActivity(intent)
-                                }
-                            }
-
-                            override fun updateDrawState(ds: TextPaint) {
-                                super.updateDrawState(ds)
-                                ds.isUnderlineText = false
-                            }
-                        }
                         val spannable = if (data == dataK && time == timeK) {
-                            SpannableString(resources.getString(R.string.sabytieKali, data, time, res))
+                            getString(R.string.sabytieKali, data, time, res)
                         } else {
-                            SpannableString(resources.getString(R.string.sabytieDoKuda, data, time, dataK, timeK, res))
+                            getString(R.string.sabytieDoKuda, data, time, dataK, timeK, res)
                         }
                         val t1 = spannable.lastIndexOf("\n")
-                        val t2 = spannable.lastIndexOf("/")
-                        spannable.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_OPPOSITE), t1 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        if (dzenNoch) spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary_black)), t1 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        else spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary)), t1 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        spannable.setSpan(clickableSpanEdit, t1 + 1, t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        spannable.setSpan(clickableSpanRemove, t2 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        textView.text = spannable
-                        textView.movementMethod = LinkMovementMethod.getInstance()
+                        textView.text = spannable.substring(0, t1)
                         sabytieList.add(textView)
                         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
                         llp.setMargins(0, 0, 0, 10)

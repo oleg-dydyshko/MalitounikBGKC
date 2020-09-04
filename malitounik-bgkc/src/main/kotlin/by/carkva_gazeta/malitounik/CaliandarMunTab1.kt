@@ -193,7 +193,12 @@ companion object {
                 viewHolder = convert.tag as ViewHolder
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            if (dzenNoch) viewHolder.text?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
+            if (dzenNoch) {
+                viewHolder.text?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
+            } else {
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
+            }
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
                     viewHolder.text?.setTypeface(null, Typeface.BOLD)

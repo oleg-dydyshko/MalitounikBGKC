@@ -37,6 +37,8 @@ class HistoryAdapter(private var context: Activity, private var history: ArrayLi
             viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
             viewHolder.text?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
             viewHolder.image?.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.search))
+        } else {
+            viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
         }
         return rootView
     }

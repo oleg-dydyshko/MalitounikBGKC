@@ -247,6 +247,8 @@ class DialogFileExplorer : DialogFragment() {
             if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark_ligte)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            } else {
+                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_white)
             }
             return rootView
         }

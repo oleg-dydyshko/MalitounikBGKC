@@ -1728,6 +1728,8 @@ class SettingsActivity : AppCompatActivity() {
             if (dzenNoch) {
                 textView.setBackgroundResource(R.drawable.selector_dark)
                 textView.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
+            } else {
+                textView.setBackgroundResource(R.drawable.selector_white)
             }
             return v
         }
@@ -1753,6 +1755,8 @@ class SettingsActivity : AppCompatActivity() {
             if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
+            } else {
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
             }
             return rootView
         }

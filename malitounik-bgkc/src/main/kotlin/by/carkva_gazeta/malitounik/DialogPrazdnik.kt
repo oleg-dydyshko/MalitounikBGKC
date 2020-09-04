@@ -138,6 +138,8 @@ class DialogPrazdnik : DialogFragment() {
             if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+            } else {
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
             }
             return rootView
         }

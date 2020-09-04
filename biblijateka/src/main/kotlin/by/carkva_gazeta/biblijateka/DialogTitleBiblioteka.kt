@@ -119,6 +119,8 @@ class DialogTitleBiblioteka : DialogFragment() {
                 viewHolder.text?.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            } else {
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
             }
             return rootView
         }

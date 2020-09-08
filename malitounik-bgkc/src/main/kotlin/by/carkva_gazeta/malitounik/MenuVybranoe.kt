@@ -34,9 +34,9 @@ class MenuVybranoe : VybranoeListFragment() {
 
     override fun fileDelite(position: Int) {
         vybranoe.removeAt(position)
-        activity?.let {
+        activity?.let { activity ->
             val gson = Gson()
-            val file = File(it.filesDir.toString() + "/Vybranoe.json")
+            val file = File(activity.filesDir.toString() + "/Vybranoe.json")
             vybranoe.sort()
             file.writer().use {
                 it.write(gson.toJson(vybranoe))
@@ -46,10 +46,10 @@ class MenuVybranoe : VybranoeListFragment() {
     }
 
     override fun deliteAllVybranoe() {
-        activity?.let {
+        activity?.let { activity ->
             vybranoe.clear()
             val gson = Gson()
-            val file = File(it.filesDir.toString() + "/Vybranoe.json")
+            val file = File(activity.filesDir.toString() + "/Vybranoe.json")
             file.writer().use {
                 it.write(gson.toJson(vybranoe))
             }

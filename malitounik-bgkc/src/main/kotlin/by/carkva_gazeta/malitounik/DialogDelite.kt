@@ -25,6 +25,7 @@ class DialogDelite : DialogFragment() {
 
     interface DialogDeliteListener {
         fun fileDelite(position: Int, file: String)
+        fun fileDeliteCancel()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +71,7 @@ class DialogDelite : DialogFragment() {
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             linearLayout.addView(textView)
             builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener.fileDelite(position, filename) }
-            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { _: DialogInterface, _: Int -> mListener.fileDeliteCancel() }
             builder.setView(linearLayout)
             alert = builder.create()
             alert.setOnShowListener {

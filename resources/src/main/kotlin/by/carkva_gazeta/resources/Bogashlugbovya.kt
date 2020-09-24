@@ -29,7 +29,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.*
+import java.io.BufferedReader
+import java.io.File
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.lang.reflect.Field
 import java.util.*
 
@@ -127,9 +130,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                 }
                 if (check) {
-                    MenuVybranoe.vybranoe.add(VybranoeData(resurs, title))
+                    MenuVybranoe.vybranoe.add(VybranoeData(vybranoeIndex(), resurs, title))
                 }
-                MenuVybranoe.vybranoe.sort()
                 file.writer().use {
                     it.write(gson.toJson(MenuVybranoe.vybranoe))
                 }
@@ -138,6 +140,19 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 check = false
             }
             return check
+        }
+
+        private fun vybranoeIndex(): Long {
+            var result: Long = 1
+            val vybranoe = MenuVybranoe.vybranoe
+            if (vybranoe.size != 0) {
+                vybranoe.forEach {
+                    if (result < it.id)
+                        result = it.id
+                }
+                result++
+            }
+            return result
         }
 
         fun checkVybranoe(context: Context, resurs: String): Boolean {

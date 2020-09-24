@@ -84,6 +84,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         setDataCalendar = page
     }
 
+    override fun fileDeliteCancel() {
+        val vybranoe = supportFragmentManager.findFragmentByTag("MenuVybranoe") as? MenuVybranoe
+        vybranoe?.fileDeliteCancel()
+        //val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
+        //menuNatatki?.fileDelite(position)
+    }
+
     override fun fileDelite(position: Int, file: String) {
         val vybranoe = supportFragmentManager.findFragmentByTag("MenuVybranoe") as? MenuVybranoe
         vybranoe?.fileDelite(position)
@@ -730,6 +737,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             menu.findItem(R.id.search_sviatyia).isVisible = false
             menu.findItem(R.id.search_nadsan).isVisible = false
             menu.findItem(R.id.sortdate).isVisible = false
+            menu.findItem(R.id.sortdatevybranoe).isVisible = false
             menu.findItem(R.id.action_font).isVisible = false
             menu.findItem(R.id.action_bright).isVisible = false
             menu.findItem(R.id.action_dzen_noch).isVisible = false
@@ -752,7 +760,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     val sort = k.getInt("natatki_sort", 0)
                     menu.findItem(R.id.sortdate).isChecked = sort == 1
                 }
-                R.id.label12 -> menu.findItem(R.id.trash).isVisible = true
+                R.id.label12 -> {
+                    menu.findItem(R.id.trash).isVisible = true
+                    menu.findItem(R.id.sortdatevybranoe).isVisible = true
+                }
                 R.id.label13 -> menu.findItem(R.id.search_nadsan).isVisible = true
             }
             if (dzenNoch) {

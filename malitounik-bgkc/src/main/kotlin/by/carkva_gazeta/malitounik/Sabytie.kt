@@ -509,6 +509,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         invalidateOptionsMenu()
     }
 
+    override fun fileDeliteCancel() {
+    }
+
     override fun fileDelite(position: Int, file: String) {
         redak = true
         val sab = MainActivity.padzeia[position]

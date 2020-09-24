@@ -473,9 +473,9 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 }
                 }*/
                 if (check) {
-                    MenuVybranoe.vybranoe.add(VybranoeData(resurs, title))
+                    MenuVybranoe.vybranoe.add(VybranoeData(vybranoeIndex(), resurs, title))
                 }
-                MenuVybranoe.vybranoe.sort()
+                //MenuVybranoe.vybranoe.sort()
                 file.writer().use {
                     it.write(gson.toJson(MenuVybranoe.vybranoe))
                 }
@@ -484,6 +484,19 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 check = false
             }
             return check
+        }
+
+        private fun vybranoeIndex(): Long {
+            var result: Long = 1
+            val vybranoe = MenuVybranoe.vybranoe
+            if (vybranoe.size != 0) {
+                vybranoe.forEach {
+                    if (result < it.id)
+                        result = it.id
+                }
+                result++
+            }
+            return result
         }
 
         private fun checkVybranoe(context: Context, resurs: String): Boolean {

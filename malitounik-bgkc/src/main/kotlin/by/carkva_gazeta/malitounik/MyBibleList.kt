@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -29,6 +30,7 @@ class MyBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDelite
 
     private var dzenNoch = false
     private lateinit var k: SharedPreferences
+    private var mLastClickTime: Long = 0
 
     override fun vybranoeDeliteCancel() {
         drag_list_view.resetSwipedViews(null)
@@ -178,6 +180,10 @@ class MyBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDelite
         private inner class ViewHolder(itemView: View) : DragItemAdapter.ViewHolder(itemView, mGrabHandleId, mDragOnLongPress) {
             var mText: TextView = itemView.findViewById(R.id.text)
             override fun onItemClicked(view: View) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
                 if (MainActivity.checkmoduleResources(this@MyBibleList)) {
                     val intent = Intent(this@MyBibleList, Class.forName("by.carkva_gazeta.resources.BibliaVybranoe"))
                     intent.putExtra("position", adapterPosition * 2)

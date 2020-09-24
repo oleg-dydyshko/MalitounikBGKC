@@ -215,6 +215,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
     }
 
+    override fun fileDeliteCancel() {
+    }
+
     override fun fileDelite(position: Int, file: String) {
         var file1 = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), file)
         if (file1.exists()) {

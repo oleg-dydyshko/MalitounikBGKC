@@ -22,37 +22,55 @@ class MenuBibleSinoidal : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val k = activity?.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val dzenNoch = k?.getBoolean("dzen_noch", false)?: false
-        novyZavet.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnClickListener
+        activity?.let { activity ->
+            val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
+            if (bibleVybranoe == "") {
+                myBible.visibility = View.GONE
+            } else {
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
+                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
+                if (arrayListVybranoe.isEmpty()) myBible.visibility = View.GONE
             }
-            mLastClickTime = SystemClock.elapsedRealtime()
-            startActivity(Intent(activity, NovyZapavietSinaidalList::class.java))
-        }
-        staryZavet.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnClickListener
+            myBible.setOnClickListener {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return@setOnClickListener
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                MyBibleList.biblia = 2
+                startActivity(Intent(activity, MyBibleList::class.java))
             }
-            mLastClickTime = SystemClock.elapsedRealtime()
-            startActivity(Intent(activity, StaryZapavietSinaidalList::class.java))
-        }
-        val bibleTime = k?.getString("bible_time_sinodal", "") ?: ""
-        if (bibleTime == "") {
-            bible_time = true
-            prodolzych.visibility = View.GONE
-        }
-        prodolzych.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnClickListener
+            novyZavet.setOnClickListener {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return@setOnClickListener
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                startActivity(Intent(activity, NovyZapavietSinaidalList::class.java))
             }
-            mLastClickTime = SystemClock.elapsedRealtime()
-            val gson = Gson()
-            val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
-            val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
-            if (set["zavet"] == 1) {
-                if (MainActivity.checkmoduleResources(activity)) {
+            staryZavet.setOnClickListener {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return@setOnClickListener
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                startActivity(Intent(activity, StaryZapavietSinaidalList::class.java))
+            }
+            val bibleTime = k.getString("bible_time_sinodal", "") ?: ""
+            if (bibleTime == "") {
+                bible_time = true
+                prodolzych.visibility = View.GONE
+            }
+            prodolzych.setOnClickListener {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return@setOnClickListener
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                val gson = Gson()
+                val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
+                val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
+                if (set["zavet"] == 1) {
+                    if (MainActivity.checkmoduleResources(activity)) {
                         val intent = Intent(activity, NovyZapavietSinaidalList::class.java)
                         intent.putExtra("kniga", set["kniga"])
                         intent.putExtra("glava", set["glava"])
@@ -76,52 +94,51 @@ class MenuBibleSinoidal : Fragment() {
                         fragmentManager?.let { dadatak.show(it, "dadatak") }
                     }
                 }
-        }
-        zakladki.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnClickListener
             }
-            mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.BibleZakladki"))
-                intent.putExtra("semuxa", 2)
-                startActivity(intent)
-            } else {
-                val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+            zakladki.setOnClickListener {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return@setOnClickListener
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                if (MainActivity.checkmoduleResources(activity)) {
+                    val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.BibleZakladki"))
+                    intent.putExtra("semuxa", 2)
+                    startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    fragmentManager?.let { dadatak.show(it, "dadatak") }
+                }
             }
-        }
-        natatki.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnClickListener
+            natatki.setOnClickListener {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return@setOnClickListener
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                if (MainActivity.checkmoduleResources(activity)) {
+                    val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.BibleNatatki"))
+                    intent.putExtra("semuxa", 2)
+                    startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    fragmentManager?.let { dadatak.show(it, "dadatak") }
+                }
             }
-            mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.BibleNatatki"))
-                intent.putExtra("semuxa", 2)
-                startActivity(intent)
-            } else {
-                val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+            saeche.setOnClickListener {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return@setOnClickListener
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                if (MainActivity.checkmoduleResources(activity)) {
+                    val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SearchBiblia"))
+                    intent.putExtra("zavet", 2)
+                    startActivity(intent)
+                } else {
+                    val dadatak = DialogInstallDadatak()
+                    fragmentManager?.let { dadatak.show(it, "dadatak") }
+                }
             }
-        }
-        saeche.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnClickListener
-            }
-            mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SearchBiblia"))
-                intent.putExtra("zavet", 2)
-                startActivity(intent)
-            } else {
-                val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
-            }
-        }
-        umovy_karystannia.visibility = View.GONE
-        if (dzenNoch) {
-            activity?.let {
+            umovy_karystannia.visibility = View.GONE
+            if (dzenNoch) {
                 novyZavet.setBackgroundResource(R.drawable.knopka_red_black)
                 staryZavet.setBackgroundResource(R.drawable.knopka_red_black)
             }

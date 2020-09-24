@@ -261,6 +261,13 @@
             android:label="Даведка"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name="by.carkva_gazeta.malitounik.MyBibleList"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
             android:name="by.carkva_gazeta.malitounik.NovyZapavietSemuxaList"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

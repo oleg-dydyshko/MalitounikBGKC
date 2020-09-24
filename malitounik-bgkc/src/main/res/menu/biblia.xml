@@ -8,17 +8,23 @@
         android:title="@string/RAZDZEL"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_orientation"
-        android:checkable="true"
+        android:id="@+id/action_vybranoe"
+        android:icon="@android:drawable/btn_star_big_off"
         android:orderInCategory="100"
-        android:title="@string/blok_orientation"
-        app:showAsAction="never" />
+        android:title="@string/vybranoe"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_fullscreen"
         android:icon="@drawable/full_screen"
         android:orderInCategory="100"
         android:title="@string/fullscreen"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_orientation"
+        android:checkable="true"
+        android:orderInCategory="100"
+        android:title="@string/blok_orientation"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_font"
         android:orderInCategory="100"

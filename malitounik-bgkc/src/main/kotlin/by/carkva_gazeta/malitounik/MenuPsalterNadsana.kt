@@ -34,6 +34,16 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                 MenuBibleSemuxa.bible_time = true
                 prodolzych.visibility = View.GONE
             }
+            val bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
+            if (bibleVybranoe == "") {
+                myBible.visibility = View.GONE
+            } else {
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
+                val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
+                if (arrayListVybranoe.isEmpty()) myBible.visibility = View.GONE
+            }
+            myBible.setOnClickListener(this)
             psalter.setOnClickListener(this)
             prodolzych.setOnClickListener(this)
             pravila_chtenia.setOnClickListener(this)
@@ -97,6 +107,10 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = v?.id ?: 0
+        if (id == R.id.myBible) {
+            MyBibleList.biblia = 3
+            startActivity(Intent(activity, MyBibleList::class.java))
+        }
         if (id == R.id.psalter) {
             startActivity(Intent(activity, NadsanContent::class.java))
         }

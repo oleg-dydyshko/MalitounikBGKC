@@ -678,7 +678,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         }
                     }
                 }
-                val r = this@MaranAta.resources
+                val r = resources
                 var inputStream = r.openRawResource(R.raw.biblias1)
                 var error = false
                 if (belarus) {

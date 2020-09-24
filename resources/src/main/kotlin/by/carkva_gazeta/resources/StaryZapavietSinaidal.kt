@@ -67,6 +67,7 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
     private var setedit = false
     private var checkSetDzenNoch = false
     private var title = ""
+    private var men = true
     private val uiAnimationDelay: Long = 300
     private val orientation: Int
         get() {
@@ -205,7 +206,9 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
 
             override fun onPageSelected(position: Int) {
                 BibleGlobalList.mListGlava = position
-                if (glava != position) fierstPosition = 0
+                men = MyBibleList.checkVybranoe(this@StaryZapavietSinaidal, kniga, position, 2)
+                if (glava != position) NovyZapavietSemuxa.fierstPosition = 0
+                invalidateOptionsMenu()
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
@@ -412,6 +415,7 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
                 fullglav = 16
             }
         }
+        men = MyBibleList.checkVybranoe(this, kniga, glava, 2)
         if (savedInstanceState != null) {
             dialog = savedInstanceState.getBoolean("dialog")
             paralel = savedInstanceState.getBoolean("paralel")
@@ -505,6 +509,14 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_glava).isVisible = !paralel
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
+        val itemVybranoe: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
+        if (men) {
+            itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
+            itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
+        } else {
+            itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
+            itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
+        }
         return true
     }
 
@@ -512,6 +524,14 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
         val id = item.itemId
         val prefEditors = k.edit()
         dzenNoch = k.getBoolean("dzen_noch", false)
+        if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
+            checkSetDzenNoch = true
+            men = MyBibleList.setVybranoe(this, title, kniga, BibleGlobalList.mListGlava, bibleName = 2)
+            if (men) {
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
+            }
+            invalidateOptionsMenu()
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             checkSetDzenNoch = true
             val prefEditor = k.edit()

@@ -23,6 +23,14 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
+            android:name="by.carkva_gazeta.resources.BibliaVybranoe"
+            android:label="@string/str_short_label1"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MyBibleList" />
+        </activity>
+        <activity
             android:name="by.carkva_gazeta.resources.Opisanie"
             android:label="@string/zmiest"
             android:theme="@style/AppTheme.NoActionBar">

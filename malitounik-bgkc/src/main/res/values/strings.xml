@@ -360,5 +360,6 @@
     <string name="sabytie_pachatak_show">Пачатак: %1$s %2$s\nКанец: %3$s %4$s\n%5$s</string>
     <string name="empty"> </string>
     <string name="chytanne">Чытаньне:</string>
+    <string name="vybranoe_biblia_delite">Вы сапраўды жадаеце выдаліць \"%1$s\"?</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

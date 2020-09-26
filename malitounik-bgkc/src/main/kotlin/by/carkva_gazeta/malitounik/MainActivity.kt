@@ -87,8 +87,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     override fun fileDeliteCancel() {
         val vybranoe = supportFragmentManager.findFragmentByTag("MenuVybranoe") as? MenuVybranoe
         vybranoe?.fileDeliteCancel()
-        //val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
-        //menuNatatki?.fileDelite(position)
+        val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
+        menuNatatki?.fileDeliteCancel()
     }
 
     override fun fileDelite(position: Int, file: String) {
@@ -173,8 +173,38 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             idOld = savedInstanceState.getInt("idOld")
         }
         // Удаление кеша интернета
-        val file = File("$filesDir/Site")
-        if (file.exists()) file.deleteRecursively()
+        val fileSite = File("$filesDir/Site")
+        if (fileSite.exists()) fileSite.deleteRecursively()
+        // Создание нового формата нататок
+        val fileNatatki = File("$filesDir/Natatki.json")
+        if (!fileNatatki.exists()) {
+            File(filesDir.toString().plus("/Malitva")).walk().forEach { file ->
+                if (file.isFile) {
+                    val name = file.name
+                    val t1 = name.lastIndexOf("_")
+                    val index = name.substring(t1 + 1).toLong()
+                    val inputStream = FileReader(file)
+                    val reader = BufferedReader(inputStream)
+                    val res = reader.readText().split("<MEMA></MEMA>").toTypedArray()
+                    inputStream.close()
+                    var lRTE: Long = 1
+                    if (res[1].contains("<RTE></RTE>")) {
+                        val start = res[1].indexOf("<RTE></RTE>")
+                        val end = res[1].length
+                        lRTE = res[1].substring(start + 11, end).toLong()
+                    }
+                    if (lRTE <= 1) {
+                        lRTE = file.lastModified()
+                    }
+                    MenuNatatki.myNatatkiFiles.add(MyNatatkiFiles(index, lRTE, res[0]))
+                }
+            }
+            val file = File("$filesDir/Natatki.json")
+            file.writer().use {
+                val gson = Gson()
+                it.write(gson.toJson(MenuNatatki.myNatatkiFiles))
+            }
+        }
         /*InputStream inputStream2 = getResources().openRawResource(R.raw.nadsan_psaltyr)
         String[] split
         try {
@@ -662,14 +692,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 dadatak.show(supportFragmentManager, "dadatak")
             }
         }
-        if (id == R.id.sortdate) {
-            prefEditors = k.edit()
-            if (item.isChecked) prefEditors.putInt("natatki_sort", 0)
-            else prefEditors.putInt("natatki_sort", 1)
-            prefEditors.apply()
-            val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
-            menuNatatki?.sortAlfavit()
-        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -737,7 +759,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             menu.findItem(R.id.search_sviatyia).isVisible = false
             menu.findItem(R.id.search_nadsan).isVisible = false
             menu.findItem(R.id.sortdate).isVisible = false
-            menu.findItem(R.id.sortdatevybranoe).isVisible = false
+            menu.findItem(R.id.sorttime).isVisible = false
             menu.findItem(R.id.action_font).isVisible = false
             menu.findItem(R.id.action_bright).isVisible = false
             menu.findItem(R.id.action_dzen_noch).isVisible = false
@@ -757,12 +779,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 R.id.label7 -> {
                     menu.findItem(R.id.action_add).isVisible = true
                     menu.findItem(R.id.sortdate).isVisible = true
-                    val sort = k.getInt("natatki_sort", 0)
-                    menu.findItem(R.id.sortdate).isChecked = sort == 1
+                    menu.findItem(R.id.sorttime).isVisible = true
+                    when (k.getInt("natatki_sort", 0)) {
+                        0 -> {
+                            menu.findItem(R.id.sortdate).isChecked = false
+                            menu.findItem(R.id.sorttime).isChecked = true
+                        }
+                        1 -> {
+                            menu.findItem(R.id.sortdate).isChecked = true
+                            menu.findItem(R.id.sorttime).isChecked = false
+                        }
+                        else -> {
+                            menu.findItem(R.id.sortdate).isChecked = false
+                            menu.findItem(R.id.sorttime).isChecked = false
+                        }
+                    }
                 }
                 R.id.label12 -> {
                     menu.findItem(R.id.trash).isVisible = true
-                    menu.findItem(R.id.sortdatevybranoe).isVisible = true
+                    menu.findItem(R.id.sortdate).isVisible = true
+                    menu.findItem(R.id.sortdate).isChecked = k.getInt("vybranoe_sort", 1) == 1
                 }
                 R.id.label13 -> menu.findItem(R.id.search_nadsan).isVisible = true
             }

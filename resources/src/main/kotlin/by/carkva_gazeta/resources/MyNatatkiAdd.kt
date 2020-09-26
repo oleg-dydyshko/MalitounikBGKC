@@ -1,22 +1,21 @@
 package by.carkva_gazeta.resources
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.TypedValue
-import android.view.MenuItem
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MenuNatatki
+import by.carkva_gazeta.malitounik.MyNatatkiFiles
 import by.carkva_gazeta.malitounik.SettingsActivity
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.my_malitva_add.*
 import java.io.File
-import java.io.FileWriter
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
@@ -36,18 +35,7 @@ class MyNatatkiAdd : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val intent = Intent()
-        intent.putExtra("savefile", true)
-        setResult(Activity.RESULT_OK, intent)
-        finish()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressed()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
+        onSupportNavigateUp()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -130,17 +118,17 @@ class MyNatatkiAdd : AppCompatActivity() {
     }
 
     private fun write() {
-        var filename = file.text.toString()
+        var nazva = file.text.toString()
         var imiafile = "Mae_malitvy"
-        val string: String = EditText.text.toString()
+        val natatka = EditText.text.toString()
         val gc = Calendar.getInstance() as GregorianCalendar
-        val editMd5 = md5Sum("$filename<MEMA></MEMA>$string")
+        val editMd5 = md5Sum("$nazva<MEMA></MEMA>$natatka")
+        var i: Long = 1
         if (md5sum != editMd5) {
             if (!redak) {
-                var i = 1
                 while (true) {
                     imiafile = "Mae_malitvy_$i"
-                    val fileN = File(this.filesDir.toString() + "/Malitva/" + imiafile)
+                    val fileN = File("$filesDir/Malitva/$imiafile")
                     if (fileN.exists()) {
                         i++
                     } else {
@@ -148,24 +136,40 @@ class MyNatatkiAdd : AppCompatActivity() {
                     }
                 }
             }
-            if (filename == "") {
+            if (nazva == "") {
                 val mun = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
-                filename = gc[Calendar.DATE].toString() + " " + mun[gc[Calendar.MONTH]] + " " + gc[Calendar.YEAR] + " " + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
+                nazva = gc[Calendar.DATE].toString() + " " + mun[gc[Calendar.MONTH]] + " " + gc[Calendar.YEAR] + " " + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
             }
             val file = if (redak) {
-                File(this.filesDir.toString() + "/Malitva/" + this.filename)
+                MenuNatatki.myNatatkiFiles.forEach {
+                    val t1 = filename.lastIndexOf("_")
+                    val id = filename.substring(t1 + 1).toLong()
+                    if (it.id == id) {
+                        it.title = nazva
+                        return@forEach
+                    }
+                }
+                File("$filesDir/Malitva/$filename")
             } else {
-                File(this.filesDir.toString() + "/Malitva/" + imiafile)
+                MenuNatatki.myNatatkiFiles.add(MyNatatkiFiles(i, gc.timeInMillis, nazva))
+                File("$filesDir/Malitva/$imiafile")
             }
-            val outputStream: FileWriter
-            outputStream = FileWriter(file)
-            outputStream.write(filename + "<MEMA></MEMA>" + string + "<RTE></RTE>" + gc.timeInMillis)
-            outputStream.close()
+            val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            MenuNatatki.myNatatkiFilesSort = k.getInt("natatki_sort", 0)
+            MenuNatatki.myNatatkiFiles.sort()
+            val fileName = File("$filesDir/Natatki.json")
+            fileName.writer().use {
+                val gson = Gson()
+                it.write(gson.toJson(MenuNatatki.myNatatkiFiles))
+            }
+            file.writer().use {
+                it.write(nazva + "<MEMA></MEMA>" + natatka + "<RTE></RTE>" + gc.timeInMillis)
+            }
             // Скрываем клавиатуру
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(EditText.windowToken, 0)
             redak = true
-            this.filename = file.name
+            filename = file.name
         }
     }
 

@@ -2,6 +2,7 @@ package by.carkva_gazeta.malitounik
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
@@ -28,6 +29,7 @@ import java.io.File
 class MenuVybranoe : VybranoeFragment() {
     private lateinit var adapter: ItemAdapter //MyVybranoeAdapter
     private var mLastClickTime: Long = 0
+    private lateinit var k: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,18 +72,20 @@ class MenuVybranoe : VybranoeFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let { it ->
+            k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val file = File(it.filesDir.toString() + "/Vybranoe.json")
             if (file.exists()) {
                 try {
                     val gson = Gson()
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
                     vybranoe = gson.fromJson(file.readText(), type)
+                    if (k.getInt("vybranoe_sort", 1) == 1) vybranoe.sort()
                 } catch (t: Throwable) {
                     file.delete()
                 }
             }
             adapter = ItemAdapter(vybranoe, R.layout.list_item, R.id.image, false) //MyVybranoeAdapter(it)
-            drag_list_view.recyclerView.isVerticalScrollBarEnabled = true
+            drag_list_view.recyclerView.isVerticalScrollBarEnabled = false
             drag_list_view.setLayoutManager(LinearLayoutManager(it))
             drag_list_view.setAdapter(adapter, false)
             drag_list_view.setCanDragHorizontally(false)
@@ -114,6 +118,10 @@ class MenuVybranoe : VybranoeFragment() {
                         val gson = Gson()
                         it.write(gson.toJson(vybranoe))
                     }
+                    val edit = k.edit()
+                    edit.putInt("vybranoe_sort", 0)
+                    edit.apply()
+                    it.invalidateOptionsMenu()
                 }
             })
         }
@@ -132,15 +140,23 @@ class MenuVybranoe : VybranoeFragment() {
                 }
             }
         }
-        if (id == R.id.sortdatevybranoe) {
+        if (id == R.id.sortdate) {
             activity?.let { fragmentActivity ->
-                vybranoe.sort()
-                val gson = Gson()
-                val file = File(fragmentActivity.filesDir.toString() + "/Vybranoe.json")
-                file.writer().use {
-                    it.write(gson.toJson(vybranoe))
+                val edit = k.edit()
+                if (item.isChecked) {
+                    edit.putInt("vybranoe_sort", 0)
+                } else {
+                    edit.putInt("vybranoe_sort", 1)
+                    vybranoe.sort()
+                    val gson = Gson()
+                    val file = File(fragmentActivity.filesDir.toString() + "/Vybranoe.json")
+                    file.writer().use {
+                        it.write(gson.toJson(vybranoe))
+                    }
+                    adapter.notifyDataSetChanged()
                 }
-                adapter.notifyDataSetChanged()
+                edit.apply()
+                //it.invalidateOptionsMenu()
             }
         }
         return super.onOptionsItemSelected(item)

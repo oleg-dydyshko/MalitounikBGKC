@@ -61,7 +61,7 @@ class MyBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDelite
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.my_bible_list)
-        drag_list_view.recyclerView.isVerticalScrollBarEnabled = true
+        drag_list_view.recyclerView.isVerticalScrollBarEnabled = false
         val gson = Gson()
         val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
         var bibleVybranoe = ""

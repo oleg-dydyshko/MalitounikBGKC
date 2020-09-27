@@ -33,7 +33,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 
-class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NovyZapavietSinaidalFragment.ClicParalelListiner, NovyZapavietSinaidalFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner {
+class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NovyZapavietSinaidalFragment.ClicParalelListiner, NovyZapavietSinaidalFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
     private val mHideHandler = Handler(Looper.getMainLooper())
 
     @SuppressLint("InlinedApi")
@@ -149,6 +149,12 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
 
     override fun setEdit(edit: Boolean) {
         setedit = edit
+    }
+
+    override fun addZakladka(color: Int) {
+        val adapter = pager.adapter as MyPagerAdapter
+        val fragment = adapter.getFragment(pager.currentItem) as BackPressedFragment
+        fragment.addZakladka(color)
     }
 
     override fun addNatatka() {

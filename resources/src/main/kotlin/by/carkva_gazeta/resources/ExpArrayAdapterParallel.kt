@@ -3,6 +3,7 @@ package by.carkva_gazeta.resources
 import android.app.Activity
 import android.content.Context
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.*
@@ -469,10 +470,33 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
 
                 if (zavet.contains(zav) && knigaN == kniga && glava1 == glava && stix1 == position) {
                     ssb = SpannableStringBuilder(".")
-                    val d = if (k.getBoolean("dzen_noch", false))
-                        ContextCompat.getDrawable(context, R.drawable.bookmark)
+                    var d: Drawable? = null
+                    val t5 = knigaName.lastIndexOf("<!--")
+                    val color = if (t5 != -1)
+                        knigaName.substring(t5 + 4).toInt()
                     else
-                        ContextCompat.getDrawable(context, R.drawable.bookmark_black)
+                        0
+                    when(color) {
+                        0 -> {
+                            d = if (k.getBoolean("dzen_noch", false)) ContextCompat.getDrawable(context, R.drawable.bookmark)
+                            else ContextCompat.getDrawable(context, R.drawable.bookmark_black)
+                        }
+                        1 -> {
+                            d = if (k.getBoolean("dzen_noch", false)) ContextCompat.getDrawable(context, R.drawable.bookmark1_black)
+                            else ContextCompat.getDrawable(context, R.drawable.bookmark1)
+                        }
+                        2 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark2)
+                        3 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark3)
+                        4 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark4)
+                        5 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark5)
+                        6 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark6)
+                        7 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark7)
+                        8 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark8)
+                        9 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark9)
+                        10 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark10)
+                        11 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark11)
+                        12 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark12)
+                    }
                     val realpadding = (fontSize * context.resources.displayMetrics.density).toInt()
                     d?.setBounds(0, 0, realpadding, realpadding)
                     d?.let {
@@ -588,10 +612,33 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
                 }
                 if (zavet.contains(zav) && knigaN == kniga && glava1 == glava && stix1 == position) {
                     ssb = SpannableStringBuilder(".")
-                    val d = if (k.getBoolean("dzen_noch", false))
-                        ContextCompat.getDrawable(context, R.drawable.bookmark)
+                    var d: Drawable? = null
+                    val t5 = knigaName.lastIndexOf("<!--")
+                    val color = if (t5 != -1)
+                        knigaName.substring(t5 + 4).toInt()
                     else
-                        ContextCompat.getDrawable(context, R.drawable.bookmark_black)
+                        0
+                    when(color) {
+                        0 -> {
+                            d = if (k.getBoolean("dzen_noch", false)) ContextCompat.getDrawable(context, R.drawable.bookmark)
+                            else ContextCompat.getDrawable(context, R.drawable.bookmark_black)
+                        }
+                        1 -> {
+                            d = if (k.getBoolean("dzen_noch", false)) ContextCompat.getDrawable(context, R.drawable.bookmark1_black)
+                            else ContextCompat.getDrawable(context, R.drawable.bookmark1)
+                        }
+                        2 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark2)
+                        3 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark3)
+                        4 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark4)
+                        5 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark5)
+                        6 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark6)
+                        7 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark7)
+                        8 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark8)
+                        9 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark9)
+                        10 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark10)
+                        11 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark11)
+                        12 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark12)
+                    }
                     val realpadding = (fontSize * context.resources.displayMetrics.density).toInt()
                     d?.setBounds(0, 0, realpadding, realpadding)
                     d?.let {
@@ -609,4 +656,7 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
         var textView: TextViewRobotoCondensed? = null
     }
 
+    companion object {
+        val colors = arrayOf("#000000", "#D00505", "#800080", "#C71585", "#FF00FF", "#F4A460", "#D2691E", "#A52A2A", "#1E90FF", "#6A5ACD", "#228B22", "#9ACD32", "#20B2AA")
+    }
 }

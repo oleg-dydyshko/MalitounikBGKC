@@ -4,12 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
@@ -31,7 +33,6 @@ import kotlinx.android.synthetic.main.akafist_list_bible.*
 import java.io.File
 import java.io.FileWriter
 import java.util.*
-import kotlin.collections.ArrayList
 
 class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickListener, ZakladkaDeliteListiner, DialogDeliteAllZakladkiINatatkiListener {
     private lateinit var adapter: BibleZakladkiListAdaprer
@@ -447,16 +448,30 @@ class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickL
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            viewHolder.buttonPopup?.setOnClickListener { viewHolder.buttonPopup?.let { showPopupMenu(it, position, itemsL[position]) } }
-            viewHolder.text?.text = itemsL[position]
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, by.carkva_gazeta.malitounik.R.color.colorIcons))
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+                ExpArrayAdapterParallel.colors[0] = "#FFFFFF"
+                ExpArrayAdapterParallel.colors[1] = "#f44336"
             } else {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_white)
+                ExpArrayAdapterParallel.colors[0] = "#000000"
+                ExpArrayAdapterParallel.colors[1] = "#D00505"
             }
+            viewHolder.buttonPopup?.setOnClickListener { viewHolder.buttonPopup?.let { showPopupMenu(it, position, itemsL[position]) } }
+            val t1 = itemsL[position].lastIndexOf("<!--")
+            val t2 = itemsL[position].indexOf("\n\n")
+            var colorPosition = 0
+            val textItem = if (t1 == -1) {
+                SpannableString(itemsL[position])
+            } else {
+                colorPosition = itemsL[position].substring(t1 + 4).toInt()
+                SpannableString(itemsL[position].substring(0, t1))
+            }
+            textItem.setSpan(ForegroundColorSpan(Color.parseColor(ExpArrayAdapterParallel.colors[colorPosition])), 0, t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            viewHolder.text?.text = textItem
+            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             return rootView
         }
 

@@ -49,6 +49,9 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
         adapter.notifyDataSetChanged()
     }
 
+    override fun addZakladka(color: Int) {
+    }
+
     override fun addNatatka() {
     }
 

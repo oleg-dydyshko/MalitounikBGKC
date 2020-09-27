@@ -34,7 +34,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 
-class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, StaryZapavietSinaidalFragment.ClicParalelListiner, StaryZapavietSinaidalFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner {
+class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, StaryZapavietSinaidalFragment.ClicParalelListiner, StaryZapavietSinaidalFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
     private val mHideHandler = Handler(Looper.getMainLooper())
 
     @SuppressLint("InlinedApi")
@@ -150,6 +150,12 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
 
     override fun setEdit(edit: Boolean) {
         setedit = edit
+    }
+
+    override fun addZakladka(color: Int) {
+        val adapter = pager.adapter as StaryZapavietSinaidal.MyPagerAdapter
+        val fragment = adapter.getFragment(pager.currentItem) as BackPressedFragment
+        fragment.addZakladka(color)
     }
 
     override fun addNatatka() {

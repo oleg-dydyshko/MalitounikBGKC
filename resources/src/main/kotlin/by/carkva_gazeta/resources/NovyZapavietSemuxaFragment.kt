@@ -93,6 +93,19 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
         adapter.notifyDataSetChanged()
     }
 
+    override fun addZakladka(color: Int) {
+        activity?.let {
+            if (color != -1) {
+                BibleGlobalList.zakladkiSemuxa.add(0, knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.RAZDZEL) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString() + "<!--" + color)
+                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
+            }
+            BibleGlobalList.mPedakVisable = false
+            listPositionListiner?.setEdit(true)
+            BibleGlobalList.bibleCopyList.clear()
+            adapter.notifyDataSetChanged()
+        }
+    }
+
     override fun addNatatka() {
         BibleGlobalList.bibleCopyList.clear()
         adapter.notifyDataSetChanged()
@@ -421,6 +434,46 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                 adapter.notifyDataSetChanged()
                 copyBigFull.visibility = View.GONE
             }
+            zametka_natatka.setOnClickListener {
+                val copyString = StringBuilder()
+                BibleGlobalList.bibleCopyList.sort()
+                BibleGlobalList.bibleCopyList.forEach {
+                    copyString.append("${bible[it]}<br>")
+                }
+                val clip = copyString.toString().trim()
+                fragmentManager?.let {
+                    val dialog = DialogAddNatatka.getInstance(clip)
+                    dialog.show(it, "DialogAddNatatka")
+                }
+                //MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.copy))
+                linearLayout4.visibility = View.GONE
+                linearLayout6.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                linearLayout6.visibility = View.GONE
+                linearLayout5.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                linearLayout5.visibility = View.GONE
+                BibleGlobalList.mPedakVisable = false
+                BibleGlobalList.bibleCopyList.clear()
+                adapter.notifyDataSetChanged()
+            }
+            zametkaBig.setOnClickListener {
+                val copyString = StringBuilder()
+                BibleGlobalList.bibleCopyList.sort()
+                BibleGlobalList.bibleCopyList.forEach {
+                    copyString.append("${bible[it]}<br>")
+                }
+                val clip = copyString.toString().trim()
+                fragmentManager?.let {
+                    val dialog = DialogAddNatatka.getInstance(clip)
+                    dialog.show(it, "DialogAddNatatka")
+                }
+                //MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.copy))
+                linearLayout4.visibility = View.GONE
+                linearLayout6.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                linearLayout6.visibility = View.GONE
+                BibleGlobalList.mPedakVisable = false
+                BibleGlobalList.bibleCopyList.clear()
+                adapter.notifyDataSetChanged()
+            }
             copyBig.setOnClickListener {
                 val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val copyString = java.lang.StringBuilder()
@@ -547,16 +600,18 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
                         }
                     }
                     if (index == -1) {
-                        BibleGlobalList.zakladkiSemuxa.add(0, knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.RAZDZEL) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString())
-                        MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
+                        fragmentManager?.let {
+                            val dialog = DialogAddZakladka()
+                            dialog.show(it, "DialogAddZakladka")
+                        }
                     } else {
                         BibleGlobalList.zakladkiSemuxa.removeAt(index)
+                        BibleGlobalList.mPedakVisable = false
+                        listPositionListiner?.setEdit(true)
+                        BibleGlobalList.bibleCopyList.clear()
                     }
                     linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     linearLayout4.visibility = View.GONE
-                    BibleGlobalList.mPedakVisable = false
-                    listPositionListiner?.setEdit(true)
-                    BibleGlobalList.bibleCopyList.clear()
                 } else {
                     MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }

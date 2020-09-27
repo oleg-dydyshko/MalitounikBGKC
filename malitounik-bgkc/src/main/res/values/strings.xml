@@ -49,6 +49,10 @@
     <string name="malitva_edit">Рэдагаваць нататку</string>
     <string name="malitva">Нататка</string>
     <string name="MAJE_MALITVY">МАЕ НАТАТКІ</string>
+    <string name="add_maje_natatki">Дадаць у Мае нататкі</string>
+    <string name="ADD_MAJE_MALITVY_NAZVA">Увядзіце назву нататкі</string>
+    <string name="add_color_zakladka">Колер закладкі</string>
+    <string name="COPY_MAJE_MALITVY_NAZVA">Скапіявана ў Мае нататкі</string>
     <string name="SOUND">Гук</string>
     <string name="VIBRATION">Вібрацыя</string>
     <string name="INTERNET_CACHE">КЭШ ІНТЭРНЭТУ:</string>

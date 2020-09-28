@@ -21,13 +21,13 @@
         android:id="@+id/linearLayout5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
         android:background="@color/colorPrimary"
         android:orientation="vertical"
         android:padding="5dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/listView"
-        android:layout_marginStart="10dp"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
@@ -35,11 +35,11 @@
             android:layout_width="34dp"
             android:layout_height="39dp"
             android:layout_weight="1"
+            android:contentDescription="@string/share"
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
             android:paddingRight="5dp"
             android:paddingBottom="10dp"
-            android:contentDescription="@string/share"
             app:srcCompat="@drawable/share_bible" />
 
         <ImageView
@@ -47,23 +47,35 @@
             android:layout_width="34dp"
             android:layout_height="39dp"
             android:layout_weight="1"
+            android:contentDescription="@string/copy_big"
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
             android:paddingRight="5dp"
             android:paddingBottom="10dp"
-            android:contentDescription="@string/copy_big"
             app:srcCompat="@drawable/copy" />
+
+        <ImageView
+            android:id="@+id/zametka_natatka"
+            android:layout_width="34dp"
+            android:layout_height="39dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/add_maje_natatki"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="10dp"
+            app:srcCompat="@drawable/sketch_natatka" />
 
         <ImageView
             android:id="@+id/fullCopy"
             android:layout_width="34dp"
             android:layout_height="39dp"
             android:layout_weight="1"
+            android:contentDescription="@string/copy_big_full"
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
             android:paddingRight="5dp"
             android:paddingBottom="10dp"
-            android:contentDescription="@string/copy_big_full"
             app:srcCompat="@drawable/select_all" />
 
     </LinearLayout>
@@ -84,9 +96,9 @@
             android:id="@+id/spinnerCopy"
             android:layout_width="54dp"
             android:layout_height="24dp"
+            android:contentDescription="@string/empty"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/arrow_down_float_bible" />
 
         <ImageView
@@ -143,37 +155,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <ImageView
             android:id="@+id/adpravit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_weight="1"
-            android:background="@drawable/knopka_red"
-            android:gravity="center"
-            android:text="@string/adpravit"
-            android:textColor="@color/colorIcons"
-            android:textSize="18sp" />
+            android:contentDescription="@string/share"
+            app:srcCompat="@drawable/share_bible" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <ImageView
             android:id="@+id/copyBig"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_weight="1"
-            android:background="@drawable/knopka_red"
-            android:gravity="center"
-            android:text="@string/copy_big"
-            android:textColor="@color/colorIcons"
-            android:textSize="18sp" />
+            android:contentDescription="@string/copy_big"
+            app:srcCompat="@drawable/copy" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-            android:id="@+id/copyBigFull"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/zametkaBig"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_weight="1"
-            android:background="@drawable/knopka_red"
-            android:gravity="center"
-            android:text="@string/copy_big_full"
-            android:textColor="@color/colorIcons"
-            android:textSize="18sp" />
+            android:contentDescription="@string/add_maje_natatki"
+            app:srcCompat="@drawable/sketch_natatka" />
+
+        <ImageView
+            android:id="@+id/copyBigFull"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/copy_big_full"
+            app:srcCompat="@drawable/select_all" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

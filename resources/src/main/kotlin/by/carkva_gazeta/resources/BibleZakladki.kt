@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.akafist_list_bible.*
 import java.io.File
 import java.io.FileWriter
 import java.util.*
+import kotlin.collections.ArrayList
 
 class BibleZakladki : AppCompatActivity(), OnItemClickListener, OnItemLongClickListener, ZakladkaDeliteListiner, DialogDeliteAllZakladkiINatatkiListener {
     private lateinit var adapter: BibleZakladkiListAdaprer

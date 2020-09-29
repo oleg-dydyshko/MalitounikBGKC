@@ -501,11 +501,10 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
             val fragment = adapter.getFragment(pager.currentItem) as BackPressedFragment
             fragment.onBackPressedFragment()
         } else {
-            if (setedit) {
-                setResult(500)
-                finish()
+            if (setedit || checkSetDzenNoch) {
+                onSupportNavigateUp()
             } else {
-                if (checkSetDzenNoch) onSupportNavigateUp() else super.onBackPressed()
+                super.onBackPressed()
             }
         }
     }

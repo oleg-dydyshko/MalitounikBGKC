@@ -1221,6 +1221,21 @@ class SettingsActivity : AppCompatActivity() {
 
             override fun onNothingSelected(adapterView: AdapterView<*>?) {}
         }
+        val autoPrag = ArrayList<String>()
+        for (i in 0..15) {
+            autoPrag.add(getString(R.string.autoprag_time, i + 5))
+        }
+        spinnerAutoPrag.adapter = AutoPragortkaAdapter(this, autoPrag)
+        spinnerAutoPrag.setSelection(k.getInt("autoscrollAutostartTime", 5))
+        spinnerAutoPrag.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                prefEditor.putInt("autoscrollAutostartTime", p2)
+                prefEditor.apply()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibro.visibility = View.GONE
             this.guk.visibility = View.GONE
@@ -1251,11 +1266,13 @@ class SettingsActivity : AppCompatActivity() {
         }
         textView14.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         textView15.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        textView16.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         notificationView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         //textView57.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (dzenNoch) {
             textView14.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             textView15.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            textView16.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             notificationView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             //textView57.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             secret.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
@@ -1263,7 +1280,7 @@ class SettingsActivity : AppCompatActivity() {
             line1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             line2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             line3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            //line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
         }
         /*var dirCount: Long = 0
         File("$filesDir/Site").walk().forEach {
@@ -1387,6 +1404,14 @@ class SettingsActivity : AppCompatActivity() {
         if (dzenNoch) checkBox5.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         checkBox5.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (dzenNochSettings) checkBox5.isChecked = true
+        val autoscrollAutostart = k.getBoolean("autoscrollAutostart", false)
+        if (dzenNoch) checkBox6.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        checkBox6.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        if (autoscrollAutostart) {
+            checkBox6.isChecked = true
+        } else {
+            spinnerAutoPrag.visibility = View.GONE
+        }
         /*val trafik = k.getInt("trafic", 0)
         if (dzenNoch) checkBox2.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         checkBox2.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
@@ -1435,6 +1460,7 @@ class SettingsActivity : AppCompatActivity() {
             this.guk.isClickable = true
             this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
             checkBox5.isChecked = false
+            checkBox6.isChecked = false
             this.maranata.isChecked = false
             maranataRus.isChecked = true
             maranataBel.isChecked = false
@@ -1446,6 +1472,7 @@ class SettingsActivity : AppCompatActivity() {
             this.guk.isChecked = true
             //checkBox2.isChecked = false
             spinnerTime.setSelection(2)
+            spinnerAutoPrag.setSelection(5)
             pkc.isChecked = false
             prav.isChecked = false
             dzair.isChecked = false
@@ -1466,6 +1493,7 @@ class SettingsActivity : AppCompatActivity() {
             notificationNon.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             //textView58.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             checkBox5.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            checkBox6.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             this.sinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             this.maranata.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             if (maranata != 0) {
@@ -1658,6 +1686,16 @@ class SettingsActivity : AppCompatActivity() {
             prefEditor.apply()
             recreate()
         }
+        checkBox6.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            if (isChecked) {
+                prefEditor.putBoolean("autoscrollAutostart", true)
+                spinnerAutoPrag.visibility = View.VISIBLE
+            } else {
+                prefEditor.putBoolean("autoscrollAutostart", false)
+                spinnerAutoPrag.visibility = View.GONE
+            }
+            prefEditor.apply()
+        }
         /*button.setOnClickListener {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
         return@setOnClickListener
@@ -1685,6 +1723,7 @@ class SettingsActivity : AppCompatActivity() {
         dzair.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         praf.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         checkBox5.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        checkBox6.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         if (savedInstanceState == null && (notification == 1 || notification == 2)) {
             if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
                 val notifi = DialogHelpNotification()
@@ -1752,6 +1791,52 @@ class SettingsActivity : AppCompatActivity() {
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             viewHolder.text?.text = dataTimes[position].string
+            if (dzenNoch) {
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
+                viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
+            } else {
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
+            }
+            return rootView
+        }
+
+    }
+
+    private class AutoPragortkaAdapter(private val activity: Activity, private val dataTimes: ArrayList<String>) : ArrayAdapter<String>(activity, R.layout.simple_list_item_1, dataTimes) {
+        private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        private val dzenNoch = k.getBoolean("dzen_noch", false)
+        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val v = super.getDropDownView(position, convertView, parent)
+            val textView = v as TextViewRobotoCondensed
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+            textView.text = dataTimes[position]
+            if (dzenNoch) {
+                textView.setBackgroundResource(R.drawable.selector_dark)
+                textView.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
+            } else {
+                textView.setBackgroundResource(R.drawable.selector_white)
+            }
+            return v
+        }
+
+        override fun getCount(): Int {
+            return dataTimes.size
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            if (convertView == null) {
+                rootView = activity.layoutInflater.inflate(R.layout.simple_list_item_1, parent, false)
+                viewHolder = ViewHolder()
+                rootView.tag = viewHolder
+                viewHolder.text = rootView.findViewById(R.id.text1)
+            } else {
+                rootView = convertView
+                viewHolder = rootView.tag as ViewHolder
+            }
+            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+            viewHolder.text?.text = dataTimes[position]
             if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))

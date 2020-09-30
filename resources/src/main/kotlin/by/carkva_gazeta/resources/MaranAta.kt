@@ -68,7 +68,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
     private var dzenNoch = false
     private var autoscroll = false
-    private var autoscrollAutostart = false
     private lateinit var adapter: MaranAtaListAdaprer
     private val maranAta = ArrayList<String>()
     private var n = 0
@@ -143,7 +142,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         belarus = k.getBoolean("belarus", false)
-        autoscrollAutostart = k.getBoolean("autoscrollAutostart", false)
         spid = k.getInt("autoscrollSpid", 60)
         maranAtaScrollPasition = k.getInt("maranAtaScrollPasition", 0)
         super.onCreate(savedInstanceState)
@@ -155,7 +153,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        if (autoscrollAutostart) autoStartScroll()
+        if (k.getBoolean("autoscrollAutostart", false)) autoStartScroll()
         bibleCopyList.clear()
         //autoscroll = k.getBoolean("autoscroll", false)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
@@ -991,7 +989,14 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 }
             }
         }
-        autoscrollTimer.schedule(autoscrollSchedule, 10000)
+        var autoTime: Long = 10000
+        for (i in 0..15) {
+            if (i == k.getInt("autoscrollAutostartTime", 5)) {
+                autoTime = (i + 5) * 1000L
+                break
+            }
+        }
+        autoscrollTimer.schedule(autoscrollSchedule, autoTime)
     }
 
     private fun stopAutoStartScroll() {
@@ -1244,11 +1249,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             if (autoscroll) {
                 stopAutoScroll()
                 prefEditor.putBoolean("autoscroll", false)
-                prefEditor.putBoolean("autoscrollAutostart", false)
             } else {
                 startAutoScroll()
                 prefEditor.putBoolean("autoscroll", true)
-                prefEditor.putBoolean("autoscrollAutostart", true)
             }
             invalidateOptionsMenu()
         }

@@ -70,9 +70,11 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
     private var scrollTimer = Timer()
     private var procentTimer = Timer()
     private var resetTimer = Timer()
+    private var autoscrollTimer = Timer()
     private var scrollerSchedule: TimerTask? = null
     private var procentSchedule: TimerTask? = null
     private var resetSchedule: TimerTask? = null
+    private var autoscrollSchedule: TimerTask? = null
     private var levo = false
     private var pravo = false
     private var niz = false
@@ -154,6 +156,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             prefEditor.putBoolean("help_str", false)
             prefEditor.apply()
         }
+        if (k.getBoolean("autoscrollAutostart", false)) autoStartScroll()
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -564,6 +567,36 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
                 it.setTextIsSelectable(true)
             }
         }
+    }
+
+    private fun autoStartScroll() {
+        stopAutoStartScroll()
+        autoscrollTimer = Timer()
+        autoscrollSchedule = object : TimerTask() {
+            override fun run() {
+                CoroutineScope(Dispatchers.Main).launch {
+                    stopAutoScroll()
+                    startAutoScroll()
+                    val prefEditor: Editor = k.edit()
+                    prefEditor.putBoolean("autoscroll", true)
+                    prefEditor.apply()
+                    invalidateOptionsMenu()
+                }
+            }
+        }
+        var autoTime: Long = 10000
+        for (i in 0..15) {
+            if (i == k.getInt("autoscrollAutostartTime", 5)) {
+                autoTime = (i + 5) * 1000L
+                break
+            }
+        }
+        autoscrollTimer.schedule(autoscrollSchedule, autoTime)
+    }
+
+    private fun stopAutoStartScroll() {
+        autoscrollTimer.cancel()
+        autoscrollSchedule = null
     }
 
     private fun stopProcent() {

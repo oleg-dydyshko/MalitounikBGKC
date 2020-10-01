@@ -146,6 +146,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         maranAtaScrollPasition = k.getInt("maranAtaScrollPasition", 0)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.akafist_maran_ata)
         setTollbarTheme()
         if (!MainActivity.checkBrightness) {
@@ -153,7 +154,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        if (k.getBoolean("autoscrollAutostart", false)) autoStartScroll()
+        if (k.getBoolean("autoscrollAutostart", false)) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            autoStartScroll()
+        }
         bibleCopyList.clear()
         //autoscroll = k.getBoolean("autoscroll", false)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)

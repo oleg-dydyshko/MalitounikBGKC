@@ -369,5 +369,6 @@
     <string name="kiravanne">КІРАВАНЬНЕ:</string>
     <string name="autoprag">Аўтаматычнае ўключэньне аўтапрагорткі</string>
     <string name="autoprag_time">Праз %1$d секунд</string>
+    <string name="ekpan_on">Экран заўсёды ўключаны</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

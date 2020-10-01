@@ -232,6 +232,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             window.attributes = lp
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         setContentView(R.layout.bogasluzbovya)
@@ -292,7 +293,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             prefEditor.putBoolean("help_str", false)
             prefEditor.apply()
         }
-        if (k.getBoolean("autoscrollAutostart", false)) autoStartScroll()
+        if (k.getBoolean("autoscrollAutostart", false)) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            autoStartScroll()
+        }
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {

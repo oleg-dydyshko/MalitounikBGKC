@@ -11,10 +11,7 @@ import android.text.*
 import android.text.style.AbsoluteSizeSpan
 import android.util.SparseIntArray
 import android.util.TypedValue
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
@@ -148,6 +145,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         c = Calendar.getInstance() as GregorianCalendar
         dzenNoch = chin.getBoolean("dzen_noch", false)
+        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         setContentView(R.layout.search_sviatyia)

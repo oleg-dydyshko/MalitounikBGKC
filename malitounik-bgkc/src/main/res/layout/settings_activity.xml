@@ -119,6 +119,20 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp" />
 
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/checkBox7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:drawableStart="@drawable/stiker"
+                android:drawableLeft="@drawable/stiker"
+                android:drawablePadding="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="@string/ekpan_on"
+                android:textSize="12sp" />
+
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                 android:id="@+id/textView15"
                 android:layout_width="match_parent"

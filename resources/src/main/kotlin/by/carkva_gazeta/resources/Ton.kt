@@ -92,6 +92,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         dzenNoch = chin.getBoolean("dzen_noch", false)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
+        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.akafist_under)
         constraint.setOnTouchListener(this)
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)

@@ -1179,6 +1179,7 @@ class SettingsActivity : AppCompatActivity() {
         }
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         dzenNoch = k.getBoolean("dzen_noch", false)
         val notification = k.getInt("notification", 2)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
@@ -1412,6 +1413,12 @@ class SettingsActivity : AppCompatActivity() {
         } else {
             spinnerAutoPrag.visibility = View.GONE
         }
+        val scrinOn = k.getBoolean("scrinOn", false)
+        if (dzenNoch) checkBox7.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        checkBox7.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        if (scrinOn) {
+            checkBox7.isChecked = true
+        }
         /*val trafik = k.getInt("trafic", 0)
         if (dzenNoch) checkBox2.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         checkBox2.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
@@ -1461,6 +1468,7 @@ class SettingsActivity : AppCompatActivity() {
             this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
             checkBox5.isChecked = false
             checkBox6.isChecked = false
+            checkBox7.isChecked = false
             this.maranata.isChecked = false
             maranataRus.isChecked = true
             maranataBel.isChecked = false
@@ -1494,6 +1502,7 @@ class SettingsActivity : AppCompatActivity() {
             //textView58.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             checkBox5.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             checkBox6.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            checkBox7.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             this.sinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             this.maranata.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             if (maranata != 0) {
@@ -1696,6 +1705,18 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
+        checkBox7.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            if (isChecked) {
+                prefEditor.putBoolean("scrinOn", true)
+                spinnerAutoPrag.visibility = View.VISIBLE
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            } else {
+                prefEditor.putBoolean("scrinOn", false)
+                spinnerAutoPrag.visibility = View.GONE
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            }
+            prefEditor.apply()
+        }
         /*button.setOnClickListener {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
         return@setOnClickListener
@@ -1724,6 +1745,7 @@ class SettingsActivity : AppCompatActivity() {
         praf.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         checkBox5.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         checkBox6.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        checkBox7.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         if (savedInstanceState == null && (notification == 1 || notification == 2)) {
             if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
                 val notifi = DialogHelpNotification()

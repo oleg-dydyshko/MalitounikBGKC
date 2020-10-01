@@ -97,6 +97,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bible)
         glava = if (intent.extras?.containsKey("kafizma") == true) {

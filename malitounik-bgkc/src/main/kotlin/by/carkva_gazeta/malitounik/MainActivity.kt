@@ -165,9 +165,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         k = getSharedPreferences("biblia", MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         if (savedInstanceState != null) {
             idSelect = savedInstanceState.getInt("id")
             idOld = savedInstanceState.getInt("idOld")

@@ -1708,11 +1708,9 @@ class SettingsActivity : AppCompatActivity() {
         checkBox7.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putBoolean("scrinOn", true)
-                spinnerAutoPrag.visibility = View.VISIBLE
                 window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             } else {
                 prefEditor.putBoolean("scrinOn", false)
-                spinnerAutoPrag.visibility = View.GONE
                 window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
             prefEditor.apply()

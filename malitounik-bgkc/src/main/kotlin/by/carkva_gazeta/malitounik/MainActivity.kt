@@ -575,8 +575,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             if (back_pressed + 2000 > System.currentTimeMillis()) {
                 moveTaskToBack(true)
                 prefEditors = k.edit()
-                val allEntries = k.all
-                for ((key) in allEntries) {
+                for ((key) in k.all) {
                     if (key.contains("Scroll")) {
                         prefEditors.putInt(key, 0)
                     }

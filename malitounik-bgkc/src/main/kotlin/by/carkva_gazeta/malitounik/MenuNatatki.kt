@@ -113,15 +113,17 @@ class MenuNatatki : NatatkiFragment() {
                 }
 
                 override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
-                    file.writer().use {
-                        val gson = Gson()
-                        it.write(gson.toJson(myNatatkiFiles))
+                    if (fromPosition != toPosition) {
+                        file.writer().use {
+                            val gson = Gson()
+                            it.write(gson.toJson(myNatatkiFiles))
+                        }
+                        val edit = k.edit()
+                        edit.putInt("natatki_sort", -1)
+                        edit.apply()
+                        myNatatkiFilesSort = -1
+                        activity.invalidateOptionsMenu()
                     }
-                    val edit = k.edit()
-                    edit.putInt("natatki_sort", -1)
-                    edit.apply()
-                    myNatatkiFilesSort = -1
-                    activity.invalidateOptionsMenu()
                 }
             })
         }

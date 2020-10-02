@@ -114,14 +114,16 @@ class MenuVybranoe : VybranoeFragment() {
                 }
 
                 override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
-                    file.writer().use {
-                        val gson = Gson()
-                        it.write(gson.toJson(vybranoe))
+                    if (fromPosition != toPosition) {
+                        file.writer().use {
+                            val gson = Gson()
+                            it.write(gson.toJson(vybranoe))
+                        }
+                        val edit = k.edit()
+                        edit.putInt("vybranoe_sort", 0)
+                        edit.apply()
+                        it.invalidateOptionsMenu()
                     }
-                    val edit = k.edit()
-                    edit.putInt("vybranoe_sort", 0)
-                    edit.apply()
-                    it.invalidateOptionsMenu()
                 }
             })
         }

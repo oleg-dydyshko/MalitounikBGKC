@@ -1431,16 +1431,29 @@ class SettingsActivity : AppCompatActivity() {
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             val id = k.getInt("id", R.id.label1)
-            k.all.forEach {
-                if (!(it.key.contains("WIDGET", ignoreCase = true) || it.key.contains("history", ignoreCase = true))) prefEditor.remove(it.key)
+            val noDelite = ArrayList<String>()
+            noDelite.add("WIDGET")
+            noDelite.add("history")
+            noDelite.add("Vybranoe")
+            noDelite.add("help_str")
+            noDelite.add("FullscreenHelp")
+            noDelite.add("bible_time")
+            for ((key) in k.all) {
+                var del = true
+                for (i in 0 until noDelite.size) {
+                    if (key.contains(noDelite[i], true)) {
+                        del = false
+                        break
+                    }
+                }
+                if (del)
+                    prefEditor.remove(key)
             }
             File("$filesDir/Book").deleteRecursively()
             MainActivity.toastView(this, getString(R.string.save))
             prefEditor.putInt("id", id)
-            prefEditor.putBoolean("help_str", true)
             prefEditor.putFloat("font_biblia", GET_DEFAULT_FONT_SIZE)
             prefEditor.putBoolean("dzen_noch", false)
-            prefEditor.putBoolean("FullscreenHelp", true)
             prefEditor.putInt("pravas", 0)
             prefEditor.putInt("pkc", 0)
             prefEditor.putInt("nedelia", 0)

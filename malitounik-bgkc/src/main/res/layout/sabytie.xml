@@ -298,18 +298,8 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/listLayout"
+    <com.woxthebox.draglistview.DragListView
+        android:id="@+id/drag_list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <ListView
-            android:id="@+id/ListView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none" />
-
-    </LinearLayout>
+        android:layout_height="match_parent" />
 </LinearLayout>

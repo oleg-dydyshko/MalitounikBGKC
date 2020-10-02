@@ -19,13 +19,19 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import android.widget.AdapterView.*
+import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.DialogContextMenuSabytie.DialogContextMenuSabytieListener
 import by.carkva_gazeta.malitounik.DialogDelite.DialogDeliteListener
 import by.carkva_gazeta.malitounik.DialogSabytieSave.DialogSabytieSaveListener
 import com.google.gson.Gson
+import com.woxthebox.draglistview.DragItem
+import com.woxthebox.draglistview.DragItemAdapter
+import com.woxthebox.draglistview.swipe.ListSwipeHelper
+import com.woxthebox.draglistview.swipe.ListSwipeItem
 import kotlinx.android.synthetic.main.sabytie.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -369,11 +375,33 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
         }
         MainActivity.padzeia.sort()
-        for (p in MainActivity.padzeia) {
-            sabytie2.add(SabytieDataAdapter(p.dat + " " + p.padz, p.color))
+        for (i in 0 until MainActivity.padzeia.size) {
+            sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
         }
-        adapter = SabytieAdapter(this)
-        ListView.adapter = adapter
+        adapter = SabytieAdapter(sabytie2, R.layout.list_item_sabytie, R.id.image, false)
+        drag_list_view.recyclerView.isVerticalScrollBarEnabled = false
+        drag_list_view.setLayoutManager(LinearLayoutManager(this))
+        drag_list_view.setAdapter(adapter, false)
+        drag_list_view.setCanDragHorizontally(false)
+        drag_list_view.setCanDragVertically(true)
+        drag_list_view.setCustomDragItem(MyDragItem(this, R.layout.list_item_sabytie))
+        drag_list_view.setCanDragVertically(false)
+        drag_list_view.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
+            override fun onItemSwipeStarted(item: ListSwipeItem) {
+            }
+
+            override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: ListSwipeItem.SwipeDirection) {
+                val adapterItem = item.tag as SabytieDataAdapter
+                val pos: Int = drag_list_view.adapter.getPositionForItem(adapterItem)
+                if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
+                    onDialogDeliteClick(pos)
+                }
+                if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
+                    onPopupRedaktor(pos)
+                }
+            }
+        })
+        /*ListView.adapter = adapter
         ListView.onItemLongClickListener = OnItemLongClickListener { parent: AdapterView<*>, _: View?, position: Int, _: Long ->
             val name = (parent.getItemAtPosition(position) as SabytieDataAdapter).title
             val contextMenuSabytie = DialogContextMenuSabytie.getInstance(position, name)
@@ -416,14 +444,14 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
             val dialogShowSabytie = DialogSabytieShow.getInstance(title, data, time, dataK, timeK, res)
             dialogShowSabytie.show(supportFragmentManager, "sabytie")
-        }
+        }*/
         if (savedInstanceState != null) {
             redak = savedInstanceState.getBoolean("redak")
             back = savedInstanceState.getBoolean("back")
             idMenu = savedInstanceState.getInt("idMenu")
             if (savedInstanceState.getBoolean("titleLayout")) {
                 titleLayout.visibility = View.VISIBLE
-                listLayout.visibility = View.GONE
+                drag_list_view.visibility = View.GONE
                 invalidateOptionsMenu()
             }
             ta = savedInstanceState.getString("ta")?: "0:0"
@@ -482,7 +510,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         if (p.repit > 0) radioGroup.visibility = View.VISIBLE else radioGroup.visibility = View.GONE
         nomer = position
         titleLayout.visibility = View.VISIBLE
-        listLayout.visibility = View.GONE
+        drag_list_view.visibility = View.GONE
         idMenu = 3
         time = p.count
         val count = time.split(".").toTypedArray()
@@ -508,6 +536,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     }
 
     override fun fileDeliteCancel() {
+        drag_list_view.resetSwipedViews(null)
     }
 
     override fun fileDelite(position: Int, file: String) {
@@ -527,8 +556,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         outputStream.close()
         MainActivity.padzeia.sort()
         sabytie2.clear()
-        for (p in MainActivity.padzeia) {
-            sabytie2.add(SabytieDataAdapter(p.dat + " " + p.padz, p.color))
+        for (i in 0 until MainActivity.padzeia.size) {
+            sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
         }
         adapter.notifyDataSetChanged()
         CoroutineScope(Dispatchers.IO).launch {
@@ -575,6 +604,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     }
 
     private fun onPopupRedaktor(pos: Int) {
+        drag_list_view.resetSwipedViews(null)
         val timeC: String
         save = true
         back = true
@@ -598,7 +628,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         if (p.repit > 0) radioGroup.visibility = View.VISIBLE else radioGroup.visibility = View.GONE
         nomer = pos
         titleLayout.visibility = View.VISIBLE
-        listLayout.visibility = View.GONE
+        drag_list_view.visibility = View.GONE
         idMenu = 3
         timeC = p.count
         val count = timeC.split(".").toTypedArray()
@@ -632,7 +662,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         val taSaveN = label2.text.toString()
         val daKSaveN = label12.text.toString()
         val taKSaveN = label22.text.toString()
-        if (!(edit2SaveN == edit2Save && editSaveN == editSave && daSaveN == daSave && daKSaveN == daKSave && taSaveN == taSave && taKSaveN == taKSave && spinner3.selectedItemPosition == vybtimeSave && spinner4.selectedItemPosition == repitSave && spinner5.selectedItemPosition == colorSave && labelbutton12Save == labelbutton12.text.toString() && editText4Save == edit4SaveN && radioSave == radio) && listLayout.visibility == View.GONE) {
+        if (!(edit2SaveN == edit2Save && editSaveN == editSave && daSaveN == daSave && daKSaveN == daKSave && taSaveN == taSave && taKSaveN == taKSave && spinner3.selectedItemPosition == vybtimeSave && spinner4.selectedItemPosition == repitSave && spinner5.selectedItemPosition == colorSave && labelbutton12Save == labelbutton12.text.toString() && editText4Save == edit4SaveN && radioSave == radio) && drag_list_view.visibility == View.GONE) {
             val dialogSabytieSave = DialogSabytieSave()
             dialogSabytieSave.show(supportFragmentManager, "sabytie_save")
         } else if (back) {
@@ -1493,8 +1523,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 outputStream.close()
                 MainActivity.padzeia.sort()
                 sabytie2.clear()
-                for (p in MainActivity.padzeia) {
-                    sabytie2.add(SabytieDataAdapter(p.dat + " " + p.padz, p.color))
+                for (i in 0 until MainActivity.padzeia.size) {
+                    sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
                 }
                 if (editText2.text.toString() != "") {
                     if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
@@ -1509,7 +1539,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(editText.windowToken, 0)
                 titleLayout.visibility = View.GONE
-                listLayout.visibility = View.VISIBLE
+                drag_list_view.visibility = View.VISIBLE
                 idMenu = 1
                 invalidateOptionsMenu()
             } else {
@@ -2214,8 +2244,8 @@ fileReader.close()
 }*/
                 MainActivity.padzeia.sort()
                 sabytie2.clear()
-                for (p2 in MainActivity.padzeia) {
-                    sabytie2.add(SabytieDataAdapter(p2.dat + " " + p2.padz, p2.color))
+                for (i in 0 until MainActivity.padzeia.size) {
+                    sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
                 }
                 if (editText2.text.toString() != "") {
                     if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
@@ -2245,7 +2275,7 @@ fileReader.close()
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(editText.windowToken, 0)
                 titleLayout.visibility = View.GONE
-                listLayout.visibility = View.VISIBLE
+                drag_list_view.visibility = View.VISIBLE
                 idMenu = 1
                 invalidateOptionsMenu()
             } else {
@@ -2276,7 +2306,7 @@ fileReader.close()
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(editText.windowToken, 0)
             titleLayout.visibility = View.GONE
-            listLayout.visibility = View.VISIBLE
+            drag_list_view.visibility = View.VISIBLE
             idMenu = 1
             invalidateOptionsMenu()
             //return true;
@@ -2310,7 +2340,7 @@ fileReader.close()
         daK = nol1 + c[Calendar.DAY_OF_MONTH] + "." + nol2 + (c[Calendar.MONTH] + 1) + "." + c[Calendar.YEAR]
         taK = ta
         titleLayout.visibility = View.VISIBLE
-        listLayout.visibility = View.GONE
+        drag_list_view.visibility = View.GONE
         label1.text = da
         label2.text = ta
         label12.text = daK
@@ -2350,7 +2380,7 @@ fileReader.close()
                 }
             }
         }
-        adapter.clear()
+        //adapter.clear()
         adapter.notifyDataSetChanged()
         MainActivity.toastView(this, getString(R.string.remove_padzea))
     }
@@ -2440,8 +2470,8 @@ file.delete()
 }
 }*/
             sabytie2.clear()
-            for (p2 in MainActivity.padzeia) {
-                sabytie2.add(SabytieDataAdapter(p2.dat + " " + p2.padz, p2.color))
+            for (i in 0 until MainActivity.padzeia.size) {
+                sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
             }
             adapter.notifyDataSetChanged()
         }
@@ -2472,7 +2502,164 @@ file.delete()
         outState.putString("daK", label12.text.toString())
     }
 
-    private inner class SabytieAdapter(context: Context) : ArrayAdapter<SabytieDataAdapter>(context, R.layout.simple_list_item_sabytie, sabytie2) {
+    private inner class SabytieAdapter(list: ArrayList<SabytieDataAdapter>, private val mLayoutId: Int, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<SabytieDataAdapter, SabytieAdapter.ViewHolder>() {
+        private var dzenNoch = false
+        private val day = Calendar.getInstance() as GregorianCalendar
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view: View = LayoutInflater.from(parent.context).inflate(mLayoutId, parent, false)
+            //(view as ListSwipeItem).supportedSwipeDirection = ListSwipeItem.SwipeDirection.LEFT_AND_RIGHT
+            val textview = view.findViewById<TextViewRobotoCondensed>(R.id.text)
+            val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            dzenNoch = k.getBoolean("dzen_noch", false)
+            textview.textSize = SettingsActivity.GET_FONT_SIZE_MIN
+            if (dzenNoch) {
+                val itemLeft = view.findViewById<TextViewRobotoCondensed>(R.id.item_left)
+                itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
+                itemLeft.setBackgroundResource(R.color.colorprimary_material_dark)
+                val itemRight = view.findViewById<TextViewRobotoCondensed>(R.id.item_right)
+                itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
+                itemRight.setBackgroundResource(R.color.colorprimary_material_dark)
+                view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_dark)
+                textview.setTextColor(ContextCompat.getColor(parent.context, R.color.colorIcons))
+            } else {
+                textview.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_text))
+                view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_default)
+            }
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            super.onBindViewHolder(holder, position)
+            val text = mItemList[position].title
+            val sab = text.split(" ").toTypedArray()
+            val data = sab[0].split(".").toTypedArray()
+            val gc = GregorianCalendar(data[2].toInt(), data[1].toInt() - 1, data[0].toInt())
+            if (gc[Calendar.DAY_OF_YEAR] == day[Calendar.DAY_OF_YEAR] && gc[Calendar.YEAR] == day[Calendar.YEAR]) {
+                holder.mText.setTypeface(null, Typeface.BOLD)
+            } else {
+                holder.mText.setTypeface(null, Typeface.NORMAL)
+            }
+            holder.mText.text = text
+            holder.color.setBackgroundColor(Color.parseColor(colors[mItemList[position].color]))
+            holder.buttonPopup.setOnClickListener {
+                showPopupMenu(it, position)
+            }
+            holder.itemView.tag = mItemList[position]
+        }
+
+        override fun getUniqueItemId(position: Int): Long {
+            return mItemList[position].id
+        }
+
+        private fun showPopupMenu(view: View, position: Int) {
+            val popup = PopupMenu(this@Sabytie, view)
+            val infl = popup.menuInflater
+            infl.inflate(R.menu.popup, popup.menu)
+            for (i in 0 until popup.menu.size()) {
+                val item = popup.menu.getItem(i)
+                val spanString = SpannableString(popup.menu.getItem(i).title.toString())
+                val end = spanString.length
+                spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                item.title = spanString
+            }
+            popup.setOnMenuItemClickListener { menuItem: MenuItem ->
+                popup.dismiss()
+                when (menuItem.itemId) {
+                    R.id.menu_redoktor -> onPopupRedaktor(position)
+                    R.id.menu_remove -> onDialogDeliteClick(position)
+                }
+                true
+            }
+            popup.show()
+        }
+
+        private inner class ViewHolder(itemView: View) : DragItemAdapter.ViewHolder(itemView, mGrabHandleId, mDragOnLongPress) {
+            var mText: TextViewRobotoCondensed = itemView.findViewById(R.id.text)
+            val color: TextViewRobotoCondensed = itemView.findViewById(R.id.color)
+            val buttonPopup: ImageView = itemView.findViewById(R.id.button_popup)
+
+            override fun onItemLongClicked(view: View): Boolean {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return true
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                val contextMenuSabytie = DialogContextMenuSabytie.getInstance(adapterPosition, sabytie2[adapterPosition].title)
+                contextMenuSabytie.show(supportFragmentManager, "context_menu_sabytie")
+                return true
+            }
+
+            override fun onItemClicked(view: View) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                var title = ""
+                var data = ""
+                var time = ""
+                var dataK = ""
+                var timeK = ""
+                var paz: Long = 0
+                for (i in MainActivity.padzeia.indices) {
+                    if (i == adapterPosition) {
+                        val p = MainActivity.padzeia[i]
+                        title = p.padz
+                        data = p.dat
+                        time = p.tim
+                        paz = p.paznic
+                        dataK = p.datK
+                        timeK = p.timK
+                    }
+                }
+                var res = "Паведаміць: Ніколі"
+                if (paz != 0L) {
+                    val gc = Calendar.getInstance() as GregorianCalendar
+                    gc.timeInMillis = paz
+                    var nol11 = ""
+                    var nol21 = ""
+                    var nol3 = ""
+                    if (gc[Calendar.DAY_OF_MONTH] < 10) nol11 = "0"
+                    if (gc[Calendar.MONTH] < 9) nol21 = "0"
+                    if (gc[Calendar.MINUTE] < 10) nol3 = "0"
+                    res = "Паведаміць: " + nol11 + gc[Calendar.DAY_OF_MONTH] + "." + nol21 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR] + " у " + gc[Calendar.HOUR_OF_DAY] + ":" + nol3 + gc[Calendar.MINUTE]
+                }
+                val dialogShowSabytie = DialogSabytieShow.getInstance(title, data, time, dataK, timeK, res)
+                dialogShowSabytie.show(supportFragmentManager, "sabytie")
+            }
+        }
+
+        init {
+            itemList = list
+        }
+    }
+
+    private class MyDragItem(context: Context, layoutId: Int) : DragItem(context, layoutId) {
+        private val mycontext = context
+        override fun onBindDragView(clickedView: View, dragView: View) {
+            val text = (clickedView.findViewById<View>(R.id.text) as TextView).text
+            val dragTextView = dragView.findViewById<View>(R.id.text) as TextView
+            dragTextView.text = text
+            dragTextView.textSize = SettingsActivity.GET_FONT_SIZE_MIN
+            val k = mycontext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = k.getBoolean("dzen_noch", false)
+            if (dzenNoch) {
+                clickedView.findViewById<TextViewRobotoCondensed>(R.id.text).setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+                clickedView.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_dark)
+                val itemLeft = clickedView.findViewById<TextViewRobotoCondensed>(R.id.item_left)
+                itemLeft.setTextColor(ContextCompat.getColor(mycontext, R.color.colorPrimary_black))
+                itemLeft.setBackgroundResource(R.color.colorprimary_material_dark)
+                val itemRight = clickedView.findViewById<TextViewRobotoCondensed>(R.id.item_right)
+                itemRight.setTextColor(ContextCompat.getColor(mycontext, R.color.colorPrimary_black))
+                itemRight.setBackgroundResource(R.color.colorprimary_material_dark)
+                dragTextView.setTextColor(ContextCompat.getColor(mycontext, R.color.colorIcons))
+                dragView.findViewById<View>(R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, R.color.colorprimary_material_dark))
+            } else {
+                dragTextView.setTextColor(ContextCompat.getColor(mycontext, R.color.colorPrimary_text))
+                dragView.findViewById<View>(R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, R.color.colorDivider))
+            }
+        }
+    }
+
+    /*private inner class SabytieAdapter(context: Context) : ArrayAdapter<SabytieDataAdapter>(context, R.layout.simple_list_item_sabytie, sabytie2) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -2541,7 +2728,7 @@ file.delete()
         var color: TextViewRobotoCondensed? = null
         var text: TextViewRobotoCondensed? = null
         var buttonPopup: ImageView? = null
-    }
+    }*/
 
     private inner class ColorAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_color, R.id.label, colors) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -2637,7 +2824,7 @@ file.delete()
         }
     }
 
-    private data class SabytieDataAdapter(val title: String, val color: Int)
+    private data class SabytieDataAdapter(val id: Long, val title: String, val color: Int)
 
     companion object {
         private val colors = arrayOf("#D00505", "#800080", "#C71585", "#FF00FF", "#F4A460", "#D2691E", "#A52A2A", "#1E90FF", "#6A5ACD", "#228B22", "#9ACD32", "#20B2AA")

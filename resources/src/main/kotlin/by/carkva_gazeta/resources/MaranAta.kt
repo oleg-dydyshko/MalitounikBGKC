@@ -943,14 +943,16 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     private fun stopAutoScroll() {
         scrollTimer.cancel()
-        resetTimer = Timer()
         scrollerSchedule = null
-        resetSchedule = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+        if (!k.getBoolean("scrinOn", false)) {
+            resetTimer = Timer()
+            resetSchedule = object : TimerTask() {
+                override fun run() {
+                    CoroutineScope(Dispatchers.Main).launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+                }
             }
+            resetTimer.schedule(resetSchedule, 60000)
         }
-        resetTimer.schedule(resetSchedule, 60000)
     }
 
     private fun startAutoScroll() {

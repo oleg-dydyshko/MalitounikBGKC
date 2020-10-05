@@ -32,7 +32,6 @@ import kotlinx.android.synthetic.main.activity_bible.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
-import java.io.FileWriter
 
 class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, StaryZapavietSinaidalFragment.ClicParalelListiner, StaryZapavietSinaidalFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
     private val mHideHandler = Handler(Looper.getMainLooper())
@@ -110,9 +109,9 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
                 file.delete()
             }
         } else {
-            val outputStream = FileWriter(file)
-            outputStream.write(gson.toJson(BibleGlobalList.vydelenie))
-            outputStream.close()
+            file.writer().use {
+                it.write(gson.toJson(BibleGlobalList.vydelenie))
+            }
         }
         val fileZakladki = File("$filesDir/BibliaSinodalZakladki.json")
         if (BibleGlobalList.zakladkiSinodal.size == 0) {
@@ -120,9 +119,9 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
                 fileZakladki.delete()
             }
         } else {
-            val outputStream = FileWriter(fileZakladki)
-            outputStream.write(gson.toJson(BibleGlobalList.zakladkiSinodal))
-            outputStream.close()
+            fileZakladki.writer().use {
+                it.write(gson.toJson(BibleGlobalList.zakladkiSinodal))
+            }
         }
         val fileNatatki = File("$filesDir/BibliaSinodalNatatki.json")
         if (BibleGlobalList.natatkiSinodal.size == 0) {
@@ -130,9 +129,9 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
                 fileNatatki.delete()
             }
         } else {
-            val outputStream = FileWriter(fileNatatki)
-            outputStream.write(gson.toJson(BibleGlobalList.natatkiSinodal))
-            outputStream.close()
+            fileNatatki.writer().use {
+                it.write(gson.toJson(BibleGlobalList.natatkiSinodal))
+            }
         }
     }
 

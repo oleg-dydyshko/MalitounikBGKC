@@ -7,8 +7,8 @@ class BibleGlobalList {
         var mPedakVisable = false
         var bibleCopyList = ArrayList<Int>()
         var vydelenie = ArrayList<ArrayList<Int>>()
-        var zakladkiSemuxa = ArrayList<String>()
-        var zakladkiSinodal = ArrayList<String>()
+        var zakladkiSemuxa = ArrayList<BibleZakladkiData>()
+        var zakladkiSinodal = ArrayList<BibleZakladkiData>()
         var natatkiSemuxa = ArrayList<ArrayList<String>>()
         var natatkiSinodal = ArrayList<ArrayList<String>>()
 

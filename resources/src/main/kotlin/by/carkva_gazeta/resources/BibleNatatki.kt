@@ -184,6 +184,9 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
 
     override fun zakladkadiliteItem(position: Int, semuxa: Int) {}
 
+    override fun zakladkadiliteItemCancel() {
+    }
+
     override fun natatkidiliteItem(position: Int, semuxa: Int) {
         if (semuxa == 1) {
             BibleGlobalList.natatkiSemuxa.removeAt(position)

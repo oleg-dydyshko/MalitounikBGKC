@@ -1107,10 +1107,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     if (file2.exists()) {
                         try {
                             val gson = Gson()
-                            val type = object : TypeToken<ArrayList<String>>() {}.type
+                            val type = object : TypeToken<ArrayList<BibleZakladkiData>>() {}.type
                             BibleGlobalList.zakladkiSemuxa = gson.fromJson(file2.readText(), type)
                         } catch (t: Throwable) {
-                            file2.delete()
+                            try {
+                                val gson = Gson()
+                                val type = object : TypeToken<ArrayList<String>>() {}.type
+                                val arrayList = gson.fromJson<ArrayList<String>>(file2.readText(), type)
+                                for (i in 0 until arrayList.size)
+                                    BibleGlobalList.zakladkiSemuxa.add(BibleZakladkiData(i.toLong(), arrayList[i]))
+                            } catch (t: Throwable) {
+                                file2.delete()
+                            }
                         }
                     }
                     prefEditors.putInt("id", idSelect)
@@ -1191,10 +1199,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     if (file2.exists()) {
                         try {
                             val gson = Gson()
-                            val type = object : TypeToken<ArrayList<String>>() {}.type
+                            val type = object : TypeToken<ArrayList<BibleZakladkiData>>() {}.type
                             BibleGlobalList.zakladkiSinodal = gson.fromJson(file2.readText(), type)
                         } catch (t: Throwable) {
-                            file2.delete()
+                            try {
+                                val gson = Gson()
+                                val type = object : TypeToken<ArrayList<String>>() {}.type
+                                val arrayList = gson.fromJson<ArrayList<String>>(file2.readText(), type)
+                                for (i in 0 until arrayList.size)
+                                    BibleGlobalList.zakladkiSinodal.add(BibleZakladkiData(i.toLong(), arrayList[i]))
+                            } catch (t: Throwable) {
+                                file2.delete()
+                            }
                         }
                     }
                     prefEditors.putInt("id", idSelect)

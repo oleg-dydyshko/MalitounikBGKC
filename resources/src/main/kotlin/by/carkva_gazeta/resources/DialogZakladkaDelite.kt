@@ -44,6 +44,7 @@ class DialogZakladkaDelite : DialogFragment() {
 
     internal interface ZakladkaDeliteListiner {
         fun zakladkadiliteItem(position: Int, semuxa: Int)
+        fun zakladkadiliteItemCancel()
         fun natatkidiliteItem(position: Int, semuxa: Int)
     }
 
@@ -75,7 +76,7 @@ class DialogZakladkaDelite : DialogFragment() {
             } else {
                 builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> delite?.natatkidiliteItem(position, semuxa) }
             }
-            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { _: DialogInterface, _: Int -> delite?.zakladkadiliteItemCancel() }
             builder.setView(linearLayout)
         }
         val alert = builder.create()

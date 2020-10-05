@@ -31,7 +31,6 @@ import kotlinx.android.synthetic.main.activity_bible.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
-import java.io.FileWriter
 
 class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NovyZapavietSemuxaFragment.ClicParalelListiner, NovyZapavietSemuxaFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
     private val mHideHandler = Handler(Looper.getMainLooper())
@@ -109,9 +108,9 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
                 file.delete()
             }
         } else {
-            val outputStream = FileWriter(file)
-            outputStream.write(gson.toJson(BibleGlobalList.vydelenie))
-            outputStream.close()
+            file.writer().use {
+                it.write(gson.toJson(BibleGlobalList.vydelenie))
+            }
         }
         val fileZakladki = File("$filesDir/BibliaSemuxaZakladki.json")
         if (BibleGlobalList.zakladkiSemuxa.size == 0) {
@@ -119,9 +118,9 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
                 fileZakladki.delete()
             }
         } else {
-            val outputStream = FileWriter(fileZakladki)
-            outputStream.write(gson.toJson(BibleGlobalList.zakladkiSemuxa))
-            outputStream.close()
+            fileZakladki.writer().use {
+                it.write(gson.toJson(BibleGlobalList.zakladkiSemuxa))
+            }
         }
         val fileNatatki = File("$filesDir/BibliaSemuxaNatatki.json")
         if (BibleGlobalList.natatkiSemuxa.size == 0) {
@@ -129,9 +128,9 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
                 fileNatatki.delete()
             }
         } else {
-            val outputStream = FileWriter(fileNatatki)
-            outputStream.write(gson.toJson(BibleGlobalList.natatkiSemuxa))
-            outputStream.close()
+            fileNatatki.writer().use {
+                it.write(gson.toJson(BibleGlobalList.natatkiSemuxa))
+            }
         }
     }
 

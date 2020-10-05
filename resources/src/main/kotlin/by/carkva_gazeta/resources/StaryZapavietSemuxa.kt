@@ -110,9 +110,9 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
                 file.delete()
             }
         } else {
-            val outputStream = FileWriter(file)
-            outputStream.write(gson.toJson(BibleGlobalList.vydelenie))
-            outputStream.close()
+            file.writer().use {
+                it.write(gson.toJson(BibleGlobalList.vydelenie))
+            }
         }
         val fileZakladki = File("$filesDir/BibliaSemuxaZakladki.json")
         if (BibleGlobalList.zakladkiSemuxa.size == 0) {
@@ -120,9 +120,9 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
                 fileZakladki.delete()
             }
         } else {
-            val outputStream = FileWriter(fileZakladki)
-            outputStream.write(gson.toJson(BibleGlobalList.zakladkiSemuxa))
-            outputStream.close()
+            fileZakladki.writer().use {
+                it.write(gson.toJson(BibleGlobalList.zakladkiSemuxa))
+            }
         }
         val fileNatatki = File("$filesDir/BibliaSemuxaNatatki.json")
         if (BibleGlobalList.natatkiSemuxa.size == 0) {
@@ -130,9 +130,9 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
                 fileNatatki.delete()
             }
         } else {
-            val outputStream = FileWriter(fileNatatki)
-            outputStream.write(gson.toJson(BibleGlobalList.natatkiSemuxa))
-            outputStream.close()
+            fileNatatki.writer().use {
+                it.write(gson.toJson(BibleGlobalList.natatkiSemuxa))
+            }
         }
     }
 

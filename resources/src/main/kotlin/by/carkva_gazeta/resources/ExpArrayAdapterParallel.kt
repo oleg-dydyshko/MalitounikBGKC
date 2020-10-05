@@ -390,7 +390,7 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
                 var t2: Int
                 var t3: Int
                 var glava1: Int
-                val knigaName = BibleGlobalList.zakladkiSemuxa[i]
+                val knigaName = BibleGlobalList.zakladkiSemuxa[i].data
                 if (knigaName.contains("Паводле Мацьвея")) knigaN = 0
                 if (knigaName.contains("Паводле Марка")) knigaN = 1
                 if (knigaName.contains("Паводле Лукаша")) knigaN = 2
@@ -522,7 +522,7 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
                 var t2: Int
                 var t3: Int
                 var glava1: Int
-                val knigaName = BibleGlobalList.zakladkiSinodal[i]
+                val knigaName = BibleGlobalList.zakladkiSinodal[i].data
                 if (knigaName.contains("От Матфея")) knigaN = 0
                 if (knigaName.contains("От Марка")) knigaN = 1
                 if (knigaName.contains("От Луки")) knigaN = 2

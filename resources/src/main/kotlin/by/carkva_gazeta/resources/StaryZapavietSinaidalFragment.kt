@@ -14,6 +14,7 @@ import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemLongClickListener
 import by.carkva_gazeta.malitounik.BibleGlobalList
+import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.MainActivity
 import kotlinx.android.synthetic.main.activity_bible_page_fragment.*
 import java.io.BufferedReader
@@ -119,7 +120,7 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
     override fun addZakladka(color: Int) {
         activity?.let {
             if (color != -1) {
-                BibleGlobalList.zakladkiSinodal.add(0, knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_ru) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString() + "<!--" + color)
+                BibleGlobalList.zakladkiSinodal.add(0, BibleZakladkiData(BibleGlobalList.zakladkiSinodal.size.toLong(), knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_ru) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString() + "<!--" + color))
                 MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
             }
             BibleGlobalList.mPedakVisable = false
@@ -745,7 +746,7 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
                 if (BibleGlobalList.bibleCopyList.size > 0) {
                     var index = -1
                     for (i in BibleGlobalList.zakladkiSinodal.indices) {
-                        if (BibleGlobalList.zakladkiSinodal[i].contains(MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString())) {
+                        if (BibleGlobalList.zakladkiSinodal[i].data.contains(MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString())) {
                             index = i
                             break
                         }

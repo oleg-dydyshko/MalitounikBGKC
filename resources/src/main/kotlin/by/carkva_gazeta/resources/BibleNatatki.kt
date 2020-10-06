@@ -1,9 +1,7 @@
 package by.carkva_gazeta.resources
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Spannable
@@ -12,34 +10,43 @@ import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
-import android.widget.AdapterView.OnItemLongClickListener
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.DialogBibleNatatkaEdit.BibleNatatkaEditlistiner
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
 import by.carkva_gazeta.resources.DialogZakladkaDelite.ZakladkaDeliteListiner
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.akafist_list_bible.*
+import com.woxthebox.draglistview.DragItem
+import com.woxthebox.draglistview.DragItemAdapter
+import com.woxthebox.draglistview.DragListView
+import com.woxthebox.draglistview.swipe.ListSwipeHelper
+import com.woxthebox.draglistview.swipe.ListSwipeItem
+import kotlinx.android.synthetic.main.akafist_list_bible.help
+import kotlinx.android.synthetic.main.akafist_list_bible.title_toolbar
+import kotlinx.android.synthetic.main.akafist_list_bible.toolbar
+import kotlinx.android.synthetic.main.bible_zakladki.*
 import java.io.File
 import java.io.FileWriter
 import java.util.*
 import kotlin.collections.ArrayList
 
-class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickListener, ZakladkaDeliteListiner, DialogDeliteAllZakladkiINatatkiListener, BibleNatatkaEditlistiner, DialogContextMenu.DialogContextMenuListener {
-    private lateinit var data: ArrayList<ArrayList<String>>
-    private lateinit var adapter: ListAdaprer
+class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakladkiINatatkiListener, BibleNatatkaEditlistiner, DialogContextMenu.DialogContextMenuListener {
+    private var data = ArrayList<BibleNatatkiData>()
+    private lateinit var adapter: ItemAdapter
     private var semuxa = 1
     private var dzenNoch = false
     private var mLastClickTime: Long = 0
 
     override fun setEdit() {
         adapter.notifyDataSetChanged()
+    }
+
+    override fun editCancel() {
+        drag_list_view.resetSwipedViews(null)
     }
 
     override fun onDialogEditClick(position: Int) {
@@ -54,7 +61,7 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
 
     override fun fileAllNatatkiAlboZakladki(semuxa: Int) {
         if (semuxa == 1) {
-            BibleGlobalList.natatkiSemuxa.removeAll(BibleGlobalList.natatkiSemuxa)
+            data.removeAll(data)
             adapter.notifyDataSetChanged()
             val fileNatatki = File("$filesDir/BibliaSemuxaNatatki.json")
             if (fileNatatki.exists()) {
@@ -62,7 +69,7 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
             }
         }
         if (semuxa == 2) {
-            BibleGlobalList.natatkiSinodal.removeAll(BibleGlobalList.natatkiSinodal)
+            data.removeAll(data)
             adapter.notifyDataSetChanged()
             val fileNatatki = File("$filesDir/BibliaSinodalNatatki.json")
             if (fileNatatki.exists()) {
@@ -70,7 +77,7 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
             }
         }
         help.visibility = View.VISIBLE
-        ListView.visibility = View.GONE
+        drag_list_view.visibility = View.GONE
         invalidateOptionsMenu()
     }
 
@@ -85,20 +92,76 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.akafist_list_bible)
+        setContentView(R.layout.bible_zakladki)
         semuxa = intent.getIntExtra("semuxa", 1)
         if (semuxa == 1) data = BibleGlobalList.natatkiSemuxa
         if (semuxa == 2) data = BibleGlobalList.natatkiSinodal
-        adapter = ListAdaprer(this, data)
+        adapter = ItemAdapter(data, by.carkva_gazeta.malitounik.R.layout.list_item, by.carkva_gazeta.malitounik.R.id.image, false)
+        drag_list_view.recyclerView.isVerticalScrollBarEnabled = false
+        drag_list_view.setLayoutManager(LinearLayoutManager(this))
+        drag_list_view.setAdapter(adapter, false)
+        drag_list_view.setCanDragHorizontally(false)
+        drag_list_view.setCanDragVertically(true)
+        drag_list_view.setCustomDragItem(MyDragItem(this, by.carkva_gazeta.malitounik.R.layout.list_item))
+        drag_list_view.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
+            override fun onItemSwipeStarted(item: ListSwipeItem) {
+            }
+
+            override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: ListSwipeItem.SwipeDirection) {
+                val adapterItem = item.tag as BibleNatatkiData
+                val position: Int = drag_list_view.adapter.getPositionForItem(adapterItem)
+                if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
+                    val delite = DialogZakladkaDelite.getInstance(position, data[position].list[5], semuxa, false)
+                    delite.show(supportFragmentManager, "zakladka_delite")
+                }
+                if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
+                    val natatka = DialogBibleNatatkaEdit.getInstance(semuxa, position)
+                    natatka.show(supportFragmentManager, "bible_natatka_edit")
+                }
+            }
+        })
+        drag_list_view.setDragListListener(object : DragListView.DragListListener {
+            override fun onItemDragStarted(position: Int) {
+            }
+
+            override fun onItemDragging(itemPosition: Int, x: Float, y: Float) {
+            }
+
+            override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
+                if (fromPosition != toPosition) {
+                    val gson = Gson()
+                    if (semuxa == 1) {
+                        val fileZakladki = File("$filesDir/BibliaSemuxaNatatki.json")
+                        if (data.size == 0) {
+                            if (fileZakladki.exists()) {
+                                fileZakladki.delete()
+                            }
+                        } else {
+                            fileZakladki.writer().use {
+                                it.write(gson.toJson(data))
+                            }
+                        }
+                    }
+                    if (semuxa == 2) {
+                        val fileZakladki = File("$filesDir/BibliaSinodalNatatki.json")
+                        if (data.size == 0) {
+                            if (fileZakladki.exists()) {
+                                fileZakladki.delete()
+                            }
+                        } else {
+                            fileZakladki.writer().use {
+                                it.write(gson.toJson(data))
+                            }
+                        }
+                    }
+                }
+            }
+        })
         if (data.size == 0) {
             help.visibility = View.VISIBLE
-            ListView.visibility = View.GONE
+            drag_list_view.visibility = View.GONE
         }
         if (dzenNoch) help.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-        ListView.adapter = adapter
-        ListView.isVerticalScrollBarEnabled = false
-        ListView.onItemClickListener = this
-        ListView.onItemLongClickListener = this
     }
 
     private fun setTollbarTheme() {
@@ -185,104 +248,45 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
     override fun zakladkadiliteItem(position: Int, semuxa: Int) {}
 
     override fun zakladkadiliteItemCancel() {
+        drag_list_view.resetSwipedViews(null)
     }
 
     override fun natatkidiliteItem(position: Int, semuxa: Int) {
         if (semuxa == 1) {
-            BibleGlobalList.natatkiSemuxa.removeAt(position)
+            data.removeAt(position)
             adapter.notifyDataSetChanged()
             val fileNatatki = File("$filesDir/BibliaSemuxaNatatki.json")
-            if (BibleGlobalList.natatkiSemuxa.size == 0) {
+            if (data.size == 0) {
                 if (fileNatatki.exists()) {
                     fileNatatki.delete()
                 }
                 help.visibility = View.VISIBLE
-                ListView.visibility = View.GONE
+                drag_list_view.visibility = View.GONE
             } else {
                 val gson = Gson()
                 val outputStream = FileWriter(fileNatatki)
-                outputStream.write(gson.toJson(BibleGlobalList.natatkiSemuxa))
+                outputStream.write(gson.toJson(data))
                 outputStream.close()
             }
         }
         if (semuxa == 2) {
-            BibleGlobalList.natatkiSinodal.removeAt(position)
+            data.removeAt(position)
             adapter.notifyDataSetChanged()
             val fileNatatki = File("$filesDir/BibliaSinodalNatatki.json")
-            if (BibleGlobalList.natatkiSinodal.size == 0) {
+            if (data.size == 0) {
                 if (fileNatatki.exists()) {
                     fileNatatki.delete()
                 }
                 help.visibility = View.VISIBLE
-                ListView.visibility = View.GONE
+                drag_list_view.visibility = View.GONE
             } else {
                 val gson = Gson()
                 val outputStream = FileWriter(fileNatatki)
-                outputStream.write(gson.toJson(BibleGlobalList.natatkiSinodal))
+                outputStream.write(gson.toJson(data))
                 outputStream.close()
             }
         }
         invalidateOptionsMenu()
-    }
-
-    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return
-        }
-        mLastClickTime = SystemClock.elapsedRealtime()
-        var kniga = -1
-        var knigaS = -1
-        if (data[position][0].contains("1")) kniga = data[position][1].toInt() else knigaS = data[position][1].toInt()
-        var intent = Intent()
-        /*if (semuxa == 3) {
-            intent = new Intent(this, nadsanContentActivity.class);
-        } else {*/if (kniga != -1) {
-            if (semuxa == 1) {
-                intent = Intent(this, NovyZapavietSemuxa::class.java)
-            }
-            if (semuxa == 2) {
-                intent = Intent(this, NovyZapavietSinaidal::class.java)
-            }
-            intent.putExtra("kniga", kniga)
-        }
-        if (knigaS != -1) {
-            if (semuxa == 1) {
-                intent = Intent(this, StaryZapavietSemuxa::class.java)
-                when (knigaS) {
-                    19 -> knigaS = 16
-                    20 -> knigaS = 17
-                    21 -> knigaS = 18
-                    22 -> knigaS = 19
-                    23 -> knigaS = 20
-                    24 -> knigaS = 21
-                    27 -> knigaS = 22
-                    28 -> knigaS = 23
-                    29 -> knigaS = 24
-                    32 -> knigaS = 25
-                    33 -> knigaS = 26
-                    34 -> knigaS = 27
-                    35 -> knigaS = 28
-                    36 -> knigaS = 29
-                    37 -> knigaS = 30
-                    38 -> knigaS = 31
-                    39 -> knigaS = 32
-                    40 -> knigaS = 33
-                    41 -> knigaS = 34
-                    42 -> knigaS = 35
-                    43 -> knigaS = 36
-                    44 -> knigaS = 37
-                    45 -> knigaS = 38
-                }
-            }
-            if (semuxa == 2) {
-                intent = Intent(this, StaryZapavietSinaidal::class.java)
-            }
-            intent.putExtra("kniga", knigaS)
-        }
-        //}
-        intent.putExtra("glava", Integer.valueOf(data[position][2]))
-        intent.putExtra("stix", Integer.valueOf(data[position][3]))
-        startActivityForResult(intent, 500)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -290,19 +294,152 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
         if (requestCode == 500) {
             if (data.size == 0) {
                 help.visibility = View.VISIBLE
-                ListView.visibility = View.GONE
+                drag_list_view.visibility = View.GONE
             }
             adapter.notifyDataSetChanged()
         }
     }
 
-    override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
-        val contextMenu = DialogContextMenu.getInstance(position, data[position][5])
-        contextMenu.show(supportFragmentManager, "context_menu")
-        return true
+    private inner class ItemAdapter(list: ArrayList<BibleNatatkiData>, private val mLayoutId: Int, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<BibleNatatkiData, ItemAdapter.ViewHolder>() {
+        private var dzenNoch = false
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view: View = LayoutInflater.from(parent.context).inflate(mLayoutId, parent, false)
+            val textview = view.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.text)
+            val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            dzenNoch = k.getBoolean("dzen_noch", false)
+            textview.textSize = SettingsActivity.GET_FONT_SIZE_MIN
+            if (dzenNoch) {
+                ExpArrayAdapterParallel.colors[0] = "#FFFFFF"
+                ExpArrayAdapterParallel.colors[1] = "#f44336"
+                val itemLeft = view.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_left)
+                itemLeft.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+                itemLeft.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+                val itemRight = view.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_right)
+                itemRight.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+                itemRight.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+                view.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                textview.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            } else {
+                ExpArrayAdapterParallel.colors[0] = "#000000"
+                ExpArrayAdapterParallel.colors[1] = "#D00505"
+                textview.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+                view.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            }
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            super.onBindViewHolder(holder, position)
+            holder.mText.text = getString(by.carkva_gazeta.malitounik.R.string.bible_natatki, mItemList[position].list[4], mItemList[position].list[5])
+            holder.itemView.tag = mItemList[position]
+        }
+
+        override fun getUniqueItemId(position: Int): Long {
+            return mItemList[position].id
+        }
+
+        private inner class ViewHolder(itemView: View) : DragItemAdapter.ViewHolder(itemView, mGrabHandleId, mDragOnLongPress) {
+            var mText: TextView = itemView.findViewById(by.carkva_gazeta.malitounik.R.id.text)
+            override fun onItemClicked(view: View) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                var kniga = -1
+                var knigaS = -1
+                if (data[adapterPosition].list[0].contains("1")) kniga = data[adapterPosition].list[1].toInt() else knigaS = data[adapterPosition].list[1].toInt()
+                var intent = Intent()
+                /*if (semuxa == 3) {
+                    intent = new Intent(this, nadsanContentActivity.class);
+                } else {*/if (kniga != -1) {
+                    if (semuxa == 1) {
+                        intent = Intent(this@BibleNatatki, NovyZapavietSemuxa::class.java)
+                    }
+                    if (semuxa == 2) {
+                        intent = Intent(this@BibleNatatki, NovyZapavietSinaidal::class.java)
+                    }
+                    intent.putExtra("kniga", kniga)
+                }
+                if (knigaS != -1) {
+                    if (semuxa == 1) {
+                        intent = Intent(this@BibleNatatki, StaryZapavietSemuxa::class.java)
+                        when (knigaS) {
+                            19 -> knigaS = 16
+                            20 -> knigaS = 17
+                            21 -> knigaS = 18
+                            22 -> knigaS = 19
+                            23 -> knigaS = 20
+                            24 -> knigaS = 21
+                            27 -> knigaS = 22
+                            28 -> knigaS = 23
+                            29 -> knigaS = 24
+                            32 -> knigaS = 25
+                            33 -> knigaS = 26
+                            34 -> knigaS = 27
+                            35 -> knigaS = 28
+                            36 -> knigaS = 29
+                            37 -> knigaS = 30
+                            38 -> knigaS = 31
+                            39 -> knigaS = 32
+                            40 -> knigaS = 33
+                            41 -> knigaS = 34
+                            42 -> knigaS = 35
+                            43 -> knigaS = 36
+                            44 -> knigaS = 37
+                            45 -> knigaS = 38
+                        }
+                    }
+                    if (semuxa == 2) {
+                        intent = Intent(this@BibleNatatki, StaryZapavietSinaidal::class.java)
+                    }
+                    intent.putExtra("kniga", knigaS)
+                }
+                //}
+                intent.putExtra("glava", Integer.valueOf(data[adapterPosition].list[2]))
+                intent.putExtra("stix", Integer.valueOf(data[adapterPosition].list[3]))
+                startActivityForResult(intent, 500)
+            }
+
+            override fun onItemLongClicked(view: View): Boolean {
+                val contextMenu = DialogContextMenu.getInstance(adapterPosition, data[adapterPosition].list[5])
+                contextMenu.show(supportFragmentManager, "context_menu")
+                return true
+            }
+        }
+
+        init {
+            itemList = list
+        }
     }
 
-    private inner class ListAdaprer(private val mContext: Activity, private val itemsL: ArrayList<ArrayList<String>>) : ArrayAdapter<ArrayList<String>?>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_3, by.carkva_gazeta.malitounik.R.id.label, itemsL as List<ArrayList<String>>) {
+    private class MyDragItem(context: Context, layoutId: Int) : DragItem(context, layoutId) {
+        private val mycontext = context
+        override fun onBindDragView(clickedView: View, dragView: View) {
+            val text = (clickedView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.text) as TextView).text
+            val dragTextView = dragView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.text) as TextView
+            dragTextView.text = text
+            dragTextView.textSize = SettingsActivity.GET_FONT_SIZE_MIN
+            val k = mycontext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = k.getBoolean("dzen_noch", false)
+            if (dzenNoch) {
+                clickedView.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.text).setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+                clickedView.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                val itemLeft = clickedView.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_left)
+                itemLeft.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+                itemLeft.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+                val itemRight = clickedView.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_right)
+                itemRight.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+                itemRight.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+                dragTextView.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                dragView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark))
+            } else {
+                dragTextView.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+                dragView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorDivider))
+            }
+        }
+    }
+
+    /*private inner class ListAdaprer(private val mContext: Activity, private val itemsL: ArrayList<ArrayList<String>>) : ArrayAdapter<ArrayList<String>?>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_3, by.carkva_gazeta.malitounik.R.id.label, itemsL as List<ArrayList<String>>) {
         private val k: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         override fun add(string: ArrayList<String>?) {
             super.add(string)
@@ -381,5 +518,5 @@ class BibleNatatki : AppCompatActivity(), OnItemClickListener, OnItemLongClickLi
     private class ViewHolder {
         var text: TextViewRobotoCondensed? = null
         var buttonPopup: ImageView? = null
-    }
+    }*/
 }

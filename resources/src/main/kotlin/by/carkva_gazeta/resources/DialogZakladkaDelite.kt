@@ -18,7 +18,7 @@ import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 class DialogZakladkaDelite : DialogFragment() {
     private var delite: ZakladkaDeliteListiner? = null
     private var position = 0
-    private var name: String = ""
+    private var name = ""
     private var semuxa = 0
     private var zakladka = false
     private lateinit var builder: AlertDialog.Builder
@@ -46,6 +46,11 @@ class DialogZakladkaDelite : DialogFragment() {
         fun zakladkadiliteItem(position: Int, semuxa: Int)
         fun zakladkadiliteItemCancel()
         fun natatkidiliteItem(position: Int, semuxa: Int)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        delite?.zakladkadiliteItemCancel()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

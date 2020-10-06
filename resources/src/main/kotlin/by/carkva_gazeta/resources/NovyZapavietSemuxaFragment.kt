@@ -95,10 +95,15 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
     }
 
     override fun addZakladka(color: Int) {
-        activity?.let {
+        activity?.let { activity ->
             if (color != -1) {
-                BibleGlobalList.zakladkiSemuxa.add(0, BibleZakladkiData(BibleGlobalList.zakladkiSemuxa.size.toLong(), knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.RAZDZEL) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString() + "<!--" + color))
-                MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
+                var maxIndex: Long = 0
+                BibleGlobalList.zakladkiSemuxa.forEach {
+                    if (maxIndex < it.id) maxIndex = it.id
+                }
+                maxIndex++
+                BibleGlobalList.zakladkiSemuxa.add(0, BibleZakladkiData(maxIndex, knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.RAZDZEL) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString() + "<!--" + color))
+                MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
             }
             BibleGlobalList.mPedakVisable = false
             listPositionListiner?.setEdit(true)

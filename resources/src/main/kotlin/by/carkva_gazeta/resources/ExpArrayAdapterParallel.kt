@@ -348,10 +348,10 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
             if (Zapavet) zav = "1"
             if (BibleGlobalList.natatkiSemuxa.size > 0) {
                 for (i in BibleGlobalList.natatkiSemuxa.indices) {
-                    if (BibleGlobalList.natatkiSemuxa[i][0].contains(zav) && BibleGlobalList.natatkiSemuxa[i][1].toInt() == kniga && BibleGlobalList.natatkiSemuxa[i][2].toInt() == glava && BibleGlobalList.natatkiSemuxa[i][3].toInt() == position) {
+                    if (BibleGlobalList.natatkiSemuxa[i].list[0].contains(zav) && BibleGlobalList.natatkiSemuxa[i].list[1].toInt() == kniga && BibleGlobalList.natatkiSemuxa[i].list[2].toInt() == glava && BibleGlobalList.natatkiSemuxa[i].list[3].toInt() == position) {
                         val ssb = SpannableStringBuilder(ea.textView?.text)
                         val nachalo = ssb.length
-                        ssb.append("\nНататка:\n").append(BibleGlobalList.natatkiSemuxa[i][5]).append("\n")
+                        ssb.append("\nНататка:\n").append(BibleGlobalList.natatkiSemuxa[i].list[5]).append("\n")
                         ssb.setSpan(StyleSpan(Typeface.ITALIC), nachalo, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         ea.textView?.text = ssb
                         break
@@ -364,10 +364,10 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
             if (Zapavet) zav = "1"
             if (BibleGlobalList.natatkiSinodal.size > 0) {
                 for (i in BibleGlobalList.natatkiSinodal.indices) {
-                    if (BibleGlobalList.natatkiSinodal[i][0].contains(zav) && BibleGlobalList.natatkiSinodal[i][1].toInt() == kniga && BibleGlobalList.natatkiSinodal[i][2].toInt() == glava && BibleGlobalList.natatkiSinodal[i][3].toInt() == position) {
+                    if (BibleGlobalList.natatkiSinodal[i].list[0].contains(zav) && BibleGlobalList.natatkiSinodal[i].list[1].toInt() == kniga && BibleGlobalList.natatkiSinodal[i].list[2].toInt() == glava && BibleGlobalList.natatkiSinodal[i].list[3].toInt() == position) {
                         val ssb = SpannableStringBuilder(ea.textView?.text)
                         val nachalo = ssb.length
-                        ssb.append("\nНататка:\n").append(BibleGlobalList.natatkiSinodal[i][5]).append("\n")
+                        ssb.append("\nНататка:\n").append(BibleGlobalList.natatkiSinodal[i].list[5]).append("\n")
                         ssb.setSpan(StyleSpan(Typeface.ITALIC), nachalo, ssb.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         ea.textView?.text = ssb
                         break

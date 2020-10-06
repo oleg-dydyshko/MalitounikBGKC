@@ -75,18 +75,18 @@ class DialogBibleNatatka : DialogFragment() {
                 nov = "1"
             if (semuxa) {
                 for (i in BibleGlobalList.natatkiSemuxa.indices) {
-                    if (BibleGlobalList.natatkiSemuxa[i][0].contains(nov) && BibleGlobalList.natatkiSemuxa[i][1].toInt() == kniga && BibleGlobalList.natatkiSemuxa[i][2].toInt() == glava && BibleGlobalList.natatkiSemuxa[i][3].toInt() == stix) {
+                    if (BibleGlobalList.natatkiSemuxa[i].list[0].contains(nov) && BibleGlobalList.natatkiSemuxa[i].list[1].toInt() == kniga && BibleGlobalList.natatkiSemuxa[i].list[2].toInt() == glava && BibleGlobalList.natatkiSemuxa[i].list[3].toInt() == stix) {
                         redaktor = true
-                        editText = BibleGlobalList.natatkiSemuxa[i][5]
+                        editText = BibleGlobalList.natatkiSemuxa[i].list[5]
                         position = i
                         break
                     }
                 }
             } else {
                 for (i in BibleGlobalList.natatkiSinodal.indices) {
-                    if (BibleGlobalList.natatkiSinodal[i][0].contains(nov) && BibleGlobalList.natatkiSinodal[i][1].toInt() == kniga && BibleGlobalList.natatkiSinodal[i][2].toInt() == glava && BibleGlobalList.natatkiSinodal[i][3].toInt() == stix) {
+                    if (BibleGlobalList.natatkiSinodal[i].list[0].contains(nov) && BibleGlobalList.natatkiSinodal[i].list[1].toInt() == kniga && BibleGlobalList.natatkiSinodal[i].list[2].toInt() == glava && BibleGlobalList.natatkiSinodal[i].list[3].toInt() == stix) {
                         redaktor = true
-                        editText = BibleGlobalList.natatkiSinodal[i][5]
+                        editText = BibleGlobalList.natatkiSinodal[i].list[5]
                         position = i
                         break
                     }
@@ -113,7 +113,7 @@ class DialogBibleNatatka : DialogFragment() {
                 if (semuxa) {
                     if (redaktor && BibleGlobalList.natatkiSemuxa.size > 0) {
                         if (editTextView.text.toString() == "") BibleGlobalList.natatkiSemuxa.removeAt(position)
-                        else BibleGlobalList.natatkiSemuxa[position][5] = editTextView.text.toString()
+                        else BibleGlobalList.natatkiSemuxa[position].list[5] = editTextView.text.toString()
                     } else {
                         if (editTextView.text.toString() != "") {
                             val temp = ArrayList<String>()
@@ -123,13 +123,19 @@ class DialogBibleNatatka : DialogFragment() {
                             temp.add(stix.toString())
                             temp.add(bibletext)
                             temp.add(editTextView.text.toString())
-                            BibleGlobalList.natatkiSemuxa.add(0, temp)
+                            var maxIndex: Long = 0
+                            BibleGlobalList.natatkiSemuxa.forEach {
+                                if (maxIndex < it.id)
+                                    maxIndex = it.id
+                            }
+                            maxIndex++
+                            BibleGlobalList.natatkiSemuxa.add(0, BibleNatatkiData(maxIndex, temp))
                         }
                     }
                 } else {
                     if (redaktor && BibleGlobalList.natatkiSinodal.size > 0) {
                         if (editTextView.text.toString() == "") BibleGlobalList.natatkiSinodal.removeAt(position)
-                        else BibleGlobalList.natatkiSinodal[position][5] = editTextView.text.toString()
+                        else BibleGlobalList.natatkiSinodal[position].list[5] = editTextView.text.toString()
                     } else {
                         if (editTextView.text.toString() != "") {
                             val temp = ArrayList<String>()
@@ -139,7 +145,13 @@ class DialogBibleNatatka : DialogFragment() {
                             temp.add(stix.toString())
                             temp.add(bibletext)
                             temp.add(editTextView.text.toString())
-                            BibleGlobalList.natatkiSinodal.add(0, temp)
+                            var maxIndex: Long = 0
+                            BibleGlobalList.natatkiSinodal.forEach {
+                                if (maxIndex < it.id)
+                                    maxIndex = it.id
+                            }
+                            maxIndex++
+                            BibleGlobalList.natatkiSinodal.add(0, BibleNatatkiData(maxIndex, temp))
                         }
                     }
                 }

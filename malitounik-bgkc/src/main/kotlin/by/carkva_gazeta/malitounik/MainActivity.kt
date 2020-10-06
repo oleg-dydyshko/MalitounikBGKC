@@ -1097,10 +1097,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     if (file.exists()) {
                         try {
                             val gson = Gson()
-                            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                            val type = object : TypeToken<ArrayList<BibleNatatkiData>>() {}.type
                             BibleGlobalList.natatkiSemuxa = gson.fromJson(file.readText(), type)
                         } catch (t: Throwable) {
-                            file.delete()
+                            try {
+                                val gson = Gson()
+                                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                                val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(file.readText(), type)
+                                for (i in 0 until arrayList.size)
+                                    BibleGlobalList.natatkiSemuxa.add(BibleNatatkiData(i.toLong(), arrayList[i]))
+                            } catch (t: Throwable) {
+                                file.delete()
+                            }
                         }
                     }
                     val file2 = File("$filesDir/BibliaSemuxaZakladki.json")
@@ -1189,10 +1197,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     if (file.exists()) {
                         try {
                             val gson = Gson()
-                            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                            val type = object : TypeToken<ArrayList<BibleNatatkiData>>() {}.type
                             BibleGlobalList.natatkiSinodal = gson.fromJson(file.readText(), type)
                         } catch (t: Throwable) {
-                            file.delete()
+                            try {
+                                val gson = Gson()
+                                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                                val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(file.readText(), type)
+                                for (i in 0 until arrayList.size)
+                                    BibleGlobalList.natatkiSinodal.add(BibleNatatkiData(i.toLong(), arrayList[i]))
+                            } catch (t: Throwable) {
+                                file.delete()
+                            }
                         }
                     }
                     val file2 = File("$filesDir/BibliaSinodalZakladki.json")

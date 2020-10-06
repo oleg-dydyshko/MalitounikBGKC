@@ -16,16 +16,21 @@ import androidx.fragment.app.DialogFragment
  * Created by oleg on 8.3.18
  */
 class DialogDelite : DialogFragment() {
-    private lateinit var mListener: DialogDeliteListener
+    private var mListener: DialogDeliteListener? = null
     private var position = 0
-    private lateinit var filename: String
-    private lateinit var title: String
-    private lateinit var massege: String
+    private var filename = ""
+    private var title = ""
+    private var massege = ""
     private lateinit var alert: AlertDialog
 
     interface DialogDeliteListener {
         fun fileDelite(position: Int, file: String)
         fun fileDeliteCancel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mListener?.fileDeliteCancel()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,8 +75,8 @@ class DialogDelite : DialogFragment() {
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             linearLayout.addView(textView)
-            builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener.fileDelite(position, filename) }
-            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { _: DialogInterface, _: Int -> mListener.fileDeliteCancel() }
+            builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener?.fileDelite(position, filename) }
+            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { _: DialogInterface, _: Int -> mListener?.fileDeliteCancel() }
             builder.setView(linearLayout)
             alert = builder.create()
             alert.setOnShowListener {

@@ -9,8 +9,8 @@ class BibleGlobalList {
         var vydelenie = ArrayList<ArrayList<Int>>()
         var zakladkiSemuxa = ArrayList<BibleZakladkiData>()
         var zakladkiSinodal = ArrayList<BibleZakladkiData>()
-        var natatkiSemuxa = ArrayList<ArrayList<String>>()
-        var natatkiSinodal = ArrayList<ArrayList<String>>()
+        var natatkiSemuxa = ArrayList<BibleNatatkiData>()
+        var natatkiSinodal = ArrayList<BibleNatatkiData>()
 
         fun checkPosition(glava: Int = mListGlava, position: Int = bibleCopyList[0]): Int {
             for (i in vydelenie.indices) {

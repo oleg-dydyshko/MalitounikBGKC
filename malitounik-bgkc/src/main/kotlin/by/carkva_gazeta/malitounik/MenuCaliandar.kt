@@ -1,7 +1,10 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -11,14 +14,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.menu_caliandar.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.FileWriter
 import java.util.*
+
 
 /**
  * Created by oleg on 14.6.19
  */
-class MenuCaliandar : Fragment() {
+class MenuCaliandar : MenuCaliandarFragment() {
     private lateinit var listinner: MenuCaliandarPageListinner
+    private lateinit var adapter: MyCalendarAdapter
     private var page = 0
 
     internal interface MenuCaliandarPageListinner {
@@ -40,11 +50,69 @@ class MenuCaliandar : Fragment() {
         return inflater.inflate(R.layout.menu_caliandar, container, false)
     }
 
+    override fun delitePadzeia(position: Int) {
+        activity?.let {
+            val sab = MainActivity.padzeia[position]
+            val filen = sab.padz
+            val del = ArrayList<Padzeia>()
+            for (p in MainActivity.padzeia) {
+                if (p.padz == filen) {
+                    del.add(p)
+                }
+            }
+            MainActivity.padzeia.removeAll(del)
+            val  am = it.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val filesDir = it.filesDir
+            val outputStream = FileWriter("$filesDir/Sabytie.json")
+            val gson = Gson()
+            outputStream.write(gson.toJson(MainActivity.padzeia))
+            outputStream.close()
+            MainActivity.padzeia.sort()
+            CoroutineScope(Dispatchers.IO).launch {
+                if (sab.count == "0") {
+                    if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
+                        if (sab.sec != "-1") {
+                            val intent = createIntent(sab.padz, "Падзея" + " " + sab.dat + " у " + sab.tim, sab.dat, sab.tim)
+                            val londs3 = sab.paznic / 100000L
+                            val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, 0)
+                            am.cancel(pIntent)
+                            pIntent.cancel()
+                        }
+                    } else {
+                        for (p in del) {
+                            if (p.padz.contains(filen)) {
+                                if (p.sec != "-1") {
+                                    val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
+                                    val londs3 = p.paznic / 100000L
+                                    val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, 0)
+                                    am.cancel(pIntent)
+                                    pIntent.cancel()
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    for (p in del) {
+                        if (p.sec != "-1") {
+                            val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
+                            val londs3 = p.paznic / 100000L
+                            val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, 0)
+                            am.cancel(pIntent)
+                            pIntent.cancel()
+                        }
+                    }
+                }
+            }
+            MainActivity.toastView(it, getString(R.string.remove_padzea))
+            adapter.notifyDataSetChanged()
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         fragmentManager?.let {
-            val frag = MyCalendarAdapter(it)
-            pager.adapter = frag
+            adapter = MyCalendarAdapter(it)
+            pager.adapter = adapter
             pager.currentItem = page
             pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
@@ -75,6 +143,22 @@ class MenuCaliandar : Fragment() {
         menu.findItem(R.id.tipicon).isVisible = true
         menu.findItem(R.id.sabytie).isVisible = true
         menu.findItem(R.id.search_sviatyia).isVisible = true
+    }
+
+    private fun createIntent(action: String, extra: String, data: String, time: String): Intent {
+        var i = Intent()
+        activity?.let {
+            i = Intent(it, ReceiverBroad::class.java)
+            i.action = action
+            i.putExtra("sabytieSet", true)
+            i.putExtra("extra", extra)
+            val dateN = data.split(".").toTypedArray()
+            val timeN = time.split(":").toTypedArray()
+            val g = GregorianCalendar(dateN[2].toInt(), dateN[1].toInt() - 1, dateN[0].toInt(), 0, 0, 0)
+            i.putExtra("dataString", dateN[0] + dateN[1] + timeN[0] + timeN[1])
+            i.putExtra("year", g[Calendar.YEAR])
+        }
+        return i
     }
 
     private class MyCalendarAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {

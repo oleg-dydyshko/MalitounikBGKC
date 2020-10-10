@@ -537,10 +537,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         val clickableSpanRemove = object : ClickableSpan() {
                             override fun onClick(p0: View) {
                                 fragmentManager?.let {
-                                    val intent = Intent(activity, Sabytie::class.java)
-                                    intent.putExtra("remove", true)
-                                    intent.putExtra("position", index)
-                                    startActivity(intent)
+                                    val dd = DialogDelite.getInstance(index, "", "з падзей", MainActivity.padzeia[index].dat + " " + MainActivity.padzeia[index].padz)
+                                    dd.show(it, "dialig_delite")
                                 }
                             }
 
@@ -609,7 +607,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
     }
 
     companion object {
-
         fun newInstance(position: Int, day: Int, year: Int, dayYear: Int): CaliandarFull {
             val fragment = CaliandarFull()
             val args = Bundle()

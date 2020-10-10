@@ -14,9 +14,9 @@ abstract class SmartFragmentStatePagerAdapter(fragmentManager: FragmentManager) 
         return fragment
     }
 
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+    override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
         registeredFragments.remove(position)
-        super.destroyItem(container, position, `object`)
+        super.destroyItem(container, position, obj)
     }
 
     fun getFragment(key: Int) : Fragment {

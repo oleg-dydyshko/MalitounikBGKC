@@ -96,6 +96,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         vybranoe?.fileDelite(position)
         val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
         menuNatatki?.fileDelite(position)
+        val menuCaliandar = supportFragmentManager.findFragmentByTag("menuCaliandar") as? MenuCaliandar
+        menuCaliandar?.delitePadzeia(position)
     }
 
     override fun deliteAllVybranoe() {
@@ -1035,7 +1037,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     }
                     if (setDataCalendar == -1) setDataCalendar = dayyear + c.get(Calendar.DAY_OF_YEAR) - 1
                     val caliandar: MenuCaliandar = MenuCaliandar.newInstance(setDataCalendar)
-                    ftrans.replace(R.id.conteiner, caliandar)
+                    ftrans.replace(R.id.conteiner, caliandar, "menuCaliandar")
                     prefEditors.putInt("id", idSelect)
                     if (shortcuts) {
                         val i = Intent(this, Sabytie::class.java)

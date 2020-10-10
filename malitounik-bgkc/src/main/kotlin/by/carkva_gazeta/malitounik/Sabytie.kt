@@ -481,10 +481,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val position = intent.extras?.getInt("position")?: 0
             onPopupRedaktor(position)
         }
-        if (intent.extras?.getBoolean("remove", false) == true) {
-            val position = intent.extras?.getInt("position")?: 0
-            onDialogDeliteClick(position)
-        }
     }
 
     override fun onDialogEditClick(position: Int) {

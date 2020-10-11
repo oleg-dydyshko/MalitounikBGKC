@@ -105,6 +105,9 @@ class MenuCaliandar : MenuCaliandarFragment() {
             }
             MainActivity.toastView(it, getString(R.string.remove_padzea))
             adapter.notifyDataSetChanged()
+            Sabytie.editCaliandar = true
+            //val caliandarFragment = adapter.getFragment(pager.currentItem) as CaliandarFull
+            //caliandarFragment.onSabytieView()
         }
     }
 

@@ -104,12 +104,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         return inflater.inflate(R.layout.calaindar, container, false)
     }
 
-    /*fun onSabytieView() {
-        scroll?.post {
-            scroll?.fullScroll(ScrollView.FOCUS_DOWN)
-        }
-    }*/
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         CoroutineScope(Dispatchers.Main).launch {
@@ -363,8 +357,18 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 if (extras?.getBoolean("sabytieView", false) == true) {
                     sabytieTitle = extras.getString("sabytieTitle", "") ?: ""
                 }
+                if (editCaliandarTitle != "") {
+                    sabytieTitle = editCaliandarTitle
+                    editCaliandarTitle = ""
+                }
                 withContext(Dispatchers.Main) {
                     sabytieView(sabytieTitle)
+                }
+            }
+            if (Sabytie.editCaliandar) {
+                scroll.post {
+                    scroll.fullScroll(ScrollView.FOCUS_DOWN)
+                    Sabytie.editCaliandar = false
                 }
             }
         }
@@ -528,6 +532,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         val clickableSpanEdit = object : ClickableSpan() {
                             override fun onClick(p0: View) {
                                 fragmentManager?.let {
+                                    editCaliandarTitle = textViewT.text.toString()
                                     val intent = Intent(activity, Sabytie::class.java)
                                     intent.putExtra("edit", true)
                                     intent.putExtra("position", index)
@@ -581,7 +586,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                                 val llp2 = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
                                 llp2.setMargins(0, 0, 0, 0)
                                 textViewT.layoutParams = llp2
-                                scroll?.post { scroll?.fullScroll(ScrollView.FOCUS_DOWN) }
+                                scroll.post { scroll.fullScroll(ScrollView.FOCUS_DOWN) }
                             } else {
                                 textViewT.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0)
                                 textViewT.layoutParams = llp
@@ -594,12 +599,15 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             val llp2 = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
                             llp2.setMargins(0, 0, 0, 0)
                             textViewT.layoutParams = llp2
-                            scroll?.post {
+                            scroll.post {
                                 activity.intent?.removeExtra("sabytieView")
-                                scroll?.fullScroll(ScrollView.FOCUS_DOWN)
-                                val shakeanimation = AnimationUtils.loadAnimation(activity, R.anim.shake)
-                                textViewT.startAnimation(shakeanimation)
-                                textView.startAnimation(shakeanimation)
+                                scroll.fullScroll(ScrollView.FOCUS_DOWN)
+                                if (!Sabytie.editCaliandar) {
+                                    val shakeanimation = AnimationUtils.loadAnimation(activity, R.anim.shake)
+                                    textViewT.startAnimation(shakeanimation)
+                                    textView.startAnimation(shakeanimation)
+                                }
+                                Sabytie.editCaliandar = false
                             }
                         }
                     }
@@ -613,6 +621,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
     }
 
     companion object {
+        var editCaliandarTitle = ""
         fun newInstance(position: Int, day: Int, year: Int, dayYear: Int): CaliandarFull {
             val fragment = CaliandarFull()
             val args = Bundle()

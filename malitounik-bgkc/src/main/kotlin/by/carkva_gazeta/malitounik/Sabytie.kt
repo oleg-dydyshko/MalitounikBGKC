@@ -89,7 +89,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     private var mLastClickTime: Long = 0
     private lateinit var colorAdapter: ColorAdapter
     private var nazvaPadzei = "Назва падзеі"
-    private var editCaliandar = false
 
     override fun sabytieTimePositive(nomerDialoga: Int, hour: Int, minute: Int) {
         if (nomerDialoga == 1) {
@@ -660,8 +659,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         val taSaveN = label2.text.toString()
         val daKSaveN = label12.text.toString()
         val taKSaveN = label22.text.toString()
-        if (editCaliandar) onSupportNavigateUp()
-        else if (!(edit2SaveN == edit2Save && editSaveN == editSave && daSaveN == daSave && daKSaveN == daKSave && taSaveN == taSave && taKSaveN == taKSave && spinner3.selectedItemPosition == vybtimeSave && spinner4.selectedItemPosition == repitSave && spinner5.selectedItemPosition == colorSave && labelbutton12Save == labelbutton12.text.toString() && editText4Save == edit4SaveN && radioSave == radio) && drag_list_view.visibility == View.GONE) {
+        if (editCaliandar) {
+            onSupportNavigateUp()
+        } else if (!(edit2SaveN == edit2Save && editSaveN == editSave && daSaveN == daSave && daKSaveN == daKSave && taSaveN == taSave && taKSaveN == taKSave && spinner3.selectedItemPosition == vybtimeSave && spinner4.selectedItemPosition == repitSave && spinner5.selectedItemPosition == colorSave && labelbutton12Save == labelbutton12.text.toString() && editText4Save == edit4SaveN && radioSave == radio) && drag_list_view.visibility == View.GONE) {
             val dialogSabytieSave = DialogSabytieSave()
             dialogSabytieSave.show(supportFragmentManager, "sabytie_save")
         } else if (back) {
@@ -2280,7 +2280,10 @@ fileReader.close()
             } else {
                 editText.startAnimation(shakeanimation)
             }
-            if (editCaliandar) onSupportNavigateUp()
+            if (editCaliandar) {
+                CaliandarFull.editCaliandarTitle = edit
+                onSupportNavigateUp()
+            }
             //MyBackupAgent.requestBackup(this);
         }
         if (id == R.id.action_cansel) {
@@ -2309,7 +2312,9 @@ fileReader.close()
             drag_list_view.visibility = View.VISIBLE
             idMenu = 1
             invalidateOptionsMenu()
-            if (editCaliandar) onSupportNavigateUp()
+            if (editCaliandar) {
+                onSupportNavigateUp()
+            }
             //return true;
         }
         if (id == R.id.action_delite) {
@@ -2829,6 +2834,7 @@ file.delete()
 
     companion object {
         private val colors = arrayOf("#D00505", "#800080", "#C71585", "#FF00FF", "#F4A460", "#D2691E", "#A52A2A", "#1E90FF", "#6A5ACD", "#228B22", "#9ACD32", "#20B2AA")
+        var editCaliandar = false
 
         fun getColors(context: Context): Array<String> {
             val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)

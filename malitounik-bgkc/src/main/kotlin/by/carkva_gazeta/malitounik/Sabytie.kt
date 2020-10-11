@@ -89,6 +89,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     private var mLastClickTime: Long = 0
     private lateinit var colorAdapter: ColorAdapter
     private var nazvaPadzei = "Назва падзеі"
+    private var editCaliandar = false
 
     override fun sabytieTimePositive(nomerDialoga: Int, hour: Int, minute: Int) {
         if (nomerDialoga == 1) {
@@ -480,6 +481,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         if (intent.extras?.getBoolean("edit", false) == true) {
             val position = intent.extras?.getInt("position")?: 0
             onPopupRedaktor(position)
+            editCaliandar = true
         }
     }
 
@@ -658,7 +660,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         val taSaveN = label2.text.toString()
         val daKSaveN = label12.text.toString()
         val taKSaveN = label22.text.toString()
-        if (!(edit2SaveN == edit2Save && editSaveN == editSave && daSaveN == daSave && daKSaveN == daKSave && taSaveN == taSave && taKSaveN == taKSave && spinner3.selectedItemPosition == vybtimeSave && spinner4.selectedItemPosition == repitSave && spinner5.selectedItemPosition == colorSave && labelbutton12Save == labelbutton12.text.toString() && editText4Save == edit4SaveN && radioSave == radio) && drag_list_view.visibility == View.GONE) {
+        if (editCaliandar) onSupportNavigateUp()
+        else if (!(edit2SaveN == edit2Save && editSaveN == editSave && daSaveN == daSave && daKSaveN == daKSave && taSaveN == taSave && taKSaveN == taKSave && spinner3.selectedItemPosition == vybtimeSave && spinner4.selectedItemPosition == repitSave && spinner5.selectedItemPosition == colorSave && labelbutton12Save == labelbutton12.text.toString() && editText4Save == edit4SaveN && radioSave == radio) && drag_list_view.visibility == View.GONE) {
             val dialogSabytieSave = DialogSabytieSave()
             dialogSabytieSave.show(supportFragmentManager, "sabytie_save")
         } else if (back) {
@@ -2277,6 +2280,7 @@ fileReader.close()
             } else {
                 editText.startAnimation(shakeanimation)
             }
+            if (editCaliandar) onSupportNavigateUp()
             //MyBackupAgent.requestBackup(this);
         }
         if (id == R.id.action_cansel) {
@@ -2305,6 +2309,7 @@ fileReader.close()
             drag_list_view.visibility = View.VISIBLE
             idMenu = 1
             invalidateOptionsMenu()
+            if (editCaliandar) onSupportNavigateUp()
             //return true;
         }
         if (id == R.id.action_delite) {

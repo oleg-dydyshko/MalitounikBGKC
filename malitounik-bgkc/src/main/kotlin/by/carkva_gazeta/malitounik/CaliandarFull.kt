@@ -104,6 +104,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         return inflater.inflate(R.layout.calaindar, container, false)
     }
 
+    /*fun onSabytieView() {
+        scroll?.post {
+            scroll?.fullScroll(ScrollView.FOCUS_DOWN)
+        }
+    }*/
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         CoroutineScope(Dispatchers.Main).launch {

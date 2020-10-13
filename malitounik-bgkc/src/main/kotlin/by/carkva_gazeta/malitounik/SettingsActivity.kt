@@ -1137,12 +1137,12 @@ class SettingsActivity : AppCompatActivity() {
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             channel.description = name
             channel.importance = NotificationManager.IMPORTANCE_HIGH
+            channel.enableLights(true)
             channel.lightColor = ContextCompat.getColor(context, R.color.colorPrimary)
             val att = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build()
             channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att)
             channel.enableVibration(true)
             channel.vibrationPattern = vibrate
-            channel.enableLights(true)
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager?.createNotificationChannel(channel)
             notificationManager?.deleteNotificationChannel("by.carkva-gazeta")

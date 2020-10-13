@@ -501,9 +501,15 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     filePath = file.absolutePath
                     fileName = file.name
                     if (!File(arrayList[position][2]).exists()) {
-                        val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        val permissionCheck = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        } else {
+                            1
+                        }
                         if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                            }
                             return@setOnItemClickListener
                         }
                     }
@@ -631,6 +637,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
         webSettings.standardFontFamily = "sans-serif-condensed"
         webSettings.defaultFontSize = fontBiblia.toInt()
+        webSettings.allowFileAccess = true
         label1.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
         label2.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
         label3.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
@@ -795,9 +802,15 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 val t1 = filePath.indexOf("raw:")
                 filePath = filePath.substring(t1 + 4)
             }
-            val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            val permissionCheck = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+            } else {
+                1
+            }
             if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                }
             } else {
                 when {
                     fileName.toLowerCase(Locale.getDefault()).contains(".pdf") -> {
@@ -1497,7 +1510,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     override fun onPause() {
         super.onPause()
-        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         val prefEditor: SharedPreferences.Editor = k.edit()
         if (pdfView.visibility == View.VISIBLE) {
             prefEditor.putInt(fileName, pdfView.currentPage)
@@ -1571,10 +1583,13 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     override fun onClick(view: View?) {
-        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         stopAutoScroll()
         idSelect = view?.id ?: 0
-        val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val permissionCheck = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        } else {
+            1
+        }
         var rub = -1
         if (dzenNoch) {
             label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
@@ -1635,7 +1650,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
             R.id.label6 -> {
                 if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                    }
                 } else {
                     progressBar2.visibility = View.GONE
                     val fileExplorer = DialogFileExplorer()
@@ -1856,14 +1873,16 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private fun stopAutoScroll() {
         webView.setOnBottomListener(null)
         scrollTimer.cancel()
-        resetTimer = Timer()
         scrollerSchedule = null
-        resetSchedule = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+        if (!k.getBoolean("scrinOn", false)) {
+            resetTimer = Timer()
+            resetSchedule = object : TimerTask() {
+                override fun run() {
+                    CoroutineScope(Dispatchers.Main).launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+                }
             }
+            resetTimer.schedule(resetSchedule, 60000)
         }
-        resetTimer.schedule(resetSchedule, 60000)
     }
 
     private fun startAutoScroll() {

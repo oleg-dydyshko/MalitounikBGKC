@@ -974,7 +974,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             defaultPage = 0
             positionY = 0
         }
-        val split: Array<String> = biblioteka?.content?.get(defaultPage)?.get(1)?.split("#")?.toTypedArray() ?: arrayOf("")
+        val split = biblioteka?.content?.get(defaultPage)?.get(1)?.split("#")?: ArrayList()
         webView.loadUrl("file://" + dir.absolutePath.toString() + "/" + split[0])
         webView.scrollTo(0, positionY)
         bookTitle.clear()

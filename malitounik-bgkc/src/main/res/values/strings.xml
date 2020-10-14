@@ -185,7 +185,6 @@
     <string name="sabytie_pachatak">Пачатак:</string>
     <string name="Sabytie_end">Канец:</string>
     <string name="Sabytie_uved">Паведаміць за:</string>
-    <string name="Sabytie_never">Ніколі</string>
     <string name="Sabytie_repit">Паўтор:</string>
     <string name="Sabytie_no_data_zakan">Няма даты заканчэньня</string>
     <string name="Sabytie_install_kolkast_paz">Усталяваць колькасьць разоў</string>
@@ -284,7 +283,6 @@
     <string name="malitva_pered">Малітвы перад\nчытаньнем Псалтыра</string>
     <string name="malitva_posle">Малітвы пасьля\nчытаньня Псалтыра</string>
     <string name="psalom2">Псалом</string>
-    <string name="sabytie_kaliandar">У каляндары</string>
     <string name="poshuk_nadsan">Пошук па перакладу А. Надсана</string>
     <string name="niama">Няма</string>
     <string name="searche_text">Пошук у тэксьце</string>
@@ -370,5 +368,8 @@
     <string name="autoprag">Аўтаматычнае ўключэньне аўтапрагорткі</string>
     <string name="autoprag_time">Праз %1$d секунд</string>
     <string name="ekpan_on">Экран заўсёды ўключаны</string>
+    <string name="color_padzei">Колер:</string>
+    <string name="sabytie_no_pavedam">Паведаміць: Ніколі</string>
+    <string name="sabytie_pavedam">Паведаміць: %1$s%2$d.%3$s%4$d.%5$d у %6$d:%7$s%8$d</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

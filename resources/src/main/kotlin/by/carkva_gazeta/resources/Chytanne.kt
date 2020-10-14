@@ -362,14 +362,14 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
             var w = intent.extras?.getString("cytanne") ?: ""
             w = MainActivity.removeZnakiAndSlovy(w)
-            val split = w.split(";").toTypedArray()
+            val split = w.split(";")
             //String[] split = {"Гал 1.1-10, 20-2.5"};
             var knigaN: String
             var knigaK = "0"
             var zaglnum = 0
             // Мц 1.1-10, 20-2.5, 10-20, 1.21-2.4, 11;
             for (i in split.indices) {
-                val zaglavie = split[i].split(",").toTypedArray()
+                val zaglavie = split[i].split(",")
                 var zagl = ""
                 var zaglavieName = ""
                 for (e in zaglavie.indices) {
@@ -824,7 +824,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                                 }
                             }
                             inputStream.close()
-                            val split2 = builder.toString().split("===").toTypedArray()
+                            val split2 = builder.toString().split("===")
                             var spl: String
                             var desK1: Int
                             var desN: Int
@@ -835,7 +835,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             } else {
                                 desK1 = spl.indexOf("$knigaK.")
                                 if (desK1 == -1) {
-                                    val splAll = spl.split("\n").toTypedArray().size
+                                    val splAll = spl.split("\n").size
                                     desK1 = spl.indexOf("$splAll.")
                                 }
                                 if (zag3 != -1 || glav) {

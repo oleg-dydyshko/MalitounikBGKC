@@ -43,7 +43,7 @@ class DialogSabytieTime : DialogFragment() {
             ad.setView(linearLayout)
             val timePicker = TimePicker(it)
             timePicker.setIs24HourView(true)
-            val settime = arguments?.getString("time")?.split(":")?.toTypedArray()
+            val settime = arguments?.getString("time")?.split(":")
             val gc = GregorianCalendar(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH], settime?.get(0)?.toInt()?: 0, settime?.get(1)?.toInt()?: 0, 0)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 timePicker.hour = gc[Calendar.HOUR_OF_DAY]

@@ -172,7 +172,7 @@ class ParalelnyeMesta {
                 cytanneSours1 = cytanneSours1.replace("Откр", "Адкр")
             }
         }
-        val chten = cytanneParalelnye.split(";").toTypedArray()
+        val chten = cytanneParalelnye.split(";")
         val textViewSours = TextViewRobotoCondensed(context)
         textViewSours.setTextIsSelectable(true)
         textViewSours.setTypeface(null, Typeface.BOLD_ITALIC)
@@ -196,7 +196,7 @@ class ParalelnyeMesta {
             var konec: String
             // Пс 88:12-13; 135:5; 145:6; Сир 18:1; Ин 1:3; Пс 22
 // Быт 13:15; 15:7, 18, 15-16; 26:3-4; Втор 34:4; 1 Тим 2:13
-            val split = fit.split(",").toTypedArray()
+            val split = fit.split(",")
             for (aSplit in split) {
                 val splitres = aSplit.trim()
                 val t2 = splitres.lastIndexOf(" ")
@@ -415,7 +415,7 @@ class ParalelnyeMesta {
                             }
                         }
                         inputStream.close()
-                        val split2 = builder.toString().split("===").toTypedArray()
+                        val split2 = builder.toString().split("===")
                         var r1 = split2[nomerglavy].trim()
                         var r2: String
                         val vN = r1.indexOf(nachalo)
@@ -423,7 +423,7 @@ class ParalelnyeMesta {
                         val vK = r1.indexOf("\n", vK1)
                         if (semuxa && nomer == 22) {
                             r1 = r1.replace("\n", "<br>\n")
-                            val r3 = r1.split("\n").toTypedArray()
+                            val r3 = r1.split("\n")
                             val sb = StringBuilder()
                             for (w in nachalo.toInt()..konec.toInt()) {
                                 sb.append(r3[w - 1])

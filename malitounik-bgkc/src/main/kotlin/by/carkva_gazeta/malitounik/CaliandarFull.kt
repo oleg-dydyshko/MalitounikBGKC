@@ -473,8 +473,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         MainActivity.padzeia.sort()
         for (index in 0 until MainActivity.padzeia.size) {
             val p = MainActivity.padzeia[index]
-            val r1 = p.dat.split(".").toTypedArray()
-            val r2 = p.datK.split(".").toTypedArray()
+            val r1 = p.dat.split(".")
+            val r2 = p.datK.split(".")
             gc[r1[2].toInt(), r1[1].toInt() - 1] = r1[0].toInt()
             val naY = gc[Calendar.YEAR]
             val na = gc[Calendar.DAY_OF_YEAR]
@@ -496,16 +496,19 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     val dataK = p.datK
                     val timeK = p.timK
                     val paz = p.paznic
-                    var res = "Паведаміць: Ніколі"
+                    var res = getString(R.string.sabytie_no_pavedam)
+                    val realTime = Calendar.getInstance().timeInMillis
+                    var paznicia = false
                     if (paz != 0L) {
                         gc.timeInMillis = paz
                         var nol1 = ""
                         var nol2 = ""
                         var nol3 = ""
                         if (gc[Calendar.DATE] < 10) nol1 = "0"
-                        if (gc[Calendar.MONTH] < 10) nol2 = "0"
+                        if (gc[Calendar.MONTH] < 9) nol2 = "0"
                         if (gc[Calendar.MINUTE] < 10) nol3 = "0"
-                        res = "Паведаміць: " + nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR] + " у " + gc[Calendar.HOUR_OF_DAY] + ":" + nol3 + gc[Calendar.MINUTE]
+                        res = getString(R.string.sabytie_pavedam, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR], gc[Calendar.HOUR_OF_DAY], nol3, gc[Calendar.MINUTE])
+                        if (realTime > paz) paznicia = true
                     }
                     activity?.let { activity ->
                         val density = resources.displayMetrics.density
@@ -565,9 +568,15 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         }
                         val t1 = spannable.lastIndexOf("\n")
                         val t2 = spannable.lastIndexOf("/")
+                        val t3 = spannable.indexOf(res)
                         spannable.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_OPPOSITE), t1 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        if (dzenNoch) spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary_black)), t1 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        else spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary)), t1 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (dzenNoch) {
+                            spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary_black)), t1 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (paznicia) spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary_black)), t3, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        } else {
+                            spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary)), t1 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (paznicia) spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary)), t3, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
                         spannable.setSpan(clickableSpanEdit, t1 + 1, t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         spannable.setSpan(clickableSpanRemove, t2 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         textView.text = spannable

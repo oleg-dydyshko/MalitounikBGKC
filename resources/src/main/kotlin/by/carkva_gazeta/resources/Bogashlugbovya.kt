@@ -434,15 +434,15 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             line = line.replace("<APCH></APCH>", "")
                             var sv = zmenyiaChastki.sviatyia()
                             if (sv != "") {
-                                val s1 = sv.split(":").toTypedArray()
-                                val s2 = s1[1].split(";").toTypedArray()
+                                val s1 = sv.split(":")
+                                val s2 = s1[1].split(";")
                                 sv = s1[0] + ":" + s2[0]
                                 builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=8\">").append(color).append(sv).append("</font></a>").append("<br><br>\n")
                             } else builder.append(line)
                             var svDop = zmenyiaChastki.sviatyiaDop()
                             if (svDop != "") {
-                                val s1 = svDop.split(":").toTypedArray()
-                                val s2 = s1[1].split(";").toTypedArray()
+                                val s1 = svDop.split(":")
+                                val s2 = s1[1].split(";")
                                 svDop = s1[0] + ":" + s2[0]
                                 builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=8\">").append(color).append(svDop).append("</font></a>").append("<br><br>\n")
                             } else builder.append(line)
@@ -456,15 +456,15 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             line = line.replace("<EVCH></EVCH>", "")
                             var sv = zmenyiaChastki.sviatyia()
                             if (sv != "") {
-                                val s1 = sv.split(":").toTypedArray()
-                                val s2 = s1[1].split(";").toTypedArray()
+                                val s1 = sv.split(":")
+                                val s2 = s1[1].split(";")
                                 sv = s1[0] + ":" + s2[1]
                                 builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=9\">").append(color).append(sv).append("</font></a>").append("<br><br>\n")
                             } else builder.append(line)
                             var svDop = zmenyiaChastki.sviatyiaDop()
                             if (svDop != "") {
-                                val s1 = svDop.split(":").toTypedArray()
-                                val s2 = s1[1].split(";").toTypedArray()
+                                val s1 = svDop.split(":")
+                                val s2 = s1[1].split(";")
                                 svDop = s1[0] + ":" + s2[1]
                                 builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=9\">").append(color).append(svDop).append("</font></a>").append("<br><br>\n")
                             } else builder.append(line)

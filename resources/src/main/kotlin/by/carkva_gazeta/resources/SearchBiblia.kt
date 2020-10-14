@@ -976,11 +976,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         val isr = InputStreamReader(inputStream)
                         val reader = BufferedReader(isr)
                         var glava = 0
-                        val split = reader.readText().split("===").toTypedArray()
+                        val split = reader.readText().split("===")
                         inputStream.close()
                         for (e in 1 until split.size) {
                             glava++
-                            val bibleline = split[e].split("\n").toTypedArray()
+                            val bibleline = split[e].split("\n")
                             var stix = 0
                             for (r in 1 until bibleline.size) {
                                 var prepinanie = bibleline[r]
@@ -1141,11 +1141,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         val isr = InputStreamReader(inputStream)
                         val reader = BufferedReader(isr)
                         var glava = 0
-                        val split = reader.readText().split("===").toTypedArray()
+                        val split = reader.readText().split("===")
                         inputStream.close()
                         for (e in 1 until split.size) {
                             glava++
-                            val bibleline = split[e].split("\n").toTypedArray()
+                            val bibleline = split[e].split("\n")
                             var stix = 0
                             for (r in 1 until bibleline.size) {
                                 stix++
@@ -1219,11 +1219,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
                 var glava = 0
-                val split = reader.readText().split("===").toTypedArray()
+                val split = reader.readText().split("===")
                 inputStream.close()
                 for (e in 1 until split.size) {
                     glava++
-                    val bibleline = split[e].split("\n").toTypedArray()
+                    val bibleline = split[e].split("\n")
                     var stix = 0
                     for (r in 1 until bibleline.size) {
                         stix++

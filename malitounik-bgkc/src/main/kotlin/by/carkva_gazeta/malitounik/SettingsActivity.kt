@@ -104,7 +104,7 @@ class SettingsActivity : AppCompatActivity() {
             intent.action = action
             intent.putExtra("sabytieSet", true)
             intent.putExtra("extra", "Падзея $data у $time")
-            val dateN = data.split(".").toTypedArray()
+            val dateN = data.split(".")
             val g = GregorianCalendar(dateN[2].toInt(), dateN[1].toInt() - 1, dateN[0].toInt(), 0, 0, 0)
             intent.putExtra("data", g[Calendar.DAY_OF_YEAR])
             intent.putExtra("year", g[Calendar.YEAR])
@@ -183,7 +183,7 @@ class SettingsActivity : AppCompatActivity() {
             reader.forEachLine {
             val line = it
             if (line != "") {
-            val t1 = line.split(" ").toTypedArray()
+            val t1 = line.split(" ")
             if (t1[5] != "-1") {
             if (t1[10] == "0") {
             when (t1[9].toInt()) {

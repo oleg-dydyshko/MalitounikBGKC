@@ -64,7 +64,7 @@ class MenuNatatki : NatatkiFragment() {
                     val index = name.substring(t1 + 1).toLong()
                     val inputStream = FileReader(file)
                     val reader = BufferedReader(inputStream)
-                    val res = reader.readText().split("<MEMA></MEMA>").toTypedArray()
+                    val res = reader.readText().split("<MEMA></MEMA>")
                     inputStream.close()
                     var lRTE: Long = 1
                     if (res[1].contains("<RTE></RTE>")) {
@@ -185,7 +185,7 @@ class MenuNatatki : NatatkiFragment() {
                         val index = name.substring(t1 + 1).toLong()
                         val inputStream = FileReader(file)
                         val reader = BufferedReader(inputStream)
-                        val res = reader.readText().split("<MEMA></MEMA>").toTypedArray()
+                        val res = reader.readText().split("<MEMA></MEMA>")
                         inputStream.close()
                         var lRTE: Long = 1
                         if (res[1].contains("<RTE></RTE>")) {

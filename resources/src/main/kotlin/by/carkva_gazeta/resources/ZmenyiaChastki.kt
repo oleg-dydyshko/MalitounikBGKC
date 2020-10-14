@@ -66,7 +66,7 @@ internal class ZmenyiaChastki(context: Context) {
         w1 = MainActivity.removeZnakiAndSlovy(w1)
         //w1 = w1.replace("а", "")
         //w1 = w1.replace("б", "")
-        val split = w1.split(";").toTypedArray()
+        val split = w1.split(";")
         //val split = arrayOf("Гал 1.1-10, 20-2.5", "Гал 1.1-10, 20-2.5")
         var knigaN: String
         var knigaK = "0"
@@ -74,7 +74,7 @@ internal class ZmenyiaChastki(context: Context) {
         // Мц 1.1-10, 20-2.5, 10-20, 1.21-2.4, 11;
         var chtenie: Int = if (apostal == 1) 0 else 1
         if (split.size == 3) chtenie++
-        val zaglavie = split[chtenie].split(",").toTypedArray()
+        val zaglavie = split[chtenie].split(",")
         var zagl = ""
         var zaglavieName = ""
         var result = ""
@@ -189,7 +189,7 @@ internal class ZmenyiaChastki(context: Context) {
                 if (line != "") builder.append(line).append("<br>\n")
             }
             inputStream.close()
-            val split2 = builder.toString().split("===<br>").toTypedArray()
+            val split2 = builder.toString().split("===<br>")
             var spl: String
             var desK1: Int
             var desN: Int
@@ -205,7 +205,7 @@ internal class ZmenyiaChastki(context: Context) {
             } else {
                 desK1 = spl.indexOf("$knigaK.")
                 if (desK1 == -1) {
-                    val splAll = spl.split("\n").toTypedArray().size
+                    val splAll = spl.split("\n").size
                     desK1 = spl.indexOf("$splAll.")
                 }
                 if (zag3 != -1 || glav) {

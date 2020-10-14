@@ -476,7 +476,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             var color = "<font color=#d00505>"
             if (dzenNoch) color = "<font color=#f44336>"
             for (e in arrayLists.indices) {
-                val sviatyia: Array<String> = arrayLists[e][4].split("<br>").toTypedArray()
+                val sviatyia = arrayLists[e][4].split("<br>")
                 for (aSviatyia in sviatyia) {
                     if (aSviatyia.toLowerCase(Locale.getDefault()).replace("ё", "е").contains(poshuk.toLowerCase(Locale.getDefault()))) {
                         var bSviatyia = aSviatyia

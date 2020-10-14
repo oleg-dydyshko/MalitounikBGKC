@@ -104,10 +104,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             var tr = ""
             if (timeM < 10) tr = "0"
             ta = "$timeH:$tr$timeM"
-            val date = da.split(".").toTypedArray()
+            val date = da.split(".")
             var gc12 = GregorianCalendar(date[2].toInt(), date[1].toInt() - 1, date[0].toInt(), 0, 0, 0)
-            val dateK = daK.split(".").toTypedArray()
-            val timeK = taK.split(":").toTypedArray()
+            val dateK = daK.split(".")
+            val timeK = taK.split(":")
             var gcK = GregorianCalendar(dateK[2].toInt(), dateK[1].toInt() - 1, dateK[0].toInt(), 0, 0, 0)
             if (gc12.timeInMillis == gcK.timeInMillis) {
                 gc12 = GregorianCalendar(date[2].toInt(), date[1].toInt() - 1, date[0].toInt(), timeH, timeM, 0)
@@ -117,6 +117,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 }
             }
             label2.text = ta
+            val temp = editText2.text
+            editText2.setText("")
+            editText2.text = temp
         }
         if (nomerDialoga == 2) {
             var tr = ""
@@ -124,15 +127,15 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             taK = "$hour:$tr$minute"
             label22.text = taK
             konec = true
-            val days = label1.text.toString().split(".").toTypedArray()
+            val days = label1.text.toString().split(".")
             val gc1 = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
-            val days2 = label12.text.toString().split(".").toTypedArray()
+            val days2 = label12.text.toString().split(".")
             val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
             val kon = gc2[Calendar.DAY_OF_YEAR]
             val res = gc1[Calendar.DAY_OF_YEAR]
             if (kon - res == 0) {
-                val times = label2.text.toString().split(":").toTypedArray()
-                val times2 = label22.text.toString().split(":").toTypedArray()
+                val times = label2.text.toString().split(":")
+                val times2 = label22.text.toString().split(":")
                 val gc3 = GregorianCalendar(gc2[Calendar.YEAR], gc2[Calendar.MONTH], gc2[Calendar.DAY_OF_MONTH], times[0].toInt(), times[1].toInt(), 0)
                 val gc4 = GregorianCalendar(gc2[Calendar.YEAR], gc2[Calendar.MONTH], gc2[Calendar.DAY_OF_MONTH], times2[0].toInt(), times2[1].toInt(), 0)
                 if (gc4.timeInMillis - gc3.timeInMillis < 1000) {
@@ -169,7 +172,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 return@OnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val w = labelbutton12.text.toString().split(".").toTypedArray()
+            val w = labelbutton12.text.toString().split(".")
             val gc = GregorianCalendar(w[2].toInt(), w[1].toInt() - 1, w[0].toInt())
             yearG = gc[Calendar.YEAR]
             munG = gc[Calendar.MONTH]
@@ -194,7 +197,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 }
                 R.id.radioButton3 -> {
                     if (idMenu != 3) {
-                        val w = labelbutton12.text.toString().split(".").toTypedArray()
+                        val w = labelbutton12.text.toString().split(".")
                         val gc = GregorianCalendar(w[2].toInt(), w[1].toInt() - 1, w[0].toInt())
                         yearG = gc[Calendar.YEAR]
                         munG = gc[Calendar.MONTH]
@@ -241,6 +244,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         spinner3.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 posit = position
+                val temp = editText2.text
+                editText2.setText("")
+                editText2.text = temp
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -288,7 +294,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val w = label1.text.toString().split(".").toTypedArray()
+            val w = label1.text.toString().split(".")
             val gc = GregorianCalendar(w[2].toInt(), w[1].toInt() - 1, w[0].toInt())
             yearG = gc[Calendar.YEAR]
             munG = gc[Calendar.MONTH]
@@ -314,7 +320,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val w = label12.text.toString().split(".").toTypedArray()
+            val w = label12.text.toString().split(".")
             val gc = GregorianCalendar(w[2].toInt(), w[1].toInt() - 1, w[0].toInt())
             yearG = gc[Calendar.YEAR]
             munG = gc[Calendar.MONTH]
@@ -454,16 +460,17 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 drag_list_view.visibility = View.GONE
                 invalidateOptionsMenu()
             }
-            ta = savedInstanceState.getString("ta")?: "0:0"
-            da = savedInstanceState.getString("da")?: "0.0.0"
-            taK = savedInstanceState.getString("taK")?: "0:0"
-            daK = savedInstanceState.getString("daK")?: "0.0.0"
+            ta = savedInstanceState.getString("ta") ?: "0:0"
+            da = savedInstanceState.getString("da") ?: "0.0.0"
+            taK = savedInstanceState.getString("taK") ?: "0:0"
+            daK = savedInstanceState.getString("daK") ?: "0.0.0"
             label1.text = da
             label2.text = ta
             label12.text = daK
             label22.text = taK
         }
-        editText.addTextChangedListener(MyTextWatcher())
+        editText.addTextChangedListener(MyTextWatcher(editText))
+        editText2.addTextChangedListener(MyTextWatcher(editText2))
         editSave = editText.text.toString().trim()
         edit2Save = editText2.text.toString()
         daSave = label1.text.toString()
@@ -510,7 +517,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         drag_list_view.visibility = View.GONE
         idMenu = 3
         time = p.count
-        val count = time.split(".").toTypedArray()
+        val count = time.split(".")
         when {
             time == "0" -> radioButton1.isChecked = true
             count.size == 1 -> {
@@ -628,7 +635,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         drag_list_view.visibility = View.GONE
         idMenu = 3
         timeC = p.count
-        val count = timeC.split(".").toTypedArray()
+        val count = timeC.split(".")
         when {
             timeC == "0" -> radioButton1.isChecked = true
             count.size == 1 -> {
@@ -718,9 +725,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 yearG = setCal[Calendar.YEAR]
                 munG = setCal[Calendar.MONTH]
                 if (requestCode == 109) {
-                    val days = label1.text.toString().split(".").toTypedArray()
+                    val days = label1.text.toString().split(".")
                     val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
-                    val days2 = label12.text.toString().split(".").toTypedArray()
+                    val days2 = label12.text.toString().split(".")
                     val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
                     val kon = gc2[Calendar.DAY_OF_YEAR]
                     val res = gc[Calendar.DAY_OF_YEAR]
@@ -748,20 +755,23 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     setCal.add(Calendar.DATE, 1)
                     if (setCal[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
                     if (setCal[Calendar.MONTH] < 9) nol2 = "0"
-                    val days3 = labelbutton12.text.toString().split(".").toTypedArray()
+                    val days3 = labelbutton12.text.toString().split(".")
                     val gc3 = GregorianCalendar(days3[2].toInt(), days3[1].toInt() - 1, days3[0].toInt(), 0, 0, 0)
-                    val days4 = label1.text.toString().split(".").toTypedArray()
+                    val days4 = label1.text.toString().split(".")
                     val gc4 = GregorianCalendar(days4[2].toInt(), days4[1].toInt() - 1, days4[0].toInt(), 0, 0, 0)
                     val kon2 = gc3.timeInMillis
                     val resul = gc4.timeInMillis
                     if (kon2 - resul < 0) labelbutton12.text = resources.getString(R.string.Sabytie, nol1, setCal[Calendar.DAY_OF_MONTH], nol2, setCal[Calendar.MONTH] + 1, setCal[Calendar.YEAR])
+                    val temp = editText2.text
+                    editText2.setText("")
+                    editText2.text = temp
                 }
                 if (requestCode == 1092) {
                     label12.text = da
                     konec = true
-                    val days = label1.text.toString().split(".").toTypedArray()
+                    val days = label1.text.toString().split(".")
                     val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
-                    val days2 = label12.text.toString().split(".").toTypedArray()
+                    val days2 = label12.text.toString().split(".")
                     val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
                     val kon = gc2.timeInMillis
                     result = gc.timeInMillis
@@ -773,10 +783,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 }
                 if (requestCode == 1093) {
                     labelbutton12.text = da
-                    val days = label1.text.toString().split(".").toTypedArray()
+                    val days = label1.text.toString().split(".")
                     val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
                     gc.add(Calendar.DATE, 1)
-                    val days2 = labelbutton12.text.toString().split(".").toTypedArray()
+                    val days2 = labelbutton12.text.toString().split(".")
                     val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
                     val kon = gc2.timeInMillis
                     val resul = gc.timeInMillis
@@ -885,8 +895,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             if (edit != "") {
                 var londs: Long = 0
                 var londs2: Long = 0
-                val days = label1.text.toString().split(".").toTypedArray()
-                val times = label2.text.toString().split(":").toTypedArray()
+                val days = label1.text.toString().split(".")
+                val times = label2.text.toString().split(":")
                 val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                 result = gc.timeInMillis
                 if (!konec) {
@@ -904,14 +914,13 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 } else {
                     edit2 = "-1"
                 }
-                //val outputStream = FileWriter(filesDir.toString() + "/Sabytie/" + c.timeInMillis + ".dat")
                 when (repitL) {
                     0 -> {
                         time = "0"
                         if (edit2 != "-1") {
                             londs2 = result - londs
                             val londs3 = londs2 / 100000L
-                            if (result > c.timeInMillis) {
+                            if (londs2 > c.timeInMillis) {
                                 val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                 val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                 when {
@@ -928,21 +937,19 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             }
                         }
                         MainActivity.padzeia.add(Padzeia(edit, da, ta, londs2, posit, edit2, daK, taK, repitL, time, color))
-                        //outputStream.write(edit.replace(" ", "_") + " " + da + " " + ta + " " + londs2 + " " + posit + " " + edit2 + " " + daK + " " + taK + " " + repitL + " " + time + " " + c.timeInMillis + ".dat" + " " + color + "\n")
                     }
                     1 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
                         val dayof = gc[Calendar.DAY_OF_YEAR]
                         var leapYear = 365 - dayof + 365 + 1
                         if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 365 - dayof + 366 + 1
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -981,7 +988,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 londs2 = result - londs
                                 val londs3 = londs2 / 100000L
                                 if (radio != 1) {
-                                    if (result > c.timeInMillis) {
+                                    if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                         when {
@@ -1007,26 +1014,23 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc2[Calendar.DAY_OF_MONTH] < 10) nol3 = "0"
                             if (gc2[Calendar.MONTH] < 9) nol4 = "0"
                             MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2[Calendar.DAY_OF_MONTH] + "." + nol4 + (gc2[Calendar.MONTH] + 1) + "." + gc2[Calendar.YEAR], taK, repitL, time, color))
-                            //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2[Calendar.DAY_OF_MONTH]).append(".").append(nol4).append(gc2[Calendar.MONTH] + 1).append(".").append(gc2[Calendar.YEAR]).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(c.timeInMillis).append(".dat").append(" ").append(color).append("\n")
                             gc.add(Calendar.DATE, 1)
                             gc2.add(Calendar.DATE, 1)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     2 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
                         val dayof = gc[Calendar.DAY_OF_YEAR]
                         var leapYear = 365 - dayof + 365 + 1
                         if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 365 - dayof + 366 + 1
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -1048,7 +1052,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (edit2 != "-1") {
                                     londs2 = result - londs
                                     val londs3 = londs2 / 100000L
-                                    if (result > c.timeInMillis) {
+                                    if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                         when {
@@ -1073,27 +1077,24 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                                 if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                                 MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                                //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(c.timeInMillis).append(".dat").append(" ").append(color).append("\n")
                             }
                             gc.add(Calendar.DATE, 1)
                             gc2.add(Calendar.DATE, 1)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     3 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
                         val dayof = gc[Calendar.DAY_OF_YEAR]
                         var leapYear = 365 - dayof + 365 + 1
                         if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 365 - dayof + 366 + 1
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -1116,7 +1117,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (edit2 != "-1") {
                                     londs2 = result - londs
                                     val londs3 = londs2 / 100000L
-                                    if (result > c.timeInMillis) {
+                                    if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                         when {
@@ -1141,7 +1142,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                                 if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                                 MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                                //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(c.timeInMillis).append(".dat").append(" ").append(color).append("\n")
                             }
                             schet++
                             gc.add(Calendar.DATE, 1)
@@ -1149,20 +1149,19 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (schet == 4) schet = 0
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     4 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                         //val builder = StringBuilder()
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 52 - dayof + 52 + 1
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.WEEK_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -1201,7 +1200,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 londs2 = result - londs
                                 val londs3 = londs2 / 100000L
                                 if (radio != 1) {
-                                    if (result > c.timeInMillis) {
+                                    if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                         when {
@@ -1227,25 +1226,23 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                             MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                            //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(c.timeInMillis).append(".dat").append(" ").append(color).append("\n")
                             gc.add(Calendar.DATE, 7)
                             gc2.add(Calendar.DATE, 7)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     5 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                         //val builder = StringBuilder()
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 26 - dayof / 2 + 26 + 1
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -1284,7 +1281,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 londs2 = result - londs
                                 val londs3 = londs2 / 100000L
                                 if (radio != 1) {
-                                    if (result > c.timeInMillis) {
+                                    if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                         when {
@@ -1310,25 +1307,23 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                             MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                            //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(c.timeInMillis).append(".dat").append(" ").append(color).append("\n")
                             gc.add(Calendar.DATE, 14)
                             gc2.add(Calendar.DATE, 14)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     6 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                         //val builder = StringBuilder()
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 13 - dayof / 4 + 13
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -1367,7 +1362,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 londs2 = result - londs
                                 val londs3 = londs2 / 100000L
                                 if (radio != 1) {
-                                    if (result > c.timeInMillis) {
+                                    if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                         when {
@@ -1393,25 +1388,22 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                             MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                            //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(c.timeInMillis).append(".dat").append(" ").append(color).append("\n")
                             gc.add(Calendar.DATE, 28)
                             gc2.add(Calendar.DATE, 28)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     7 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
                         val dayof = gc[Calendar.MONTH] + 1
                         var leapYear = 12 - dayof + 12 + 1
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -1432,7 +1424,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (edit2 != "-1") {
                                 londs2 = result - londs
                                 val londs3 = londs2 / 100000L
-                                if (result > c.timeInMillis) {
+                                if (londs2 > c.timeInMillis) {
                                     val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                     when {
@@ -1457,18 +1449,16 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                             MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                            //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(c.timeInMillis).append(".dat").append(" ").append(color).append("\n")
                             gc.add(Calendar.MONTH, 1)
                             gc2.add(Calendar.MONTH, 1)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     8 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                         //val builder = StringBuilder()
                         var leapYear = 10
@@ -1483,7 +1473,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (edit2 != "-1") {
                                 londs2 = result - londs
                                 val londs3 = londs2 / 100000L
-                                if (result > c.timeInMillis) {
+                                if (londs2 > c.timeInMillis) {
                                     val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                     when {
@@ -1508,12 +1498,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                             MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                            //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(c.timeInMillis).append(".dat").append(" ").append(color).append("\n")
                             gc.add(Calendar.YEAR, 1)
                             gc2.add(Calendar.YEAR, 1)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                 }
                 val gson = Gson()
@@ -1544,7 +1532,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             } else {
                 editText.startAnimation(shakeanimation)
             }
-            //MyBackupAgent.requestBackup(this);
         }
         if (id == R.id.action_save_redak) {
             redak = true
@@ -1559,23 +1546,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             if (edit != "") {
                 var intent: Intent
                 var pIntent: PendingIntent
-                /*val file = File(filesDir.toString() + "/Sabytie/" + p.file)
-val inputStream = FileReader(file)
-val reader = BufferedReader(inputStream)
-val line = reader.readText()
-if (line != "") {
-val t1 = line.split(" ").toTypedArray()
-intent = createIntent(t1[0].replace("_", " "), "Падзея" + " " + t1[1] + " у " + t1[2], t1[1], t1[2])
-val londs3 = t1[3].toLong() / 100000L
-pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
-am.cancel(pIntent)
-pIntent.cancel()
-}*/
                 var londs: Long = 0
                 var londs2: Long = 0
-                val days = label1.text.toString().split(".").toTypedArray()
-                val times = label2.text.toString().split(":").toTypedArray()
-                val times2 = label22.text.toString().split(":").toTypedArray()
+                val days = label1.text.toString().split(".")
+                val times = label2.text.toString().split(":")
+                val times2 = label22.text.toString().split(":")
                 val gc4 = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), times2[0].toInt(), times2[1].toInt(), 0)
                 val result2 = gc4.timeInMillis
                 val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
@@ -1616,7 +1591,7 @@ pIntent.cancel()
                         if (edit2 != "-1") {
                             londs2 = result - londs
                             val londs3 = londs2 / 100000L
-                            if (result > c.timeInMillis) {
+                            if (londs2 > c.timeInMillis) {
                                 intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                 pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                 when {
@@ -1633,21 +1608,19 @@ pIntent.cancel()
                             }
                         }
                         MainActivity.padzeia.add(Padzeia(edit, da, ta, londs2, posit, edit2, daK, taK, repitL, time, color))
-                        //outputStream.write(edit.replace(" ", "_") + " " + da + " " + ta + " " + londs2 + " " + posit + " " + edit2 + " " + daK + " " + taK + " " + repitL + " " + time + " " + filename + " " + color + "\n")
                     }
                     1 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
                         val dayof = gc[Calendar.DAY_OF_YEAR]
                         var leapYear = 365 - dayof + 365 + 1
                         if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 365 - dayof + 366 + 1
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -1686,7 +1659,7 @@ pIntent.cancel()
                                 londs2 = result - londs
                                 val londs3 = londs2 / 100000L
                                 if (radio != 1) {
-                                    if (result > c.timeInMillis) {
+                                    if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                         when {
@@ -1712,26 +1685,23 @@ pIntent.cancel()
                             if (gc2[Calendar.DAY_OF_MONTH] < 10) nol3 = "0"
                             if (gc2[Calendar.MONTH] < 9) nol4 = "0"
                             MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2[Calendar.DAY_OF_MONTH] + "." + nol4 + (gc2[Calendar.MONTH] + 1) + "." + gc2[Calendar.YEAR], taK, repitL, time, color))
-                            //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2[Calendar.DAY_OF_MONTH]).append(".").append(nol4).append(gc2[Calendar.MONTH] + 1).append(".").append(gc2[Calendar.YEAR]).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(filename).append(" ").append(color).append("\n")
                             gc.add(Calendar.DATE, 1)
                             gc2.add(Calendar.DATE, 1)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     2 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
                         val dayof = gc[Calendar.DAY_OF_YEAR]
                         var leapYear = 365 - dayof + 365 + 1
                         if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 365 - dayof + 366 + 1
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -1753,7 +1723,7 @@ pIntent.cancel()
                                 if (edit2 != "-1") {
                                     londs2 = result - londs
                                     val londs3 = londs2 / 100000L
-                                    if (result > c.timeInMillis) {
+                                    if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                         when {
@@ -1778,27 +1748,24 @@ pIntent.cancel()
                                 if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                                 if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                                 MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                                //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(filename).append(" ").append(color).append("\n")
                             }
                             gc.add(Calendar.DATE, 1)
                             gc2.add(Calendar.DATE, 1)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     3 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
                         val dayof = gc[Calendar.DAY_OF_YEAR]
                         var leapYear = 365 - dayof + 365 + 1
                         if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 365 - dayof + 366 + 1
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -1821,7 +1788,7 @@ pIntent.cancel()
                                 if (edit2 != "-1") {
                                     londs2 = result - londs
                                     val londs3 = londs2 / 100000L
-                                    if (result > c.timeInMillis) {
+                                    if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                         when {
@@ -1846,7 +1813,6 @@ pIntent.cancel()
                                 if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                                 if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                                 MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                                //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(filename).append(" ").append(color).append("\n")
                             }
                             schet++
                             gc.add(Calendar.DATE, 1)
@@ -1854,20 +1820,19 @@ pIntent.cancel()
                             if (schet == 4) schet = 0
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     4 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                         //val builder = StringBuilder()
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 52 - dayof + 52 + 1
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.WEEK_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -1906,7 +1871,7 @@ pIntent.cancel()
                                 londs2 = result - londs
                                 val londs3 = londs2 / 100000L
                                 if (radio != 1) {
-                                    if (result > c.timeInMillis) {
+                                    if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                         when {
@@ -1932,25 +1897,22 @@ pIntent.cancel()
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                             MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                            //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(filename).append(" ").append(color).append("\n")
                             gc.add(Calendar.DATE, 7)
                             gc2.add(Calendar.DATE, 7)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     5 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 26 - dayof / 2 + 26 + 1
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -1989,7 +1951,7 @@ pIntent.cancel()
                                 londs2 = result - londs
                                 val londs3 = londs2 / 100000L
                                 if (radio != 1) {
-                                    if (result > c.timeInMillis) {
+                                    if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                         when {
@@ -2015,25 +1977,22 @@ pIntent.cancel()
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                             MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                            //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(filename).append(" ").append(color).append("\n")
                             gc.add(Calendar.DATE, 14)
                             gc2.add(Calendar.DATE, 14)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     6 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 13 - dayof / 4 + 13
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -2072,7 +2031,7 @@ pIntent.cancel()
                                 londs2 = result - londs
                                 val londs3 = londs2 / 100000L
                                 if (radio != 1) {
-                                    if (result > c.timeInMillis) {
+                                    if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                         when {
@@ -2098,25 +2057,22 @@ pIntent.cancel()
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                             MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                            //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(filename).append(" ").append(color).append("\n")
                             gc.add(Calendar.DATE, 28)
                             gc2.add(Calendar.DATE, 28)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     7 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
                         val dayof = gc[Calendar.MONTH] + 1
                         var leapYear = 12 - dayof + 12 + 1
                         if (radio == 3) {
                             time = labelbutton12.text.toString()
-                            val tim = time.split(".").toTypedArray()
+                            val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
                             if (gc[Calendar.YEAR] < gc3[Calendar.YEAR]) {
@@ -2137,7 +2093,7 @@ pIntent.cancel()
                             if (edit2 != "-1") {
                                 londs2 = result - londs
                                 val londs3 = londs2 / 100000L
-                                if (result > c.timeInMillis) {
+                                if (londs2 > c.timeInMillis) {
                                     intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                     when {
@@ -2162,18 +2118,16 @@ pIntent.cancel()
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                             MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                            //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(filename).append(" ").append(color).append("\n")
                             gc.add(Calendar.MONTH, 1)
                             gc2.add(Calendar.MONTH, 1)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                     8 -> {
                         time = "0"
-                        val rdat = da.split(".").toTypedArray()
+                        val rdat = da.split(".")
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
-                        val rdat2 = daK.split(".").toTypedArray()
+                        val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                         //val builder = StringBuilder()
                         var leapYear = 10
@@ -2188,7 +2142,7 @@ pIntent.cancel()
                             if (edit2 != "-1") {
                                 londs2 = result - londs
                                 val londs3 = londs2 / 100000L
-                                if (result > c.timeInMillis) {
+                                if (londs2 > c.timeInMillis) {
                                     intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
                                     when {
@@ -2213,34 +2167,16 @@ pIntent.cancel()
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
                             MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
-                            //builder.append(edit.replace(" ", "_")).append(" ").append(nol1).append(gc[Calendar.DAY_OF_MONTH]).append(".").append(nol2).append(gc[Calendar.MONTH] + 1).append(".").append(gc[Calendar.YEAR]).append(" ").append(ta).append(" ").append(londs2).append(" ").append(posit).append(" ").append(edit2).append(" ").append(nol3).append(gc2.get(Calendar.DAY_OF_MONTH)).append(".").append(nol4).append(gc2.get(Calendar.MONTH) + 1).append(".").append(gc2.get(Calendar.YEAR)).append(" ").append(taK).append(" ").append(repitL).append(" ").append(time).append(" ").append(filename).append(" ").append(color).append("\n")
                             gc.add(Calendar.YEAR, 1)
                             gc2.add(Calendar.YEAR, 1)
                             i++
                         }
-                        //outputStream.write(builder.toString())
                     }
                 }
                 val outputStream = FileWriter("$filesDir/Sabytie.json")
                 val gson = Gson()
                 outputStream.write(gson.toJson(MainActivity.padzeia))
                 outputStream.close()
-                /*File("$filesDir/Sabytie").walk().forEach { file1 ->
-if (file1.isFile && !file1.path.contains(filename)) {
-val fileReader = FileReader(file1)
-val bufferedReader = BufferedReader(fileReader)
-bufferedReader.forEachLine {
-if (it != "") {
-val t1 = it.split(" ").toTypedArray()
-if (t1.size == 11)
-MainActivity.padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], t1[10], color))
-else
-MainActivity.padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], t1[10], t1[11].toInt()))
-}
-}
-fileReader.close()
-}
-}*/
                 MainActivity.padzeia.sort()
                 sabytie2.clear()
                 for (i in 0 until MainActivity.padzeia.size) {
@@ -2284,7 +2220,6 @@ fileReader.close()
                 CaliandarFull.editCaliandarTitle = edit
                 onSupportNavigateUp()
             }
-            //MyBackupAgent.requestBackup(this);
         }
         if (id == R.id.action_cansel) {
             back = false
@@ -2315,7 +2250,6 @@ fileReader.close()
             if (editCaliandar) {
                 onSupportNavigateUp()
             }
-            //return true;
         }
         if (id == R.id.action_delite) {
             val delite = DialogSabytieDelite()
@@ -2386,7 +2320,6 @@ fileReader.close()
                 }
             }
         }
-        //adapter.clear()
         adapter.notifyDataSetChanged()
         MainActivity.toastView(this, getString(R.string.remove_padzea))
     }
@@ -2397,8 +2330,8 @@ fileReader.close()
         val del = ArrayList<Padzeia>()
         for (p in MainActivity.padzeia) {
             if (p.repit == 0) {
-                val days = p.datK.split(".").toTypedArray()
-                val time = p.timK.split(":").toTypedArray()
+                val days = p.datK.split(".")
+                val time = p.timK.split(":")
                 val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), time[0].toInt(), time[1].toInt(), 0)
                 if (c2.timeInMillis >= gc.timeInMillis) {
                     if (p.sec != "-1") {
@@ -2411,8 +2344,8 @@ fileReader.close()
                     del.add(p)
                 }
             } else {
-                val days = p.dat.split(".").toTypedArray()
-                val time = p.timK.split(":").toTypedArray()
+                val days = p.dat.split(".")
+                val time = p.timK.split(":")
                 val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), time[0].toInt(), time[1].toInt(), 0)
                 if (c2.timeInMillis >= gc.timeInMillis) {
                     if (p.sec != "-1") {
@@ -2428,53 +2361,12 @@ fileReader.close()
         }
         if (del.size != 0) {
             redak = true
-            /*File("$filesDir/Sabytie").walk().forEach { file ->
-if (file.isFile) {
-var line: String
-val sb = StringBuilder()
-val inputStream = FileReader(file)
-val reader = BufferedReader(inputStream)
-reader.forEachLine {
-line = it
-if (line != "") {
-val t1 = line.split(" ").toTypedArray()
-val days = t1[6].split(".").toTypedArray()
-val time = t1[7].split(":").toTypedArray()
-val gc = GregorianCalendar(
-days[2].toInt(),
-days[1].toInt() - 1,
-days[0].toInt(),
-time[0].toInt(),
-time[1].toInt(),
-0
-)
-if (c2.timeInMillis <= gc.timeInMillis) {
-sb.append(line).append("\n")
-}
-}
-}
-inputStream.close()
-if (sb.isNotEmpty()) {
-val outputStream = FileWriter(file)
-outputStream.write(sb.toString())
-outputStream.close()
-} else {
-file.delete()
-}
-}
-}*/
             MainActivity.padzeia.removeAll(del)
             val outputStream = FileWriter("$filesDir/Sabytie.json")
             val gson = Gson()
             outputStream.write(gson.toJson(MainActivity.padzeia))
             outputStream.close()
             MainActivity.padzeia.sort()
-            /*for (p in del) {
-if (p.repit == 0) {
-val file = File(filesDir.toString() + "/Sabytie/" + p.file)
-file.delete()
-}
-}*/
             sabytie2.clear()
             for (i in 0 until MainActivity.padzeia.size) {
                 sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
@@ -2488,8 +2380,8 @@ file.delete()
         i.action = action
         i.putExtra("sabytieSet", true)
         i.putExtra("extra", extra)
-        val dateN = data.split(".").toTypedArray()
-        val timeN = time.split(":").toTypedArray()
+        val dateN = data.split(".")
+        val timeN = time.split(":")
         val g = GregorianCalendar(dateN[2].toInt(), dateN[1].toInt() - 1, dateN[0].toInt(), 0, 0, 0)
         i.putExtra("dataString", dateN[0] + dateN[1] + timeN[0] + timeN[1])
         i.putExtra("year", g[Calendar.YEAR])
@@ -2537,8 +2429,8 @@ file.delete()
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             super.onBindViewHolder(holder, position)
             val text = mItemList[position].title
-            val sab = text.split(" ").toTypedArray()
-            val data = sab[0].split(".").toTypedArray()
+            val sab = text.split(" ")
+            val data = sab[0].split(".")
             val gc = GregorianCalendar(data[2].toInt(), data[1].toInt() - 1, data[0].toInt())
             if (gc[Calendar.DAY_OF_YEAR] == day[Calendar.DAY_OF_YEAR] && gc[Calendar.YEAR] == day[Calendar.YEAR]) {
                 holder.mText.setTypeface(null, Typeface.BOLD)
@@ -2616,9 +2508,11 @@ file.delete()
                         timeK = p.timK
                     }
                 }
-                var res = "Паведаміць: Ніколі"
+                var res = getString(R.string.sabytie_no_pavedam)
+                val gc = Calendar.getInstance() as GregorianCalendar
+                val realTime = gc.timeInMillis
+                var paznicia = false
                 if (paz != 0L) {
-                    val gc = Calendar.getInstance() as GregorianCalendar
                     gc.timeInMillis = paz
                     var nol11 = ""
                     var nol21 = ""
@@ -2627,8 +2521,9 @@ file.delete()
                     if (gc[Calendar.MONTH] < 9) nol21 = "0"
                     if (gc[Calendar.MINUTE] < 10) nol3 = "0"
                     res = "Паведаміць: " + nol11 + gc[Calendar.DAY_OF_MONTH] + "." + nol21 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR] + " у " + gc[Calendar.HOUR_OF_DAY] + ":" + nol3 + gc[Calendar.MINUTE]
+                    if (realTime > paz) paznicia = true
                 }
-                val dialogShowSabytie = DialogSabytieShow.getInstance(title, data, time, dataK, timeK, res)
+                val dialogShowSabytie = DialogSabytieShow.getInstance(title, data, time, dataK, timeK, res, paznicia)
                 dialogShowSabytie.show(supportFragmentManager, "sabytie")
             }
         }
@@ -2664,77 +2559,6 @@ file.delete()
             }
         }
     }
-
-    /*private inner class SabytieAdapter(context: Context) : ArrayAdapter<SabytieDataAdapter>(context, R.layout.simple_list_item_sabytie, sabytie2) {
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val rootView: View
-            val viewHolder: ViewHolder
-            val sab = sabytie2[position].title.split(" ").toTypedArray()
-            val data = sab[0].split(".").toTypedArray()
-            val gc = GregorianCalendar(data[2].toInt(), data[1].toInt() - 1, data[0].toInt())
-            val day = Calendar.getInstance() as GregorianCalendar
-            if (convertView == null) {
-                rootView = this@Sabytie.layoutInflater.inflate(R.layout.simple_list_item_sabytie, parent, false)
-                viewHolder = ViewHolder()
-                rootView.tag = viewHolder
-                viewHolder.color = rootView.findViewById(R.id.color)
-                viewHolder.text = rootView.findViewById(R.id.label)
-                viewHolder.buttonPopup = rootView.findViewById(R.id.button_popup)
-            } else {
-                rootView = convertView
-                viewHolder = rootView.tag as ViewHolder
-            }
-            if (gc[Calendar.DAY_OF_YEAR] == day[Calendar.DAY_OF_YEAR] && gc[Calendar.YEAR] == day[Calendar.YEAR]) {
-                viewHolder.text?.setTypeface(null, Typeface.BOLD)
-            } else {
-                viewHolder.text?.setTypeface(null, Typeface.NORMAL)
-            }
-            viewHolder.color?.setBackgroundColor(Color.parseColor(colors[sabytie2[position].color]))
-            viewHolder.buttonPopup?.setOnClickListener {
-                viewHolder.buttonPopup?.let {
-                    showPopupMenu(it, position)
-                }
-            }
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            viewHolder.text?.text = sabytie2[position].title
-            if (dzenNoch) {
-                //viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-            } else {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-            }
-            return rootView
-        }
-
-        private fun showPopupMenu(view: View, position: Int) {
-            val popup = PopupMenu(this@Sabytie, view)
-            val infl = popup.menuInflater
-            infl.inflate(R.menu.popup, popup.menu)
-            for (i in 0 until popup.menu.size()) {
-                val item = popup.menu.getItem(i)
-                val spanString = SpannableString(popup.menu.getItem(i).title.toString())
-                val end = spanString.length
-                spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                item.title = spanString
-            }
-            popup.setOnMenuItemClickListener { menuItem: MenuItem ->
-                popup.dismiss()
-                when (menuItem.itemId) {
-                    R.id.menu_redoktor -> onPopupRedaktor(position)
-                    R.id.menu_remove -> onDialogDeliteClick(position)
-                }
-                true
-            }
-            popup.show()
-        }
-    }
-
-    private class ViewHolder {
-        var color: TextViewRobotoCondensed? = null
-        var text: TextViewRobotoCondensed? = null
-        var buttonPopup: ImageView? = null
-    }*/
 
     private inner class ColorAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_color, R.id.label, colors) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -2801,7 +2625,7 @@ file.delete()
         var text: TextViewRobotoCondensed? = null
     }
 
-    private inner class MyTextWatcher : TextWatcher {
+    private inner class MyTextWatcher(private val editTextWatcher: EditTextRobotoCondensed) : TextWatcher {
         private var editPosition = 0
         private var check = 0
         private var editch = true
@@ -2817,14 +2641,53 @@ file.delete()
         override fun afterTextChanged(s: Editable) {
             if (editch) {
                 val edit = s.toString()
-                nazvaPadzei = if (edit != "") edit
-                else "Назва падзеі"
-                colorAdapter.notifyDataSetChanged()
+                val id = editTextWatcher.id
+                if (id == R.id.editText) {
+                    nazvaPadzei = if (edit != "") edit
+                    else getString(R.string.sabytie_name)
+                    colorAdapter.notifyDataSetChanged()
+                }
+                if (id == R.id.editText2) {
+                    if (edit != "") {
+                        val days = label1.text.toString().split(".")
+                        val times = label2.text.toString().split(":")
+                        val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
+                        result = gc.timeInMillis
+                        var londs = edit.toLong()
+                        when (posit) {
+                            0 -> londs *= 60000L
+                            1 -> londs *= 3600000L
+                            2 -> londs *= 86400000L
+                            3 -> londs *= 604800000L
+                        }
+                        val londs2 = result - londs
+                        gc.timeInMillis = londs2
+                        var nol1 = ""
+                        var nol2 = ""
+                        var nol3 = ""
+                        if (gc[Calendar.DATE] < 10) nol1 = "0"
+                        if (gc[Calendar.MONTH] < 9) nol2 = "0"
+                        if (gc[Calendar.MINUTE] < 10) nol3 = "0"
+                        pavedamic2.text = getString(R.string.sabytie_pavedam, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR], gc[Calendar.HOUR_OF_DAY], nol3, gc[Calendar.MINUTE])
+                        val gcReal = Calendar.getInstance() as GregorianCalendar
+                        if (gcReal.timeInMillis > londs2) {
+                            if (dzenNoch) pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_black))
+                            else pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary))
+                        } else {
+                            if (dzenNoch) pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+                            else pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
+                        }
+                    } else {
+                        pavedamic2.text = getString(R.string.sabytie_no_pavedam)
+                        if (dzenNoch) pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+                        else pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
+                    }
+                }
                 if (check != 0) {
-                    editText.removeTextChangedListener(this)
-                    editText.setText(edit)
-                    editText.setSelection(editPosition)
-                    editText.addTextChangedListener(this)
+                    editTextWatcher.removeTextChangedListener(this)
+                    editTextWatcher.setText(edit)
+                    editTextWatcher.setSelection(editPosition)
+                    editTextWatcher.addTextChangedListener(this)
                 }
             }
         }

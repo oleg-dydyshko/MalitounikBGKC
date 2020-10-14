@@ -155,8 +155,8 @@ class MenuCaliandar : MenuCaliandarFragment() {
             i.action = action
             i.putExtra("sabytieSet", true)
             i.putExtra("extra", extra)
-            val dateN = data.split(".").toTypedArray()
-            val timeN = time.split(":").toTypedArray()
+            val dateN = data.split(".")
+            val timeN = time.split(":")
             val g = GregorianCalendar(dateN[2].toInt(), dateN[1].toInt() - 1, dateN[0].toInt(), 0, 0, 0)
             i.putExtra("dataString", dateN[0] + dateN[1] + timeN[0] + timeN[1])
             i.putExtra("year", g[Calendar.YEAR])

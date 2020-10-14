@@ -630,7 +630,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     private fun setMaranata(cytanne: String) {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        val chten = cytanne.split(";").toTypedArray()
+        val chten = cytanne.split(";")
         for (i in chten.indices) {
             val fit = chten[i].trim()
             var nazvaFull = ""
@@ -855,7 +855,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n")
                         }
                     }
-                    val split2 = builder.toString().split("===").toTypedArray()
+                    val split2 = builder.toString().split("===")
                     if (konec == split2.size) konec -= 1
                     var vN: Int
                     var vK: Int
@@ -894,7 +894,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             } else {
                                 maranAta.add("<!--no--><!--nazva+++$nazva $e--><br><strong>$nazvaFull $e</strong><br>\n")
                             }
-                            val splitline = split2[e].trim().split("\n").toTypedArray()
+                            val splitline = split2[e].trim().split("\n")
                             var i3: Int
                             for (i2 in splitline.indices) {
                                 i3 = if (kniga.contains("Сир") && e == 1 && i2 >= 8) i2 - 7 else i2 + 1
@@ -909,7 +909,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         } else {
                             maranAta.add("<!--no--><!--nazva+++$nazva " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n")
                         }
-                        val res1 = r1.toString().trim().split("\n").toTypedArray()
+                        val res1 = r1.toString().trim().split("\n")
                         var i2 = 0
                         var i3 = stixn
                         while (i2 < res1.size) {
@@ -918,7 +918,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             i3++
                         }
                         if (konec - nachalo != 0) {
-                            val res2 = r2.trim().split("\n").toTypedArray()
+                            val res2 = r2.trim().split("\n")
                             for (i21 in res2.indices) {
                                 if (belarus) maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazvaBel + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n") else maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazva + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n")
                             }
@@ -1348,7 +1348,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     val t2 = maranAta[position].indexOf("-->")
                     val t3 = maranAta[position].indexOf("<!--")
                     val ch = maranAta[position].substring(t3 + 4, t2)
-                    val biblia = ch.split(".").toTypedArray()
+                    val biblia = ch.split(".")
                     conteiner.removeAllViewsInLayout()
                     val arrayList = pm.paralel(this, biblia[0] + " " + biblia[1] + "." + biblia[2], maranAta[position].substring(t1 + 1).trim(), belarus)
                     for (i in arrayList.indices) {

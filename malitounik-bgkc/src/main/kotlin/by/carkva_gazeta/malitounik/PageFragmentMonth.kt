@@ -7,6 +7,9 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.SystemClock
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -58,7 +61,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
         val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
         data.addAll(gson.fromJson(getData(position), type))
         for (p in MainActivity.padzeia) {
-            val r1 = p.dat.split(".").toTypedArray()
+            val r1 = p.dat.split(".")
             val munL = r1[1].toInt() - 1
             val yaer = r1[2].toInt()
             if (munL == mun && yaer == year) {
@@ -81,7 +84,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
     private fun sabytieCheck(day: Int): Boolean {
         var sabytie = false
         for (p in padzei) {
-            val r1 = p.dat.split(".").toTypedArray()
+            val r1 = p.dat.split(".")
             val date = r1[0].toInt()
             if (date == day) {
                 sabytie = true
@@ -2917,8 +2920,8 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
             val sabytieList = ArrayList<TextViewRobotoCondensed>()
             for (index in 0 until MainActivity.padzeia.size) {
                 val p = MainActivity.padzeia[index]
-                val r1 = p.dat.split(".").toTypedArray()
-                val r2 = p.datK.split(".").toTypedArray()
+                val r1 = p.dat.split(".")
+                val r2 = p.datK.split(".")
                 gc[r1[2].toInt(), r1[1].toInt() - 1] = r1[0].toInt()
                 val naY = gc[Calendar.YEAR]
                 val na = gc[Calendar.DAY_OF_YEAR]
@@ -2940,16 +2943,19 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         val dataK = p.datK
                         val timeK = p.timK
                         val paz = p.paznic
-                        var res = "Паведаміць: Ніколі"
+                        var res = getString(R.string.sabytie_no_pavedam)
+                        val realTime = Calendar.getInstance().timeInMillis
+                        var paznicia = false
                         if (paz != 0L) {
                             gc.timeInMillis = paz
                             var nol1 = ""
                             var nol2 = ""
                             var nol3 = ""
                             if (gc[Calendar.DATE] < 10) nol1 = "0"
-                            if (gc[Calendar.MONTH] < 10) nol2 = "0"
+                            if (gc[Calendar.MONTH] < 9) nol2 = "0"
                             if (gc[Calendar.MINUTE] < 10) nol3 = "0"
-                            res = "Паведаміць: " + nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR] + " у " + gc[Calendar.HOUR_OF_DAY] + ":" + nol3 + gc[Calendar.MINUTE]
+                            res = getString(R.string.sabytie_pavedam, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR], gc[Calendar.HOUR_OF_DAY], nol3, gc[Calendar.MINUTE])
+                            if (realTime > paz) paznicia = true
                         }
                         val textViewT = TextViewRobotoCondensed(it)
                         textViewT.text = title
@@ -2969,13 +2975,20 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                             textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                             textView.setBackgroundResource(R.color.colorprimary_material_dark)
                         }
-                        val spannable = if (data == dataK && time == timeK) {
+                        val textR = if (data == dataK && time == timeK) {
                             getString(R.string.sabytieKali, data, time, res)
                         } else {
                             getString(R.string.sabytieDoKuda, data, time, dataK, timeK, res)
                         }
-                        val t1 = spannable.lastIndexOf("\n")
-                        textView.text = spannable.substring(0, t1)
+                        val t1 = textR.lastIndexOf("\n")
+                        val spannable = SpannableString(textR.substring(0, t1))
+                        val t3 = spannable.indexOf(res)
+                        if (dzenNoch) {
+                            if (paznicia) spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary_black)), t3, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        } else {
+                            if (paznicia) spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary)), t3, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
+                        textView.text = spannable
                         sabytieList.add(textView)
                         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
                         llp.setMargins(0, 0, 0, 10)

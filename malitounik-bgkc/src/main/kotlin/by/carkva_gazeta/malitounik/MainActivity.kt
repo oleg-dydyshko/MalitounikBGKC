@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     val index = name.substring(t1 + 1).toLong()
                     val inputStream = FileReader(file)
                     val reader = BufferedReader(inputStream)
-                    val res = reader.readText().split("<MEMA></MEMA>").toTypedArray()
+                    val res = reader.readText().split("<MEMA></MEMA>")
                     inputStream.close()
                     var lRTE: Long = 1
                     if (res[1].contains("<RTE></RTE>")) {
@@ -1300,7 +1300,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                             reader.forEachLine {
                                 val line = it.trim() // { it <= ' ' }
                                 if (line != "") {
-                                    val t1 = line.split(" ").toTypedArray()
+                                    val t1 = line.split(" ")
                                     try {
                                         if (t1.size == 11) padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], 0)) else padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], t1[11].toInt()))
                                     } catch (e: Throwable) {

@@ -135,9 +135,9 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
         val inputStream = resources.openRawResource(R.raw.nadsan_psaltyr)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
-        val split = reader.readText().split("===").toTypedArray()
+        val split = reader.readText().split("===")
         inputStream.close()
-        val bibleline = split[page + 1].split("\n").toTypedArray()
+        val bibleline = split[page + 1].split("\n")
         bibleline.forEach {
             if (it.trim() != "")
                 bible.add(it)

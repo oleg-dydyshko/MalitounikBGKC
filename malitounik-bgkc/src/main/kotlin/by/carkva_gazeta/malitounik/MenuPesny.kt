@@ -544,7 +544,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             var line: String
             reader.forEachLine {
                 line = it
-                val split = line.split("<>").toTypedArray()
+                val split = line.split("<>")
                 val t1 = split[0].indexOf("_")
                 val t2 = split[0].indexOf("_", t1 + 1)
                 menuListData.add(MenuListData(listRaw(split[0]), split[1], split[0].substring(t1 + 1, t2)))

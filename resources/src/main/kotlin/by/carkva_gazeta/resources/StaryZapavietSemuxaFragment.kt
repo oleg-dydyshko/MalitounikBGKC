@@ -613,8 +613,8 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
             }
         }
         inputStream.close()
-        val split = builder.toString().split("===").toTypedArray()
-        val bibleline = split[page + 1].split("\n").toTypedArray()
+        val split = builder.toString().split("===")
+        val bibleline = split[page + 1].split("\n")
         bibleline.forEach {
             if (it.trim() != "") bible.add(it)
         }

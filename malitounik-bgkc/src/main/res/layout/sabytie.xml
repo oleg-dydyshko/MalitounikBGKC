@@ -100,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="Без канца" />
+                    android:text="@string/sabytie_bez_kanca" />
 
             </LinearLayout>
 

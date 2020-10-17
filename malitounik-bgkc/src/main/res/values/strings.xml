@@ -375,5 +375,6 @@
     <string name="sabytie_zaxavac">Захаваць зьмены?</string>
     <string name="sabytie_no">Не</string>
     <string name="sabytie_yes">Так</string>
+    <string name="sabytie_bez_kanca">Без канца</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

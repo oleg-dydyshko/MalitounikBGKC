@@ -2976,7 +2976,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                             textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                             textView.setBackgroundResource(R.color.colorprimary_material_dark)
                         }
-                        val textR = if (konecSabytie) {
+                        val textR = if (!konecSabytie) {
                             getString(R.string.sabytieKali, data, time, res)
                         } else {
                             getString(R.string.sabytieDoKuda, data, time, dataK, timeK, res)

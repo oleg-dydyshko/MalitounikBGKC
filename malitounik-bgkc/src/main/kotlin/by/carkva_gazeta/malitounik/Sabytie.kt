@@ -48,7 +48,7 @@ import kotlin.collections.ArrayList
 class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
-    private var konec = true
+    private var konec = false
     private var back = false
     private var home = false
     private var redak = false
@@ -342,10 +342,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         checkBox2.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 linearKonec.visibility = View.GONE
-                konec = true
+                konec = false
             } else {
                 linearKonec.visibility = View.VISIBLE
-                konec = false
+                konec = true
             }
         }
         setSupportActionBar(toolbar)
@@ -814,7 +814,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 val times = label2.text.toString().split(":")
                 val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                 result = gc.timeInMillis
-                if (konec) {
+                if (!konec) {
                     daK = da
                     taK = ta
                 }
@@ -1465,7 +1465,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 val times = label2.text.toString().split(":")
                 val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                 result = gc.timeInMillis
-                if (konec) {
+                if (!konec) {
                     daK = da
                     taK = ta
                 }
@@ -2193,8 +2193,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         colorSave = p.color
         color = p.color
         konec = p.konecSabytie
-        checkBox2.isChecked = konec
-        if (!konec)
+        checkBox2.isChecked = !konec
+        if (konec)
             linearKonec.visibility = View.VISIBLE
         if (p.repit > 0) radioGroup.visibility = View.VISIBLE else radioGroup.visibility = View.GONE
         nomer = pos
@@ -2229,6 +2229,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         c = Calendar.getInstance() as GregorianCalendar
         save = false
         back = true
+        konec = false
+        checkBox2.isChecked = !konec
         var nol1 = ""
         var nol2 = ""
         if (c[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
@@ -2460,7 +2462,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 var dataK = ""
                 var timeK = ""
                 var paz: Long = 0
-                var konecSabytie = true
+                var konecSabytie = false
                 for (i in MainActivity.padzeia.indices) {
                     if (i == adapterPosition) {
                         val p = MainActivity.padzeia[i]
@@ -2488,7 +2490,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     res = "Паведаміць: " + nol11 + gc[Calendar.DAY_OF_MONTH] + "." + nol21 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR] + " у " + gc[Calendar.HOUR_OF_DAY] + ":" + nol3 + gc[Calendar.MINUTE]
                     if (realTime > paz) paznicia = true
                 }
-                val dialogShowSabytie = DialogSabytieShow.getInstance(title, data, time, dataK, timeK, res, paznicia, konecSabytie)
+                val dialogShowSabytie = DialogSabytieShow.getInstance(title, data, time, dataK, timeK, res, paznicia, !konecSabytie)
                 dialogShowSabytie.show(supportFragmentManager, "sabytie")
             }
         }

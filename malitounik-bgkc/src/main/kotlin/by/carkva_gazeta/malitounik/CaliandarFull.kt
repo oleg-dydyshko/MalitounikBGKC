@@ -561,7 +561,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                                 ds.isUnderlineText = false
                             }
                         }
-                        val spannable = if (konecSabytie) {
+                        val spannable = if (!konecSabytie) {
                             SpannableString(resources.getString(R.string.sabytieKali, data, time, res))
                         } else {
                             SpannableString(resources.getString(R.string.sabytieDoKuda, data, time, dataK, timeK, res))

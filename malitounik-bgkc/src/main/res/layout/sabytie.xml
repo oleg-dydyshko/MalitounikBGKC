@@ -95,12 +95,21 @@
                     android:textColor="@color/colorPrimary_text"
                     android:textSize="15sp" />
 
+                <CheckBox
+                    android:id="@+id/checkBox2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Без канца" />
+
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linearKonec"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                     android:id="@+id/kanec"

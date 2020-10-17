@@ -468,7 +468,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
 
     private fun sabytieView(sabytieTitle: String) {
         val gc = Calendar.getInstance() as GregorianCalendar
-        //var title: String
         val sabytieList = ArrayList<TextViewRobotoCondensed>()
         MainActivity.padzeia.sort()
         for (index in 0 until MainActivity.padzeia.size) {
@@ -497,6 +496,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     val timeK = p.timK
                     val paz = p.paznic
                     var res = getString(R.string.sabytie_no_pavedam)
+                    val konecSabytie = p.konecSabytie
                     val realTime = Calendar.getInstance().timeInMillis
                     var paznicia = false
                     if (paz != 0L) {
@@ -561,7 +561,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                                 ds.isUnderlineText = false
                             }
                         }
-                        val spannable = if (data == dataK && time == timeK) {
+                        val spannable = if (konecSabytie) {
                             SpannableString(resources.getString(R.string.sabytieKali, data, time, res))
                         } else {
                             SpannableString(resources.getString(R.string.sabytieDoKuda, data, time, dataK, timeK, res))

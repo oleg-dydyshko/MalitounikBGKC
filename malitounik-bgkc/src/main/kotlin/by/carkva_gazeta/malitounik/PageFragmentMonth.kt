@@ -2944,6 +2944,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         val timeK = p.timK
                         val paz = p.paznic
                         var res = getString(R.string.sabytie_no_pavedam)
+                        val konecSabytie = p.konecSabytie
                         val realTime = Calendar.getInstance().timeInMillis
                         var paznicia = false
                         if (paz != 0L) {
@@ -2975,7 +2976,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                             textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                             textView.setBackgroundResource(R.color.colorprimary_material_dark)
                         }
-                        val textR = if (data == dataK && time == timeK) {
+                        val textR = if (konecSabytie) {
                             getString(R.string.sabytieKali, data, time, res)
                         } else {
                             getString(R.string.sabytieDoKuda, data, time, dataK, timeK, res)

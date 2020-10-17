@@ -371,5 +371,9 @@
     <string name="color_padzei">Колер:</string>
     <string name="sabytie_no_pavedam">Паведаміць: Ніколі</string>
     <string name="sabytie_pavedam">Паведаміць: %1$s%2$d.%3$s%4$d.%5$d у %6$d:%7$s%8$d</string>
+    <string name="sabytie_zmenena">ПАДЗЕЯ ЗЬМЕНЕНА</string>
+    <string name="sabytie_zaxavac">Захаваць зьмены?</string>
+    <string name="sabytie_no">Не</string>
+    <string name="sabytie_yes">Так</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

@@ -47,21 +47,21 @@ class DialogSabytieSave : DialogFragment() {
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = "ПАДЗЕЯ ЗЬМЕНЕНА"
+            textViewZaglavie.text = getString(R.string.sabytie_zmenena)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             linearLayout.addView(textViewZaglavie)
             val textView = TextViewRobotoCondensed(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView.text = "Захаваць зьмены?"
+            textView.text = getString(R.string.sabytie_zaxavac)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             linearLayout.addView(textView)
             ad.setView(linearLayout)
-            ad.setNegativeButton("Не") { _: DialogInterface?, _: Int -> mListener.onDialogNegativeClick() }
-            ad.setPositiveButton("Так") { _: DialogInterface?, _: Int -> mListener.onDialogPositiveClick() }
-            ad.setNeutralButton("Адмена") { dialogInterface: DialogInterface, _: Int -> dialogInterface.cancel() }
+            ad.setNegativeButton(getString(R.string.sabytie_no)) { _: DialogInterface?, _: Int -> mListener.onDialogNegativeClick() }
+            ad.setPositiveButton(getString(R.string.sabytie_yes)) { _: DialogInterface?, _: Int -> mListener.onDialogPositiveClick() }
+            ad.setNeutralButton(getString(R.string.CANCEL)) { dialogInterface: DialogInterface, _: Int -> dialogInterface.cancel() }
             alert = ad.create()
             alert.setOnShowListener {
                 val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)

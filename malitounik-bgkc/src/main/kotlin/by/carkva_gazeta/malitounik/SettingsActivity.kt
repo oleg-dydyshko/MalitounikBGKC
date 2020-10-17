@@ -20,7 +20,6 @@ import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
-import android.widget.CompoundButton
 import android.widget.RadioGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -1304,7 +1303,7 @@ class SettingsActivity : AppCompatActivity() {
         if (dzenNoch) prav.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         prav.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         secret.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        prav.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        prav.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("pravas", 1)
             } else {
@@ -1314,7 +1313,7 @@ class SettingsActivity : AppCompatActivity() {
         }
         if (dzenNoch) pkc.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         pkc.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        pkc.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        pkc.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("pkc", 1)
             } else {
@@ -1324,7 +1323,7 @@ class SettingsActivity : AppCompatActivity() {
         }
         if (dzenNoch) dzair.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         dzair.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        dzair.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        dzair.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("gosud", 1)
             } else {
@@ -1334,7 +1333,7 @@ class SettingsActivity : AppCompatActivity() {
         }
         if (dzenNoch) praf.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         praf.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        praf.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        praf.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("pafesii", 1)
             } else {
@@ -1643,7 +1642,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        vibro.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        vibro.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("vibra", 1)
             } else {
@@ -1651,7 +1650,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        this.sinoidal.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        this.sinoidal.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("sinoidal", 1)
             } else {
@@ -1659,7 +1658,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        this.maranata.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        this.maranata.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("maranata", 1)
                 maranataBel.isClickable = true
@@ -1683,7 +1682,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        this.guk.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        this.guk.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("guk", 1)
             } else {
@@ -1691,7 +1690,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        /*checkBox2.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        /*checkBox2.setOnCheckedChangeListener { _, isChecked: Boolean ->
         if (isChecked) {
         prefEditor.putInt("trafic", 1)
         } else {
@@ -1699,7 +1698,7 @@ class SettingsActivity : AppCompatActivity() {
         }
         prefEditor.apply()
         }*/
-        checkBox5.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        checkBox5.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putBoolean("dzen_noch", true)
             } else {
@@ -1708,7 +1707,7 @@ class SettingsActivity : AppCompatActivity() {
             prefEditor.apply()
             recreate()
         }
-        checkBox6.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        checkBox6.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putBoolean("autoscrollAutostart", true)
                 spinnerAutoPrag.visibility = View.VISIBLE
@@ -1718,7 +1717,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        checkBox7.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        checkBox7.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putBoolean("scrinOn", true)
                 window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

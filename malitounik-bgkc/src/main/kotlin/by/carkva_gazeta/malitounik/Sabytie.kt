@@ -48,7 +48,7 @@ import kotlin.collections.ArrayList
 class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
-    private var konec = false
+    private var konec = true
     private var back = false
     private var home = false
     private var redak = false
@@ -126,7 +126,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             if (minute < 10) tr = "0"
             taK = "$hour:$tr$minute"
             label22.text = taK
-            konec = true
             val days = label1.text.toString().split(".")
             val gc1 = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
             val days2 = label12.text.toString().split(".")
@@ -340,6 +339,15 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val dialogSabytieTime = DialogSabytieTime.getInstance(2, label22.text.toString())
             dialogSabytieTime.show(supportFragmentManager, "dialogSabytieTime")
         }
+        checkBox2.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                linearKonec.visibility = View.GONE
+                konec = true
+            } else {
+                linearKonec.visibility = View.VISIBLE
+                konec = false
+            }
+        }
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title_toolbar.setOnClickListener {
@@ -371,10 +379,12 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             label2.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             label12.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             label22.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            checkBox2.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             label1.setBackgroundResource(R.drawable.selector_dark)
             label2.setBackgroundResource(R.drawable.selector_dark)
             label12.setBackgroundResource(R.drawable.selector_dark)
             label22.setBackgroundResource(R.drawable.selector_dark)
+            checkBox2.setBackgroundResource(R.drawable.selector_dark)
             labelbutton12.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             labelbutton12.setBackgroundResource(R.drawable.selector_dark)
             toolbar.popupTheme = R.style.AppCompatDark
@@ -403,57 +413,14 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     onDialogDeliteClick(pos)
                 }
                 if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
-                    onPopupRedaktor(pos)
+                    onSabytieRedaktor(pos)
                 }
             }
         })
-        /*ListView.adapter = adapter
-        ListView.onItemLongClickListener = OnItemLongClickListener { parent: AdapterView<*>, _: View?, position: Int, _: Long ->
-            val name = (parent.getItemAtPosition(position) as SabytieDataAdapter).title
-            val contextMenuSabytie = DialogContextMenuSabytie.getInstance(position, name)
-            contextMenuSabytie.show(supportFragmentManager, "context_menu_sabytie")
-            true
-        }
-        ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@OnItemClickListener
-            }
-            mLastClickTime = SystemClock.elapsedRealtime()
-            var title = ""
-            var data = ""
-            var time = ""
-            var dataK = ""
-            var timeK = ""
-            var paz: Long = 0
-            for (i in MainActivity.padzeia.indices) {
-                if (i == position) {
-                    val p = MainActivity.padzeia[i]
-                    title = p.padz
-                    data = p.dat
-                    time = p.tim
-                    paz = p.paznic
-                    dataK = p.datK
-                    timeK = p.timK
-                }
-            }
-            var res = "Паведаміць: Ніколі"
-            if (paz != 0L) {
-                val gc = Calendar.getInstance() as GregorianCalendar
-                gc.timeInMillis = paz
-                var nol11 = ""
-                var nol21 = ""
-                var nol3 = ""
-                if (gc[Calendar.DAY_OF_MONTH] < 10) nol11 = "0"
-                if (gc[Calendar.MONTH] < 9) nol21 = "0"
-                if (gc[Calendar.MINUTE] < 10) nol3 = "0"
-                res = "Паведаміць: " + nol11 + gc[Calendar.DAY_OF_MONTH] + "." + nol21 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR] + " у " + gc[Calendar.HOUR_OF_DAY] + ":" + nol3 + gc[Calendar.MINUTE]
-            }
-            val dialogShowSabytie = DialogSabytieShow.getInstance(title, data, time, dataK, timeK, res)
-            dialogShowSabytie.show(supportFragmentManager, "sabytie")
-        }*/
         if (savedInstanceState != null) {
             redak = savedInstanceState.getBoolean("redak")
             back = savedInstanceState.getBoolean("back")
+            save = savedInstanceState.getBoolean("save")
             idMenu = savedInstanceState.getInt("idMenu")
             if (savedInstanceState.getBoolean("titleLayout")) {
                 titleLayout.visibility = View.VISIBLE
@@ -486,7 +453,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
         if (intent.extras?.getBoolean("edit", false) == true) {
             val position = intent.extras?.getInt("position")?: 0
-            onPopupRedaktor(position)
+            onSabytieRedaktor(position)
             editCaliandar = true
         }
     }
@@ -607,57 +574,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         dd.show(supportFragmentManager, "dialig_delite")
     }
 
-    private fun onPopupRedaktor(pos: Int) {
-        drag_list_view.resetSwipedViews(null)
-        val timeC: String
-        save = true
-        back = true
-        val p = MainActivity.padzeia[pos]
-        editText.setText(p.padz)
-        label1.text = p.dat
-        label2.text = p.tim
-        label12.text = p.datK
-        label22.text = p.timK
-        if (p.sec == "-1") editText2.setText("") else editText2.setText(p.sec)
-        spinner3.setSelection(p.vybtime)
-        spinner4.setSelection(p.repit)
-        spinner5.setSelection(p.color)
-        labelbutton12Save = labelbutton12.text.toString()
-        editText4Save = editText4.text.toString()
-        radioSave = radio
-        vybtimeSave = p.vybtime
-        repitSave = p.repit
-        colorSave = p.color
-        color = p.color
-        if (p.repit > 0) radioGroup.visibility = View.VISIBLE else radioGroup.visibility = View.GONE
-        nomer = pos
-        titleLayout.visibility = View.VISIBLE
-        drag_list_view.visibility = View.GONE
-        idMenu = 3
-        timeC = p.count
-        val count = timeC.split(".")
-        when {
-            timeC == "0" -> radioButton1.isChecked = true
-            count.size == 1 -> {
-                radioButton2.isChecked = true
-                editText4.setText(timeC)
-            }
-            else -> {
-                radioButton3.isChecked = true
-                labelbutton12.text = timeC
-            }
-        }
-        repitL = p.repit
-        time = timeC
-        editSave = editText.text.toString().trim()
-        edit2Save = editText2.text.toString()
-        daSave = label1.text.toString()
-        taSave = label2.text.toString()
-        daKSave = label12.text.toString()
-        taKSave = label22.text.toString()
-        invalidateOptionsMenu()
-    }
-
     override fun onBackPressed() {
         val editSaveN = editText.text.toString().trim()
         val edit2SaveN = editText2.text.toString()
@@ -768,7 +684,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 }
                 if (requestCode == 1092) {
                     label12.text = da
-                    konec = true
                     val days = label1.text.toString().split(".")
                     val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
                     val days2 = label12.text.toString().split(".")
@@ -899,7 +814,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 val times = label2.text.toString().split(":")
                 val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                 result = gc.timeInMillis
-                if (!konec) {
+                if (konec) {
                     daK = da
                     taK = ta
                 }
@@ -936,7 +851,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 }
                             }
                         }
-                        MainActivity.padzeia.add(Padzeia(edit, da, ta, londs2, posit, edit2, daK, taK, repitL, time, color))
+                        MainActivity.padzeia.add(Padzeia(edit, da, ta, londs2, posit, edit2, daK, taK, repitL, time, color, konec))
                     }
                     1 -> {
                         time = "0"
@@ -1013,7 +928,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc[Calendar.MONTH] < 9) nol2 = "0"
                             if (gc2[Calendar.DAY_OF_MONTH] < 10) nol3 = "0"
                             if (gc2[Calendar.MONTH] < 9) nol4 = "0"
-                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2[Calendar.DAY_OF_MONTH] + "." + nol4 + (gc2[Calendar.MONTH] + 1) + "." + gc2[Calendar.YEAR], taK, repitL, time, color))
+                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2[Calendar.DAY_OF_MONTH] + "." + nol4 + (gc2[Calendar.MONTH] + 1) + "." + gc2[Calendar.YEAR], taK, repitL, time, color, konec))
                             gc.add(Calendar.DATE, 1)
                             gc2.add(Calendar.DATE, 1)
                             i++
@@ -1076,7 +991,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (gc[Calendar.MONTH] < 9) nol2 = "0"
                                 if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                                 if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                                MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                                MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             }
                             gc.add(Calendar.DATE, 1)
                             gc2.add(Calendar.DATE, 1)
@@ -1141,7 +1056,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (gc[Calendar.MONTH] < 9) nol2 = "0"
                                 if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                                 if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                                MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                                MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             }
                             schet++
                             gc.add(Calendar.DATE, 1)
@@ -1156,7 +1071,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
                         val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 52 - dayof + 52 + 1
                         if (radio == 3) {
@@ -1225,7 +1139,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc[Calendar.MONTH] < 9) nol2 = "0"
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             gc.add(Calendar.DATE, 7)
                             gc2.add(Calendar.DATE, 7)
                             i++
@@ -1237,7 +1151,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
                         val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
+                        
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 26 - dayof / 2 + 26 + 1
                         if (radio == 3) {
@@ -1306,7 +1220,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc[Calendar.MONTH] < 9) nol2 = "0"
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             gc.add(Calendar.DATE, 14)
                             gc2.add(Calendar.DATE, 14)
                             i++
@@ -1318,7 +1232,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
                         val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
+                        
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 13 - dayof / 4 + 13
                         if (radio == 3) {
@@ -1387,7 +1301,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc[Calendar.MONTH] < 9) nol2 = "0"
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             gc.add(Calendar.DATE, 28)
                             gc2.add(Calendar.DATE, 28)
                             i++
@@ -1448,7 +1362,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc[Calendar.MONTH] < 9) nol2 = "0"
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             gc.add(Calendar.MONTH, 1)
                             gc2.add(Calendar.MONTH, 1)
                             i++
@@ -1460,7 +1374,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
                         val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
                         var leapYear = 10
                         if (radio == 2) {
                             time = editText4.text.toString()
@@ -1497,7 +1410,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc[Calendar.MONTH] < 9) nol2 = "0"
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             gc.add(Calendar.YEAR, 1)
                             gc2.add(Calendar.YEAR, 1)
                             i++
@@ -1550,13 +1463,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 var londs2: Long = 0
                 val days = label1.text.toString().split(".")
                 val times = label2.text.toString().split(":")
-                val times2 = label22.text.toString().split(":")
-                val gc4 = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), times2[0].toInt(), times2[1].toInt(), 0)
-                val result2 = gc4.timeInMillis
                 val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                 result = gc.timeInMillis
-                if (result2 != result) konec = true
-                if (!konec) {
+                if (konec) {
                     daK = da
                     taK = ta
                 }
@@ -1607,7 +1516,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 }
                             }
                         }
-                        MainActivity.padzeia.add(Padzeia(edit, da, ta, londs2, posit, edit2, daK, taK, repitL, time, color))
+                        MainActivity.padzeia.add(Padzeia(edit, da, ta, londs2, posit, edit2, daK, taK, repitL, time, color, konec))
                     }
                     1 -> {
                         time = "0"
@@ -1684,7 +1593,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc[Calendar.MONTH] < 9) nol2 = "0"
                             if (gc2[Calendar.DAY_OF_MONTH] < 10) nol3 = "0"
                             if (gc2[Calendar.MONTH] < 9) nol4 = "0"
-                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2[Calendar.DAY_OF_MONTH] + "." + nol4 + (gc2[Calendar.MONTH] + 1) + "." + gc2[Calendar.YEAR], taK, repitL, time, color))
+                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2[Calendar.DAY_OF_MONTH] + "." + nol4 + (gc2[Calendar.MONTH] + 1) + "." + gc2[Calendar.YEAR], taK, repitL, time, color, konec))
                             gc.add(Calendar.DATE, 1)
                             gc2.add(Calendar.DATE, 1)
                             i++
@@ -1747,7 +1656,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (gc[Calendar.MONTH] < 9) nol2 = "0"
                                 if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                                 if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                                MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                                MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             }
                             gc.add(Calendar.DATE, 1)
                             gc2.add(Calendar.DATE, 1)
@@ -1812,7 +1721,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (gc[Calendar.MONTH] < 9) nol2 = "0"
                                 if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                                 if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                                MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                                MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             }
                             schet++
                             gc.add(Calendar.DATE, 1)
@@ -1827,7 +1736,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
                         val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
+                        
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 52 - dayof + 52 + 1
                         if (radio == 3) {
@@ -1896,7 +1805,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc[Calendar.MONTH] < 9) nol2 = "0"
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             gc.add(Calendar.DATE, 7)
                             gc2.add(Calendar.DATE, 7)
                             i++
@@ -1976,7 +1885,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc[Calendar.MONTH] < 9) nol2 = "0"
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             gc.add(Calendar.DATE, 14)
                             gc2.add(Calendar.DATE, 14)
                             i++
@@ -2056,7 +1965,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc[Calendar.MONTH] < 9) nol2 = "0"
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             gc.add(Calendar.DATE, 28)
                             gc2.add(Calendar.DATE, 28)
                             i++
@@ -2117,7 +2026,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc[Calendar.MONTH] < 9) nol2 = "0"
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             gc.add(Calendar.MONTH, 1)
                             gc2.add(Calendar.MONTH, 1)
                             i++
@@ -2129,7 +2038,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
                         val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        //val builder = StringBuilder()
+                        
                         var leapYear = 10
                         if (radio == 2) {
                             time = editText4.text.toString()
@@ -2166,7 +2075,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (gc[Calendar.MONTH] < 9) nol2 = "0"
                             if (gc2.get(Calendar.DAY_OF_MONTH) < 10) nol3 = "0"
                             if (gc2.get(Calendar.MONTH) < 9) nol4 = "0"
-                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color))
+                            MainActivity.padzeia.add(Padzeia(edit, nol1 + gc[Calendar.DAY_OF_MONTH] + "." + nol2 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR], ta, londs2, posit, edit2, nol3 + gc2.get(Calendar.DAY_OF_MONTH) + "." + nol4 + (gc2.get(Calendar.MONTH) + 1) + "." + gc2.get(Calendar.YEAR), taK, repitL, time, color, konec))
                             gc.add(Calendar.YEAR, 1)
                             gc2.add(Calendar.YEAR, 1)
                             i++
@@ -2261,6 +2170,61 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         return super.onOptionsItemSelected(item)
     }
 
+    private fun onSabytieRedaktor(pos: Int) {
+        drag_list_view.resetSwipedViews(null)
+        val timeC: String
+        save = true
+        back = true
+        val p = MainActivity.padzeia[pos]
+        editText.setText(p.padz)
+        label1.text = p.dat
+        label2.text = p.tim
+        label12.text = p.datK
+        label22.text = p.timK
+        if (p.sec == "-1") editText2.setText("") else editText2.setText(p.sec)
+        spinner3.setSelection(p.vybtime)
+        spinner4.setSelection(p.repit)
+        spinner5.setSelection(p.color)
+        labelbutton12Save = labelbutton12.text.toString()
+        editText4Save = editText4.text.toString()
+        radioSave = radio
+        vybtimeSave = p.vybtime
+        repitSave = p.repit
+        colorSave = p.color
+        color = p.color
+        konec = p.konecSabytie
+        checkBox2.isChecked = konec
+        if (!konec)
+            linearKonec.visibility = View.VISIBLE
+        if (p.repit > 0) radioGroup.visibility = View.VISIBLE else radioGroup.visibility = View.GONE
+        nomer = pos
+        titleLayout.visibility = View.VISIBLE
+        drag_list_view.visibility = View.GONE
+        idMenu = 3
+        timeC = p.count
+        val count = timeC.split(".")
+        when {
+            timeC == "0" -> radioButton1.isChecked = true
+            count.size == 1 -> {
+                radioButton2.isChecked = true
+                editText4.setText(timeC)
+            }
+            else -> {
+                radioButton3.isChecked = true
+                labelbutton12.text = timeC
+            }
+        }
+        repitL = p.repit
+        time = timeC
+        editSave = editText.text.toString().trim()
+        edit2Save = editText2.text.toString()
+        daSave = label1.text.toString()
+        taSave = label2.text.toString()
+        daKSave = label12.text.toString()
+        taKSave = label22.text.toString()
+        invalidateOptionsMenu()
+    }
+
     private fun addSabytie() {
         c = Calendar.getInstance() as GregorianCalendar
         save = false
@@ -2285,7 +2249,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         label2.text = ta
         label12.text = daK
         label22.text = taK
-        konec = false
         idMenu = 2
         spinner4.setSelection(0)
         spinner5.setSelection(0)
@@ -2392,6 +2355,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         super.onSaveInstanceState(outState)
         outState.putBoolean("redak", redak)
         outState.putBoolean("back", back)
+        outState.putBoolean("save", save)
         outState.putBoolean("titleLayout", titleLayout.visibility == View.VISIBLE)
         outState.putInt("idMenu", idMenu)
         outState.putString("ta", label2.text.toString())
@@ -2405,7 +2369,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         private val day = Calendar.getInstance() as GregorianCalendar
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view: View = LayoutInflater.from(parent.context).inflate(mLayoutId, parent, false)
-            //(view as ListSwipeItem).supportedSwipeDirection = ListSwipeItem.SwipeDirection.LEFT_AND_RIGHT
             val textview = view.findViewById<TextViewRobotoCondensed>(R.id.text)
             val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = k.getBoolean("dzen_noch", false)
@@ -2463,7 +2426,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             popup.setOnMenuItemClickListener { menuItem: MenuItem ->
                 popup.dismiss()
                 when (menuItem.itemId) {
-                    R.id.menu_redoktor -> onPopupRedaktor(position)
+                    R.id.menu_redoktor -> onSabytieRedaktor(position)
                     R.id.menu_remove -> onDialogDeliteClick(position)
                 }
                 true
@@ -2497,6 +2460,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 var dataK = ""
                 var timeK = ""
                 var paz: Long = 0
+                var konecSabytie = true
                 for (i in MainActivity.padzeia.indices) {
                     if (i == adapterPosition) {
                         val p = MainActivity.padzeia[i]
@@ -2506,6 +2470,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         paz = p.paznic
                         dataK = p.datK
                         timeK = p.timK
+                        konecSabytie = p.konecSabytie
                     }
                 }
                 var res = getString(R.string.sabytie_no_pavedam)
@@ -2523,7 +2488,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     res = "Паведаміць: " + nol11 + gc[Calendar.DAY_OF_MONTH] + "." + nol21 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR] + " у " + gc[Calendar.HOUR_OF_DAY] + ":" + nol3 + gc[Calendar.MINUTE]
                     if (realTime > paz) paznicia = true
                 }
-                val dialogShowSabytie = DialogSabytieShow.getInstance(title, data, time, dataK, timeK, res, paznicia)
+                val dialogShowSabytie = DialogSabytieShow.getInstance(title, data, time, dataK, timeK, res, paznicia, konecSabytie)
                 dialogShowSabytie.show(supportFragmentManager, "sabytie")
             }
         }

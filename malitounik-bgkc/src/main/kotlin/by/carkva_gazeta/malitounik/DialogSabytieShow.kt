@@ -13,7 +13,6 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.sabytie.*
 import java.util.*
 
 /**
@@ -27,6 +26,7 @@ class DialogSabytieShow : DialogFragment() {
     private var timeK = ""
     private var res = ""
     private var paz = false
+    private var konecSabytie = true
     private lateinit var alert: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +38,7 @@ class DialogSabytieShow : DialogFragment() {
         timeK = arguments?.getString("timeK") ?: ""
         res = arguments?.getString("res") ?: ""
         paz = arguments?.getBoolean("paz") ?: false
+        konecSabytie = arguments?.getBoolean("konecSabytie") ?: true
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -57,7 +58,7 @@ class DialogSabytieShow : DialogFragment() {
             if (dzenNoch) textViewT.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewT.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             linearLayout.addView(textViewT)
             val textView = TextViewRobotoCondensed(it)
-            val textR = if (data == dataK && time == timeK) {
+            val textR = if (konecSabytie) {
                 SpannableString(getString(R.string.sabytie_kali, data, time, res))
             } else {
                 SpannableString(getString(R.string.sabytie_pachatak_show, data, time, dataK, timeK, res))
@@ -91,7 +92,7 @@ class DialogSabytieShow : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(title: String, data: String, time: String, dataK: String, timeK: String, res: String, paz: Boolean): DialogSabytieShow {
+        fun getInstance(title: String, data: String, time: String, dataK: String, timeK: String, res: String, paz: Boolean, konecSabytie: Boolean): DialogSabytieShow {
             val dialogShowSabytie = DialogSabytieShow()
             val bundle = Bundle()
             bundle.putString("title", title)
@@ -101,6 +102,7 @@ class DialogSabytieShow : DialogFragment() {
             bundle.putString("timeK", timeK)
             bundle.putString("res", res)
             bundle.putBoolean("paz", paz)
+            bundle.putBoolean("konecSabytie", konecSabytie)
             dialogShowSabytie.arguments = bundle
             return dialogShowSabytie
         }

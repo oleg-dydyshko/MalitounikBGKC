@@ -441,6 +441,14 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             men = MyBibleList.setVybranoe(this, title, kniga, BibleGlobalList.mListGlava, true)
             if (men) {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
+                if (!MyBibleList.checkVybranoe("1")) {
+                    MenuVybranoe.vybranoe.add(VybranoeData(Bogashlugbovya.vybranoeIndex(), "1", getString(by.carkva_gazeta.malitounik.R.string.title_biblia)))
+                    val gson = Gson()
+                    val file = File("$filesDir/Vybranoe.json")
+                    file.writer().use {
+                        it.write(gson.toJson(MenuVybranoe.vybranoe))
+                    }
+                }
             }
             invalidateOptionsMenu()
         }

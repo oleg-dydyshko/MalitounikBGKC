@@ -30,6 +30,7 @@ import by.carkva_gazeta.resources.DialogBibleRazdel.DialogBibleRazdelListener
 import by.carkva_gazeta.resources.NadsanContentPage.Companion.newInstance
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_bible.*
+import java.io.File
 
 class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NadsanContentPage.ListPosition {
     private val mHideHandler = Handler(Looper.getMainLooper())
@@ -292,6 +293,14 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             men = MyBibleList.setVybranoe(this, resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2), 0, pager.currentItem, bibleName = 3)
             if (men) {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
+                if (!MyBibleList.checkVybranoe("3")) {
+                    MenuVybranoe.vybranoe.add(VybranoeData(Bogashlugbovya.vybranoeIndex(), "3", getString(by.carkva_gazeta.malitounik.R.string.title_psalter)))
+                    val gson = Gson()
+                    val file = File("$filesDir/Vybranoe.json")
+                    file.writer().use {
+                        it.write(gson.toJson(MenuVybranoe.vybranoe))
+                    }
+                }
             }
             invalidateOptionsMenu()
         }

@@ -144,7 +144,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             return check
         }
 
-        private fun vybranoeIndex(): Long {
+        fun vybranoeIndex(): Long {
             var result: Long = 1
             val vybranoe = MenuVybranoe.vybranoe
             if (vybranoe.size != 0) {
@@ -492,6 +492,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
         if ((resurs.contains("bogashlugbovya") && bogashlugbovya) || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("ton")) {
             scrollView2.visibility = View.GONE
+            if (resurs.contains("ton")) mAutoScroll = false
             WebView.visibility = View.VISIBLE
             WebView.loadDataWithBaseURL("malitounikApp-app//carkva-gazeta.by/", res, "text/html", "utf-8", null)
         } else {
@@ -500,7 +501,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             TextView.text = MainActivity.fromHtml(res)
             positionY = k.getInt(resurs + "Scroll", 0)
             scrollView2.post { scrollView2.scrollBy(0, positionY) }
-            if (!resurs.contains("ton")) mAutoScroll = false
+            mAutoScroll = false
         }
         // API >= 16
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -546,6 +547,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (dzenNoch) imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.niz_back)
             imageView5.setOnClickListener { WebView.findNext(true) }
         }
+        invalidateOptionsMenu()
         progressBar.visibility = View.GONE
     }
 
@@ -834,6 +836,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
                 menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             }
+        } else {
+            itemAuto.isVisible = false
+            stopAutoScroll()
         }
         var spanString = SpannableString(itemAuto.title.toString())
         var end = spanString.length

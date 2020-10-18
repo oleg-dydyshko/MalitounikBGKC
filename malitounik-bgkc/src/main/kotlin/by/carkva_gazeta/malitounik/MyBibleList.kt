@@ -25,6 +25,7 @@ import com.woxthebox.draglistview.swipe.ListSwipeHelper.OnSwipeListenerAdapter
 import com.woxthebox.draglistview.swipe.ListSwipeItem
 import com.woxthebox.draglistview.swipe.ListSwipeItem.SwipeDirection
 import kotlinx.android.synthetic.main.my_bible_list.*
+import java.io.File
 
 
 class MyBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDeliteBibliVybranoeListener {
@@ -42,13 +43,31 @@ class MyBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDelite
         drag_list_view.resetSwipedViews(null)
         val gson = Gson()
         val prefEditors = k.edit()
-        when (biblia) {
-            1 -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe))
-            2 -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe))
-            3 -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe))
+        if (arrayListVybranoe.isEmpty()) {
+            when (biblia) {
+                1 -> prefEditors.remove("bibleVybranoeSemuxa")
+                2 -> prefEditors.remove("bibleVybranoeSinoidal")
+                3 -> prefEditors.remove("bibleVybranoeNadsan")
+            }
+            MenuVybranoe.vybranoe.forEachIndexed { index, it ->
+                if (it.resurs == biblia.toString()) {
+                    MenuVybranoe.vybranoe.removeAt(index)
+                    val file = File("$filesDir/Vybranoe.json")
+                    file.writer().use {
+                        it.write(gson.toJson(MenuVybranoe.vybranoe))
+                    }
+                    return@forEachIndexed
+                }
+            }
+            onSupportNavigateUp()
+        } else {
+            when (biblia) {
+                1 -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe))
+                2 -> prefEditors.putString("bibleVybranoeSinoidal", gson.toJson(arrayListVybranoe))
+                3 -> prefEditors.putString("bibleVybranoeNadsan", gson.toJson(arrayListVybranoe))
+            }
         }
         prefEditors.apply()
-        if (arrayListVybranoe.isEmpty()) onSupportNavigateUp()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -263,6 +282,15 @@ class MyBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDelite
             return false
         }
 
+        fun checkVybranoe(resurs: String): Boolean {
+            MenuVybranoe.vybranoe.forEach {
+                if (it.resurs == resurs) {
+                    return true
+                }
+            }
+            return false
+        }
+
         fun setVybranoe(context: Context, title: String, kniga: Int, glava: Int, novyZavet: Boolean = false, bibleName: Int = 1): Boolean {
             val knigaglava = "${kniga + 1}${glava + 1}".toLong()
             var remove = true
@@ -270,6 +298,7 @@ class MyBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDelite
                 if (arrayListVybranoe[i].id == knigaglava) {
                     arrayListVybranoe.removeAt(i)
                     remove = false
+                    break
                 }
             }
             if (remove)

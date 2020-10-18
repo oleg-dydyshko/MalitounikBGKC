@@ -41,11 +41,17 @@ class MenuVybranoe : VybranoeFragment() {
     }
 
     override fun fileDelite(position: Int) {
+        val edit = k.edit()
+        when (vybranoe[position].resurs) {
+            "1" -> edit.remove("bibleVybranoeSemuxa")
+            "2" -> edit.remove("bibleVybranoeSinoidal")
+            "3" -> edit.remove("bibleVybranoeNadsan")
+        }
+        edit.apply()
         vybranoe.removeAt(position)
         activity?.let { activity ->
             val gson = Gson()
             val file = File(activity.filesDir.toString() + "/Vybranoe.json")
-            //vybranoe.sort()
             file.writer().use {
                 it.write(gson.toJson(vybranoe))
             }
@@ -55,6 +61,11 @@ class MenuVybranoe : VybranoeFragment() {
 
     override fun deliteAllVybranoe() {
         activity?.let { activity ->
+            val edit = k.edit()
+            edit.remove("bibleVybranoeSemuxa")
+            edit.remove("bibleVybranoeSinoidal")
+            edit.remove("bibleVybranoeNadsan")
+            edit.apply()
             vybranoe.clear()
             val gson = Gson()
             val file = File(activity.filesDir.toString() + "/Vybranoe.json")
@@ -73,18 +84,18 @@ class MenuVybranoe : VybranoeFragment() {
         super.onActivityCreated(savedInstanceState)
         activity?.let { it ->
             k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val gson = Gson()
             val file = File(it.filesDir.toString() + "/Vybranoe.json")
             if (file.exists()) {
                 try {
-                    val gson = Gson()
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
                     vybranoe = gson.fromJson(file.readText(), type)
-                    if (k.getInt("vybranoe_sort", 1) == 1) vybranoe.sort()
                 } catch (t: Throwable) {
                     file.delete()
                 }
             }
-            adapter = ItemAdapter(vybranoe, R.layout.list_item, R.id.image, false) //MyVybranoeAdapter(it)
+            if (k.getInt("vybranoe_sort", 1) == 1) vybranoe.sort()
+            adapter = ItemAdapter(vybranoe, R.layout.list_item, R.id.image, false)
             drag_list_view.recyclerView.isVerticalScrollBarEnabled = false
             drag_list_view.setLayoutManager(LinearLayoutManager(it))
             drag_list_view.setAdapter(adapter, false)
@@ -116,7 +127,6 @@ class MenuVybranoe : VybranoeFragment() {
                 override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
                     if (fromPosition != toPosition) {
                         file.writer().use {
-                            val gson = Gson()
                             it.write(gson.toJson(vybranoe))
                         }
                         val edit = k.edit()
@@ -155,10 +165,9 @@ class MenuVybranoe : VybranoeFragment() {
                     file.writer().use {
                         it.write(gson.toJson(vybranoe))
                     }
-                    adapter.notifyDataSetChanged()
                 }
                 edit.apply()
-                //it.invalidateOptionsMenu()
+                adapter.notifyDataSetChanged()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -208,10 +217,26 @@ class MenuVybranoe : VybranoeFragment() {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (MainActivity.checkmoduleResources(activity)) {
-                    val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-                    intent.putExtra("resurs", vybranoe[adapterPosition].resurs)
-                    intent.putExtra("title", vybranoe[adapterPosition].data)
-                    startActivity(intent)
+                    when (vybranoe[adapterPosition].resurs) {
+                        "1" -> {
+                            MyBibleList.biblia = 1
+                            startActivity(Intent(activity, MyBibleList::class.java))
+                        }
+                        "2" -> {
+                            MyBibleList.biblia = 2
+                            startActivity(Intent(activity, MyBibleList::class.java))
+                        }
+                        "3" -> {
+                            MyBibleList.biblia = 3
+                            startActivity(Intent(activity, MyBibleList::class.java))
+                        }
+                        else -> {
+                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
+                            intent.putExtra("resurs", vybranoe[adapterPosition].resurs)
+                            intent.putExtra("title", vybranoe[adapterPosition].data)
+                            startActivity(intent)
+                        }
+                    }
                 } else {
                     val dadatak = DialogInstallDadatak()
                     fragmentManager?.let { dadatak.show(it, "dadatak") }
@@ -256,66 +281,6 @@ class MenuVybranoe : VybranoeFragment() {
             }
         }
     }
-
-    /*private inner class MyVybranoeAdapter(private val activity: Activity) : ArrayAdapter<VybranoeData>(activity, R.layout.simple_list_item_3, R.id.label, vybranoe) {
-        private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-
-        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
-            val rootView: View
-            val viewHolder: ViewHolder
-            if (mView == null) {
-                rootView = activity.layoutInflater.inflate(R.layout.simple_list_item_3, parent, false)
-                viewHolder = ViewHolder()
-                rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(R.id.label)
-                viewHolder.buttonPopup = rootView.findViewById(R.id.button_popup)
-            } else {
-                rootView = mView
-                viewHolder = rootView.tag as ViewHolder
-            }
-            val dzenNoch = k.getBoolean("dzen_noch", false)
-            viewHolder.buttonPopup?.setOnClickListener { viewHolder.buttonPopup?.let { showPopupMenu(it, position, vybranoe[position].data) } }
-            viewHolder.text?.text = vybranoe[position].data
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
-                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            } else {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-            }
-            return rootView
-        }
-
-        private fun showPopupMenu(view: View, position: Int, name: String) {
-            val popup = PopupMenu(activity, view)
-            val infl = popup.menuInflater
-            infl.inflate(R.menu.popup, popup.menu)
-            popup.menu.getItem(0).isVisible = false
-            for (i in 0 until popup.menu.size()) {
-                val item = popup.menu.getItem(i)
-                val spanString = SpannableString(popup.menu.getItem(i).title.toString())
-                val end = spanString.length
-                spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                item.title = spanString
-            }
-            popup.setOnMenuItemClickListener { menuItem: MenuItem ->
-                popup.dismiss()
-                if (menuItem.itemId == R.id.menu_remove) {
-                    val dd = DialogDelite.getInstance(position, "", "з выбранага", name)
-                    fragmentManager?.let { dd.show(it, "dialog_dilite") }
-                    return@setOnMenuItemClickListener true
-                }
-                false
-            }
-            popup.show()
-        }
-    }
-
-    private class ViewHolder {
-        var text: TextViewRobotoCondensed? = null
-        var buttonPopup: ImageView? = null
-    }*/
 
     companion object {
         var vybranoe: ArrayList<VybranoeData> = ArrayList()

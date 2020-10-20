@@ -27,13 +27,11 @@ class ReceiverBroad : BroadcastReceiver() {
         val year = g[Calendar.YEAR]
         val sabytie = intent.getBooleanExtra("sabytieSet", false)
         if (sabytie) {
-            val idString = intent.extras?.getString("dataString", dayofyear.toString() + g[Calendar.MONTH].toString() + g[Calendar.HOUR_OF_DAY] + g[Calendar.MINUTE])
-                    ?: "205"
+            val idString = intent.extras?.getString("dataString", dayofyear.toString() + g[Calendar.MONTH].toString() + g[Calendar.HOUR_OF_DAY] + g[Calendar.MINUTE]) ?: "205"
             id = idString.toInt()
             sabytieSet = true
         }
-        sendNotif(ctx, intent.action, intent.getStringExtra("extra")
-                ?: "", intent.getIntExtra("dayofyear", dayofyear), intent.getIntExtra("year", year))
+        sendNotif(ctx, intent.action, intent.getStringExtra("extra") ?: "", intent.getIntExtra("dayofyear", dayofyear), intent.getIntExtra("year", year))
     }
 
     private fun sendNotif(context: Context, Sviata: String?, Name: String, dayofyear: Int, year: Int) {

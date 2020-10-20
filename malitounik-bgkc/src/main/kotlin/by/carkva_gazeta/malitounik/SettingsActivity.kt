@@ -4,6 +4,7 @@ import android.app.*
 import android.appwidget.AppWidgetManager
 import android.content.*
 import android.content.SharedPreferences.Editor
+import android.graphics.Color
 import android.graphics.Typeface
 import android.media.AudioAttributes
 import android.media.RingtoneManager
@@ -52,8 +53,8 @@ class SettingsActivity : AppCompatActivity() {
         const val GET_FONT_SIZE_TOAST = 12F
         const val GET_CALIANDAR_YEAR_MIN = 2017
         const val GET_CALIANDAR_YEAR_MAX = 2021
-        const val NOTIFICATION_CHANNEL_ID_SABYTIE = "3000"
-        const val NOTIFICATION_CHANNEL_ID_SVIATY = "2000"
+        const val NOTIFICATION_CHANNEL_ID_SABYTIE = "3001"
+        const val NOTIFICATION_CHANNEL_ID_SVIATY = "2001"
 
         private fun mkTime(year: Int, month: Int, day: Int, hour: Int): Long {
             val calendar = Calendar.getInstance() as GregorianCalendar
@@ -1137,14 +1138,16 @@ class SettingsActivity : AppCompatActivity() {
             channel.description = name
             channel.importance = NotificationManager.IMPORTANCE_HIGH
             channel.enableLights(true)
-            channel.lightColor = ContextCompat.getColor(context, R.color.colorPrimary)
+            channel.lightColor = Color.RED
             val att = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build()
             channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att)
             channel.enableVibration(true)
             channel.vibrationPattern = vibrate
             val notificationManager = context.getSystemService(NotificationManager::class.java)
-            notificationManager?.createNotificationChannel(channel)
-            notificationManager?.deleteNotificationChannel("by.carkva-gazeta")
+            notificationManager.createNotificationChannel(channel)
+            notificationManager.deleteNotificationChannel("by.carkva-gazeta")
+            notificationManager.deleteNotificationChannel("3000")
+            notificationManager.deleteNotificationChannel("2000")
         }
     }
 

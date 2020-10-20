@@ -121,9 +121,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         InteractiveScroll.setOnBottomReachedListener(object : OnBottomReachedListener {
             override fun onBottomReached() {
                 autoscroll = false
-                cytannelist.forEach {
-                    it.setTextIsSelectable(true)
-                }
                 stopAutoScroll()
                 val prefEditors = k.edit()
                 prefEditors.putBoolean("autoscroll", false)
@@ -235,9 +232,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         startProcent()
                         autoscroll = k.getBoolean("autoscroll", false)
                         if (!autoscroll) {
-                            cytannelist.forEach {
-                                it.setTextIsSelectable(false)
-                            }
                             startAutoScroll()
                             prefEditor.putBoolean("autoscroll", true)
                             prefEditor.apply()
@@ -899,11 +893,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                     InteractiveScroll.smoothScrollTo(0, y.toInt())
                 }, 700)
             }
-            if (!autoscroll) {
-                cytannelist.forEach {
-                    it.setTextIsSelectable(true)
-                }
-            }
         } catch (t: Throwable) {
             error()
         }
@@ -971,6 +960,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     }
 
     private fun stopAutoScroll() {
+        cytannelist.forEach {
+            it.setTextIsSelectable(true)
+        }
         scrollTimer.cancel()
         scrollerSchedule = null
         if (!k.getBoolean("scrinOn", false)) {
@@ -985,6 +977,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     }
 
     private fun startAutoScroll() {
+        cytannelist.forEach {
+            it.setTextIsSelectable(false)
+        }
         resetTimer.cancel()
         scrollTimer = Timer()
         resetSchedule = null
@@ -1083,9 +1078,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
-            cytannelist.forEach {
-                it.setTextIsSelectable(false)
-            }
             startAutoScroll()
         }
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -1157,15 +1149,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {
-                cytannelist.forEach {
-                    it.setTextIsSelectable(true)
-                }
                 stopAutoScroll()
                 prefEditor.putBoolean("autoscroll", false)
             } else {
-                cytannelist.forEach {
-                    it.setTextIsSelectable(false)
-                }
                 startAutoScroll()
                 prefEditor.putBoolean("autoscroll", true)
             }

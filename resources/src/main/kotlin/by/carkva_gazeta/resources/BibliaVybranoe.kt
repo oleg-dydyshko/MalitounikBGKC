@@ -116,13 +116,9 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
         toTwoList = intent.extras?.getInt("position", 0) ?: 0
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         constraint.setOnTouchListener(this)
-        InteractiveScroll.setOnTouchListener(this)
         InteractiveScroll.setOnBottomReachedListener(object : OnBottomReachedListener {
             override fun onBottomReached() {
                 autoscroll = false
-                cytannelist.forEach {
-                    it.setTextIsSelectable(true)
-                }
                 stopAutoScroll()
                 val prefEditors = k.edit()
                 prefEditors.putBoolean("autoscroll", false)
@@ -198,13 +194,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
         val y = event?.y?.toInt() ?: 0
         val x = event?.x?.toInt() ?: 0
         val prefEditor: Editor = k.edit()
-        if (v?.id ?: 0 == R.id.InteractiveScroll) {
-            when (event?.action ?: MotionEvent.ACTION_CANCEL) {
-                MotionEvent.ACTION_DOWN -> mActionDown = true
-                MotionEvent.ACTION_UP -> mActionDown = false
-            }
-            return false
-        }
         if (v?.id ?: 0 == R.id.constraint) {
             if (MainActivity.checkBrightness) {
                 MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
@@ -241,9 +230,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
                         startProcent()
                         autoscroll = k.getBoolean("autoscroll", false)
                         if (!autoscroll) {
-                            cytannelist.forEach {
-                                it.setTextIsSelectable(false)
-                            }
                             startAutoScroll()
                             prefEditor.putBoolean("autoscroll", true)
                             prefEditor.apply()
@@ -566,11 +552,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             val y = LinearButtom.y + LinearButtom.getChildAt(toTwoList).y
             InteractiveScroll.smoothScrollTo(0, y.toInt())
         }, 700)
-        if (!autoscroll) {
-            cytannelist.forEach {
-                it.setTextIsSelectable(true)
-            }
-        }
     }
 
     private fun autoStartScroll() {
@@ -622,6 +603,9 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
     }
 
     private fun stopAutoScroll() {
+        cytannelist.forEach {
+            it.setTextIsSelectable(true)
+        }
         scrollTimer.cancel()
         scrollerSchedule = null
         if (!k.getBoolean("scrinOn", false)) {
@@ -636,6 +620,9 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
     }
 
     private fun startAutoScroll() {
+        cytannelist.forEach {
+            it.setTextIsSelectable(false)
+        }
         resetTimer.cancel()
         scrollTimer = Timer()
         resetSchedule = null
@@ -730,9 +717,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
-            cytannelist.forEach {
-                it.setTextIsSelectable(false)
-            }
             startAutoScroll()
         }
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -796,15 +780,9 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {
-                cytannelist.forEach {
-                    it.setTextIsSelectable(true)
-                }
                 stopAutoScroll()
                 prefEditor.putBoolean("autoscroll", false)
             } else {
-                cytannelist.forEach {
-                    it.setTextIsSelectable(false)
-                }
                 startAutoScroll()
                 prefEditor.putBoolean("autoscroll", true)
             }

@@ -293,10 +293,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             prefEditor.putBoolean("help_str", false)
             prefEditor.apply()
         }
-        if (k.getBoolean("autoscrollAutostart", false)) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            autoStartScroll()
-        }
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -495,6 +491,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (resurs.contains("ton")) mAutoScroll = false
             WebView.visibility = View.VISIBLE
             WebView.loadDataWithBaseURL("malitounikApp-app//carkva-gazeta.by/", res, "text/html", "utf-8", null)
+            if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                autoStartScroll()
+            }
         } else {
             WebView.visibility = View.GONE
             scrollView2.visibility = View.VISIBLE

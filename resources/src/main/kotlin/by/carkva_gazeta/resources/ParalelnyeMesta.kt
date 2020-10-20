@@ -69,11 +69,11 @@ class ParalelnyeMesta {
             if (cytanneSours1 == "Ис") {
                 cytanneSours1 = cytanneSours1.replace("Ис", "Іс")
             }
+            if (cytanneSours1.contains("Посл Иер")) {
+                cytanneSours1 = cytanneSours1.replace("Посл Иер", "Пасл Ер")
+            }
             if (cytanneSours1.contains("Иер")) {
                 cytanneSours1 = cytanneSours1.replace("Иер", "Ер")
-            }
-            if (cytanneSours1.contains("Плач Иер")) {
-                cytanneSours1 = cytanneSours1.replace("Плач Иер", "Пасл Ер")
             }
             if (cytanneSours1.contains("Иез")) {
                 cytanneSours1 = cytanneSours1.replace("Иез", "Езк")
@@ -545,9 +545,11 @@ class ParalelnyeMesta {
         return arrayList
     }
 
-    fun biblia(kniga: String): Array<String> {
+    fun biblia(chtenie: String): Array<String> {
+        val t1 = chtenie.lastIndexOf(" ")
+        val kniga = chtenie.substring(0, t1)
         val bible = arrayOf("Быт", "Бытие", "Быцьцё", "1", "", "")
-        if (kniga.contains("Быт") || kniga.contains("Быц")) {
+        if (kniga == "Быт" || kniga == "Быц") {
             bible[0] = "Быт" // Сокращение по русски
             bible[1] = "Бытие" // Название по русски не полное
             bible[2] = "Быцьцё" // Название по Белорусски не полное
@@ -555,37 +557,37 @@ class ParalelnyeMesta {
             //bible[4] Название по русски
             //bible[5] Название по Белорусски
         }
-        if (kniga.contains("Исх") || kniga.contains("Вых")) {
+        if (kniga == "Исх" || kniga == "Вых") {
             bible[0] = "Исх"
             bible[1] = "Исход"
             bible[2] = "Выхад"
             bible[3] = "2"
         }
-        if (kniga.contains("Лев") || kniga.contains("Ляв")) {
+        if (kniga == "Лев" || kniga == "Ляв") {
             bible[0] = "Лев"
             bible[1] = "Левит"
             bible[2] = "Лявіт"
             bible[3] = "3"
         }
-        if (kniga.contains("Чис") || kniga.contains("Лікі")) {
+        if (kniga == "Чис" || kniga == "Лікі") {
             bible[0] = "Числа"
             bible[1] = "Числа"
             bible[2] = "Лікі"
             bible[3] = "4"
         }
-        if (kniga.contains("Втор") || kniga.contains("Дрг")) {
+        if (kniga == "Втор" || kniga == "Дрг") {
             bible[0] = "Втор"
             bible[1] = "Второзаконие"
             bible[2] = "Другі Закон"
             bible[3] = "5"
         }
-        if (kniga.contains("Нав")) {
+        if (kniga == "Нав") {
             bible[0] = "Нав"
             bible[1] = "Иисуса Навина"
             bible[2] = "Ісуса сына Нава"
             bible[3] = "6"
         }
-        if (kniga.contains("Суд")) {
+        if (kniga == "Суд") {
             bible[0] = "Суд"
             bible[1] = "Судей"
             bible[2] = "Судзьдзяў"
@@ -593,13 +595,13 @@ class ParalelnyeMesta {
             bible[4] = "Судей израилевых"
             bible[5] = "Судзьдзяў"
         }
-        if (kniga.contains("Руфь") || kniga.contains("Рут")) {
+        if (kniga == "Руфь" || kniga == "Рут") {
             bible[0] = "Руфь"
             bible[1] = "Руфи"
             bible[2] = "Рут"
             bible[3] = "8"
         }
-        if (kniga.contains("1 Цар")) {
+        if (kniga == "1 Цар") {
             bible[0] = "1 Цар"
             bible[1] = "1 Царств"
             bible[2] = "1 Царстваў"
@@ -607,7 +609,7 @@ class ParalelnyeMesta {
             bible[4] = "1-я Царств"
             bible[5] = "1-я Царстваў"
         }
-        if (kniga.contains("2 Цар")) {
+        if (kniga == "2 Цар") {
             bible[0] = "2 Цар"
             bible[1] = "2 Царств"
             bible[2] = "2 Царстваў"
@@ -615,7 +617,7 @@ class ParalelnyeMesta {
             bible[4] = "2-я Царств"
             bible[5] = "2-я Царстваў"
         }
-        if (kniga.contains("3 Цар")) {
+        if (kniga == "3 Цар") {
             bible[0] = "3 Цар"
             bible[1] = "3 Царств"
             bible[2] = "3 Царстваў"
@@ -623,7 +625,7 @@ class ParalelnyeMesta {
             bible[4] = "3-я Царств"
             bible[5] = "3-я Царстваў"
         }
-        if (kniga.contains("4 Цар")) {
+        if (kniga == "4 Цар") {
             bible[0] = "4 Цар"
             bible[1] = "4 Царств"
             bible[2] = "4 Царстваў"
@@ -631,7 +633,7 @@ class ParalelnyeMesta {
             bible[4] = "4-я Царств"
             bible[5] = "4-я Царстваў"
         }
-        if (kniga.contains("1 Пар") || kniga.contains("1 Лет")) {
+        if (kniga == "1 Пар" || kniga == "1 Лет") {
             bible[0] = "1 Пар"
             bible[1] = "1 Паралипоменон"
             bible[2] = "1 Летапісаў"
@@ -639,7 +641,7 @@ class ParalelnyeMesta {
             bible[4] = "1-я Паралипоменон"
             bible[5] = "1-я Летапісаў"
         }
-        if (kniga.contains("2 Пар") || kniga.contains("2 Лет")) {
+        if (kniga == "2 Пар" || kniga == "2 Лет") {
             bible[0] = "2 Пар"
             bible[1] = "2 Паралипоменон"
             bible[2] = "2 Летапісаў"
@@ -647,7 +649,7 @@ class ParalelnyeMesta {
             bible[4] = "2-я Паралипоменон"
             bible[5] = "2-я Летапісаў"
         }
-        if (kniga.contains("1 Езд") || kniga.contains("1 Эзд")) {
+        if (kniga == "1 Езд" || kniga == "1 Эзд") {
             bible[0] = "1 Езд"
             bible[1] = "1 Ездры"
             bible[2] = "1 Эздры"
@@ -655,13 +657,13 @@ class ParalelnyeMesta {
             bible[4] = "1-я Ездры"
             bible[5] = "1-я Эздры"
         }
-        if (kniga.contains("Неем") || kniga.contains("Нээм")) {
+        if (kniga == "Неем" || kniga == "Нээм") {
             bible[0] = "Неем"
             bible[1] = "Неемии"
             bible[2] = "Нээміі"
             bible[3] = "16"
         }
-        if (kniga.contains("2 Езд") || kniga.contains("2 Эзд")) {
+        if (kniga == "2 Езд" || kniga == "2 Эзд") {
             bible[0] = "2 Езд"
             bible[1] = "2 Ездры"
             bible[2] = "2 Эздры"
@@ -669,37 +671,37 @@ class ParalelnyeMesta {
             bible[4] = "2-я Ездры"
             bible[5] = "2-я Эздры"
         }
-        if (kniga.contains("Тов") || kniga.contains("Тав")) {
+        if (kniga == "Тов" || kniga == "Тав") {
             bible[0] = "Тов"
             bible[1] = "Товита"
             bible[2] = "Тавіта"
             bible[3] = "18"
         }
-        if (kniga.contains("Иудифь") || kniga.contains("Юдт")) {
+        if (kniga == "Иудифь" || kniga == "Юдт") {
             bible[0] = "Иудифь"
             bible[1] = "Иудифи"
             bible[2] = "Юдыты"
             bible[3] = "19"
         }
-        if (kniga.contains("Есф") || kniga.contains("Эст")) {
+        if (kniga == "Есф" || kniga == "Эст") {
             bible[0] = "Есф"
             bible[1] = "Есфири"
             bible[2] = "Эстэр"
             bible[3] = "20"
         }
-        if (kniga.contains("Иов") || kniga.contains("Ёва")) {
+        if (kniga == "Иов" || kniga == "Ёва") {
             bible[0] = "Иов"
             bible[1] = "Иова"
             bible[2] = "Ёва"
             bible[3] = "21"
         }
-        if (kniga.contains("Пс")) {
+        if (kniga == "Пс") {
             bible[0] = "Пс"
             bible[1] = "Псалтирь"
             bible[2] = "Псалтыр"
             bible[3] = "22"
         }
-        if (kniga.contains("Притч") || kniga.contains("Высл")) {
+        if (kniga == "Притч" || kniga == "Высл") {
             bible[0] = "Притч"
             bible[1] = "Притчи"
             bible[2] = "Выслоўі"
@@ -707,13 +709,13 @@ class ParalelnyeMesta {
             bible[4] = "Притчи Соломона"
             bible[5] = "Выслоўяў Саламонавых"
         }
-        if (kniga.contains("Еккл") || kniga.contains("Экл")) {
+        if (kniga == "Еккл" || kniga == "Экл") {
             bible[0] = "Еккл"
             bible[1] = "Екклезиаста"
             bible[2] = "Эклезіяста"
             bible[3] = "24"
         }
-        if (kniga.contains("Песн") || kniga.contains("Псн")) {
+        if (kniga == "Песн" || kniga == "Псн") {
             bible[0] = "Песн"
             bible[1] = "Песнь песней"
             bible[2] = "Найвышэйшая Песьня"
@@ -721,13 +723,13 @@ class ParalelnyeMesta {
             bible[4] = "Песнь песней Соломона"
             bible[5] = "Найвышэйшая Песьня Саламонава"
         }
-        if (kniga.contains("Прем") || kniga.contains("Мдр")) {
+        if (kniga == "Прем" || kniga == "Мдр") {
             bible[0] = "Прем"
             bible[1] = "Премудрости Соломона"
             bible[2] = "Мудрасьці Саламона"
             bible[3] = "26"
         }
-        if (kniga.contains("Сир") || kniga.contains("Сір")) {
+        if (kniga == "Сир" || kniga == "Сір") {
             bible[0] = "Сир"
             bible[1] = "Сирах"
             bible[2] = "Сірах"
@@ -735,121 +737,121 @@ class ParalelnyeMesta {
             bible[4] = "Премудрости Иисуса, сына Сирахова"
             bible[5] = "Мудрасьці Ісуса, сына Сірахава"
         }
-        if ((kniga.contains("Ис") && !kniga.contains("Исх")) || kniga.contains("Іс")) {
+        if (kniga == "Ис" || kniga == "Іс") {
             bible[0] = "Ис"
             bible[1] = "Исаии"
             bible[2] = "Ісаі"
             bible[3] = "28"
         }
-        if (kniga.contains("Иер") || kniga.contains("Ер")) {
+        if (kniga == "Иер" || kniga == "Ер") {
             bible[0] = "Иер"
             bible[1] = "Иеремии"
             bible[2] = "Ераміі"
             bible[3] = "29"
         }
-        if (kniga.contains("Плач")) {
+        if (kniga == "Плач") {
             bible[0] = "Плач Иер"
             bible[1] = "Плач Иеремии"
             bible[2] = "Ераміін Плач"
             bible[3] = "30"
         }
-        if (kniga.contains("Посл Иер") || kniga.contains("Пасл Ер")) {
+        if (kniga == "Посл Иер" || kniga == "Пасл Ер") {
             bible[0] = "Посл Иеремии"
             bible[1] = "Послание Иеремии"
             bible[2] = "Пасланьне Ераміі"
             bible[3] = "31"
         }
-        if (kniga.contains("Вар") || kniga.contains("Бар")) {
+        if (kniga == "Вар" || kniga == "Бар") {
             bible[0] = "Вар"
             bible[1] = "Варуха"
             bible[2] = "Баруха"
             bible[3] = "32"
         }
-        if (kniga.contains("Иез") || kniga.contains("Езк")) {
+        if (kniga == "Иез" || kniga == "Езк") {
             bible[0] = "Иез"
             bible[1] = "Иезекииля"
             bible[2] = "Езэкііля"
             bible[3] = "33"
         }
-        if (kniga.contains("Дан")) {
+        if (kniga == "Дан") {
             bible[0] = "Дан"
             bible[1] = "Даниила"
             bible[2] = "Данііла"
             bible[3] = "34"
         }
-        if (kniga.contains("Ос") || kniga.contains("Ас")) {
+        if (kniga == "Ос" || kniga == "Ас") {
             bible[0] = "Ос"
             bible[1] = "Осии"
             bible[2] = "Асіі"
             bible[3] = "35"
         }
-        if (kniga.contains("Иоил") || kniga.contains("Ёіл")) {
+        if (kniga == "Иоил" || kniga == "Ёіл") {
             bible[0] = "Иоиль"
             bible[1] = "Иоиля"
             bible[2] = "Ёіля"
             bible[3] = "36"
         }
-        if (kniga.contains("Ам")) {
+        if (kniga == "Ам") {
             bible[0] = "Ам"
             bible[1] = "Амоса"
             bible[2] = "Амоса"
             bible[3] = "37"
         }
-        if (kniga.contains("Авд") || kniga.contains("Аўдз")) {
+        if (kniga == "Авд" || kniga == "Аўдз") {
             bible[0] = "Авдий"
             bible[1] = "Авдия"
             bible[2] = "Аўдзея"
             bible[3] = "38"
         }
-        if (kniga.contains("Иона") || kniga.contains("Ёны")) {
+        if (kniga == "Иона" || kniga == "Ёны") {
             bible[0] = "Иона"
             bible[1] = "Ионы"
             bible[2] = "Ёны"
             bible[3] = "39"
         }
-        if (kniga.contains("Мих") || kniga.contains("Міх")) {
+        if (kniga == "Мих" || kniga == "Міх") {
             bible[0] = "Мих"
             bible[1] = "Михея"
             bible[2] = "Міхея"
             bible[3] = "40"
         }
-        if (kniga.contains("Наум") || kniga.contains("Нвм")) {
+        if (kniga == "Наум" || kniga == "Нвм") {
             bible[0] = "Наум"
             bible[1] = "Наума"
             bible[2] = "Навума"
             bible[3] = "41"
         }
-        if (kniga.contains("Авв") || kniga.contains("Абк")) {
+        if (kniga == "Авв" || kniga == "Абк") {
             bible[0] = "Аввакум"
             bible[1] = "Аввакума"
             bible[2] = "Абакума"
             bible[3] = "42"
         }
-        if (kniga.contains("Соф") || kniga.contains("Саф")) {
+        if (kniga == "Соф" || kniga == "Саф") {
             bible[0] = "Сафония"
             bible[1] = "Софонии"
             bible[2] = "Сафона"
             bible[3] = "43"
         }
-        if (kniga.contains("Агг") || kniga.contains("Аг")) {
+        if (kniga == "Агг" || kniga == "Аг") {
             bible[0] = "Аггей"
             bible[1] = "Аггея"
             bible[2] = "Агея"
             bible[3] = "44"
         }
-        if (kniga.contains("Зах")) {
+        if (kniga == "Зах") {
             bible[0] = "Зах"
             bible[1] = "Захарии"
             bible[2] = "Захарыі"
             bible[3] = "45"
         }
-        if (kniga.contains("Мал")) {
+        if (kniga == "Мал") {
             bible[0] = "Мал"
             bible[1] = "Малахии"
             bible[2] = "Малахіі"
             bible[3] = "46"
         }
-        if (kniga.contains("1 Мак")) {
+        if (kniga == "1 Мак") {
             bible[0] = "1 Мак"
             bible[1] = "1 Маккавейская"
             bible[2] = "1 Макабэяў"
@@ -857,7 +859,7 @@ class ParalelnyeMesta {
             bible[4] = "1-я Маккавейская"
             bible[5] = "1-я Макабэяў"
         }
-        if (kniga.contains("2 Мак")) {
+        if (kniga == "2 Мак") {
             bible[0] = "2 Мак"
             bible[1] = "2 Маккавейская"
             bible[2] = "2 Макабэяў"
@@ -865,7 +867,7 @@ class ParalelnyeMesta {
             bible[4] = "2-я Маккавейская"
             bible[5] = "2-я Макабэяў"
         }
-        if (kniga.contains("3 Мак")) {
+        if (kniga == "3 Мак") {
             bible[0] = "3 Мак"
             bible[1] = "3 Маккавейская"
             bible[2] = "3 Макабэяў"
@@ -873,38 +875,38 @@ class ParalelnyeMesta {
             bible[4] = "3-я Маккавейская"
             bible[5] = "3-я Макабэяў"
         }
-        if (kniga.contains("3 Езд") || kniga.contains("3 Эзд")) {
+        if (kniga == "3 Езд" || kniga == "3 Эзд") {
             bible[1] = "3 Ездры"
             bible[2] = "3 Эздры"
             bible[3] = "50"
             bible[4] = "3-я Ездры"
             bible[5] = "3-я Эздры"
         }
-        if (kniga.contains("Мф") || kniga.contains("Мц")) {
+        if (kniga == "Мф" || kniga == "Мц") {
             bible[0] = "Мф"
             bible[1] = "От Матфея"
             bible[2] = "Паводле Мацьвея"
             bible[3] = "51"
         }
-        if (kniga.contains("Мк")) {
+        if (kniga == "Мк") {
             bible[0] = "Мк"
             bible[1] = "От Марка"
             bible[2] = "Паводле Марка"
             bible[3] = "52"
         }
-        if (kniga.contains("Лк")) {
+        if (kniga == "Лк") {
             bible[0] = "Лк"
             bible[1] = "От Луки"
             bible[2] = "Паводле Лукаша"
             bible[3] = "53"
         }
-        if (kniga.contains("Ин") || kniga.contains("Ян")) {
+        if (kniga == "Ин" || kniga == "Ян") {
             bible[0] = "Ин"
             bible[1] = "От Иоанна"
             bible[2] = "Паводле Яна"
             bible[3] = "54"
         }
-        if (kniga.contains("Деян") || kniga.contains("Дз")) {
+        if (kniga == "Деян" || kniga == "Дз") {
             bible[0] = "Деян"
             bible[1] = "Деяния"
             bible[2] = "Дзеі"
@@ -912,13 +914,13 @@ class ParalelnyeMesta {
             bible[4] = "Деяния святых апостолов"
             bible[5] = "Дзеі Апосталаў"
         }
-        if (kniga.contains("Иак") || kniga.contains("Як")) {
+        if (kniga == "Иак" || kniga == "Як") {
             bible[0] = "Иак"
             bible[1] = "Иакова"
             bible[2] = "Якава"
             bible[3] = "56"
         }
-        if (kniga.contains("1 Пет") || kniga.contains("1 Пт")) {
+        if (kniga == "1 Пет" || kniga == "1 Пт") {
             bible[0] = "1 Петр"
             bible[1] = "1 Петра"
             bible[2] = "1 Пятра"
@@ -926,7 +928,7 @@ class ParalelnyeMesta {
             bible[4] = "1-е Петра"
             bible[5] = "1-е Пятра"
         }
-        if (kniga.contains("2 Пет") || kniga.contains("2 Пт")) {
+        if (kniga == "2 Пет" || kniga == "2 Пт") {
             bible[0] = "2 Петр"
             bible[1] = "2 Петра"
             bible[2] = "2 Пятра"
@@ -934,7 +936,7 @@ class ParalelnyeMesta {
             bible[4] = "2-е Петра"
             bible[5] = "2-е Пятра"
         }
-        if (kniga.contains("1 Ин") || kniga.contains("1 Ян")) {
+        if (kniga == "1 Ин" || kniga == "1 Ян") {
             bible[0] = "1 Ин"
             bible[1] = "1 Иоанна"
             bible[2] = "1 Яна"
@@ -942,7 +944,7 @@ class ParalelnyeMesta {
             bible[4] = "1-е Иоанна"
             bible[5] = "1-е Яна"
         }
-        if (kniga.contains("2 Ин") || kniga.contains("2 Ян")) {
+        if (kniga == "2 Ин" || kniga == "2 Ян") {
             bible[0] = "2 Ин"
             bible[1] = "2 Иоанна"
             bible[2] = "2 Яна"
@@ -950,7 +952,7 @@ class ParalelnyeMesta {
             bible[4] = "2-е Иоанна"
             bible[5] = "2-е Яна"
         }
-        if (kniga.contains("3 Ин") || kniga.contains("3 Ян")) {
+        if (kniga == "3 Ин" || kniga == "3 Ян") {
             bible[0] = "3 Ин"
             bible[1] = "3 Иоанна"
             bible[2] = "3 Яна"
@@ -958,19 +960,19 @@ class ParalelnyeMesta {
             bible[4] = "3-е Иоанна"
             bible[5] = "3-е Яна"
         }
-        if (kniga.contains("Иуд") || kniga.contains("Юд") && !kniga.contains("Юдт")) {
+        if (kniga == "Иуд" || kniga == "Юд") {
             bible[0] = "Иуд"
             bible[1] = "Иуды"
             bible[2] = "Юды"
             bible[3] = "62"
         }
-        if (kniga.contains("Рим") || kniga.contains("Рым")) {
+        if (kniga == "Рим" || kniga == "Рым") {
             bible[0] = "Рим"
             bible[1] = "Римлянам"
             bible[2] = "Да Рымлянаў"
             bible[3] = "63"
         }
-        if (kniga.contains("1 Кор") || kniga.contains("1 Кар")) {
+        if (kniga == "1 Кор" || kniga == "1 Кар") {
             bible[0] = "1 Кор"
             bible[1] = "1 Коринфянам"
             bible[2] = "1 да Карынфянаў"
@@ -978,7 +980,7 @@ class ParalelnyeMesta {
             bible[4] = "1-е Коринфянам"
             bible[5] = "1-е да Карынфянаў"
         }
-        if (kniga.contains("2 Кор") || kniga.contains("2 Кар")) {
+        if (kniga == "2 Кор" || kniga == "2 Кар") {
             bible[0] = "2 Кор"
             bible[1] = "2 Коринфянам"
             bible[2] = "2 да Карынфянаў"
@@ -986,31 +988,31 @@ class ParalelnyeMesta {
             bible[4] = "2-е Коринфянам"
             bible[5] = "2-е да Карынфянаў"
         }
-        if (kniga.contains("Гал")) {
+        if (kniga == "Гал") {
             bible[0] = "Гал"
             bible[1] = "Галатам"
             bible[2] = "Да Галятаў"
             bible[3] = "66"
         }
-        if (kniga.contains("Еф") || kniga.contains("Эф")) {
+        if (kniga == "Еф" || kniga == "Эф") {
             bible[0] = "Еф"
             bible[1] = "Ефесянам"
             bible[2] = "Да Эфэсянаў"
             bible[3] = "67"
         }
-        if (kniga.contains("Флп") || kniga.contains("Плп")) {
+        if (kniga == "Флп" || kniga == "Плп") {
             bible[0] = "Флп"
             bible[1] = "Филиппийцам"
             bible[2] = "Да Піліпянаў"
             bible[3] = "68"
         }
-        if (kniga.contains("Кол") || kniga.contains("Клс")) {
+        if (kniga == "Кол" || kniga == "Клс") {
             bible[0] = "Кол"
             bible[1] = "Колоссянам"
             bible[2] = "Да Каласянаў"
             bible[3] = "69"
         }
-        if (kniga.contains("1 Фес")) {
+        if (kniga == "1 Фес") {
             bible[0] = "1 Фес"
             bible[1] = "1 Фессалоникийцам" // (Солунянам)
             bible[2] = "1 да Фесаланікійцаў"
@@ -1018,7 +1020,7 @@ class ParalelnyeMesta {
             bible[4] = "1-е Фессалоникийцам" // (Солунянам)
             bible[5] = "1-е да Фесаланікійцаў"
         }
-        if (kniga.contains("2 Фес")) {
+        if (kniga == "2 Фес") {
             bible[0] = "2 Фес"
             bible[1] = "2 Фессалоникийцам" // (Солунянам)
             bible[2] = "2 да Фесаланікійцаў"
@@ -1026,7 +1028,7 @@ class ParalelnyeMesta {
             bible[4] = "2-е Фессалоникийцам" // (Солунянам)
             bible[5] = "2-е да Фесаланікійцаў"
         }
-        if (kniga.contains("1 Тим") || kniga.contains("1 Цім")) {
+        if (kniga == "1 Тим" || kniga == "1 Цім") {
             bible[0] = "1 Тим"
             bible[1] = "1 Тимофею"
             bible[2] = "1 да Цімафея"
@@ -1034,7 +1036,7 @@ class ParalelnyeMesta {
             bible[4] = "1-е Тимофею"
             bible[5] = "1-е да Цімафея"
         }
-        if (kniga.contains("2 Тим") || kniga.contains("2 Цім")) {
+        if (kniga == "2 Тим" || kniga == "2 Цім") {
             bible[0] = "2 Тим"
             bible[1] = "2 Тимофею"
             bible[2] = "2 да Цімафея"
@@ -1042,25 +1044,25 @@ class ParalelnyeMesta {
             bible[4] = "2-е Тимофею"
             bible[5] = "2-е да Цімафея"
         }
-        if (kniga.contains("Тит") || kniga.contains("Ціт")) {
+        if (kniga == "Тит" || kniga == "Ціт") {
             bible[0] = "Тит"
             bible[1] = "Титу"
             bible[2] = "Да Ціта"
             bible[3] = "74"
         }
-        if (kniga.contains("Флм")) {
+        if (kniga == "Флм") {
             bible[0] = "Флм"
             bible[1] = "Филимону"
             bible[2] = "Да Філімона"
             bible[3] = "75"
         }
-        if (kniga.contains("Евр") || kniga.contains("Гбр")) {
+        if (kniga == "Евр" || kniga == "Гбр") {
             bible[0] = "Евр"
             bible[1] = "Евреям"
             bible[2] = "Да Габрэяў"
             bible[3] = "76"
         }
-        if (kniga.contains("Откр") || kniga.contains("Адкр")) {
+        if (kniga == "Откр" || kniga == "Адкр") {
             bible[0] = "Откр"
             bible[1] = "Откровение"
             bible[2] = "Адкрыцьцё"

@@ -926,14 +926,15 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     }
                 } else {
                     // Только Семуха
-                    maranAta.add("<!--no--><br><strong>$nazvaFullBel $fit</strong><br>\n")
+                    maranAta.add("<!--no--><br><strong>$nazvaFullBel ${fit.substring(s2 + 1)}</strong><br>\n")
                     maranAta.add("<!--no--><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>\n")
                 }
             } catch (t: Throwable) {
+                val t1 = fit.lastIndexOf(" ")
                 if (belarus) {
-                    maranAta.add("<!--no--><br><strong>$nazvaFullBel $fit</strong><br>\n")
+                    maranAta.add("<!--no--><br><strong>$nazvaFullBel ${fit.substring(t1 + 1)}</strong><br>\n")
                 } else {
-                    maranAta.add("<!--no--><br><strong>$nazvaFull $fit</strong><br>\n")
+                    maranAta.add("<!--no--><br><strong>$nazvaFull ${fit.substring(t1 + 1)}</strong><br>\n")
                 }
                 maranAta.add("<!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch) + "\n")
             }

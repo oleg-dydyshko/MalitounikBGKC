@@ -21,154 +21,154 @@ class ParalelnyeMesta {
         var textViewZag: TextViewRobotoCondensed
         var textViewOpis: TextViewRobotoCondensed
         if (semuxa) {
-            if (cytanneSours1.contains("Быт")) {
+            if (cytanneSours1 == "Быт") {
                 cytanneSours1 = cytanneSours1.replace("Быт", "Быц")
             }
             if (cytanneSours1 == "Исх") {
                 cytanneSours1 = cytanneSours1.replace("Исх", "Вых")
             }
-            if (cytanneSours1.contains("Лев")) {
+            if (cytanneSours1 == "Лев") {
                 cytanneSours1 = cytanneSours1.replace("Лев", "Ляв")
             }
-            if (cytanneSours1.contains("Числа")) {
+            if (cytanneSours1 == "Числа") {
                 cytanneSours1 = cytanneSours1.replace("Числа", "Лікі")
             }
-            if (cytanneSours1.contains("Втор")) {
+            if (cytanneSours1 == "Втор") {
                 cytanneSours1 = cytanneSours1.replace("Втор", "Дрг")
             }
-            if (cytanneSours1.contains("Руфь")) {
+            if (cytanneSours1 == "Руфь") {
                 cytanneSours1 = cytanneSours1.replace("Руфь", "Рут")
             }
-            if (cytanneSours1.contains("1 Пар")) {
+            if (cytanneSours1 == "1 Пар") {
                 cytanneSours1 = cytanneSours1.replace("1 Пар", "1 Лет")
             }
-            if (cytanneSours1.contains("2 Пар")) {
+            if (cytanneSours1 == "2 Пар") {
                 cytanneSours1 = cytanneSours1.replace("2 Пар", "2 Лет")
             }
-            if (cytanneSours1.contains("1 Езд")) {
+            if (cytanneSours1 == "1 Езд") {
                 cytanneSours1 = cytanneSours1.replace("1 Езд", "1 Эзд")
             }
-            if (cytanneSours1.contains("Неем")) {
+            if (cytanneSours1 == "Неем") {
                 cytanneSours1 = cytanneSours1.replace("Неем", "Нээм")
             }
-            if (cytanneSours1.contains("Есф")) {
+            if (cytanneSours1 == "Есф") {
                 cytanneSours1 = cytanneSours1.replace("Есф", "Эст")
             }
-            if (cytanneSours1.contains("Иов")) {
+            if (cytanneSours1 == "Иов") {
                 cytanneSours1 = cytanneSours1.replace("Иов", "Ёва")
             }
-            if (cytanneSours1.contains("Притч")) {
+            if (cytanneSours1 == "Притч") {
                 cytanneSours1 = cytanneSours1.replace("Притч", "Высл")
             }
-            if (cytanneSours1.contains("Еккл")) {
+            if (cytanneSours1 == "Еккл") {
                 cytanneSours1 = cytanneSours1.replace("Еккл", "Экл")
             }
-            if (cytanneSours1.contains("Песн")) {
+            if (cytanneSours1 == "Песн") {
                 cytanneSours1 = cytanneSours1.replace("Песн", "Псн")
             }
             if (cytanneSours1 == "Ис") {
                 cytanneSours1 = cytanneSours1.replace("Ис", "Іс")
             }
-            if (cytanneSours1.contains("Посл Иер")) {
+            if (cytanneSours1 == "Посл Иер") {
                 cytanneSours1 = cytanneSours1.replace("Посл Иер", "Пасл Ер")
             }
-            if (cytanneSours1.contains("Иер")) {
+            if (cytanneSours1 == "Иер") {
                 cytanneSours1 = cytanneSours1.replace("Иер", "Ер")
             }
-            if (cytanneSours1.contains("Иез")) {
+            if (cytanneSours1 == "Иез") {
                 cytanneSours1 = cytanneSours1.replace("Иез", "Езк")
             }
-            if (cytanneSours1.contains("Ос")) {
+            if (cytanneSours1 == "Ос") {
                 cytanneSours1 = cytanneSours1.replace("Ос", "Ас")
             }
-            if (cytanneSours1.contains("Иоиль")) {
+            if (cytanneSours1 == "Иоиль") {
                 cytanneSours1 = cytanneSours1.replace("Иоиль", "Ёіл")
             }
-            if (cytanneSours1.contains("Авдий")) {
+            if (cytanneSours1 == "Авдий") {
                 cytanneSours1 = cytanneSours1.replace("Авдий", "Аўдз")
             }
-            if (cytanneSours1.contains("Иона")) {
+            if (cytanneSours1 == "Иона") {
                 cytanneSours1 = cytanneSours1.replace("Иона", "Ёны")
             }
-            if (cytanneSours1.contains("Мих")) {
+            if (cytanneSours1 == "Мих") {
                 cytanneSours1 = cytanneSours1.replace("Мих", "Міх")
             }
-            if (cytanneSours1.contains("Наум")) {
+            if (cytanneSours1 == "Наум") {
                 cytanneSours1 = cytanneSours1.replace("Наум", "Нвм")
             }
-            if (cytanneSours1.contains("Аввакум")) {
+            if (cytanneSours1 == "Аввакум") {
                 cytanneSours1 = cytanneSours1.replace("Аввакум", "Абк")
             }
-            if (cytanneSours1.contains("Сафония")) {
+            if (cytanneSours1 == "Сафония") {
                 cytanneSours1 = cytanneSours1.replace("Сафония", "Саф")
             }
-            if (cytanneSours1.contains("Аггей")) {
+            if (cytanneSours1 == "Аггей") {
                 cytanneSours1 = cytanneSours1.replace("Аггей", "Аг")
             }
-            if (cytanneSours1.contains("Мф")) {
+            if (cytanneSours1 == "Мф") {
                 cytanneSours1 = cytanneSours1.replace("Мф", "Мц")
             }
-            if (cytanneSours1.contains("Лк")) {
+            if (cytanneSours1 == "Лк") {
                 cytanneSours1 = cytanneSours1.replace("Лк", "Лук")
             }
-            if (cytanneSours1.contains("Ин")) {
+            if (cytanneSours1 == "Ин") {
                 cytanneSours1 = cytanneSours1.replace("Ин", "Ян")
             }
-            if (cytanneSours1.contains("Деян")) {
+            if (cytanneSours1 == "Деян") {
                 cytanneSours1 = cytanneSours1.replace("Деян", "Дз")
             }
-            if (cytanneSours1.contains("Иак")) {
+            if (cytanneSours1 == "Иак") {
                 cytanneSours1 = cytanneSours1.replace("Иак", "Як")
             }
-            if (cytanneSours1.contains("1 Пет")) {
+            if (cytanneSours1 == "1 Пет") {
                 cytanneSours1 = cytanneSours1.replace("1 Пет", "1 Пт")
             }
-            if (cytanneSours1.contains("2 Пет")) {
+            if (cytanneSours1 == "2 Пет") {
                 cytanneSours1 = cytanneSours1.replace("2 Пет", "2 Пт")
             }
-            if (cytanneSours1.contains("1 Ин")) {
+            if (cytanneSours1 == "1 Ин") {
                 cytanneSours1 = cytanneSours1.replace("1 Ин", "1 Ян")
             }
-            if (cytanneSours1.contains("2 Ин")) {
+            if (cytanneSours1 == "2 Ин") {
                 cytanneSours1 = cytanneSours1.replace("2 Ин", "2 Ян")
             }
-            if (cytanneSours1.contains("3 Ин")) {
+            if (cytanneSours1 == "3 Ин") {
                 cytanneSours1 = cytanneSours1.replace("3 Ин", "3 Ян")
             }
-            if (cytanneSours1.contains("Иуд")) {
+            if (cytanneSours1 == "Иуд") {
                 cytanneSours1 = cytanneSours1.replace("Иуд", "Юд")
             }
-            if (cytanneSours1.contains("Рим")) {
+            if (cytanneSours1 == "Рим") {
                 cytanneSours1 = cytanneSours1.replace("Рим", "Рым")
             }
-            if (cytanneSours1.contains("1 Кор")) {
+            if (cytanneSours1 == "1 Кор") {
                 cytanneSours1 = cytanneSours1.replace("1 Кор", "1 Кар")
             }
-            if (cytanneSours1.contains("2 Кор")) {
+            if (cytanneSours1 == "2 Кор") {
                 cytanneSours1 = cytanneSours1.replace("2 Кор", "2 Кар")
             }
-            if (cytanneSours1.contains("Еф")) {
+            if (cytanneSours1 == "Еф") {
                 cytanneSours1 = cytanneSours1.replace("Еф", "Эф")
             }
-            if (cytanneSours1.contains("Флп")) {
+            if (cytanneSours1 == "Флп") {
                 cytanneSours1 = cytanneSours1.replace("Флп", "Плп")
             }
-            if (cytanneSours1.contains("Кол")) {
+            if (cytanneSours1 == "Кол") {
                 cytanneSours1 = cytanneSours1.replace("Кол", "Клс")
             }
-            if (cytanneSours1.contains("1 Тим")) {
+            if (cytanneSours1 == "1 Тим") {
                 cytanneSours1 = cytanneSours1.replace("1 Тим", "1 Цім")
             }
-            if (cytanneSours1.contains("2 Тим")) {
+            if (cytanneSours1 == "2 Тим") {
                 cytanneSours1 = cytanneSours1.replace("2 Тим", "2 Цім")
             }
-            if (cytanneSours1.contains("Тит")) {
+            if (cytanneSours1 == "Тит") {
                 cytanneSours1 = cytanneSours1.replace("Тит", "Ціт")
             }
-            if (cytanneSours1.contains("Евр")) {
+            if (cytanneSours1 == "Евр") {
                 cytanneSours1 = cytanneSours1.replace("Евр", "Гбр")
             }
-            if (cytanneSours1.contains("Откр")) {
+            if (cytanneSours1 == "Откр") {
                 cytanneSours1 = cytanneSours1.replace("Откр", "Адкр")
             }
         }
@@ -195,7 +195,7 @@ class ParalelnyeMesta {
             var nachalo: String
             var konec: String
             // Пс 88:12-13; 135:5; 145:6; Сир 18:1; Ин 1:3; Пс 22
-// Быт 13:15; 15:7, 18, 15-16; 26:3-4; Втор 34:4; 1 Тим 2:13
+            // Быт 13:15; 15:7, 18, 15-16; 26:3-4; Втор 34:4; 1 Тим 2:13
             val split = fit.split(",")
             for (aSplit in split) {
                 val splitres = aSplit.trim()
@@ -204,7 +204,6 @@ class ParalelnyeMesta {
                     knigaName = splitres.substring(0, t2)
                 }
                 val bible = biblia(knigaName)
-                //val kniga = bible[0]
                 var nazva = bible[1]
                 val nazvaBel = bible[2]
                 val nomer = bible[3].toInt()

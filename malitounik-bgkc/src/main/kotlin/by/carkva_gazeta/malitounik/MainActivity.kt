@@ -590,6 +590,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 prefEditors.putInt("pegistr", 0)
                 prefEditors.putInt("slovocalkam", 0)
                 prefEditors.putInt("biblia_seash", 0)
+                prefEditors.putBoolean("autoscroll", false)
                 prefEditors.apply()
                 setPadzeia = true
                 setDataCalendar = -1

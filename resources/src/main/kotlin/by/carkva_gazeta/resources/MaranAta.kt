@@ -92,7 +92,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var paralelPosition = 0
     private var tollBarText = ""
     private var mPosition = 0
-    private var maranAtaScrollPasition = 0
+    private var maranAtaScrollPosition = 0
     private var mOffset = 0
     private val uiAnimationDelay: Long = 300
     private val orientation: Int
@@ -143,7 +143,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         dzenNoch = k.getBoolean("dzen_noch", false)
         belarus = k.getBoolean("belarus", false)
         spid = k.getInt("autoscrollSpid", 60)
-        maranAtaScrollPasition = k.getInt("maranAtaScrollPasition", 0)
+        maranAtaScrollPosition = k.getInt("maranAtaScrollPasition", 0)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -167,7 +167,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         adapter = MaranAtaListAdaprer(this)
         ListView.adapter = adapter
         ListView.divider = null
-        ListView.setSelection(maranAtaScrollPasition)
+        ListView.setSelection(maranAtaScrollPosition)
         cytanne = intent.extras?.getString("cytanneMaranaty") ?: ""
         setMaranata(cytanne)
         if (savedInstanceState != null) {
@@ -190,15 +190,15 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
                     if (list.adapter == null || list.getChildAt(0) == null) return
                     val position = list.firstVisiblePosition
-                    maranAtaScrollPasition = position
+                    maranAtaScrollPosition = position
                     if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
                         autoscroll = false
-                        maranAtaScrollPasition = 0
+                        //maranAtaScrollPasition = 0
                         stopAutoScroll()
-                        val prefEditors = k.edit()
+                        /*val prefEditors = k.edit()
                         prefEditors.putBoolean("autoscroll", false)
                         prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPasition)
-                        prefEditors.apply()
+                        prefEditors.apply()*/
                         invalidateOptionsMenu()
                     }
                     setFont = false
@@ -432,6 +432,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             orientation
         } else {
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+        ListView.post {
+            ListView.smoothScrollToPosition(maranAtaScrollPosition)
         }
     }
 
@@ -1099,8 +1102,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         linearLayout4.visibility = View.GONE
         linearLayout5.visibility = View.GONE
         val prefEditors = k.edit()
-        maranAtaScrollPasition = ListView.firstVisiblePosition
-        prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPasition)
+        maranAtaScrollPosition = ListView.firstVisiblePosition
+        prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
         prefEditors.apply()
         scrollTimer.cancel()
         autoscrollTimer.cancel()
@@ -1182,7 +1185,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         if (id == android.R.id.home) {
             if (paralel) {

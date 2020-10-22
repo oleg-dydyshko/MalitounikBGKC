@@ -546,7 +546,8 @@ class ParalelnyeMesta {
 
     fun biblia(chtenie: String): Array<String> {
         val t1 = chtenie.lastIndexOf(" ")
-        val kniga = chtenie.substring(0, t1)
+        val kniga = if (t1 != -1) chtenie.substring(0, t1)
+        else chtenie
         val bible = arrayOf("Быт", "Бытие", "Быцьцё", "1", "", "")
         if (kniga == "Быт" || kniga == "Быц") {
             bible[0] = "Быт" // Сокращение по русски

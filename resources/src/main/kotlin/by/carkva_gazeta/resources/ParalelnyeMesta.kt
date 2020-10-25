@@ -201,7 +201,7 @@ class ParalelnyeMesta {
                 val splitres = aSplit.trim()
                 val t2 = splitres.lastIndexOf(" ")
                 if (t2 != -1) {
-                    knigaName = splitres.substring(0, t2)
+                    knigaName = splitres
                 }
                 val bible = biblia(knigaName)
                 var nazva = bible[1]

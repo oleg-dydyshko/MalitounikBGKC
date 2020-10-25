@@ -193,12 +193,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     maranAtaScrollPosition = position
                     if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
                         autoscroll = false
-                        //maranAtaScrollPasition = 0
                         stopAutoScroll()
-                        /*val prefEditors = k.edit()
+                        val prefEditors = k.edit()
                         prefEditors.putBoolean("autoscroll", false)
-                        prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPasition)
-                        prefEditors.apply()*/
+                        prefEditors.apply()
                         invalidateOptionsMenu()
                     }
                     setFont = false

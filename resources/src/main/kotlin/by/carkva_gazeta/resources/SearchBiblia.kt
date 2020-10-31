@@ -979,7 +979,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         var glava = 0
                         val split = reader.readText().split("===")
                         inputStream.close()
-                        for (e in 1 until split.size) {
+                        (1 until split.size).forEach { e ->
                             glava++
                             val bibleline = split[e].split("\n")
                             var stix = 0

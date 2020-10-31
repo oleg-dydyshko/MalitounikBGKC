@@ -1219,14 +1219,12 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 val inputStream = context.resources.openRawResource(raw.nadsan_psaltyr)
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
-                var glava = 0
                 val split = reader.readText().split("===")
                 inputStream.close()
-                for (e in 1 until split.size) {
-                    glava++
+                for ((glava, e) in (1 until split.size).withIndex()) {
                     val bibleline = split[e].split("\n")
                     var stix = 0
-                    for (r in 1 until bibleline.size) {
+                    (1 until bibleline.size).forEach { r ->
                         stix++
                         var prepinanie = bibleline[r]
                         if (chin?.getInt("pegistr", 0) == 0) prepinanie = prepinanie.toLowerCase(Locale.getDefault())

@@ -302,16 +302,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 if (strText.contains("Да Габрэяў")) nazva = 25
                 if (strText.contains("Адкрыцьцё (Апакаліпсіс)")) nazva = 26
             }
-            val str1: Int
-            str1 = if (zavet == 3) {
-                strText.indexOf("Пс. ")
-            } else {
-                strText.indexOf("Гл. ")
-            }
-            val str2 = strText.indexOf("</strong>")
+            val str1 = strText.indexOf("glava.")
+            val str2 = strText.indexOf("-->")
             val str3 = strText.indexOf("<!--stix.")
-            val str4 = strText.indexOf("-->")
-            val glava = strText.substring(str1 + 4, str2).toInt()
+            val str4 = strText.indexOf("::")
+            val glava = strText.substring(str1 + 6, str2).toInt()
             val stix = strText.substring(str3 + 9, str4).toInt()
             if (zavet == 3) {
                 val intent = Intent(this@SearchBiblia, NadsanContentActivity::class.java)
@@ -777,9 +772,15 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                     var color = "<font color=#d00505>"
                     if (dzenNoch) color = "<font color=#f44336>"
                     for (item in results.values as ArrayList<*>) {
-                        val itm = item.toString().toLowerCase(Locale.getDefault()).indexOf(constraint.toString().toLowerCase(Locale.getDefault()))
+                        var t1 = item.toString().toLowerCase(Locale.getDefault()).indexOf("-->")
+                        if (t1 == -1) t1 = 0
+                        else t1+=3
+                        val itm = item.toString().toLowerCase(Locale.getDefault()).indexOf(constraint.toString().toLowerCase(Locale.getDefault()), t1)
                         val itmcount = constraint.toString().length
-                        add(item.toString().substring(0, itm) + color + item.toString().substring(itm, itm + itmcount) + "</font>" + item.toString().substring(itm + itmcount))
+                        if (itm != -1)
+                            add(item.toString().substring(0, itm) + color + item.toString().substring(itm, itm + itmcount) + "</font>" + item.toString().substring(itm + itmcount))
+                        else
+                            add(item.toString())
                     }
                     textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, results.count)
                 }
@@ -1013,7 +1014,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                         t1 += count
                                         val t2 = poshuk1.length
                                         aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
-                                        seashpost.add("<!--stix.$stix--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
+                                        seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                     }
                                 } else {
                                     if (prepinanie.contains(poshuk1)) {
@@ -1022,7 +1023,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                         t1 += count
                                         val t2 = poshuk1.length
                                         aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
-                                        seashpost.add("<!--stix.$stix--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
+                                        seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                     }
                                 }
                             }
@@ -1171,7 +1172,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                         t1 += count
                                         val t2 = poshuk1.length
                                         aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
-                                        seashpost.add("<!--stix.$stix--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
+                                        seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                     }
                                 } else {
                                     if (prepinanie.contains(poshuk1)) {
@@ -1180,7 +1181,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                         t1 += count
                                         val t2 = poshuk1.length
                                         aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
-                                        seashpost.add("<!--stix.$stix--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
+                                        seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                     }
                                 }
                             }
@@ -1251,7 +1252,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                 t1 += count
                                 val t2 = poshuk1.length
                                 aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
-                                seashpost.add("<!--stix.$stix--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")
+                                seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")
                             }
                         } else {
                             if (prepinanie.contains(poshuk1)) {
@@ -1260,7 +1261,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                 t1 += count
                                 val t2 = poshuk1.length
                                 aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
-                                seashpost.add("<!--stix.$stix--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")
+                                seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")
                             }
                         }
                     }

@@ -132,7 +132,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                 }
                 if (check) {
-                    MenuVybranoe.vybranoe.add(VybranoeData(vybranoeIndex(), resurs, title))
+                    MenuVybranoe.vybranoe.add(0, VybranoeData(vybranoeIndex(), resurs, title))
                 }
                 file.writer().use {
                     it.write(gson.toJson(MenuVybranoe.vybranoe))

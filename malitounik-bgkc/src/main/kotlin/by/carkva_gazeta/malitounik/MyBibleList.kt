@@ -302,7 +302,7 @@ class MyBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDelite
                 }
             }
             if (remove)
-                arrayListVybranoe.add(VybranoeBibliaData(knigaglava, "$title ${glava + 1}", kniga, glava + 1, novyZavet, bibleName))
+                arrayListVybranoe.add(0, VybranoeBibliaData(knigaglava, "$title ${glava + 1}", kniga, glava + 1, novyZavet, bibleName))
             val gson = Gson()
             val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val prefEditors = k.edit()

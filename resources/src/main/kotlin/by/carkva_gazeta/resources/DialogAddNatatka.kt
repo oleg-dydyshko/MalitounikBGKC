@@ -124,7 +124,7 @@ class DialogAddNatatka : DialogFragment() {
                     fileNatatka.delete()
                 }
             }
-            MenuNatatki.myNatatkiFiles.add(MyNatatkiFiles(i, gc.timeInMillis, nazva))
+            MenuNatatki.myNatatkiFiles.add(0, MyNatatkiFiles(i, gc.timeInMillis, nazva))
             val file = File(activity.filesDir.toString() + "/Malitva/$imiafile")
             MenuNatatki.myNatatkiFilesSort = k.getInt("natatki_sort", 0)
             MenuNatatki.myNatatkiFiles.sort()

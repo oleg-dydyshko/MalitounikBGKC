@@ -1651,6 +1651,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
 
         @Suppress("DEPRECATION")
+        fun toHtml(html: Spannable): String {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Html.toHtml(html, Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL)
+            } else {
+                Html.toHtml(html)
+            }
+        }
+
+        @Suppress("DEPRECATION")
         fun isNetworkAvailable(context: Context): Boolean {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

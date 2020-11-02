@@ -244,7 +244,7 @@ class Widget : AppWidgetProvider() {
                 dataSviatyia = data[day][4]
             }
             if (data[day][8] != "") {
-                dataSviatyia = data[day][8] + ";<br>" + dataSviatyia
+                dataSviatyia = data[day][8] + "<br>" + dataSviatyia
             }
             if (data[day][18] == "1") {
                 dataSviatyia = dataSviatyia + "<br><strong>" + context.getString(R.string.pamerlyia) + "</strong>"

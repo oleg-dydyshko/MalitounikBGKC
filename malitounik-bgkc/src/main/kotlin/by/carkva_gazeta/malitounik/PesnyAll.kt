@@ -473,7 +473,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 }
                 }*/
                 if (check) {
-                    MenuVybranoe.vybranoe.add(VybranoeData(vybranoeIndex(), resurs, title))
+                    MenuVybranoe.vybranoe.add(0, VybranoeData(vybranoeIndex(), resurs, title))
                 }
                 //MenuVybranoe.vybranoe.sort()
                 file.writer().use {

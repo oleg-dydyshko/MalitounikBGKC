@@ -294,7 +294,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             if (men) {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
                 if (!MyBibleList.checkVybranoe("3")) {
-                    MenuVybranoe.vybranoe.add(VybranoeData(Bogashlugbovya.vybranoeIndex(), "3", getString(by.carkva_gazeta.malitounik.R.string.title_psalter)))
+                    MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "3", getString(by.carkva_gazeta.malitounik.R.string.title_psalter)))
                     val gson = Gson()
                     val file = File("$filesDir/Vybranoe.json")
                     file.writer().use {

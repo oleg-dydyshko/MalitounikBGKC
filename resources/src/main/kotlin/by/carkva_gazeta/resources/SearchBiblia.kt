@@ -5,11 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -38,7 +41,7 @@ import kotlin.collections.ArrayList
  * Created by oleg on 5.10.16
  */
 class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSearshListiner, DialogClearHishory.DialogClearHistoryListener {
-    private var seash: ArrayList<String> = ArrayList()
+    private var seash: ArrayList<Spannable> = ArrayList()
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
     private lateinit var chin: SharedPreferences
@@ -106,8 +109,16 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             if (chin.getString("search_array", "") != "") {
                 val gson = Gson()
                 val json = chin.getString("search_array", "")
-                val type = object : TypeToken<ArrayList<String?>?>() {}.type
-                seash.addAll(gson.fromJson(json, type))
+                val type = object : TypeToken<ArrayList<String>>() {}.type
+                val arrayList = ArrayList<String>()
+                arrayList.addAll(gson.fromJson(json, type))
+                arrayList.forEach {
+                    var str = it.replace("<p dir=\"ltr\" style=\"margin-top:0; margin-bottom:0;\">", "")
+                    str = str.replace("</p>", "<br>")
+                    val t1 = str.lastIndexOf("<br>")
+                    val span = MainActivity.fromHtml(str.substring(0, t1)) as Spannable
+                    seash.add(span)
+                }
                 actionExpandOn = true
             }
         }
@@ -445,6 +456,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     val edit = autoCompleteTextView?.text.toString()
                     if (edit.length >= 3) {
+                        searche = true
                         addHistory(edit)
                         saveHistory()
                         Histopy.visibility = View.GONE
@@ -454,7 +466,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.seashmin))
                     }
                 }
-                false
+                true
             }
         }
         if (view is ViewGroup) {
@@ -626,7 +638,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         }
     }
 
-    private fun doInBackground(searche: String): ArrayList<String> {
+    private fun doInBackground(searche: String): ArrayList<Spannable> {
         return when (zavet) {
             1 -> semuxa(this@SearchBiblia, searche)
             2 -> sinoidal(this@SearchBiblia, searche)
@@ -635,7 +647,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         }
     }
 
-    private fun onPostExecute(result: ArrayList<String>) {
+    private fun onPostExecute(result: ArrayList<Spannable>) {
         adapter.addAll(result)
         adapter.filter.filter(editText2?.text.toString())
         textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, adapter.count)
@@ -643,9 +655,14 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             ListView?.post { ListView.setSelection(chin.getInt("search_position", 0)) }
         }
         progressBar.visibility = View.GONE
+        Histopy.visibility = View.GONE
         ListView.visibility = View.VISIBLE
+        val arrayList = ArrayList<String>()
+        result.forEach {
+            arrayList.add(MainActivity.toHtml(it))
+        }
         val gson = Gson()
-        val json = gson.toJson(result)
+        val json = gson.toJson(arrayList)
         prefEditors.putString("search_array", json)
         prefEditors.apply()
         searche = false
@@ -706,11 +723,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     }
 
-    internal inner class SearchBibliaListAdaprer(context: Activity) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, seash) {
+    internal inner class SearchBibliaListAdaprer(context: Activity) : ArrayAdapter<Spannable>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, seash) {
         private val k: SharedPreferences = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        private val origData: ArrayList<String> = ArrayList(seash)
+        private val origData: ArrayList<Spannable> = ArrayList(seash)
         private val activity: Activity = context
-        override fun addAll(collection: Collection<String>) {
+        override fun addAll(collection: Collection<Spannable>) {
             super.addAll(collection)
             origData.addAll(collection)
         }
@@ -733,7 +750,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            viewHolder.text?.text = MainActivity.fromHtml(seash[position])
+            val t1 = seash[position].indexOf("-->")
+            viewHolder.text?.text = seash[position].subSequence(t1 + 3, seash[position].length)
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
@@ -752,9 +770,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                     charSequence = charSequence.toString().toLowerCase(Locale.getDefault())
                     val result = FilterResults()
                     if (charSequence.toString().isNotEmpty()) {
-                        val founded = ArrayList<String>()
+                        val founded = ArrayList<Spannable>()
                         for (item in origData) {
-                            if (item.toLowerCase(Locale.getDefault()).contains(charSequence)) {
+                            if (item.contains(charSequence)) {
                                 founded.add(item)
                             }
                         }
@@ -769,18 +787,22 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
                 override fun publishResults(constraint: CharSequence, results: FilterResults) {
                     clear()
-                    var color = "<font color=#d00505>"
-                    if (dzenNoch) color = "<font color=#f44336>"
+                    var color = by.carkva_gazeta.malitounik.R.color.colorPrimary //"<font color=#d00505>"
+                    if (dzenNoch) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black //"<font color=#f44336>"
                     for (item in results.values as ArrayList<*>) {
-                        var t1 = item.toString().toLowerCase(Locale.getDefault()).indexOf("-->")
+                        var t1 = (item as Spannable).indexOf("-->")
                         if (t1 == -1) t1 = 0
-                        else t1+=3
-                        val itm = item.toString().toLowerCase(Locale.getDefault()).indexOf(constraint.toString().toLowerCase(Locale.getDefault()), t1)
+                        else t1 += 3
+                        val itm = item.indexOf(constraint.toString(), t1, true)
                         val itmcount = constraint.toString().length
-                        if (itm != -1)
-                            add(item.toString().substring(0, itm) + color + item.toString().substring(itm, itm + itmcount) + "</font>" + item.toString().substring(itm + itmcount))
-                        else
-                            add(item.toString())
+                        if (itm != -1) {
+                            val span = SpannableString(item)
+                            span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), itm, itm + itmcount, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            add(span)
+                            //add(item.toString().substring(0, itm) + color + item.toString().substring(itm, itm + itmcount) + "</font>" + item.toString().substring(itm + itmcount))
+                        } else {
+                            add(item)
+                        }
                     }
                     textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, results.count)
                 }
@@ -878,11 +900,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             return replase1
         }
 
-        private fun semuxa(context: Context, poshuk: String): ArrayList<String> {
+        private fun semuxa(context: Context, poshuk: String): ArrayList<Spannable> {
             var poshuk1 = poshuk
             val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin?.getBoolean("dzen_noch", false)
-            val seashpost = ArrayList<String>()
+            val seashpost = ArrayList<Spannable>()
             if (poshuk1 != "") {
                 poshuk1 = zamena(poshuk1)
                 if (chin?.getInt("pegistr", 0) == 0) poshuk1 = poshuk1.toLowerCase(Locale.getDefault())
@@ -899,8 +921,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 } else {
                     poshuk1 = " $poshuk1 "
                 }
-                var color = "<font color=#d00505>"
-                if (dzenNoch == true) color = "<font color=#f44336>"
+                var color = by.carkva_gazeta.malitounik.R.color.colorPrimary //"<font color=#d00505>"
+                if (dzenNoch == true) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black //"<font color=#f44336>"
                 for (i in 0 until setSemuxaBible.size) {
                     var biblia = "biblia"
                     if (chin?.getInt("biblia_seash", 0) == 1) biblia = "biblian"
@@ -992,15 +1014,15 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                 stix++
                                 if (chin?.getInt("slovocalkam", 0) == 1) prepinanie = " " + bibleline[r] + " "
                                 if (chin?.getInt("pegistr", 0) == 0) prepinanie = prepinanie.toLowerCase(Locale.getDefault())
-                                val t1a = prepinanie.indexOf(poshuk1)
+                                //val t1a = prepinanie.indexOf(poshuk1)
                                 prepinanie = prepinanie.replace(",", "")
                                 prepinanie = prepinanie.replace(".", "")
                                 prepinanie = prepinanie.replace(";", "")
                                 prepinanie = prepinanie.replace(":", "")
                                 prepinanie = prepinanie.replace("-", "")
                                 prepinanie = prepinanie.replace("\"", "")
-                                var count = 0
-                                if (t1a != -1) count = t1a - prepinanie.indexOf(poshuk1)
+                                //var count = 0
+                                //if (t1a != -1) count = t1a - prepinanie.indexOf(poshuk1)
                                 prepinanie = prepinanie.replace("ё", "е")
                                 prepinanie = prepinanie.replace("<em>", "")
                                 prepinanie = prepinanie.replace("</em>", " ")
@@ -1009,21 +1031,33 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                 prepinanie = prepinanie.replace("</strong>", " ")
                                 if (chin?.getInt("slovocalkam", 0) == 0) {
                                     if (prepinanie.contains(poshuk1)) {
-                                        var aSviatyia = bibleline[r]
-                                        var t1 = prepinanie.indexOf(poshuk1)
-                                        t1 += count
+                                        val aSviatyia = bibleline[r]
+                                        //aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
+                                        val title = "$nazva Гл. $glava".length
+                                        val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                        val t3 = span.indexOf("-->")
+                                        val t1 = span.indexOf(poshuk1)
+                                        //t1 += count
                                         val t2 = poshuk1.length
-                                        aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
-                                        seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
+                                        span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        seashpost.add(span)
+                                        //seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                     }
                                 } else {
                                     if (prepinanie.contains(poshuk1)) {
-                                        var aSviatyia = bibleline[r]
-                                        var t1 = prepinanie.indexOf(poshuk1)
-                                        t1 += count
+                                        val aSviatyia = bibleline[r]
                                         val t2 = poshuk1.length
-                                        aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
-                                        seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
+                                        val title = "$nazva Гл. $glava".length
+                                        val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                        val t3 = span.indexOf("-->")
+                                        val t1 = span.indexOf(poshuk1)
+                                        //t1 += count
+                                        span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        seashpost.add(span)
+                                        //aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
+                                        //seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                     }
                                 }
                             }
@@ -1034,11 +1068,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             return seashpost
         }
 
-        private fun sinoidal(context: Context, poshuk: String): ArrayList<String> {
+        private fun sinoidal(context: Context, poshuk: String): ArrayList<Spannable> {
             var poshuk1 = poshuk
             val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            val seashpost = ArrayList<String>()
+            val seashpost = ArrayList<Spannable>()
             if (poshuk1 != "") {
                 poshuk1 = poshuk1.replace("ё", "е")
                 if (chin?.getInt("pegistr", 0) == 0) poshuk1 = poshuk1.toLowerCase(Locale.getDefault())
@@ -1053,8 +1087,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 } else {
                     poshuk1 = " $poshuk1 "
                 }
-                var color = "<font color=#d00505>"
-                if (dzenNoch) color = "<font color=#f44336>"
+                var color = by.carkva_gazeta.malitounik.R.color.colorPrimary //"<font color=#d00505>"
+                if (dzenNoch) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black //"<font color=#f44336>"
                 for (i in 0 until setSinodalBible.size) {
                     var biblia = "sinaidal"
                     if (chin?.getInt("biblia_seash", 0) == 1) biblia = "sinaidaln"
@@ -1144,16 +1178,16 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         var glava = 0
                         val split = reader.readText().split("===")
                         inputStream.close()
-                        for (e in 1 until split.size) {
+                        (1 until split.size).forEach { e ->
                             glava++
                             val bibleline = split[e].split("\n")
                             var stix = 0
-                            for (r in 1 until bibleline.size) {
+                            (1 until bibleline.size).forEach { r ->
                                 stix++
                                 var prepinanie = bibleline[r]
                                 if (chin?.getInt("slovocalkam", 0) == 1) prepinanie = " " + bibleline[r] + " "
                                 if (chin?.getInt("pegistr", 0) == 0) prepinanie = prepinanie.toLowerCase(Locale.getDefault())
-                                val t1a = prepinanie.indexOf(poshuk1)
+                                //val t1a = prepinanie.indexOf(poshuk1)
                                 prepinanie = prepinanie.replace(",", "")
                                 prepinanie = prepinanie.replace(".", "")
                                 prepinanie = prepinanie.replace(";", "")
@@ -1162,26 +1196,38 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                 prepinanie = prepinanie.replace("]", "")
                                 prepinanie = prepinanie.replace("-", "")
                                 prepinanie = prepinanie.replace("\"", "")
-                                var count = 0
-                                if (t1a != -1) count = t1a - prepinanie.indexOf(poshuk1)
+                                //var count = 0
+                                //if (t1a != -1) count = t1a - prepinanie.indexOf(poshuk1)
                                 prepinanie = prepinanie.replace("ё", "е")
                                 if (chin?.getInt("slovocalkam", 0) == 0) {
                                     if (prepinanie.contains(poshuk1)) {
-                                        var aSviatyia = bibleline[r]
-                                        var t1 = prepinanie.indexOf(poshuk1)
-                                        t1 += count
+                                        val aSviatyia = bibleline[r]
                                         val t2 = poshuk1.length
-                                        aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
-                                        seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
+                                        val title = "$nazva Гл. $glava".length
+                                        val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                        val t3 = span.indexOf("-->")
+                                        val t1 = span.indexOf(poshuk1)
+                                        //t1 += count
+                                        span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        seashpost.add(span)
+                                        //aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
+                                        //seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                     }
                                 } else {
                                     if (prepinanie.contains(poshuk1)) {
-                                        var aSviatyia = bibleline[r]
-                                        var t1 = prepinanie.indexOf(poshuk1)
-                                        t1 += count
+                                        val aSviatyia = bibleline[r]
                                         val t2 = poshuk1.length
-                                        aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
-                                        seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
+                                        val title = "$nazva Гл. $glava".length
+                                        val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                        val t3 = span.indexOf("-->")
+                                        val t1 = span.indexOf(poshuk1)
+                                        //t1 += count
+                                        span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        seashpost.add(span)
+                                        //aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
+                                        //seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                     }
                                 }
                             }
@@ -1192,11 +1238,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             return seashpost
         }
 
-        private fun nadsan(context: Context, poshuk: String): ArrayList<String> {
+        private fun nadsan(context: Context, poshuk: String): ArrayList<Spannable> {
             var poshuk1 = poshuk
             val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            val seashpost = ArrayList<String>()
+            val seashpost = ArrayList<Spannable>()
             if (poshuk1 != "") {
                 poshuk1 = zamena(poshuk1)
                 if (chin?.getInt("pegistr", 0) == 0) poshuk1 = poshuk1.toLowerCase(Locale.getDefault())
@@ -1213,8 +1259,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 } else {
                     poshuk1 = " $poshuk1 "
                 }
-                var color = "<font color=#d00505>"
-                if (dzenNoch) color = "<font color=#f44336>"
+                var color = by.carkva_gazeta.malitounik.R.color.colorPrimary //"<font color=#d00505>"
+                if (dzenNoch) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black //"<font color=#f44336>"
                 val nazva = "Псалтыр"
                 val inputStream = context.resources.openRawResource(raw.nadsan_psaltyr)
                 val isr = InputStreamReader(inputStream)
@@ -1228,15 +1274,15 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         stix++
                         var prepinanie = bibleline[r]
                         if (chin?.getInt("pegistr", 0) == 0) prepinanie = prepinanie.toLowerCase(Locale.getDefault())
-                        val t1a = prepinanie.indexOf(poshuk1)
+                        //val t1a = prepinanie.indexOf(poshuk1)
                         prepinanie = prepinanie.replace(",", "")
                         prepinanie = prepinanie.replace(".", "")
                         prepinanie = prepinanie.replace(";", "")
                         prepinanie = prepinanie.replace(":", "")
                         prepinanie = prepinanie.replace("-", "")
                         prepinanie = prepinanie.replace("\"", "")
-                        var count = 0
-                        if (t1a != -1) count = t1a - prepinanie.indexOf(poshuk1)
+                        //var count = 0
+                        //if (t1a != -1) count = t1a - prepinanie.indexOf(poshuk1)
                         prepinanie = prepinanie.replace("ё", "е")
                         prepinanie = prepinanie.replace("<em>", "")
                         prepinanie = prepinanie.replace("</em>", " ")
@@ -1245,21 +1291,33 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         prepinanie = prepinanie.replace("</strong>", " ")
                         if (chin?.getInt("slovocalkam", 0) == 0) {
                             if (prepinanie.contains(poshuk1)) {
-                                var aSviatyia = bibleline[r]
-                                var t1 = prepinanie.indexOf(poshuk1)
-                                t1 += count
+                                val aSviatyia = bibleline[r]
                                 val t2 = poshuk1.length
-                                aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
-                                seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")
+                                val title = "$nazva Гл. $glava".length
+                                val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                val t3 = span.indexOf("-->")
+                                val t1 = span.indexOf(poshuk1)
+                                //t1 += count
+                                span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                seashpost.add(span)
+                                //aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
+                                //seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")
                             }
                         } else {
                             if (prepinanie.contains(poshuk1)) {
-                                var aSviatyia = bibleline[r]
-                                var t1 = prepinanie.indexOf(poshuk1)
-                                t1 += count
+                                val aSviatyia = bibleline[r]
                                 val t2 = poshuk1.length
-                                aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
-                                seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")
+                                val title = "$nazva Гл. $glava".length
+                                val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                val t3 = span.indexOf("-->")
+                                val t1 = span.indexOf(poshuk1)
+                                //t1 += count
+                                span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                seashpost.add(span)
+                                //aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
+                                //seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")
                             }
                         }
                     }

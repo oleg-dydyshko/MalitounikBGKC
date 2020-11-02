@@ -1036,11 +1036,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                         val title = "$nazva Гл. $glava".length
                                         val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
                                         val t3 = span.indexOf("-->")
-                                        val t1 = span.indexOf(poshuk1)
+                                        val t1 = span.indexOf(poshuk1, ignoreCase = true)
                                         //t1 += count
                                         val t2 = poshuk1.length
                                         span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                                         seashpost.add(span)
                                         //seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
                                     }
@@ -1051,10 +1051,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                         val title = "$nazva Гл. $glava".length
                                         val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
                                         val t3 = span.indexOf("-->")
-                                        val t1 = span.indexOf(poshuk1)
+                                        val t1 = span.indexOf(poshuk1, ignoreCase = true)
                                         //t1 += count
                                         span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                                         seashpost.add(span)
                                         //aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
                                         //seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
@@ -1206,10 +1206,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                         val title = "$nazva Гл. $glava".length
                                         val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
                                         val t3 = span.indexOf("-->")
-                                        val t1 = span.indexOf(poshuk1)
+                                        val t1 = span.indexOf(poshuk1, ignoreCase = true)
                                         //t1 += count
                                         span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                                         seashpost.add(span)
                                         //aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
                                         //seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
@@ -1221,10 +1221,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                         val title = "$nazva Гл. $glava".length
                                         val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
                                         val t3 = span.indexOf("-->")
-                                        val t1 = span.indexOf(poshuk1)
+                                        val t1 = span.indexOf(poshuk1, ignoreCase = true)
                                         //t1 += count
                                         span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                                         seashpost.add(span)
                                         //aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
                                         //seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Гл. $glava</strong><br>$aSviatyia")
@@ -1296,10 +1296,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                 val title = "$nazva Гл. $glava".length
                                 val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
                                 val t3 = span.indexOf("-->")
-                                val t1 = span.indexOf(poshuk1)
+                                val t1 = span.indexOf(poshuk1, ignoreCase = true)
                                 //t1 += count
                                 span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                                 seashpost.add(span)
                                 //aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
                                 //seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")
@@ -1311,10 +1311,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                 val title = "$nazva Гл. $glava".length
                                 val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
                                 val t3 = span.indexOf("-->")
-                                val t1 = span.indexOf(poshuk1)
+                                val t1 = span.indexOf(poshuk1, ignoreCase = true)
                                 //t1 += count
                                 span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                                 seashpost.add(span)
                                 //aSviatyia = aSviatyia.substring(0, t1) + color + aSviatyia.substring(t1, t1 + t2) + "</font>" + aSviatyia.substring(t1 + t2)
                                 //seashpost.add("<!--stix.$stix::glava.$glava--><strong>$nazva Пс. $glava</strong><br>$aSviatyia")

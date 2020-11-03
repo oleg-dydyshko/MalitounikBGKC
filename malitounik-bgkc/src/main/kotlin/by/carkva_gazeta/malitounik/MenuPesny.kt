@@ -90,19 +90,19 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                         startPosukPesen(searchViewQwery)
                     }
                     searchViewQwery.length in 1..2 -> {
-                        Histopy.visibility = View.VISIBLE
+                        History.visibility = View.VISIBLE
                         ListView.visibility = View.GONE
                     }
                     else -> {
-                        Histopy.visibility = View.GONE
+                        History.visibility = View.GONE
                         ListView.visibility = View.VISIBLE
                     }
                 }
             }
             historyAdapter = HistoryAdapter(fraragment, history, true)
-            Histopy.adapter = historyAdapter
-            Histopy.onItemClickListener = this
-            Histopy.setOnItemLongClickListener { _, _, position, _ ->
+            History.adapter = historyAdapter
+            History.onItemClickListener = this
+            History.setOnItemLongClickListener { _, _, position, _ ->
                 fragmentManager?.let {
                     val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
                     dialogClearHishory.show(it, "dialogClearHishory")
@@ -243,7 +243,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                     adapter.notifyDataSetChanged()
                     menu.findItem(R.id.count).isVisible = search
                 }
-                Histopy.visibility = View.GONE
+                History.visibility = View.GONE
                 ListView.visibility = View.VISIBLE
                 return true
             }
@@ -441,11 +441,11 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                     edit.length >= 3 -> {
                         stopPosukPesen()
                         startPosukPesen(edit)
-                        Histopy.visibility = View.GONE
+                        History.visibility = View.GONE
                         ListView.visibility = View.VISIBLE
                     }
                     edit.length in 1..2 -> {
-                        Histopy.visibility = View.VISIBLE
+                        History.visibility = View.VISIBLE
                         ListView.visibility = View.GONE
                         textViewCount?.text = "(0)"
                     }
@@ -455,7 +455,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                         menuList.sort()
                         adapter.notifyDataSetChanged()
                         textViewCount?.text = getString(R.string.seash, menuList.size)
-                        Histopy.visibility = View.GONE
+                        History.visibility = View.GONE
                         ListView.visibility = View.VISIBLE
                     }
                 }

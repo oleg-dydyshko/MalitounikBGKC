@@ -214,8 +214,8 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         }
         //loadHistory()
         historyAdapter = HistoryAdapter(this, history)
-        Histopy.adapter = historyAdapter
-        Histopy.setOnItemClickListener { _, _, position, _ ->
+        History.adapter = historyAdapter
+        History.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
             }
@@ -229,7 +229,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             saveHistopy()
             actionExpandOn = false
         }
-        Histopy.setOnItemLongClickListener { _, _, position, _ ->
+        History.setOnItemLongClickListener { _, _, position, _ ->
             val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
             return@setOnItemLongClickListener true
@@ -291,7 +291,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         if (actionExpandOn) {
             searchViewItem.expandActionView()
             if (history.size > 0) {
-                Histopy.visibility = View.VISIBLE
+                History.visibility = View.VISIBLE
                 ListView.visibility = View.GONE
             }
         }
@@ -374,10 +374,10 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
                 }
             }
             if (editPosition == 0 && actionExpandOn) {
-                Histopy.visibility = View.VISIBLE
+                History.visibility = View.VISIBLE
                 ListView.visibility = View.GONE
             } else {
-                Histopy.visibility = View.GONE
+                History.visibility = View.GONE
                 ListView.visibility = View.VISIBLE
             }
             adapter.filter.filter(edit)

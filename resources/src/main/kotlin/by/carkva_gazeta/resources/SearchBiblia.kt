@@ -74,7 +74,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 addHistory(it)
                 saveHistory()
                 execute(edit)
-                Histopy.visibility = View.GONE
+                History.visibility = View.GONE
                 ListView.visibility = View.VISIBLE
             }
         }
@@ -375,8 +375,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             }
         }
         historyAdapter = HistoryAdapter(this, history)
-        Histopy.adapter = historyAdapter
-        Histopy.setOnItemClickListener { _, _, position, _ ->
+        History.adapter = historyAdapter
+        History.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
             }
@@ -384,7 +384,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             val edit = history[position]
             addHistory(edit)
             saveHistory()
-            Histopy.visibility = View.GONE
+            History.visibility = View.GONE
             ListView.visibility = View.VISIBLE
             searche = true
             prefEditors.putString("search_string", edit)
@@ -393,7 +393,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             searchView?.clearFocus()
             execute(edit)
         }
-        Histopy.setOnItemLongClickListener { _, _, position, _ ->
+        History.setOnItemLongClickListener { _, _, position, _ ->
             val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
             return@setOnItemLongClickListener true
@@ -463,7 +463,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         searche = true
                         addHistory(edit)
                         saveHistory()
-                        Histopy.visibility = View.GONE
+                        History.visibility = View.GONE
                         ListView.visibility = View.VISIBLE
                         execute(edit)
                     } else {
@@ -659,7 +659,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             ListView?.post { ListView.setSelection(chin.getInt("search_position", 0)) }
         }
         progressBar.visibility = View.GONE
-        Histopy.visibility = View.GONE
+        History.visibility = View.GONE
         ListView.visibility = View.VISIBLE
         val arrayList = ArrayList<String>()
         result.forEach {
@@ -705,18 +705,18 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             }
             if (editText?.id == by.carkva_gazeta.malitounik.R.id.search_src_text) {
                 if (actionExpandOn && editPosition != 0) {
-                    Histopy.visibility = View.GONE
+                    History.visibility = View.GONE
                     ListView.visibility = View.VISIBLE
                     actionExpandOn = false
                 } else {
                     if (searche && editPosition != 0) {
-                        Histopy.visibility = View.GONE
+                        History.visibility = View.GONE
                         ListView.visibility = View.VISIBLE
                         editText.clearFocus()
                         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(editText.windowToken, 0)
                     } else {
-                        Histopy.visibility = View.VISIBLE
+                        History.visibility = View.VISIBLE
                         ListView.visibility = View.GONE
                         textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
                     }

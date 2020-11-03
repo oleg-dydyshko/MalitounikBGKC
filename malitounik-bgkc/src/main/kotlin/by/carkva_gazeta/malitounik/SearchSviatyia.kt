@@ -182,12 +182,12 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                 //editText.setSelection(editPosition)
             }
         } else {
-            Histopy.visibility = View.VISIBLE
+            History.visibility = View.VISIBLE
             ListView.visibility = View.GONE
         }
         historyAdapter = HistoryAdapter(this, history, true)
-        Histopy.adapter = historyAdapter
-        Histopy.setOnItemClickListener { _, _, position, _ ->
+        History.adapter = historyAdapter
+        History.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
             }
@@ -204,7 +204,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             saveHistopy()
             finish()
         }
-        Histopy.setOnItemLongClickListener { _, _, position, _ ->
+        History.setOnItemLongClickListener { _, _, position, _ ->
             val t1 = history[position].indexOf("</em><br>")
             val hishoryResult = history[position].substring(t1 + 9)
             val dialogClearHishory = DialogClearHishory.getInstance(position, MainActivity.fromHtml(hishoryResult).toString())
@@ -222,11 +222,11 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                 stopPosukSviatyx()
                 startPosukSviatyx(searchSvityxString)
             } else {
-                Histopy.visibility = View.VISIBLE
+                History.visibility = View.VISIBLE
                 ListView.visibility = View.GONE
             }
         } else if (searchSvityxString.length < 3) {
-            Histopy.visibility = View.VISIBLE
+            History.visibility = View.VISIBLE
             ListView.visibility = View.GONE
         }
         adapter = SearchListAdapter(this, arrayRes)
@@ -585,7 +585,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                 if (edit.length >= 3) {
                     stopPosukSviatyx()
                     startPosukSviatyx(edit)
-                    Histopy.visibility = View.GONE
+                    History.visibility = View.GONE
                     ListView.visibility = View.VISIBLE
                 } else {
                     if (actionExpandOn) {
@@ -598,7 +598,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                         prefEditors.putString("search_svityx_array", json)
                         prefEditors.putString("search_svityx_string", edit)
                         prefEditors.apply()
-                        Histopy.visibility = View.VISIBLE
+                        History.visibility = View.VISIBLE
                         ListView.visibility = View.GONE
                     }
                 }

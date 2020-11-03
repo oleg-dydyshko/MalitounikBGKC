@@ -113,7 +113,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 val arrayList = ArrayList<String>()
                 arrayList.addAll(gson.fromJson(json, type))
                 arrayList.forEach {
-                    var str = it.replace("<p dir=\"ltr\" style=\"margin-top:0; margin-bottom:0;\">", "")
+                    val p = it
+                    val t2 = p.indexOf("<p")
+                    val t3 = p.indexOf(">", t2)
+                    val subP = p.substring(t2, t3 + 1)
+                    var str = p.replace(subP, "")
                     str = str.replace("</p>", "<br>")
                     val t1 = str.lastIndexOf("<br>")
                     val span = MainActivity.fromHtml(str.substring(0, t1)) as Spannable

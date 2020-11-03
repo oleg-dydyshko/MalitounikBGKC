@@ -585,6 +585,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 prefEditors.putString("search_svityx_string", "")
                 prefEditors.putString("search_string", "")
                 prefEditors.putString("search_array", "")
+                prefEditors.putString("search_string_filter", "")
                 prefEditors.putInt("search_bible_fierstPosition", 0)
                 prefEditors.putInt("search_position", 0)
                 prefEditors.putInt("pegistr", 0)

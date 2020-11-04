@@ -40,6 +40,7 @@
         android:id="@+id/ListView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:listSelector="@drawable/selector_white"
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/textSearch"
         app:layout_constraintEnd_toEndOf="parent"

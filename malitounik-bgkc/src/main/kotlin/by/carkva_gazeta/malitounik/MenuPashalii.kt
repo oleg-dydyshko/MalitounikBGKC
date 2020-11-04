@@ -73,6 +73,8 @@ class MenuPashalii : PashaliiFragment() {
                 setArrayPasha(savedInstanceState.getInt("year"))
             myArrayAdapter = MyArrayAdapter(it)
             pasha.adapter = myArrayAdapter
+            pasha.selector = ContextCompat.getDrawable(it, android.R.color.transparent)
+            pasha.isClickable = false
         }
     }
 
@@ -160,12 +162,12 @@ class MenuPashalii : PashaliiFragment() {
             var colorP = R.color.colorPrimary
             if (k.getBoolean("dzen_noch", false)) {
                 ea.textView?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
-                ea.textView?.setBackgroundResource(R.drawable.selector_dark)
+                //ea.textView?.setBackgroundResource(R.drawable.selector_dark)
                 color = R.color.colorIcons
                 colorP = R.color.colorPrimary_black
-            } else {
+            } /*else {
                 ea.textView?.setBackgroundResource(R.drawable.selector_white)
-            }
+            }*/
             val c = Calendar.getInstance() as GregorianCalendar
             val pasxa = SpannableStringBuilder(pasxi[position].katolic)
             if (!pasxi[position].sovpadenie) {
@@ -186,10 +188,8 @@ class MenuPashalii : PashaliiFragment() {
                 }
             }
             ea.textView?.text = pasxa
-
             return rootView
         }
-
     }
 
     private class ViewHolder {

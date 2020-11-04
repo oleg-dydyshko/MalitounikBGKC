@@ -39,6 +39,20 @@ class MenuCviaty : CviatyListFragment() {
     override fun setCviatyYear(year: Int) {
         this.year = year
         list = getPrazdnik(activity, year)
+        activity?.let {
+            if (SettingsActivity.GET_CALIANDAR_YEAR_MAX >= year) {
+                listView.isClickable = true
+                val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+                if (k.getBoolean("dzen_noch", false)) {
+                    listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
+                } else {
+                    listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_white)
+                }
+            } else {
+                listView.isClickable = false
+                listView.selector = ContextCompat.getDrawable(it, android.R.color.transparent)
+            }
+        }
         myArrayAdapter.notifyDataSetChanged()
     }
 

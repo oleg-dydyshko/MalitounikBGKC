@@ -490,9 +490,9 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            } else {
+            } /*else {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-            }
+            }*/
             return rootView
         }
     }

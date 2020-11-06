@@ -136,7 +136,7 @@ class DialogPrazdnik : DialogFragment() {
             viewHolder.text?.text = arrayList[position].toString()
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (dzenNoch) {
-                viewHolder.text?.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_dialog_font_dark)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
             } else {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
@@ -152,10 +152,10 @@ class DialogPrazdnik : DialogFragment() {
             if (gc[Calendar.YEAR] == arrayList[position]) text.setTypeface(null, Typeface.BOLD) else text.setTypeface(null, Typeface.NORMAL)
             text.text = arrayList[position].toString()
             if (dzenNoch) {
-                text.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
+                text.setBackgroundResource(R.drawable.selector_dialog_font_dark)
                 text.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
             } else {
-                text.setBackgroundResource(R.color.colorIcons)
+                text.setBackgroundResource(R.drawable.selector_white)
             }
             return v
         }

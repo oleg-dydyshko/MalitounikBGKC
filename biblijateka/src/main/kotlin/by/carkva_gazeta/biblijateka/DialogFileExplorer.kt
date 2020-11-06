@@ -245,7 +245,7 @@ class DialogFileExplorer : DialogFragment() {
             image?.setBounds(0, 0, 48 * density, 48 * density)
             viewHolder.text?.setCompoundDrawables(image, null, null, null)
             if (dzenNoch) {
-                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark_ligte)
+                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dialog_font_dark)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, by.carkva_gazeta.malitounik.R.color.colorIcons))
             } else {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_white)

@@ -396,9 +396,9 @@ class StaryZapavietSinaidalList : AppCompatActivity() {
             if (dzenNoch) {
                 textGroup.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
                 textGroup.setBackgroundResource(R.drawable.selector_dark)
-            } else {
+            } /*else {
                 textGroup.setBackgroundResource(R.drawable.selector_white)
-            }
+            }*/
             when (groupPosition) {
                 0 -> textGroup.text = "Бытие"
                 1 -> textGroup.text = "Исход"
@@ -464,9 +464,9 @@ class StaryZapavietSinaidalList : AppCompatActivity() {
                 textChild.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
                 textChild.setBackgroundResource(R.drawable.selector_dark)
                 textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            } else {
+            } /*else {
                 textChild.setBackgroundResource(R.drawable.selector_white)
-            }
+            }*/
             textChild.text = groups[groupPosition][childPosition]
             return rootView
         }

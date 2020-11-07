@@ -48,6 +48,7 @@
             android:layout_marginRight="8dp"
             android:drawablePadding="10dp"
             android:padding="10dp"
+            android:textColor="@color/colorPrimary_text"
             app:drawableLeftCompat="@drawable/stiker"
             app:drawableStartCompat="@drawable/stiker"
             app:layout_constraintBottom_toBottomOf="parent"

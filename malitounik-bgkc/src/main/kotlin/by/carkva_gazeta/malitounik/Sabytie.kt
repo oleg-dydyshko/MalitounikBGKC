@@ -2384,10 +2384,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 itemRight.setBackgroundResource(R.color.colorprimary_material_dark)
                 view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_dark)
                 textview.setTextColor(ContextCompat.getColor(parent.context, R.color.colorIcons))
-            } else {
+            } /*else {
                 textview.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_text))
                 view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_default)
-            }
+            }*/
             return ViewHolder(view)
         }
 
@@ -2520,10 +2520,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 itemRight.setBackgroundResource(R.color.colorprimary_material_dark)
                 dragTextView.setTextColor(ContextCompat.getColor(mycontext, R.color.colorIcons))
                 dragView.findViewById<View>(R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, R.color.colorprimary_material_dark))
-            } else {
+            } /*else {
                 dragTextView.setTextColor(ContextCompat.getColor(mycontext, R.color.colorPrimary_text))
                 dragView.findViewById<View>(R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, R.color.colorDivider))
-            }
+            }*/
         }
     }
 

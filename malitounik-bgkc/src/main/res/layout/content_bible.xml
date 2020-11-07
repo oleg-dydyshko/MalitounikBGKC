@@ -36,5 +36,6 @@
         android:id="@+id/elvMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:listSelector="@drawable/selector_default"
         android:scrollbars="none" />
 </LinearLayout>

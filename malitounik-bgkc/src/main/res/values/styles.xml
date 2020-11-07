@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:windowBackground">@color/colorIcons</item>
         <item name="android:colorBackground">@color/colorIcons</item>
         <item name="android:textColorPrimary">@color/colorPrimary_text</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorPrimaryDark</item>
         <item name="android:textColorSecondary">@color/colorSecondary_text</item>
-        <!--<item name="colorControlNormal">#d32f2f</item>
-        <item name="colorControlActivated">#ff5722</item>
-        <item name="colorControlHighlight">#f44336</item>-->
-        <!--<item name="android:colorForeground">@color/colorforeground_material_light</item>-->
+        <!--<item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>-->
         <item name="fontFamily">sans-serif-condensed</item>
     </style>
 
-    <style name="Theme.Transparent" parent="AppTheme.NoActionBar">
+    <style name="Theme.Transparent" parent="AppTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -26,28 +23,23 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="AppTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="fontFamily">sans-serif-condensed</item>
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
-        <item name="fontFamily">sans-serif-condensed</item>
-    </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppCompatDark" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorAccent">@color/colorPrimary_black</item>
+    <style name="AppCompatDark" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorprimary_material_dark</item>
         <item name="colorPrimaryDark">@color/colorPrimary_text</item>
-        <item name="android:textColorPrimary">@color/colorIcons</item>
+        <item name="colorAccent">@color/colorPrimary_black</item>
+        <item name="android:windowBackground">@color/colorbackground_material_dark</item>
         <item name="android:colorBackground">@color/colorbackground_material_dark</item>
-        <!--<item name="android:colorForeground">@color/colorforeground_material_dark</item>-->
+        <item name="android:textColorPrimary">@color/colorIcons</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorPrimary_text</item>
+        <item name="android:textColorSecondary">@color/colorSecondary_text</item>
         <item name="fontFamily">sans-serif-condensed</item>
-    </style>
-
-    <style name="SplashTheme" parent="AppTheme.NoActionBar">
-        <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 </resources>

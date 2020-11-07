@@ -1349,6 +1349,8 @@ class SettingsActivity : AppCompatActivity() {
             dzair.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             praf.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             pkc.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
         }
         if (k.getInt("pkc", 0) == 1) pkc.isChecked = true
         if (k.getInt("pravas", 0) == 1) prav.isChecked = true

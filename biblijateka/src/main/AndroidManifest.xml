@@ -17,7 +17,7 @@
         <activity
             android:name=".BibliotekaView"
             android:label="Бібліятэка Царквы"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme">
         </activity>
     </application>
 </manifest>

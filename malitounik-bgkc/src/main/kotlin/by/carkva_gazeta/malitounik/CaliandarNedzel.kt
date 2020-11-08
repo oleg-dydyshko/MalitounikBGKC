@@ -113,6 +113,7 @@ class CaliandarNedzel : ListFragment() {
 
             activity?.let {
                 listAdapter = CaliandarNedzelListAdapter(it, strings2)
+                listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_white)
             }
 
             if (setDenNedeli) {
@@ -185,7 +186,7 @@ class CaliandarNedzel : ListFragment() {
                 else viewHolder.linearLayout?.setBackgroundResource(R.drawable.calendar_nedel_today)
             } else {
                 if (dzenNoch) viewHolder.linearLayout?.setBackgroundResource(R.drawable.selector_dark)
-                else viewHolder.linearLayout?.setBackgroundResource(R.drawable.selector_white)
+                //else viewHolder.linearLayout?.setBackgroundResource(R.drawable.selector_white)
             }
             if (arrayList[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar?.text = getString(R.string.tydzen_name3, nedelName[arrayList[position][0].toInt()], arrayList[position][1], munName[arrayList[position][2].toInt()], arrayList[position][3])
             else viewHolder.textCalendar?.text = getString(R.string.tydzen_name2, nedelName[arrayList[position][0].toInt()], arrayList[position][1], munName[arrayList[position][2].toInt()])

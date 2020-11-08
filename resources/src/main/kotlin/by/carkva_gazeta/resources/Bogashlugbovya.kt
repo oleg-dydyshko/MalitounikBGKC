@@ -383,7 +383,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                                 builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 1))
                             }
                         } catch (t: Throwable) {
-                            builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
+                            builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                         }
                     }
                     if (line.contains("<PRAKIMEN></PRAKIMEN>")) {
@@ -396,7 +396,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                                 builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 2))
                             }
                         } catch (t: Throwable) {
-                            builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
+                            builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                         }
                     }
                     if (line.contains("<ALILUIA></ALILUIA>")) {
@@ -409,7 +409,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                                 builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 3))
                             }
                         } catch (t: Throwable) {
-                            builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
+                            builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                         }
                     }
                     if (line.contains("<PRICHASNIK></PRICHASNIK>")) {
@@ -422,7 +422,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                                 builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 4))
                             }
                         } catch (t: Throwable) {
-                            builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
+                            t.printStackTrace()
+                            builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                         }
                     }
                     when {
@@ -445,7 +446,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             try {
                                 builder.append(zmenyiaChastki.zmenya(1))
                             } catch (t: Throwable) {
-                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
+                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                             }
                         }
                         line.contains("<EVCH></EVCH>") -> {
@@ -467,7 +468,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             try {
                                 builder.append(zmenyiaChastki.zmenya(0))
                             } catch (t: Throwable) {
-                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.chteniaErr)).append("<br>\n")
+                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                             }
                         }
                         else -> {

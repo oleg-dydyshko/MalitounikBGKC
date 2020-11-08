@@ -7,7 +7,6 @@ import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.BufferedReader
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.*
 
@@ -257,12 +256,10 @@ internal class ZmenyiaChastki(context: Context) {
     fun traparyIKandakiNiadzelnyia(chast: Int): String {
         val kal = Calendar.getInstance() as GregorianCalendar
         if (arrayData[kal[Calendar.DATE] - 1][20] != "") {
-            val builder = StringBuilder()
-            val r = context.resources
             val w = arrayData[kal[Calendar.DATE] - 1][20]
             var result = ""
             if (w.contains("Тон 1")) {
-                val res = readFile(r.openRawResource(R.raw.ton1))
+                val res = readFile(R.raw.ton1)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
                     val tfk = res.indexOf("<!--trapark-->")
@@ -280,7 +277,7 @@ internal class ZmenyiaChastki(context: Context) {
                 }
             }
             if (w.contains("Тон 2")) {
-                val res = readFile(r.openRawResource(R.raw.ton2))
+                val res = readFile(R.raw.ton2)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
                     val tfk = res.indexOf("<!--trapark-->")
@@ -298,7 +295,7 @@ internal class ZmenyiaChastki(context: Context) {
                 }
             }
             if (w.contains("Тон 3")) {
-                val res = readFile(r.openRawResource(R.raw.ton3))
+                val res = readFile(R.raw.ton3)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
                     val tfk = res.indexOf("<!--trapark-->")
@@ -316,7 +313,7 @@ internal class ZmenyiaChastki(context: Context) {
                 }
             }
             if (w.contains("Тон 4")) {
-                val res = readFile(r.openRawResource(R.raw.ton4))
+                val res = readFile(R.raw.ton4)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
                     val tfk = res.indexOf("<!--trapark-->")
@@ -334,7 +331,7 @@ internal class ZmenyiaChastki(context: Context) {
                 }
             }
             if (w.contains("Тон 5")) {
-                val res = readFile(r.openRawResource(R.raw.ton5))
+                val res = readFile(R.raw.ton5)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
                     val tfk = res.indexOf("<!--trapark-->")
@@ -352,7 +349,7 @@ internal class ZmenyiaChastki(context: Context) {
                 }
             }
             if (w.contains("Тон 6")) {
-                val res = readFile(r.openRawResource(R.raw.ton6))
+                val res = readFile(R.raw.ton6)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
                     val tfk = res.indexOf("<!--trapark-->")
@@ -370,7 +367,7 @@ internal class ZmenyiaChastki(context: Context) {
                 }
             }
             if (w.contains("Тон 7")) {
-                val res = readFile(r.openRawResource(R.raw.ton7))
+                val res = readFile(R.raw.ton7)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
                     val tfk = res.indexOf("<!--trapark-->")
@@ -388,7 +385,7 @@ internal class ZmenyiaChastki(context: Context) {
                 }
             }
             if (w.contains("Тон 8")) {
-                val res = readFile(r.openRawResource(R.raw.ton8))
+                val res = readFile(R.raw.ton8)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
                     val tfk = res.indexOf("<!--trapark-->")
@@ -406,10 +403,11 @@ internal class ZmenyiaChastki(context: Context) {
                 }
             }
             if (chast == 4) {
-                val res = builder.toString()
-                val tfn = res.indexOf("<!--prichasnikn-->")
-                val tfk = res.indexOf("<!--prichasnikk-->")
-                result = res.substring(tfn, tfk)
+                result = if (kal[Calendar.DAY_OF_WEEK] == Calendar.SUNDAY) {
+                    readFile(R.raw.prichasnik)
+                } else {
+                    readFile(R.raw.prichasnik_budni)
+                }
             }
             return result
         }
@@ -417,10 +415,9 @@ internal class ZmenyiaChastki(context: Context) {
     }
 
     fun traparyIKandakiNaKognyDzen(day_of_week: Int, chast: Int): String {
-        val r = context.resources
         var result = ""
         if (day_of_week == 2) {
-            val res = readFile(r.openRawResource(R.raw.ton1_budni))
+            val res = readFile(R.raw.ton1_budni)
             if (chast == 1) {
                 val tfn = res.indexOf("<!--traparn-->")
                 val tfk = res.indexOf("<!--trapark-->")
@@ -443,7 +440,7 @@ internal class ZmenyiaChastki(context: Context) {
             }
         }
         if (day_of_week == 3) {
-            val res = readFile(r.openRawResource(R.raw.ton2_budni))
+            val res = readFile(R.raw.ton2_budni)
             if (chast == 1) {
                 val tfn = res.indexOf("<!--traparn-->")
                 val tfk = res.indexOf("<!--trapark-->")
@@ -466,7 +463,7 @@ internal class ZmenyiaChastki(context: Context) {
             }
         }
         if (day_of_week == 4) {
-            val res = readFile(r.openRawResource(R.raw.ton3_budni))
+            val res = readFile(R.raw.ton3_budni)
             if (chast == 1) {
                 val tfn = res.indexOf("<!--traparn-->")
                 val tfk = res.indexOf("<!--trapark-->")
@@ -489,7 +486,7 @@ internal class ZmenyiaChastki(context: Context) {
             }
         }
         if (day_of_week == 5) {
-            val res = readFile(r.openRawResource(R.raw.ton4_budni))
+            val res = readFile(R.raw.ton4_budni)
             if (chast == 1) {
                 val tfn = res.indexOf("<!--traparn-->")
                 val tfk = res.indexOf("<!--trapark-->")
@@ -512,7 +509,7 @@ internal class ZmenyiaChastki(context: Context) {
             }
         }
         if (day_of_week == 6) {
-            val res = readFile(r.openRawResource(R.raw.ton5_budni))
+            val res = readFile(R.raw.ton5_budni)
             if (chast == 1) {
                 val tfn = res.indexOf("<!--traparn-->")
                 val tfk = res.indexOf("<!--trapark-->")
@@ -535,7 +532,7 @@ internal class ZmenyiaChastki(context: Context) {
             }
         }
         if (day_of_week == 7) {
-            val res = readFile(r.openRawResource(R.raw.ton6_budni))
+            val res = readFile(R.raw.ton6_budni)
             if (chast == 1) {
                 val tfn = res.indexOf("<!--traparn-->")
                 val tfk = res.indexOf("<!--trapark-->")
@@ -560,7 +557,8 @@ internal class ZmenyiaChastki(context: Context) {
         return result
     }
 
-    private fun readFile(inputStream: InputStream): String {
+    private fun readFile(resource: Int): String {
+        val inputStream = context.resources.openRawResource(resource)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)

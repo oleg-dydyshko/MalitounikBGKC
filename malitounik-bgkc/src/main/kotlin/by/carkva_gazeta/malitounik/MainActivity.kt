@@ -526,12 +526,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }
         }
 
-        if (setAlarm) {
+        if (k.getBoolean("setAlarm", true)) {
             CoroutineScope(Dispatchers.IO).launch {
                 val notify = k.getInt("notification", 2)
                 SettingsActivity.setNotifications(this@MainActivity, notify)
+                val edit = k.edit()
+                edit.putBoolean("setAlarm", false)
+                edit.apply()
             }
-            setAlarm = false
         }
         if (setPadzeia) {
             setPadzeia = false
@@ -592,6 +594,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 prefEditors.putInt("slovocalkam", 0)
                 prefEditors.putInt("biblia_seash", 0)
                 prefEditors.putBoolean("autoscroll", false)
+                prefEditors.putBoolean("setAlarm", true)
                 prefEditors.apply()
                 setPadzeia = true
                 setDataCalendar = -1
@@ -1263,7 +1266,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }*/
 
     companion object {
-        private var setAlarm = true
         var back_pressed = 0L
         var padzeia: ArrayList<Padzeia> = ArrayList()
         var setDataCalendar = -1

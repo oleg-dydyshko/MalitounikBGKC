@@ -7,7 +7,6 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.core.content.ContextCompat
 
 /**
  * Created by oleg on 17.1.18
@@ -64,8 +63,8 @@ class MenuListAdaprer : ArrayAdapter<String> {
             viewHolder.text?.text = items?.get(position)
         viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
         if (dzenNoch) {
-            viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-            viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+            //viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
+            //viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
             viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         } /*else {
             viewHolder.text?.setBackgroundResource(R.drawable.selector_white)

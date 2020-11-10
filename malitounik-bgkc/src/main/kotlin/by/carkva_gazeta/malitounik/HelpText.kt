@@ -42,7 +42,6 @@ class HelpText : AppCompatActivity() {
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         if (dzenNoch) {
             toolbar.popupTheme = R.style.AppCompatDark
-            toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
         }
     }
 }

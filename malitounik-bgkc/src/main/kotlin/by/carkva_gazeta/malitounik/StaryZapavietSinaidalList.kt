@@ -29,6 +29,10 @@ class StaryZapavietSinaidalList : AppCompatActivity() {
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.content_bible)
+        if (dzenNoch)
+            elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        else
+            elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         val children1 = ArrayList<String>()
         val children2 = ArrayList<String>()
         val children3 = ArrayList<String>()
@@ -325,7 +329,6 @@ class StaryZapavietSinaidalList : AppCompatActivity() {
         title_toolbar.setText(R.string.stsinaidal)
         if (dzenNoch) {
             toolbar.popupTheme = R.style.AppCompatDark
-            toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
         }
     }
 
@@ -390,13 +393,13 @@ class StaryZapavietSinaidalList : AppCompatActivity() {
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = mContext.layoutInflater.inflate(R.layout.group_view, parent, false)
             val textGroup: TextViewRobotoCondensed = rootView.findViewById(R.id.textGroup)
-            val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            //val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch) {
+            //val dzenNoch = k.getBoolean("dzen_noch", false)
+            /*if (dzenNoch) {
                 textGroup.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
                 textGroup.setBackgroundResource(R.drawable.selector_dark)
-            } /*else {
+            } else {
                 textGroup.setBackgroundResource(R.drawable.selector_white)
             }*/
             when (groupPosition) {
@@ -461,8 +464,8 @@ class StaryZapavietSinaidalList : AppCompatActivity() {
             textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
-                textChild.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
-                textChild.setBackgroundResource(R.drawable.selector_dark)
+                //textChild.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                //textChild.setBackgroundResource(R.drawable.selector_dark)
                 textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             } /*else {
                 textChild.setBackgroundResource(R.drawable.selector_white)

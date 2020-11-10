@@ -39,7 +39,9 @@ class DialogSabytieSave : DialogFragment() {
         activity?.let {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            val ad = AlertDialog.Builder(it)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            val ad = AlertDialog.Builder(it, style)
             val linearLayout = LinearLayout(it)
             linearLayout.orientation = LinearLayout.VERTICAL
             val textViewZaglavie = TextViewRobotoCondensed(it)
@@ -63,14 +65,6 @@ class DialogSabytieSave : DialogFragment() {
             ad.setPositiveButton(getString(R.string.sabytie_yes)) { _: DialogInterface?, _: Int -> mListener.onDialogPositiveClick() }
             ad.setNeutralButton(getString(R.string.CANCEL)) { dialogInterface: DialogInterface, _: Int -> dialogInterface.cancel() }
             alert = ad.create()
-            alert.setOnShowListener {
-                val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                val btnNeutral = alert.getButton(Dialog.BUTTON_NEUTRAL)
-                btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            }
         }
         return alert
     }

@@ -8,6 +8,5 @@
         android:id="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 </LinearLayout>

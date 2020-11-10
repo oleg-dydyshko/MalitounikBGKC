@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.akafist_list.*
 
 /**
@@ -46,10 +47,12 @@ class MalitvyPasliaPrychascia : AppCompatActivity() {
         title_toolbar.text = resources.getText(R.string.pasliaPrychscia)
         if (dzenNoch) {
             toolbar.popupTheme = R.style.AppCompatDark
-            toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
-            title_toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
         }
 
+        if (dzenNoch)
+            ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        else
+            ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_white)
         ListView.adapter = MenuListAdaprer(this, data)
         ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {

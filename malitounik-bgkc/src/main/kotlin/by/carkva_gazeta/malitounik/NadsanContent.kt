@@ -70,7 +70,6 @@ class NadsanContent : AppCompatActivity() {
         title_toolbar.setText(R.string.title_psalter)
         if (dzenNoch) {
             toolbar.popupTheme = R.style.AppCompatDark
-            toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
         }
     }
 

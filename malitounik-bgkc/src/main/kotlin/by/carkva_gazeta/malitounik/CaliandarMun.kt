@@ -11,7 +11,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
@@ -53,16 +52,13 @@ class CaliandarMun : AppCompatActivity() {
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.calendar)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val titleToolbar: TextViewRobotoCondensed = findViewById(R.id.title_toolbar)
-        titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         sabytue = intent.getBooleanExtra("sabytie", false)
-        if (sabytue) titleToolbar.setText(R.string.get_date) else titleToolbar.setText(R.string.kaliandar)
+        if (sabytue) title_toolbar.setText(R.string.get_date) else title_toolbar.setText(R.string.kaliandar)
         if (dzenNoch) {
             toolbar.popupTheme = R.style.AppCompatDark
-            toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
         }
         c = Calendar.getInstance() as GregorianCalendar
         posMun = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]

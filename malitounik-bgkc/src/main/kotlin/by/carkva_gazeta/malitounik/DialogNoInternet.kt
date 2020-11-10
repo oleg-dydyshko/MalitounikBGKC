@@ -21,7 +21,9 @@ class DialogNoInternet : DialogFragment() {
         activity?.let {
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            val ad = AlertDialog.Builder(it)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            val ad = AlertDialog.Builder(it, style)
             val linearLayout = LinearLayout(it)
             linearLayout.orientation = LinearLayout.VERTICAL
             val textViewZaglavie = TextViewRobotoCondensed(it)
@@ -43,10 +45,6 @@ class DialogNoInternet : DialogFragment() {
             ad.setView(linearLayout)
             ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = ad.create()
-            alert.setOnShowListener {
-                val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            }
         }
         return alert
     }

@@ -22,10 +22,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:paddingTop="5dp"
-        android:text="@string/HRYHARYJAN"
-        android:textColor="@color/colorPrimary_text" />
+        android:paddingRight="10dp"
+        android:text="@string/HRYHARYJAN" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
         android:id="@+id/ula"

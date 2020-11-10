@@ -487,8 +487,8 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             viewHolder.text?.text = menuList[position].data
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
+                //viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
+                //viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             } /*else {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_white)

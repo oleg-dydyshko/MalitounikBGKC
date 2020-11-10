@@ -9,6 +9,7 @@
         <item name="android:textColorPrimary">@color/colorPrimary_text</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorPrimaryDark</item>
         <item name="android:textColorSecondary">@color/colorSecondary_text</item>
+        <item name="android:textColor">@color/colorPrimary_text</item>
         <!--<item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>-->
         <item name="fontFamily">sans-serif-condensed</item>
@@ -23,13 +24,39 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/ButtonStyle</item>
+    </style>
+
+    <style name="AlertDialogThemeBlack" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="buttonBarPositiveButtonStyle">@style/ButtonStyleBlack</item>
+        <item name="buttonBarNegativeButtonStyle">@style/ButtonStyleBlack</item>
+        <item name="buttonBarNeutralButtonStyle">@style/ButtonStyleBlack</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="ButtonStyleBlack" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/colorPrimary_black</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="SplashTheme" parent="AppTheme">
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="android:textColor">@color/colorPrimary_text</item>
+    </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+        <item name="android:textColor">@color/colorIcons</item>
+    </style>
 
     <style name="AppCompatDark" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorprimary_material_dark</item>
@@ -40,6 +67,7 @@
         <item name="android:textColorPrimary">@color/colorIcons</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorPrimary_text</item>
         <item name="android:textColorSecondary">@color/colorSecondary_text</item>
+        <item name="android:textColor">@color/colorIcons</item>
         <item name="fontFamily">sans-serif-condensed</item>
     </style>
 </resources>

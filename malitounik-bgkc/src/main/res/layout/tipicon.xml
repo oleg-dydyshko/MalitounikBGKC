@@ -64,7 +64,7 @@
                     android:paddingRight="10dp"
                     android:paddingStart="10dp"
                     android:text="@string/Post"
-                    android:textColor="@color/colorPrimary_text" />
+                     />
             </TableRow>
 
             <TableRow
@@ -90,8 +90,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingStart="10dp"
-                    android:text="@string/Strogi_post"
-                    android:textColor="@color/colorPrimary_text" />
+                    android:text="@string/Strogi_post" />
             </TableRow>
 
             <TableRow
@@ -117,8 +116,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingStart="10dp"
-                    android:text="@string/No_post"
-                    android:textColor="@color/colorPrimary_text" />
+                    android:text="@string/No_post" />
             </TableRow>
 
             <TableRow
@@ -146,8 +144,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingStart="10dp"
-                    android:text="@string/niadzeli_i_sviaty"
-                    android:textColor="@color/colorPrimary_text" />
+                    android:text="@string/niadzeli_i_sviaty" />
             </TableRow>
 
             <TableRow
@@ -174,8 +171,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingStart="10dp"
-                    android:text="@string/zvychaynye_dny"
-                    android:textColor="@color/colorPrimary_text" />
+                    android:text="@string/zvychaynye_dny" />
             </TableRow>
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -249,8 +245,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingStart="10dp"
-                    android:text="@string/Z_Lic_na_ve"
-                    android:textColor="@color/colorPrimary_text" />
+                    android:text="@string/Z_Lic_na_ve" />
             </TableRow>
 
             <TableRow
@@ -279,8 +274,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingStart="10dp"
-                    android:text="@string/Z_v_v_v_u_n_u"
-                    android:textColor="@color/colorPrimary_text" />
+                    android:text="@string/Z_v_v_v_u_n_u" />
             </TableRow>
 
             <TableRow
@@ -309,8 +303,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingStart="10dp"
-                    android:text="@string/Z_sh_v_v_u_u"
-                    android:textColor="@color/colorPrimary_text" />
+                    android:text="@string/Z_sh_v_v_u_u" />
             </TableRow>
 
             <TableRow
@@ -339,8 +332,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingStart="10dp"
-                    android:text="@string/Z_sh_v_m_u_u"
-                    android:textColor="@color/colorPrimary_text" />
+                    android:text="@string/Z_sh_v_m_u_u" />
             </TableRow>
         </TableLayout>
     </ScrollView>

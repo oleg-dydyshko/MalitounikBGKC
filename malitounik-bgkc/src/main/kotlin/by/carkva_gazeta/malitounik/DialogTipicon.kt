@@ -95,15 +95,15 @@ class DialogTipicon : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            val builder = AlertDialog.Builder(it)
+            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            val builder = AlertDialog.Builder(it, style)
             rootView = View.inflate(it, R.layout.tipicon, null)
             builder.setView(rootView)
             builder.setPositiveButton(it.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
-            alert.setOnShowListener {
-                val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            }
         }
         return alert
     }

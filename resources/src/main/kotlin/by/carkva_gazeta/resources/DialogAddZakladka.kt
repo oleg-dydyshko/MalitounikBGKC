@@ -14,6 +14,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 
@@ -47,26 +48,28 @@ class DialogAddZakladka : DialogFragment() {
         activity?.let {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = k.getBoolean("dzen_noch", false)
-            val builder = AlertDialog.Builder(it)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            val builder = AlertDialog.Builder(it, style)
             val linear = LinearLayout(it)
             linear.orientation = LinearLayout.VERTICAL
             val textViewZaglavie = TextViewRobotoCondensed(it)
             if (dzenNoch) {
                 ExpArrayAdapterParallel.colors[0] = "#FFFFFF"
                 ExpArrayAdapterParallel.colors[1] = "#f44336"
-                textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+                textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             } else {
                 ExpArrayAdapterParallel.colors[0] = "#000000"
                 ExpArrayAdapterParallel.colors[1] = "#D00505"
-                textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+                textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             }
             val density = resources.displayMetrics.density
             realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(by.carkva_gazeta.malitounik.R.string.add_color_zakladka)
+            textViewZaglavie.text = resources.getString(R.string.add_color_zakladka)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             linear.addView(textViewZaglavie)
             val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             layoutParams.setMargins(realpadding, realpadding, 0, 0)
@@ -82,32 +85,26 @@ class DialogAddZakladka : DialogFragment() {
             }
             linear.addView(spinner, layoutParams)
             builder.setView(linear)
-            builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.ok)) { _: DialogInterface?, _: Int ->
+            builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                 dialogAddZakladkiListiner?.addZakladka(color)
             }
-            builder.setNegativeButton(getString(by.carkva_gazeta.malitounik.R.string.CANCEL)) { _: DialogInterface?, _: Int ->
+            builder.setNegativeButton(getString(R.string.CANCEL)) { _: DialogInterface?, _: Int ->
                 dialogAddZakladkiListiner?.addZakladka(-1)
             }
             alert = builder.create()
-            alert.setOnShowListener {
-                val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            }
         }
         return alert
     }
 
-    private inner class ColorAdapter(context: Context) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_color, by.carkva_gazeta.malitounik.R.id.label, ExpArrayAdapterParallel.colors) {
+    private inner class ColorAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_color, R.id.label, ExpArrayAdapterParallel.colors) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolderColor
             if (convertView == null) {
-                rootView = layoutInflater.inflate(by.carkva_gazeta.malitounik.R.layout.simple_list_item_color, parent, false)
+                rootView = layoutInflater.inflate(R.layout.simple_list_item_color, parent, false)
                 viewHolder = ViewHolderColor()
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(by.carkva_gazeta.malitounik.R.id.label)
+                viewHolder.text = rootView.findViewById(R.id.label)
             } else {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolderColor
@@ -118,7 +115,7 @@ class DialogAddZakladka : DialogFragment() {
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = super.getDropDownView(position, convertView, parent)
-            val text: TextView = view.findViewById(by.carkva_gazeta.malitounik.R.id.label)
+            val text: TextView = view.findViewById(R.id.label)
             text.text = ""
             text.setBackgroundColor(Color.parseColor(ExpArrayAdapterParallel.colors[position]))
             return view

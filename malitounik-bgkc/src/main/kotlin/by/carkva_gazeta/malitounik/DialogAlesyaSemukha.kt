@@ -25,7 +25,9 @@ class DialogAlesyaSemukha : DialogFragment() {
         activity?.let { it ->
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            ad = AlertDialog.Builder(it)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            ad = AlertDialog.Builder(it, style)
             val scrollView = ScrollView(it)
             scrollView.isVerticalScrollBarEnabled = false
             val linearLayout = LinearLayout(it)
@@ -53,11 +55,6 @@ class DialogAlesyaSemukha : DialogFragment() {
             ad.setView(linearLayout)
             ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
         }
-        val alert = ad.create()
-        alert.setOnShowListener {
-            val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-        }
-        return alert
+        return ad.create()
     }
 }

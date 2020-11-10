@@ -326,12 +326,6 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         title_toolbar.text = resources.getText(R.string.search_svityia)
         if (dzenNoch) {
             toolbar.popupTheme = R.style.AppCompatDark
-            toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
-            title_toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
-            title_toolbar.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-        } else {
-            toolbar.setBackgroundResource(R.color.colorPrimary)
-            title_toolbar.setBackgroundResource(R.color.colorPrimary)
         }
     }
 

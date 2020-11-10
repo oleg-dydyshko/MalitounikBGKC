@@ -23,7 +23,9 @@ class DialogHelpFullscreen : DialogFragment() {
             prefEditor.putBoolean("FullscreenHelp", false)
             prefEditor.apply()
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            val builder = AlertDialog.Builder(it)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            val builder = AlertDialog.Builder(it, style)
             val linearLayout = LinearLayout(it)
             linearLayout.orientation = LinearLayout.VERTICAL
             val textViewZaglavie = TextViewRobotoCondensed(it)
@@ -45,10 +47,6 @@ class DialogHelpFullscreen : DialogFragment() {
             builder.setView(linearLayout)
             builder.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
-            alert.setOnShowListener {
-                val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            }
         }
         return alert
     }

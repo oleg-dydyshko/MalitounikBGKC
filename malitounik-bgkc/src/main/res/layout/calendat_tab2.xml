@@ -35,7 +35,6 @@
             android:layout_alignParentRight="true"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="@color/colorPrimary_text"
             android:textSize="18sp" />
 
         <ImageView

@@ -18,7 +18,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
             app:contentInsetStartWithNavigation="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -29,7 +28,6 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:singleLine="true"
-                android:textColor="@color/colorIcons"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -40,7 +38,6 @@
         android:id="@+id/ListView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:listSelector="@drawable/selector_white"
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/textSearch"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +59,6 @@
         android:layout_marginBottom="8dp"
         android:gravity="center"
         android:text="@string/helpbible"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/ListView"

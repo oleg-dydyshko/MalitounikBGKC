@@ -47,7 +47,9 @@ class DialogSetPageBiblioteka : DialogFragment() {
         activity?.let {
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            builder = AlertDialog.Builder(it)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            builder = AlertDialog.Builder(it, style)
             val linear = LinearLayout(it)
             linear.orientation = LinearLayout.VERTICAL
             val textViewZaglavie = TextViewRobotoCondensed(it)
@@ -99,16 +101,7 @@ class DialogSetPageBiblioteka : DialogFragment() {
                 imm12.hideSoftInputFromWindow(input.windowToken, 0)
             }
         }
-        val alert = builder.create()
-        alert.setOnShowListener {
-            val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-            btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            val btnNeutral = alert.getButton(Dialog.BUTTON_NEUTRAL)
-            btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-        }
-        return alert
+        return builder.create()
     }
 
     companion object {

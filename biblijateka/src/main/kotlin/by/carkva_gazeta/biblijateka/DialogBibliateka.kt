@@ -63,7 +63,9 @@ class DialogBibliateka : DialogFragment() {
         activity?.let {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            builder = AlertDialog.Builder(it)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            builder = AlertDialog.Builder(it, style)
             val linearLayout2 = LinearLayout(it)
             linearLayout2.orientation = LinearLayout.VERTICAL
             builder.setView(linearLayout2)
@@ -130,14 +132,7 @@ class DialogBibliateka : DialogFragment() {
                 }
             }
         }
-        val alert = builder.create()
-        alert.setOnShowListener {
-            val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-            btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-        }
-        return alert
+        return builder.create()
     }
 
     private fun formatFigureTwoPlaces(value: Float): String {

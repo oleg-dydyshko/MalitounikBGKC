@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
@@ -33,27 +34,29 @@ class DialogAddNatatka : DialogFragment() {
         activity?.let {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = k.getBoolean("dzen_noch", false)
-            val builder = AlertDialog.Builder(it)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            val builder = AlertDialog.Builder(it, style)
             val linear = LinearLayout(it)
             linear.orientation = LinearLayout.VERTICAL
             val textViewZaglavie = TextViewRobotoCondensed(it)
-            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             val density = resources.displayMetrics.density
             realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(by.carkva_gazeta.malitounik.R.string.ADD_MAJE_MALITVY_NAZVA)
+            textViewZaglavie.text = resources.getString(R.string.ADD_MAJE_MALITVY_NAZVA)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             linear.addView(textViewZaglavie)
             input = EditTextRobotoCondensed(it)
             //input.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(4)}
             if (dzenNoch) {
-                input.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                input.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark_ligte)
+                input.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                input.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
             } else {
-                input.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-                input.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorIcons)
+                input.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                input.setBackgroundResource(R.color.colorIcons)
             }
             input.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             linear.addView(input)
@@ -75,20 +78,14 @@ class DialogAddNatatka : DialogFragment() {
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             builder.setView(linear)
-            builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.ok)) { _: DialogInterface?, _: Int ->
+            builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                 write()
             }
-            builder.setNegativeButton(getString(by.carkva_gazeta.malitounik.R.string.CANCEL)) { _: DialogInterface?, _: Int ->
+            builder.setNegativeButton(getString(R.string.CANCEL)) { _: DialogInterface?, _: Int ->
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(input.windowToken, 0)
             }
             alert = builder.create()
-            alert.setOnShowListener {
-                val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-                val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-                btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            }
         }
         return alert
     }
@@ -138,7 +135,7 @@ class DialogAddNatatka : DialogFragment() {
             // Скрываем клавиатуру
             val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(input.windowToken, 0)
-            MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.COPY_MAJE_MALITVY_NAZVA))
+            MainActivity.toastView(activity, getString(R.string.COPY_MAJE_MALITVY_NAZVA))
         }
     }
 

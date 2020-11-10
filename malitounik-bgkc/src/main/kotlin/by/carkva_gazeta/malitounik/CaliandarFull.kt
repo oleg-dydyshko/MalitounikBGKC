@@ -157,8 +157,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                     textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
                     textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textBlaslavenne.setBackgroundResource(R.drawable.selector_dark)
                 }
             }
             textDenNedeli.text = nedelName[data[day][0].toInt()]

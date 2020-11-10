@@ -12,6 +12,7 @@ import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.akafist_list.*
 
 /**
@@ -46,9 +47,11 @@ class TonNaKoznyDzen : AppCompatActivity() {
         title_toolbar.text = resources.getText(R.string.ton_sh)
         if (dzenNoch) {
             toolbar.popupTheme = R.style.AppCompatDark
-            toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
-            title_toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
         }
+        if (dzenNoch)
+            ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        else
+            ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_white)
         val adapter = MenuListAdaprer(this, data)
         ListView.adapter = adapter
         ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->

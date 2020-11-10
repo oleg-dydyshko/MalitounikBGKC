@@ -40,7 +40,9 @@ class DialogLiturgia : DialogFragment() {
             MainActivity.dialogVisable = true
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            ab = AlertDialog.Builder(it)
+            var style = by.carkva_gazeta.malitounik.R.style.AlertDialogTheme
+            if (dzenNoch) style = by.carkva_gazeta.malitounik.R.style.AlertDialogThemeBlack
+            ab = AlertDialog.Builder(it, style)
             val builder = StringBuilder()
             val linearLayout = LinearLayout(it)
             linearLayout.orientation = LinearLayout.VERTICAL
@@ -119,12 +121,7 @@ class DialogLiturgia : DialogFragment() {
             ab.setView(linearLayout)
             ab.setPositiveButton(it.resources.getString(by.carkva_gazeta.malitounik.R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
         }
-        val alert = ab.create()
-        alert.setOnShowListener {
-            val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-        }
-        return alert
+        return ab.create()
     }
 
     companion object {

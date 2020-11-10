@@ -10,6 +10,5 @@
         android:layout_height="match_parent"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="16sp" />
 </LinearLayout>

@@ -11,8 +11,7 @@
         android:layout_weight="1"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
-        android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
-        android:textColor="@color/colorPrimary_text" />
+        android:paddingBottom="10dp" />
 </LinearLayout>

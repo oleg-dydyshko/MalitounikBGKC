@@ -417,7 +417,7 @@ class NovyZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickListe
                 linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
                 linearLayout5.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
                 linearLayout6.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-                listView.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
+                //listView.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             }
             copyBigFull.setOnClickListener {
                 BibleGlobalList.bibleCopyList.clear()

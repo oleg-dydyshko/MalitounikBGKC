@@ -111,7 +111,6 @@
                 android:layout_marginTop="0dp"
                 android:gravity="start"
                 android:text="@string/Post"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="12sp"
                 android:visibility="gone" />
         </RelativeLayout>
@@ -140,7 +139,6 @@
             android:layout_marginRight="10dp"
             android:gravity="center_horizontal"
             android:paddingBottom="5dp"
-            android:textColor="@color/colorPrimary_text"
             android:textSize="18sp"
             android:visibility="gone" />
 
@@ -168,7 +166,6 @@
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
             android:text="Вялеб. Яна, Сяргея, Патрыка і інш. айцоў, замучаных у лаўры сьв. Савы"
-            android:textColor="@color/colorPrimary_text"
             android:textSize="18sp" />
 
         <View
@@ -189,9 +186,9 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/selector_gray"
             android:paddingStart="10dp"
-            android:paddingEnd="10dp"
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
+            android:paddingEnd="10dp"
             android:text="@string/chytanne"
             android:textColor="@color/colorPrimary_text"
             android:textSize="18sp"
@@ -303,7 +300,6 @@
             android:paddingTop="5dp"
             android:paddingRight="10dp"
             android:text="@string/maranata"
-            android:textColor="@color/colorPrimary_text"
             android:textSize="18sp"
             android:textStyle="italic"
             android:visibility="gone" />
@@ -319,11 +315,10 @@
             android:gravity="start|center_vertical"
             android:paddingStart="10dp"
             android:paddingLeft="10dp"
-            android:paddingEnd="10dp"
             android:paddingTop="5dp"
+            android:paddingEnd="10dp"
             android:paddingBottom="5dp"
             android:text="Дз 15.5-34; Ян 10.17-28"
-            android:textColor="@color/colorPrimary_text"
             android:textSize="18sp"
             android:visibility="gone" />
 

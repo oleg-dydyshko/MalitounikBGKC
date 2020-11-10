@@ -300,7 +300,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             label103.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             label105.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             label104.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            label1.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            /*label1.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             label2.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             label3.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             label4.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
@@ -322,7 +322,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             label105.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             label11.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             label12.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label13.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            label13.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))*/
         }
         ajustCompoundDrawableSizeWithText(label1, drawable)
         ajustCompoundDrawableSizeWithText(label2, drawable)

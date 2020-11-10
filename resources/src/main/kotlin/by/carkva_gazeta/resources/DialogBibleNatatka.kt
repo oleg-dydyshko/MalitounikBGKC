@@ -57,7 +57,9 @@ class DialogBibleNatatka : DialogFragment() {
         activity?.let { it ->
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            ad = AlertDialog.Builder(it)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            ad = AlertDialog.Builder(it, style)
             val linearLayout = LinearLayout(it)
             linearLayout.orientation = LinearLayout.VERTICAL
             var editText = ""
@@ -174,16 +176,7 @@ class DialogBibleNatatka : DialogFragment() {
                 dialog.cancel()
             }
         }
-        val alert = ad.create()
-        alert.setOnShowListener {
-            val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            val btnNegative = alert.getButton(Dialog.BUTTON_NEGATIVE)
-            btnNegative.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            val btnNeutral = alert.getButton(Dialog.BUTTON_NEUTRAL)
-            btnNeutral.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-        }
-        return alert
+        return ad.create()
     }
 
     companion object {

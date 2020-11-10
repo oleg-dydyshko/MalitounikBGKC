@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
+    android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
     <include
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="false">
+        android:fitsSystemWindows="true">
 
         <ScrollView
             android:id="@+id/scrollView"
@@ -62,7 +62,6 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/kaliandar2"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -73,11 +72,10 @@
                     android:gravity="center_vertical"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
                     android:paddingTop="10dp"
+                    android:paddingRight="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/SAJT"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -88,7 +86,6 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/LITURGIKON"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -99,7 +96,6 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/malitvy"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -110,7 +106,6 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/akafisty"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -122,7 +117,6 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/ruzanec"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -134,7 +128,6 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/MAJE_MALITVY"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -146,7 +139,6 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/MenuVybranoe"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <View
@@ -165,7 +157,6 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/title_biblia"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -177,7 +168,6 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/title_psalter"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -189,37 +179,41 @@
                     android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/bsinaidal"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp"
                     android:visibility="gone" />
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/label9a"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/image2"
-                        android:layout_width="15dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:src="@drawable/arrow_down_float"
-                        android:contentDescription="@string/empty"/>
+                    android:focusable="true">
 
                     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                         android:id="@+id/label9"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:padding="10dp"
                         android:text="@string/song"
-                        android:textColor="@color/colorPrimary_text"
-                        android:textSize="16sp" />
-                </LinearLayout>
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/image2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/image2"
+                        android:layout_width="15dp"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:contentDescription="@string/empty"
+                        android:src="@drawable/arrow_down_float"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 <LinearLayout
@@ -240,12 +234,11 @@
                         android:paddingStart="20dp"
                         android:paddingLeft="20dp"
                         android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny1"
-                        android:textColor="@color/colorPrimary_text"
-                        android:textSize="16sp"
-                        android:paddingEnd="10dp" />
+                        android:textSize="16sp" />
 
                     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                         android:id="@+id/label92"
@@ -257,13 +250,12 @@
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
                         android:paddingLeft="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="10dp"
-                        android:paddingTop="10dp"
                         android:text="@string/pesny2"
-                        android:textColor="@color/colorPrimary_text"
-                        android:textSize="16sp"
-                        android:paddingEnd="10dp" />
+                        android:textSize="16sp" />
 
                     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                         android:id="@+id/label93"
@@ -275,12 +267,11 @@
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
                         android:paddingLeft="20dp"
-                        android:paddingRight="10dp"
-                        android:paddingEnd="10dp"
                         android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny3"
-                        android:textColor="@color/colorPrimary_text"
                         android:textSize="16sp" />
 
                     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -293,12 +284,11 @@
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
                         android:paddingLeft="20dp"
-                        android:paddingRight="10dp"
-                        android:paddingEnd="10dp"
                         android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny4"
-                        android:textColor="@color/colorPrimary_text"
                         android:textSize="16sp" />
 
                     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -311,42 +301,46 @@
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
                         android:paddingLeft="20dp"
-                        android:paddingRight="10dp"
-                        android:paddingEnd="10dp"
                         android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pesny5"
-                        android:textColor="@color/colorPrimary_text"
                         android:textSize="16sp" />
                 </LinearLayout>
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/label10a"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/image3"
-                        android:layout_width="15dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:src="@drawable/arrow_down_float"
-                        android:contentDescription="@string/empty" />
+                    android:focusable="true">
 
                     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                         android:id="@+id/label10"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:padding="10dp"
                         android:text="@string/OTHER"
-                        android:textColor="@color/colorPrimary_text"
-                        android:textSize="16sp" />
-                </LinearLayout>
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/image3"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/image3"
+                        android:layout_width="15dp"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:contentDescription="@string/empty"
+                        android:src="@drawable/arrow_down_float"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:id="@+id/title10"
@@ -365,12 +359,11 @@
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
                         android:paddingLeft="20dp"
-                        android:paddingRight="10dp"
-                        android:paddingEnd="10dp"
                         android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/spovedz"
-                        android:textColor="@color/colorPrimary_text"
                         android:textSize="16sp" />
 
                     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -383,12 +376,11 @@
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
                         android:paddingLeft="20dp"
-                        android:paddingRight="10dp"
-                        android:paddingEnd="10dp"
                         android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/pamiatka"
-                        android:textColor="@color/colorPrimary_text"
                         android:textSize="16sp" />
 
                     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -401,12 +393,11 @@
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
                         android:paddingLeft="20dp"
-                        android:paddingRight="10dp"
-                        android:paddingEnd="10dp"
                         android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/SVIATY"
-                        android:textColor="@color/colorPrimary_text"
                         android:textSize="16sp" />
 
                     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -419,12 +410,11 @@
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
                         android:paddingLeft="20dp"
-                        android:paddingRight="10dp"
-                        android:paddingEnd="10dp"
                         android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/parafii"
-                        android:textColor="@color/colorPrimary_text"
                         android:textSize="16sp" />
 
                     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -437,12 +427,11 @@
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
                         android:paddingLeft="20dp"
-                        android:paddingRight="10dp"
-                        android:paddingEnd="10dp"
                         android:paddingTop="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/PASCHA"
-                        android:textColor="@color/colorPrimary_text"
                         android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>

@@ -54,8 +54,6 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
                 ?: getString(by.carkva_gazeta.malitounik.R.string.slugby_vialikaga_postu)
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
-            toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-            title_toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
         }
         when (intent.extras?.getInt("resurs") ?: 0) {
             12 -> {

@@ -49,7 +49,9 @@ class DialogBibleSearshSettings : DialogFragment() {
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = chin.getBoolean("dzen_noch", false)
             prefEditors = chin.edit()
-            builder = AlertDialog.Builder(it)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            builder = AlertDialog.Builder(it, style)
             val linear = LinearLayout(it)
             linear.orientation = LinearLayout.VERTICAL
             val textViewZaglavie = TextViewRobotoCondensed(it)
@@ -116,12 +118,7 @@ class DialogBibleSearshSettings : DialogFragment() {
                 mListener?.onSetSettings(arguments?.getString("edit")?: "")
             }
         }
-        val alert = builder.create()
-        alert.setOnShowListener {
-            val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-            btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-        }
-        return alert
+        return builder.create()
     }
 
     private inner class DialogBibleAdapter(private val context: Activity, private val name: Array<String>) : ArrayAdapter<String?>(context, R.layout.simple_list_item_1, name) {

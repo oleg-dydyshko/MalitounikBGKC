@@ -137,7 +137,6 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         title_toolbar.text = intent.extras?.getString("malitva_title")
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
-            toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
         }
     }
 

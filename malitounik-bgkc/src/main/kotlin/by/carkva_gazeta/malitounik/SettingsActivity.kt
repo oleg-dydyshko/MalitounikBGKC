@@ -1206,6 +1206,11 @@ class SettingsActivity : AppCompatActivity() {
         }
         spinnerTime.adapter = TimeAdapter(this, dataTimes)
         spinnerTime.setSelection(itemDefault)
+        if (dzenNoch) {
+            spinnerTime.setBackgroundResource(R.drawable.selector_dark)
+        } else {
+            spinnerTime.setBackgroundResource(R.drawable.selector_white)
+        }
         spinnerTime.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
                 if (itemDefault != i) {
@@ -1230,6 +1235,11 @@ class SettingsActivity : AppCompatActivity() {
         }
         spinnerAutoPrag.adapter = AutoPragortkaAdapter(this, autoPrag)
         spinnerAutoPrag.setSelection(k.getInt("autoscrollAutostartTime", 5))
+        if (dzenNoch) {
+            spinnerAutoPrag.setBackgroundResource(R.drawable.selector_dark)
+        } else {
+            spinnerAutoPrag.setBackgroundResource(R.drawable.selector_white)
+        }
         spinnerAutoPrag.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 prefEditor.putInt("autoscrollAutostartTime", p2)
@@ -1344,14 +1354,14 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        if (dzenNoch) {
+        /*if (dzenNoch) {
             prav.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             dzair.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             praf.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             pkc.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-        }
+        }*/
         if (k.getInt("pkc", 0) == 1) pkc.isChecked = true
         if (k.getInt("pravas", 0) == 1) prav.isChecked = true
         if (k.getInt("gosud", 0) == 1) dzair.isChecked = true
@@ -1504,7 +1514,7 @@ class SettingsActivity : AppCompatActivity() {
             praf.isChecked = false
             recreate()
         }
-        if (dzenNoch) {
+        /*if (dzenNoch) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val window = window
                 //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -1528,7 +1538,7 @@ class SettingsActivity : AppCompatActivity() {
                 maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             }
             //checkBox2.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-        }
+        }*/
         maranataGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             when (checkedId) {
                 R.id.maranataBel -> {
@@ -1789,24 +1799,23 @@ class SettingsActivity : AppCompatActivity() {
         title_toolbar.text = resources.getText(R.string.tools_item)
         if (dzenNoch) {
             toolbar.popupTheme = R.style.AppCompatDark
-            toolbar.setBackgroundResource(R.color.colorprimary_material_dark)
         }
     }
 
     private class TimeAdapter(private val activity: Activity, private val dataTimes: ArrayList<DataTime>) : ArrayAdapter<DataTime>(activity, R.layout.simple_list_item_1, dataTimes) {
-        private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        private val dzenNoch = k.getBoolean("dzen_noch", false)
+        //private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        //private val dzenNoch = k.getBoolean("dzen_noch", false)
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextViewRobotoCondensed
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             textView.text = dataTimes[position].string
-            if (dzenNoch) {
+            /*if (dzenNoch) {
                 textView.setBackgroundResource(R.drawable.selector_dark)
                 textView.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
             } else {
                 textView.setBackgroundResource(R.drawable.selector_white)
-            }
+            }*/
             return v
         }
 
@@ -1828,31 +1837,31 @@ class SettingsActivity : AppCompatActivity() {
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             viewHolder.text?.text = dataTimes[position].string
-            if (dzenNoch) {
+            /*if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
             } else {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-            }
+            }*/
             return rootView
         }
 
     }
 
     private class AutoPragortkaAdapter(private val activity: Activity, private val dataTimes: ArrayList<String>) : ArrayAdapter<String>(activity, R.layout.simple_list_item_1, dataTimes) {
-        private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        private val dzenNoch = k.getBoolean("dzen_noch", false)
+        //private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        //private val dzenNoch = k.getBoolean("dzen_noch", false)
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextViewRobotoCondensed
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             textView.text = dataTimes[position]
-            if (dzenNoch) {
+            /*if (dzenNoch) {
                 textView.setBackgroundResource(R.drawable.selector_dark)
                 textView.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
             } else {
                 textView.setBackgroundResource(R.drawable.selector_white)
-            }
+            }*/
             return v
         }
 
@@ -1874,12 +1883,12 @@ class SettingsActivity : AppCompatActivity() {
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             viewHolder.text?.text = dataTimes[position]
-            if (dzenNoch) {
+            /*if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
             } else {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-            }
+            }*/
             return rootView
         }
 

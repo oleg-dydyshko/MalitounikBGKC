@@ -174,7 +174,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -184,7 +183,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -194,7 +192,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -204,7 +201,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -214,7 +210,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -224,7 +219,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -252,7 +246,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -262,7 +255,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -272,7 +264,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -282,7 +273,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -292,7 +282,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -302,7 +291,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -330,7 +318,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -340,7 +327,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -350,7 +336,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -360,7 +345,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -370,7 +354,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -380,7 +363,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -408,7 +390,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -418,7 +399,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -428,7 +408,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -438,7 +417,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -448,7 +426,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -458,7 +435,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -487,7 +463,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -497,7 +472,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -507,7 +481,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -517,7 +490,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -527,7 +499,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -537,7 +508,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -566,7 +536,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -576,7 +545,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -586,7 +554,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -596,7 +563,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -606,7 +572,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -616,7 +581,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_day"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary_text"
                 android:textSize="20sp" />
         </LinearLayout>
     </LinearLayout>

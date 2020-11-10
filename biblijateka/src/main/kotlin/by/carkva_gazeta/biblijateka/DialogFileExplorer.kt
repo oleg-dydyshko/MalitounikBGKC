@@ -144,7 +144,9 @@ class DialogFileExplorer : DialogFragment() {
                     fileList.add(MyFile("Карта SD", R.drawable.directory_icon))
                 }
             }
-            val builder = AlertDialog.Builder(it)
+            var style = by.carkva_gazeta.malitounik.R.style.AlertDialogTheme
+            if (dzenNoch) style = by.carkva_gazeta.malitounik.R.style.AlertDialogThemeBlack
+            val builder = AlertDialog.Builder(it, style)
             val linear = LinearLayout(it)
             linear.orientation = LinearLayout.VERTICAL
             val textViewZaglavie = TextViewRobotoCondensed(it)
@@ -164,10 +166,6 @@ class DialogFileExplorer : DialogFragment() {
             builder.setView(linear)
             builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
-            alert.setOnShowListener {
-                val btnPositive = alert.getButton(Dialog.BUTTON_POSITIVE)
-                btnPositive.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            }
             listViewCompat.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, i: Int, _: Long ->
                 if (sdCard) {
                     var dir = ContextCompat.getExternalFilesDirs(it, null)[i].absolutePath

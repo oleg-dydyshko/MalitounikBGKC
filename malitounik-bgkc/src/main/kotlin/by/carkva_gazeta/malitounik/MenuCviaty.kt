@@ -46,7 +46,7 @@ class MenuCviaty : CviatyListFragment() {
                 if (k.getBoolean("dzen_noch", false)) {
                     listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
                 } else {
-                    listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_white)
+                    listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
                 }
             } else {
                 listView.isClickable = false

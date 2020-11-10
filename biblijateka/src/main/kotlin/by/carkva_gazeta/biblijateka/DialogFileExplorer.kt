@@ -160,6 +160,10 @@ class DialogFileExplorer : DialogFragment() {
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorIcons))
             linear.addView(textViewZaglavie)
             val listViewCompat = ListView(it)
+            if (dzenNoch)
+                listViewCompat.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+            else
+                listViewCompat.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_default)
             val listAdaprer = TitleListAdaprer(it)
             listViewCompat.adapter = listAdaprer
             linear.addView(listViewCompat)
@@ -235,19 +239,19 @@ class DialogFileExplorer : DialogFragment() {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            //val dzenNoch = chin.getBoolean("dzen_noch", false)
             viewHolder.text?.text = fileList[position].name
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val image = ContextCompat.getDrawable(mContext, fileList[position].resources)
             val density = resources.displayMetrics.density.toInt()
             image?.setBounds(0, 0, 48 * density, 48 * density)
             viewHolder.text?.setCompoundDrawables(image, null, null, null)
-            if (dzenNoch) {
+            /*if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dialog_font_dark)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, by.carkva_gazeta.malitounik.R.color.colorIcons))
             } else {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_white)
-            }
+            }*/
             return rootView
         }
 

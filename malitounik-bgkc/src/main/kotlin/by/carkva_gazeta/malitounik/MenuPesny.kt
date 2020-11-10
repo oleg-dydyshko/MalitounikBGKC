@@ -100,6 +100,9 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                 }
             }
             historyAdapter = HistoryAdapter(fraragment, history, true)
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            if (dzenNoch) History.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_dark)
+            else History.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_default)
             History.adapter = historyAdapter
             History.onItemClickListener = this
             History.setOnItemLongClickListener { _, _, position, _ ->

@@ -186,6 +186,8 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             ListView.visibility = View.GONE
         }
         historyAdapter = HistoryAdapter(this, history, true)
+        if (dzenNoch) History.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        else History.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         History.adapter = historyAdapter
         History.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -230,6 +232,8 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             ListView.visibility = View.GONE
         }
         adapter = SearchListAdapter(this, arrayRes)
+        if (dzenNoch) ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        else ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         ListView.adapter = adapter
         ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
@@ -625,12 +629,12 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             viewHolder.text?.text = MainActivity.fromHtml(adapterList[position])
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                //viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
+                //viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            } else {
+            } /*else {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-            }
+            }*/
             return rootView
         }
     }

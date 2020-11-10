@@ -17,7 +17,9 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import kotlinx.android.synthetic.main.akafist_list_bible.*
 
 /**
@@ -113,18 +115,20 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
                 data.add(Data(R.raw.bogashlugbovya16_11,"5-ая нядзеля Вялікага посту (Памяць сьвятое Маці нашае Марыі Ягіпецкай) Літургія сьвятога Васіля Вялікага"))
             }
             17 -> {
-                data.add(Data(R.raw.bogashlugbovya17_1,"5-ая нядзеля посту ўвечары"))
-                data.add(Data(R.raw.bogashlugbovya17_2,"Панядзелак 6-га тыдня посту ўвечары"))
-                data.add(Data(R.raw.bogashlugbovya17_3,"Аўторак 6-га тыдня посту ўвечары"))
-                data.add(Data(R.raw.bogashlugbovya17_4,"Серада 6-га тыдня посту ўвечары"))
-                data.add(Data(R.raw.bogashlugbovya17_5,"Чацьвер 6-га тыдня посту ўвечары"))
-                data.add(Data(R.raw.bogashlugbovya17_6,"Пятніца 6-га тыдня посту ўвечары"))
-                data.add(Data(R.raw.bogashlugbovya17_7,"Субота Лазара Ютрань"))
-                data.add(Data(R.raw.bogashlugbovya17_8,"Літургія"))
+                data.add(Data(R.raw.bogashlugbovya17_1, "5-ая нядзеля посту ўвечары"))
+                data.add(Data(R.raw.bogashlugbovya17_2, "Панядзелак 6-га тыдня посту ўвечары"))
+                data.add(Data(R.raw.bogashlugbovya17_3, "Аўторак 6-га тыдня посту ўвечары"))
+                data.add(Data(R.raw.bogashlugbovya17_4, "Серада 6-га тыдня посту ўвечары"))
+                data.add(Data(R.raw.bogashlugbovya17_5, "Чацьвер 6-га тыдня посту ўвечары"))
+                data.add(Data(R.raw.bogashlugbovya17_6, "Пятніца 6-га тыдня посту ўвечары"))
+                data.add(Data(R.raw.bogashlugbovya17_7, "Субота Лазара Ютрань"))
+                data.add(Data(R.raw.bogashlugbovya17_8, "Літургія"))
             }
         }
         val adapter = ListAdaprer(this)
         ListView.adapter = adapter
+        if (dzenNoch) ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+        else ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
         ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnItemClickListener
@@ -174,12 +178,12 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
             viewHolder.text?.text = data[position].data
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
-                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                //viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                //viewHolder.text?.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
-            } else {
+            } /*else {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_white)
-            }
+            }*/
             return rootView
         }
     }

@@ -489,6 +489,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         autoscroll = k.getBoolean("autoscroll", false)
         adapter = BibliotekaAdapter(this)
         listView.adapter = adapter
+        if (dzenNoch) listView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+        else listView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
         listView.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
@@ -2058,12 +2060,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
-                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                //viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                //viewHolder.text?.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorIcons))
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
-            } else {
+            } /*else {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_white)
-            }
+            }*/
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolder.text?.text = arrayList[position][0]
             return rootView

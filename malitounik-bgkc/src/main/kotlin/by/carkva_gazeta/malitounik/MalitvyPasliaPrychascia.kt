@@ -48,11 +48,10 @@ class MalitvyPasliaPrychascia : AppCompatActivity() {
         if (dzenNoch) {
             toolbar.popupTheme = R.style.AppCompatDark
         }
-
         if (dzenNoch)
             ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         else
-            ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_white)
+            ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         ListView.adapter = MenuListAdaprer(this, data)
         ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {

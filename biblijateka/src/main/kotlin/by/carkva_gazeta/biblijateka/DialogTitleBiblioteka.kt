@@ -71,6 +71,10 @@ class DialogTitleBiblioteka : DialogFragment() {
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             linear.addView(textViewZaglavie)
             val listViewCompat = ListView(it)
+            if (dzenNoch)
+                listViewCompat.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
+            else
+                listViewCompat.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
             listViewCompat.adapter = TitleListAdaprer(it)
             linear.addView(listViewCompat)
             builder.setView(linear)
@@ -114,12 +118,12 @@ class DialogTitleBiblioteka : DialogFragment() {
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_dialog_font_dark)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                //viewHolder.text?.setBackgroundResource(R.drawable.selector_dialog_font_dark)
+                //viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            } else {
+            } /*else {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-            }
+            }*/
             return rootView
         }
 

@@ -103,8 +103,8 @@ companion object {
                 spinner.setBackgroundResource(R.drawable.selector_dark)
                 spinner2.setBackgroundResource(R.drawable.selector_dark)
             } else {
-                spinner.setBackgroundResource(R.drawable.selector_white)
-                spinner2.setBackgroundResource(R.drawable.selector_white)
+                spinner.setBackgroundResource(R.drawable.selector_default)
+                spinner2.setBackgroundResource(R.drawable.selector_default)
             }
             pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}

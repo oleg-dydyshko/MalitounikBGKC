@@ -51,7 +51,7 @@ class TonNiadzelny : AppCompatActivity() {
         if (dzenNoch)
             ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         else
-            ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_white)
+            ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         val adapter = MenuListAdaprer(this, data)
         ListView.adapter = adapter
         ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->

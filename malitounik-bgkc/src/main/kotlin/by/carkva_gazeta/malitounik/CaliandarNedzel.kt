@@ -113,7 +113,7 @@ class CaliandarNedzel : ListFragment() {
 
             activity?.let {
                 listAdapter = CaliandarNedzelListAdapter(it, strings2)
-                listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_white)
+                listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
             }
 
             if (setDenNedeli) {

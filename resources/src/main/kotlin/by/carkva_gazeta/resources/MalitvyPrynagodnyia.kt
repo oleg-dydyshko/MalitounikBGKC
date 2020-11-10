@@ -164,17 +164,19 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         data.add(MenuListData(R.raw.prynagodnyia_26, "Намер ісьці за Хрыстом", "prynagodnyia"))
         data.add(MenuListData(R.raw.prynagodnyia_27, "Цябе, Бога, хвалім", "prynagodnyia"))
         data.add(MenuListData(R.raw.prynagodnyia_28, "Малітва падчас згубнай пошасьці", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_29,"Малітва вучняў перад навучаньнем", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_30,"Малітва да Маці Божай Берасьцейскай", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_31,"Малітва да Маці Божай Лагішынскай", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_32,"Малітва пілігрыма", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_33,"Малітва сям’і аб Божым бласлаўленьні на час адпачынку і вакацыяў", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_34,"Малітва ў час адпачынку", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_29, "Малітва вучняў перад навучаньнем", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_30, "Малітва да Маці Божай Берасьцейскай", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_31, "Малітва да Маці Божай Лагішынскай", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_32, "Малітва пілігрыма", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_33, "Малітва сям’і аб Божым бласлаўленьні на час адпачынку і вакацыяў", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_34, "Малітва ў час адпачынку", "prynagodnyia"))
         data.add(MenuListData(R.raw.prynagodnyia_35, "Малітва за бязьвінных ахвяраў перасьледу", "prynagodnyia"))
         data.add(MenuListData(R.raw.prynagodnyia_36, "Малітва за Айчыну - Ян Павел II", "prynagodnyia"))
         data.sort()
         adapter = MenuListAdaprer(this)
         ListView.adapter = adapter
+        if (dzenNoch) ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+        else ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
         ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
                 if (firstVisibleItem == 1) {
@@ -213,6 +215,8 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         }
         //loadHistory()
         historyAdapter = HistoryAdapter(this, history)
+        if (dzenNoch) History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+        else History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
         History.adapter = historyAdapter
         History.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -402,12 +406,12 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             viewHolder.text?.text = data[position].data
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
-                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                //viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                //viewHolder.text?.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
-            } else {
+            } /*else {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_white)
-            }
+            }*/
             return rootView
         }
 

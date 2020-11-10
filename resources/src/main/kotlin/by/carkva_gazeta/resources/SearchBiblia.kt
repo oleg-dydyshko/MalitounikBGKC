@@ -150,6 +150,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         }
         adapter = SearchBibliaListAdaprer(this)
         ListView.adapter = adapter
+        if (dzenNoch) ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+        else ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
         ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                 fierstPosition = absListView.firstVisiblePosition
@@ -375,6 +377,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             }
         }
         historyAdapter = HistoryAdapter(this, history)
+        if (dzenNoch) History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+        else History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
         History.adapter = historyAdapter
         History.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -757,12 +761,12 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             viewHolder.text?.text = seash[position].subSequence(t1 + 3, seash[position].length)
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
-                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                //viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                //viewHolder.text?.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorIcons))
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
-            } else {
+            } /*else {
                 viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_white)
-            }
+            }*/
             return rootView
         }
 

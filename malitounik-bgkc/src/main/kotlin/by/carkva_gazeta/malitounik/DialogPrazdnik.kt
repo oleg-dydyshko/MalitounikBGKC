@@ -78,6 +78,10 @@ class DialogPrazdnik : DialogFragment() {
             }
             val arrayAdapter = ListAdapter(it)
             val spinner = Spinner(it)
+            if (dzenNoch)
+                spinner.setBackgroundResource(R.drawable.selector_dark)
+            else
+                spinner.setBackgroundResource(R.drawable.selector_default)
             spinner.adapter = arrayAdapter
             for (i in arrayList.indices) {
                 if (arrayList[i] == arguments?.getInt("year")?: c[Calendar.YEAR]) {
@@ -127,32 +131,32 @@ class DialogPrazdnik : DialogFragment() {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            //val dzenNoch = k.getBoolean("dzen_noch", false)
             if (gc[Calendar.YEAR] == arrayList[position]) viewHolder.text?.setTypeface(null, Typeface.BOLD) else viewHolder.text?.setTypeface(null, Typeface.NORMAL)
             viewHolder.text?.text = arrayList[position].toString()
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-            if (dzenNoch) {
+            /*if (dzenNoch) {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_dialog_font_dark)
                 viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
             } else {
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-            }
+            }*/
             return rootView
         }
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
+            //val dzenNoch = k.getBoolean("dzen_noch", false)
             val text: TextViewRobotoCondensed = v.findViewById(R.id.text1)
             text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (gc[Calendar.YEAR] == arrayList[position]) text.setTypeface(null, Typeface.BOLD) else text.setTypeface(null, Typeface.NORMAL)
             text.text = arrayList[position].toString()
-            if (dzenNoch) {
+            /*if (dzenNoch) {
                 text.setBackgroundResource(R.drawable.selector_dialog_font_dark)
                 text.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
             } else {
                 text.setBackgroundResource(R.drawable.selector_white)
-            }
+            }*/
             return v
         }
     }

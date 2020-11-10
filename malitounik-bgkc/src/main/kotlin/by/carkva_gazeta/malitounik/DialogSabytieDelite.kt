@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
@@ -9,6 +8,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 

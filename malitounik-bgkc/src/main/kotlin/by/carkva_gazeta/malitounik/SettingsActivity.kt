@@ -1209,7 +1209,7 @@ class SettingsActivity : AppCompatActivity() {
         if (dzenNoch) {
             spinnerTime.setBackgroundResource(R.drawable.selector_dark)
         } else {
-            spinnerTime.setBackgroundResource(R.drawable.selector_white)
+            spinnerTime.setBackgroundResource(R.drawable.selector_default)
         }
         spinnerTime.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
@@ -1238,7 +1238,7 @@ class SettingsActivity : AppCompatActivity() {
         if (dzenNoch) {
             spinnerAutoPrag.setBackgroundResource(R.drawable.selector_dark)
         } else {
-            spinnerAutoPrag.setBackgroundResource(R.drawable.selector_white)
+            spinnerAutoPrag.setBackgroundResource(R.drawable.selector_default)
         }
         spinnerAutoPrag.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {

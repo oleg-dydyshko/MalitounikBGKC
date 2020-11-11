@@ -12,7 +12,6 @@
         android:paddingTop="5dp"
         android:paddingRight="10dp"
         android:paddingBottom="5dp"
-        android:background="@drawable/selector_default"
         android:text="@string/pascha_kaliandar_bel"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold" />

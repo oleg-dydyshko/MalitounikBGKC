@@ -837,52 +837,54 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             drawer_layout.closeDrawer(GravityCompat.START)
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
-        if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
-            if (dzenNoch) {
-                label1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label5.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label6.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label7.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label8.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label91.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label92.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label93.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label94.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label95.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label101.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label102.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label103.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label104.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label105.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label11.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label12.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-                label13.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
-            } else {
-                label1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label5.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label6.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label7.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label8.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label91.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label92.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label93.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label94.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label95.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label101.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label102.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label103.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label104.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label105.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label11.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label12.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-                label13.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIcons))
-            }
+        if (dzenNoch) {
+            label1.setBackgroundResource(R.drawable.selector_dark)
+            label2.setBackgroundResource(R.drawable.selector_dark)
+            label3.setBackgroundResource(R.drawable.selector_dark)
+            label4.setBackgroundResource(R.drawable.selector_dark)
+            label5.setBackgroundResource(R.drawable.selector_dark)
+            label6.setBackgroundResource(R.drawable.selector_dark)
+            label7.setBackgroundResource(R.drawable.selector_dark)
+            label8.setBackgroundResource(R.drawable.selector_dark)
+            label91.setBackgroundResource(R.drawable.selector_dark)
+            label92.setBackgroundResource(R.drawable.selector_dark)
+            label93.setBackgroundResource(R.drawable.selector_dark)
+            label94.setBackgroundResource(R.drawable.selector_dark)
+            label95.setBackgroundResource(R.drawable.selector_dark)
+            label101.setBackgroundResource(R.drawable.selector_dark)
+            label102.setBackgroundResource(R.drawable.selector_dark)
+            label103.setBackgroundResource(R.drawable.selector_dark)
+            label104.setBackgroundResource(R.drawable.selector_dark)
+            label105.setBackgroundResource(R.drawable.selector_dark)
+            label11.setBackgroundResource(R.drawable.selector_dark)
+            label12.setBackgroundResource(R.drawable.selector_dark)
+            label13.setBackgroundResource(R.drawable.selector_dark)
+            label9a.setBackgroundResource(R.drawable.selector_dark)
+            label10a.setBackgroundResource(R.drawable.selector_dark)
+        } else {
+            label1.setBackgroundResource(R.drawable.selector_default)
+            label2.setBackgroundResource(R.drawable.selector_default)
+            label3.setBackgroundResource(R.drawable.selector_default)
+            label4.setBackgroundResource(R.drawable.selector_default)
+            label5.setBackgroundResource(R.drawable.selector_default)
+            label6.setBackgroundResource(R.drawable.selector_default)
+            label7.setBackgroundResource(R.drawable.selector_default)
+            label8.setBackgroundResource(R.drawable.selector_default)
+            label91.setBackgroundResource(R.drawable.selector_default)
+            label92.setBackgroundResource(R.drawable.selector_default)
+            label93.setBackgroundResource(R.drawable.selector_default)
+            label94.setBackgroundResource(R.drawable.selector_default)
+            label95.setBackgroundResource(R.drawable.selector_default)
+            label101.setBackgroundResource(R.drawable.selector_default)
+            label102.setBackgroundResource(R.drawable.selector_default)
+            label103.setBackgroundResource(R.drawable.selector_default)
+            label104.setBackgroundResource(R.drawable.selector_default)
+            label105.setBackgroundResource(R.drawable.selector_default)
+            label11.setBackgroundResource(R.drawable.selector_default)
+            label12.setBackgroundResource(R.drawable.selector_default)
+            label13.setBackgroundResource(R.drawable.selector_default)
+            label9a.setBackgroundResource(R.drawable.selector_default)
+            label10a.setBackgroundResource(R.drawable.selector_default)
         }
 
         prefEditors = k.edit()
@@ -905,7 +907,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 title9.visibility = View.VISIBLE
                 if (dzenNoch) image2.setImageResource(R.drawable.arrow_up_float_black)
                 else image2.setImageResource(R.drawable.arrow_up_float)
-                scrollView.post { scrollView.smoothScrollBy(0, title9.height) }
+                CoroutineScope(Dispatchers.Main).launch {
+                    scrollView.smoothScrollBy(0, title9.height)
+                }
             }
         }
         if (idSelect == R.id.label10a) {
@@ -916,114 +920,116 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 title10.visibility = View.VISIBLE
                 if (dzenNoch) image3.setImageResource(R.drawable.arrow_up_float_black)
                 else image3.setImageResource(R.drawable.arrow_up_float)
-                scrollView.post { scrollView.smoothScrollBy(0, title10.height) }
+                CoroutineScope(Dispatchers.Main).launch {
+                    scrollView.smoothScrollBy(0, title10.height)
+                }
             }
         }
         when (idSelect) {
             R.id.label1 -> {
                 tolbarTitle = getString(R.string.kaliandar2)
-                if (dzenNoch) label1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label1.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label1.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label2 -> {
                 tolbarTitle = getString(R.string.SAJT)
-                if (dzenNoch) label2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label2.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label2.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label3 -> {
                 tolbarTitle = getString(R.string.LITURGIKON)
-                if (dzenNoch) label3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label3.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label3.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label4 -> {
                 tolbarTitle = getString(R.string.malitvy)
-                if (dzenNoch) label4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label4.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label4.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label5 -> {
                 tolbarTitle = getString(R.string.akafisty)
-                if (dzenNoch) label5.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label5.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label5.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label5.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label6 -> {
                 tolbarTitle = getString(R.string.ruzanec)
-                if (dzenNoch) label6.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label6.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label6.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label6.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label7 -> {
                 tolbarTitle = getString(R.string.MAJE_MALITVY)
-                if (dzenNoch) label7.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label7.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label7.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label7.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label8 -> {
                 tolbarTitle = getString(R.string.title_biblia)
-                if (dzenNoch) label8.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label8.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label8.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label8.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label13 -> {
                 tolbarTitle = getString(R.string.title_psalter)
-                if (dzenNoch) label13.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label13.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label13.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label13.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label91 -> {
                 tolbarTitle = getString(R.string.pesny1)
-                if (dzenNoch) label91.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label91.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label91.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label91.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label92 -> {
                 tolbarTitle = getString(R.string.pesny2)
-                if (dzenNoch) label92.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label92.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label92.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label92.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label93 -> {
                 tolbarTitle = getString(R.string.pesny3)
-                if (dzenNoch) label93.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label93.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label93.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label93.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label94 -> {
                 tolbarTitle = getString(R.string.pesny4)
-                if (dzenNoch) label94.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label94.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label94.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label94.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label95 -> {
                 tolbarTitle = getString(R.string.pesny5)
-                if (dzenNoch) label95.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label95.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label95.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label95.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label103 -> {
                 tolbarTitle = getString(R.string.CARKVA_SVIATY)
-                if (dzenNoch) label103.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label103.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label103.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label103.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label104 -> {
                 tolbarTitle = getString(R.string.KALIANDAR_BEL)
-                if (dzenNoch) label104.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label104.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label104.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label104.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label105 -> {
                 tolbarTitle = getString(R.string.parafii)
-                if (dzenNoch) label105.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label105.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label105.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label105.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label102 -> {
                 tolbarTitle = getString(R.string.pamiatka)
-                if (dzenNoch) label102.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label102.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label102.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label102.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label101 -> {
                 tolbarTitle = getString(R.string.spovedz)
-                if (dzenNoch) label101.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label101.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label101.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label101.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label11 -> {
                 tolbarTitle = getString(R.string.bsinaidal)
-                if (dzenNoch) label11.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label11.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label11.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label11.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label12 -> {
                 tolbarTitle = getString(R.string.MenuVybranoe)
-                if (dzenNoch) label12.setBackgroundColor(ContextCompat.getColor(this, R.color.colorprimary_material_dark))
-                else label12.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDivider))
+                if (dzenNoch) label12.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else label12.setBackgroundResource(R.drawable.selector_gray)
             }
         }
 

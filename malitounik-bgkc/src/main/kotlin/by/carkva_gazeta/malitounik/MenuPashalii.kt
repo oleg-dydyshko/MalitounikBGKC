@@ -53,8 +53,10 @@ class MenuPashalii : PashaliiFragment() {
             title.text = titlespan
             if (dzenNoch) {
                 title.setBackgroundResource(R.drawable.selector_dark)
-                gri.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                //gri.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                 title.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+            } else {
+                title.setBackgroundResource(R.drawable.selector_default)
             }
             title.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
             gri.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)

@@ -10,13 +10,13 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 
-class HistoryAdapter(private var context: Activity, private var history: ArrayList<String>, private var spannable: Boolean = false) : ArrayAdapter<String>(context, R.layout.example_adapter, history) {
+class HistoryAdapter(private var context: Activity, private var history: ArrayList<String>, private var spannable: Boolean = false) : ArrayAdapter<String>(context, R.layout.simple_list_item_history, history) {
     private val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
     override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
         val rootView: View
         val viewHolder: ViewHolderHistory
         if (mView == null) {
-            rootView = context.layoutInflater.inflate(R.layout.example_adapter, parent, false)
+            rootView = context.layoutInflater.inflate(R.layout.simple_list_item_history, parent, false)
             viewHolder = ViewHolderHistory()
             rootView.tag = viewHolder
             viewHolder.text = rootView.findViewById(R.id.item)

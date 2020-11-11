@@ -142,7 +142,7 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
             help.visibility = View.VISIBLE
             drag_list_view.visibility = View.GONE
         }
-        if (dzenNoch) help.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+        //if (dzenNoch) help.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
     }
 
     private fun setTollbarTheme() {

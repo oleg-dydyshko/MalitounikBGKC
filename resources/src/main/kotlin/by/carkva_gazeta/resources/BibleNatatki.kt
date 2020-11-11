@@ -161,7 +161,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
             help.visibility = View.VISIBLE
             drag_list_view.visibility = View.GONE
         }
-        if (dzenNoch) help.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+        //if (dzenNoch) help.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
     }
 
     private fun setTollbarTheme() {
@@ -422,7 +422,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 clickedView.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.text).setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
-                clickedView.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                //clickedView.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
                 val itemLeft = clickedView.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_left)
                 itemLeft.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
                 itemLeft.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)

@@ -907,7 +907,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 title9.visibility = View.VISIBLE
                 if (dzenNoch) image2.setImageResource(R.drawable.arrow_up_float_black)
                 else image2.setImageResource(R.drawable.arrow_up_float)
-                CoroutineScope(Dispatchers.Main).launch {
+                scrollView.post {
                     scrollView.smoothScrollBy(0, title9.height)
                 }
             }
@@ -920,7 +920,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 title10.visibility = View.VISIBLE
                 if (dzenNoch) image3.setImageResource(R.drawable.arrow_up_float_black)
                 else image3.setImageResource(R.drawable.arrow_up_float)
-                CoroutineScope(Dispatchers.Main).launch {
+                scrollView.post {
                     scrollView.smoothScrollBy(0, title10.height)
                 }
             }

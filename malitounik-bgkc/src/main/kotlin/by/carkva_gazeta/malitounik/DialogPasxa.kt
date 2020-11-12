@@ -65,13 +65,13 @@ class DialogPasxa : DialogFragment() {
             linear.addView(textViewZaglavie)
             input = EditTextRobotoCondensed(it)
             input.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(4)}
-            if (dzenNoch) {
+            /*if (dzenNoch) {
                 input.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                 input.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
             } else {
                 input.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                 input.setBackgroundResource(R.color.colorIcons)
-            }
+            }*/
             input.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             linear.addView(input)
             if (savedInstanceState != null) {

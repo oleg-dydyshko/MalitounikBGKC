@@ -312,17 +312,19 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
                 ExpArrayAdapterParallel.colors[1] = "#f44336"
                 val itemLeft = view.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_left)
                 itemLeft.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-                itemLeft.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+                //itemLeft.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
                 val itemRight = view.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_right)
                 itemRight.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-                itemRight.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+                //itemRight.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
                 view.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                textview.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                //textview.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                view.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
             } else {
                 ExpArrayAdapterParallel.colors[0] = "#000000"
                 ExpArrayAdapterParallel.colors[1] = "#D00505"
-                textview.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+                //textview.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
                 view.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+                view.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorDivider)
             }
             return ViewHolder(view)
         }
@@ -412,29 +414,29 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
     }
 
     private class MyDragItem(context: Context, layoutId: Int) : DragItem(context, layoutId) {
-        private val mycontext = context
+        //private val mycontext = context
         override fun onBindDragView(clickedView: View, dragView: View) {
             val text = (clickedView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.text) as TextView).text
             val dragTextView = dragView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.text) as TextView
             dragTextView.text = text
             dragTextView.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            val k = mycontext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            /*val k = mycontext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 clickedView.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.text).setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
                 //clickedView.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
                 val itemLeft = clickedView.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_left)
                 itemLeft.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-                itemLeft.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+                //itemLeft.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
                 val itemRight = clickedView.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_right)
                 itemRight.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-                itemRight.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-                dragTextView.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                //itemRight.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+                //dragTextView.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorIcons))
                 dragView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark))
             } else {
-                dragTextView.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+                //dragTextView.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
                 dragView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorDivider))
-            }
+            }*/
         }
     }
 

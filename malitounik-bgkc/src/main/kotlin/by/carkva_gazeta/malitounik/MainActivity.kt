@@ -287,9 +287,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
         carkva_link.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
 
-        var drawable = ContextCompat.getDrawable(this, R.drawable.krest)
         if (dzenNoch) {
-            drawable = ContextCompat.getDrawable(this, R.drawable.krest_black)
             label91.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             label92.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             label93.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -300,6 +298,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             label103.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             label105.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             label104.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            toolbar.popupTheme = R.style.AppCompatDark
+            setMenuIcon(ContextCompat.getDrawable(this, R.drawable.krest_black))
+            logosite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.logotip_whate))
+            label9a.setBackgroundResource(R.drawable.selector_dark)
+            label10a.setBackgroundResource(R.drawable.selector_dark)
             /*label1.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             label2.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             label3.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
@@ -323,26 +326,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             label11.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             label12.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
             label13.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))*/
+        } else {
+            setMenuIcon(ContextCompat.getDrawable(this, R.drawable.krest))
+            label9a.setBackgroundResource(R.drawable.selector_default)
+            label10a.setBackgroundResource(R.drawable.selector_default)
         }
-        ajustCompoundDrawableSizeWithText(label1, drawable)
-        ajustCompoundDrawableSizeWithText(label2, drawable)
-        ajustCompoundDrawableSizeWithText(label3, drawable)
-        ajustCompoundDrawableSizeWithText(label4, drawable)
-        ajustCompoundDrawableSizeWithText(label5, drawable)
-        ajustCompoundDrawableSizeWithText(label6, drawable)
-        ajustCompoundDrawableSizeWithText(label7, drawable)
-        ajustCompoundDrawableSizeWithText(label8, drawable)
-        ajustCompoundDrawableSizeWithText(label9, drawable)
-        ajustCompoundDrawableSizeWithText(label10, drawable)
-        ajustCompoundDrawableSizeWithText(label11, drawable)
-        ajustCompoundDrawableSizeWithText(label12, drawable)
-        ajustCompoundDrawableSizeWithText(label13, drawable)
 
-        if (dzenNoch) {
-            toolbar.popupTheme = R.style.AppCompatDark
-            drawable = ContextCompat.getDrawable(this, R.drawable.logotip_whate)
-            logosite.setImageDrawable(drawable)
-        }
         if (k.getInt("sinoidal", 0) == 1) {
             label11.visibility = View.VISIBLE
         }
@@ -571,6 +560,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         if (!dir.exists()) {
             dir.mkdir()
         }
+    }
+
+    private fun setMenuIcon(drawable: Drawable?) {
+        ajustCompoundDrawableSizeWithText(label1, drawable)
+        ajustCompoundDrawableSizeWithText(label2, drawable)
+        ajustCompoundDrawableSizeWithText(label3, drawable)
+        ajustCompoundDrawableSizeWithText(label4, drawable)
+        ajustCompoundDrawableSizeWithText(label5, drawable)
+        ajustCompoundDrawableSizeWithText(label6, drawable)
+        ajustCompoundDrawableSizeWithText(label7, drawable)
+        ajustCompoundDrawableSizeWithText(label8, drawable)
+        ajustCompoundDrawableSizeWithText(label9, drawable)
+        ajustCompoundDrawableSizeWithText(label10, drawable)
+        ajustCompoundDrawableSizeWithText(label11, drawable)
+        ajustCompoundDrawableSizeWithText(label12, drawable)
+        ajustCompoundDrawableSizeWithText(label13, drawable)
     }
 
     override fun onBackPressed() {
@@ -835,56 +840,52 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         idSelect = view?.id ?: 0
         if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
             drawer_layout.closeDrawer(GravityCompat.START)
-        }
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) {
-            label1.setBackgroundResource(R.drawable.selector_dark)
-            label2.setBackgroundResource(R.drawable.selector_dark)
-            label3.setBackgroundResource(R.drawable.selector_dark)
-            label4.setBackgroundResource(R.drawable.selector_dark)
-            label5.setBackgroundResource(R.drawable.selector_dark)
-            label6.setBackgroundResource(R.drawable.selector_dark)
-            label7.setBackgroundResource(R.drawable.selector_dark)
-            label8.setBackgroundResource(R.drawable.selector_dark)
-            label91.setBackgroundResource(R.drawable.selector_dark)
-            label92.setBackgroundResource(R.drawable.selector_dark)
-            label93.setBackgroundResource(R.drawable.selector_dark)
-            label94.setBackgroundResource(R.drawable.selector_dark)
-            label95.setBackgroundResource(R.drawable.selector_dark)
-            label101.setBackgroundResource(R.drawable.selector_dark)
-            label102.setBackgroundResource(R.drawable.selector_dark)
-            label103.setBackgroundResource(R.drawable.selector_dark)
-            label104.setBackgroundResource(R.drawable.selector_dark)
-            label105.setBackgroundResource(R.drawable.selector_dark)
-            label11.setBackgroundResource(R.drawable.selector_dark)
-            label12.setBackgroundResource(R.drawable.selector_dark)
-            label13.setBackgroundResource(R.drawable.selector_dark)
-            label9a.setBackgroundResource(R.drawable.selector_dark)
-            label10a.setBackgroundResource(R.drawable.selector_dark)
-        } else {
-            label1.setBackgroundResource(R.drawable.selector_default)
-            label2.setBackgroundResource(R.drawable.selector_default)
-            label3.setBackgroundResource(R.drawable.selector_default)
-            label4.setBackgroundResource(R.drawable.selector_default)
-            label5.setBackgroundResource(R.drawable.selector_default)
-            label6.setBackgroundResource(R.drawable.selector_default)
-            label7.setBackgroundResource(R.drawable.selector_default)
-            label8.setBackgroundResource(R.drawable.selector_default)
-            label91.setBackgroundResource(R.drawable.selector_default)
-            label92.setBackgroundResource(R.drawable.selector_default)
-            label93.setBackgroundResource(R.drawable.selector_default)
-            label94.setBackgroundResource(R.drawable.selector_default)
-            label95.setBackgroundResource(R.drawable.selector_default)
-            label101.setBackgroundResource(R.drawable.selector_default)
-            label102.setBackgroundResource(R.drawable.selector_default)
-            label103.setBackgroundResource(R.drawable.selector_default)
-            label104.setBackgroundResource(R.drawable.selector_default)
-            label105.setBackgroundResource(R.drawable.selector_default)
-            label11.setBackgroundResource(R.drawable.selector_default)
-            label12.setBackgroundResource(R.drawable.selector_default)
-            label13.setBackgroundResource(R.drawable.selector_default)
-            label9a.setBackgroundResource(R.drawable.selector_default)
-            label10a.setBackgroundResource(R.drawable.selector_default)
+            dzenNoch = k.getBoolean("dzen_noch", false)
+            if (dzenNoch) {
+                label1.setBackgroundResource(R.drawable.selector_dark)
+                label2.setBackgroundResource(R.drawable.selector_dark)
+                label3.setBackgroundResource(R.drawable.selector_dark)
+                label4.setBackgroundResource(R.drawable.selector_dark)
+                label5.setBackgroundResource(R.drawable.selector_dark)
+                label6.setBackgroundResource(R.drawable.selector_dark)
+                label7.setBackgroundResource(R.drawable.selector_dark)
+                label8.setBackgroundResource(R.drawable.selector_dark)
+                label91.setBackgroundResource(R.drawable.selector_dark)
+                label92.setBackgroundResource(R.drawable.selector_dark)
+                label93.setBackgroundResource(R.drawable.selector_dark)
+                label94.setBackgroundResource(R.drawable.selector_dark)
+                label95.setBackgroundResource(R.drawable.selector_dark)
+                label101.setBackgroundResource(R.drawable.selector_dark)
+                label102.setBackgroundResource(R.drawable.selector_dark)
+                label103.setBackgroundResource(R.drawable.selector_dark)
+                label104.setBackgroundResource(R.drawable.selector_dark)
+                label105.setBackgroundResource(R.drawable.selector_dark)
+                label11.setBackgroundResource(R.drawable.selector_dark)
+                label12.setBackgroundResource(R.drawable.selector_dark)
+                label13.setBackgroundResource(R.drawable.selector_dark)
+            } else {
+                label1.setBackgroundResource(R.drawable.selector_default)
+                label2.setBackgroundResource(R.drawable.selector_default)
+                label3.setBackgroundResource(R.drawable.selector_default)
+                label4.setBackgroundResource(R.drawable.selector_default)
+                label5.setBackgroundResource(R.drawable.selector_default)
+                label6.setBackgroundResource(R.drawable.selector_default)
+                label7.setBackgroundResource(R.drawable.selector_default)
+                label8.setBackgroundResource(R.drawable.selector_default)
+                label91.setBackgroundResource(R.drawable.selector_default)
+                label92.setBackgroundResource(R.drawable.selector_default)
+                label93.setBackgroundResource(R.drawable.selector_default)
+                label94.setBackgroundResource(R.drawable.selector_default)
+                label95.setBackgroundResource(R.drawable.selector_default)
+                label101.setBackgroundResource(R.drawable.selector_default)
+                label102.setBackgroundResource(R.drawable.selector_default)
+                label103.setBackgroundResource(R.drawable.selector_default)
+                label104.setBackgroundResource(R.drawable.selector_default)
+                label105.setBackgroundResource(R.drawable.selector_default)
+                label11.setBackgroundResource(R.drawable.selector_default)
+                label12.setBackgroundResource(R.drawable.selector_default)
+                label13.setBackgroundResource(R.drawable.selector_default)
+            }
         }
 
         prefEditors = k.edit()

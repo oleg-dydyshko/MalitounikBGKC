@@ -97,13 +97,13 @@ class DialogBibleNatatka : DialogFragment() {
             val editTextView = EditTextRobotoCondensed(it)
             editTextView.setPadding(realpadding, realpadding, realpadding, realpadding)
             editTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) {
+            /*if (dzenNoch) {
                 editTextView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                 editTextView.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
             } else {
                 editTextView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                 editTextView.setBackgroundResource(R.color.colorIcons)
-            }
+            }*/
             editTextView.setText(editText)
             editTextView.requestFocus()
             // Показываем клавиатуру

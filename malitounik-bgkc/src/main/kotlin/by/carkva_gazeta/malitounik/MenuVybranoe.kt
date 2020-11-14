@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.woxthebox.draglistview.DragItem
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
@@ -101,7 +100,7 @@ class MenuVybranoe : VybranoeFragment() {
             drag_list_view.setAdapter(adapter, false)
             drag_list_view.setCanDragHorizontally(false)
             drag_list_view.setCanDragVertically(true)
-            drag_list_view.setCustomDragItem(MyDragItem(it, R.layout.list_item))
+            //drag_list_view.setCustomDragItem(MyDragItem(it, R.layout.list_item))
             drag_list_view.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
                 override fun onItemSwipeStarted(item: ListSwipeItem) {
                 }
@@ -189,12 +188,12 @@ class MenuVybranoe : VybranoeFragment() {
                 val itemRight = view.findViewById<TextViewRobotoCondensed>(R.id.item_right)
                 itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
                 //itemRight.setBackgroundResource(R.color.colorprimary_material_dark)
-                view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_dark)
+                view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_dark_list)
                 //textview.setTextColor(ContextCompat.getColor(parent.context, R.color.colorIcons))
                 view.setBackgroundResource(R.color.colorprimary_material_dark)
             } else {
                 //textview.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_text))
-                view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_default)
+                view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_default_list)
                 view.setBackgroundResource(R.color.colorDivider)
             }
             return ViewHolder(view)
@@ -257,14 +256,14 @@ class MenuVybranoe : VybranoeFragment() {
         }
     }
 
-    private class MyDragItem(context: Context, layoutId: Int) : DragItem(context, layoutId) {
+    /*private class MyDragItem(context: Context, layoutId: Int) : DragItem(context, layoutId) {
         //private val mycontext = context
         override fun onBindDragView(clickedView: View, dragView: View) {
             val text = (clickedView.findViewById<View>(R.id.text) as TextView).text
             val dragTextView = dragView.findViewById<View>(R.id.text) as TextView
             dragTextView.text = text
             dragTextView.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            /*val k = mycontext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val k = mycontext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 clickedView.findViewById<TextViewRobotoCondensed>(R.id.text).setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -280,9 +279,9 @@ class MenuVybranoe : VybranoeFragment() {
             } else {
                 dragTextView.setTextColor(ContextCompat.getColor(mycontext, R.color.colorPrimary_text))
                 dragView.findViewById<View>(R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, R.color.colorDivider))
-            }*/
+            }
         }
-    }
+    }*/
 
     companion object {
         var vybranoe: ArrayList<VybranoeData> = ArrayList()

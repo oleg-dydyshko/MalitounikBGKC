@@ -21,7 +21,6 @@ import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
 import by.carkva_gazeta.resources.DialogZakladkaDelite.ZakladkaDeliteListiner
 import com.google.gson.Gson
-import com.woxthebox.draglistview.DragItem
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
@@ -84,7 +83,7 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
         drag_list_view.setAdapter(adapter, false)
         drag_list_view.setCanDragHorizontally(false)
         drag_list_view.setCanDragVertically(true)
-        drag_list_view.setCustomDragItem(MyDragItem(this, by.carkva_gazeta.malitounik.R.layout.list_item))
+        //drag_list_view.setCustomDragItem(MyDragItem(this, by.carkva_gazeta.malitounik.R.layout.list_item))
         drag_list_view.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
             override fun onItemSwipeStarted(item: ListSwipeItem) {
             }
@@ -294,14 +293,14 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
                 val itemRight = view.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_right)
                 itemRight.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
                 //itemRight.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-                view.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                view.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark_list)
                 //textview.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorIcons))
                 view.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
             } else {
                 ExpArrayAdapterParallel.colors[0] = "#000000"
                 ExpArrayAdapterParallel.colors[1] = "#D00505"
                 //textview.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-                view.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+                view.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default_list)
                 view.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorDivider)
             }
             return ViewHolder(view)
@@ -537,14 +536,14 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
         }
     }
 
-    private class MyDragItem(context: Context, layoutId: Int) : DragItem(context, layoutId) {
+    /*private class MyDragItem(context: Context, layoutId: Int) : DragItem(context, layoutId) {
         //private val mycontext = context
         override fun onBindDragView(clickedView: View, dragView: View) {
             val text = (clickedView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.text) as TextView).text
             val dragTextView = dragView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.text) as TextView
             dragTextView.text = text
             dragTextView.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            /*val k = mycontext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val k = mycontext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 clickedView.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.text).setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
@@ -560,9 +559,9 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
             } else {
                 dragTextView.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
                 dragView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorDivider))
-            }*/
+            }
         }
-    }
+    }*/
 
     /*private inner class BibleZakladkiListAdaprer(private val mContext: Activity, private val itemsL: ArrayList<String>) : ArrayAdapter<String>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_3, by.carkva_gazeta.malitounik.R.id.label, itemsL) {
         private val k: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)

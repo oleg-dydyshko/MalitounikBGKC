@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
@@ -99,13 +98,13 @@ companion object {
 
                 override fun onNothingSelected(arg0: AdapterView<*>?) {}
             }
-            if (dzenNoch) {
+            /*if (dzenNoch) {
                 spinner.setBackgroundResource(R.drawable.selector_dark)
                 spinner2.setBackgroundResource(R.drawable.selector_dark)
             } else {
                 spinner.setBackgroundResource(R.drawable.selector_default)
                 spinner2.setBackgroundResource(R.drawable.selector_default)
-            }
+            }*/
             pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
                 override fun onPageSelected(position: Int) {
@@ -164,12 +163,12 @@ companion object {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextViewRobotoCondensed
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            /*if (dzenNoch) {
-                textView.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
+            if (dzenNoch) {
+                //textView.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
                 textView.setBackgroundResource(R.drawable.selector_dark)
             } else {
-                textView.setBackgroundResource(R.drawable.selector_white)
-            }*/
+                textView.setBackgroundResource(R.drawable.selector_default)
+            }
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
                     textView.setTypeface(null, Typeface.BOLD)
@@ -200,12 +199,12 @@ companion object {
                 viewHolder = convert.tag as ViewHolder
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            /*if (dzenNoch) {
-                viewHolder.text?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
+            if (dzenNoch) {
+                //viewHolder.text?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
             } else {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-            }*/
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
+            }
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
                     viewHolder.text?.setTypeface(null, Typeface.BOLD)

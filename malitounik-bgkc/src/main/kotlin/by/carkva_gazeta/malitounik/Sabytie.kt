@@ -2574,7 +2574,12 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
             viewHolder.text?.text = spinnerList[position]
             viewHolder.text?.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            if (dzenNoch) viewHolder.text?.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+            //if (dzenNoch) viewHolder.text?.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+            if (dzenNoch) {
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
+            } else {
+                viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
+            }
             return rootView
         }
 
@@ -2583,7 +2588,12 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val text: TextView = view.findViewById(R.id.text1)
             text.text = spinnerList[position]
             text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            if (dzenNoch) text.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+            //if (dzenNoch) text.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+            if (dzenNoch) {
+                text.setBackgroundResource(R.drawable.selector_dark)
+            } else {
+                text.setBackgroundResource(R.drawable.selector_default)
+            }
             return view
         }
     }

@@ -403,11 +403,7 @@ internal class ZmenyiaChastki(context: Context) {
                 }
             }
             if (chast == 4) {
-                result = if (kal[Calendar.DAY_OF_WEEK] == Calendar.SUNDAY) {
-                    readFile(R.raw.prichasnik)
-                } else {
-                    readFile(R.raw.prichasnik_budni)
-                }
+                readFile(R.raw.prichasnik)
             }
             return result
         }

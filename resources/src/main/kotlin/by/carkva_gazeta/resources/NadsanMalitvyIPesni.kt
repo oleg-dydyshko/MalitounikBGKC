@@ -95,7 +95,7 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             if (dzenNoch) {
@@ -108,7 +108,7 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         }
         if (dzenNoch) {
             malitvy_i_pesny.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-        }
+        }*/
         malitvy_i_pesny.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation

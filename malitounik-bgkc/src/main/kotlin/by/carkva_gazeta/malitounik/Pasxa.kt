@@ -1,14 +1,12 @@
 package by.carkva_gazeta.malitounik
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.pasxa.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -47,7 +45,7 @@ class Pasxa : AppCompatActivity() {
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        if (dzenNoch) {
+        /*if (dzenNoch) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val window = window
                 //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -56,7 +54,7 @@ class Pasxa : AppCompatActivity() {
                 window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
             }
             pasxa.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-        }
+        }*/
         val inputStream = resources.openRawResource(R.raw.pasxa)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)

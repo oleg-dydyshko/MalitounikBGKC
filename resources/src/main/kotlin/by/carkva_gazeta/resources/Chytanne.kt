@@ -68,10 +68,10 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var n = 0
     private var yS = 0
     private var spid = 60
-    private var scrollTimer = Timer()
-    private var procentTimer = Timer()
-    private var resetTimer = Timer()
-    private var autoscrollTimer = Timer()
+    private var scrollTimer: Timer? = null
+    private var procentTimer: Timer? = null
+    private var resetTimer: Timer? = null
+    private var autoscrollTimer: Timer? = null
     private var scrollerSchedule: TimerTask? = null
     private var procentSchedule: TimerTask? = null
     private var resetSchedule: TimerTask? = null
@@ -130,13 +130,14 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         })
         InteractiveScroll.setOnNestedTouchListener(object : OnNestedTouchListener {
             override fun onTouch(action: Boolean) {
+                stopAutoStartScroll()
                 mActionDown = action
             }
         })
         if (dzenNoch) progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
         spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
             //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -147,7 +148,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
                 window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
             }
-        }
+        }*/
         setChtenia(savedInstanceState)
         if (k.getBoolean("help_str", true)) {
             startActivity(Intent(this, HelpText::class.java))
@@ -796,9 +797,10 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             if (e == 0) ssbTitle.setSpan(StyleSpan(Typeface.BOLD), 0, ssbTitle.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             val textView1 = TextViewRobotoCondensed(this)
                             textView1.isFocusable = false
+                            textView1.setTextIsSelectable(true)
                             textView1.text = ssbTitle
                             textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                            if (dzenNoch) textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+                            //if (dzenNoch) textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
                             textView1.setPadding(0, 10, 0, 0)
                             LinearButtom.addView(textView1)
                             cytannelist.add(textView1)
@@ -873,7 +875,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             textView2.setTextIsSelectable(true)
                             textView2.text = textBiblia
                             textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                            if (dzenNoch) textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+                            //if (dzenNoch) textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
                             textView2.setPadding(0, 10, 0, 0)
                             cytannelist.add(textView2)
                             LinearButtom.addView(textView2)
@@ -904,7 +906,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         textView2.isFocusable = false
         textView2.text = ssb
         textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        if (dzenNoch) textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+        //if (dzenNoch) textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
         textView2.setPadding(0, 10, 0, 0)
         cytannelist.add(textView2)
         LinearButtom.addView(textView2)
@@ -932,16 +934,16 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 break
             }
         }
-        autoscrollTimer.schedule(autoscrollSchedule, autoTime)
+        autoscrollTimer?.schedule(autoscrollSchedule, autoTime)
     }
 
     private fun stopAutoStartScroll() {
-        autoscrollTimer.cancel()
+        autoscrollTimer?.cancel()
         autoscrollSchedule = null
     }
 
     private fun stopProcent() {
-        procentTimer.cancel()
+        procentTimer?.cancel()
         procentSchedule = null
     }
 
@@ -955,14 +957,14 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 }
             }
         }
-        procentTimer.schedule(procentSchedule, 1000)
+        procentTimer?.schedule(procentSchedule, 1000)
     }
 
     private fun stopAutoScroll() {
         cytannelist.forEach {
             it.setTextIsSelectable(true)
         }
-        scrollTimer.cancel()
+        scrollTimer?.cancel()
         scrollerSchedule = null
         if (!k.getBoolean("scrinOn", false)) {
             resetTimer = Timer()
@@ -971,7 +973,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                     CoroutineScope(Dispatchers.Main).launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
                 }
             }
-            resetTimer.schedule(resetSchedule, 60000)
+            resetTimer?.schedule(resetSchedule, 60000)
         }
     }
 
@@ -979,7 +981,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         cytannelist.forEach {
             it.setTextIsSelectable(false)
         }
-        resetTimer.cancel()
+        resetTimer?.cancel()
         scrollTimer = Timer()
         resetSchedule = null
         scrollerSchedule = object : TimerTask() {
@@ -992,7 +994,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+        scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -1010,6 +1012,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
+        stopAutoStartScroll()
         if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
             MainActivity.dialogVisable = true
         }
@@ -1062,11 +1065,13 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         super.onPause()
         stopAutoScroll()
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer.cancel()
-        resetTimer.cancel()
-        procentTimer.cancel()
+        scrollTimer?.cancel()
+        resetTimer?.cancel()
+        autoscrollTimer?.cancel()
+        procentTimer?.cancel()
         scrollerSchedule = null
         procentSchedule = null
+        autoscrollSchedule = null
         resetSchedule = null
     }
 

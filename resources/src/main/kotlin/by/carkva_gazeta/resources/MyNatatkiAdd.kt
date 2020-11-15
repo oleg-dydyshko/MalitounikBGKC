@@ -1,14 +1,12 @@
 package by.carkva_gazeta.resources
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuNatatki
 import by.carkva_gazeta.malitounik.MyNatatkiFiles
@@ -56,14 +54,14 @@ class MyNatatkiAdd : AppCompatActivity() {
         // Показываем клавиатуру
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-        if (dzenNoch) { //getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.colorprimary_material_dark));
+        /*if (dzenNoch) { //getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.colorprimary_material_dark));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
                 window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
             }
-        }
+        }*/
         EditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         if (savedInstanceState != null) {
             filename = savedInstanceState.getString("filename") ?: ""
@@ -73,12 +71,12 @@ class MyNatatkiAdd : AppCompatActivity() {
             redak = intent.getBooleanExtra("redak", false)
         }
         file.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        if (dzenNoch) {
+        /*if (dzenNoch) {
             EditText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
             file.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
         } else {
             file.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-        }
+        }*/
         if (redak) {
             title = resources.getString(by.carkva_gazeta.malitounik.R.string.malitva_edit)
             val res = File("$filesDir/Malitva/$filename").readText().split("<MEMA></MEMA>").toTypedArray()
@@ -114,7 +112,7 @@ class MyNatatkiAdd : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title_toolbar.text = title
         if (dzenNoch) {
-            toolbar.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
 

@@ -2,7 +2,9 @@ package by.carkva_gazeta.malitounik
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Rect
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.ScrollView
 
@@ -18,9 +20,14 @@ class InteractiveScrollView : ScrollView {
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?) : super(context)
 
+    override fun computeScrollDeltaToGetChildRectOnScreen(rect: Rect?): Int {
+        return 0
+    }
+
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
         val view = getChildAt(childCount - 1)
         val diff = view.bottom - (height + scrollY)
+        Log.d("Oleg", scrollY.toString())
         if (diff == 0) {
             mListener?.onBottomReached()
         }

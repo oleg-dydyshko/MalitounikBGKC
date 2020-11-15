@@ -74,10 +74,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var spid = 60
     private var resurs = ""
     private var men = true
-    private var scrollTimer = Timer()
-    private var procentTimer = Timer()
-    private var resetTimer = Timer()
-    private var autoscrollTimer = Timer()
+    private var scrollTimer: Timer? = null
+    private var procentTimer: Timer? = null
+    private var resetTimer: Timer? = null
+    private var autoscrollTimer: Timer? = null
     private var scrollerSchedule: TimerTask? = null
     private var procentSchedule: TimerTask? = null
     private var resetSchedule: TimerTask? = null
@@ -262,7 +262,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         TextView.textSize = fontBiblia
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
             //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -273,9 +273,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
                 window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
             }
-        }
+        }*/
         if (dzenNoch) {
-            TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            //TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
             progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             WebView.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
         }
@@ -573,16 +573,16 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 break
             }
         }
-        autoscrollTimer.schedule(autoscrollSchedule, autoTime)
+        autoscrollTimer?.schedule(autoscrollSchedule, autoTime)
     }
 
     private fun stopAutoStartScroll() {
-        autoscrollTimer.cancel()
+        autoscrollTimer?.cancel()
         autoscrollSchedule = null
     }
 
     private fun stopProcent() {
-        procentTimer.cancel()
+        procentTimer?.cancel()
         procentSchedule = null
     }
 
@@ -596,11 +596,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }
             }
         }
-        procentTimer.schedule(procentSchedule, 1000)
+        procentTimer?.schedule(procentSchedule, 1000)
     }
 
     private fun stopAutoScroll() {
-        scrollTimer.cancel()
+        scrollTimer?.cancel()
         scrollerSchedule = null
         if (!k.getBoolean("scrinOn", false)) {
             resetTimer = Timer()
@@ -609,12 +609,12 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     CoroutineScope(Dispatchers.Main).launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
                 }
             }
-            resetTimer.schedule(resetSchedule, 60000)
+            resetTimer?.schedule(resetSchedule, 60000)
         }
     }
 
     private fun startAutoScroll() {
-        resetTimer.cancel()
+        resetTimer?.cancel()
         scrollTimer = Timer()
         resetSchedule = null
         scrollerSchedule = object : TimerTask() {
@@ -627,7 +627,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+        scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -639,6 +639,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val prefEditor: Editor = k.edit()
         val id = v?.id ?: 0
         if (id == R.id.WebView) {
+            stopAutoStartScroll()
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> mActionDown = true
                 MotionEvent.ACTION_UP -> mActionDown = false
@@ -863,6 +864,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
+        stopAutoStartScroll()
         if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
             MainActivity.dialogVisable = true
         }
@@ -1033,11 +1035,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         prefEditor.apply()
         stopAutoScroll()
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer.cancel()
-        resetTimer.cancel()
-        procentTimer.cancel()
+        scrollTimer?.cancel()
+        resetTimer?.cancel()
+        autoscrollTimer?.cancel()
+        procentTimer?.cancel()
         scrollerSchedule = null
         procentSchedule = null
+        autoscrollSchedule = null
         resetSchedule = null
     }
 

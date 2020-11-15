@@ -74,10 +74,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var yS = 0
     private var spid = 60
     private var belarus = false
-    private var scrollTimer = Timer()
-    private var autoscrollTimer = Timer()
-    private var procentTimer = Timer()
-    private var resetTimer = Timer()
+    private var scrollTimer: Timer? = null
+    private var autoscrollTimer: Timer? = null
+    private var procentTimer: Timer? = null
+    private var resetTimer: Timer? = null
     private var scrollerSchedule: TimerTask? = null
     private var autoscrollSchedule: TimerTask? = null
     private var procentSchedule: TimerTask? = null
@@ -400,7 +400,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             copyBig.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
             adpravit.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             if (dzenNoch) {
@@ -410,7 +410,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
                 window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
             }
-        }
+        }*/
         val file: File = if (belarus) File("$filesDir/MaranAtaBel/$cytanne.json") else File("$filesDir/MaranAta/$cytanne.json")
         if (file.exists()) {
             val inputStream = FileReader(file)
@@ -469,6 +469,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         val prefEditor: Editor = k.edit()
         val id = v?.id ?: 0
         if (id == R.id.ListView) {
+            stopAutoStartScroll()
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> mActionDown = true
                 MotionEvent.ACTION_UP -> mActionDown = false
@@ -943,7 +944,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     private fun stopAutoScroll() {
-        scrollTimer.cancel()
+        scrollTimer?.cancel()
         scrollerSchedule = null
         if (!k.getBoolean("scrinOn", false)) {
             resetTimer = Timer()
@@ -952,13 +953,13 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     CoroutineScope(Dispatchers.Main).launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
                 }
             }
-            resetTimer.schedule(resetSchedule, 60000)
+            resetTimer?.schedule(resetSchedule, 60000)
         }
     }
 
     private fun startAutoScroll() {
-        resetTimer.cancel()
-        autoscrollTimer.cancel()
+        resetTimer?.cancel()
+        autoscrollTimer?.cancel()
         scrollTimer = Timer()
         resetSchedule = null
         scrollerSchedule = object : TimerTask() {
@@ -978,7 +979,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
+        scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     private fun autoStartScroll() {
@@ -1003,16 +1004,16 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 break
             }
         }
-        autoscrollTimer.schedule(autoscrollSchedule, autoTime)
+        autoscrollTimer?.schedule(autoscrollSchedule, autoTime)
     }
 
     private fun stopAutoStartScroll() {
-        autoscrollTimer.cancel()
+        autoscrollTimer?.cancel()
         autoscrollSchedule = null
     }
 
     private fun stopProcent() {
-        procentTimer.cancel()
+        procentTimer?.cancel()
         procentSchedule = null
     }
 
@@ -1026,7 +1027,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 }
             }
         }
-        procentTimer.schedule(procentSchedule, 1000)
+        procentTimer?.schedule(procentSchedule, 1000)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -1102,10 +1103,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         maranAtaScrollPosition = ListView.firstVisiblePosition
         prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
         prefEditors.apply()
-        scrollTimer.cancel()
-        autoscrollTimer.cancel()
-        resetTimer.cancel()
-        procentTimer.cancel()
+        scrollTimer?.cancel()
+        autoscrollTimer?.cancel()
+        resetTimer?.cancel()
+        procentTimer?.cancel()
         scrollerSchedule = null
         autoscrollSchedule = null
         procentSchedule = null
@@ -1168,6 +1169,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
+        stopAutoStartScroll()
         if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
             MainActivity.dialogVisable = true
         }

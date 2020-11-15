@@ -652,7 +652,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         if (dzenNoch) {
             drawable = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.krest_black)
             title.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            title.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+            label6.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+            /*title.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
             label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
             label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
             label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
@@ -665,15 +666,16 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             label4.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
             label5.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
             label6.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            textViewB.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            textViewB.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))*/
         } else {
-            title.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            label6.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            /*title.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
             label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
             label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
             label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
             label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
             label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))*/
         }
         ajustCompoundDrawableSizeWithText(label1, drawable)
         ajustCompoundDrawableSizeWithText(label2, drawable)
@@ -688,7 +690,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         label5.setOnClickListener(this)
         label6.setOnClickListener(this)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
             //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -699,7 +701,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
                 window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
             }
-        }
+        }*/
 
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
@@ -1593,19 +1595,17 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         var rub = -1
         if (dzenNoch) {
-            label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+            label1.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+            label2.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+            label3.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+            label4.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+            label5.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
         } else {
-            label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            label1.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            label2.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            label3.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            label4.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            label5.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
         }
         if (idSelect == R.id.label1) listView.onItemLongClickListener = this
         else listView.onItemLongClickListener = null
@@ -1619,35 +1619,40 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_niadaunia)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
-                if (dzenNoch) label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+                if (dzenNoch) label1.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata)
+                else label1.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_gray)
             }
             R.id.label2 -> {
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_gistoryia_carkvy)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
                 rub = 1
-                if (dzenNoch) label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+                if (dzenNoch) label2.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata)
+                else label2.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_gray)
             }
             R.id.label3 -> {
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_malitouniki)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
                 rub = 2
-                if (dzenNoch) label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+                if (dzenNoch) label3.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata)
+                else label3.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_gray)
             }
             R.id.label4 -> {
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_speuniki)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
                 rub = 3
-                if (dzenNoch) label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+                if (dzenNoch) label4.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata)
+                else label4.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_gray)
             }
             R.id.label5 -> {
                 nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_rel_litaratura)
                 title_toolbar.text = nameRubrika
                 page_toolbar.text = ""
                 rub = 4
-                if (dzenNoch) label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)) else label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorDivider))
+                if (dzenNoch) label5.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata)
+                else label5.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_gray)
             }
             R.id.label6 -> {
                 if (PackageManager.PERMISSION_DENIED == permissionCheck) {

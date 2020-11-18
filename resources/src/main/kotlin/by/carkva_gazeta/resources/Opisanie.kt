@@ -2,7 +2,6 @@ package by.carkva_gazeta.resources
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -13,12 +12,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import kotlinx.android.synthetic.main.akafist_under.*
-import kotlinx.android.synthetic.main.akafist_under.title_toolbar
-import kotlinx.android.synthetic.main.akafist_under.toolbar
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader

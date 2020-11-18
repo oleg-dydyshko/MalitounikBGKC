@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
 import android.widget.LinearLayout
 import android.widget.TimePicker
 import androidx.appcompat.app.AlertDialog

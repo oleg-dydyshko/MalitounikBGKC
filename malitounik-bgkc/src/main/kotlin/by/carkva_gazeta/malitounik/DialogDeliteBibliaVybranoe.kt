@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment
  * Created by oleg on 8.3.18
  */
 class DialogDeliteBibliaVybranoe : DialogFragment() {
-    private lateinit var mListener: DialogDeliteBibliVybranoeListener
+    private var mListener: DialogDeliteBibliVybranoeListener? = null
     private var position = 0
     private lateinit var title: String
     private lateinit var alert: AlertDialog
@@ -24,6 +24,11 @@ class DialogDeliteBibliaVybranoe : DialogFragment() {
     interface DialogDeliteBibliVybranoeListener {
         fun vybranoeDelite(position: Int)
         fun vybranoeDeliteCancel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mListener?.vybranoeDeliteCancel()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,8 +73,8 @@ class DialogDeliteBibliaVybranoe : DialogFragment() {
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             linearLayout.addView(textView)
-            builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener.vybranoeDelite(position) }
-            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { _: DialogInterface, _: Int -> mListener.vybranoeDeliteCancel() }
+            builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener?.vybranoeDelite(position) }
+            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { _: DialogInterface, _: Int -> mListener?.vybranoeDeliteCancel() }
             builder.setView(linearLayout)
             alert = builder.create()
         }

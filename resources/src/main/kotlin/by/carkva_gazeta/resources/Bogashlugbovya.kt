@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager
 import android.webkit.WebSettings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import com.google.gson.Gson
@@ -33,7 +34,6 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.lang.reflect.Field
 import java.util.*
 
 
@@ -96,6 +96,283 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
 
     companion object {
+
+        private val resursMap = ArrayMap<String, Int>()
+
+        init {
+            resursMap["bogashlugbovya1"] = R.raw.bogashlugbovya1
+            resursMap["bogashlugbovya4"] = R.raw.bogashlugbovya1
+            resursMap["bogashlugbovya6"] = R.raw.bogashlugbovya6
+            resursMap["bogashlugbovya8"] = R.raw.bogashlugbovya8
+            resursMap["bogashlugbovya11"] = R.raw.bogashlugbovya11
+            resursMap["bogashlugbovya12_1"] = R.raw.bogashlugbovya12_1
+            resursMap["bogashlugbovya12_2"] = R.raw.bogashlugbovya12_2
+            resursMap["bogashlugbovya12_3"] = R.raw.bogashlugbovya12_3
+            resursMap["bogashlugbovya12_4"] = R.raw.bogashlugbovya12_4
+            resursMap["bogashlugbovya12_5"] = R.raw.bogashlugbovya12_5
+            resursMap["bogashlugbovya12_6"] = R.raw.bogashlugbovya12_6
+            resursMap["bogashlugbovya12_7"] = R.raw.bogashlugbovya12_7
+            resursMap["bogashlugbovya12_8"] = R.raw.bogashlugbovya12_8
+            resursMap["bogashlugbovya12_9"] = R.raw.bogashlugbovya12_9
+            resursMap["bogashlugbovya13_1"] = R.raw.bogashlugbovya13_1
+            resursMap["bogashlugbovya13_2"] = R.raw.bogashlugbovya13_2
+            resursMap["bogashlugbovya13_3"] = R.raw.bogashlugbovya13_3
+            resursMap["bogashlugbovya13_4"] = R.raw.bogashlugbovya13_4
+            resursMap["bogashlugbovya13_5"] = R.raw.bogashlugbovya13_5
+            resursMap["bogashlugbovya13_6"] = R.raw.bogashlugbovya13_6
+            resursMap["bogashlugbovya13_7"] = R.raw.bogashlugbovya13_7
+            resursMap["bogashlugbovya13_8"] = R.raw.bogashlugbovya13_8
+            resursMap["bogashlugbovya14_1"] = R.raw.bogashlugbovya14_1
+            resursMap["bogashlugbovya14_2"] = R.raw.bogashlugbovya14_2
+            resursMap["bogashlugbovya14_3"] = R.raw.bogashlugbovya14_3
+            resursMap["bogashlugbovya14_4"] = R.raw.bogashlugbovya14_4
+            resursMap["bogashlugbovya14_5"] = R.raw.bogashlugbovya14_5
+            resursMap["bogashlugbovya14_6"] = R.raw.bogashlugbovya14_6
+            resursMap["bogashlugbovya14_7"] = R.raw.bogashlugbovya14_7
+            resursMap["bogashlugbovya14_8"] = R.raw.bogashlugbovya14_8
+            resursMap["bogashlugbovya14_9"] = R.raw.bogashlugbovya14_9
+            resursMap["bogashlugbovya15_1"] = R.raw.bogashlugbovya15_1
+            resursMap["bogashlugbovya15_2"] = R.raw.bogashlugbovya15_2
+            resursMap["bogashlugbovya15_3"] = R.raw.bogashlugbovya15_3
+            resursMap["bogashlugbovya15_4"] = R.raw.bogashlugbovya15_4
+            resursMap["bogashlugbovya15_5"] = R.raw.bogashlugbovya15_5
+            resursMap["bogashlugbovya15_6"] = R.raw.bogashlugbovya15_6
+            resursMap["bogashlugbovya15_7"] = R.raw.bogashlugbovya15_7
+            resursMap["bogashlugbovya15_8"] = R.raw.bogashlugbovya15_8
+            resursMap["bogashlugbovya15_9"] = R.raw.bogashlugbovya15_9
+            resursMap["bogashlugbovya16_1"] = R.raw.bogashlugbovya16_1
+            resursMap["bogashlugbovya16_2"] = R.raw.bogashlugbovya16_2
+            resursMap["bogashlugbovya16_3"] = R.raw.bogashlugbovya16_3
+            resursMap["bogashlugbovya16_4"] = R.raw.bogashlugbovya16_4
+            resursMap["bogashlugbovya16_5"] = R.raw.bogashlugbovya16_5
+            resursMap["bogashlugbovya16_6"] = R.raw.bogashlugbovya16_6
+            resursMap["bogashlugbovya16_7"] = R.raw.bogashlugbovya16_7
+            resursMap["bogashlugbovya16_8"] = R.raw.bogashlugbovya16_8
+            resursMap["bogashlugbovya16_9"] = R.raw.bogashlugbovya16_9
+            resursMap["bogashlugbovya16_10"] = R.raw.bogashlugbovya16_10
+            resursMap["bogashlugbovya16_11"] = R.raw.bogashlugbovya16_11
+            resursMap["bogashlugbovya17_1"] = R.raw.bogashlugbovya17_1
+            resursMap["bogashlugbovya17_2"] = R.raw.bogashlugbovya17_2
+            resursMap["bogashlugbovya17_3"] = R.raw.bogashlugbovya17_3
+            resursMap["bogashlugbovya17_4"] = R.raw.bogashlugbovya17_4
+            resursMap["bogashlugbovya17_5"] = R.raw.bogashlugbovya17_5
+            resursMap["bogashlugbovya17_6"] = R.raw.bogashlugbovya17_6
+            resursMap["bogashlugbovya17_7"] = R.raw.bogashlugbovya17_7
+            resursMap["bogashlugbovya17_8"] = R.raw.bogashlugbovya17_8
+            resursMap["akafist0"] = R.raw.akafist0
+            resursMap["akafist1"] = R.raw.akafist1
+            resursMap["akafist2"] = R.raw.akafist2
+            resursMap["akafist3"] = R.raw.akafist3
+            resursMap["akafist4"] = R.raw.akafist4
+            resursMap["akafist5"] = R.raw.akafist5
+            resursMap["akafist6"] = R.raw.akafist6
+            resursMap["akafist7"] = R.raw.akafist7
+            resursMap["malitvy1"] = R.raw.malitvy1
+            resursMap["malitvy2"] = R.raw.malitvy2
+            resursMap["paslia_prychascia1"] = R.raw.paslia_prychascia1
+            resursMap["paslia_prychascia2"] = R.raw.paslia_prychascia2
+            resursMap["paslia_prychascia3"] = R.raw.paslia_prychascia3
+            resursMap["paslia_prychascia4"] = R.raw.paslia_prychascia4
+            resursMap["paslia_prychascia5"] = R.raw.paslia_prychascia5
+            resursMap["prynagodnyia_0"] = R.raw.prynagodnyia_0
+            resursMap["prynagodnyia_1"] = R.raw.prynagodnyia_1
+            resursMap["prynagodnyia_2"] = R.raw.prynagodnyia_2
+            resursMap["prynagodnyia_3"] = R.raw.prynagodnyia_3
+            resursMap["prynagodnyia_4"] = R.raw.prynagodnyia_4
+            resursMap["prynagodnyia_5"] = R.raw.prynagodnyia_5
+            resursMap["prynagodnyia_6"] = R.raw.prynagodnyia_6
+            resursMap["prynagodnyia_7"] = R.raw.prynagodnyia_7
+            resursMap["prynagodnyia_8"] = R.raw.prynagodnyia_8
+            resursMap["prynagodnyia_9"] = R.raw.prynagodnyia_9
+            resursMap["prynagodnyia_10"] = R.raw.prynagodnyia_10
+            resursMap["prynagodnyia_11"] = R.raw.prynagodnyia_11
+            resursMap["prynagodnyia_12"] = R.raw.prynagodnyia_12
+            resursMap["prynagodnyia_13"] = R.raw.prynagodnyia_13
+            resursMap["prynagodnyia_14"] = R.raw.prynagodnyia_14
+            resursMap["prynagodnyia_15"] = R.raw.prynagodnyia_15
+            resursMap["prynagodnyia_16"] = R.raw.prynagodnyia_16
+            resursMap["prynagodnyia_17"] = R.raw.prynagodnyia_17
+            resursMap["prynagodnyia_18"] = R.raw.prynagodnyia_18
+            resursMap["prynagodnyia_19"] = R.raw.prynagodnyia_19
+            resursMap["prynagodnyia_20"] = R.raw.prynagodnyia_20
+            resursMap["prynagodnyia_21"] = R.raw.prynagodnyia_21
+            resursMap["prynagodnyia_22"] = R.raw.prynagodnyia_22
+            resursMap["prynagodnyia_23"] = R.raw.prynagodnyia_23
+            resursMap["prynagodnyia_24"] = R.raw.prynagodnyia_24
+            resursMap["prynagodnyia_25"] = R.raw.prynagodnyia_25
+            resursMap["prynagodnyia_26"] = R.raw.prynagodnyia_26
+            resursMap["prynagodnyia_27"] = R.raw.prynagodnyia_27
+            resursMap["prynagodnyia_28"] = R.raw.prynagodnyia_28
+            resursMap["prynagodnyia_29"] = R.raw.prynagodnyia_29
+            resursMap["prynagodnyia_30"] = R.raw.prynagodnyia_30
+            resursMap["prynagodnyia_31"] = R.raw.prynagodnyia_31
+            resursMap["prynagodnyia_32"] = R.raw.prynagodnyia_32
+            resursMap["prynagodnyia_33"] = R.raw.prynagodnyia_33
+            resursMap["prynagodnyia_34"] = R.raw.prynagodnyia_34
+            resursMap["prynagodnyia_35"] = R.raw.prynagodnyia_35
+            resursMap["prynagodnyia_36"] = R.raw.prynagodnyia_36
+            resursMap["ruzanec0"] = R.raw.ruzanec0
+            resursMap["ruzanec1"] = R.raw.ruzanec1
+            resursMap["ruzanec2"] = R.raw.ruzanec2
+            resursMap["ruzanec3"] = R.raw.ruzanec3
+            resursMap["ruzanec4"] = R.raw.ruzanec4
+            resursMap["ruzanec5"] = R.raw.ruzanec5
+            resursMap["ruzanec6"] = R.raw.ruzanec6
+            resursMap["ton1"] = R.raw.ton1
+            resursMap["ton1_budni"] = R.raw.ton1_budni
+            resursMap["ton2"] = R.raw.ton2
+            resursMap["ton2_budni"] = R.raw.ton2_budni
+            resursMap["ton3"] = R.raw.ton3
+            resursMap["ton3_budni"] = R.raw.ton3_budni
+            resursMap["ton4"] = R.raw.ton4
+            resursMap["ton4_budni"] = R.raw.ton4_budni
+            resursMap["ton5"] = R.raw.ton5
+            resursMap["ton5_budni"] = R.raw.ton5_budni
+            resursMap["ton6"] = R.raw.ton6
+            resursMap["ton6_budni"] = R.raw.ton6_budni
+            resursMap["ton7"] = R.raw.ton7
+            resursMap["ton8"] = R.raw.ton8
+            /*resursMap["pesny_bag_0"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_0
+            resursMap["pesny_bag_1"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_1
+            resursMap["pesny_bag_2"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_2
+            resursMap["pesny_bag_3"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_3
+            resursMap["pesny_bag_4"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_4
+            resursMap["pesny_bag_5"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_5
+            resursMap["pesny_bag_6"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_6
+            resursMap["pesny_bag_7"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_7
+            resursMap["pesny_bag_8"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_8
+            resursMap["pesny_bag_9"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_9
+            resursMap["pesny_bag_10"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_10
+            resursMap["pesny_bag_11"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_11
+            resursMap["pesny_bag_12"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_12
+            resursMap["pesny_bag_13"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_13
+            resursMap["pesny_bag_14"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_14
+            resursMap["pesny_bag_15"] = by.carkva_gazeta.malitounik.R.raw.pesny_bag_15
+            resursMap["pesny_bel_0"] = by.carkva_gazeta.malitounik.R.raw.pesny_bel_0
+            resursMap["pesny_bel_1"] = by.carkva_gazeta.malitounik.R.raw.pesny_bel_1
+            resursMap["pesny_bel_2"] = by.carkva_gazeta.malitounik.R.raw.pesny_bel_2
+            resursMap["pesny_bel_3"] = by.carkva_gazeta.malitounik.R.raw.pesny_bel_3
+            resursMap["pesny_bel_4"] = by.carkva_gazeta.malitounik.R.raw.pesny_bel_4
+            resursMap["pesny_bel_5"] = by.carkva_gazeta.malitounik.R.raw.pesny_bel_5
+            resursMap["pesny_bel_6"] = by.carkva_gazeta.malitounik.R.raw.pesny_bel_6
+            resursMap["pesny_bel_7"] = by.carkva_gazeta.malitounik.R.raw.pesny_bel_7
+            resursMap["pesny_bel_8"] = by.carkva_gazeta.malitounik.R.raw.pesny_bel_8
+            resursMap["pesny_bel_9"] = by.carkva_gazeta.malitounik.R.raw.pesny_bel_9
+            resursMap["pesny_kal_0"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_0
+            resursMap["pesny_kal_1"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_1
+            resursMap["pesny_kal_2"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_2
+            resursMap["pesny_kal_3"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_3
+            resursMap["pesny_kal_4"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_4
+            resursMap["pesny_kal_5"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_5
+            resursMap["pesny_kal_6"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_6
+            resursMap["pesny_kal_7"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_7
+            resursMap["pesny_kal_8"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_8
+            resursMap["pesny_kal_9"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_9
+            resursMap["pesny_kal_10"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_10
+            resursMap["pesny_kal_11"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_11
+            resursMap["pesny_kal_12"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_12
+            resursMap["pesny_kal_13"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_13
+            resursMap["pesny_kal_14"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_14
+            resursMap["pesny_kal_15"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_15
+            resursMap["pesny_kal_16"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_16
+            resursMap["pesny_kal_17"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_17
+            resursMap["pesny_kal_18"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_18
+            resursMap["pesny_kal_19"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_19
+            resursMap["pesny_kal_20"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_20
+            resursMap["pesny_kal_21"] = by.carkva_gazeta.malitounik.R.raw.pesny_kal_21
+            resursMap["pesny_prasl_0"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_0
+            resursMap["pesny_prasl_1"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_1
+            resursMap["pesny_prasl_2"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_2
+            resursMap["pesny_prasl_3"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_3
+            resursMap["pesny_prasl_4"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_4
+            resursMap["pesny_prasl_5"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_5
+            resursMap["pesny_prasl_6"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_6
+            resursMap["pesny_prasl_7"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_7
+            resursMap["pesny_prasl_8"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_8
+            resursMap["pesny_prasl_9"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_9
+            resursMap["pesny_prasl_10"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_10
+            resursMap["pesny_prasl_11"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_11
+            resursMap["pesny_prasl_12"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_12
+            resursMap["pesny_prasl_13"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_13
+            resursMap["pesny_prasl_14"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_14
+            resursMap["pesny_prasl_15"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_15
+            resursMap["pesny_prasl_16"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_16
+            resursMap["pesny_prasl_17"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_17
+            resursMap["pesny_prasl_18"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_18
+            resursMap["pesny_prasl_19"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_19
+            resursMap["pesny_prasl_20"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_20
+            resursMap["pesny_prasl_21"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_21
+            resursMap["pesny_prasl_22"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_22
+            resursMap["pesny_prasl_23"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_23
+            resursMap["pesny_prasl_24"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_24
+            resursMap["pesny_prasl_25"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_25
+            resursMap["pesny_prasl_26"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_26
+            resursMap["pesny_prasl_27"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_27
+            resursMap["pesny_prasl_28"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_28
+            resursMap["pesny_prasl_29"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_29
+            resursMap["pesny_prasl_30"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_30
+            resursMap["pesny_prasl_31"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_31
+            resursMap["pesny_prasl_32"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_32
+            resursMap["pesny_prasl_33"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_34
+            resursMap["pesny_prasl_35"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_35
+            resursMap["pesny_prasl_36"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_36
+            resursMap["pesny_prasl_37"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_37
+            resursMap["pesny_prasl_38"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_38
+            resursMap["pesny_prasl_39"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_39
+            resursMap["pesny_prasl_40"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_40
+            resursMap["pesny_prasl_41"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_41
+            resursMap["pesny_prasl_42"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_42
+            resursMap["pesny_prasl_43"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_43
+            resursMap["pesny_prasl_44"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_44
+            resursMap["pesny_prasl_45"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_45
+            resursMap["pesny_prasl_46"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_46
+            resursMap["pesny_prasl_47"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_47
+            resursMap["pesny_prasl_48"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_48
+            resursMap["pesny_prasl_49"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_49
+            resursMap["pesny_prasl_50"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_50
+            resursMap["pesny_prasl_51"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_51
+            resursMap["pesny_prasl_52"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_52
+            resursMap["pesny_prasl_53"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_53
+            resursMap["pesny_prasl_54"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_54
+            resursMap["pesny_prasl_55"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_55
+            resursMap["pesny_prasl_56"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_56
+            resursMap["pesny_prasl_57"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_57
+            resursMap["pesny_prasl_58"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_58
+            resursMap["pesny_prasl_59"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_59
+            resursMap["pesny_prasl_60"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_60
+            resursMap["pesny_prasl_61"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_61
+            resursMap["pesny_prasl_62"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_62
+            resursMap["pesny_prasl_63"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_63
+            resursMap["pesny_prasl_64"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_64
+            resursMap["pesny_prasl_65"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_65
+            resursMap["pesny_prasl_66"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_66
+            resursMap["pesny_prasl_67"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_67
+            resursMap["pesny_prasl_68"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_68
+            resursMap["pesny_prasl_69"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_69
+            resursMap["pesny_prasl_70"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_70
+            resursMap["pesny_prasl_71"] = by.carkva_gazeta.malitounik.R.raw.pesny_prasl_71
+            resursMap["pesny_taize_0"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_0
+            resursMap["pesny_taize_1"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_1
+            resursMap["pesny_taize_2"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_2
+            resursMap["pesny_taize_3"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_3
+            resursMap["pesny_taize_4"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_4
+            resursMap["pesny_taize_5"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_5
+            resursMap["pesny_taize_6"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_6
+            resursMap["pesny_taize_7"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_7
+            resursMap["pesny_taize_8"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_8
+            resursMap["pesny_taize_9"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_9
+            resursMap["pesny_taize_10"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_10
+            resursMap["pesny_taize_11"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_11
+            resursMap["pesny_taize_12"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_12
+            resursMap["pesny_taize_13"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_13
+            resursMap["pesny_taize_14"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_14
+            resursMap["pesny_taize_15"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_15
+            resursMap["pesny_taize_16"] = by.carkva_gazeta.malitounik.R.raw.pesny_taize_16*/
+            PesnyAll.resursMap.forEach {
+                resursMap[it.key] = it.value
+            }
+        }
+
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
             var check = true
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
@@ -105,7 +382,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
                     MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
                 }
-                val fields: Array<Field?> = R.raw::class.java.fields
+                for (i in 0 until MenuVybranoe.vybranoe.size) {
+                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
+                        MenuVybranoe.vybranoe.removeAt(i)
+                        check = false
+                        break
+                    }
+                }
+                /*val fields: Array<Field?> = R.raw::class.java.fields
                 for (field in fields) {
                     if (field?.name?.intern() == resurs) {
                         for (i in 0 until MenuVybranoe.vybranoe.size) {
@@ -130,7 +414,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         }
                         break
                     }
-                }
+                }*/
                 if (check) {
                     MenuVybranoe.vybranoe.add(0, VybranoeData(vybranoeIndex(), resurs, title))
                 }
@@ -167,12 +451,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 } else {
                     return false
                 }
-                val fields: Array<Field?> = R.raw::class.java.fields
+                for (i in 0 until MenuVybranoe.vybranoe.size) {
+                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) return true
+                }
+                /*val fields: Array<Field?> = R.raw::class.java.fields
                 for (field in fields) {
                     if (field?.name?.intern() == resurs) {
                         for (i in 0 until MenuVybranoe.vybranoe.size) {
-                            if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs)
-                                return true
+                            if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) return true
                         }
                         break
                     }
@@ -186,7 +472,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         }
                         break
                     }
-                }
+                }*/
             } catch (t: Throwable) {
                 file.delete()
                 return false
@@ -341,8 +627,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         progressBar.visibility = View.VISIBLE
         val res = withContext(Dispatchers.IO) {
             val builder = StringBuilder()
-            var id = R.raw.bogashlugbovya1
-            val fields: Array<Field?> = R.raw::class.java.fields
+            val id = resursMap[resurs]?: R.raw.bogashlugbovya1
+            /*val fields: Array<Field?> = R.raw::class.java.fields
             for (field in fields) {
                 if (field?.name?.intern() == resurs) {
                     id = field.getInt(null)
@@ -355,14 +641,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     id = field.getInt(null)
                     break
                 }
-            }
+            }*/
             val inputStream: InputStream = resources.openRawResource(id)
             val zmenyiaChastki = ZmenyiaChastki(this@Bogashlugbovya)
             val gregorian = Calendar.getInstance() as GregorianCalendar
             val dayOfWeek = gregorian.get(Calendar.DAY_OF_WEEK)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
-            val color: String = if (dzenNoch) "<font color=\"#f44336\">"
+            val color = if (dzenNoch) "<font color=\"#f44336\">"
             else "<font color=\"#d00505\">"
             reader.forEachLine {
                 var line = it

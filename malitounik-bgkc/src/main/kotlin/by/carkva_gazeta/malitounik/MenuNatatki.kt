@@ -95,7 +95,7 @@ class MenuNatatki : NatatkiFragment() {
                     val adapterItem = item.tag as MyNatatkiFiles
                     val pos: Int = drag_list_view.adapter.getPositionForItem(adapterItem)
                     if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
-                        onDialogDeliteClick(pos, myNatatkiFiles[pos].title)
+                        onDialogDeliteClick(pos, adapter.itemList[pos].title)
                         /*val dd = DialogDelite.getInstance(pos, "", "з выбранага", MenuVybranoe.vybranoe[pos].data)
                         fragmentManager?.let { dd.show(it, "dialog_dilite") }*/
                     }
@@ -115,7 +115,7 @@ class MenuNatatki : NatatkiFragment() {
                     if (fromPosition != toPosition) {
                         file.writer().use {
                             val gson = Gson()
-                            it.write(gson.toJson(myNatatkiFiles))
+                            it.write(gson.toJson(adapter.itemList))
                         }
                         val edit = k.edit()
                         edit.putInt("natatki_sort", -1)
@@ -135,14 +135,14 @@ class MenuNatatki : NatatkiFragment() {
 
     override fun fileDelite(position: Int) {
         activity?.let { fragmentActivity ->
-            val f = myNatatkiFiles[position]
-            myNatatkiFiles.removeAt(position)
+            val f = adapter.itemList[position]
+            adapter.itemList.removeAt(position)
             val filedel = File(fragmentActivity.filesDir.toString().plus("/Malitva/").plus("Mae_malitvy_").plus(f.id))
             filedel.delete()
             val file = File(fragmentActivity.filesDir.toString().plus("/Natatki.json"))
             file.writer().use {
                 val gson = Gson()
-                it.write(gson.toJson(myNatatkiFiles))
+                it.write(gson.toJson(adapter.itemList))
             }
             //myNatatkiFiles.sort()
             adapter.notifyDataSetChanged()
@@ -151,7 +151,7 @@ class MenuNatatki : NatatkiFragment() {
 
     override fun onDialogEditClick(position: Int) {
         if (MainActivity.checkmoduleResources(activity)) {
-            val f = myNatatkiFiles[position]
+            val f = adapter.itemList[position]
             val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.MyNatatkiAdd"))
             intent.putExtra("filename", "Mae_malitvy_" + f.id)
             intent.putExtra("redak", true)
@@ -227,11 +227,11 @@ class MenuNatatki : NatatkiFragment() {
                 }
                 prefEditors.apply()
                 myNatatkiFilesSort = k.getInt("natatki_sort", 0)
-                myNatatkiFiles.sort()
+                adapter.itemList.sort()
                 val file = File(activity.filesDir.toString().plus("/Natatki.json"))
                 file.writer().use {
                     val gson = Gson()
-                    it.write(gson.toJson(myNatatkiFiles))
+                    it.write(gson.toJson(adapter.itemList))
                 }
                 adapter.notifyDataSetChanged()
             }
@@ -247,11 +247,11 @@ class MenuNatatki : NatatkiFragment() {
                 }
                 prefEditors.apply()
                 myNatatkiFilesSort = k.getInt("natatki_sort", 0)
-                myNatatkiFiles.sort()
+                adapter.itemList.sort()
                 val file = File(activity.filesDir.toString().plus("/Natatki.json"))
                 file.writer().use {
                     val gson = Gson()
-                    it.write(gson.toJson(myNatatkiFiles))
+                    it.write(gson.toJson(adapter.itemList))
                 }
                 adapter.notifyDataSetChanged()
             }
@@ -318,7 +318,7 @@ class MenuNatatki : NatatkiFragment() {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (MainActivity.checkmoduleResources(activity)) {
-                    val f = myNatatkiFiles[adapterPosition]
+                    val f = itemList[adapterPosition]
                     val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.MyNatatkiView"))
                     intent.putExtra("filename", "Mae_malitvy_" + f.id)
                     startActivity(intent)
@@ -329,7 +329,7 @@ class MenuNatatki : NatatkiFragment() {
             }
 
             override fun onItemLongClicked(view: View): Boolean {
-                val contextMenu = DialogContextMenu.getInstance(adapterPosition, myNatatkiFiles[adapterPosition].title)
+                val contextMenu = DialogContextMenu.getInstance(adapterPosition, itemList[adapterPosition].title)
                 fragmentManager?.let { contextMenu.show(it, "context_menu") }
                 return true
             }

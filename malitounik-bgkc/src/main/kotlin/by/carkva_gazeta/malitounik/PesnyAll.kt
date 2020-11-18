@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.content.pm.ActivityInfo
+import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -19,6 +20,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -29,7 +31,6 @@ import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
-import java.lang.reflect.Field
 import java.util.*
 
 class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener {
@@ -120,24 +121,29 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         title = intent.extras?.getString("pesny", "") ?: ""
         val pedsny = MenuPesny.getPesniaID(this, title)
-        val fields: Array<Field?> = R.raw::class.java.fields
+        resurs = intent.extras?.getString("type", "pesny_prasl_0") ?: "pesny_prasl_0"
+        /*val fields: Array<Field?> = R.raw::class.java.fields
         for (field in fields) {
             if (field?.getInt(null) == pedsny) {
                 resurs = field.name
                 break
             }
-        }
-        val inputStream = resources.openRawResource(pedsny)
-        val isr = InputStreamReader(inputStream)
-        val reader = BufferedReader(isr)
-        var line: String
+        }*/
         val builder = StringBuilder()
-        reader.forEachLine {
-            line = it
-            if (dzenNoch) line = line.replace("#d00505", "#f44336")
-            builder.append(line)
+        try {
+            val inputStream = resources.openRawResource(pedsny)
+            val isr = InputStreamReader(inputStream)
+            val reader = BufferedReader(isr)
+            var line: String
+            reader.forEachLine {
+                line = it
+                if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                builder.append(line)
+            }
+            inputStream.close()
+        } catch (resourse: Resources.NotFoundException) {
+            builder.append(getString(R.string.error_ch))
         }
-        inputStream.close()
         TextView.text = MainActivity.fromHtml(builder.toString())
         men = checkVybranoe(this, resurs)
         if (k.getBoolean("help_str", true)) {
@@ -436,6 +442,148 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     }
 
     companion object {
+
+        val resursMap = ArrayMap<String, Int>()
+
+        init {
+            resursMap["pesny_bag_0"] = R.raw.pesny_bag_0
+            resursMap["pesny_bag_1"] = R.raw.pesny_bag_1
+            resursMap["pesny_bag_2"] = R.raw.pesny_bag_2
+            resursMap["pesny_bag_3"] = R.raw.pesny_bag_3
+            resursMap["pesny_bag_4"] = R.raw.pesny_bag_4
+            resursMap["pesny_bag_5"] = R.raw.pesny_bag_5
+            resursMap["pesny_bag_6"] = R.raw.pesny_bag_6
+            resursMap["pesny_bag_7"] = R.raw.pesny_bag_7
+            resursMap["pesny_bag_8"] = R.raw.pesny_bag_8
+            resursMap["pesny_bag_9"] = R.raw.pesny_bag_9
+            resursMap["pesny_bag_10"] = R.raw.pesny_bag_10
+            resursMap["pesny_bag_11"] = R.raw.pesny_bag_11
+            resursMap["pesny_bag_12"] = R.raw.pesny_bag_12
+            resursMap["pesny_bag_13"] = R.raw.pesny_bag_13
+            resursMap["pesny_bag_14"] = R.raw.pesny_bag_14
+            resursMap["pesny_bag_15"] = R.raw.pesny_bag_15
+            resursMap["pesny_bel_0"] = R.raw.pesny_bel_0
+            resursMap["pesny_bel_1"] = R.raw.pesny_bel_1
+            resursMap["pesny_bel_2"] = R.raw.pesny_bel_2
+            resursMap["pesny_bel_3"] = R.raw.pesny_bel_3
+            resursMap["pesny_bel_4"] = R.raw.pesny_bel_4
+            resursMap["pesny_bel_5"] = R.raw.pesny_bel_5
+            resursMap["pesny_bel_6"] = R.raw.pesny_bel_6
+            resursMap["pesny_bel_7"] = R.raw.pesny_bel_7
+            resursMap["pesny_bel_8"] = R.raw.pesny_bel_8
+            resursMap["pesny_bel_9"] = R.raw.pesny_bel_9
+            resursMap["pesny_kal_0"] = R.raw.pesny_kal_0
+            resursMap["pesny_kal_1"] = R.raw.pesny_kal_1
+            resursMap["pesny_kal_2"] = R.raw.pesny_kal_2
+            resursMap["pesny_kal_3"] = R.raw.pesny_kal_3
+            resursMap["pesny_kal_4"] = R.raw.pesny_kal_4
+            resursMap["pesny_kal_5"] = R.raw.pesny_kal_5
+            resursMap["pesny_kal_6"] = R.raw.pesny_kal_6
+            resursMap["pesny_kal_7"] = R.raw.pesny_kal_7
+            resursMap["pesny_kal_8"] = R.raw.pesny_kal_8
+            resursMap["pesny_kal_9"] = R.raw.pesny_kal_9
+            resursMap["pesny_kal_10"] = R.raw.pesny_kal_10
+            resursMap["pesny_kal_11"] = R.raw.pesny_kal_11
+            resursMap["pesny_kal_12"] = R.raw.pesny_kal_12
+            resursMap["pesny_kal_13"] = R.raw.pesny_kal_13
+            resursMap["pesny_kal_14"] = R.raw.pesny_kal_14
+            resursMap["pesny_kal_15"] = R.raw.pesny_kal_15
+            resursMap["pesny_kal_16"] = R.raw.pesny_kal_16
+            resursMap["pesny_kal_17"] = R.raw.pesny_kal_17
+            resursMap["pesny_kal_18"] = R.raw.pesny_kal_18
+            resursMap["pesny_kal_19"] = R.raw.pesny_kal_19
+            resursMap["pesny_kal_20"] = R.raw.pesny_kal_20
+            resursMap["pesny_kal_21"] = R.raw.pesny_kal_21
+            resursMap["pesny_prasl_0"] = R.raw.pesny_prasl_0
+            resursMap["pesny_prasl_1"] = R.raw.pesny_prasl_1
+            resursMap["pesny_prasl_2"] = R.raw.pesny_prasl_2
+            resursMap["pesny_prasl_3"] = R.raw.pesny_prasl_3
+            resursMap["pesny_prasl_4"] = R.raw.pesny_prasl_4
+            resursMap["pesny_prasl_5"] = R.raw.pesny_prasl_5
+            resursMap["pesny_prasl_6"] = R.raw.pesny_prasl_6
+            resursMap["pesny_prasl_7"] = R.raw.pesny_prasl_7
+            resursMap["pesny_prasl_8"] = R.raw.pesny_prasl_8
+            resursMap["pesny_prasl_9"] = R.raw.pesny_prasl_9
+            resursMap["pesny_prasl_10"] = R.raw.pesny_prasl_10
+            resursMap["pesny_prasl_11"] = R.raw.pesny_prasl_11
+            resursMap["pesny_prasl_12"] = R.raw.pesny_prasl_12
+            resursMap["pesny_prasl_13"] = R.raw.pesny_prasl_13
+            resursMap["pesny_prasl_14"] = R.raw.pesny_prasl_14
+            resursMap["pesny_prasl_15"] = R.raw.pesny_prasl_15
+            resursMap["pesny_prasl_16"] = R.raw.pesny_prasl_16
+            resursMap["pesny_prasl_17"] = R.raw.pesny_prasl_17
+            resursMap["pesny_prasl_18"] = R.raw.pesny_prasl_18
+            resursMap["pesny_prasl_19"] = R.raw.pesny_prasl_19
+            resursMap["pesny_prasl_20"] = R.raw.pesny_prasl_20
+            resursMap["pesny_prasl_21"] = R.raw.pesny_prasl_21
+            resursMap["pesny_prasl_22"] = R.raw.pesny_prasl_22
+            resursMap["pesny_prasl_23"] = R.raw.pesny_prasl_23
+            resursMap["pesny_prasl_24"] = R.raw.pesny_prasl_24
+            resursMap["pesny_prasl_25"] = R.raw.pesny_prasl_25
+            resursMap["pesny_prasl_26"] = R.raw.pesny_prasl_26
+            resursMap["pesny_prasl_27"] = R.raw.pesny_prasl_27
+            resursMap["pesny_prasl_28"] = R.raw.pesny_prasl_28
+            resursMap["pesny_prasl_29"] = R.raw.pesny_prasl_29
+            resursMap["pesny_prasl_30"] = R.raw.pesny_prasl_30
+            resursMap["pesny_prasl_31"] = R.raw.pesny_prasl_31
+            resursMap["pesny_prasl_32"] = R.raw.pesny_prasl_32
+            resursMap["pesny_prasl_33"] = R.raw.pesny_prasl_34
+            resursMap["pesny_prasl_35"] = R.raw.pesny_prasl_35
+            resursMap["pesny_prasl_36"] = R.raw.pesny_prasl_36
+            resursMap["pesny_prasl_37"] = R.raw.pesny_prasl_37
+            resursMap["pesny_prasl_38"] = R.raw.pesny_prasl_38
+            resursMap["pesny_prasl_39"] = R.raw.pesny_prasl_39
+            resursMap["pesny_prasl_40"] = R.raw.pesny_prasl_40
+            resursMap["pesny_prasl_41"] = R.raw.pesny_prasl_41
+            resursMap["pesny_prasl_42"] = R.raw.pesny_prasl_42
+            resursMap["pesny_prasl_43"] = R.raw.pesny_prasl_43
+            resursMap["pesny_prasl_44"] = R.raw.pesny_prasl_44
+            resursMap["pesny_prasl_45"] = R.raw.pesny_prasl_45
+            resursMap["pesny_prasl_46"] = R.raw.pesny_prasl_46
+            resursMap["pesny_prasl_47"] = R.raw.pesny_prasl_47
+            resursMap["pesny_prasl_48"] = R.raw.pesny_prasl_48
+            resursMap["pesny_prasl_49"] = R.raw.pesny_prasl_49
+            resursMap["pesny_prasl_50"] = R.raw.pesny_prasl_50
+            resursMap["pesny_prasl_51"] = R.raw.pesny_prasl_51
+            resursMap["pesny_prasl_52"] = R.raw.pesny_prasl_52
+            resursMap["pesny_prasl_53"] = R.raw.pesny_prasl_53
+            resursMap["pesny_prasl_54"] = R.raw.pesny_prasl_54
+            resursMap["pesny_prasl_55"] = R.raw.pesny_prasl_55
+            resursMap["pesny_prasl_56"] = R.raw.pesny_prasl_56
+            resursMap["pesny_prasl_57"] = R.raw.pesny_prasl_57
+            resursMap["pesny_prasl_58"] = R.raw.pesny_prasl_58
+            resursMap["pesny_prasl_59"] = R.raw.pesny_prasl_59
+            resursMap["pesny_prasl_60"] = R.raw.pesny_prasl_60
+            resursMap["pesny_prasl_61"] = R.raw.pesny_prasl_61
+            resursMap["pesny_prasl_62"] = R.raw.pesny_prasl_62
+            resursMap["pesny_prasl_63"] = R.raw.pesny_prasl_63
+            resursMap["pesny_prasl_64"] = R.raw.pesny_prasl_64
+            resursMap["pesny_prasl_65"] = R.raw.pesny_prasl_65
+            resursMap["pesny_prasl_66"] = R.raw.pesny_prasl_66
+            resursMap["pesny_prasl_67"] = R.raw.pesny_prasl_67
+            resursMap["pesny_prasl_68"] = R.raw.pesny_prasl_68
+            resursMap["pesny_prasl_69"] = R.raw.pesny_prasl_69
+            resursMap["pesny_prasl_70"] = R.raw.pesny_prasl_70
+            resursMap["pesny_prasl_71"] = R.raw.pesny_prasl_71
+            resursMap["pesny_taize_0"] = R.raw.pesny_taize_0
+            resursMap["pesny_taize_1"] = R.raw.pesny_taize_1
+            resursMap["pesny_taize_2"] = R.raw.pesny_taize_2
+            resursMap["pesny_taize_3"] = R.raw.pesny_taize_3
+            resursMap["pesny_taize_4"] = R.raw.pesny_taize_4
+            resursMap["pesny_taize_5"] = R.raw.pesny_taize_5
+            resursMap["pesny_taize_6"] = R.raw.pesny_taize_6
+            resursMap["pesny_taize_7"] = R.raw.pesny_taize_7
+            resursMap["pesny_taize_8"] = R.raw.pesny_taize_8
+            resursMap["pesny_taize_9"] = R.raw.pesny_taize_9
+            resursMap["pesny_taize_10"] = R.raw.pesny_taize_10
+            resursMap["pesny_taize_11"] = R.raw.pesny_taize_11
+            resursMap["pesny_taize_12"] = R.raw.pesny_taize_12
+            resursMap["pesny_taize_13"] = R.raw.pesny_taize_13
+            resursMap["pesny_taize_14"] = R.raw.pesny_taize_14
+            resursMap["pesny_taize_15"] = R.raw.pesny_taize_15
+            resursMap["pesny_taize_16"] = R.raw.pesny_taize_16
+        }
+
         private fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
             var check = true
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
@@ -445,7 +593,14 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
                     MenuVybranoe.vybranoe = gson.fromJson(file.readText(), type)
                 }
-                val fields: Array<Field?> = R.raw::class.java.fields
+                for (i in 0 until MenuVybranoe.vybranoe.size) {
+                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
+                        MenuVybranoe.vybranoe.removeAt(i)
+                        check = false
+                        break
+                    }
+                }
+                /*val fields: Array<Field?> = R.raw::class.java.fields
                 for (field in fields) {
                     if (field?.name?.intern() == resurs) {
                         for (i in 0 until MenuVybranoe.vybranoe.size) {
@@ -458,7 +613,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                         break
                     }
                 }
-                /*val fields2 = R.raw::class.java.fields
+                val fields2 = R.raw::class.java.fields
                 for (field in fields2) {
                 if (field.name.intern() == resurs) {
                 for (i in 0 until MenuVybranoe.vybranoe.size) {
@@ -509,7 +664,13 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 } else {
                     return false
                 }
-                val fields: Array<Field?> = R.raw::class.java.fields
+                for (i in 0 until MenuVybranoe.vybranoe.size) {
+                    if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) { //MenuVybranoe.vybranoe.remove(i)
+                        check = true
+                        break
+                    }
+                }
+                /*val fields: Array<Field?> = R.raw::class.java.fields
                 for (field in fields) {
                     if (field?.name?.intern() == resurs) {
                         for (i in 0 until MenuVybranoe.vybranoe.size) {
@@ -521,7 +682,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                         break
                     }
                 }
-                /*val fields2: Array<Field> = R.raw::class.java.fields
+                val fields2: Array<Field> = R.raw::class.java.fields
                 for (field in fields2) {
                 if (field.name.intern() == resurs) {
                 for (i in 0 until MenuVybranoe.vybranoe.size) {

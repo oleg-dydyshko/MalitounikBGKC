@@ -26,7 +26,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.lang.reflect.Field
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -282,16 +281,29 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         val intent = Intent(activity, PesnyAll::class.java)
         if (parent?.id == R.id.ListView) {
             intent.putExtra("pesny", menuList[position].data)
+            intent.putExtra("type", menuList[position].type)
             if (search) {
                 addHistory(menuList[position].data)
                 saveHistopy()
             }
         } else {
             intent.putExtra("pesny", history[position])
+            intent.putExtra("type", getTypeHistory(history[position]))
             addHistory(history[position])
             saveHistopy()
         }
         startActivity(intent)
+    }
+
+    private fun getTypeHistory(item: String): String {
+        var type = "pesny_prasl_0"
+        for (i in 0 until menuList.size) {
+            if (menuList[i].data == item) {
+                type = menuList[i].type
+                break
+            }
+        }
+        return type
     }
 
     override fun onResume() {
@@ -531,7 +543,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         }
 
         private fun listRaw(filename: String): Int {
-            val fields: Array<Field?> = R.raw::class.java.fields
+            /*val fields: Array<Field?> = R.raw::class.java.fields
             var id = 0
             run files@{
                 fields.forEach {
@@ -540,8 +552,8 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                         return@files
                     }
                 }
-            }
-            return id
+            }*/
+            return PesnyAll.resursMap[filename] ?: -1
         }
 
         private fun getMenuListData(context: Context): ArrayList<MenuListData> {
@@ -553,16 +565,13 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             reader.forEachLine {
                 line = it
                 val split = line.split("<>")
-                val t1 = split[0].indexOf("_")
-                val t2 = split[0].indexOf("_", t1 + 1)
-                menuListData.add(MenuListData(listRaw(split[0]), split[1], split[0].substring(t1 + 1, t2)))
+                menuListData.add(MenuListData(listRaw(split[0]), split[1], split[0]))
             }
             return menuListData
         }
 
         private fun getMenuListData(context: Context, pesny: String): ArrayList<MenuListData> {
             if (!::menuListData.isInitialized) menuListData = getMenuListData(context)
-
             val menuList = menuListData.filter {
                 it.type.contains(pesny)
             }

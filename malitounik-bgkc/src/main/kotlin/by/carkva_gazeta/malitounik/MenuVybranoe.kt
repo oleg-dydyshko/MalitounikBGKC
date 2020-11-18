@@ -41,18 +41,18 @@ class MenuVybranoe : VybranoeFragment() {
 
     override fun fileDelite(position: Int) {
         val edit = k.edit()
-        when (vybranoe[position].resurs) {
+        when (adapter.itemList[position].resurs) {
             "1" -> edit.remove("bibleVybranoeSemuxa")
             "2" -> edit.remove("bibleVybranoeSinoidal")
             "3" -> edit.remove("bibleVybranoeNadsan")
         }
         edit.apply()
-        vybranoe.removeAt(position)
+        adapter.itemList.removeAt(position)
         activity?.let { activity ->
             val gson = Gson()
             val file = File(activity.filesDir.toString() + "/Vybranoe.json")
             file.writer().use {
-                it.write(gson.toJson(vybranoe))
+                it.write(gson.toJson(adapter.itemList))
             }
             adapter.notifyDataSetChanged()
         }
@@ -65,12 +65,12 @@ class MenuVybranoe : VybranoeFragment() {
             edit.remove("bibleVybranoeSinoidal")
             edit.remove("bibleVybranoeNadsan")
             edit.apply()
-            vybranoe.clear()
-            val gson = Gson()
-            val file = File(activity.filesDir.toString() + "/Vybranoe.json")
-            file.writer().use {
+            adapter.itemList.clear()
+            //val gson = Gson()
+            File(activity.filesDir.toString() + "/Vybranoe.json").delete()
+            /*file.writer().use {
                 it.write(gson.toJson(vybranoe))
-            }
+            }*/
             adapter.notifyDataSetChanged()
         }
     }
@@ -81,22 +81,23 @@ class MenuVybranoe : VybranoeFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        activity?.let { it ->
-            k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        activity?.let { fragmentActivity ->
+            k = fragmentActivity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val gson = Gson()
-            val file = File(it.filesDir.toString() + "/Vybranoe.json")
+            val file = File(fragmentActivity.filesDir.toString() + "/Vybranoe.json")
             if (file.exists()) {
                 try {
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
                     vybranoe = gson.fromJson(file.readText(), type)
+                    vybranoeSort = k.getInt("vybranoe_sort", 1)
+                    vybranoe.sort()
                 } catch (t: Throwable) {
                     file.delete()
                 }
             }
-            if (k.getInt("vybranoe_sort", 1) == 1) vybranoe.sort()
             adapter = ItemAdapter(vybranoe, R.layout.list_item, R.id.image, false)
             drag_list_view.recyclerView.isVerticalScrollBarEnabled = false
-            drag_list_view.setLayoutManager(LinearLayoutManager(it))
+            drag_list_view.setLayoutManager(LinearLayoutManager(fragmentActivity))
             drag_list_view.setAdapter(adapter, false)
             drag_list_view.setCanDragHorizontally(false)
             drag_list_view.setCanDragVertically(true)
@@ -110,7 +111,7 @@ class MenuVybranoe : VybranoeFragment() {
                         fragmentManager?.let {
                             val adapterItem = item.tag as VybranoeData
                             val pos: Int = drag_list_view.adapter.getPositionForItem(adapterItem)
-                            val dd = DialogDelite.getInstance(pos, "", "з выбранага", vybranoe[pos].data)
+                            val dd = DialogDelite.getInstance(pos, "", "з выбранага", adapter.itemList[pos].data)
                             fragmentManager?.let { dd.show(it, "dialog_dilite") }
                         }
                     }
@@ -126,12 +127,13 @@ class MenuVybranoe : VybranoeFragment() {
                 override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
                     if (fromPosition != toPosition) {
                         file.writer().use {
-                            it.write(gson.toJson(vybranoe))
+                            it.write(gson.toJson(adapter.itemList))
                         }
                         val edit = k.edit()
                         edit.putInt("vybranoe_sort", 0)
                         edit.apply()
-                        it.invalidateOptionsMenu()
+                        vybranoeSort = 0
+                        fragmentActivity.invalidateOptionsMenu()
                     }
                 }
             })
@@ -145,7 +147,7 @@ class MenuVybranoe : VybranoeFragment() {
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.trash) {
-            if (vybranoe.size > 0) {
+            if (adapter.itemList.size > 0) {
                 fragmentManager?.let {
                     DialogDeliteAllVybranoe().show(it, "DeliteVybranoe")
                 }
@@ -158,14 +160,15 @@ class MenuVybranoe : VybranoeFragment() {
                     edit.putInt("vybranoe_sort", 0)
                 } else {
                     edit.putInt("vybranoe_sort", 1)
-                    vybranoe.sort()
-                    val gson = Gson()
-                    val file = File(fragmentActivity.filesDir.toString() + "/Vybranoe.json")
-                    file.writer().use {
-                        it.write(gson.toJson(vybranoe))
-                    }
                 }
                 edit.apply()
+                vybranoeSort = k.getInt("vybranoe_sort", 1)
+                adapter.itemList.sort()
+                val gson = Gson()
+                val file = File(fragmentActivity.filesDir.toString() + "/Vybranoe.json")
+                file.writer().use {
+                    it.write(gson.toJson(adapter.itemList))
+                }
                 adapter.notifyDataSetChanged()
             }
         }
@@ -218,7 +221,7 @@ class MenuVybranoe : VybranoeFragment() {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (MainActivity.checkmoduleResources(activity)) {
-                    when (vybranoe[adapterPosition].resurs) {
+                    when (itemList[adapterPosition].resurs) {
                         "1" -> {
                             MyBibleList.biblia = 1
                             startActivity(Intent(activity, MyBibleList::class.java))
@@ -233,8 +236,8 @@ class MenuVybranoe : VybranoeFragment() {
                         }
                         else -> {
                             val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-                            intent.putExtra("resurs", vybranoe[adapterPosition].resurs)
-                            intent.putExtra("title", vybranoe[adapterPosition].data)
+                            intent.putExtra("resurs", itemList[adapterPosition].resurs)
+                            intent.putExtra("title", itemList[adapterPosition].data)
                             startActivity(intent)
                         }
                     }
@@ -245,7 +248,7 @@ class MenuVybranoe : VybranoeFragment() {
             }
 
             override fun onItemLongClicked(view: View): Boolean {
-                val dd = DialogDelite.getInstance(adapterPosition, "", "з выбранага", vybranoe[adapterPosition].data)
+                val dd = DialogDelite.getInstance(adapterPosition, "", "з выбранага", itemList[adapterPosition].data)
                 fragmentManager?.let { dd.show(it, "dialog_dilite") }
                 return true
             }
@@ -284,6 +287,7 @@ class MenuVybranoe : VybranoeFragment() {
     }*/
 
     companion object {
-        var vybranoe: ArrayList<VybranoeData> = ArrayList()
+        var vybranoe = ArrayList<VybranoeData>()
+        var vybranoeSort = 1
     }
 }

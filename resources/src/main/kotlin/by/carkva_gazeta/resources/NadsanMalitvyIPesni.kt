@@ -16,7 +16,6 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import kotlinx.android.synthetic.main.nadsan_malitvy_i_pesny.*
@@ -165,8 +164,8 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
+        //fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        //dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         val id = item.itemId
         if (id == by.carkva_gazeta.malitounik.R.id.action_orientation) {

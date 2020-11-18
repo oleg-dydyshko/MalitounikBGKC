@@ -28,7 +28,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.lang.reflect.Field
 import java.util.*
 
 class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
@@ -118,13 +117,14 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         }
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         val id = intent.extras?.getInt("id", R.raw.bogashlugbovya12_1) ?: R.raw.bogashlugbovya12_1
-        val fields: Array<Field?> = R.raw::class.java.fields
+        resurs = intent.extras?.getString("type", "bogashlugbovya12_1") ?: "bogashlugbovya12_1"
+        /*val fields: Array<Field?> = R.raw::class.java.fields
         for (field in fields) {
             if (field?.getInt(null) == id) {
                 resurs = field.name
                 break
             }
-        }
+        }*/
         title = intent.extras?.getString("title", "") ?: ""
         val inputStream = resources.openRawResource(id)
         val isr = InputStreamReader(inputStream)

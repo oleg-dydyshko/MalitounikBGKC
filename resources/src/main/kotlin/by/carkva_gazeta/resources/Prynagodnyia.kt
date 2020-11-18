@@ -28,7 +28,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.lang.reflect.Field
 import java.util.*
 
 class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
@@ -118,13 +117,14 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         }
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         val id = intent.extras?.getInt("prynagodnyiaID", R.raw.prynagodnyia_0) ?: R.raw.prynagodnyia_0
-        val fields: Array<Field?> = R.raw::class.java.fields
+        resurs = intent.extras?.getString("prynagodnyiaType", "prynagodnyia_0") ?: "prynagodnyia_0"
+        /*val fields: Array<Field?> = R.raw::class.java.fields
         for (field in fields) {
             if (field?.getInt(null) == id) {
                 resurs = field.name
                 break
             }
-        }
+        }*/
         title = intent.extras?.getString("prynagodnyia", "") ?: ""
         val inputStream = resources.openRawResource(id)
         val isr = InputStreamReader(inputStream)

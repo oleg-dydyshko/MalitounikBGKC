@@ -105,6 +105,17 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         return id
     }
 
+    private fun getTypeHistory(item: String): String {
+        var type = "prynagodnyia_0"
+        for (i in 0 until data.size) {
+            if (data[i].data == item) {
+                type = data[i].type
+                break
+            }
+        }
+        return type
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         chin = getSharedPreferences("biblia", MODE_PRIVATE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
@@ -135,43 +146,43 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
-        data.add(MenuListData(R.raw.prynagodnyia_0, "Малітва аб блаславеньні", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_1, "Малітва аб дапамозе ў выбары жыцьцёвай дарогі дзіцяці", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_2, "Малітва аб еднасьці", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_3, "Малітва бацькоў за дзяцей 2", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_4, "Малітва бацькоў за дзяцей", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_5, "Малітва вадзіцеля", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_6, "Малітва вучня", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_7, "Малітва да Маці Божай Браслаўскай, Валадаркі Азёраў", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_8, "Малітва да Маці Божай Будслаўскай, Апякункі Беларусі", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_9, "Малітва да Маці Божай Нястомнай Дапамогі", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_10, "Малітва за Беларусь", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_11, "Малітва за дарослых дзяцей", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_12, "Малітва за дзяцей перад пачаткам навукі", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_13, "Малітва за парафію", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_14, "Малітва за хворага", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_15, "Малітва за хворае дзіця", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_16, "Малітва за хрысьціянскую еднасьць", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_17, "Малітва за ўмацаваньне ў любові", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_18, "Малітва маладога чалавека", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_19, "Малітва на ўсякую патрэбу", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_20, "Малітва падзякі за атрыманыя дабрадзействы", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_21, "Малітва перад пачаткам навучаньня", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_22, "Малітва перад іспытамі", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_23, "Малітва ранішняга намеру (Опціных старцаў)", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_24, "Малітвы за сьвятароў і сьвятарскія пакліканьні", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_25, "Малітвы ў часе хваробы і за хворых", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_26, "Намер ісьці за Хрыстом", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_27, "Цябе, Бога, хвалім", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_28, "Малітва падчас згубнай пошасьці", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_29, "Малітва вучняў перад навучаньнем", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_30, "Малітва да Маці Божай Берасьцейскай", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_31, "Малітва да Маці Божай Лагішынскай", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_32, "Малітва пілігрыма", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_33, "Малітва сям’і аб Божым бласлаўленьні на час адпачынку і вакацыяў", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_34, "Малітва ў час адпачынку", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_35, "Малітва за бязьвінных ахвяраў перасьледу", "prynagodnyia"))
-        data.add(MenuListData(R.raw.prynagodnyia_36, "Малітва за Айчыну - Ян Павел II", "prynagodnyia"))
+        data.add(MenuListData(R.raw.prynagodnyia_0, "Малітва аб блаславеньні", "prynagodnyia_0"))
+        data.add(MenuListData(R.raw.prynagodnyia_1, "Малітва аб дапамозе ў выбары жыцьцёвай дарогі дзіцяці", "prynagodnyia_1"))
+        data.add(MenuListData(R.raw.prynagodnyia_2, "Малітва аб еднасьці", "prynagodnyia_2"))
+        data.add(MenuListData(R.raw.prynagodnyia_3, "Малітва бацькоў за дзяцей 2", "prynagodnyia_3"))
+        data.add(MenuListData(R.raw.prynagodnyia_4, "Малітва бацькоў за дзяцей", "prynagodnyia_4"))
+        data.add(MenuListData(R.raw.prynagodnyia_5, "Малітва вадзіцеля", "prynagodnyia_5"))
+        data.add(MenuListData(R.raw.prynagodnyia_6, "Малітва вучня", "prynagodnyia_6"))
+        data.add(MenuListData(R.raw.prynagodnyia_7, "Малітва да Маці Божай Браслаўскай, Валадаркі Азёраў", "prynagodnyia_7"))
+        data.add(MenuListData(R.raw.prynagodnyia_8, "Малітва да Маці Божай Будслаўскай, Апякункі Беларусі", "prynagodnyia_8"))
+        data.add(MenuListData(R.raw.prynagodnyia_9, "Малітва да Маці Божай Нястомнай Дапамогі", "prynagodnyia_9"))
+        data.add(MenuListData(R.raw.prynagodnyia_10, "Малітва за Беларусь", "prynagodnyia_10"))
+        data.add(MenuListData(R.raw.prynagodnyia_11, "Малітва за дарослых дзяцей", "prynagodnyia_11"))
+        data.add(MenuListData(R.raw.prynagodnyia_12, "Малітва за дзяцей перад пачаткам навукі", "prynagodnyia_12"))
+        data.add(MenuListData(R.raw.prynagodnyia_13, "Малітва за парафію", "prynagodnyia_13"))
+        data.add(MenuListData(R.raw.prynagodnyia_14, "Малітва за хворага", "prynagodnyia_14"))
+        data.add(MenuListData(R.raw.prynagodnyia_15, "Малітва за хворае дзіця", "prynagodnyia_15"))
+        data.add(MenuListData(R.raw.prynagodnyia_16, "Малітва за хрысьціянскую еднасьць", "prynagodnyia_16"))
+        data.add(MenuListData(R.raw.prynagodnyia_17, "Малітва за ўмацаваньне ў любові", "prynagodnyia_17"))
+        data.add(MenuListData(R.raw.prynagodnyia_18, "Малітва маладога чалавека", "prynagodnyia_18"))
+        data.add(MenuListData(R.raw.prynagodnyia_19, "Малітва на ўсякую патрэбу", "prynagodnyia_19"))
+        data.add(MenuListData(R.raw.prynagodnyia_20, "Малітва падзякі за атрыманыя дабрадзействы", "prynagodnyia_20"))
+        data.add(MenuListData(R.raw.prynagodnyia_21, "Малітва перад пачаткам навучаньня", "prynagodnyia_21"))
+        data.add(MenuListData(R.raw.prynagodnyia_22, "Малітва перад іспытамі", "prynagodnyia_22"))
+        data.add(MenuListData(R.raw.prynagodnyia_23, "Малітва ранішняга намеру (Опціных старцаў)", "prynagodnyia_23"))
+        data.add(MenuListData(R.raw.prynagodnyia_24, "Малітвы за сьвятароў і сьвятарскія пакліканьні", "prynagodnyia_24"))
+        data.add(MenuListData(R.raw.prynagodnyia_25, "Малітвы ў часе хваробы і за хворых", "prynagodnyia_25"))
+        data.add(MenuListData(R.raw.prynagodnyia_26, "Намер ісьці за Хрыстом", "prynagodnyia_26"))
+        data.add(MenuListData(R.raw.prynagodnyia_27, "Цябе, Бога, хвалім", "prynagodnyia_27"))
+        data.add(MenuListData(R.raw.prynagodnyia_28, "Малітва падчас згубнай пошасьці", "prynagodnyia_28"))
+        data.add(MenuListData(R.raw.prynagodnyia_29, "Малітва вучняў перад навучаньнем", "prynagodnyia_29"))
+        data.add(MenuListData(R.raw.prynagodnyia_30, "Малітва да Маці Божай Берасьцейскай", "prynagodnyia_30"))
+        data.add(MenuListData(R.raw.prynagodnyia_31, "Малітва да Маці Божай Лагішынскай", "prynagodnyia_31"))
+        data.add(MenuListData(R.raw.prynagodnyia_32, "Малітва пілігрыма", "prynagodnyia_32"))
+        data.add(MenuListData(R.raw.prynagodnyia_33, "Малітва сям’і аб Божым бласлаўленьні на час адпачынку і вакацыяў", "prynagodnyia_33"))
+        data.add(MenuListData(R.raw.prynagodnyia_34, "Малітва ў час адпачынку", "prynagodnyia_34"))
+        data.add(MenuListData(R.raw.prynagodnyia_35, "Малітва за бязьвінных ахвяраў перасьледу", "prynagodnyia_35"))
+        data.add(MenuListData(R.raw.prynagodnyia_36, "Малітва за Айчыну - Ян Павел II", "prynagodnyia_36"))
         data.sort()
         adapter = MenuListAdaprer(this)
         ListView.adapter = adapter
@@ -198,6 +209,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             val intent = Intent(this, Prynagodnyia::class.java)
             intent.putExtra("prynagodnyia", data[position].data)
             intent.putExtra("prynagodnyiaID", data[position].id)
+            intent.putExtra("prynagodnyiaType", data[position].type)
             startActivity(intent)
             val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(ListView.windowToken, 0)
@@ -226,6 +238,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             val intent = Intent(this@MalitvyPrynagodnyia, Prynagodnyia::class.java)
             intent.putExtra("prynagodnyia", history[position])
             intent.putExtra("prynagodnyiaID", getIdHistory(history[position]))
+            intent.putExtra("prynagodnyiaType", getTypeHistory(history[position]))
             startActivity(intent)
             val edit = history[position]
             addHistory(edit)

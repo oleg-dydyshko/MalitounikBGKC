@@ -18,7 +18,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="VII"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -32,7 +31,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="Ютрань"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -45,7 +43,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="1-я гадз."
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -58,7 +55,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="3-я, 6-я,\n9-я гадз."
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -71,7 +67,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="Вяч."
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -84,7 +79,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="Ндз"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -97,7 +91,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="2 3 17"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -110,7 +103,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="-"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -123,7 +115,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="- - -"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -136,7 +127,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="-"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -149,7 +139,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="Пн"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -162,7 +151,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="4 5 6"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -175,7 +163,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="-"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -188,7 +175,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="7 8 9"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -201,7 +187,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="10"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -214,7 +199,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="Аў"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -227,7 +211,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="11 12 13"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -240,7 +223,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="14"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -253,7 +235,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="15 16 18"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -266,7 +247,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="19"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -279,7 +259,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="Ср"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -292,7 +271,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="20 1 2"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -305,7 +283,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="3"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -318,7 +295,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="4 5 6"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -331,7 +307,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="7"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -344,7 +319,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="Чц"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -357,7 +331,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="- 8 -"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -370,7 +343,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="-"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -383,7 +355,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="9 10 11"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -396,7 +367,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="12"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -409,7 +379,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="Пт"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -422,7 +391,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="13 14 15"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -435,7 +403,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="-"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -448,7 +415,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="19 20 -"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -461,7 +427,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="18"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -474,7 +439,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="Сб"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -487,7 +451,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="- 16 17"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -500,7 +463,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="-"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -513,7 +475,6 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="- - -"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -526,6 +487,5 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="1"
-        android:textColor="@color/colorPrimary_text"
         android:textSize="18sp" />
 </androidx.gridlayout.widget.GridLayout>

@@ -18,9 +18,6 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
 
-/**
- * Created by oleg on 14.6.16
- */
 class MyNatatkiAdd : AppCompatActivity() {
     private var filename = ""
     private var redak = false
@@ -51,17 +48,8 @@ class MyNatatkiAdd : AppCompatActivity() {
         setContentView(R.layout.my_malitva_add)
         var title = resources.getString(by.carkva_gazeta.malitounik.R.string.MALITVA_ADD)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        // Показываем клавиатуру
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-        /*if (dzenNoch) { //getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.colorprimary_material_dark));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-            }
-        }*/
         EditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         if (savedInstanceState != null) {
             filename = savedInstanceState.getString("filename") ?: ""
@@ -71,12 +59,6 @@ class MyNatatkiAdd : AppCompatActivity() {
             redak = intent.getBooleanExtra("redak", false)
         }
         file.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        /*if (dzenNoch) {
-            EditText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            file.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-        } else {
-            file.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-        }*/
         if (redak) {
             title = resources.getString(by.carkva_gazeta.malitounik.R.string.malitva_edit)
             val res = File("$filesDir/Malitva/$filename").readText().split("<MEMA></MEMA>").toTypedArray()
@@ -164,7 +146,6 @@ class MyNatatkiAdd : AppCompatActivity() {
             file.writer().use {
                 it.write(nazva + "<MEMA></MEMA>" + natatka + "<RTE></RTE>" + gc.timeInMillis)
             }
-            // Скрываем клавиатуру
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(EditText.windowToken, 0)
             redak = true

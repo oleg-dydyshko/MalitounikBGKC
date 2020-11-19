@@ -101,21 +101,8 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-            } else {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-            }
-        }*/
-        if (dzenNoch) {
-            //TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+        if (dzenNoch)
             progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-        }
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         val r = resources
         val ton = intent.extras?.getInt("ton", 1) ?: 1
@@ -211,44 +198,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         }
         inputStream.close()
         val resursOut = builder.toString()
-        /*var n = resursOut.indexOf("<!--ton1n-->")
-        var k = resursOut.indexOf("<!--ton1k-->")
-        when (ton) {
-        1 -> {
-        n = resursOut.indexOf("<!--ton1n-->")
-        k = resursOut.indexOf("<!--ton1k-->")
-        }
-        2 -> {
-        n = resursOut.indexOf("<!--ton2n-->")
-        k = resursOut.indexOf("<!--ton2k-->")
-        }
-        3 -> {
-        n = resursOut.indexOf("<!--ton3n-->")
-        k = resursOut.indexOf("<!--ton3k-->")
-        }
-        4 -> {
-        n = resursOut.indexOf("<!--ton4n-->")
-        k = resursOut.indexOf("<!--ton4k-->")
-        }
-        5 -> {
-        n = resursOut.indexOf("<!--ton5n-->")
-        k = resursOut.indexOf("<!--ton5k-->")
-        }
-        6 -> {
-        n = resursOut.indexOf("<!--ton6n-->")
-        k = resursOut.indexOf("<!--ton6k-->")
-        }
-        7 -> {
-        n = resursOut.indexOf("<!--ton7n-->")
-        k = resursOut.indexOf("<!--ton7k-->")
-        }
-        8 -> {
-        n = resursOut.indexOf("<!--ton8n-->")
-        k = resursOut.indexOf("<!--ton8k-->")
-        }
-        }
-        resursOut = resursOut.substring(n, k)*/
-        //CaseInsensitiveResourcesFontLoader FontLoader = new CaseInsensitiveResourcesFontLoader();
         TextView.text = MainActivity.fromHtml(resursOut)
         men = Bogashlugbovya.checkVybranoe(this, resurs)
         if (chin.getBoolean("help_str", true)) {
@@ -421,7 +370,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
         }
-        //menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = chin.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
         val item = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
@@ -525,7 +473,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             window.setDecorFitsSystemWindows(true)
             val controller = window.insetsController
             controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            //controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }

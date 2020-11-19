@@ -18,9 +18,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
 
-/**
- * Created by oleg on 21.7.17
- */
 class DialogBibleRazdel : DialogFragment() {
     private var fullGlav = 0
     private lateinit var input: EditTextRobotoCondensed
@@ -102,7 +99,6 @@ class DialogBibleRazdel : DialogFragment() {
                 false
             }
             input.imeOptions = EditorInfo.IME_ACTION_GO
-            // Показываем клавиатуру
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             linearLayout.addView(input)
@@ -120,7 +116,6 @@ class DialogBibleRazdel : DialogFragment() {
 
     private fun goRazdel() {
         activity?.let {
-            // Скрываем клавиатуру
             val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm1.hideSoftInputFromWindow(input.windowToken, 0)
             if (input.text.toString() == "") {

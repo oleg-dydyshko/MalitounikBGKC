@@ -15,9 +15,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
 
-/**
- * Created by oleg on 29.3.19
- */
 class DialogBibleNatatka : DialogFragment() {
     private var redaktor = false
     private var position = 0
@@ -97,16 +94,8 @@ class DialogBibleNatatka : DialogFragment() {
             val editTextView = EditTextRobotoCondensed(it)
             editTextView.setPadding(realpadding, realpadding, realpadding, realpadding)
             editTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            /*if (dzenNoch) {
-                editTextView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                editTextView.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
-            } else {
-                editTextView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                editTextView.setBackgroundResource(R.color.colorIcons)
-            }*/
             editTextView.setText(editText)
             editTextView.requestFocus()
-            // Показываем клавиатуру
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             linearLayout.addView(editTextView)

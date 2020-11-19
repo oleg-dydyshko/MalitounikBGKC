@@ -16,9 +16,6 @@ import by.carkva_gazeta.malitounik.MenuListAdaprer
 import by.carkva_gazeta.malitounik.SettingsActivity
 import kotlinx.android.synthetic.main.bgkc_list.*
 
-/**
- * Created by oleg on 30.5.16
- */
 class ParafiiBgkcDekanat : AppCompatActivity() {
     private var bgkc = 0
     private var mLastClickTime: Long = 0
@@ -55,46 +52,16 @@ class ParafiiBgkcDekanat : AppCompatActivity() {
         }
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.parafii)
-        val data = ArrayList<String>()
         bgkc = intent.getIntExtra("bgkc", 1)
-        if (bgkc == 1) {
-            data.add("Цэнтральны дэканат")
-            data.add("Барысаў")
-            data.add("Жодзіна")
-            data.add("Заслаўе")
-            data.add("Маладэчна")
-            data.add("Мар'іна Горка")
-            data.add("Менск")
-        }
+        var data = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.parafii_bgkc_1)
         if (bgkc == 2) {
-            data.add("Усходні дэканат")
-            data.add("Віцебск")
-            data.add("Ворша")
-            data.add("Гомель")
-            data.add("Полацак")
-            data.add("Магілёў")
+            data = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.parafii_bgkc_2)
         }
         if (bgkc == 3) {
-            data.add("Заходні дэканат")
-            data.add("Баранавічы")
-            data.add("Берасьце")
-            data.add("Горадня")
-            data.add("Івацэвічы")
-            data.add("Ліда")
-            data.add("Наваградак")
-            data.add("Пінск")
-            data.add("Слонім")
+            data = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.parafii_bgkc_3)
         }
         if (bgkc == 4) {
-            data.add("Антвэрпан (Бельгія)")
-            data.add("Лондан (Вялікабрытанія)")
-            data.add("Варшава (Польшча)")
-            data.add("Вільня (Літва)")
-            data.add("Вена (Аўстрыя)")
-            data.add("Калінінград (Расея)")
-            data.add("Прага (Чэхія)")
-            data.add("Рым (Італія)")
-            data.add("Санкт-Пецярбург (Расея)")
+            data = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.parafii_bgkc_4)
         }
         val adapter = MenuListAdaprer(this, data)
         ListView.adapter = adapter

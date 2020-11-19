@@ -13,9 +13,6 @@ import by.carkva_gazeta.malitounik.SettingsActivity
 import kotlinx.android.synthetic.main.my_malitva_view.*
 import java.io.File
 
-/**
- * Created by oleg on 16.6.16
- */
 class MyNatatkiView : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {

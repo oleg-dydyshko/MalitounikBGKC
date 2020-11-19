@@ -50,7 +50,6 @@ class DialogAddNatatka : DialogFragment() {
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             linear.addView(textViewZaglavie)
             input = EditTextRobotoCondensed(it)
-            //input.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(4)}
             if (dzenNoch) {
                 input.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                 input.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
@@ -64,7 +63,6 @@ class DialogAddNatatka : DialogFragment() {
                 val sValue = savedInstanceState.getString("value", "")
                 input.setText(sValue)
             }
-            //input.inputType = InputType.TYPE_CLASS_NUMBER
             input.requestFocus()
             input.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_GO) {
@@ -74,7 +72,6 @@ class DialogAddNatatka : DialogFragment() {
                 false
             }
             input.imeOptions = EditorInfo.IME_ACTION_GO
-            // Показываем клавиатуру
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             builder.setView(linear)
@@ -132,7 +129,6 @@ class DialogAddNatatka : DialogFragment() {
             file.writer().use {
                 it.write(nazva + "<MEMA></MEMA>" + MainActivity.fromHtml(natatka) + "<RTE></RTE>" + gc.timeInMillis)
             }
-            // Скрываем клавиатуру
             val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(input.windowToken, 0)
             MainActivity.toastView(activity, getString(R.string.COPY_MAJE_MALITVY_NAZVA))

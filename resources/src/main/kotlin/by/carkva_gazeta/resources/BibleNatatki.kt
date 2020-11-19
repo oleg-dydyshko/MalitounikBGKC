@@ -101,7 +101,6 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
         drag_list_view.setAdapter(adapter, false)
         drag_list_view.setCanDragHorizontally(false)
         drag_list_view.setCanDragVertically(true)
-        //drag_list_view.setCustomDragItem(MyDragItem(this, by.carkva_gazeta.malitounik.R.layout.list_item))
         drag_list_view.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
             override fun onItemSwipeStarted(item: ListSwipeItem) {
             }
@@ -160,7 +159,6 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
             help.visibility = View.VISIBLE
             drag_list_view.visibility = View.GONE
         }
-        //if (dzenNoch) help.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
     }
 
     private fun setTollbarTheme() {
@@ -309,19 +307,13 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
             if (dzenNoch) {
                 ExpArrayAdapterParallel.colors[0] = "#FFFFFF"
                 ExpArrayAdapterParallel.colors[1] = "#f44336"
-                val itemLeft = view.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_left)
-                itemLeft.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-                //itemLeft.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-                val itemRight = view.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_right)
-                itemRight.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-                //itemRight.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+                view.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_left).setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+                view.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_right).setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
                 view.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark_list)
-                //textview.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorIcons))
                 view.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
             } else {
                 ExpArrayAdapterParallel.colors[0] = "#000000"
                 ExpArrayAdapterParallel.colors[1] = "#D00505"
-                //textview.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
                 view.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default_list)
                 view.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorDivider)
             }
@@ -349,9 +341,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
                 var knigaS = -1
                 if (data[adapterPosition].list[0].contains("1")) kniga = data[adapterPosition].list[1].toInt() else knigaS = data[adapterPosition].list[1].toInt()
                 var intent = Intent()
-                /*if (semuxa == 3) {
-                    intent = new Intent(this, nadsanContentActivity.class);
-                } else {*/if (kniga != -1) {
+                if (kniga != -1) {
                     if (semuxa == 1) {
                         intent = Intent(this@BibleNatatki, NovyZapavietSemuxa::class.java)
                     }
@@ -394,7 +384,6 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
                     }
                     intent.putExtra("kniga", knigaS)
                 }
-                //}
                 intent.putExtra("glava", Integer.valueOf(data[adapterPosition].list[2]))
                 intent.putExtra("stix", Integer.valueOf(data[adapterPosition].list[3]))
                 startActivityForResult(intent, 500)
@@ -411,112 +400,4 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
             itemList = list
         }
     }
-
-    /*private class MyDragItem(context: Context, layoutId: Int) : DragItem(context, layoutId) {
-        //private val mycontext = context
-        override fun onBindDragView(clickedView: View, dragView: View) {
-            val text = (clickedView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.text) as TextView).text
-            val dragTextView = dragView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.text) as TextView
-            dragTextView.text = text
-            dragTextView.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            val k = mycontext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch) {
-                clickedView.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.text).setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
-                //clickedView.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                val itemLeft = clickedView.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_left)
-                itemLeft.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-                //itemLeft.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-                val itemRight = clickedView.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_right)
-                itemRight.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-                //itemRight.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-                //dragTextView.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                dragView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark))
-            } else {
-                //dragTextView.setTextColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-                dragView.findViewById<View>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, by.carkva_gazeta.malitounik.R.color.colorDivider))
-            }
-        }
-    }*/
-
-    /*private inner class ListAdaprer(private val mContext: Activity, private val itemsL: ArrayList<ArrayList<String>>) : ArrayAdapter<ArrayList<String>?>(mContext, by.carkva_gazeta.malitounik.R.layout.simple_list_item_3, by.carkva_gazeta.malitounik.R.id.label, itemsL as List<ArrayList<String>>) {
-        private val k: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        override fun add(string: ArrayList<String>?) {
-            super.add(string)
-            itemsL.add(string ?: ArrayList())
-        }
-
-        override fun remove(string: ArrayList<String>?) {
-            super.remove(string)
-            itemsL.remove(string)
-        }
-
-        override fun clear() {
-            super.clear()
-            itemsL.clear()
-        }
-
-        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
-            val rootView: View
-            val viewHolder: ViewHolder
-            if (mView == null) {
-                rootView = mContext.layoutInflater.inflate(by.carkva_gazeta.malitounik.R.layout.simple_list_item_3, parent, false)
-                viewHolder = ViewHolder()
-                rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(by.carkva_gazeta.malitounik.R.id.label)
-                viewHolder.buttonPopup = rootView.findViewById(by.carkva_gazeta.malitounik.R.id.button_popup)
-            } else {
-                rootView = mView
-                viewHolder = rootView.tag as ViewHolder
-            }
-            val dzenNoch = k.getBoolean("dzen_noch", false)
-            viewHolder.buttonPopup?.setOnClickListener { viewHolder.buttonPopup?.let { showPopupMenu(it, position, itemsL[position][5]) } }
-            viewHolder.text?.text = getString(by.carkva_gazeta.malitounik.R.string.bible_natatki, itemsL[position][4], itemsL[position][5])
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) {
-                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, by.carkva_gazeta.malitounik.R.color.colorIcons))
-                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
-            } else {
-                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_white)
-            }
-            return rootView
-        }
-
-    }
-
-    private fun showPopupMenu(view: View, position: Int, name: String) {
-        val popup = PopupMenu(this, view)
-        val infl = popup.menuInflater
-        infl.inflate(by.carkva_gazeta.malitounik.R.menu.popup, popup.menu)
-        for (i in 0 until popup.menu.size()) {
-            val item = popup.menu.getItem(i)
-            val spanString = SpannableString(popup.menu.getItem(i).title.toString())
-            val end = spanString.length
-            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            item.title = spanString
-        }
-        popup.setOnMenuItemClickListener { menuItem: MenuItem ->
-            popup.dismiss()
-            when (menuItem.itemId) {
-                by.carkva_gazeta.malitounik.R.id.menu_redoktor -> {
-                    val natatka = DialogBibleNatatkaEdit.getInstance(semuxa, position)
-                    natatka.show(supportFragmentManager, "bible_natatka_edit")
-                    return@setOnMenuItemClickListener true
-                }
-                by.carkva_gazeta.malitounik.R.id.menu_remove -> {
-                    val delite = DialogZakladkaDelite.getInstance(position, name, semuxa, false)
-                    delite.show(supportFragmentManager, "zakladka_delite")
-                    return@setOnMenuItemClickListener true
-                }
-            }
-            false
-        }
-        popup.show()
-    }
-
-    private class ViewHolder {
-        var text: TextViewRobotoCondensed? = null
-        var buttonPopup: ImageView? = null
-    }*/
 }

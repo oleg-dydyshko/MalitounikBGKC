@@ -37,9 +37,6 @@ import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by oleg on 25.5.16
- */
 class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private val mHideHandler = Handler(Looper.getMainLooper())
 
@@ -135,18 +132,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
         if (dzenNoch) progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
         spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
-            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-            } else {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-            }
-        }*/
         loadBible()
         if (k.getBoolean("help_str", true)) {
             startActivity(Intent(this, HelpText::class.java))
@@ -537,14 +522,12 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             textView1.isFocusable = false
             textView1.text = ssbTitle
             textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-            //if (dzenNoch) textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             LinearButtom.addView(textView1)
             cytannelist.add(textView1)
             val textView2 = TextViewRobotoCondensed(this)
             textView2.isFocusable = false
             textView2.text = MainActivity.fromHtml(split2[VybranoeBibliaData.glava])
             textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-            //if (dzenNoch) textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             cytannelist.add(textView2)
             LinearButtom.addView(textView2)
         }
@@ -824,7 +807,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             window.setDecorFitsSystemWindows(true)
             val controller = window.insetsController
             controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            //controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }

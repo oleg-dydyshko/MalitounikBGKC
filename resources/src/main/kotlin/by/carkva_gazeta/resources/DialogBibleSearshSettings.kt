@@ -20,9 +20,6 @@ import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 
-/**
- * Created by oleg on 22.7.17
- */
 class DialogBibleSearshSettings : DialogFragment() {
     private lateinit var prefEditors: Editor
     private var mListener: DiallogBibleSearshListiner? = null
@@ -127,14 +124,10 @@ class DialogBibleSearshSettings : DialogFragment() {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextViewRobotoCondensed
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
-            //if (dzenNoch)
-                //textView.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
-            if (dzenNoch) {
+            if (dzenNoch)
                 textView.setBackgroundResource(R.drawable.selector_dark)
-                //textView.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
-            } else {
+            else
                 textView.setBackgroundResource(R.drawable.selector_default)
-            }
             return v
         }
 
@@ -152,14 +145,10 @@ class DialogBibleSearshSettings : DialogFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
-            //if (dzenNoch)
-                //viewHolder.text?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
-            if (dzenNoch) {
+            if (dzenNoch)
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-                //viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
-            } else {
+            else
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
-            }
             viewHolder.text?.gravity = Gravity.START
             viewHolder.text?.setTypeface(null, Typeface.NORMAL)
             viewHolder.text?.text = name[position]

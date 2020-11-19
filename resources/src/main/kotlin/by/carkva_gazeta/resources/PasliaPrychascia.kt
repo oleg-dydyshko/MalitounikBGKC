@@ -30,6 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.ArrayList
 
 class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSizeListener {
     private val mHideHandler = Handler(Looper.getMainLooper())
@@ -54,9 +55,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     private var checkSetDzenNoch = false
     private lateinit var k: SharedPreferences
     private var men = false
-    private val resursID = arrayOf(R.raw.paslia_prychascia1, R.raw.paslia_prychascia2, R.raw.paslia_prychascia3, R.raw.paslia_prychascia4, R.raw.paslia_prychascia5)
-    private var resurs = arrayOf("paslia_prychascia1", "paslia_prychascia2", "paslia_prychascia3", "paslia_prychascia4", "paslia_prychascia5")
-    private val title = arrayOf("Малітва падзякі", "Малітва сьв. Васіля Вялікага", "Малітва Сымона Мэтафраста", "Iншая малітва", "Малітва да Найсьвяцейшай Багародзіцы")
+    private val malitvy = ArrayList<Malitvy>()
     private var dzenNoch = false
     private var pasliaPrychascia = 0
     private var n = 0
@@ -96,8 +95,13 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.akafist_activity_paslia_prich)
+        malitvy.add(Malitvy(R.raw.paslia_prychascia1, "paslia_prychascia1", "Малітва падзякі"))
+        malitvy.add(Malitvy(R.raw.paslia_prychascia2, "paslia_prychascia2", "Малітва сьв. Васіля Вялікага"))
+        malitvy.add(Malitvy(R.raw.paslia_prychascia3, "paslia_prychascia3", "Малітва Сымона Мэтафраста"))
+        malitvy.add(Malitvy(R.raw.paslia_prychascia4, "paslia_prychascia4", "Iншая малітва"))
+        malitvy.add(Malitvy(R.raw.paslia_prychascia5, "paslia_prychascia5", "Малітва да Найсьвяцейшай Багародзіцы"))
         pasliaPrychascia = intent.extras?.getInt("paslia_prychascia") ?: 0
-        men = Bogashlugbovya.checkVybranoe(this, resurs[pasliaPrychascia])
+        men = Bogashlugbovya.checkVybranoe(this, malitvy[pasliaPrychascia].resourse)
         constraint.setOnTouchListener(this)
         val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
         pager.adapter = adapterViewPager
@@ -107,23 +111,12 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-            } else {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-            }
-        }*/
         pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             }
 
             override fun onPageSelected(position: Int) {
-                men = Bogashlugbovya.checkVybranoe(this@PasliaPrychascia, resurs[position])
+                men = Bogashlugbovya.checkVybranoe(this@PasliaPrychascia, malitvy[position].resourse)
                 pasliaPrychascia = position
                 invalidateOptionsMenu()
             }
@@ -175,7 +168,6 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        //fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         val id = item.itemId
@@ -201,7 +193,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            men = Bogashlugbovya.setVybranoe(this, resurs[pasliaPrychascia], title[pasliaPrychascia])
+            men = Bogashlugbovya.setVybranoe(this, malitvy[pasliaPrychascia].resourse, malitvy[pasliaPrychascia].title)
             if (men) {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
             }
@@ -399,7 +391,6 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             window.setDecorFitsSystemWindows(true)
             val controller = window.insetsController
             controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            //controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
@@ -416,15 +407,17 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
 
         override fun getCount(): Int {
-            return title.size
+            return malitvy.size
         }
 
         override fun getItem(position: Int): Fragment {
-            return PasliaPrychasciaFragment.newInstance(resursID[position])
+            return PasliaPrychasciaFragment.newInstance(malitvy[position].resourseID)
         }
 
         override fun getItemPosition(`object`: Any): Int {
             return PagerAdapter.POSITION_NONE
         }
     }
+
+    private data class Malitvy(val resourseID: Int, val resourse: String, val title: String)
 }

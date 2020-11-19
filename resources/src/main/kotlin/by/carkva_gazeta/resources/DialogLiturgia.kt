@@ -18,9 +18,6 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
-/**
- * Created by oleg on 30.11.17
- */
 class DialogLiturgia : DialogFragment() {
     private var chast: String = "1"
     private lateinit var ab: AlertDialog.Builder

@@ -10,9 +10,6 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
 
-/**
- * Created by oleg on 25.5.16
- */
 internal class ZmenyiaChastki(context: Context) {
     private val data: ArrayMap<String, Int> = ArrayMap()
     private val arrayData: ArrayList<ArrayList<String>>
@@ -63,14 +60,10 @@ internal class ZmenyiaChastki(context: Context) {
         var w1 = w
         val res = StringBuilder()
         w1 = MainActivity.removeZnakiAndSlovy(w1)
-        //w1 = w1.replace("а", "")
-        //w1 = w1.replace("б", "")
         val split = w1.split(";")
-        //val split = arrayOf("Гал 1.1-10, 20-2.5", "Гал 1.1-10, 20-2.5")
         var knigaN: String
         var knigaK = "0"
         var zaglnum = 0
-        // Мц 1.1-10, 20-2.5, 10-20, 1.21-2.4, 11;
         var chtenie: Int = if (apostal == 1) 0 else 1
         if (split.size == 3) chtenie++
         val zaglavie = split[chtenie].split(",")
@@ -93,38 +86,38 @@ internal class ZmenyiaChastki(context: Context) {
             if (zag1 > zag2 && zag == -1) {
                 glav = true
             } else if (zag != -1) {
-                zagl = zaglav.substring(0, zag) // Название книги
+                zagl = zaglav.substring(0, zag)
                 val zaglavieName1 = split[chtenie].trim()
                 zaglavieName = " " + zaglavieName1.substring(zag + 1)
-                zaglnum = zaglav.substring(zag + 1, zag1).toInt() // Номер главы
+                zaglnum = zaglav.substring(zag + 1, zag1).toInt()
             } else if (zag1 != -1) {
-                zaglnum = zaglav.substring(0, zag1).toInt() // Номер главы
+                zaglnum = zaglav.substring(0, zag1).toInt()
             }
             if (glav) {
                 val zagS1 = zagS.indexOf(".")
                 if (zagS1 == -1) {
-                    knigaN = zagS // Начало чтения
+                    knigaN = zagS
                 } else {
-                    zaglnum = zagS.substring(0, zagS1).toInt() // Номер главы
-                    knigaN = zagS.substring(zagS1 + 1) // Начало чтения
+                    zaglnum = zagS.substring(0, zagS1).toInt()
+                    knigaN = zagS.substring(zagS1 + 1)
                 }
             } else if (zag2 == -1) {
                 knigaN = if (zag1 != -1) {
-                    zaglav.substring(zag1 + 1) // Начало чтения
+                    zaglav.substring(zag1 + 1)
                 } else {
-                    zaglav // Начало чтения
+                    zaglav
                 }
-                knigaK = knigaN // Конец чтения
+                knigaK = knigaN
             } else {
-                knigaN = zaglav.substring(zag1 + 1, zag2) // Начало чтения
+                knigaN = zaglav.substring(zag1 + 1, zag2)
             }
             if (glav) {
-                knigaK = zaglav.substring(zag1 + 1) // Конец чтения
+                knigaK = zaglav.substring(zag1 + 1)
             } else if (zag2 != -1) {
                 knigaK = if (zag3 == -1) {
-                    zaglav.substring(zag2 + 1) // Конец чтения
+                    zaglav.substring(zag2 + 1)
                 } else {
-                    zaglav.substring(zag3 + 1) // Конец чтения
+                    zaglav.substring(zag3 + 1)
                 }
             }
             var polstixaA = false
@@ -197,7 +190,7 @@ internal class ZmenyiaChastki(context: Context) {
             if (e == 0) {
                 res.append("<strong>").append(data.keyAt(kniga)).append(zaglavieName).append("</strong><br>")
             } else {
-                res.append("[&#8230;]<br>") // &#8230; -> ...
+                res.append("[&#8230;]<br>")
             }
             if (knigaN == knigaK) {
                 desK1 = desN

@@ -100,31 +100,11 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
             traker = savedInstanceState.getBoolean("traker")
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-            } else {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-            }
-        }*/
-        if (dzenNoch) {
-            //TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
+        if (dzenNoch)
             progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-        }
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         val id = intent.extras?.getInt("id", R.raw.bogashlugbovya12_1) ?: R.raw.bogashlugbovya12_1
         resurs = intent.extras?.getString("type", "bogashlugbovya12_1") ?: "bogashlugbovya12_1"
-        /*val fields: Array<Field?> = R.raw::class.java.fields
-        for (field in fields) {
-            if (field?.getInt(null) == id) {
-                resurs = field.name
-                break
-            }
-        }*/
         title = intent.extras?.getString("title", "") ?: ""
         val inputStream = resources.openRawResource(id)
         val isr = InputStreamReader(inputStream)
@@ -408,7 +388,6 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
             window.setDecorFitsSystemWindows(true)
             val controller = window.insetsController
             controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            //controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }

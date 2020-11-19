@@ -16,9 +16,6 @@ import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import java.util.*
 
-/**
- * Created by oleg on 4.4.19
- */
 class DialogDeliteAllZakladkiINatatki : DialogFragment() {
     private var mListener: DialogDeliteAllZakladkiINatatkiListener? = null
     private var zakladkaAlboNatatka: String = ""

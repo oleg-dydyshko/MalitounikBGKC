@@ -1,8 +1,5 @@
 package by.carkva_gazeta.resources
 
-/**
- * Created by oleg on 6.12.16.
- */
 internal class BibliaParallelChtenia {
     private var res = "+-+"
     fun kniga1(glava: Int, stih: Int): String {

@@ -632,7 +632,6 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
                 linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
                 linearLayout5.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
                 linearLayout6.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-                //listView.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             }
             copyBigFull.setOnClickListener {
                 BibleGlobalList.bibleCopyList.clear()
@@ -653,7 +652,6 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
                     val dialog = DialogAddNatatka.getInstance(clip)
                     dialog.show(it, "DialogAddNatatka")
                 }
-                //MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.copy))
                 linearLayout4.visibility = View.GONE
                 linearLayout6.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 linearLayout6.visibility = View.GONE
@@ -674,7 +672,6 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
                     val dialog = DialogAddNatatka.getInstance(clip)
                     dialog.show(it, "DialogAddNatatka")
                 }
-                //MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.copy))
                 linearLayout4.visibility = View.GONE
                 linearLayout6.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 linearLayout6.visibility = View.GONE

@@ -23,10 +23,6 @@ import kotlinx.android.synthetic.main.akafist_list_bible.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-
-/**
- * Created by oleg on 30.5.16
- */
 class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearHistoryListener {
 
     private val data = ArrayList<MenuListData>()
@@ -39,18 +35,6 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
     private var actionExpandOn = false
-
-    /*private fun loadHistory() {
-        val columns = arrayOf("_id", "text")
-        val temp = arrayOf(0, "default")
-        val cursor = MatrixCursor(columns)
-        for (i in 0 until history.size) {
-            temp[0] = i
-            temp[1] = history[i]
-            cursor.addRow(temp)
-        }
-        //searchView.suggestionsAdapter = ExampleCursorAdapter(this, cursor, history)
-    }*/
 
     private fun addHistory(item: String) {
         val temp = ArrayList<String>()
@@ -82,7 +66,6 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         saveHistopy()
         invalidateOptionsMenu()
         actionExpandOn = false
-        //loadHistory()
     }
 
     override fun cleanHistory(position: Int) {
@@ -91,7 +74,6 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         if (history.size == 0)
             invalidateOptionsMenu()
         historyAdapter.notifyDataSetChanged()
-        //actionExpandOn = false
     }
 
     private fun getIdHistory(item: String): Int {
@@ -191,7 +173,6 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
                 if (firstVisibleItem == 1) {
-                    // Скрываем клавиатуру
                     val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm1.hideSoftInputFromWindow(ListView.windowToken, 0)
                 }
@@ -225,7 +206,6 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             val type = object : TypeToken<ArrayList<String>>() {}.type
             history.addAll(gson.fromJson(json, type))
         }
-        //loadHistory()
         historyAdapter = HistoryAdapter(this, history)
         if (dzenNoch) History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
         else History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
@@ -313,16 +293,12 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         }
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                //Histopy.visibility = View.VISIBLE
-                //ListView.visibility = View.GONE
                 if (history.size > 0)
                     actionExpandOn = true
                 return true
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                //Histopy.visibility = View.GONE
-                //ListView.visibility = View.VISIBLE
                 actionExpandOn = false
                 return true
             }
@@ -418,13 +394,8 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             val dzenNoch = chin.getBoolean("dzen_noch", false)
             viewHolder.text?.text = data[position].data
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) {
-                //viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                //viewHolder.text?.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            if (dzenNoch)
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
-            } /*else {
-                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_white)
-            }*/
             return rootView
         }
 

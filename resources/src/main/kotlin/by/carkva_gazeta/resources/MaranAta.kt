@@ -39,9 +39,6 @@ import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by oleg on 18.10.16
- */
 class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener {
     private val mHideHandler = Handler(Looper.getMainLooper())
 
@@ -159,7 +156,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             autoStartScroll()
         }
         bibleCopyList.clear()
-        //autoscroll = k.getBoolean("autoscroll", false)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         ListView.onItemClickListener = this
         ListView.onItemLongClickListener = this
@@ -205,13 +201,13 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         mOffset = 0
                     }
                     val scroll: Int
-                    scroll = if (mPosition == position && mOffset == offset) { // прокрутка стоит
+                    scroll = if (mPosition == position && mOffset == offset) {
                         0
-                    } else if (mPosition > position && mOffset > offset) { // прокрутка идет вверх
-                        1 //-1;
-                    } else if (mPosition == position && mOffset < offset) { // прокрутка идет вверх
-                        1 //-1;
-                    } else { // прокрутка идет вниз
+                    } else if (mPosition > position && mOffset > offset) {
+                        1
+                    } else if (mPosition == position && mOffset < offset) {
+                        1
+                    } else {
                         1
                     }
                     if (!onsave) {
@@ -400,17 +396,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             copyBig.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
             adpravit.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
         }
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-            } else {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-            }
-        }*/
         val file: File = if (belarus) File("$filesDir/MaranAtaBel/$cytanne.json") else File("$filesDir/MaranAta/$cytanne.json")
         if (file.exists()) {
             val inputStream = FileReader(file)
@@ -1296,7 +1281,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             window.setDecorFitsSystemWindows(true)
             val controller = window.insetsController
             controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            //controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }

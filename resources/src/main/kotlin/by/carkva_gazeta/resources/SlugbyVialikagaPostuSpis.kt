@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.akafist_list_bible.*
 class SlugbyVialikagaPostuSpis : AppCompatActivity() {
     private var mLastClickTime: Long = 0
     private val data = ArrayList<Data>()
-    //private val data = arrayOf("ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам", "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю", "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу", "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю", "ПЯТНІЦА\nСлужба Крыжу Гасподняму", "СУБОТА\nСлужба ўсім сьвятым і памёрлым")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -178,13 +177,8 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
             val dzenNoch = k.getBoolean("dzen_noch", false)
             viewHolder.text?.text = data[position].data
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) {
-                //viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                //viewHolder.text?.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            if (dzenNoch)
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
-            } /*else {
-                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_white)
-            }*/
             return rootView
         }
     }

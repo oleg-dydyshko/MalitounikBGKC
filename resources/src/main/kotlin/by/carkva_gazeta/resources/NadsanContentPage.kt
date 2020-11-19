@@ -155,7 +155,6 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
                 copyBigFull.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
                 adpravit.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
                 linearLayout6.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-                //listView.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             }
             copyBigFull.setOnClickListener {
                 BibleGlobalList.bibleCopyList.clear()

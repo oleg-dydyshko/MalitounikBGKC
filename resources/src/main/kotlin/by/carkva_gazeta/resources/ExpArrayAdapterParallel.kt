@@ -15,9 +15,6 @@ import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
 
-/**
- * Created by oleg on 7.12.16
- */
 internal class ExpArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val Zapavet: Boolean, private val mPerevod: Int) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) { // 1-Сёмуха, 2-Синоидальный, 3-Псалтырь Надсана
     private val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
     private val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)

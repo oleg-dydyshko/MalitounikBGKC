@@ -38,9 +38,6 @@ import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by oleg on 25.5.16
- */
 class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private val mHideHandler = Handler(Looper.getMainLooper())
 
@@ -137,18 +134,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         if (dzenNoch) progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
         spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
-            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-            } else {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-            }
-        }*/
         setChtenia(savedInstanceState)
         if (k.getBoolean("help_str", true)) {
             startActivity(Intent(this, HelpText::class.java))
@@ -357,11 +342,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             var w = intent.extras?.getString("cytanne") ?: ""
             w = MainActivity.removeZnakiAndSlovy(w)
             val split = w.split(";")
-            //String[] split = {"Гал 1.1-10, 20-2.5"};
             var knigaN: String
             var knigaK = "0"
             var zaglnum = 0
-            // Мц 1.1-10, 20-2.5, 10-20, 1.21-2.4, 11;
             for (i in split.indices) {
                 val zaglavie = split[i].split(",")
                 var zagl = ""
@@ -383,40 +366,40 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         if (zag1 > zag2 && zag == -1) {
                             glav = true
                         } else if (zag != -1) {
-                            zagl = zaglav.substring(0, zag) // Название книги
+                            zagl = zaglav.substring(0, zag)
                             val zaglavieName1 = split[i].trim()
                             zaglavieName = " " + zaglavieName1.substring(zag + 1)
-                            zaglnum = zaglav.substring(zag + 1, zag1).toInt() // Номер главы
+                            zaglnum = zaglav.substring(zag + 1, zag1).toInt()
                         } else if (zag1 != -1) {
-                            zaglnum = zaglav.substring(0, zag1).toInt() // Номер главы
+                            zaglnum = zaglav.substring(0, zag1).toInt()
                         }
                         if (glav) {
                             val zagS1 = zagS.indexOf(".")
                             if (zagS1 == -1) {
                                 knigaN = zagS // Начало чтения
                             } else {
-                                zaglnum = zagS.substring(0, zagS1).toInt() // Номер главы
-                                knigaN = zagS.substring(zagS1 + 1) // Начало чтения
+                                zaglnum = zagS.substring(0, zagS1).toInt()
+                                knigaN = zagS.substring(zagS1 + 1)
                             }
                         } else if (zag2 == -1) { // Конец чтения
                             if (zag != -1) {
                                 val zagS1 = zagS.indexOf(".")
-                                zaglnum = zagS.substring(zag + 1, zagS1).toInt() // Номер главы
-                                knigaN = zagS.substring(zagS1 + 1) // Начало чтения
+                                zaglnum = zagS.substring(zag + 1, zagS1).toInt()
+                                knigaN = zagS.substring(zagS1 + 1)
                             } else {
-                                knigaN = zaglav // Начало чтения
+                                knigaN = zaglav
                             }
-                            knigaK = knigaN // Конец чтения
+                            knigaK = knigaN
                         } else {
-                            knigaN = zaglav.substring(zag1 + 1, zag2) // Начало чтения
+                            knigaN = zaglav.substring(zag1 + 1, zag2)
                         }
                         if (glav) {
-                            knigaK = zaglav.substring(zag1 + 1) // Конец чтения
+                            knigaK = zaglav.substring(zag1 + 1)
                         } else if (zag2 != -1) {
                             knigaK = if (zag3 == -1) {
-                                zaglav.substring(zag2 + 1) // Конец чтения
+                                zaglav.substring(zag2 + 1)
                             } else {
-                                zaglav.substring(zag3 + 1) // Конец чтения
+                                zaglav.substring(zag3 + 1)
                             }
                         }
                         var polstixaA = false
@@ -471,7 +454,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         if (zagl == "Дан") kniga = 36
                         if (zagl == "Лікі") kniga = 37
                         if (zagl == "Міх") kniga = 38
-                        //Быц 1.1-13; Лікі 24.2-3, 5-9, 17-18; Міх 4.6-7, 5.1-4; Іс 11.1-10; Ярэм 3.35-4.4; Дан 2.31-36, 44-45; Іс 9.5-6, 7.10-16, 8.1-4, 9-10
                         val r = resources
                         var inputStream = r.openRawResource(R.raw.biblian1)
                         var ssbTitle = SpannableStringBuilder()
@@ -800,7 +782,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             textView1.setTextIsSelectable(true)
                             textView1.text = ssbTitle
                             textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                            //if (dzenNoch) textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
                             textView1.setPadding(0, 10, 0, 0)
                             LinearButtom.addView(textView1)
                             cytannelist.add(textView1)
@@ -875,7 +856,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             textView2.setTextIsSelectable(true)
                             textView2.text = textBiblia
                             textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                            //if (dzenNoch) textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
                             textView2.setPadding(0, 10, 0, 0)
                             cytannelist.add(textView2)
                             LinearButtom.addView(textView2)
@@ -906,7 +886,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         textView2.isFocusable = false
         textView2.text = ssb
         textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        //if (dzenNoch) textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
         textView2.setPadding(0, 10, 0, 0)
         cytannelist.add(textView2)
         LinearButtom.addView(textView2)
@@ -1194,7 +1173,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             window.setDecorFitsSystemWindows(true)
             val controller = window.insetsController
             controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            //controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }

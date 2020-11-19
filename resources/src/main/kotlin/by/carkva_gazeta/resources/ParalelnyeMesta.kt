@@ -11,9 +11,6 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
-/**
- * Created by oleg on 18.10.16
- */
 class ParalelnyeMesta {
     fun paralel(context: Context, cytanneSours: String, cytanneParalelnye: String, semuxa: Boolean): ArrayList<TextViewRobotoCondensed> {
         var cytanneSours1 = cytanneSours
@@ -194,8 +191,6 @@ class ParalelnyeMesta {
             val fit = aChten.trim()
             var nachalo: String
             var konec: String
-            // Пс 88:12-13; 135:5; 145:6; Сир 18:1; Ин 1:3; Пс 22
-            // Быт 13:15; 15:7, 18, 15-16; 26:3-4; Втор 34:4; 1 Тим 2:13
             val split = fit.split(",")
             for (aSplit in split) {
                 val splitres = aSplit.trim()
@@ -550,12 +545,10 @@ class ParalelnyeMesta {
         else chtenie
         val bible = arrayOf("Быт", "Бытие", "Быцьцё", "1", "", "")
         if (kniga == "Быт" || kniga == "Быц") {
-            bible[0] = "Быт" // Сокращение по русски
-            bible[1] = "Бытие" // Название по русски не полное
-            bible[2] = "Быцьцё" // Название по Белорусски не полное
-            bible[3] = "1" // Номер книги
-            //bible[4] Название по русски
-            //bible[5] Название по Белорусски
+            bible[0] = "Быт"
+            bible[1] = "Бытие"
+            bible[2] = "Быцьцё"
+            bible[3] = "1"
         }
         if (kniga == "Исх" || kniga == "Вых") {
             bible[0] = "Исх"

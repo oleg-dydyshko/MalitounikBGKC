@@ -65,13 +65,6 @@ class DialogPasxa : DialogFragment() {
             linear.addView(textViewZaglavie)
             input = EditTextRobotoCondensed(it)
             input.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(4)}
-            /*if (dzenNoch) {
-                input.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                input.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
-            } else {
-                input.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                input.setBackgroundResource(R.color.colorIcons)
-            }*/
             input.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             linear.addView(input)
             if (savedInstanceState != null) {
@@ -82,7 +75,6 @@ class DialogPasxa : DialogFragment() {
             input.requestFocus()
             input.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_GO) {
-                    // Скрываем клавиатуру
                     val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm1.hideSoftInputFromWindow(input.windowToken, 0)
                     if (input.text.toString() == "") {
@@ -100,12 +92,10 @@ class DialogPasxa : DialogFragment() {
                 false
             }
             input.imeOptions = EditorInfo.IME_ACTION_GO
-            // Показываем клавиатуру
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             builder.setView(linear)
             builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
-                // Скрываем клавиатуру
                 val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm1.hideSoftInputFromWindow(input.windowToken, 0)
                 if (input.text.toString() == "") {
@@ -118,19 +108,19 @@ class DialogPasxa : DialogFragment() {
                         error()
                     }
                 }
+            }
+            builder.setNegativeButton(getString(R.string.CANCEL)) { _: DialogInterface?, _: Int ->
+                val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm12.hideSoftInputFromWindow(input.windowToken, 0)
+            }
+            alert = builder.create()
         }
-        builder.setNegativeButton(getString(R.string.CANCEL)) { _: DialogInterface?, _: Int ->
-            val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm12.hideSoftInputFromWindow(input.windowToken, 0)
-        }
-        alert = builder.create()
+        return alert
     }
-    return alert
-}
 
-private fun error() {
-    activity?.let {
-        MainActivity.toastView(it, getString(R.string.error))
+    private fun error() {
+        activity?.let {
+            MainActivity.toastView(it, getString(R.string.error))
+        }
     }
-}
 }

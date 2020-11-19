@@ -49,6 +49,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
     private var sabytieTitle: String = ""
     private var position = 0
     private var mLastClickTime: Long = 0
+
     private fun getData(mun: Int): String {
         return if (MenuCaliandar.munKal == mun && MenuCaliandar.dataJson != "") {
             MenuCaliandar.dataJson

@@ -94,10 +94,6 @@ class MenuBibleSemuxa : Fragment() {
                         fragmentManager?.let { dadatak.show(it, "dadatak") }
                     }
                 }
-                /*} else {
-                val chtenia = DialogNoBibleChtenia()
-                fragmentManager?.let { chtenia.show(it, "no_bible_chtenia") }
-            }*/
             }
             zakladki.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {

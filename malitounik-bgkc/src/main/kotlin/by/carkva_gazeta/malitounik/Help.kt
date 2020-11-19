@@ -12,9 +12,6 @@ import kotlinx.android.synthetic.main.help.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-/**
- * Created by oleg on 9.7.16
- */
 class Help : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

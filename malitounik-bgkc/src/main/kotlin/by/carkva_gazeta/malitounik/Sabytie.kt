@@ -41,9 +41,6 @@ import java.io.FileWriter
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by oleg on 8.5.17
- */
 class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
@@ -398,7 +395,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         drag_list_view.setAdapter(adapter, false)
         drag_list_view.setCanDragHorizontally(false)
         drag_list_view.setCanDragVertically(true)
-        //drag_list_view.setCustomDragItem(MyDragItem(this, R.layout.list_item_sabytie))
         drag_list_view.setCanDragVertically(false)
         drag_list_view.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
             override fun onItemSwipeStarted(item: ListSwipeItem) {
@@ -2374,17 +2370,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             dzenNoch = k.getBoolean("dzen_noch", false)
             textview.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
-                val itemLeft = view.findViewById<TextViewRobotoCondensed>(R.id.item_left)
-                itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
-                //itemLeft.setBackgroundResource(R.color.colorprimary_material_dark)
-                val itemRight = view.findViewById<TextViewRobotoCondensed>(R.id.item_right)
-                itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
-                //itemRight.setBackgroundResource(R.color.colorprimary_material_dark)
+                view.findViewById<TextViewRobotoCondensed>(R.id.item_left).setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
+                view.findViewById<TextViewRobotoCondensed>(R.id.item_right).setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
                 view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_dark_list)
-                //textview.setTextColor(ContextCompat.getColor(parent.context, R.color.colorIcons))
                 view.setBackgroundResource(R.color.colorprimary_material_dark)
             } else {
-                //textview.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_text))
                 view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_default_list)
                 view.setBackgroundResource(R.color.colorDivider)
             }
@@ -2500,33 +2490,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
     }
 
-    /*private class MyDragItem(context: Context, layoutId: Int) : DragItem(context, layoutId) {
-        //private val mycontext = context
-        override fun onBindDragView(clickedView: View, dragView: View) {
-            val text = (clickedView.findViewById<View>(R.id.text) as TextView).text
-            val dragTextView = dragView.findViewById<View>(R.id.text) as TextView
-            dragTextView.text = text
-            dragTextView.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            val k = mycontext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch) {
-                clickedView.findViewById<TextViewRobotoCondensed>(R.id.text).setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-                clickedView.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_dark)
-                val itemLeft = clickedView.findViewById<TextViewRobotoCondensed>(R.id.item_left)
-                itemLeft.setTextColor(ContextCompat.getColor(mycontext, R.color.colorPrimary_black))
-                itemLeft.setBackgroundResource(R.color.colorprimary_material_dark)
-                val itemRight = clickedView.findViewById<TextViewRobotoCondensed>(R.id.item_right)
-                itemRight.setTextColor(ContextCompat.getColor(mycontext, R.color.colorPrimary_black))
-                itemRight.setBackgroundResource(R.color.colorprimary_material_dark)
-                dragTextView.setTextColor(ContextCompat.getColor(mycontext, R.color.colorIcons))
-                dragView.findViewById<View>(R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, R.color.colorprimary_material_dark))
-            } else {
-                dragTextView.setTextColor(ContextCompat.getColor(mycontext, R.color.colorPrimary_text))
-                dragView.findViewById<View>(R.id.item_layout).setBackgroundColor(ContextCompat.getColor(mycontext, R.color.colorDivider))
-            }
-        }
-    }*/
-
     private inner class ColorAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_color, R.id.label, colors) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -2574,12 +2537,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
             viewHolder.text?.text = spinnerList[position]
             viewHolder.text?.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            //if (dzenNoch) viewHolder.text?.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
-            if (dzenNoch) {
+            if (dzenNoch)
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-            } else {
+             else
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
-            }
             return rootView
         }
 
@@ -2588,12 +2549,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val text: TextView = view.findViewById(R.id.text1)
             text.text = spinnerList[position]
             text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            //if (dzenNoch) text.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
-            if (dzenNoch) {
+            if (dzenNoch)
                 text.setBackgroundResource(R.drawable.selector_dark)
-            } else {
+            else
                 text.setBackgroundResource(R.drawable.selector_default)
-            }
             return view
         }
     }

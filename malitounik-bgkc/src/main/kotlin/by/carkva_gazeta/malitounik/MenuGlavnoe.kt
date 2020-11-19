@@ -8,12 +8,11 @@ import android.view.View
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
 
-/**
- * Created by oleg on 30.5.16
- */
 class MenuGlavnoe : ListFragment() {
-    private val data = arrayOf("Апошнія навіны", "Навіны хрысьціянскага сьвету", "Гісторыя Царквы", "Сьвятло Ўсходу", "Царква і грамадзтва", "Катэдральны пляц", "Відэа", "Бібліятэка")
+    private val data: Array<out String>
+        get() = resources.getStringArray(R.array.galounae)
     private var mLastClickTime: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

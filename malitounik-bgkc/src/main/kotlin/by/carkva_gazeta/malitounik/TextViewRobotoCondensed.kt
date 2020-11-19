@@ -5,9 +5,6 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 
-/**
- * Created by oleg on 23.12.17
- */
 class TextViewRobotoCondensed : AppCompatTextView {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)

@@ -74,7 +74,6 @@ import java.util.zip.ZipInputStream
 import javax.xml.parsers.ParserConfigurationException
 import kotlin.collections.ArrayList
 
-
 class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback,
     WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
 
@@ -653,29 +652,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             drawable = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.krest_black)
             title.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             label6.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-            /*title.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-            label1.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label2.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label3.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label4.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label5.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label6.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            textViewB.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))*/
         } else {
             label6.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
-            /*title.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label1.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label2.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label3.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label4.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label5.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))
-            label6.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons))*/
         }
         ajustCompoundDrawableSizeWithText(label1, drawable)
         ajustCompoundDrawableSizeWithText(label2, drawable)
@@ -689,19 +667,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         label4.setOnClickListener(this)
         label5.setOnClickListener(this)
         label6.setOnClickListener(this)
-
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
-            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
-            } else {
-                window.statusBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-                window.navigationBarColor = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimaryDark)
-            }
-        }*/
 
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
@@ -858,29 +823,18 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
         }
         val file = File(filePath)
-        pdfView.fromFile(file).enableAntialiasing(true) //.pages(0, 2, 1, 3, 3, 3) // all pages are displayed by default
-            .enableSwipe(true) // allows to block changing pages using swipe
-            .swipeHorizontal(false).enableDoubletap(true).defaultPage(defaultPage) // allows to draw something on the current page, usually visible in the middle of the screen
-            //.onDraw(onDrawListener)
-            // allows to draw something on all pages, separately for every page. Called only for visible pages
-            //.onDrawAll(onDrawListener)
-            .onLoad(this) // called after document is loaded and starts to be rendered
-            .onPageChange(this) //.onPageChange(onPageChangeListener)
-            //.onPageScroll(onPageScrollListener)
-            .onError(this) //.onError(onErrorListener)
-            //.onPageError(onPageErrorListener)
-            //.onRender(onRenderListener) // called after document is rendered for the first time
-            // called on single tap, return true if handled, false to toggle scroll handle visibility
-            //.onTap(onTapListener)
-            //.onLongPress(onLongPressListener)
-            .enableAnnotationRendering(false) // render annotations (such as comments, colors or forms)
-            .password(null).scrollHandle(null).enableAntialiasing(true) // improve rendering a little bit on low-res screens
-            // spacing between pages in dp. To define spacing color, set view background
-            .spacing(2).autoSpacing(false) // add dynamic spacing to fit each page on its own on the screen
-            //.linkHandler(DefaultLinkHandler)
-            .pageFitPolicy(FitPolicy.WIDTH).pageSnap(false) // snap pages to screen boundaries
-            .pageFling(false) // make a fling change only a single page like ViewPager
-            .nightMode(k.getBoolean("inversion", false)) // toggle night mode
+        pdfView.fromFile(file).enableAntialiasing(true)
+            .enableSwipe(true)
+            .swipeHorizontal(false).enableDoubletap(true).defaultPage(defaultPage)
+            .onLoad(this)
+            .onPageChange(this)
+            .onError(this)
+            .enableAnnotationRendering(false)
+            .password(null).scrollHandle(null).enableAntialiasing(true)
+            .spacing(2).autoSpacing(false)
+            .pageFitPolicy(FitPolicy.WIDTH).pageSnap(false)
+            .pageFling(false)
+            .nightMode(k.getBoolean("inversion", false))
             .load()
     }
 
@@ -2064,13 +2018,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch) {
-                //viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                //viewHolder.text?.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            if (dzenNoch)
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
-            } /*else {
-                viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_white)
-            }*/
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolder.text?.text = arrayList[position][0]
             return rootView

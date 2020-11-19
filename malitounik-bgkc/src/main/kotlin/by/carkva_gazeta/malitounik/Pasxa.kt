@@ -11,9 +11,6 @@ import kotlinx.android.synthetic.main.pasxa.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-/**
- * Created by oleg on 1.8.16
- */
 class Pasxa : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
@@ -45,16 +42,6 @@ class Pasxa : AppCompatActivity() {
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        /*if (dzenNoch) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val window = window
-                //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
-            }
-            pasxa.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-        }*/
         val inputStream = resources.openRawResource(R.raw.pasxa)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)

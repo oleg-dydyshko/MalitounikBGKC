@@ -7,11 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import java.io.File
 import java.io.FileOutputStream
 
-/**
- * Created by oleg on 22.4.17
- */
 class SplashActivity : AppCompatActivity() {
-override fun onCreate(savedInstanceState: Bundle?) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val data = intent.data
     val intent1 = Intent(this, MainActivity::class.java)
@@ -66,5 +64,5 @@ override fun onCreate(savedInstanceState: Bundle?) {
     }
     startActivity(intent1)
     finish()
-}
+    }
 }

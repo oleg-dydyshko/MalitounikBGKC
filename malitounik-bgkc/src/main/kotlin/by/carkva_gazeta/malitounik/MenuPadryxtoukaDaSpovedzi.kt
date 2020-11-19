@@ -16,6 +16,7 @@ import java.io.InputStreamReader
 class MenuPadryxtoukaDaSpovedzi : PadryxtoukaPamiatkaListFragment() {
     private lateinit var adapter: MyArrayAdapter
     private var k: SharedPreferences? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

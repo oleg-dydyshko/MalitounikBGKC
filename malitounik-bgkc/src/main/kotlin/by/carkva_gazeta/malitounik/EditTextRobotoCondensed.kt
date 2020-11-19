@@ -5,9 +5,6 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 
-/**
- * Created by oleg on 25.12.17
- */
 class EditTextRobotoCondensed : AppCompatEditText {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)

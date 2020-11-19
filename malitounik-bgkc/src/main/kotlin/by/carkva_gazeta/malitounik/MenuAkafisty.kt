@@ -7,13 +7,11 @@ import android.view.View
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
 
-/**
- * Created by oleg on 30.5.16
- */
 class MenuAkafisty : ListFragment() {
-    //String[] by.carkva_gazeta.malitounikApp.data = {"Пра Акафіст", "Найсьвяцейшай Багародзіцы", "Маці Божай Нястомнай Дапамогі", "перад Жыровіцкай іконай", "у гонар Падляшскіх мучанікаў", "няма Імю Ісусаваму", "да Духа Сьвятога", "сьв. Апосталам Пятру і Паўлу", "няма Жыцьцядайнаму Крыжу"};
-    private val data = arrayOf("Пра Акафіст", "Найсьвяцейшай Багародзіцы", "Маці Божай Нястомнай Дапамогі", "перад Жыровіцкай іконай", "у гонар Падляшскіх мучанікаў", "Імю Ісусаваму", "да Духа Сьвятога", "сьв. Апосталам Пятру і Паўлу")
+    private val data: Array<out String>
+        get() = resources.getStringArray(R.array.akafisty)
     private var mLastClickTime: Long = 0
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {

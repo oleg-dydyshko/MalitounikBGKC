@@ -15,17 +15,17 @@ import java.util.*
 
 class CaliandarMunTab2 : Fragment() {
 
-companion object {
-    fun getInstance(posMun: Int, yearG: Int, day: Int): CaliandarMunTab2 {
-        val frag = CaliandarMunTab2()
-        val bundle = Bundle()
-        bundle.putInt("posMun", posMun)
-        bundle.putInt("yearG", yearG)
-        bundle.putInt("day", day)
-        frag.arguments = bundle
-        return frag
+    companion object {
+        fun getInstance(posMun: Int, yearG: Int, day: Int): CaliandarMunTab2 {
+            val frag = CaliandarMunTab2()
+            val bundle = Bundle()
+            bundle.putInt("posMun", posMun)
+            bundle.putInt("yearG", yearG)
+            bundle.putInt("day", day)
+            frag.arguments = bundle
+            return frag
+        }
     }
-}
 
     private var dzenNoch = false
     private lateinit var adapterViewPagerNedel: SmartFragmentStatePagerAdapter

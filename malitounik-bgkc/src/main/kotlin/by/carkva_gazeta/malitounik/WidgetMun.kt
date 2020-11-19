@@ -19,9 +19,6 @@ import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by oleg on 20.3.17
- */
 class WidgetMun : AppWidgetProvider() {
     private var updateViews: RemoteViews? = null
     private val updateAllWidgets = "update_all_widgets"
@@ -35,9 +32,7 @@ class WidgetMun : AppWidgetProvider() {
         for (widgetID in appWidgetIds) {
             updateWidget(context, appWidgetManager, widgetID)
         }
-        // Обновляем виджет
         appWidgetManager.updateAppWidget(appWidgetIds, updateViews)
-        //appWidgetManager.updateAppWidget(new ComponentName(context.getPackageName(), Widget_mun.class.getName()), updateViews);
     }
 
     private fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, widgetIDs: IntArray) {
@@ -61,9 +56,7 @@ class WidgetMun : AppWidgetProvider() {
             updateViews?.setOnClickPendingIntent(R.id.imageButton, pIntent)
             mun(context, i)
         }
-        // Обновляем виджет
         appWidgetManager.updateAppWidget(widgetIDs, updateViews)
-        //appWidgetManager.updateAppWidget(new ComponentName(context.getPackageName(), Widget_mun.class.getName()), updateViews);
     }
 
     private fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, widgetID: Int) {
@@ -89,9 +82,7 @@ class WidgetMun : AppWidgetProvider() {
         pIntent = PendingIntent.getBroadcast(context, widgetID, countIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         updateViews?.setOnClickPendingIntent(R.id.imageButton, pIntent)
         mun(context, widgetID)
-        // Обновляем виджет
         appWidgetManager.updateAppWidget(widgetID, updateViews)
-        //appWidgetManager.updateAppWidget(new ComponentName(context.getPackageName(), Widget_mun.class.getName()), updateViews);
     }
 
     override fun onEnabled(context: Context) {
@@ -118,7 +109,6 @@ class WidgetMun : AppWidgetProvider() {
                 alarmManager[AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000] = pIntentBoot
             }
         }
-        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, mkTime(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)), 86400000, pIntent);
     }
 
     override fun onDisabled(context: Context) {
@@ -140,7 +130,6 @@ class WidgetMun : AppWidgetProvider() {
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         super.onDeleted(context, appWidgetIds)
-        // Удаляем Preferences
         val editor = context.getSharedPreferences("biblia", Context.MODE_PRIVATE).edit()
         for (widgetID in appWidgetIds) {
             editor.remove("WIDGET$widgetID")
@@ -235,7 +224,6 @@ class WidgetMun : AppWidgetProvider() {
                 reset.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
                 val pReset = PendingIntent.getBroadcast(context, 257, reset, PendingIntent.FLAG_UPDATE_CURRENT)
                 val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                //if (alarmManager != null) {
                 alarmManager.cancel(pReset)
                 when {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
@@ -248,8 +236,6 @@ class WidgetMun : AppWidgetProvider() {
                         alarmManager[AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 120000] = pReset
                     }
                 }
-                //}
-// Обновляем виджет
                 updateWidget(context, AppWidgetManager.getInstance(context), mAppWidgetId)
             }
         }
@@ -273,9 +259,7 @@ class WidgetMun : AppWidgetProvider() {
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val c = Calendar.getInstance() as GregorianCalendar
         var calendarPost: GregorianCalendar
-        //Month = 10;
         val month = chin.getInt("WIDGET$widgetID", c[Calendar.MONTH])
-        //year = 2016
         val year = chin.getInt("WIDGETYEAR$widgetID", c[Calendar.YEAR])
         val inputStream = context.resources.openRawResource(MainActivity.caliandar(context, getmun(month, year)))
         val isr = InputStreamReader(inputStream)
@@ -303,7 +287,7 @@ class WidgetMun : AppWidgetProvider() {
         var newDay = 0
         var nopost = false
         var post = false
-        var strogiPost = false //, do_day, img;
+        var strogiPost = false
         for (e in 1..42) {
             var denNedeli: Int
             if (e < wik) {
@@ -2485,11 +2469,11 @@ class WidgetMun : AppWidgetProvider() {
         }
     }
 
-    private fun sviatyVialikia(day: Int): Boolean { // когда выпадают ВЯЛІКІЯ СЬВЯТЫ относительно Пасхі
+    private fun sviatyVialikia(day: Int): Boolean {
         return data[day - 1][5].contains("2")
     }
 
-    private fun sviatyDvunadesiatya(day: Int): Boolean { // когда выпадают двунадесятые праздники
+    private fun sviatyDvunadesiatya(day: Int): Boolean {
         return data[day - 1][5].contains("1")
     }
 

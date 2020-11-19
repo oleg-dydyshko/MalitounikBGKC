@@ -7,13 +7,10 @@ import android.view.View
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
 
-/**
- * Created by oleg on 30.5.16
- */
 class MenuMalitvy : ListFragment() {
     private var mLastClickTime: Long = 0
-    //String[] by.carkva_gazeta.malitounikApp.data = {"Ранішняя малітвы", "Вячэрнія малітвы", "Прынагодныя малітвы", "няма Прынагодныя – у псальмах"};
-    private val data = arrayOf("Ранішняя малітвы", "Вячэрнія малітвы", "Прынагодныя малітвы")
+    private val data: Array<out String>
+        get() = resources.getStringArray(R.array.malitvy)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

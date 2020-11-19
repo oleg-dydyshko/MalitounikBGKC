@@ -7,12 +7,11 @@ import android.view.View
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
 
-/**
- * Created by oleg on 30.5.16
- */
 class MenuParafiiBgkc : ListFragment() {
-    private val data = arrayOf("Курыя Апостальскай Візітатуры БГКЦ", "Цэнтральны дэканат", "Усходні дэканат", "Заходні дэканат", "Замежжа")
+    private val data: Array<out String>
+        get() = resources.getStringArray(R.array.parafii_bgkc)
     private var mLastClickTime: Long = 0
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {

@@ -11,9 +11,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 
-/**
- * Created by oleg on 18.7.17
- */
 class DialogContextMenu : DialogFragment() {
     private var position = 0
     private var name: String = ""

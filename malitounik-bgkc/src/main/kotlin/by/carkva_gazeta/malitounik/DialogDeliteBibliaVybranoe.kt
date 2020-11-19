@@ -12,9 +12,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 
-/**
- * Created by oleg on 8.3.18
- */
 class DialogDeliteBibliaVybranoe : DialogFragment() {
     private var mListener: DialogDeliteBibliVybranoeListener? = null
     private var position = 0

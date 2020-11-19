@@ -48,13 +48,6 @@ class Naviny : AppCompatActivity() {
             if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
                 WebSettingsCompat.setForceDark(viewWeb.settings, WebSettingsCompat.FORCE_DARK_ON)
             }
-            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
-            }*/
-            //viewWeb.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbackground_material_dark))
             toolbarprogress.setBackgroundResource(R.drawable.progress_bar_black)
         }
         val naviny = kq.getInt("naviny", 0)
@@ -350,7 +343,6 @@ class Naviny : AppCompatActivity() {
                     startActivity(intent)
                 } else {
                     if (MainActivity.isNetworkAvailable(this@Naviny)) {
-                        //view.loadUrl(url)
                         invalidateOptionsMenu()
                         return false
                     } else {
@@ -363,7 +355,6 @@ class Naviny : AppCompatActivity() {
                 if (url.contains("translate.google.com") || url.contains("carkva-gazeta.by/download.php")) {
                     onChrome(url)
                 } else {
-                    //view.loadUrl(url)
                     invalidateOptionsMenu()
                     return false
                 }

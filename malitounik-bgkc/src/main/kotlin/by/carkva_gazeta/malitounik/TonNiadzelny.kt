@@ -15,12 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.akafist_list.*
 
-/**
- * Created by oleg on 30.5.16
- */
 class TonNiadzelny : AppCompatActivity() {
     private var mLastClickTime: Long = 0
-    private val data = arrayOf("Тон 1", "Тон 2", "Тон 3", "Тон 4", "Тон 5", "Тон 6", "Тон 7", "Тон 8")
+    private val data: Array<out String>
+        get() = resources.getStringArray(R.array.ton_niadzeli)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)

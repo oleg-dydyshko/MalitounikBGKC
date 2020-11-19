@@ -14,11 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.akafist_list.*
 
-/**
- * Created by oleg on 30.5.16
- */
 class MalitvyPasliaPrychascia : AppCompatActivity() {
-    private val data = arrayOf("Малітва падзякі", "Малітва сьв. Васіля Вялікага", "Малітва Сымона Мэтафраста", "Iншая малітва", "Малітва да Найсьвяцейшай Багародзіцы")
+    private val data: Array<out String>
+        get() = resources.getStringArray(R.array.malitvy_pasli_prychastia)
     private var result = false
     private var mLastClickTime: Long = 0
 

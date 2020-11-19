@@ -8,9 +8,6 @@ import android.util.Log
 import android.view.MotionEvent
 import android.widget.ScrollView
 
-/**
- * Created by oleg on 9.11.16
- */
 class InteractiveScrollView : ScrollView {
     private var mOnScrollChangedCallback: OnScrollChangedCallback? = null
     private var mListener: OnBottomReachedListener? = null

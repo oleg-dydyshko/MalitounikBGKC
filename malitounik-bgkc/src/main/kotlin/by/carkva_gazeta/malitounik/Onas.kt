@@ -7,14 +7,10 @@ import android.text.method.LinkMovementMethod
 import android.util.TypedValue
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.onas.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-/**
- * Created by oleg on 9.7.16
- */
 class Onas : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
@@ -29,9 +25,6 @@ class Onas : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.onas)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        if (dzenNoch) {
-            onas.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-        }
         onas.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         onas.movementMethod = LinkMovementMethod.getInstance()
         setSupportActionBar(toolbar)
@@ -65,7 +58,6 @@ class Onas : AppCompatActivity() {
             builder.append(line)
         }
         inputStream.close()
-        //CaseInsensitiveResourcesFontLoader FontLoader = new CaseInsensitiveResourcesFontLoader();
         onas.text = MainActivity.fromHtml(builder.toString())
     }
 

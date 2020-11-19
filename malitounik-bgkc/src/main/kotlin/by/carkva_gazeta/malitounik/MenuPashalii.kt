@@ -22,13 +22,11 @@ import kotlinx.android.synthetic.main.pashalii.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by oleg on 31.5.16
- */
 class MenuPashalii : PashaliiFragment() {
     private val pasxi = ArrayList<Pashalii>()
     private lateinit var myArrayAdapter: MyArrayAdapter
     private var mLastClickTime: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -53,7 +51,6 @@ class MenuPashalii : PashaliiFragment() {
             title.text = titlespan
             if (dzenNoch) {
                 title.setBackgroundResource(R.drawable.selector_dark)
-                //gri.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                 title.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             } else {
                 title.setBackgroundResource(R.drawable.selector_default)
@@ -164,12 +161,9 @@ class MenuPashalii : PashaliiFragment() {
             var colorP = R.color.colorPrimary
             if (k.getBoolean("dzen_noch", false)) {
                 ea.textView?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
-                //ea.textView?.setBackgroundResource(R.drawable.selector_dark)
                 color = R.color.colorIcons
                 colorP = R.color.colorPrimary_black
-            } /*else {
-                ea.textView?.setBackgroundResource(R.drawable.selector_white)
-            }*/
+            }
             val c = Calendar.getInstance() as GregorianCalendar
             val pasxa = SpannableStringBuilder(pasxi[position].katolic)
             if (!pasxi[position].sovpadenie) {

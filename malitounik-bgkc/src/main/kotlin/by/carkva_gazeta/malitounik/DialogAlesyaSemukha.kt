@@ -14,9 +14,6 @@ import androidx.fragment.app.DialogFragment
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-/**
- * Created by oleg on 21.7.17
- */
 class DialogAlesyaSemukha : DialogFragment() {
 
     private lateinit var ad: AlertDialog.Builder

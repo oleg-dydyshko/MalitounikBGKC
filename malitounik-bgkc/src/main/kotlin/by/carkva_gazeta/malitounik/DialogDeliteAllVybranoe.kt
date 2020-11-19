@@ -12,9 +12,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 
-/**
- * Created by oleg on 8.3.18
- */
 class DialogDeliteAllVybranoe : DialogFragment() {
     private lateinit var mListener: DialogDeliteAllVybranoeListener
     private lateinit var alert: AlertDialog

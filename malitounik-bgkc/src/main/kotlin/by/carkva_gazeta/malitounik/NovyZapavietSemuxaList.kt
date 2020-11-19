@@ -270,15 +270,7 @@ class NovyZapavietSemuxaList : AppCompatActivity() {
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = mContext.layoutInflater.inflate(R.layout.group_view, parent, false)
             val textGroup: TextViewRobotoCondensed = rootView.findViewById(R.id.textGroup)
-            //val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            /*val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch) {
-                textGroup.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
-                textGroup.setBackgroundResource(R.drawable.selector_dark)
-            } else {
-                textGroup.setBackgroundResource(R.drawable.selector_white)
-            }*/
             when (groupPosition) {
                 0 -> textGroup.text = "Паводле Мацьвея"
                 1 -> textGroup.text = "Паводле Марка"
@@ -317,13 +309,8 @@ class NovyZapavietSemuxaList : AppCompatActivity() {
             val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch) {
-                //textChild.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
-                //textChild.setBackgroundResource(R.drawable.selector_dark)
+            if (dzenNoch)
                 textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            } /*else {
-                textChild.setBackgroundResource(R.drawable.selector_white)
-            }*/
             textChild.text = groups[groupPosition][childPosition]
             return rootView
         }

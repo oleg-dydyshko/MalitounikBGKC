@@ -66,7 +66,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             ListView.onItemClickListener = this
             ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
                 override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
-                    if (i == 1) { // Скрываем клавиатуру
+                    if (i == 1) {
                         val imm1 = fraragment.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm1.hideSoftInputFromWindow(editText?.windowToken, 0)
                     }
@@ -144,14 +144,12 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         val prefEditors = chin.edit()
         prefEditors.putString("history_pesny", json)
         prefEditors.apply()
-        //activity?.invalidateOptionsMenu()
     }
 
     override fun cleanFullHistory() {
         history.clear()
         saveHistopy()
         activity?.invalidateOptionsMenu()
-        //loadHistory()
     }
 
     override fun cleanHistory(position: Int) {
@@ -506,13 +504,8 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             val dzenNoch = chin.getBoolean("dzen_noch", false)
             viewHolder.text?.text = menuList[position].data
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) {
-                //viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-                //viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
+            if (dzenNoch)
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            } /*else {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-            }*/
             return rootView
         }
     }
@@ -542,19 +535,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             return -1
         }
 
-        private fun listRaw(filename: String): Int {
-            /*val fields: Array<Field?> = R.raw::class.java.fields
-            var id = 0
-            run files@{
-                fields.forEach {
-                    if (it?.name == filename) {
-                        id = it.getInt(it)
-                        return@files
-                    }
-                }
-            }*/
-            return PesnyAll.resursMap[filename] ?: -1
-        }
+        private fun listRaw(filename: String) = PesnyAll.resursMap[filename] ?: -1
 
         private fun getMenuListData(context: Context): ArrayList<MenuListData> {
             val menuListData = ArrayList<MenuListData>()

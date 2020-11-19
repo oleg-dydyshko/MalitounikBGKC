@@ -12,9 +12,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 
-/**
- * Created by oleg on 25.10.17
- */
 class DialogSabytieSave : DialogFragment() {
     private lateinit var mListener: DialogSabytieSaveListener
     private lateinit var alert: AlertDialog

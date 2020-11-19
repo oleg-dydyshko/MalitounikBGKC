@@ -170,8 +170,6 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                 }
                 val c = Calendar.getInstance() as GregorianCalendar
-                //GregorianCalendar calendar = new GregorianCalendar(year, mun, 1);
-                //int Month = calendar.get(Calendar.MONTH);
                 var munTudey = false
                 if (mun == c[Calendar.MONTH] && year == c[Calendar.YEAR]) munTudey = true
                 val calendarFull = GregorianCalendar(year, mun, 1)

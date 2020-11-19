@@ -34,9 +34,6 @@ import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by oleg on 29.3.16
- */
 class SettingsActivity : AppCompatActivity() {
     private lateinit var k: SharedPreferences
     private lateinit var prefEditor: Editor
@@ -176,104 +173,6 @@ class SettingsActivity : AppCompatActivity() {
                     }
                 }
             }
-            /*File(context.filesDir.toString() + "/Sabytie").walk().forEach { file ->
-            if (file.isFile && file.exists()) {
-            val inputStream = FileReader(file)
-            val reader = BufferedReader(inputStream)
-            reader.forEachLine {
-            val line = it
-            if (line != "") {
-            val t1 = line.split(" ")
-            if (t1[5] != "-1") {
-            if (t1[10] == "0") {
-            when (t1[9].toInt()) {
-            1 -> {
-            var timerepit = t1[3].toLong()
-            while (true) {
-            if (timerepit > c.timeInMillis) {
-            intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
-            pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
-            am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 86400000L, pIntent)
-            break
-            }
-            timerepit += 86400000L
-            }
-            }
-            4 -> {
-            var timerepit = t1[3].toLong()
-            while (true) {
-            if (timerepit > c.timeInMillis) {
-            intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
-            pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
-            am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 604800000L, pIntent)
-            break
-            }
-            timerepit += 604800000L
-            }
-            }
-            5 -> {
-            var timerepit = t1[3].toLong()
-            while (true) {
-            if (timerepit > c.timeInMillis) {
-            intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
-            pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
-            am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 1209600000L, pIntent)
-            break
-            }
-            timerepit += 1209600000L
-            }
-            }
-            6 -> {
-            var timerepit = t1[3].toLong()
-            while (true) {
-            if (timerepit > c.timeInMillis) {
-            intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
-            pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
-            am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 2419200000L, pIntent)
-            break
-            }
-            timerepit += 2419200000L
-            }
-            }
-            else -> if (t1[3].toLong() > c.timeInMillis) {
-            intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
-            pIntent = PendingIntent.getBroadcast(context, (t1[3].toLong() / 100000).toInt(), intent, 0)
-            when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, t1[3].toLong(), pIntent)
-            }
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-            am.setExact(AlarmManager.RTC_WAKEUP, t1[3].toLong(), pIntent)
-            }
-            else -> {
-            am[AlarmManager.RTC_WAKEUP, t1[3].toLong()] = pIntent
-            }
-            }
-            }
-            }
-            } else {
-            if (t1[3].toLong() > c.timeInMillis) {
-            intent = createIntentSabytie(context, t1[0].replace("_", " "), t1[1], t1[2])
-            pIntent = PendingIntent.getBroadcast(context, (t1[3].toLong() / 100000).toInt(), intent, 0)
-            when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, t1[3].toLong(), pIntent)
-            }
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-            am.setExact(AlarmManager.RTC_WAKEUP, t1[3].toLong(), pIntent)
-            }
-            else -> {
-            am[AlarmManager.RTC_WAKEUP, t1[3].toLong()] = pIntent
-            }
-            }
-            }
-            }
-            }
-            }
-            }
-            inputStream.close()
-            }
-            }*/
             MainActivity.padzeia.forEach {
                 if (it.sec != "-1") {
                     if (it.count == "0") {
@@ -1168,11 +1067,6 @@ class SettingsActivity : AppCompatActivity() {
         onSupportNavigateUp()
     }
 
-    /*private fun formatFigureTwoPlaces(value: Float): String {
-    val myFormatter = DecimalFormat("##0.00")
-    return myFormatter.format(value.toDouble())
-    }*/
-
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
@@ -1206,11 +1100,6 @@ class SettingsActivity : AppCompatActivity() {
         }
         spinnerTime.adapter = TimeAdapter(this, dataTimes)
         spinnerTime.setSelection(itemDefault)
-        /*if (dzenNoch) {
-            spinnerTime.setBackgroundResource(R.drawable.selector_dark)
-        } else {
-            spinnerTime.setBackgroundResource(R.drawable.selector_default)
-        }*/
         spinnerTime.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
                 if (itemDefault != i) {
@@ -1235,11 +1124,6 @@ class SettingsActivity : AppCompatActivity() {
         }
         spinnerAutoPrag.adapter = AutoPragortkaAdapter(this, autoPrag)
         spinnerAutoPrag.setSelection(k.getInt("autoscrollAutostartTime", 5))
-        /*if (dzenNoch) {
-            spinnerAutoPrag.setBackgroundResource(R.drawable.selector_dark)
-        } else {
-            spinnerAutoPrag.setBackgroundResource(R.drawable.selector_default)
-        }*/
         spinnerAutoPrag.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 prefEditor.putInt("autoscrollAutostartTime", p2)
@@ -1281,7 +1165,6 @@ class SettingsActivity : AppCompatActivity() {
         textView15.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         textView16.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         notificationView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        //textView57.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (dzenNoch) {
             textView14.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             textView15.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
@@ -1295,24 +1178,6 @@ class SettingsActivity : AppCompatActivity() {
             line3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
         }
-        /*var dirCount: Long = 0
-        File("$filesDir/Site").walk().forEach {
-        if (it.isFile)
-        dirCount += it.length()
-        }*/
-        /*val dir = File("$filesDir/Site")
-        val dirContents = dir.listFiles()
-        for (dirContent in dirContents) {
-        dirCount = dirCount + dirContent.length()
-        }*/
-        /*File dir2 = new File(getFilesDir() + "/image_temp");
-        if (!dir2.exists()) {
-        dir2.mkdir();
-        }
-        File[] dirContents2 = dir2.listFiles();
-        for (File aDirContents2 : dirContents2) {
-        dirCount = dirCount + aDirContents2.length();
-        }*/
         if (dzenNoch) prav.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         prav.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         secret.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
@@ -1354,29 +1219,14 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        /*if (dzenNoch) {
-            prav.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            dzair.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            praf.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            pkc.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-        }*/
         if (k.getInt("pkc", 0) == 1) pkc.isChecked = true
         if (k.getInt("pravas", 0) == 1) prav.isChecked = true
         if (k.getInt("gosud", 0) == 1) dzair.isChecked = true
         if (k.getInt("pafesii", 0) == 1) praf.isChecked = true
         maranataOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        //button.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         notificationOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         notificationFull.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         notificationNon.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        /*textView58.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        if (dirCount / 1024 > 1000) {
-        textView58.text = resources.getString(R.string.QUOTA_M, formatFigureTwoPlaces(BigDecimal.valueOf(dirCount.toFloat() / 1024 / 1024.toDouble()).setScale(2, RoundingMode.HALF_UP).toFloat()))
-        } else {
-        textView58.text = resources.getString(R.string.QUOTA, formatFigureTwoPlaces(BigDecimal.valueOf(dirCount.toFloat() / 1024.toDouble()).setScale(2, RoundingMode.HALF_UP).toFloat()))
-        }*/
         if (Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
             val helpNotifi: TextViewRobotoCondensed = findViewById(R.id.help_notifi)
             helpNotifi.visibility = View.VISIBLE
@@ -1433,10 +1283,6 @@ class SettingsActivity : AppCompatActivity() {
         if (scrinOn) {
             checkBox7.isChecked = true
         }
-        /*val trafik = k.getInt("trafic", 0)
-        if (dzenNoch) checkBox2.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        checkBox2.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        if (trafik == 1) checkBox2.isChecked = true*/
         if (dzenNoch) reset.setBackgroundResource(R.drawable.knopka_red_black)
         reset.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         reset.setOnClickListener {
@@ -1505,7 +1351,6 @@ class SettingsActivity : AppCompatActivity() {
             notificationNon.isChecked = false
             vibro.isChecked = true
             this.guk.isChecked = true
-            //checkBox2.isChecked = false
             spinnerTime.setSelection(2)
             spinnerAutoPrag.setSelection(5)
             pkc.isChecked = false
@@ -1514,31 +1359,6 @@ class SettingsActivity : AppCompatActivity() {
             praf.isChecked = false
             recreate()
         }
-        /*if (dzenNoch) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val window = window
-                //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
-            }
-            scrollView.setBackgroundResource(R.color.colorbackground_material_dark)
-            notificationOnly.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            notificationFull.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            notificationNon.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            //textView58.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            checkBox5.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            checkBox6.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            checkBox7.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            this.sinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            this.maranata.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            if (maranata != 0) {
-                maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            }
-            //checkBox2.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-        }*/
         maranataGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             when (checkedId) {
                 R.id.maranataBel -> {
@@ -1705,14 +1525,6 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        /*checkBox2.setOnCheckedChangeListener { _, isChecked: Boolean ->
-        if (isChecked) {
-        prefEditor.putInt("trafic", 1)
-        } else {
-        prefEditor.putInt("trafic", 0)
-        }
-        prefEditor.apply()
-        }*/
         checkBox5.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putBoolean("dzen_noch", true)
@@ -1742,28 +1554,10 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        /*button.setOnClickListener {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-        return@setOnClickListener
-        }
-        mLastClickTime = SystemClock.elapsedRealtime()
-        /*File("$filesDir/Site").walk().forEach {
-        if (it.isFile)
-        it.delete()
-        }*/
-        /*for (aDirContents1 in dirContents) {
-        aDirContents1.delete()
-        }*/
-        /*for (File aDirContents2 : dirContents2) {
-        aDirContents2.delete();
-        }*/
-        textView58.text = resources.getString(R.string.QUOTA, formatFigureTwoPlaces(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_UP).toFloat()))
-        }*/
         vibro.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         this.guk.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         this.sinoidal.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         this.maranata.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        //checkBox2.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         prav.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         pkc.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         dzair.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
@@ -1810,12 +1604,8 @@ class SettingsActivity : AppCompatActivity() {
             val textView = v as TextViewRobotoCondensed
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             textView.text = dataTimes[position].string
-            if (dzenNoch) {
-                textView.setBackgroundResource(R.drawable.selector_dark)
-                //textView.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
-            } else {
-                textView.setBackgroundResource(R.drawable.selector_default)
-            }
+            if (dzenNoch) textView.setBackgroundResource(R.drawable.selector_dark)
+            else textView.setBackgroundResource(R.drawable.selector_default)
             return v
         }
 
@@ -1837,12 +1627,8 @@ class SettingsActivity : AppCompatActivity() {
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             viewHolder.text?.text = dataTimes[position].string
-            if (dzenNoch) {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-                //viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
-            } else {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
-            }
+            if (dzenNoch) viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
+            else viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
             return rootView
         }
 
@@ -1856,12 +1642,8 @@ class SettingsActivity : AppCompatActivity() {
             val textView = v as TextViewRobotoCondensed
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             textView.text = dataTimes[position]
-            if (dzenNoch) {
-                textView.setBackgroundResource(R.drawable.selector_dark)
-                //textView.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
-            } else {
-                textView.setBackgroundResource(R.drawable.selector_default)
-            }
+            if (dzenNoch) textView.setBackgroundResource(R.drawable.selector_dark)
+            else textView.setBackgroundResource(R.drawable.selector_default)
             return v
         }
 
@@ -1883,12 +1665,8 @@ class SettingsActivity : AppCompatActivity() {
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             viewHolder.text?.text = dataTimes[position]
-            if (dzenNoch) {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-                //viewHolder.text?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
-            } else {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
-            }
+            if (dzenNoch) viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
+            else viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
             return rootView
         }
 

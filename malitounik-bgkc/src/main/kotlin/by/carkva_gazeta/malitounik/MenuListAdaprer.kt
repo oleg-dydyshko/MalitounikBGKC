@@ -8,16 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 
-/**
- * Created by oleg on 17.1.18
- */
 class MenuListAdaprer : ArrayAdapter<String> {
     private val mContext: Activity
-    private var items: Array<String>? = null
+    private var items: Array<out String>? = null
     private var itemsL: ArrayList<String>? = null
     private val k: SharedPreferences
 
-    constructor(context: Activity, strings: Array<String>) : super(context, R.layout.simple_list_item_2, R.id.label, strings) {
+    constructor(context: Activity, strings: Array<out String>) : super(context, R.layout.simple_list_item_2, R.id.label, strings) {
         mContext = context
         items = strings
         k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -62,13 +59,8 @@ class MenuListAdaprer : ArrayAdapter<String> {
         if (items != null)
             viewHolder.text?.text = items?.get(position)
         viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        if (dzenNoch) {
-            //viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-            //viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+        if (dzenNoch)
             viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        } /*else {
-            viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-        }*/
         return rootView
     }
 

@@ -102,33 +102,12 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
-            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            if (dzenNoch) {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
-                window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimary_text)
-            } else {
-                window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
-                window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
-            }
-        }*/
-        if (dzenNoch) {
-            //TextView.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+        if (dzenNoch)
             progress.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-        }
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         title = intent.extras?.getString("pesny", "") ?: ""
         val pedsny = MenuPesny.getPesniaID(this, title)
         resurs = intent.extras?.getString("type", "pesny_prasl_0") ?: "pesny_prasl_0"
-        /*val fields: Array<Field?> = R.raw::class.java.fields
-        for (field in fields) {
-            if (field?.getInt(null) == pedsny) {
-                resurs = field.name
-                break
-            }
-        }*/
         val builder = StringBuilder()
         try {
             val inputStream = resources.openRawResource(pedsny)
@@ -427,7 +406,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             window.setDecorFitsSystemWindows(true)
             val controller = window.insetsController
             controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            //controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
@@ -442,7 +420,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     }
 
     companion object {
-
         val resursMap = ArrayMap<String, Int>()
 
         init {
@@ -600,36 +577,9 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                         break
                     }
                 }
-                /*val fields: Array<Field?> = R.raw::class.java.fields
-                for (field in fields) {
-                    if (field?.name?.intern() == resurs) {
-                        for (i in 0 until MenuVybranoe.vybranoe.size) {
-                            if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
-                                MenuVybranoe.vybranoe.removeAt(i)
-                                check = false
-                                break
-                            }
-                        }
-                        break
-                    }
-                }
-                val fields2 = R.raw::class.java.fields
-                for (field in fields2) {
-                if (field.name.intern() == resurs) {
-                for (i in 0 until MenuVybranoe.vybranoe.size) {
-                if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) {
-                MenuVybranoe.vybranoe.removeAt(i)
-                check = false
-                break
-                }
-                }
-                break
-                }
-                }*/
                 if (check) {
                     MenuVybranoe.vybranoe.add(0, VybranoeData(vybranoeIndex(), resurs, title))
                 }
-                //MenuVybranoe.vybranoe.sort()
                 file.writer().use {
                     it.write(gson.toJson(MenuVybranoe.vybranoe))
                 }
@@ -670,30 +620,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                         break
                     }
                 }
-                /*val fields: Array<Field?> = R.raw::class.java.fields
-                for (field in fields) {
-                    if (field?.name?.intern() == resurs) {
-                        for (i in 0 until MenuVybranoe.vybranoe.size) {
-                            if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) { //MenuVybranoe.vybranoe.remove(i)
-                                check = true
-                                break
-                            }
-                        }
-                        break
-                    }
-                }
-                val fields2: Array<Field> = R.raw::class.java.fields
-                for (field in fields2) {
-                if (field.name.intern() == resurs) {
-                for (i in 0 until MenuVybranoe.vybranoe.size) {
-                if (MenuVybranoe.vybranoe[i].resurs.intern() == resurs) { //MenuVybranoe.vybranoe.remove(i)
-                check = true
-                break
-                }
-                }
-                break
-                }
-                }*/
             } catch (t: Throwable) {
                 file.delete()
                 check = false

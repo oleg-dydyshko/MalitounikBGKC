@@ -25,9 +25,6 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
 
-/**
- * Created by oleg on 23.3.18
- */
 class DialogBibliateka : DialogFragment() {
     private var listPosition: String = "0"
     private var title: String = "0"

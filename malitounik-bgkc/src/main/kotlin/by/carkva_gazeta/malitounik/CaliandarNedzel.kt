@@ -184,13 +184,9 @@ class CaliandarNedzel : ListFragment() {
             if (c[Calendar.YEAR] == arrayList[position][3].toInt() && c[Calendar.DATE] == arrayList[position][1].toInt() && c[Calendar.MONTH] == arrayList[position][2].toInt()) {
                 if (dzenNoch) viewHolder.linearLayout?.setBackgroundResource(R.drawable.calendar_nedel_today_black)
                 else viewHolder.linearLayout?.setBackgroundResource(R.drawable.calendar_nedel_today)
-            } /*else {
-                //if (dzenNoch) viewHolder.linearLayout?.setBackgroundResource(R.drawable.selector_dark)
-                //else viewHolder.linearLayout?.setBackgroundResource(R.drawable.selector_white)
-            }*/
+            }
             if (arrayList[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar?.text = getString(R.string.tydzen_name3, nedelName[arrayList[position][0].toInt()], arrayList[position][1], munName[arrayList[position][2].toInt()], arrayList[position][3])
             else viewHolder.textCalendar?.text = getString(R.string.tydzen_name2, nedelName[arrayList[position][0].toInt()], arrayList[position][1], munName[arrayList[position][2].toInt()])
-            //viewHolder.textPraz.setText(arrayList.get(position).get(3)); Год
             var sviatyia = arrayList[position][4]
             if (dzenNoch) {
                 sviatyia = sviatyia.replace("#d00505", "#f44336")

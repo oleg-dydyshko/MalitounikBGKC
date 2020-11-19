@@ -32,14 +32,8 @@ class HistoryAdapter(private var context: Activity, private var history: ArrayLi
         else
             viewHolder.text?.text = history[position]
         viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        if (dzenNoch) {
-            //viewHolder.rootView?.setBackgroundResource(R.drawable.selector_dark)
-            //viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-            //viewHolder.text?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
+        if (dzenNoch)
             viewHolder.image?.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.search))
-        } /*else {
-            viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-        }*/
         return rootView
     }
 

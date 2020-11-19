@@ -68,7 +68,6 @@ class DialogSetPageBiblioteka : DialogFragment() {
             input.setText(page.toString())
             input.inputType = InputType.TYPE_CLASS_NUMBER
             input.requestFocus()
-            // Показываем клавиатуру
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             builder.setView(linear)

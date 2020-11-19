@@ -15,9 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import java.util.*
 
-/**
- * Created by oleg on 29.9.17
- */
 class DialogSabytieShow : DialogFragment() {
     private var title = ""
     private var data = ""

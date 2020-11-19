@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 
 abstract class SmartFragmentStatePagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     private val registeredFragments = SparseArray<Fragment>()
+
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val fragment = super.instantiateItem(container, position) as Fragment
         registeredFragments.put(position, fragment)

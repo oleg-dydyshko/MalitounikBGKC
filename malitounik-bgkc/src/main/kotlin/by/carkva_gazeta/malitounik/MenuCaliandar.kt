@@ -22,12 +22,8 @@ import kotlinx.coroutines.launch
 import java.io.FileWriter
 import java.util.*
 
-
-/**
- * Created by oleg on 14.6.19
- */
 class MenuCaliandar : MenuCaliandarFragment() {
-    private lateinit var listinner: MenuCaliandarPageListinner
+    private var listinner: MenuCaliandarPageListinner? = null
     private lateinit var adapter: MyCalendarAdapter
     private var page = 0
 
@@ -106,8 +102,6 @@ class MenuCaliandar : MenuCaliandarFragment() {
             MainActivity.toastView(it, getString(R.string.remove_padzea))
             adapter.notifyDataSetChanged()
             Sabytie.editCaliandar = true
-            //val caliandarFragment = adapter.getFragment(pager.currentItem) as CaliandarFull
-            //caliandarFragment.onSabytieView()
         }
     }
 
@@ -120,7 +114,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
             pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
                 override fun onPageSelected(position: Int) {
-                    listinner.setPage(position)
+                    listinner?.setPage(position)
                 }
 
                 override fun onPageScrollStateChanged(state: Int) {}

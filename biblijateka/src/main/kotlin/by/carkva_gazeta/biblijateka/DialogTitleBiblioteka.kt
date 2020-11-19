@@ -117,13 +117,8 @@ class DialogTitleBiblioteka : DialogFragment() {
                 viewHolder.text?.text = bookmarks[position].substring(t1 + 2)
             }
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) {
-                //viewHolder.text?.setBackgroundResource(R.drawable.selector_dialog_font_dark)
-                //viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+            if (dzenNoch)
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            } /*else {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-            }*/
             return rootView
         }
 

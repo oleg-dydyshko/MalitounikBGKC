@@ -17,9 +17,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.dialog_font.*
 
-/**
- * Created by oleg on 20.7.17
- */
 class DialogBrightness : DialogFragment() {
     private lateinit var alert: AlertDialog
     private lateinit var rootView: View

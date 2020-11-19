@@ -15,9 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import java.util.*
 
-/**
- * Created by oleg on 21.7.17
- */
 class DialogHelpNotification : DialogFragment() {
     private lateinit var alert: AlertDialog
     

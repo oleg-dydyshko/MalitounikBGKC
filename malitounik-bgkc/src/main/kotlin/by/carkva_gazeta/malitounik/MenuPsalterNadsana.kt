@@ -76,27 +76,6 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
             textView20.setOnClickListener(this)
             if (dzenNoch) {
                 textViewtitle.setBackgroundResource(R.drawable.nadsanblack)
-                textView1.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView2.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView3.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView4.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView5.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView6.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView7.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView8.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView9.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView10.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView11.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView12.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView13.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView14.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView15.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView16.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView17.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView18.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView19.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textView20.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                textViewtitle.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
             }
         }
     }

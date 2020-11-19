@@ -29,9 +29,6 @@ import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by oleg on 21.10.18
- */
 class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistoryListener {
     private lateinit var adapter: SearchListAdapter
     private var dzenNoch = false
@@ -149,24 +146,6 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         setContentView(R.layout.search_sviatyia)
-        /*if (dzenNoch) {
-            buttonx.setImageResource(R.drawable.cancel)
-        }
-        buttonx.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnClickListener
-            }
-            mLastClickTime = SystemClock.elapsedRealtime()
-            editText.setText("")
-            adapter.clear()
-            TextView.text = resources.getString(R.string.seash, 0)
-            val prefEditors = chin.edit()
-            prefEditors.putString("search_svityx_string", "")
-            prefEditors.apply()
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-        }
-        TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)*/
         val searchSvityxString = chin.getString("search_svityx_string", "") ?: ""
         if (searchSvityxString != "") {
             if (savedInstanceState == null) {
@@ -174,12 +153,9 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                 val json = chin.getString("search_svityx_array", "")
                 val type = object : TypeToken<ArrayList<String?>?>() {}.type
                 arrayRes.addAll(gson.fromJson(json, type))
-                //TextView.text = resources.getString(R.string.seash, arrayRes.size)
                 for (i in arrayRes.indices) {
                     if (dzenNoch) arrayRes[i] = arrayRes[i].replace("#d00505", "#f44336") else arrayRes[i] = arrayRes[i].replace("#f44336", "#d00505")
                 }
-                //val editPosition: Int = editText.text?.length ?: 0
-                //editText.setSelection(editPosition)
             }
         } else {
             History.visibility = View.VISIBLE
@@ -245,10 +221,6 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
 
             override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
         })
-        //TextView.text = resources.getString(R.string.seash, adapter.count)
-        /*if (dzenNoch) {
-            TextView.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-        }*/
         ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnItemClickListener
@@ -366,14 +338,12 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         val prefEditors = chin.edit()
         prefEditors.putString("history_sviatyia", json)
         prefEditors.apply()
-        //invalidateOptionsMenu()
     }
 
     override fun cleanFullHistory() {
         history.clear()
         saveHistopy()
         invalidateOptionsMenu()
-        //loadHistory()
     }
 
     override fun cleanHistory(position: Int) {
@@ -544,13 +514,6 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         adapter.notifyDataSetChanged()
     }
 
-    /*override fun onPause() {
-        super.onPause()
-        val prefEditors = chin.edit()
-        prefEditors.putString("search_svityx_string", editText?.text.toString())
-        prefEditors.apply()
-    }*/
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         val gson = Gson()
@@ -628,13 +591,8 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             val dzenNoch = k.getBoolean("dzen_noch", false)
             viewHolder.text?.text = MainActivity.fromHtml(adapterList[position])
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) {
-                //viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-                //viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+            if (dzenNoch)
                 viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            } /*else {
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_white)
-            }*/
             return rootView
         }
     }

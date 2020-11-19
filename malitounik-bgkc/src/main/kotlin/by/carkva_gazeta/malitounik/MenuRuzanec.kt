@@ -7,12 +7,11 @@ import android.view.View
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
 
-/**
- * Created by oleg on 30.5.16
- */
 class MenuRuzanec : ListFragment() {
     private var mLastClickTime: Long = 0
-    private val data = arrayOf("Малітвы на вяровіцы", "Молімся на ружанцы", "Разважаньні на Ружанец", "Частка I. Радасныя таямніцы (пн, сб)", "Частка II. Балесныя таямніцы (аўт, пт)", "Частка III. Слаўныя таямніцы (ср, ндз)", "Частка IV. Таямніцы сьвятла (чц)")
+    private val data: Array<out String>
+        get() = resources.getStringArray(R.array.ruzanec)
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {

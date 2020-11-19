@@ -19,19 +19,13 @@ import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by oleg on 17.11.16
- */
 class Widget : AppWidgetProvider() {
     private val updateAllWidgets = "update_all_widgets"
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
-        //RemoteViews updateViews = new RemoteViews(context.getPackageName(), R.layout.widget);
         for (widgetID in appWidgetIds) {
             kaliandar(context, appWidgetManager, widgetID)
         }
-        // Обновляем виджет
-//appWidgetManager.updateAppWidget(appWidgetIds, updateViews);
     }
 
     override fun onEnabled(context: Context) {
@@ -320,7 +314,6 @@ class Widget : AppWidgetProvider() {
                 updateViews.setFloat(R.id.textDenNedeli, "setTextSize", 14f)
             updateViews.setTextViewText(R.id.textMesiac, monthName[month])
             appWidgetManager.updateAppWidget(widgetID, updateViews)
-            //appWidgetManager.updateAppWidget(new ComponentName(context.getPackageName(), Widget.class.getName()), updateViews);
         }
     }
 }

@@ -14,9 +14,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.dialog_widget_config.*
 
-/**
- * Created by oleg on 20.7.17
- */
 class DialogWidgetConfig : DialogFragment() {
     private var configDzenNoch = false
     private var widgetID = 0

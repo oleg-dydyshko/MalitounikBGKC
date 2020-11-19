@@ -7,7 +7,6 @@ import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 
-
 class ProgressBarTextView : AppCompatTextView {
     private var mMaxValue = 100
 

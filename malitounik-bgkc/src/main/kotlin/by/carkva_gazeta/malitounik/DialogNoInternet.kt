@@ -11,9 +11,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 
-/**
- * Created by oleg on 21.7.17
- */
 class DialogNoInternet : DialogFragment() {
     private lateinit var alert: AlertDialog
 

@@ -78,11 +78,6 @@ class DialogPrazdnik : DialogFragment() {
             }
             val arrayAdapter = ListAdapter(it)
             val spinner = Spinner(it)
-            /*if (dzenNoch)
-                spinner.setBackgroundResource(R.drawable.selector_dark)
-            else
-                spinner.setBackgroundResource(R.drawable.selector_default)
-            */
             spinner.adapter = arrayAdapter
             for (i in arrayList.indices) {
                 if (arrayList[i] == arguments?.getInt("year")?: c[Calendar.YEAR]) {
@@ -136,12 +131,10 @@ class DialogPrazdnik : DialogFragment() {
             if (gc[Calendar.YEAR] == arrayList[position]) viewHolder.text?.setTypeface(null, Typeface.BOLD) else viewHolder.text?.setTypeface(null, Typeface.NORMAL)
             viewHolder.text?.text = arrayList[position].toString()
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-            if (dzenNoch) {
+            if (dzenNoch)
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_dialog_font_dark)
-                //viewHolder.text?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
-            } else {
+            else
                 viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
-            }
             return rootView
         }
 
@@ -152,12 +145,10 @@ class DialogPrazdnik : DialogFragment() {
             text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (gc[Calendar.YEAR] == arrayList[position]) text.setTypeface(null, Typeface.BOLD) else text.setTypeface(null, Typeface.NORMAL)
             text.text = arrayList[position].toString()
-            if (dzenNoch) {
+            if (dzenNoch)
                 text.setBackgroundResource(R.drawable.selector_dialog_font_dark)
-                //text.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
-            } else {
+            else
                 text.setBackgroundResource(R.drawable.selector_default)
-            }
             return v
         }
     }

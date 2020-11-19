@@ -3,7 +3,11 @@ package by.carkva_gazeta.malitounik
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -50,7 +54,9 @@ class DialogTipicon : DialogFragment() {
                 textView1.visibility = View.VISIBLE
             }
             textView7.setPadding(0, 0, 0, 0)
-            textView8.text = MainActivity.fromHtml("<strong>Двунадзясятыя</strong><br> і вялікія сьвяты")
+            val dvunaIVial = SpannableString(getString(R.string.dvuna_i_vial))
+            dvunaIVial.setSpan(StyleSpan(Typeface.BOLD), 0, 13, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            textView8.text = dvunaIVial
             textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
@@ -66,18 +72,6 @@ class DialogTipicon : DialogFragment() {
             textView13.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
                 imageView14.setImageResource(R.drawable.znaki_ttk_whate)
-                textView1.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textView2.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textView3.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textView4.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textView5.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textView6.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textView7.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textView8.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textView9.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textView10.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textView11.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                textView12.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
                 textView13.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 line2.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 image1.setImageResource(R.drawable.znaki_krest_v_kruge_black)

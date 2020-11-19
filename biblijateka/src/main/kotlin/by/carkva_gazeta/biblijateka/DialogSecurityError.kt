@@ -14,9 +14,6 @@ import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 
-/**
- * Created by oleg on 5.9.17
- */
 class DialogSecurityError : DialogFragment() {
     private lateinit var alert: AlertDialog
 

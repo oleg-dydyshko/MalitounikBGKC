@@ -48,7 +48,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToLong
 
-
 class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
 
     private lateinit var c: GregorianCalendar
@@ -207,36 +206,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 it.write(gson.toJson(MenuNatatki.myNatatkiFiles))
             }
         }
-        /*InputStream inputStream2 = getResources().openRawResource(R.raw.nadsan_psaltyr)
-        String[] split
-        try {
-        InputStreamReader isr = new InputStreamReader(inputStream2)
-        BufferedReader reader = new BufferedReader(isr)
-        String line
-        StringBuilder builder = new StringBuilder()
-        while ((line = reader.readLine()) != null) {
-        /*if (line.contains("//")) {
-        int t1 = line.indexOf("//")
-        line = line.substring(0, t1).trim()
-        if (!line.equals(""))
-        builder.append(line).append("\n")
-        continue
-        }*/
-        builder.append(line).append("\n")
-        }
-        inputStream2.close()
-         split = builder.toString().split("===")
-         StringBuilder builder1 = new StringBuilder()
-         for (int e = 1 e < split.length e++) {
-         builder1.append("// Псалом ").append(e).append("\n").append("===").append(split[e])
-         }
-         File file = new File(this.getFilesDir() + "/caliandar_code.txt")
-         FileWriter outputStream = new FileWriter(file)
-         outputStream.write(builder1.toString())
-         outputStream.close()
-        } catch (Throwable ignored) {
-        }
-        */
         title_toolbar.setOnClickListener {
             title_toolbar.setHorizontallyScrolling(true)
             title_toolbar.freezesText = true
@@ -251,7 +220,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         setSupportActionBar(toolbar)
-        // Скрываем клавиатуру
+
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
         c = Calendar.getInstance() as GregorianCalendar
@@ -284,7 +253,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         label11.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
         label12.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
         label13.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-
         carkva_link.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
 
         if (dzenNoch) {
@@ -303,39 +271,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             logosite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.logotip_whate))
             label9a.setBackgroundResource(R.drawable.selector_dark)
             label10a.setBackgroundResource(R.drawable.selector_dark)
-            /*label1.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label2.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label3.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label4.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label5.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label6.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label7.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label8.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label9.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label91.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label92.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label93.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label94.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label95.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label10.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label101.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label102.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label103.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label104.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label105.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label11.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label12.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label13.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))*/
         } else {
             setMenuIcon(ContextCompat.getDrawable(this, R.drawable.krest))
             label9a.setBackgroundResource(R.drawable.selector_default)
             label10a.setBackgroundResource(R.drawable.selector_default)
         }
-
         if (k.getInt("sinoidal", 0) == 1) {
             label11.visibility = View.VISIBLE
         }
-
         title9.setOnClickListener(this)
         title10.setOnClickListener(this)
         label1.setOnClickListener(this)
@@ -430,9 +373,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 setDataCalendar = dayyear + chyt
             }
         }
-
         var scroll = false
-        // Выбор пункта
         when (idSelect) {
             R.id.label1 -> onClick(label1)
             R.id.label2 -> onClick(label2)
@@ -662,15 +603,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             val tipicon = DialogTipicon.getInstance(0)
             tipicon.show(supportFragmentManager, "tipicon")
         }
-        /*if (id == R.id.search) {
-        if (checkmoduleResources(this)) {
-        val intent = Intent(this, Class.forName("by.carkva_gazeta.resources.SearchPesny"))
-        startActivity(intent)
-        } else {
-        val dadatak = DialogInstallDadatak()
-        dadatak.show(supportFragmentManager, "dadatak")
-        }
-        }*/
         if (id == R.id.sabytie) {
             val i = Intent(this, Sabytie::class.java)
             startActivityForResult(i, 105)
@@ -1265,13 +1197,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         idOld = idSelect
     }
 
-    /*private fun mkTime(year: Int, month: Int, day: Int): Long {
-    val calendar = Calendar.getInstance() as GregorianCalendar
-    calendar.set(year, month, day, 10, 0, 0)
-    calendar.set(Calendar.MILLISECOND, 0)
-    return calendar.timeInMillis
-    }*/
-
     companion object {
         var back_pressed = 0L
         var padzeia: ArrayList<Padzeia> = ArrayList()
@@ -1309,7 +1234,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                             val inputStream = FileReader(file)
                             val reader = BufferedReader(inputStream)
                             reader.forEachLine {
-                                val line = it.trim() // { it <= ' ' }
+                                val line = it.trim()
                                 if (line != "") {
                                     val t1 = line.split(" ")
                                     try {
@@ -1555,13 +1480,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             paralel = paralel.replace("Лев", "Ляв")
             paralel = paralel.replace("Чис", "Лікі")
             paralel = paralel.replace("Втор", "Дрг")
-            //paralel = paralel.replace("Нав", "Нав")
-            //paralel = paralel.replace("Суд", "Суд")
             paralel = paralel.replace("Руфь", "Рут")
-            //paralel = paralel.replace("1 Цар", "1 Цар")
-            //paralel = paralel.replace("2 Цар", "2 Цар")
-            //paralel = paralel.replace("3 Цар", "3 Цар")
-            //paralel = paralel.replace("4 Цар", "4 Цар")
             paralel = paralel.replace("1 Пар", "1 Лет")
             paralel = paralel.replace("2 Пар", "2 Лет")
             paralel = paralel.replace("1 Езд", "1 Эзд")
@@ -1571,7 +1490,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             paralel = paralel.replace("Иудифь", "Юдт")
             paralel = paralel.replace("Есф", "Эст")
             paralel = paralel.replace("Иов", "Ёва")
-            //paralel = paralel.replace("Пс", "Пс")
             paralel = paralel.replace("Притч", "Высл")
             paralel = paralel.replace("Еккл", "Экл")
             paralel = paralel.replace("Песн", "Псн")
@@ -1580,13 +1498,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             paralel = paralel.replace("Ис", "Іс")
             paralel = paralel.replace("Посл Иер", "Пасл Ер")
             paralel = paralel.replace("Иер", "Ер")
-            //paralel = paralel.replace("Плач", "Плач")
-            //paralel = paralel.replace("Вар", "Бар")
             paralel = paralel.replace("Иез", "Езк")
-            //paralel = paralel.replace("Дан", "Дан")
             paralel = paralel.replace("Ос", "Ас")
             paralel = paralel.replace("Иоил", "Ёіл")
-            //paralel = paralel.replace("Ам", "Ам")
             paralel = paralel.replace("Авд", "Аўдз")
             paralel = paralel.replace("Иона", "Ёны")
             paralel = paralel.replace("Мих", "Міх")
@@ -1594,15 +1508,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             paralel = paralel.replace("Авв", "Абк")
             paralel = paralel.replace("Соф", "Саф")
             paralel = paralel.replace("Агг", "Аг")
-            //paralel = paralel.replace("Зах", "Зах")
-            //paralel = paralel.replace("Мал", "Мал")
-            //paralel = paralel.replace("1 Мак", "1 Мак")
-            //paralel = paralel.replace("2 Мак", "2 Мак")
-            //paralel = paralel.replace("3 Мак", "3 Мак")
             paralel = paralel.replace("3 Езд", "3 Эзд")
             paralel = paralel.replace("Мф", "Мц")
-            //paralel = paralel.replace("Мк", "Мк")
-            //paralel = paralel.replace("Лк", "Лк")
             paralel = paralel.replace("Ин", "Ян")
             paralel = paralel.replace("Деян", "Дз")
             paralel = paralel.replace("Иак", "Як")
@@ -1615,16 +1522,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             paralel = paralel.replace("Рим", "Рым")
             paralel = paralel.replace("1 Кор", "1 Кар")
             paralel = paralel.replace("2 Кор", "2 Кар")
-            //paralel = paralel.replace("Гал", "Гал")
             paralel = paralel.replace("Еф", "Эф")
             paralel = paralel.replace("Флп", "Плп")
             paralel = paralel.replace("Кол", "Клс")
-            //paralel = paralel.replace("1 Фес", "1 Фес")
-            //paralel = paralel.replace("2 Фес", "2 Фес")
             paralel = paralel.replace("1 Тим", "1 Цім")
             paralel = paralel.replace("2 Тим", "2 Цім")
             paralel = paralel.replace("Тит", "Ціт")
-            //paralel = paralel.replace("Флм", "Флм")
             paralel = paralel.replace("Евр", "Гбр")
             paralel = paralel.replace("Откр", "Адкр")
             return paralel
@@ -1699,13 +1602,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 }
             } else {
                 val activeNetwork = connectivityManager.activeNetworkInfo ?: return 0
-                return if (activeNetwork.isConnectedOrConnecting) { // connected to the internet
+                return if (activeNetwork.isConnectedOrConnecting) {
                     when (activeNetwork.type) {
-                        ConnectivityManager.TYPE_WIFI -> 1 // connected to wifi
-                        ConnectivityManager.TYPE_MOBILE -> 2 // connected to the mobile provider's
+                        ConnectivityManager.TYPE_WIFI -> 1
+                        ConnectivityManager.TYPE_MOBILE -> 2
                         else -> 0
                     }
-                } else 0 // not connected to the internet
+                } else 0
             }
         }
     }

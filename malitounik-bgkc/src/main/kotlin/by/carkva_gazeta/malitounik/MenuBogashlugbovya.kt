@@ -7,13 +7,10 @@ import android.view.View
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
 
-/**
- * Created by oleg on 30.5.16
- */
 class MenuBogashlugbovya : ListFragment() {
     private var mLastClickTime: Long = 0
-    //String[] by.carkva_gazeta.malitounikApp.data = {"няма Літургія сьв. Яна Залатавуснага", "няма Літургія сьв. Васіля Вялікага", "няма Літургія раней асьвячаных дароў", "Набажэнства ў гонар Маці Божай Нястомнай Дапамогі", "Малітвы пасьля сьвятога прычасьця", "няма Ютрань", "няма Вячэрня", "Абедніца"};
-    private val data = arrayOf("Боская Літургія між сьвятымі айца нашага Яна Залатавуснага", "Набажэнства ў гонар Маці Божай Нястомнай Дапамогі", "Малітвы пасьля сьвятога прычасьця", "Ютрань нядзельная (у скароце)", "Абедніца", "Служба за памерлых — Малая паніхіда", "Трапары і кандакі нядзельныя васьмі тонаў", "Трапары і кандакі штодзённыя - на кожны дзень тыдня", "Службы 1-га тыдня Вялікага посту", "Службы 2-га тыдня Вялікага посту", "Службы 3-га тыдня Вялікага посту", "Службы 4-га тыдня Вялікага посту", "Службы 5-га тыдня Вялікага посту", "Службы 6-га тыдня Вялікага посту")
+    private val data: Array<out String>
+        get() = resources.getStringArray(R.array.bogaslugbovuia)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

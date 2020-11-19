@@ -15,12 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.akafist_list.*
 
-/**
- * Created by oleg on 30.5.16
- */
 class TonNaKoznyDzen : AppCompatActivity() {
     private var mLastClickTime: Long = 0
-    private val data = arrayOf("ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам", "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю", "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу", "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю", "ПЯТНІЦА\nСлужба Крыжу Гасподняму", "СУБОТА\nСлужба ўсім сьвятым і памёрлым")
+    private val data: Array<out String>
+        get() = resources.getStringArray(R.array.ton_kogny_dzen)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)

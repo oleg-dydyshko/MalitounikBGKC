@@ -15,9 +15,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import java.util.*
 
-/**
- * Created by oleg on 7.6.16
- */
 class ReceiverBroad : BroadcastReceiver() {
     private var id = 205
     private var sabytieSet = false

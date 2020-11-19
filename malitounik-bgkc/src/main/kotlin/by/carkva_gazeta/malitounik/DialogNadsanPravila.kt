@@ -15,9 +15,6 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
 
-/**
- * Created by oleg on 23.8.16
- */
 class DialogNadsanPravila : DialogFragment() {
     private lateinit var alert: AlertDialog
 

@@ -13,15 +13,13 @@ import androidx.core.content.ContextCompat
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by oleg on 31.5.16
- */
 class MenuCviaty : CviatyListFragment() {
     private var year = Calendar.getInstance()[Calendar.YEAR]
     private lateinit var mListener: CarkvaCarkvaListener
     private var mLastClickTime: Long = 0
     private lateinit var myArrayAdapter: MyArrayAdapter
     private var list = ArrayList<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -111,7 +109,6 @@ class MenuCviaty : CviatyListFragment() {
                 rootView = convertView
                 ea = rootView.tag as ViewHolder
             }
-            //CaseInsensitiveResourcesFontLoader fontLoader = new CaseInsensitiveResourcesFontLoader();
             ea.textView?.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
             ea.textView?.text = MainActivity.fromHtml(list[position])
             if (k.getBoolean("dzen_noch", false)) {
@@ -201,8 +198,6 @@ class MenuCviaty : CviatyListFragment() {
             prazdnikV += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--2-->" + color + "Адсячэньне галавы сьв. Яна Прадвесьніка і Хрысьціцеля</font>", "<br><strong><em>29 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
             c = GregorianCalendar(yearG, 9, 1)
             prazdnikV += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--2-->" + color + "Покрыва Найсьвяцейшай Багародзіцы</font>", "<br><strong><em>1 кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            //c = new GregorianCalendar(yearG, 11, 9);
-//prazdnikV[5] = new prazdniki(c.get(Calendar.DAY_OF_YEAR), "<!--" + c.get(Calendar.DATE) + ":" + c.get(Calendar.MONTH) + "--><!--2-->" + color + "Беззаганнае Зачацьце Найсьвяцейшай Багародзіцы</font>", "<br><strong><em>9 сьнежня, " + NedelName[c.get(Calendar.DAY_OF_WEEK)] + "</strong></em>");
             Arrays.sort(prazdnikV)
             var prazdnikPamer = emptyArray<Prazdniki>()
             c = GregorianCalendar(yearG, monthP - 1, dataP)
@@ -267,7 +262,6 @@ class MenuCviaty : CviatyListFragment() {
             c = GregorianCalendar(yearG, 5, 29)
             prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Лондан: сьвятых апосталаў Пятра і Паўла</font>", "<br><strong><em>29 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
             prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Жодзіна: сьвятых апосталаў Пятра і Паўла</font>", "<br><strong><em>29 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            // Вылічым калі выпадает парафіяльнае свята ў Брэсте
             val chisla = intArrayOf(24, 25, 26, 27, 28, 29, 30)
             var brest = 24
             for (aChisla in chisla) {

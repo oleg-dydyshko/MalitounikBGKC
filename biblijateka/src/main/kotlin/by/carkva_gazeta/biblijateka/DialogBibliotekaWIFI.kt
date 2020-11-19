@@ -15,9 +15,6 @@ import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 
-/**
- * Created by oleg on 18.7.17
- */
 class DialogBibliotekaWIFI : DialogFragment() {
     private var listPosition: String = "0"
     private var mListener: DialogBibliotekaWIFIListener? = null

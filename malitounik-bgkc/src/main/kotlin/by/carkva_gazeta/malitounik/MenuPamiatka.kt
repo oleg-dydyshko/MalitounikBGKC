@@ -13,12 +13,10 @@ import androidx.core.content.ContextCompat
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by oleg on 9.6.16
- */
 class MenuPamiatka : PadryxtoukaPamiatkaListFragment() {
     private lateinit var adapter: MyArrayAdapter
     private var k: SharedPreferences? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

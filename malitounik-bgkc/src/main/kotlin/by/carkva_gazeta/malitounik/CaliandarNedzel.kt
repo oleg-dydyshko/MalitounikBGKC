@@ -169,7 +169,6 @@ class CaliandarNedzel : ListFragment() {
                 viewHolder = view.tag as ViewHolder
             }
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            //по умолчанию
             viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
             viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorDivider))
             viewHolder.textSviat?.visibility = View.VISIBLE
@@ -200,24 +199,29 @@ class CaliandarNedzel : ListFragment() {
                 viewHolder.textPraz?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
                 viewHolder.textPraz?.setTypeface(null, Typeface.NORMAL)
             }
+            when (arrayList[position][7].toInt()) {
+                1 -> {
+                    viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                    viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
+                    viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                    viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
+                    viewHolder.textPostS?.text = mContext.resources.getString(R.string.No_post)
+                }
+                2 -> {
+                    viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                    viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
+                    viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                    viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
+                    viewHolder.textPostS?.text = mContext.resources.getString(R.string.Post)
+                }
+                3 -> {
+                    viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                    viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
+                }
+            }
             if (arrayList[position][5].contains("1") || arrayList[position][5].contains("2") || arrayList[position][5].contains("3")) {
                 viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
                 if (dzenNoch) viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black)) else viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-            } else if (arrayList[position][7].contains("2")) {
-                viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
-                viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
-                viewHolder.textPostS?.text = mContext.resources.getString(R.string.Post)
-            } else if (arrayList[position][7].contains("3")) {
-                viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
-                viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
-            } else if (arrayList[position][7].contains("1")) {
-                viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
-                viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
-                viewHolder.textPostS?.text = mContext.resources.getString(R.string.No_post)
             }
             if (arrayList[position][5].contains("2")) {
                 viewHolder.textPraz?.setTypeface(null, Typeface.NORMAL)

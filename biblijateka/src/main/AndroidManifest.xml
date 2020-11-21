@@ -1,6 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
-    xmlns:tools="http://schemas.android.com/tools"
 
     package="by.carkva_gazeta.biblijateka">
 
@@ -13,7 +12,7 @@
         <dist:fusing dist:include="true" />
     </dist:module>
 
-    <application tools:ignore="GoogleAppIndexingWarning">
+    <application>
         <activity
             android:name=".BibliotekaView"
             android:label="Бібліятэка Царквы"

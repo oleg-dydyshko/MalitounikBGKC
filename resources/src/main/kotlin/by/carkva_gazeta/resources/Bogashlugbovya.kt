@@ -99,7 +99,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
         init {
             resursMap["bogashlugbovya1"] = R.raw.bogashlugbovya1
-            resursMap["bogashlugbovya4"] = R.raw.bogashlugbovya1
+            resursMap["bogashlugbovya4"] = R.raw.bogashlugbovya4
             resursMap["bogashlugbovya6"] = R.raw.bogashlugbovya6
             resursMap["bogashlugbovya8"] = R.raw.bogashlugbovya8
             resursMap["bogashlugbovya11"] = R.raw.bogashlugbovya11

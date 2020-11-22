@@ -160,8 +160,8 @@ class MenuPashalii : PashaliiFragment() {
             var color = R.color.colorPrimary_text
             var colorP = R.color.colorPrimary
             if (k.getBoolean("dzen_noch", false)) {
-                ea.textView?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
-                color = R.color.colorIcons
+                ea.textView?.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
+                color = R.color.colorWhite
                 colorP = R.color.colorPrimary_black
             }
             val c = Calendar.getInstance() as GregorianCalendar

@@ -48,7 +48,7 @@ class DialogSabytieShow : DialogFragment() {
             val realpadding = (10 * density).toInt()
             val textViewT = TextViewRobotoCondensed(it)
             textViewT.text = title.toUpperCase(Locale.getDefault())
-            textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+            textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewT.setTypeface(null, Typeface.BOLD)
@@ -62,7 +62,7 @@ class DialogSabytieShow : DialogFragment() {
             }
             val t1 = textR.indexOf(res)
             if (dzenNoch) {
-                textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 if (paz)
                     textR.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary_black)), t1, textR.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             } else {

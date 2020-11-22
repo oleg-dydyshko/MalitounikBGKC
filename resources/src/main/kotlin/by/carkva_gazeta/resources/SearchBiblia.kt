@@ -444,7 +444,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             autoCompleteTextView = view as AutoCompleteTextView
             autoCompleteTextView?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                autoCompleteTextView?.setTextCursorDrawable(by.carkva_gazeta.malitounik.R.color.colorIcons)
+                autoCompleteTextView?.setTextCursorDrawable(by.carkva_gazeta.malitounik.R.color.colorWhite)
             } else {
                 val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
                 f.isAccessible = true

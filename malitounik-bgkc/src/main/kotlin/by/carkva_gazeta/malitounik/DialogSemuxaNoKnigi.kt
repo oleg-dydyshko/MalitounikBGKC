@@ -33,13 +33,13 @@ class DialogSemuxaNoKnigi : DialogFragment() {
             textViewZaglavie.text = getString(R.string.title_biblia)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
             val textView = TextViewRobotoCondensed(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
             textView.text = "У Бібліі толькі кананічныя кнігі"
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             linearLayout.addView(textView)
             ad.setView(linearLayout)
             ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }

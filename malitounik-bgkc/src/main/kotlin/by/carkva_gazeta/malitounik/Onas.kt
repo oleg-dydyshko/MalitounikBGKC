@@ -49,15 +49,16 @@ class Onas : AppCompatActivity() {
         var line: String
         val builder = StringBuilder()
         val version = BuildConfig.VERSION_NAME
-        reader.forEachLine {
-            line = it
-            if (dzenNoch) line = line.replace("#d00505", "#f44336")
-            if (line.contains("<!--<VERSION></VERSION>-->")) {
-                line = line.replace("<!--<VERSION></VERSION>-->", "<em>Версія праграмы: $version</em><br><br>")
+        reader.use { bufferedReader ->
+            bufferedReader.forEachLine {
+                line = it
+                if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                if (line.contains("<!--<VERSION></VERSION>-->")) {
+                    line = line.replace("<!--<VERSION></VERSION>-->", "<em>Версія праграмы: $version</em><br><br>")
+                }
+                builder.append(line)
             }
-            builder.append(line)
         }
-        inputStream.close()
         onas.text = MainActivity.fromHtml(builder.toString())
     }
 

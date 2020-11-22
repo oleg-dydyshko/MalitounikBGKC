@@ -70,13 +70,13 @@ class DialogZakladkaDelite : DialogFragment() {
             textViewZaglavie.text = resources.getString(R.string.remove)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
             val textView = TextViewRobotoCondensed(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
             if (zakladka) textView.text = resources.getString(R.string.delite_natatki_i_zakladki, getString(R.string.zakladki_bible2), name) else textView.text = resources.getString(R.string.delite_natatki_i_zakladki, getString(R.string.natatki_biblii2), name)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             linearLayout.addView(textView)
             if (zakladka) {
                 builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> delite?.zakladkadiliteItem(position, semuxa) }

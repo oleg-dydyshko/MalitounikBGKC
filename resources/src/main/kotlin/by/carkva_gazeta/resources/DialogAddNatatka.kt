@@ -47,15 +47,15 @@ class DialogAddNatatka : DialogFragment() {
             textViewZaglavie.text = resources.getString(R.string.ADD_MAJE_MALITVY_NAZVA)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linear.addView(textViewZaglavie)
             input = EditTextRobotoCondensed(it)
             if (dzenNoch) {
-                input.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                input.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 input.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
             } else {
                 input.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                input.setBackgroundResource(R.color.colorIcons)
+                input.setBackgroundResource(R.color.colorWhite)
             }
             input.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             linear.addView(input)

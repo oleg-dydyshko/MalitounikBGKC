@@ -66,13 +66,13 @@ class DialogDelite : DialogFragment() {
             textViewZaglavie.text = resources.getString(R.string.remove)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
             val textView = TextViewRobotoCondensed(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
             textView.text = getString(R.string.delite_full, title, massege)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             linearLayout.addView(textView)
             builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener?.fileDelite(position, filename) }
             builder.setNegativeButton(resources.getString(R.string.CANCEL)) { _: DialogInterface, _: Int -> mListener?.fileDeliteCancel() }

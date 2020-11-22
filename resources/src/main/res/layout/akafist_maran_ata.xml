@@ -116,7 +116,7 @@
             android:layout_height="24dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/colorIcons"
+            android:textColor="@color/colorWhite"
             android:textSize="18sp"
             android:textStyle="bold"
             android:contentDescription="@string/empty"
@@ -128,7 +128,7 @@
             android:layout_height="24dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/colorIcons"
+            android:textColor="@color/colorWhite"
             android:textSize="18sp"
             android:contentDescription="@string/empty"
             app:srcCompat="@drawable/underline" />
@@ -139,7 +139,7 @@
             android:layout_height="24dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/colorIcons"
+            android:textColor="@color/colorWhite"
             android:textSize="18sp"
             android:textStyle="bold"
             android:contentDescription="@string/empty"
@@ -170,7 +170,7 @@
             android:background="@drawable/knopka_red"
             android:gravity="center"
             android:text="@string/adpravit"
-            android:textColor="@color/colorIcons"
+            android:textColor="@color/colorWhite"
             android:textSize="18sp" />
 
         <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -181,7 +181,7 @@
             android:background="@drawable/knopka_red"
             android:gravity="center"
             android:text="@string/copy_big"
-            android:textColor="@color/colorIcons"
+            android:textColor="@color/colorWhite"
             android:textSize="18sp" />
     </LinearLayout>
 

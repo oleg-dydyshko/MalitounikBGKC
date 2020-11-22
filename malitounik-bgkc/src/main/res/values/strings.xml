@@ -375,6 +375,10 @@
     <string name="sabytie_yes">Так</string>
     <string name="sabytie_bez_kanca">Без канца</string>
     <string name="dvuna_i_vial">Двунадзясятыя\nі вялікія сьвяты</string>
+    <string name="help_davedka">Даведка</string>
+    <string name="help_set_font">Рэгуліроўка\nшрыфту</string>
+    <string name="help_set_bridnes">Рэгуліроўка\nяркасьці</string>
+    <string name="help_on_auto_scroll">Уключэньне\nі рэгуліроўка аўтапрагорткі</string>
     <string-array name="malitvy_pasli_prychastia">
         <item>Малітва падзякі</item>
         <item>Малітва сьв. Васіля Вялікага</item>

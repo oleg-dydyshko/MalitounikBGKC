@@ -200,7 +200,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
 
             override fun onPageSelected(position: Int) {
                 BibleGlobalList.mListGlava = position
-                men = MyBibleList.checkVybranoe(this@StaryZapavietSemuxa, kniga, position)
+                men = VybranoeBibleList.checkVybranoe(this@StaryZapavietSemuxa, kniga, position)
                 if (glava != position) NovyZapavietSemuxa.fierstPosition = 0
                 invalidateOptionsMenu()
             }
@@ -365,7 +365,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
                 fullglav = 4
             }
         }
-        men = MyBibleList.checkVybranoe(this, kniga, glava)
+        men = VybranoeBibleList.checkVybranoe(this, kniga, glava)
         if (savedInstanceState != null) {
             dialog = savedInstanceState.getBoolean("dialog")
             paralel = savedInstanceState.getBoolean("paralel")
@@ -474,10 +474,10 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             checkSetDzenNoch = true
-            men = MyBibleList.setVybranoe(this, title, kniga, BibleGlobalList.mListGlava)
+            men = VybranoeBibleList.setVybranoe(this, title, kniga, BibleGlobalList.mListGlava)
             if (men) {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
-                if (!MyBibleList.checkVybranoe("1")) {
+                if (!VybranoeBibleList.checkVybranoe("1")) {
                     MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "1", getString(by.carkva_gazeta.malitounik.R.string.title_biblia)))
                     val gson = Gson()
                     val file = File("$filesDir/Vybranoe.json")

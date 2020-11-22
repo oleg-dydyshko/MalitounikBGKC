@@ -225,14 +225,14 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
             if (BibleGlobalList.bibleCopyList.size > 0 && BibleGlobalList.bibleCopyList.contains(position) && BibleGlobalList.mPedakVisable) {
                 if (dzenNoch) {
                     viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark2)
-                    viewHolder.text?.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                    viewHolder.text?.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorWhite))
                 } else {
                     viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorDivider)
                 }
             } else {
                 if (dzenNoch) {
                     viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                    viewHolder.text?.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                    viewHolder.text?.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorWhite))
                 } else {
                     viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
                 }

@@ -1382,13 +1382,13 @@ class SettingsActivity : AppCompatActivity() {
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                     prefEditor.putInt("notification", 1)
-                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     this.guk.isClickable = true
-                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     CoroutineScope(Dispatchers.Main).launch {
                         if (dzenNoch) {
-                            vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
-                            this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
+                            vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
                         } else {
                             vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                             this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
@@ -1403,8 +1403,8 @@ class SettingsActivity : AppCompatActivity() {
                         notificationNon.isClickable = true
                         notificationFull.isClickable = true
                         if (dzenNoch) {
-                            notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
-                            notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
+                            notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
                         } else {
                             notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                             notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
@@ -1419,13 +1419,13 @@ class SettingsActivity : AppCompatActivity() {
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                     prefEditor.putInt("notification", 2)
-                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     this.guk.isClickable = true
-                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     CoroutineScope(Dispatchers.Main).launch {
                         if (dzenNoch) {
-                            vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
-                            this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
+                            vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
                         } else {
                             vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                             this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
@@ -1440,8 +1440,8 @@ class SettingsActivity : AppCompatActivity() {
                         notificationOnly.isClickable = true
                         notificationNon.isClickable = true
                         if (dzenNoch) {
-                            notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
-                            notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
+                            notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
                         } else {
                             notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                             notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
@@ -1452,9 +1452,9 @@ class SettingsActivity : AppCompatActivity() {
                     notifiSvizta.visibility = View.GONE
                     spinnerTime.visibility = View.GONE
                     prefEditor.putInt("notification", 0)
-                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     this.guk.isClickable = true
-                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorIcons)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     CoroutineScope(Dispatchers.Main).launch {
                         notificationOnly.isClickable = false
                         notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
@@ -1466,8 +1466,8 @@ class SettingsActivity : AppCompatActivity() {
                         notificationOnly.isClickable = true
                         notificationFull.isClickable = true
                         if (dzenNoch) {
-                            notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
-                            notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorIcons))
+                            notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
                         } else {
                             notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                             notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
@@ -1499,9 +1499,9 @@ class SettingsActivity : AppCompatActivity() {
                 maranataBel.isClickable = true
                 maranataRus.isClickable = true
                 if (dzenNoch) {
-                    maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                    maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-                    maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+                    maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+                    maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+                    maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                 } else {
                     maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))

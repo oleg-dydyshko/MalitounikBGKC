@@ -17,7 +17,6 @@ import com.google.gson.reflect.TypeToken
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
-import kotlin.collections.ArrayList
 
 class Widget : AppWidgetProvider() {
     private val updateAllWidgets = "update_all_widgets"
@@ -115,11 +114,11 @@ class Widget : AppWidgetProvider() {
     companion object {
         private fun prazdnik(context: Context, updateViews: RemoteViews, R_color_colorPrimary: Int) {
             updateViews.setInt(R.id.textChislo, "setBackgroundColor", ContextCompat.getColor(context, R_color_colorPrimary))
-            updateViews.setTextColor(R.id.textChislo, ContextCompat.getColor(context, R.color.colorIcons))
+            updateViews.setTextColor(R.id.textChislo, ContextCompat.getColor(context, R.color.colorWhite))
             updateViews.setInt(R.id.textDenNedeli, "setBackgroundColor", ContextCompat.getColor(context, R_color_colorPrimary))
             updateViews.setInt(R.id.textMesiac, "setBackgroundColor", ContextCompat.getColor(context, R_color_colorPrimary))
-            updateViews.setTextColor(R.id.textDenNedeli, ContextCompat.getColor(context, R.color.colorIcons))
-            updateViews.setTextColor(R.id.textMesiac, ContextCompat.getColor(context, R.color.colorIcons))
+            updateViews.setTextColor(R.id.textDenNedeli, ContextCompat.getColor(context, R.color.colorWhite))
+            updateViews.setTextColor(R.id.textMesiac, ContextCompat.getColor(context, R.color.colorWhite))
         }
 
         private fun getmun(): Int {
@@ -151,7 +150,7 @@ class Widget : AppWidgetProvider() {
             val rColorColorPrimary: Int
             if (dzenNoch) {
                 rColorColorPrimary = R.color.colorPrimary_black
-                rColorColorPrimaryText = R.color.colorIcons
+                rColorColorPrimaryText = R.color.colorWhite
             } else {
                 rColorColorPrimary = R.color.colorPrimary
                 rColorColorPrimaryText = R.color.colorPrimary_text
@@ -173,10 +172,10 @@ class Widget : AppWidgetProvider() {
             updateViews.setOnClickPendingIntent(R.id.settings, pSsettings)
             if (dzenNoch) {
                 updateViews.setInt(R.id.Layout, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorbackground_material_dark))
-                updateViews.setTextColor(R.id.textSviatyia, ContextCompat.getColor(context, R.color.colorIcons))
+                updateViews.setTextColor(R.id.textSviatyia, ContextCompat.getColor(context, R.color.colorWhite))
                 updateViews.setImageViewResource(R.id.imageView7, R.drawable.settings)
             } else {
-                updateViews.setInt(R.id.Layout, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorIcons))
+                updateViews.setInt(R.id.Layout, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorWhite))
                 updateViews.setTextColor(R.id.textSviatyia, ContextCompat.getColor(context, R.color.colorPrimary_text))
                 updateViews.setImageViewResource(R.id.imageView7, R.drawable.settings_black)
             }
@@ -259,14 +258,14 @@ class Widget : AppWidgetProvider() {
                 }
             } else if (data[day][7].contains("3")) {
                 updateViews.setInt(R.id.textDenNedeli, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorStrogiPost))
-                updateViews.setTextColor(R.id.textDenNedeli, ContextCompat.getColor(context, R.color.colorIcons))
+                updateViews.setTextColor(R.id.textDenNedeli, ContextCompat.getColor(context, R.color.colorWhite))
                 updateViews.setInt(R.id.textChislo, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorStrogiPost))
-                updateViews.setTextColor(R.id.textChislo, ContextCompat.getColor(context, R.color.colorIcons))
+                updateViews.setTextColor(R.id.textChislo, ContextCompat.getColor(context, R.color.colorWhite))
                 updateViews.setInt(R.id.textMesiac, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorStrogiPost))
-                updateViews.setTextColor(R.id.textMesiac, ContextCompat.getColor(context, R.color.colorIcons))
+                updateViews.setTextColor(R.id.textMesiac, ContextCompat.getColor(context, R.color.colorWhite))
                 updateViews.setTextViewText(R.id.textPost, "Строгі пост")
                 updateViews.setInt(R.id.textPost, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorStrogiPost))
-                updateViews.setTextColor(R.id.textPost, ContextCompat.getColor(context, R.color.colorIcons))
+                updateViews.setTextColor(R.id.textPost, ContextCompat.getColor(context, R.color.colorWhite))
                 updateViews.setViewVisibility(R.id.textPost, View.VISIBLE)
                 updateViews.setViewVisibility(R.id.imageView4, View.VISIBLE)
                 if (dzenNoch) updateViews.setImageViewResource(R.id.imageView4, R.drawable.fishe_red_black) else updateViews.setImageViewResource(R.id.imageView4, R.drawable.fishe_red)

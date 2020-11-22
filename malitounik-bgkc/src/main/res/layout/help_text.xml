@@ -25,7 +25,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:singleLine="true"
-                android:text="Даведка"
+                android:text="@string/help_davedka"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
@@ -64,7 +64,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:background="@color/colorIcons"
+                    android:background="@color/colorWhite"
                     android:scrollbars="none">
 
                 </by.carkva_gazeta.malitounik.InteractiveScrollView>
@@ -83,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="right|center_vertical"
-            android:text="Рэгуліроўка\nшрыфту"
+            android:text="@string/help_set_font"
             android:textColor="@color/colorStrogiPost"
             android:textIsSelectable="false"
             android:textSize="18sp"
@@ -116,7 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="left|center_vertical"
-            android:text="Рэгуліроўка\nяркасьці"
+            android:text="@string/help_set_bridnes"
             android:textColor="@color/colorPrimaryDark"
             android:textIsSelectable="false"
             android:textSize="18sp"
@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:gravity="bottom"
             android:paddingLeft="10dp"
-            android:text="Уключэньне\nі рэгуліроўка аўтапрагорткі"
+            android:text="@string/help_on_auto_scroll"
             android:textColor="@color/colorSecondary_text"
             android:textIsSelectable="false"
             android:textSize="18sp"

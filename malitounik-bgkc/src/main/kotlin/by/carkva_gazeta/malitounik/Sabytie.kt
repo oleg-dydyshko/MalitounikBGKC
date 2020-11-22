@@ -259,7 +259,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorSecondary_text))
                 } else {
                     radioButton3.isClickable = true
-                    if (dzenNoch) radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons)) else radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
+                    if (dzenNoch) radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite)) else radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
                 }
                 if (repitL == 0) radioButton1.isChecked = true
                 if (repitL > 0) {
@@ -365,23 +365,23 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         title_toolbar.text = resources.getString(R.string.sabytie)
         if (dzenNoch) {
-            pacatak.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            kanec.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            pavedamic.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            pavtor.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            cvet.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            pazov.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label1.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label2.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label12.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            label22.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
-            checkBox2.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            pacatak.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            kanec.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            pavedamic.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            pavtor.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            cvet.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            pazov.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            label1.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            label2.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            label12.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            label22.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            checkBox2.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
             label1.setBackgroundResource(R.drawable.selector_dark)
             label2.setBackgroundResource(R.drawable.selector_dark)
             label12.setBackgroundResource(R.drawable.selector_dark)
             label22.setBackgroundResource(R.drawable.selector_dark)
             checkBox2.setBackgroundResource(R.drawable.selector_dark)
-            labelbutton12.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            labelbutton12.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
             labelbutton12.setBackgroundResource(R.drawable.selector_dark)
             toolbar.popupTheme = R.style.AppCompatDark
         }
@@ -2506,7 +2506,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             viewHolder.text?.setBackgroundColor(Color.parseColor(colors[position]))
             viewHolder.text?.text = nazvaPadzei
             viewHolder.text?.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            viewHolder.text?.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+            viewHolder.text?.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite))
             return rootView
         }
 
@@ -2516,7 +2516,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             text.setBackgroundColor(Color.parseColor(colors[position]))
             text.text = nazvaPadzei
             text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            text.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+            text.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite))
             return view
         }
     }
@@ -2610,12 +2610,12 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (dzenNoch) pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_black))
                             else pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary))
                         } else {
-                            if (dzenNoch) pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+                            if (dzenNoch) pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite))
                             else pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
                         }
                     } else {
                         pavedamic2.text = getString(R.string.sabytie_no_pavedam)
-                        if (dzenNoch) pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorIcons))
+                        if (dzenNoch) pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite))
                         else pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
                     }
                 }

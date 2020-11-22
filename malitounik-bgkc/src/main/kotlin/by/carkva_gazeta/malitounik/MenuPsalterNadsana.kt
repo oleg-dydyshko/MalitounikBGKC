@@ -9,7 +9,6 @@ import android.util.ArrayMap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -87,8 +86,8 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = v?.id ?: 0
         if (id == R.id.myBible) {
-            MyBibleList.biblia = 3
-            startActivity(Intent(activity, MyBibleList::class.java))
+            VybranoeBibleList.biblia = 3
+            startActivity(Intent(activity, VybranoeBibleList::class.java))
         }
         if (id == R.id.psalter) {
             startActivity(Intent(activity, NadsanContent::class.java))

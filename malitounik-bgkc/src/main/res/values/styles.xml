@@ -4,8 +4,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
-        <item name="android:windowBackground">@color/colorIcons</item>
-        <item name="android:colorBackground">@color/colorIcons</item>
+        <item name="android:windowBackground">@color/colorWhite</item>
+        <item name="android:colorBackground">@color/colorWhite</item>
         <item name="android:textColorPrimary">@color/colorPrimary_text</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorPrimaryDark</item>
         <item name="android:textColorSecondary">@color/colorSecondary_text</item>
@@ -55,7 +55,7 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
-        <item name="android:textColor">@color/colorIcons</item>
+        <item name="android:textColor">@color/colorWhite</item>
     </style>
 
     <style name="AppCompatDark" parent="Theme.AppCompat.NoActionBar">
@@ -64,10 +64,10 @@
         <item name="colorAccent">@color/colorPrimary_black</item>
         <item name="android:windowBackground">@color/colorbackground_material_dark</item>
         <item name="android:colorBackground">@color/colorbackground_material_dark</item>
-        <item name="android:textColorPrimary">@color/colorIcons</item>
+        <item name="android:textColorPrimary">@color/colorWhite</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorPrimary_text</item>
         <item name="android:textColorSecondary">@color/colorSecondary_text</item>
-        <item name="android:textColor">@color/colorIcons</item>
+        <item name="android:textColor">@color/colorWhite</item>
         <item name="fontFamily">sans-serif-condensed</item>
     </style>
 </resources>

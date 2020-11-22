@@ -261,7 +261,7 @@
             android:label="Даведка"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="by.carkva_gazeta.malitounik.MyBibleList"
+            android:name="by.carkva_gazeta.malitounik.VybranoeBibleList"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

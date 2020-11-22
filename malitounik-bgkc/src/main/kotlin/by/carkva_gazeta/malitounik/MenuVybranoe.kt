@@ -19,7 +19,7 @@ import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
-import kotlinx.android.synthetic.main.my_bible_list.*
+import kotlinx.android.synthetic.main.vybranoe_bible_list.*
 import java.io.File
 
 class MenuVybranoe : VybranoeFragment() {
@@ -209,16 +209,16 @@ class MenuVybranoe : VybranoeFragment() {
                 if (MainActivity.checkmoduleResources(activity)) {
                     when (itemList[adapterPosition].resurs) {
                         "1" -> {
-                            MyBibleList.biblia = 1
-                            startActivity(Intent(activity, MyBibleList::class.java))
+                            VybranoeBibleList.biblia = 1
+                            startActivity(Intent(activity, VybranoeBibleList::class.java))
                         }
                         "2" -> {
-                            MyBibleList.biblia = 2
-                            startActivity(Intent(activity, MyBibleList::class.java))
+                            VybranoeBibleList.biblia = 2
+                            startActivity(Intent(activity, VybranoeBibleList::class.java))
                         }
                         "3" -> {
-                            MyBibleList.biblia = 3
-                            startActivity(Intent(activity, MyBibleList::class.java))
+                            VybranoeBibleList.biblia = 3
+                            startActivity(Intent(activity, VybranoeBibleList::class.java))
                         }
                         else -> {
                             val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))

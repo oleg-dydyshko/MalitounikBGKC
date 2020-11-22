@@ -30,19 +30,20 @@ class Help : AppCompatActivity() {
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         textView.movementMethod = LinkMovementMethod.getInstance()
         if (dzenNoch) {
-            textView.setTextColor(ContextCompat.getColor(this, R.color.colorIcons))
+            textView.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
         }
         val inputStream = resources.openRawResource(R.raw.help)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         var line: String
         val builder = StringBuilder()
-        reader.forEachLine {
-            line = it
-            if (dzenNoch) line = line.replace("#d00505", "#f44336")
-            builder.append(line)
+        reader.use { bufferedReader ->
+            bufferedReader.forEachLine {
+                line = it
+                if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                builder.append(line)
+            }
         }
-        inputStream.close()
         textView.text = MainActivity.fromHtml(builder.toString().replace("<!--version-->", "API " + Build.VERSION.SDK_INT))
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

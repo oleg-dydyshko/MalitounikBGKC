@@ -56,7 +56,7 @@ class PasliaPrychasciaFragment : Fragment() {
                 prefEditor.apply()
             }
             if (dzenNoch) {
-                TextView.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorIcons))
+                TextView.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
             }
         }
     }

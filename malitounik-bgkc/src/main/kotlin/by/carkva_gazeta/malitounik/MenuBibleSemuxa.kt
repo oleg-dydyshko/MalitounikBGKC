@@ -39,8 +39,8 @@ class MenuBibleSemuxa : Fragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                MyBibleList.biblia = 1
-                startActivity(Intent(activity, MyBibleList::class.java))
+                VybranoeBibleList.biblia = 1
+                startActivity(Intent(activity, VybranoeBibleList::class.java))
             }
             novyZavet.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {

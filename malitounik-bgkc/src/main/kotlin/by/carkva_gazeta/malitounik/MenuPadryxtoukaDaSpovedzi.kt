@@ -62,12 +62,13 @@ class MenuPadryxtoukaDaSpovedzi : PadryxtoukaPamiatkaListFragment() {
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             var line: String
-            reader.forEachLine {
-                line = it
-                if (dzenNoch == true) line = line.replace("#d00505", "#f44336")
-                data.add(line)
+            reader.use { bufferedReader ->
+                bufferedReader.forEachLine {
+                    line = it
+                    if (dzenNoch == true) line = line.replace("#d00505", "#f44336")
+                    data.add(line)
+                }
             }
-            inputStream.close()
             adapter = MyArrayAdapter(it, data)
             listAdapter = adapter
         }
@@ -97,7 +98,7 @@ class MenuPadryxtoukaDaSpovedzi : PadryxtoukaPamiatkaListFragment() {
             ea.textView?.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
             ea.textView?.text = MainActivity.fromHtml(list[position])
             if (k.getBoolean("dzen_noch", false)) {
-                ea.textView?.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
+                ea.textView?.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
             }
             return rootView
         }

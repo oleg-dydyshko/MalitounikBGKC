@@ -24,7 +24,7 @@
                 android:background="@drawable/calendar_red"
                 android:gravity="center"
                 android:text="Ндз"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -35,7 +35,7 @@
                 android:background="@drawable/calendar_title"
                 android:gravity="center"
                 android:text="Пн"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -46,7 +46,7 @@
                 android:background="@drawable/calendar_title"
                 android:gravity="center"
                 android:text="Аў"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -57,7 +57,7 @@
                 android:background="@drawable/calendar_title"
                 android:gravity="center"
                 android:text="Ср"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -68,7 +68,7 @@
                 android:background="@drawable/calendar_title"
                 android:gravity="center"
                 android:text="Чц"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -79,7 +79,7 @@
                 android:background="@drawable/calendar_title"
                 android:gravity="center"
                 android:text="Пт"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -90,7 +90,7 @@
                 android:background="@drawable/calendar_title"
                 android:gravity="center"
                 android:text="Сб"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
         </LinearLayout>
 

@@ -97,7 +97,7 @@ class DialogBibliateka : DialogFragment() {
             }
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
             val isv = InteractiveScrollView(it)
             isv.isVerticalScrollBarEnabled = false
@@ -106,7 +106,7 @@ class DialogBibliateka : DialogFragment() {
             textView.text = MainActivity.fromHtml(listStr)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
-            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             isv.addView(textView)
             val dirCount = size.toInt()
             val izm: String

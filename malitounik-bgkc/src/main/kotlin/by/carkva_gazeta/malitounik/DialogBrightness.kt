@@ -42,7 +42,7 @@ class DialogBrightness : DialogFragment() {
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                textSize.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textSize.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 zmauchanni.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 cansel.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 ok.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))

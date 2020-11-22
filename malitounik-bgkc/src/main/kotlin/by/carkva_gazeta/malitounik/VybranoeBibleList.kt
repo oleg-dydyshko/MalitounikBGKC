@@ -23,10 +23,10 @@ import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper.OnSwipeListenerAdapter
 import com.woxthebox.draglistview.swipe.ListSwipeItem
 import com.woxthebox.draglistview.swipe.ListSwipeItem.SwipeDirection
-import kotlinx.android.synthetic.main.my_bible_list.*
+import kotlinx.android.synthetic.main.vybranoe_bible_list.*
 import java.io.File
 
-class MyBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDeliteBibliVybranoeListener {
+class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDeliteBibliVybranoeListener {
     private var dzenNoch = false
     private lateinit var k: SharedPreferences
     private var mLastClickTime: Long = 0
@@ -78,7 +78,7 @@ class MyBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDelite
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.my_bible_list)
+        setContentView(R.layout.vybranoe_bible_list)
         drag_list_view.recyclerView.isVerticalScrollBarEnabled = false
         val gson = Gson()
         val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
@@ -142,6 +142,12 @@ class MyBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDelite
             }
         }
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        title_toolbar.text = resources.getText(R.string.str_short_label1)
+        when (biblia) {
+            1 -> subtitle_toolbar.text = getString(R.string.title_biblia)
+            2 -> subtitle_toolbar.text = getString(R.string.bsinaidal)
+            3 -> subtitle_toolbar.text = getString(R.string.title_psalter)
+        }
         if (dzenNoch) {
             toolbar.popupTheme = R.style.AppCompatDark
         }
@@ -196,8 +202,8 @@ class MyBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDelite
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources(this@MyBibleList)) {
-                    val intent = Intent(this@MyBibleList, Class.forName("by.carkva_gazeta.resources.BibliaVybranoe"))
+                if (MainActivity.checkmoduleResources(this@VybranoeBibleList)) {
+                    val intent = Intent(this@VybranoeBibleList, Class.forName("by.carkva_gazeta.resources.BibliaVybranoe"))
                     intent.putExtra("position", adapterPosition * 2)
                     intent.putExtra("biblia", biblia)
                     startActivity(intent)

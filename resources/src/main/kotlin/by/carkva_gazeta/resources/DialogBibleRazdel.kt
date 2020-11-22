@@ -71,7 +71,7 @@ class DialogBibleRazdel : DialogFragment() {
             textViewZaglavie.text = resources.getString(R.string.DATA_SEARCH, fullGlav)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
             input = EditTextRobotoCondensed(it)
             input.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(3) }
@@ -83,11 +83,11 @@ class DialogBibleRazdel : DialogFragment() {
             }
             input.inputType = InputType.TYPE_CLASS_NUMBER
             if (dzenNoch) {
-                input.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                input.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 input.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
             } else {
                 input.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                input.setBackgroundResource(R.color.colorIcons)
+                input.setBackgroundResource(R.color.colorWhite)
             }
             input.setPadding(realpadding, realpadding, realpadding, realpadding) //10, 0, 0, 0
             input.requestFocus()

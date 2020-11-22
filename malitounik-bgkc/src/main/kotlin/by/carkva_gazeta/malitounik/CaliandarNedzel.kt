@@ -177,7 +177,7 @@ class CaliandarNedzel : ListFragment() {
             viewHolder.textPraz?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
             viewHolder.textPraz?.setTypeface(null, Typeface.BOLD)
             if (dzenNoch) {
-                viewHolder.textSviat?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                viewHolder.textSviat?.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
                 viewHolder.textPraz?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
             }
             if (c[Calendar.YEAR] == arrayList[position][3].toInt() && c[Calendar.DATE] == arrayList[position][1].toInt() && c[Calendar.MONTH] == arrayList[position][2].toInt()) {
@@ -215,19 +215,19 @@ class CaliandarNedzel : ListFragment() {
                     viewHolder.textPostS?.text = mContext.resources.getString(R.string.Post)
                 }
                 3 -> {
-                    viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                    viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
                     viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
                 }
             }
             if (arrayList[position][5].contains("1") || arrayList[position][5].contains("2") || arrayList[position][5].contains("3")) {
-                viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
                 if (dzenNoch) viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black)) else viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
             }
             if (arrayList[position][5].contains("2")) {
                 viewHolder.textPraz?.setTypeface(null, Typeface.NORMAL)
             }
             if (arrayList[position][7].contains("3")) {
-                viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorIcons))
+                viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
                 viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
                 viewHolder.textPostS?.text = mContext.resources.getString(R.string.Strogi_post)
                 viewHolder.textPostS?.visibility = View.VISIBLE

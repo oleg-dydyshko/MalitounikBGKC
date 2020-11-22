@@ -59,7 +59,7 @@ class DialogBibleSearshSettings : DialogFragment() {
             textViewZaglavie.text = resources.getString(R.string.settings_poshuk)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linear.addView(textViewZaglavie)
             val scrollView = ScrollView(it)
             linear.addView(scrollView)

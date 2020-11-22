@@ -68,7 +68,7 @@ class DialogTitleBiblioteka : DialogFragment() {
             textViewZaglavie.text = resources.getString(R.string.zmest).toUpperCase(Locale.getDefault())
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linear.addView(textViewZaglavie)
             val listViewCompat = ListView(it)
             if (dzenNoch)

@@ -171,7 +171,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             editText?.addTextChangedListener(textWatcher)
             editText?.setBackgroundResource(R.drawable.underline_white)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                editText?.setTextCursorDrawable(R.color.colorIcons)
+                editText?.setTextCursorDrawable(R.color.colorWhite)
             } else {
                 val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
                 f.isAccessible = true

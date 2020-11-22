@@ -426,7 +426,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/settings_default"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/colorWhite"
                 android:textSize="12sp" />
         </LinearLayout>
     </ScrollView>

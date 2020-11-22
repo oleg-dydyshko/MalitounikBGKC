@@ -16,7 +16,7 @@ import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
-import kotlinx.android.synthetic.main.my_bible_list.*
+import kotlinx.android.synthetic.main.vybranoe_bible_list.*
 import java.io.File
 
 class MenuNatatki : NatatkiFragment() {

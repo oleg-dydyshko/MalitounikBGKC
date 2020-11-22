@@ -134,9 +134,9 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 if (dzenNoch) {
                     activity?.let {
                         maranata.setBackgroundResource(R.drawable.selector_dark_maranata)
-                        maranata.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        maranata.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textTitleMaranata.setBackgroundResource(R.drawable.selector_dark_maranata)
-                        textTitleMaranata.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textTitleMaranata.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     }
                 }
                 maranata.visibility = View.VISIBLE
@@ -152,12 +152,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             }
             if (dzenNoch) {
                 activity?.let {
-                    textSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    textSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     textSviatyia.setBackgroundResource(R.drawable.selector_dark)
-                    textPost.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                     textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
-                    textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 }
             }
             textDenNedeli.text = nedelName[data[day][0].toInt()]
@@ -179,7 +179,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 textCviatyGlavnyia.visibility = View.VISIBLE
                 if (data[day][6].contains("Пачатак") || data[day][6].contains("Вялікі") || data[day][6].contains("Вялікая") || data[day][6].contains("ВЕЧАР") || data[day][6].contains("Палова")) {
                     activity?.let {
-                        if (dzenNoch) textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        if (dzenNoch) textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         else textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                     }
                     textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
@@ -232,24 +232,24 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     }
                     3 -> {
                         textDenNedeli.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textChislo.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textMesiac.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textTitleChyt.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textTitleChyt.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textTitleChyt.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textChytanne.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textChytanne.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textChytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textChytanneSviatyiaDop.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textChytanneSviatyiaDop.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textChytanneSviatyia.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textChytanneSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textChytanneSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textBlaslavenne.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textPost.text = resources.getString(R.string.Strogi_post)
                         textPamerlyia.text = resources.getString(R.string.Strogi_post)
-                        textPamerlyia.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textPamerlyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textPost.visibility = View.VISIBLE
                         PostFish.visibility = View.VISIBLE
                         if (dzenNoch) PostFish.setImageResource(R.drawable.fishe_red_black) else PostFish.setImageResource(R.drawable.fishe_red)
@@ -269,9 +269,9 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 textChislo.setBackgroundResource(rColorColorprimary)
                 textMesiac.setBackgroundResource(rColorColorprimary)
                 activity?.let {
-                    textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                    textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                    textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                    textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                    textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 }
             }
             if (data[day][5].contains("2")) {
@@ -519,7 +519,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
                         textViewT.setTypeface(null, Typeface.BOLD)
 
-                        textViewT.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
+                        textViewT.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                         textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(activity)[p.color]))
                         sabytieList.add(textViewT)
                         val textView = TextViewRobotoCondensed(activity)
@@ -528,7 +528,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         textView.setPadding(realpadding, realpadding, realpadding, realpadding)
                         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
                         if (dzenNoch) {
-                            textView.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
+                            textView.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                             textView.setBackgroundResource(R.color.colorprimary_material_dark)
                         }
                         val clickableSpanEdit = object : ClickableSpan() {

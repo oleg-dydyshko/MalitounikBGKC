@@ -167,6 +167,12 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.str_short_label1)
+        subtitle_toolbar.visibility = View.VISIBLE
+        when (intent.extras?.getInt("biblia", 1) ?: 1) {
+            1 -> subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_biblia)
+            2 -> subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.bsinaidal)
+            3 -> subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.title_psalter)
+        }
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
@@ -335,7 +341,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
     }
 
     private fun loadBible() {
-        MyBibleList.arrayListVybranoe.forEach { VybranoeBibliaData ->
+        VybranoeBibleList.arrayListVybranoe.forEach { VybranoeBibliaData ->
             var inputStream = resources.openRawResource(R.raw.biblias1)
             if (VybranoeBibliaData.bibleName == 1) {
                 if (VybranoeBibliaData.novyZavet) {

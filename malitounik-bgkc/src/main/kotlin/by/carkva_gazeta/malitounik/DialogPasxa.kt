@@ -61,7 +61,7 @@ class DialogPasxa : DialogFragment() {
             textViewZaglavie.text = resources.getString(R.string.DATA_SEARCH2)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linear.addView(textViewZaglavie)
             input = EditTextRobotoCondensed(it)
             input.filters = Array<InputFilter>(1) { InputFilter.LengthFilter(4)}

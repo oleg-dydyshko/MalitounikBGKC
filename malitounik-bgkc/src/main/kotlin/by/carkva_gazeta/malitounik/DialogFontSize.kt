@@ -90,7 +90,7 @@ class DialogFontSize : DialogFragment() {
             val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
             if (dzenNoch) {
                 title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                textSize.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textSize.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 zmauchanni.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 cansel.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 ok.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))

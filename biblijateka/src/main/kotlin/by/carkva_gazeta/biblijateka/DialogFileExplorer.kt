@@ -157,7 +157,7 @@ class DialogFileExplorer : DialogFragment() {
             textViewZaglavie.text = "ВЫБЕРЫЦЕ ФАЙЛ"
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
             linear.addView(textViewZaglavie)
             val listViewCompat = ListView(it)
             if (dzenNoch)

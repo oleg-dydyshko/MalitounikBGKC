@@ -328,14 +328,14 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
         if (BibleGlobalList.bibleCopyList.size > 0 && BibleGlobalList.bibleCopyList.contains(position) && BibleGlobalList.mPedakVisable) {
             if (k.getBoolean("dzen_noch", false)) {
                 ea.textView?.setBackgroundResource(R.color.colorprimary_material_dark2)
-                ea.textView?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
+                ea.textView?.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
             } else {
                 ea.textView?.setBackgroundResource(R.color.colorDivider)
             }
         } else {
             if (k.getBoolean("dzen_noch", false)) {
                 ea.textView?.setBackgroundResource(R.drawable.selector_dark)
-                ea.textView?.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
+                ea.textView?.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
             } else {
                 ea.textView?.setBackgroundResource(R.drawable.selector_default)
             }

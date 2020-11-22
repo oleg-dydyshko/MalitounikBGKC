@@ -228,7 +228,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button1.setBackgroundResource(R.drawable.calendar_red_sabytie) else button1.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button1.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button1.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button1.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -245,7 +245,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button1.setBackgroundResource(R.drawable.calendar_red_sabytie) else button1.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button1.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button1.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button1.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -257,7 +257,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button1.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button1.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button1.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button1.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button1.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button1.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -295,7 +295,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button2.setBackgroundResource(R.drawable.calendar_red_sabytie) else button2.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button2.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button2.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button2.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -312,7 +312,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button2.setBackgroundResource(R.drawable.calendar_red_sabytie) else button2.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button2.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button2.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button2.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -324,7 +324,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button2.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button2.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button2.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button2.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button2.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button2.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -362,7 +362,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button3.setBackgroundResource(R.drawable.calendar_red_sabytie) else button3.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button3.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button3.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button3.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -379,7 +379,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button3.setBackgroundResource(R.drawable.calendar_red_sabytie) else button3.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button3.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button3.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button3.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -391,7 +391,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button3.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button3.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button3.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button3.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button3.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button3.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -429,7 +429,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button4.setBackgroundResource(R.drawable.calendar_red_sabytie) else button4.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button4.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button4.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button4.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -446,7 +446,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button4.setBackgroundResource(R.drawable.calendar_red_sabytie) else button4.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button4.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button4.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button4.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -458,7 +458,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button4.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button4.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button4.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button4.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button4.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button4.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -496,7 +496,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button5.setBackgroundResource(R.drawable.calendar_red_sabytie) else button5.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button5.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button5.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button5.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -513,7 +513,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button5.setBackgroundResource(R.drawable.calendar_red_sabytie) else button5.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button5.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button5.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button5.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -525,7 +525,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button5.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button5.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button5.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button5.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button5.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button5.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -563,7 +563,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button6.setBackgroundResource(R.drawable.calendar_red_sabytie) else button6.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button6.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button6.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button6.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -580,7 +580,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button6.setBackgroundResource(R.drawable.calendar_red_sabytie) else button6.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button6.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button6.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button6.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -592,7 +592,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button6.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button6.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button6.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button6.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button6.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button6.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -625,7 +625,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button7.setBackgroundResource(R.drawable.calendar_red_sabytie) else button7.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button7.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button7.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button7.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -642,7 +642,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button7.setBackgroundResource(R.drawable.calendar_red_sabytie) else button7.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button7.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button7.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button7.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -654,7 +654,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button7.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button7.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button7.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button7.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button7.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button7.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -686,7 +686,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button8.setBackgroundResource(R.drawable.calendar_red_sabytie) else button8.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button8.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button8.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button8.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -703,7 +703,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button8.setBackgroundResource(R.drawable.calendar_red_sabytie) else button8.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button8.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button8.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button8.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -715,7 +715,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button8.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button8.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button8.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button8.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button8.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button8.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -747,7 +747,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button9.setBackgroundResource(R.drawable.calendar_red_sabytie) else button9.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button9.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button9.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button9.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -764,7 +764,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button9.setBackgroundResource(R.drawable.calendar_red_sabytie) else button9.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button9.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button9.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button9.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -776,7 +776,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button9.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button9.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button9.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button9.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button9.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button9.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -808,7 +808,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button10.setBackgroundResource(R.drawable.calendar_red_sabytie) else button10.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button10.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button10.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button10.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -825,7 +825,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button10.setBackgroundResource(R.drawable.calendar_red_sabytie) else button10.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button10.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button10.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button10.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -837,7 +837,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button10.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button10.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button10.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button10.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button10.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button10.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -869,7 +869,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button11.setBackgroundResource(R.drawable.calendar_red_sabytie) else button11.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button11.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button11.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button11.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -886,7 +886,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button11.setBackgroundResource(R.drawable.calendar_red_sabytie) else button11.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button11.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button11.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button11.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -898,7 +898,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button11.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button11.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button11.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button11.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button11.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button11.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -930,7 +930,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button12.setBackgroundResource(R.drawable.calendar_red_sabytie) else button12.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button12.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button12.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button12.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -947,7 +947,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button12.setBackgroundResource(R.drawable.calendar_red_sabytie) else button12.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button12.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button12.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button12.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -959,7 +959,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button12.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button12.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button12.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button12.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button12.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button12.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -991,7 +991,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button13.setBackgroundResource(R.drawable.calendar_red_sabytie) else button13.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button13.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button13.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button13.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1008,7 +1008,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button13.setBackgroundResource(R.drawable.calendar_red_sabytie) else button13.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button13.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button13.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button13.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1020,7 +1020,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button13.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button13.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button13.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button13.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button13.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button13.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1052,7 +1052,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button14.setBackgroundResource(R.drawable.calendar_red_sabytie) else button14.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button14.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button14.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button14.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1069,7 +1069,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button14.setBackgroundResource(R.drawable.calendar_red_sabytie) else button14.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button14.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button14.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button14.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1081,7 +1081,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button14.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button14.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button14.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button14.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button14.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button14.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1113,7 +1113,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button15.setBackgroundResource(R.drawable.calendar_red_sabytie) else button15.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button15.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button15.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button15.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1130,7 +1130,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button15.setBackgroundResource(R.drawable.calendar_red_sabytie) else button15.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button15.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button15.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button15.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1142,7 +1142,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button15.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button15.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button15.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button15.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button15.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button15.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1174,7 +1174,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button16.setBackgroundResource(R.drawable.calendar_red_sabytie) else button16.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button16.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button16.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button16.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1191,7 +1191,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button16.setBackgroundResource(R.drawable.calendar_red_sabytie) else button16.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button16.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button16.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button16.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1203,7 +1203,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button16.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button16.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button16.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button16.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button16.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button16.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1235,7 +1235,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button17.setBackgroundResource(R.drawable.calendar_red_sabytie) else button17.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button17.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button17.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button17.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1252,7 +1252,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button17.setBackgroundResource(R.drawable.calendar_red_sabytie) else button17.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button17.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button17.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button17.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1264,7 +1264,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button17.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button17.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button17.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button17.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button17.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button17.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1296,7 +1296,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button18.setBackgroundResource(R.drawable.calendar_red_sabytie) else button18.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button18.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button18.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button18.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1313,7 +1313,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button18.setBackgroundResource(R.drawable.calendar_red_sabytie) else button18.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button18.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button18.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button18.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1325,7 +1325,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button18.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button18.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button18.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button18.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button18.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button18.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1357,7 +1357,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button19.setBackgroundResource(R.drawable.calendar_red_sabytie) else button19.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button19.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button19.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button19.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1374,7 +1374,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button19.setBackgroundResource(R.drawable.calendar_red_sabytie) else button19.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button19.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button19.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button19.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1386,7 +1386,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button19.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button19.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button19.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button19.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button19.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button19.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1418,7 +1418,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button20.setBackgroundResource(R.drawable.calendar_red_sabytie) else button20.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button20.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button20.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button20.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1435,7 +1435,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button20.setBackgroundResource(R.drawable.calendar_red_sabytie) else button20.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button20.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button20.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button20.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1447,7 +1447,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button20.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button20.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button20.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button20.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button20.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button20.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1479,7 +1479,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button21.setBackgroundResource(R.drawable.calendar_red_sabytie) else button21.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button21.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button21.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button21.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1496,7 +1496,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button21.setBackgroundResource(R.drawable.calendar_red_sabytie) else button21.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button21.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button21.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button21.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1508,7 +1508,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button21.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button21.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button21.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button21.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button21.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button21.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1540,7 +1540,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button22.setBackgroundResource(R.drawable.calendar_red_sabytie) else button22.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button22.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button22.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button22.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1557,7 +1557,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button22.setBackgroundResource(R.drawable.calendar_red_sabytie) else button22.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button22.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button22.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button22.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1569,7 +1569,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button22.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button22.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button22.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button22.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button22.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button22.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1601,7 +1601,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button23.setBackgroundResource(R.drawable.calendar_red_sabytie) else button23.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button23.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button23.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button23.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1618,7 +1618,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button23.setBackgroundResource(R.drawable.calendar_red_sabytie) else button23.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button23.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button23.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button23.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1630,7 +1630,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button23.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button23.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button23.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button23.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button23.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button23.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1662,7 +1662,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button24.setBackgroundResource(R.drawable.calendar_red_sabytie) else button24.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button24.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button24.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button24.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1679,7 +1679,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button24.setBackgroundResource(R.drawable.calendar_red_sabytie) else button24.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button24.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button24.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button24.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1691,7 +1691,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button24.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button24.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button24.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button24.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button24.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button24.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1723,7 +1723,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button25.setBackgroundResource(R.drawable.calendar_red_sabytie) else button25.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button25.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button25.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button25.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1740,7 +1740,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button25.setBackgroundResource(R.drawable.calendar_red_sabytie) else button25.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button25.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button25.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button25.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1752,7 +1752,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button25.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button25.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button25.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button25.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button25.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button25.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1784,7 +1784,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button26.setBackgroundResource(R.drawable.calendar_red_sabytie) else button26.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button26.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button26.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button26.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1801,7 +1801,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button26.setBackgroundResource(R.drawable.calendar_red_sabytie) else button26.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button26.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button26.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button26.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1813,7 +1813,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button26.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button26.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button26.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button26.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button26.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button26.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1845,7 +1845,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button27.setBackgroundResource(R.drawable.calendar_red_sabytie) else button27.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button27.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button27.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button27.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1862,7 +1862,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button27.setBackgroundResource(R.drawable.calendar_red_sabytie) else button27.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button27.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button27.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button27.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1874,7 +1874,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button27.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button27.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button27.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button27.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button27.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button27.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1906,7 +1906,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button28.setBackgroundResource(R.drawable.calendar_red_sabytie) else button28.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button28.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button28.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button28.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
@@ -1923,7 +1923,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         if (sab) button28.setBackgroundResource(R.drawable.calendar_red_sabytie) else button28.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button28.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                button28.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 button28.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
@@ -1935,7 +1935,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                 }
                                 if (strogiPost) {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button28.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button28.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button28.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button28.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button28.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button28.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1972,7 +1972,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button29.setBackgroundResource(R.drawable.calendar_red_sabytie) else button29.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button29.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button29.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button29.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -1989,7 +1989,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button29.setBackgroundResource(R.drawable.calendar_red_sabytie) else button29.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button29.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button29.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button29.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -2001,7 +2001,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button29.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button29.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button29.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button29.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button29.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button29.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2039,7 +2039,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button30.setBackgroundResource(R.drawable.calendar_red_sabytie) else button30.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button30.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button30.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button30.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -2056,7 +2056,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button30.setBackgroundResource(R.drawable.calendar_red_sabytie) else button30.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button30.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button30.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button30.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -2068,7 +2068,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button30.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button30.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button30.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button30.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button30.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button30.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2106,7 +2106,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button31.setBackgroundResource(R.drawable.calendar_red_sabytie) else button31.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button31.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button31.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button31.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -2123,7 +2123,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button31.setBackgroundResource(R.drawable.calendar_red_sabytie) else button31.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button31.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button31.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button31.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -2135,7 +2135,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button31.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button31.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button31.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button31.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button31.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button31.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2173,7 +2173,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button32.setBackgroundResource(R.drawable.calendar_red_sabytie) else button32.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button32.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button32.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button32.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -2190,7 +2190,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button32.setBackgroundResource(R.drawable.calendar_red_sabytie) else button32.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button32.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button32.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button32.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -2202,7 +2202,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button32.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button32.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button32.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button32.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button32.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button32.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2240,7 +2240,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button33.setBackgroundResource(R.drawable.calendar_red_sabytie) else button33.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button33.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button33.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button33.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -2257,7 +2257,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button33.setBackgroundResource(R.drawable.calendar_red_sabytie) else button33.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button33.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button33.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button33.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -2269,7 +2269,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button33.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button33.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button33.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button33.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button33.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button33.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2307,7 +2307,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button34.setBackgroundResource(R.drawable.calendar_red_sabytie) else button34.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button34.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button34.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button34.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -2324,7 +2324,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button34.setBackgroundResource(R.drawable.calendar_red_sabytie) else button34.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button34.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button34.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button34.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -2336,7 +2336,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button34.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button34.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button34.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button34.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button34.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button34.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2374,7 +2374,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button35.setBackgroundResource(R.drawable.calendar_red_sabytie) else button35.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button35.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button35.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button35.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -2391,7 +2391,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button35.setBackgroundResource(R.drawable.calendar_red_sabytie) else button35.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button35.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button35.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button35.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -2403,7 +2403,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button35.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button35.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button35.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button35.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button35.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button35.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2441,7 +2441,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button36.setBackgroundResource(R.drawable.calendar_red_sabytie) else button36.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button36.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button36.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button36.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -2458,7 +2458,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button36.setBackgroundResource(R.drawable.calendar_red_sabytie) else button36.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button36.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button36.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button36.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -2470,7 +2470,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button36.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button36.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button36.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button36.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button36.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button36.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2508,7 +2508,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button37.setBackgroundResource(R.drawable.calendar_red_sabytie) else button37.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button37.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button37.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button37.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
@@ -2525,7 +2525,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                             if (sab) button37.setBackgroundResource(R.drawable.calendar_red_sabytie) else button37.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button37.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                    button37.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     button37.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
@@ -2537,7 +2537,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                     if (strogiPost) {
                                         if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button37.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button37.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button37.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button37.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button37.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                                        button37.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2962,7 +2962,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         textViewT.setTypeface(null, Typeface.BOLD)
                         textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
                         textViewT.setTypeface(null, Typeface.BOLD)
-                        textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textViewT.setBackgroundColor(Color.parseColor(getColors(it)[p.color]))
                         sabytieList.add(textViewT)
                         val textView = TextViewRobotoCondensed(it)
@@ -2971,7 +2971,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
                         textView.setBackgroundColor(ContextCompat.getColor(it, R.color.colorDivider))
                         if (dzenNoch) {
-                            textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                            textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             textView.setBackgroundResource(R.color.colorprimary_material_dark)
                         }
                         val textR = if (!konecSabytie) {

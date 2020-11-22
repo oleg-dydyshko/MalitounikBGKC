@@ -50,7 +50,7 @@ class DialogLiturgia : DialogFragment() {
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
             val r = it.resources
             val bogashlugbovya = chast.toInt()
@@ -112,7 +112,7 @@ class DialogLiturgia : DialogFragment() {
             scrollView.setPadding(realpadding, realpadding, realpadding, realpadding)
             val textView = TextViewRobotoCondensed(it)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
-            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             textView.text = MainActivity.fromHtml(builder.toString())
             scrollView.addView(textView)
             ab.setView(linearLayout)

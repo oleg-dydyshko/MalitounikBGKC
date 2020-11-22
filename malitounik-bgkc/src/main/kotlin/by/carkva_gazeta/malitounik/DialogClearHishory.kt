@@ -49,7 +49,7 @@ class DialogClearHishory : DialogFragment() {
             textViewZaglavie.text = resources.getString(R.string.clean_histopy_title)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
             val textView = TextViewRobotoCondensed(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
@@ -58,7 +58,7 @@ class DialogClearHishory : DialogFragment() {
             else
                 textView.text = getString(R.string.all_clean_item_histopy, arguments?.getString("itemName")?: "")
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             linearLayout.addView(textView)
             if (arguments?.getInt("position")?: -1 == -1)
                 builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener.cleanFullHistory() }

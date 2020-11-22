@@ -54,14 +54,14 @@ class DialogContextMenu : DialogFragment() {
             textViewZaglavie.text = name
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
             val textView = TextViewRobotoCondensed(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
             textView.text = getString(R.string.redagaktirovat)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
-                textView.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 textView.setBackgroundResource(R.drawable.selector_dark)
             } else {
                 textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
@@ -73,7 +73,7 @@ class DialogContextMenu : DialogFragment() {
             textView2.text = getString(R.string.delite)
             textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
-                textView2.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                textView2.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 textView2.setBackgroundResource(R.drawable.selector_dark)
             } else {
                 textView2.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))

@@ -55,7 +55,7 @@ class CaliandarMunTab2 : Fragment() {
             if (dzenNoch) {
                 imageButton.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.levo_catedra))
                 imageButton2.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.pravo_catedra))
-                nedelName.setTextColor(ContextCompat.getColor(activity, R.color.colorIcons))
+                nedelName.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
             }
             if (adapterViewPagerNedel.count - 1 == pagerNedel.currentItem) imageButton2.visibility = View.GONE
             if (pagerNedel.currentItem == 0) imageButton.visibility = View.GONE

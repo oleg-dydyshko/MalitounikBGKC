@@ -128,14 +128,14 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             override fun onPageSelected(position: Int) {
                 if (glava != position) fierstPosition = 0
                 subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2, getKafizma(position))
-                men = MyBibleList.checkVybranoe(this@NadsanContentActivity, 0, position, 3)
+                men = VybranoeBibleList.checkVybranoe(this@NadsanContentActivity, 0, position, 3)
                 invalidateOptionsMenu()
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
         fullglav = 151
-        men = MyBibleList.checkVybranoe(this, 0, glava, 3)
+        men = VybranoeBibleList.checkVybranoe(this, 0, glava, 3)
         if (savedInstanceState != null) {
             dialog = savedInstanceState.getBoolean("dialog")
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
@@ -276,10 +276,10 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             checkSetDzenNoch = true
-            men = MyBibleList.setVybranoe(this, resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2), 0, pager.currentItem, bibleName = 3)
+            men = VybranoeBibleList.setVybranoe(this, resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2), 0, pager.currentItem, bibleName = 3)
             if (men) {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
-                if (!MyBibleList.checkVybranoe("3")) {
+                if (!VybranoeBibleList.checkVybranoe("3")) {
                     MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "3", getString(by.carkva_gazeta.malitounik.R.string.title_psalter)))
                     val gson = Gson()
                     val file = File("$filesDir/Vybranoe.json")

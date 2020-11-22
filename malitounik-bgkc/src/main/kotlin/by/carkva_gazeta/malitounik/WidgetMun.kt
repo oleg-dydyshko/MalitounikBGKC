@@ -17,7 +17,6 @@ import com.google.gson.reflect.TypeToken
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
-import kotlin.collections.ArrayList
 
 class WidgetMun : AppWidgetProvider() {
     private var updateViews: RemoteViews? = null
@@ -337,14 +336,14 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button1a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button1a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button1a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
                             updateViews?.setInt(R.id.button1a, "setBackgroundResource", R.drawable.calendar_red_today)
                         } else {
                             updateViews?.setInt(R.id.button1a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button1a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button1a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button1a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button1a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -358,7 +357,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button1a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button1a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button1a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -399,7 +398,7 @@ class WidgetMun : AppWidgetProvider() {
                     updateViews?.setTextViewText(R.id.button2a, i.toString())
                     if (sviatyDvunadesiatya(i)) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button2a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button2a, "setBackgroundResource", R.drawable.calendar_red)
-                        updateViews?.setTextColor(R.id.button2a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button2a, ContextCompat.getColor(context, R.color.colorWhite))
                         updateViews?.setTextViewText(R.id.button2a, MainActivity.fromHtml("<strong>$i</strong>"))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
@@ -407,7 +406,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button2a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button2a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button2a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button2a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button2a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -421,7 +420,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button2a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button2a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button2a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -463,7 +462,7 @@ class WidgetMun : AppWidgetProvider() {
                     updateViews?.setTextViewText(R.id.button3a, i.toString())
                     if (sviatyDvunadesiatya(i)) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button3a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button3a, "setBackgroundResource", R.drawable.calendar_red)
-                        updateViews?.setTextColor(R.id.button3a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button3a, ContextCompat.getColor(context, R.color.colorWhite))
                         updateViews?.setTextViewText(R.id.button3a, MainActivity.fromHtml("<strong>$i</strong>"))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
@@ -471,7 +470,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button3a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button3a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button3a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button3a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button3a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -485,7 +484,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button3a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button3a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button3a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -527,7 +526,7 @@ class WidgetMun : AppWidgetProvider() {
                     updateViews?.setTextViewText(R.id.button4a, i.toString())
                     if (sviatyDvunadesiatya(i)) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button4a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button4a, "setBackgroundResource", R.drawable.calendar_red)
-                        updateViews?.setTextColor(R.id.button4a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button4a, ContextCompat.getColor(context, R.color.colorWhite))
                         updateViews?.setTextViewText(R.id.button4a, MainActivity.fromHtml("<strong>$i</strong>"))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
@@ -535,7 +534,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button4a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button4a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button4a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button4a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button4a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -549,7 +548,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button4a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button4a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button4a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -591,7 +590,7 @@ class WidgetMun : AppWidgetProvider() {
                     updateViews?.setTextViewText(R.id.button5a, i.toString())
                     if (sviatyDvunadesiatya(i)) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button5a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button5a, "setBackgroundResource", R.drawable.calendar_red)
-                        updateViews?.setTextColor(R.id.button5a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button5a, ContextCompat.getColor(context, R.color.colorWhite))
                         updateViews?.setTextViewText(R.id.button5a, MainActivity.fromHtml("<strong>$i</strong>"))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
@@ -599,7 +598,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button5a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button5a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button5a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button5a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button5a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -613,7 +612,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button5a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button5a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button5a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -655,7 +654,7 @@ class WidgetMun : AppWidgetProvider() {
                     updateViews?.setTextViewText(R.id.button6a, i.toString())
                     if (sviatyDvunadesiatya(i)) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button6a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button6a, "setBackgroundResource", R.drawable.calendar_red)
-                        updateViews?.setTextColor(R.id.button6a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button6a, ContextCompat.getColor(context, R.color.colorWhite))
                         updateViews?.setTextViewText(R.id.button6a, MainActivity.fromHtml("<strong>$i</strong>"))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
@@ -663,7 +662,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button6a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button6a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button6a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button6a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button6a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -677,7 +676,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button6a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button6a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button6a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -706,7 +705,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button7a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button7a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button7a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button7a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button7a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button7a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -714,7 +713,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button7a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button7a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button7a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button7a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button7a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -728,7 +727,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button7a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button7a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button7a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -760,14 +759,14 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button8a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button8a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button8a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
                         updateViews?.setInt(R.id.button8a, "setBackgroundResource", R.drawable.calendar_red_today)
                     } else {
                         updateViews?.setInt(R.id.button8a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button8a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button8a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button8a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button8a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -781,7 +780,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button8a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button8a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button8a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -808,7 +807,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button9a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button9a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button9a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button9a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button9a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button9a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -816,7 +815,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button9a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button9a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button9a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button9a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button9a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -830,7 +829,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button9a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button9a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button9a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -858,7 +857,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button10a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button10a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button10a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button10a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button10a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button10a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -866,7 +865,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button10a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button10a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button10a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button10a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button10a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -880,7 +879,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button10a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button10a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button10a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -908,7 +907,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button11a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button11a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button11a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button11a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button11a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button11a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -916,7 +915,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button11a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button11a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button11a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button11a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button11a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -930,7 +929,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button11a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button11a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button11a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -958,7 +957,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button12a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button12a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button12a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button12a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button12a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button12a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -966,7 +965,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button12a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button12a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button12a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button12a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button12a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -980,7 +979,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button12a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button12a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button12a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1008,7 +1007,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button13a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button13a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button13a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button13a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button13a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button13a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1016,7 +1015,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button13a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button13a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button13a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button13a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button13a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1030,7 +1029,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button13a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button13a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button13a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1058,7 +1057,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button14a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button14a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button14a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button14a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button14a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button14a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1066,7 +1065,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button14a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button14a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button14a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button14a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button14a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1080,7 +1079,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button14a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button14a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button14a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1112,14 +1111,14 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button15a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button15a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button15a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
                         updateViews?.setInt(R.id.button15a, "setBackgroundResource", R.drawable.calendar_red_today)
                     } else {
                         updateViews?.setInt(R.id.button15a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button15a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button15a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button15a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button15a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1133,7 +1132,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button15a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button15a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button15a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1160,7 +1159,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button16a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button16a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button16a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button16a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button16a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button16a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1168,7 +1167,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button16a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button16a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button16a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button16a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button16a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1182,7 +1181,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button16a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button16a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button16a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1210,7 +1209,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button17a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button17a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button17a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button17a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button17a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button17a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1218,7 +1217,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button17a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button17a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button17a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button17a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button17a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1232,7 +1231,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button17a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button17a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button17a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1260,7 +1259,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button18a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button18a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button18a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button18a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button18a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button18a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1268,7 +1267,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button18a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button18a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button18a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button18a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button18a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1282,7 +1281,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button18a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button18a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button18a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1310,7 +1309,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button19a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button19a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button19a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button19a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button19a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button19a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1318,7 +1317,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button19a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button19a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button19a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button19a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button19a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1332,7 +1331,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button19a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button19a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button19a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1360,7 +1359,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button20a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button20a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button20a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button20a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button20a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button20a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1368,7 +1367,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button20a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button20a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button20a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button20a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button20a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1382,7 +1381,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button20a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button20a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button20a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1410,7 +1409,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button21a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button21a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button21a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button21a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button21a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button21a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1418,7 +1417,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button21a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button21a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button21a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button21a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button21a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1432,7 +1431,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button21a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button21a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button21a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1464,14 +1463,14 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button22a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button22a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button22a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
                         updateViews?.setInt(R.id.button22a, "setBackgroundResource", R.drawable.calendar_red_today)
                     } else {
                         updateViews?.setInt(R.id.button22a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button22a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button22a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button22a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button22a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1485,7 +1484,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button22a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button22a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button22a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1512,7 +1511,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button23a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button23a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button23a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button23a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button23a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button23a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1520,7 +1519,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button23a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button23a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button23a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button23a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button23a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1534,7 +1533,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button23a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button23a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button23a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1562,7 +1561,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button24a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button24a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button24a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button24a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button24a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button24a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1570,7 +1569,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button24a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button24a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button24a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button24a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button24a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1584,7 +1583,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button24a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button24a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button24a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1612,7 +1611,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button25a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button25a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button25a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button25a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button25a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button25a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1620,7 +1619,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button25a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button25a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button25a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button25a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button25a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1634,7 +1633,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button25a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button25a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button25a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1662,7 +1661,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button26a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button26a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button26a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button26a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button26a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button26a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1670,7 +1669,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button26a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button26a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button26a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button26a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button26a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1684,7 +1683,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button26a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button26a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button26a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1712,7 +1711,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button27a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button27a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button27a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button27a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button27a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button27a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1720,7 +1719,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button27a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button27a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button27a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button27a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button27a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1734,7 +1733,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button27a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button27a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button27a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1762,7 +1761,7 @@ class WidgetMun : AppWidgetProvider() {
                 updateViews?.setTextViewText(R.id.button28a, i.toString())
                 if (sviatyDvunadesiatya(i)) {
                     if (munActual == i && munTudey) updateViews?.setInt(R.id.button28a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button28a, "setBackgroundResource", R.drawable.calendar_red)
-                    updateViews?.setTextColor(R.id.button28a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button28a, ContextCompat.getColor(context, R.color.colorWhite))
                     updateViews?.setTextViewText(R.id.button28a, MainActivity.fromHtml("<strong>$i</strong>"))
                 } else if (sviatyVialikia(i)) {
                     if (munActual == i && munTudey) {
@@ -1770,7 +1769,7 @@ class WidgetMun : AppWidgetProvider() {
                     } else {
                         updateViews?.setInt(R.id.button28a, "setBackgroundResource", R.drawable.calendar_red)
                     }
-                    updateViews?.setTextColor(R.id.button28a, ContextCompat.getColor(context, R.color.colorIcons))
+                    updateViews?.setTextColor(R.id.button28a, ContextCompat.getColor(context, R.color.colorWhite))
                 } else {
                     if (nopost) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button28a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button28a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1784,7 +1783,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button28a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                         }
-                        updateViews?.setTextColor(R.id.button28a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button28a, ContextCompat.getColor(context, R.color.colorWhite))
                     }
                     if (!nopost && !post && !strogiPost) {
                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1829,14 +1828,14 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button29a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button29a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button29a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
                             updateViews?.setInt(R.id.button29a, "setBackgroundResource", R.drawable.calendar_red_today)
                         } else {
                             updateViews?.setInt(R.id.button29a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button29a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button29a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button29a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button29a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1850,7 +1849,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button29a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button29a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button29a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1891,7 +1890,7 @@ class WidgetMun : AppWidgetProvider() {
                     updateViews?.setTextViewText(R.id.button30a, i.toString())
                     if (sviatyDvunadesiatya(i)) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button30a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button30a, "setBackgroundResource", R.drawable.calendar_red)
-                        updateViews?.setTextColor(R.id.button30a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button30a, ContextCompat.getColor(context, R.color.colorWhite))
                         updateViews?.setTextViewText(R.id.button30a, MainActivity.fromHtml("<strong>$i</strong>"))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
@@ -1899,7 +1898,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button30a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button30a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button30a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button30a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button30a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1913,7 +1912,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button30a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button30a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button30a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -1955,7 +1954,7 @@ class WidgetMun : AppWidgetProvider() {
                     updateViews?.setTextViewText(R.id.button31a, i.toString())
                     if (sviatyDvunadesiatya(i)) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button31a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button31a, "setBackgroundResource", R.drawable.calendar_red)
-                        updateViews?.setTextColor(R.id.button31a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button31a, ContextCompat.getColor(context, R.color.colorWhite))
                         updateViews?.setTextViewText(R.id.button31a, MainActivity.fromHtml("<strong>$i</strong>"))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
@@ -1963,7 +1962,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button31a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button31a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button31a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button31a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button31a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -1977,7 +1976,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button31a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button31a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button31a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2019,7 +2018,7 @@ class WidgetMun : AppWidgetProvider() {
                     updateViews?.setTextViewText(R.id.button32a, i.toString())
                     if (sviatyDvunadesiatya(i)) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button32a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button32a, "setBackgroundResource", R.drawable.calendar_red)
-                        updateViews?.setTextColor(R.id.button32a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button32a, ContextCompat.getColor(context, R.color.colorWhite))
                         updateViews?.setTextViewText(R.id.button32a, MainActivity.fromHtml("<strong>$i</strong>"))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
@@ -2027,7 +2026,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button32a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button32a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button32a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button32a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button32a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -2041,7 +2040,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button32a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button32a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button32a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2083,7 +2082,7 @@ class WidgetMun : AppWidgetProvider() {
                     updateViews?.setTextViewText(R.id.button33a, i.toString())
                     if (sviatyDvunadesiatya(i)) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button33a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button33a, "setBackgroundResource", R.drawable.calendar_red)
-                        updateViews?.setTextColor(R.id.button33a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button33a, ContextCompat.getColor(context, R.color.colorWhite))
                         updateViews?.setTextViewText(R.id.button33a, MainActivity.fromHtml("<strong>$i</strong>"))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
@@ -2091,7 +2090,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button33a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button33a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button33a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button33a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button33a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -2105,7 +2104,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button33a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button33a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button33a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2147,7 +2146,7 @@ class WidgetMun : AppWidgetProvider() {
                     updateViews?.setTextViewText(R.id.button34a, i.toString())
                     if (sviatyDvunadesiatya(i)) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button34a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button34a, "setBackgroundResource", R.drawable.calendar_red)
-                        updateViews?.setTextColor(R.id.button34a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button34a, ContextCompat.getColor(context, R.color.colorWhite))
                         updateViews?.setTextViewText(R.id.button34a, MainActivity.fromHtml("<strong>$i</strong>"))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
@@ -2155,7 +2154,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button34a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button34a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button34a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button34a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button34a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -2169,7 +2168,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button34a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button34a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button34a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2211,7 +2210,7 @@ class WidgetMun : AppWidgetProvider() {
                     updateViews?.setTextViewText(R.id.button35a, i.toString())
                     if (sviatyDvunadesiatya(i)) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button35a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button35a, "setBackgroundResource", R.drawable.calendar_red)
-                        updateViews?.setTextColor(R.id.button35a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button35a, ContextCompat.getColor(context, R.color.colorWhite))
                         updateViews?.setTextViewText(R.id.button35a, MainActivity.fromHtml("<strong>$i</strong>"))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
@@ -2219,7 +2218,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button35a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button35a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button35a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button35a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button35a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -2233,7 +2232,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button35a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button35a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button35a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2279,14 +2278,14 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button36a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button36a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button36a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
                             updateViews?.setInt(R.id.button36a, "setBackgroundResource", R.drawable.calendar_red_today)
                         } else {
                             updateViews?.setInt(R.id.button36a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button36a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button36a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button36a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button36a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -2300,7 +2299,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button36a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button36a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button36a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
@@ -2341,7 +2340,7 @@ class WidgetMun : AppWidgetProvider() {
                     updateViews?.setTextViewText(R.id.button37a, i.toString())
                     if (sviatyDvunadesiatya(i)) {
                         if (munActual == i && munTudey) updateViews?.setInt(R.id.button37a, "setBackgroundResource", R.drawable.calendar_red_today) else updateViews?.setInt(R.id.button37a, "setBackgroundResource", R.drawable.calendar_red)
-                        updateViews?.setTextColor(R.id.button37a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button37a, ContextCompat.getColor(context, R.color.colorWhite))
                         updateViews?.setTextViewText(R.id.button37a, MainActivity.fromHtml("<strong>$i</strong>"))
                     } else if (sviatyVialikia(i)) {
                         if (munActual == i && munTudey) {
@@ -2349,7 +2348,7 @@ class WidgetMun : AppWidgetProvider() {
                         } else {
                             updateViews?.setInt(R.id.button37a, "setBackgroundResource", R.drawable.calendar_red)
                         }
-                        updateViews?.setTextColor(R.id.button37a, ContextCompat.getColor(context, R.color.colorIcons))
+                        updateViews?.setTextColor(R.id.button37a, ContextCompat.getColor(context, R.color.colorWhite))
                     } else {
                         if (nopost) {
                             if (munActual == i && munTudey) updateViews?.setInt(R.id.button37a, "setBackgroundResource", R.drawable.calendar_bez_posta_today) else updateViews?.setInt(R.id.button37a, "setBackgroundResource", R.drawable.calendar_bez_posta)
@@ -2363,7 +2362,7 @@ class WidgetMun : AppWidgetProvider() {
                             } else {
                                 updateViews?.setInt(R.id.button37a, "setBackgroundResource", R.drawable.calendar_strogi_post)
                             }
-                            updateViews?.setTextColor(R.id.button37a, ContextCompat.getColor(context, R.color.colorIcons))
+                            updateViews?.setTextColor(R.id.button37a, ContextCompat.getColor(context, R.color.colorWhite))
                         }
                         if (!nopost && !post && !strogiPost) {
                             denNedeli = calendarPost[Calendar.DAY_OF_WEEK]

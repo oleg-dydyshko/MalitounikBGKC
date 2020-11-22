@@ -1543,7 +1543,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black)
             else layout.setBackgroundResource(R.color.colorPrimary)
             val toast = TextViewRobotoCondensed(context)
-            toast.setTextColor(ContextCompat.getColor(context, R.color.colorIcons))
+            toast.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
             toast.setPadding(realpadding, realpadding, realpadding, realpadding)
             toast.text = message
             toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)

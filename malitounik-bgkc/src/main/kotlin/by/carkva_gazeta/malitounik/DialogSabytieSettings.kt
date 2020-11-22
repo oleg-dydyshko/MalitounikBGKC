@@ -85,10 +85,10 @@ class DialogSabytieSettings : DialogFragment() {
                 prefEditor = k.edit()
                 if (isChecked) {
                     if (dzenNoch) {
-                        notificationNotification.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                        notificationAlarm.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                        notificationRingtone.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
-                        notificationPicker.setTextColor(ContextCompat.getColor(it, R.color.colorIcons))
+                        notificationNotification.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        notificationAlarm.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        notificationRingtone.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        notificationPicker.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     } else {
                         notificationNotification.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                         notificationAlarm.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))

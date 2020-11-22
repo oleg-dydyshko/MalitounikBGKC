@@ -45,7 +45,7 @@ class MyNatatkiView : AppCompatActivity() {
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         val filename = intent.getStringExtra("filename")
         TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        if (dzenNoch) TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorIcons)) else TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+        if (dzenNoch) TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite)) else TextView.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
         val res = File(this.filesDir.toString() + "/Malitva/" + filename).readText().split("<MEMA></MEMA>").toTypedArray()
         title_toolbar.text = res[0]
         if (res[1].contains("<RTE></RTE>")) {

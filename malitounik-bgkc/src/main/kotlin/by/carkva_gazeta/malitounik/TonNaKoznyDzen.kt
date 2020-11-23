@@ -58,7 +58,8 @@ class TonNaKoznyDzen : AppCompatActivity() {
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             if (MainActivity.checkmoduleResources(this)) {
-                val intent = Intent(this, Class.forName("by.carkva_gazeta.resources.Ton"))
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.TON)
                 intent.putExtra("ton", position + 1)
                 intent.putExtra("ton_naidzelny", false)
                 startActivity(intent)

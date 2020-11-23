@@ -627,7 +627,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
         if (id == R.id.search_nadsan) {
             if (checkmoduleResources(this)) {
-                val intent = Intent(this, Class.forName("by.carkva_gazeta.resources.SearchBiblia"))
+                val intent = Intent()
+                intent.setClassName(this, SEARCHBIBLIA)
                 intent.putExtra("zavet", 3)
                 startActivity(intent)
             } else {
@@ -995,7 +996,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     if (shortcuts || intent.extras?.containsKey("site") == true) {
                         if (checkmoduleResources(this)) {
                             if (checkmodulesBiblijateka(this)) {
-                                val intentBib = Intent(this, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
+                                val intentBib = Intent()
+                                intentBib.setClassName(this, BIBLIOTEKAVIEW)
                                 intentBib.data = intent.data
                                 if (intent.extras?.containsKey("filePath") == true) intentBib.putExtra("filePath", intent.extras?.getString("filePath"))
                                 if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
@@ -1050,8 +1052,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                                 val gson = Gson()
                                 val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
                                 val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(file.readText(), type)
-                                for (i in 0 until arrayList.size)
-                                    BibleGlobalList.natatkiSemuxa.add(BibleNatatkiData(i.toLong(), arrayList[i]))
+                                for (i in 0 until arrayList.size) BibleGlobalList.natatkiSemuxa.add(BibleNatatkiData(i.toLong(), arrayList[i]))
                             } catch (t: Throwable) {
                                 file.delete()
                             }
@@ -1068,8 +1069,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                                 val gson = Gson()
                                 val type = object : TypeToken<ArrayList<String>>() {}.type
                                 val arrayList = gson.fromJson<ArrayList<String>>(file2.readText(), type)
-                                for (i in 0 until arrayList.size)
-                                    BibleGlobalList.zakladkiSemuxa.add(BibleZakladkiData(i.toLong(), arrayList[i]))
+                                for (i in 0 until arrayList.size) BibleGlobalList.zakladkiSemuxa.add(BibleZakladkiData(i.toLong(), arrayList[i]))
                             } catch (t: Throwable) {
                                 file2.delete()
                             }
@@ -1150,8 +1150,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                                 val gson = Gson()
                                 val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
                                 val arrayList = gson.fromJson<ArrayList<ArrayList<String>>>(file.readText(), type)
-                                for (i in 0 until arrayList.size)
-                                    BibleGlobalList.natatkiSinodal.add(BibleNatatkiData(i.toLong(), arrayList[i]))
+                                for (i in 0 until arrayList.size) BibleGlobalList.natatkiSinodal.add(BibleNatatkiData(i.toLong(), arrayList[i]))
                             } catch (t: Throwable) {
                                 file.delete()
                             }
@@ -1168,8 +1167,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                                 val gson = Gson()
                                 val type = object : TypeToken<ArrayList<String>>() {}.type
                                 val arrayList = gson.fromJson<ArrayList<String>>(file2.readText(), type)
-                                for (i in 0 until arrayList.size)
-                                    BibleGlobalList.zakladkiSinodal.add(BibleZakladkiData(i.toLong(), arrayList[i]))
+                                for (i in 0 until arrayList.size) BibleGlobalList.zakladkiSinodal.add(BibleZakladkiData(i.toLong(), arrayList[i]))
                             } catch (t: Throwable) {
                                 file2.delete()
                             }
@@ -1198,6 +1196,30 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }
 
     companion object {
+        const val BIBLIOTEKAVIEW = "by.carkva_gazeta.biblijateka.BibliotekaView"
+        const val OPISANIE = "by.carkva_gazeta.resources.Opisanie"
+        const val CHYTANNE = "by.carkva_gazeta.resources.Chytanne"
+        const val MARANATA = "by.carkva_gazeta.resources.MaranAta"
+        const val TON = "by.carkva_gazeta.resources.Ton"
+        const val SEARCHBIBLIA = "by.carkva_gazeta.resources.SearchBiblia"
+        const val PASLIAPRYCHASCIA = "by.carkva_gazeta.resources.PasliaPrychascia"
+        const val BOGASHLUGBOVYA = "by.carkva_gazeta.resources.Bogashlugbovya"
+        const val BIBLEZAKLADKI = "by.carkva_gazeta.resources.BibleZakladki"
+        const val BIBLENATATKI = "by.carkva_gazeta.resources.BibleNatatki"
+        const val SLUGBYVIALIKAGAPOSTUSPIS = "by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"
+        const val MALITVYPRYNAGODNYIA = "by.carkva_gazeta.resources.MalitvyPrynagodnyia"
+        const val MYNATATKIADD = "by.carkva_gazeta.resources.MyNatatkiAdd"
+        const val MYNATATKIVIEW = "by.carkva_gazeta.resources.MyNatatkiView"
+        const val PARAFIIBGKC = "by.carkva_gazeta.resources.ParafiiBgkc"
+        const val PARAFIIBGKCDEKANAT = "by.carkva_gazeta.resources.ParafiiBgkcDekanat"
+        const val NADSANMALITVYIPESNI = "by.carkva_gazeta.resources.NadsanMalitvyIPesni"
+        const val PSALTERNADSANA = "by.carkva_gazeta.resources.PsalterNadsana"
+        const val NADSANCONTENTACTIVITY = "by.carkva_gazeta.resources.NadsanContentActivity"
+        const val NOVYZAPAVIETSEMUXA = "by.carkva_gazeta.resources.NovyZapavietSemuxa"
+        const val STARYZAPAVIETSEMUXA = "by.carkva_gazeta.resources.StaryZapavietSemuxa"
+        const val NOVYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.NovyZapavietSinaidal"
+        const val STARYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.StaryZapavietSinaidal"
+        const val BIBLIAVYBRANOE = "by.carkva_gazeta.resources.BibliaVybranoe"
         var back_pressed = 0L
         var padzeia: ArrayList<Padzeia> = ArrayList()
         var setDataCalendar = -1
@@ -1318,7 +1340,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 SplitInstallHelper.updateAppInfo(context)
                                 Handler(Looper.getMainLooper()).post {
-                                    val intent = Intent(context, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
+                                    val intent = Intent()
+                                    intent.setClassName(context, BIBLIOTEKAVIEW)
                                     intent.data = context.intent.data
                                     if (intent.extras?.containsKey("filePath") == true) {
                                         intent.putExtra("filePath", intent.extras?.getString("filePath"))
@@ -1328,7 +1351,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                                 }
                             } else {
                                 val newContext = context.createPackageContext(context.packageName, 0)
-                                val intent = Intent(newContext, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
+                                val intent = Intent()
+                                intent.setClassName(newContext, BIBLIOTEKAVIEW)
                                 intent.data = context.intent.data
                                 if (intent.extras?.containsKey("filePath") == true) {
                                     intent.putExtra("filePath", intent.extras?.getString("filePath"))

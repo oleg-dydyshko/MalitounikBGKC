@@ -221,10 +221,13 @@ class MenuVybranoe : VybranoeFragment() {
                             startActivity(Intent(activity, VybranoeBibleList::class.java))
                         }
                         else -> {
-                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-                            intent.putExtra("resurs", itemList[adapterPosition].resurs)
-                            intent.putExtra("title", itemList[adapterPosition].data)
-                            startActivity(intent)
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("resurs", itemList[adapterPosition].resurs)
+                                intent.putExtra("title", itemList[adapterPosition].data)
+                                startActivity(intent)
+                            }
                         }
                     }
                 } else {

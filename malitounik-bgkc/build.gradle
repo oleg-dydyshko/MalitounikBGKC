@@ -47,6 +47,7 @@ android {
     }
 
     dynamicFeatures = [':resources', ':biblijateka']
+    buildToolsVersion '30.0.2'
 }
 
 dependencies {

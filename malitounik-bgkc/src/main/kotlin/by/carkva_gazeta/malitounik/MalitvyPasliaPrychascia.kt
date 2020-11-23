@@ -57,7 +57,8 @@ class MalitvyPasliaPrychascia : AppCompatActivity() {
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             if (MainActivity.checkmoduleResources(this)) {
-                val intent = Intent(this, Class.forName("by.carkva_gazeta.resources.PasliaPrychascia"))
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.PASLIAPRYCHASCIA)
                 intent.putExtra("paslia_prychascia", position)
                 startActivityForResult(intent, 300)
             } else {

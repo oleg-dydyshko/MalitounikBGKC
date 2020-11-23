@@ -113,10 +113,13 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
         }
         if (id == R.id.malitva_pered) {
             if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.NadsanMalitvyIPesni"))
-                intent.putExtra("malitva", 0)
-                intent.putExtra("malitva_title", malitva_pered.text.toString())
-                startActivity(intent)
+                activity?.let {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.NADSANMALITVYIPESNI)
+                    intent.putExtra("malitva", 0)
+                    intent.putExtra("malitva_title", malitva_pered.text.toString())
+                    startActivity(intent)
+                }
             } else {
                 val dadatak = DialogInstallDadatak()
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
@@ -124,10 +127,13 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
         }
         if (id == R.id.malitva_posle) {
             if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.NadsanMalitvyIPesni"))
-                intent.putExtra("malitva", 1)
-                intent.putExtra("malitva_title", malitva_posle.text.toString())
-                startActivity(intent)
+                activity?.let {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.NADSANMALITVYIPESNI)
+                    intent.putExtra("malitva", 1)
+                    intent.putExtra("malitva_title", malitva_posle.text.toString())
+                    startActivity(intent)
+                }
             } else {
                 val dadatak = DialogInstallDadatak()
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
@@ -135,10 +141,13 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
         }
         if (id == R.id.pesni) {
             if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.NadsanMalitvyIPesni"))
-                intent.putExtra("malitva", 2)
-                intent.putExtra("malitva_title", pesni.text.toString())
-                startActivity(intent)
+                activity?.let {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.NADSANMALITVYIPESNI)
+                    intent.putExtra("malitva", 2)
+                    intent.putExtra("malitva_title", pesni.text.toString())
+                    startActivity(intent)
+                }
             } else {
                 val dadatak = DialogInstallDadatak()
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
@@ -146,8 +155,11 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
         }
         if (id == R.id.pravila) {
             if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.PsalterNadsana"))
-                startActivity(intent)
+                activity?.let {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.PSALTERNADSANA)
+                    startActivity(intent)
+                }
             } else {
                 val dadatak = DialogInstallDadatak()
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
@@ -178,9 +190,12 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
         }
         if (glava != -1) {
             if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.NadsanContentActivity"))
-                intent.putExtra("kafizma", glava)
-                startActivity(intent)
+                activity?.let {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.NADSANCONTENTACTIVITY)
+                    intent.putExtra("kafizma", glava)
+                    startActivity(intent)
+                }
             } else {
                 val dadatak = DialogInstallDadatak()
                 fragmentManager?.let { dadatak.show(it, "dadatak") }

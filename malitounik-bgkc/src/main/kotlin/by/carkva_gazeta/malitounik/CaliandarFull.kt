@@ -386,54 +386,72 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         MainActivity.setDataCalendar = dayyear + dayYear
         when (v?.id ?: 0) {
             R.id.textCviatyGlavnyia -> if (MainActivity.checkmoduleResources(activity)) {
-                val i = Intent(activity, Class.forName("by.carkva_gazeta.resources.Opisanie"))
-                i.putExtra("glavnyia", true)
-                i.putExtra("svity", data[day][6])
-                i.putExtra("mun", data[day][2].toInt())
-                i.putExtra("day", data[day][1].toInt())
-                startActivity(i)
+                activity?.let {
+                    val i = Intent()
+                    i.setClassName(it, MainActivity.OPISANIE)
+                    i.putExtra("glavnyia", true)
+                    i.putExtra("svity", data[day][6])
+                    i.putExtra("mun", data[day][2].toInt())
+                    i.putExtra("day", data[day][1].toInt())
+                    startActivity(i)
+                }
             } else {
                 val dadatak = DialogInstallDadatak()
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
             }
             R.id.textSviatyia -> if (MainActivity.checkmoduleResources(activity)) {
-                val i = Intent(activity, Class.forName("by.carkva_gazeta.resources.Opisanie"))
-                i.putExtra("mun", data[day][2].toInt())
-                i.putExtra("day", data[day][1].toInt())
-                startActivity(i)
+                activity?.let {
+                    val i = Intent()
+                    i.setClassName(it, MainActivity.OPISANIE)
+                    i.putExtra("mun", data[day][2].toInt())
+                    i.putExtra("day", data[day][1].toInt())
+                    startActivity(i)
+                }
             } else {
                 val dadatak = DialogInstallDadatak()
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
             }
             R.id.textChytanneSviatyia -> if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Chytanne"))
-                intent.putExtra("cytanne", data[day][10])
-                startActivity(intent)
+                activity?.let {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.CHYTANNE)
+                    intent.putExtra("cytanne", data[day][10])
+                    startActivity(intent)
+                }
             } else {
                 val dadatak = DialogInstallDadatak()
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
             }
             R.id.textChytanne -> if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Chytanne"))
-                intent.putExtra("cytanne", data[day][9])
-                intent.putExtra("nedelia", data[day][5].toInt())
-                startActivity(intent)
+                activity?.let {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.CHYTANNE)
+                    intent.putExtra("cytanne", data[day][9])
+                    intent.putExtra("nedelia", data[day][5].toInt())
+                    startActivity(intent)
+                }
             } else {
                 val dadatak = DialogInstallDadatak()
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
             }
             R.id.textChytanneSviatyiaDop -> if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Chytanne"))
-                intent.putExtra("cytanne", data[day][11])
-                startActivity(intent)
+                activity?.let {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.CHYTANNE)
+                    intent.putExtra("cytanne", data[day][11])
+                    startActivity(intent)
+                }
             } else {
                 val dadatak = DialogInstallDadatak()
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
             }
             R.id.maranata -> if (MainActivity.checkmoduleResources(activity)) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.MaranAta"))
-                intent.putExtra("cytanneMaranaty", data[day][13])
-                startActivity(intent)
+                activity?.let {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.MARANATA)
+                    intent.putExtra("cytanneMaranaty", data[day][13])
+                    startActivity(intent)
+                }
             } else {
                 val dadatak = DialogInstallDadatak()
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
@@ -441,17 +459,20 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             R.id.textTitleChyt -> {
                 val ton = data[day][20]
                 if (MainActivity.checkmoduleResources(activity)) {
-                    val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Ton"))
-                    if (ton.contains("Тон 1")) intent.putExtra("ton", 1)
-                    if (ton.contains("Тон 2")) intent.putExtra("ton", 2)
-                    if (ton.contains("Тон 3")) intent.putExtra("ton", 3)
-                    if (ton.contains("Тон 4")) intent.putExtra("ton", 4)
-                    if (ton.contains("Тон 5")) intent.putExtra("ton", 5)
-                    if (ton.contains("Тон 6")) intent.putExtra("ton", 6)
-                    if (ton.contains("Тон 7")) intent.putExtra("ton", 7)
-                    if (ton.contains("Тон 8")) intent.putExtra("ton", 8)
-                    intent.putExtra("ton_naidzelny", true)
-                    startActivity(intent)
+                    activity?.let {
+                        val intent = Intent()
+                        intent.setClassName(it, MainActivity.TON)
+                        if (ton.contains("Тон 1")) intent.putExtra("ton", 1)
+                        if (ton.contains("Тон 2")) intent.putExtra("ton", 2)
+                        if (ton.contains("Тон 3")) intent.putExtra("ton", 3)
+                        if (ton.contains("Тон 4")) intent.putExtra("ton", 4)
+                        if (ton.contains("Тон 5")) intent.putExtra("ton", 5)
+                        if (ton.contains("Тон 6")) intent.putExtra("ton", 6)
+                        if (ton.contains("Тон 7")) intent.putExtra("ton", 7)
+                        if (ton.contains("Тон 8")) intent.putExtra("ton", 8)
+                        intent.putExtra("ton_naidzelny", true)
+                        startActivity(intent)
+                    }
                 } else {
                     val dadatak = DialogInstallDadatak()
                     fragmentManager?.let { dadatak.show(it, "dadatak") }

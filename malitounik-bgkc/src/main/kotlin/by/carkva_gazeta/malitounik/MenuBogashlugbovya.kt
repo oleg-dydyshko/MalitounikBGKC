@@ -45,70 +45,103 @@ class MenuBogashlugbovya : ListFragment() {
                 if (MainActivity.checkmoduleResources(activity)) {
                     when (position) {
                         0 -> {
-                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "bogashlugbovya1")
-                            startActivity(intent)
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("title", data[position])
+                                intent.putExtra("resurs", "bogashlugbovya1")
+                                startActivity(intent)
+                            }
                         }
                         1 -> {
-                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "bogashlugbovya4")
-                            startActivity(intent)
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("title", data[position])
+                                intent.putExtra("resurs", "bogashlugbovya4")
+                                startActivity(intent)
+                            }
                         }
                         3 -> {
-                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "bogashlugbovya6")
-                            startActivity(intent)
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("title", data[position])
+                                intent.putExtra("resurs", "bogashlugbovya6")
+                                startActivity(intent)
+                            }
                         }
                         4 -> {
-                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "bogashlugbovya8")
-                            startActivity(intent)
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("title", data[position])
+                                intent.putExtra("resurs", "bogashlugbovya8")
+                                startActivity(intent)
+                            }
                         }
                         5 -> {
-                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", "bogashlugbovya11")
-                            startActivity(intent)
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("title", data[position])
+                                intent.putExtra("resurs", "bogashlugbovya11")
+                                startActivity(intent)
+                            }
                         }
                         8 -> {
-                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"))
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", 12)
-                            startActivity(intent)
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTUSPIS)
+                                intent.putExtra("title", data[position])
+                                intent.putExtra("resurs", 12)
+                                startActivity(intent)
+                            }
                         }
                         9 -> {
-                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"))
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", 13)
-                            startActivity(intent)
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTUSPIS)
+                                intent.putExtra("title", data[position])
+                                intent.putExtra("resurs", 13)
+                                startActivity(intent)
+                            }
                         }
                         10 -> {
-                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"))
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", 14)
-                            startActivity(intent)
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTUSPIS)
+                                intent.putExtra("title", data[position])
+                                intent.putExtra("resurs", 14)
+                                startActivity(intent)
+                            }
                         }
                         11 -> {
-                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"))
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", 15)
-                            startActivity(intent)
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTUSPIS)
+                                intent.putExtra("title", data[position])
+                                intent.putExtra("resurs", 15)
+                                startActivity(intent)
+                            }
                         }
                         12 -> {
-                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"))
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", 16)
-                            startActivity(intent)
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTUSPIS)
+                                intent.putExtra("title", data[position])
+                                intent.putExtra("resurs", 16)
+                                startActivity(intent)
+                            }
                         }
                         13 -> {
-                            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"))
-                            intent.putExtra("title", data[position])
-                            intent.putExtra("resurs", 17)
-                            startActivity(intent)
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTUSPIS)
+                                intent.putExtra("title", data[position])
+                                intent.putExtra("resurs", 17)
+                                startActivity(intent)
+                            }
                         }
                     }
                 } else {

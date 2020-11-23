@@ -29,22 +29,30 @@ class MenuMalitvy : ListFragment() {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         if (MainActivity.checkmoduleResources(activity)) {
-            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.Bogashlugbovya"))
-            when (position) {
-                0 -> {
-                    intent.putExtra("title", data[position])
-                    intent.putExtra("resurs", "malitvy1")
-                }
-                1 -> {
-                    intent.putExtra("title", data[position])
-                    intent.putExtra("resurs", "malitvy2")
-                }
-                2 -> {
-                    startActivity(Intent(activity, Class.forName("by.carkva_gazeta.resources.MalitvyPrynagodnyia")))
-                    return
+            activity?.let {
+                when (position) {
+                    0 -> {
+                        val intent = Intent()
+                        intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                        intent.putExtra("title", data[position])
+                        intent.putExtra("resurs", "malitvy1")
+                        startActivity(intent)
+                    }
+                    1 -> {
+                        val intent = Intent()
+                        intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                        intent.putExtra("title", data[position])
+                        intent.putExtra("resurs", "malitvy2")
+                        startActivity(intent)
+                    }
+                    2 -> {
+                        val intent = Intent()
+                        intent.setClassName(it, MainActivity.MALITVYPRYNAGODNYIA)
+                        startActivity(intent)
+                        return
+                    }
                 }
             }
-            startActivity(intent)
         } else {
             val dadatak = DialogInstallDadatak()
             fragmentManager?.let { dadatak.show(it, "dadatak") }

@@ -28,6 +28,7 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
+    buildToolsVersion '30.0.2'
 }
 
 dependencies {

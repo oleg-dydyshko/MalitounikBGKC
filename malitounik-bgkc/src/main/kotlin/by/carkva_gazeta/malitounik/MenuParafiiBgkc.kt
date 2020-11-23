@@ -31,15 +31,19 @@ class MenuParafiiBgkc : ListFragment() {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         if (MainActivity.checkmoduleResources(activity)) {
-            if (position == 0) {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.ParafiiBgkc"))
-                intent.putExtra("bgkc_parafii", position)
-                intent.putExtra("bgkc", position)
-                startActivity(intent)
-            } else {
-                val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.ParafiiBgkcDekanat"))
-                intent.putExtra("bgkc", position)
-                startActivity(intent)
+            activity?.let {
+                if (position == 0) {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.PARAFIIBGKC)
+                    intent.putExtra("bgkc_parafii", position)
+                    intent.putExtra("bgkc", position)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.PARAFIIBGKCDEKANAT)
+                    intent.putExtra("bgkc", position)
+                    startActivity(intent)
+                }
             }
         } else {
             val dadatak = DialogInstallDadatak()

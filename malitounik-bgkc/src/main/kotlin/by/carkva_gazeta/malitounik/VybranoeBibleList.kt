@@ -203,7 +203,8 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (MainActivity.checkmoduleResources(this@VybranoeBibleList)) {
-                    val intent = Intent(this@VybranoeBibleList, Class.forName("by.carkva_gazeta.resources.BibliaVybranoe"))
+                    val intent = Intent()
+                    intent.setClassName(this@VybranoeBibleList, MainActivity.BIBLIAVYBRANOE)
                     intent.putExtra("position", adapterPosition * 2)
                     intent.putExtra("biblia", biblia)
                     startActivity(intent)

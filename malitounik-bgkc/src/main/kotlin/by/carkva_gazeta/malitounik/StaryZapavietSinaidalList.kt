@@ -291,7 +291,8 @@ class StaryZapavietSinaidalList : AppCompatActivity() {
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             if (MainActivity.checkmoduleResources(this)) {
-                val intent = Intent(this, Class.forName("by.carkva_gazeta.resources.StaryZapavietSinaidal"))
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.STARYZAPAVIETSINAIDAL)
                 intent.putExtra("kniga", groupPosition)
                 intent.putExtra("glava", childPosition)
                 startActivity(intent)
@@ -302,7 +303,8 @@ class StaryZapavietSinaidalList : AppCompatActivity() {
             false
         }
         if (intent.extras?.getBoolean("prodolzyt", false) == true) {
-            val intent1 = Intent(this, Class.forName("by.carkva_gazeta.resources.StaryZapavietSinaidal"))
+            val intent1 = Intent()
+            intent1.setClassName(this, MainActivity.STARYZAPAVIETSINAIDAL)
             intent1.putExtra("kniga", intent.extras?.getInt("kniga"))
             intent1.putExtra("glava", intent.extras?.getInt("glava"))
             intent1.putExtra("stix", intent.extras?.getInt("stix"))

@@ -34,7 +34,8 @@ class NadsanContent : AppCompatActivity() {
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             if (MainActivity.checkmoduleResources(this)) {
-                val intent = Intent(this, Class.forName("by.carkva_gazeta.resources.NadsanContentActivity"))
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.NADSANCONTENTACTIVITY)
                 intent.putExtra("glava", position)
                 startActivity(intent)
             } else {
@@ -44,7 +45,8 @@ class NadsanContent : AppCompatActivity() {
         }
         setTollbarTheme()
         if (intent.extras?.getBoolean("prodolzyt", false) == true) {
-            val intent1 = Intent(this, Class.forName("by.carkva_gazeta.resources.NadsanContentActivity"))
+            val intent1 = Intent()
+            intent1.setClassName(this, MainActivity.NADSANCONTENTACTIVITY)
             intent1.putExtra("glava", intent.extras?.getInt("glava") ?: 0)
             intent1.putExtra("stix", intent.extras?.getInt("stix") ?: 0)
             startActivity(intent1)

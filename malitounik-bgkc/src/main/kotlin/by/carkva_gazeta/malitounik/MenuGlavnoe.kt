@@ -36,8 +36,11 @@ class MenuGlavnoe : ListFragment() {
         if (position == 7) {
             if (MainActivity.checkmoduleResources(activity)) {
                 if (MainActivity.checkmodulesBiblijateka(activity)) {
-                    val intent = Intent(activity, Class.forName("by.carkva_gazeta.biblijateka.BibliotekaView"))
-                    startActivity(intent)
+                    activity?.let {
+                        val intent = Intent()
+                        intent.setClassName(it, MainActivity.BIBLIOTEKAVIEW)
+                        startActivity(intent)
+                    }
                 } else {
                     activity?.let { MainActivity.downloadDynamicModule(it) }
                 }

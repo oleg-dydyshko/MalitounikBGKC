@@ -118,11 +118,14 @@ class MenuNatatki : NatatkiFragment() {
 
     override fun onDialogEditClick(position: Int) {
         if (MainActivity.checkmoduleResources(activity)) {
-            val f = adapter.itemList[position]
-            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.MyNatatkiAdd"))
-            intent.putExtra("filename", "Mae_malitvy_" + f.id)
-            intent.putExtra("redak", true)
-            startActivity(intent)
+            activity?.let {
+                val f = adapter.itemList[position]
+                val intent = Intent()
+                intent.setClassName(it, MainActivity.MYNATATKIADD)
+                intent.putExtra("filename", "Mae_malitvy_" + f.id)
+                intent.putExtra("redak", true)
+                startActivity(intent)
+            }
         } else {
             val dadatak = DialogInstallDadatak()
             fragmentManager?.let { dadatak.show(it, "dadatak") }
@@ -188,10 +191,13 @@ class MenuNatatki : NatatkiFragment() {
 
     private fun addNatatka() {
         if (MainActivity.checkmoduleResources(activity)) {
-            val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.MyNatatkiAdd"))
-            intent.putExtra("redak", false)
-            intent.putExtra("filename", "")
-            startActivity(intent)
+            activity?.let {
+                val intent = Intent()
+                intent.setClassName(it, MainActivity.MYNATATKIADD)
+                intent.putExtra("redak", false)
+                intent.putExtra("filename", "")
+                startActivity(intent)
+            }
         } else {
             val dadatak = DialogInstallDadatak()
             fragmentManager?.let { dadatak.show(it, "dadatak") }
@@ -237,10 +243,13 @@ class MenuNatatki : NatatkiFragment() {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (MainActivity.checkmoduleResources(activity)) {
-                    val f = itemList[adapterPosition]
-                    val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.MyNatatkiView"))
-                    intent.putExtra("filename", "Mae_malitvy_" + f.id)
-                    startActivity(intent)
+                    activity?.let {
+                        val f = itemList[adapterPosition]
+                        val intent = Intent()
+                        intent.setClassName(it, MainActivity.MYNATATKIVIEW)
+                        intent.putExtra("filename", "Mae_malitvy_" + f.id)
+                        startActivity(intent)
+                    }
                 } else {
                     val dadatak = DialogInstallDadatak()
                     fragmentManager?.let { dadatak.show(it, "dadatak") }

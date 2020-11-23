@@ -101,7 +101,8 @@ class MenuBibleSinoidal : Fragment() {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (MainActivity.checkmoduleResources(activity)) {
-                    val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.BibleZakladki"))
+                    val intent = Intent()
+                    intent.setClassName(activity, MainActivity.BIBLEZAKLADKI)
                     intent.putExtra("semuxa", 2)
                     startActivity(intent)
                 } else {
@@ -115,7 +116,8 @@ class MenuBibleSinoidal : Fragment() {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (MainActivity.checkmoduleResources(activity)) {
-                    val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.BibleNatatki"))
+                    val intent = Intent()
+                    intent.setClassName(activity, MainActivity.BIBLENATATKI)
                     intent.putExtra("semuxa", 2)
                     startActivity(intent)
                 } else {
@@ -129,7 +131,8 @@ class MenuBibleSinoidal : Fragment() {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (MainActivity.checkmoduleResources(activity)) {
-                    val intent = Intent(activity, Class.forName("by.carkva_gazeta.resources.SearchBiblia"))
+                    val intent = Intent()
+                    intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
                     intent.putExtra("zavet", 2)
                     startActivity(intent)
                 } else {

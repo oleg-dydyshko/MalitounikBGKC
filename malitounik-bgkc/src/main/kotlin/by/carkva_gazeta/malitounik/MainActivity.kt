@@ -152,13 +152,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }
 
     private fun ajustCompoundDrawableSizeWithText(textView: TextViewRobotoCondensed, leftDrawable: Drawable?) {
-        textView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
-            override fun onLayoutChange(v: View?, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
-                leftDrawable?.setBounds(0, 0, textView.textSize.toInt(), textView.textSize.toInt())
-                textView.setCompoundDrawables(leftDrawable, null, null, null)
-                textView.removeOnLayoutChangeListener(this)
-            }
-        })
+        leftDrawable?.setBounds(0, 0, textView.textSize.toInt(), textView.textSize.toInt())
+        textView.setCompoundDrawables(leftDrawable, null, null, null)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

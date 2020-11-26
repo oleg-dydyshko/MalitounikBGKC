@@ -654,8 +654,8 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
             return StaryZapavietSemuxaFragment.newInstance(0, kniga, 1)
         }
 
-        override fun getPageTitle(position: Int): CharSequence? {
-            return if (kniga == 18) resources.getString(by.carkva_gazeta.malitounik.R.string.psalom) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.RAZDZEL) + " " + (position + 1)
+        override fun getPageTitle(position: Int): CharSequence {
+            return if (kniga == 18) resources.getString(by.carkva_gazeta.malitounik.R.string.psalom) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
         }
 
         override fun getItemPosition(`object`: Any): Int {

@@ -161,7 +161,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name="by.carkva_gazeta.malitounik.Onas"
-            android:label="@string/PRA_NAS"
+            android:label="@string/pra_nas"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

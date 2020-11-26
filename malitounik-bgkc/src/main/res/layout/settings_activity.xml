@@ -259,7 +259,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
                     android:paddingBottom="10dp"
-                    android:text="@string/APAV_ALL"
+                    android:text="@string/apav_all"
                     android:textSize="12sp" />
 
                 <by.carkva_gazeta.malitounik.RadioButtonRobotoCondensed
@@ -269,7 +269,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
                     android:paddingBottom="5dp"
-                    android:text="@string/APAV_NO"
+                    android:text="@string/apav_no"
                     android:textSize="12sp" />
             </RadioGroup>
 
@@ -292,7 +292,7 @@
                 android:drawablePadding="10dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:text="@string/VIBRATION"
+                android:text="@string/vibration"
                 android:textSize="12sp" />
 
             <androidx.appcompat.widget.SwitchCompat
@@ -307,7 +307,7 @@
                 android:drawablePadding="10dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:text="@string/SOUND"
+                android:text="@string/sound"
                 android:textSize="12sp" />
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed

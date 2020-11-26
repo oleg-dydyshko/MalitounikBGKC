@@ -83,7 +83,7 @@ class DialogZakladkaDelite : DialogFragment() {
             } else {
                 builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> delite?.natatkidiliteItem(position, semuxa) }
             }
-            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { _: DialogInterface, _: Int -> delite?.zakladkadiliteItemCancel() }
+            builder.setNegativeButton(resources.getString(R.string.cansel)) { _: DialogInterface, _: Int -> delite?.zakladkadiliteItemCancel() }
             builder.setView(linearLayout)
         }
         return builder.create()

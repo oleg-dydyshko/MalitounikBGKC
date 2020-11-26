@@ -159,7 +159,7 @@ class DialogBibleNatatka : DialogFragment() {
                 dialogBibleNatatkaListiner?.addNatatka()
                 dialog.cancel()
             }
-            ad.setNegativeButton(R.string.CANCEL) { dialog: DialogInterface, _: Int ->
+            ad.setNegativeButton(R.string.cansel) { dialog: DialogInterface, _: Int ->
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(editTextView.windowToken, 0)
                 dialog.cancel()

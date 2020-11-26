@@ -60,7 +60,7 @@ class DialogSabytieSave : DialogFragment() {
             ad.setView(linearLayout)
             ad.setNegativeButton(getString(R.string.sabytie_no)) { _: DialogInterface?, _: Int -> mListener.onDialogNegativeClick() }
             ad.setPositiveButton(getString(R.string.sabytie_yes)) { _: DialogInterface?, _: Int -> mListener.onDialogPositiveClick() }
-            ad.setNeutralButton(getString(R.string.CANCEL)) { dialogInterface: DialogInterface, _: Int -> dialogInterface.cancel() }
+            ad.setNeutralButton(getString(R.string.cansel)) { dialogInterface: DialogInterface, _: Int -> dialogInterface.cancel() }
             alert = ad.create()
         }
         return alert

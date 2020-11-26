@@ -68,7 +68,7 @@ class DialogBibleRazdel : DialogFragment() {
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(R.string.DATA_SEARCH, fullGlav)
+            textViewZaglavie.text = resources.getString(R.string.data_search, fullGlav)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -102,7 +102,7 @@ class DialogBibleRazdel : DialogFragment() {
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             linearLayout.addView(input)
-            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int ->
+            builder.setNegativeButton(resources.getString(R.string.cansel)) { dialog: DialogInterface, _: Int ->
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(input.windowToken, 0)
                 dialog.cancel()

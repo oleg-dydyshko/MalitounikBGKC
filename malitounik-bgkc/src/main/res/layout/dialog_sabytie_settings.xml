@@ -94,7 +94,7 @@
         android:drawableStart="@drawable/stiker"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:text="@string/SOUND"
+        android:text="@string/sound"
         android:textSize="12sp" />
 
 </LinearLayout>

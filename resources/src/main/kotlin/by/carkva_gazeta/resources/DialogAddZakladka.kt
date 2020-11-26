@@ -87,7 +87,7 @@ class DialogAddZakladka : DialogFragment() {
             builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                 dialogAddZakladkiListiner?.addZakladka(color)
             }
-            builder.setNegativeButton(getString(R.string.CANCEL)) { _: DialogInterface?, _: Int ->
+            builder.setNegativeButton(getString(R.string.cansel)) { _: DialogInterface?, _: Int ->
                 dialogAddZakladkiListiner?.addZakladka(-1)
             }
             alert = builder.create()

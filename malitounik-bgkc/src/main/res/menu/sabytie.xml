@@ -28,7 +28,7 @@
     <item
         android:id="@+id/action_cansel"
         android:icon="@drawable/cancel"
-        android:title="@string/CANCEL"
+        android:title="@string/cansel"
         android:orderInCategory="100"
         app:showAsAction="always" />
     <item

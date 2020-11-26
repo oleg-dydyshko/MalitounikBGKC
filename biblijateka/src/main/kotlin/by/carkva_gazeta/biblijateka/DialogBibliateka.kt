@@ -123,7 +123,7 @@ class DialogBibliateka : DialogFragment() {
                         mListener?.onDialogbibliatekaPositiveClick(listPosition, title)
                         dialog.cancel()
                     }
-                    builder.setNegativeButton(R.string.CANCEL) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+                    builder.setNegativeButton(R.string.cansel) { dialog: DialogInterface, _: Int -> dialog.cancel() }
                 } else {
                     builder.setPositiveButton("НЯМА ІНТЭРНЭТ-ЗЛУЧЭНЬНЯ") { dialog: DialogInterface, _: Int -> dialog.cancel() }
                 }

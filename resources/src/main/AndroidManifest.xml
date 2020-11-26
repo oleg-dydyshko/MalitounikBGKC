@@ -14,7 +14,7 @@
     <application>
         <activity
             android:name="by.carkva_gazeta.resources.Chytanne"
-            android:label="@string/CZYTANNE"
+            android:label="@string/czytanne"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -82,7 +82,7 @@
         </activity>
         <activity
             android:name="by.carkva_gazeta.resources.MyNatatkiAdd"
-            android:label="@string/MALITVA_ADD"
+            android:label="@string/natatka_add"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateVisible|adjustResize">
             <meta-data
@@ -98,7 +98,7 @@
         </activity>
         <activity
             android:name="by.carkva_gazeta.resources.Bogashlugbovya"
-            android:label="@string/LITURGIKON"
+            android:label="@string/liturgikon"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data

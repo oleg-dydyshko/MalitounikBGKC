@@ -42,7 +42,7 @@ class Onas : AppCompatActivity() {
             }
         }
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        title_toolbar.text = resources.getString(R.string.PRA_NAS)
+        title_toolbar.text = resources.getString(R.string.pra_nas)
         val inputStream = resources.openRawResource(R.raw.onas)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)

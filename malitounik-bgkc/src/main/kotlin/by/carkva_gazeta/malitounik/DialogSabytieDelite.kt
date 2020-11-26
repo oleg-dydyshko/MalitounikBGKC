@@ -65,7 +65,7 @@ class DialogSabytieDelite : DialogFragment() {
             ad.setNeutralButton(getString(R.string.sabytie_del_old)) { _: DialogInterface?, _: Int ->
                 dialogSabytieDeliteListener?.sabytieDelOld()
             }
-            ad.setNegativeButton(getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            ad.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = ad.create()
         }
         return alert

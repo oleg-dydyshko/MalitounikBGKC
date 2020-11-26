@@ -67,7 +67,7 @@ class DialogBibliotekaWIFI : DialogFragment() {
             linearLayout.addView(textView)
             builder.setView(linearLayout)
             builder.setPositiveButton(getString(R.string.dazvolic)) { _: DialogInterface?, _: Int -> mListener?.onDialogPositiveClick(listPosition) }
-            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setNegativeButton(resources.getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
         }
         return builder.create()
     }

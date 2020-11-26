@@ -75,7 +75,7 @@ class DialogDelite : DialogFragment() {
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             linearLayout.addView(textView)
             builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener?.fileDelite(position, filename) }
-            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { _: DialogInterface, _: Int -> mListener?.fileDeliteCancel() }
+            builder.setNegativeButton(resources.getString(R.string.cansel)) { _: DialogInterface, _: Int -> mListener?.fileDeliteCancel() }
             builder.setView(linearLayout)
             alert = builder.create()
         }

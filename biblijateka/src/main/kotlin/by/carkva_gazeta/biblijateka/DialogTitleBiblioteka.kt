@@ -78,7 +78,7 @@ class DialogTitleBiblioteka : DialogFragment() {
             listViewCompat.adapter = TitleListAdaprer(it)
             linear.addView(listViewCompat)
             builder.setView(linear)
-            builder.setPositiveButton(getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setPositiveButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
             listViewCompat.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, i: Int, _: Long ->
                 val t1 = bookmarks[i].indexOf("<>")

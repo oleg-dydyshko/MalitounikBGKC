@@ -57,7 +57,7 @@ class DialogHelpNotification : DialogFragment() {
                     dialog.cancel()
                 }
             }
-            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setNegativeButton(resources.getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
         }
         return alert

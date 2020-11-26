@@ -168,7 +168,7 @@ class DialogFileExplorer : DialogFragment() {
             listViewCompat.adapter = listAdaprer
             linear.addView(listViewCompat)
             builder.setView(linear)
-            builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
             listViewCompat.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, i: Int, _: Long ->
                 if (sdCard) {

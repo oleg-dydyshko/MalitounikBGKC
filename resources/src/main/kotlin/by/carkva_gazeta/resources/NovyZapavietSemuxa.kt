@@ -580,8 +580,8 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             return NovyZapavietSemuxaFragment.newInstance(0, kniga, 1)
         }
 
-        override fun getPageTitle(position: Int): CharSequence? {
-            return resources.getString(by.carkva_gazeta.malitounik.R.string.RAZDZEL) + " " + (position + 1)
+        override fun getPageTitle(position: Int): CharSequence {
+            return resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
         }
 
         override fun getItemPosition(`object`: Any): Int {

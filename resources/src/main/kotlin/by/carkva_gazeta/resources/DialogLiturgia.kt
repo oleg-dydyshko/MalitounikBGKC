@@ -17,6 +17,7 @@ import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.util.*
 
 class DialogLiturgia : DialogFragment() {
     private var chast: String = "1"
@@ -85,12 +86,12 @@ class DialogLiturgia : DialogFragment() {
                     textViewZaglavie.setText(by.carkva_gazeta.malitounik.R.string.malitva_za_paclicanyx)
                 }
                 8 -> {
-                    textViewZaglavie.setText(by.carkva_gazeta.malitounik.R.string.CZYTANNE_DIALOG)
+                    textViewZaglavie.text = by.carkva_gazeta.malitounik.R.string.czytanne.toString().toUpperCase(Locale.getDefault())
                     val zch = ZmenyiaChastki(it)
                     builder.append(zch.sviatyiaView(1))
                 }
                 9 -> {
-                    textViewZaglavie.setText(by.carkva_gazeta.malitounik.R.string.CZYTANNE_DIALOG)
+                    textViewZaglavie.text = by.carkva_gazeta.malitounik.R.string.czytanne.toString().toUpperCase(Locale.getDefault())
                     val zch = ZmenyiaChastki(it)
                     builder.append(zch.sviatyiaView(0))
                 }

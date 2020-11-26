@@ -711,7 +711,7 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
             return StaryZapavietSinaidalFragment.newInstance(0, kniga, 1)
         }
 
-        override fun getPageTitle(position: Int): CharSequence? {
+        override fun getPageTitle(position: Int): CharSequence {
             return if (kniga == 21) resources.getString(by.carkva_gazeta.malitounik.R.string.psinaidal) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (position + 1)
         }
 

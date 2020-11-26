@@ -75,7 +75,7 @@
                     android:paddingTop="10dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="10dp"
-                    android:text="@string/SAJT"
+                    android:text="@string/sajt"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -85,7 +85,7 @@
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:padding="10dp"
-                    android:text="@string/LITURGIKON"
+                    android:text="@string/liturgikon"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -127,7 +127,7 @@
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:paddingBottom="10dp"
-                    android:text="@string/MAJE_MALITVY"
+                    android:text="@string/maje_natatki"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -322,7 +322,7 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:padding="10dp"
-                        android:text="@string/OTHER"
+                        android:text="@string/other"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/image3"
@@ -397,7 +397,7 @@
                         android:paddingEnd="10dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="10dp"
-                        android:text="@string/SVIATY"
+                        android:text="@string/sviaty"
                         android:textSize="16sp" />
 
                     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -431,7 +431,7 @@
                         android:paddingEnd="10dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="10dp"
-                        android:text="@string/PASCHA"
+                        android:text="@string/pascha"
                         android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>

@@ -861,12 +861,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 else label1.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label2 -> {
-                tolbarTitle = getString(R.string.SAJT)
+                tolbarTitle = getString(R.string.sajt)
                 if (dzenNoch) label2.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else label2.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label3 -> {
-                tolbarTitle = getString(R.string.LITURGIKON)
+                tolbarTitle = getString(R.string.liturgikon)
                 if (dzenNoch) label3.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else label3.setBackgroundResource(R.drawable.selector_gray)
             }
@@ -886,7 +886,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 else label6.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label7 -> {
-                tolbarTitle = getString(R.string.MAJE_MALITVY)
+                tolbarTitle = getString(R.string.maje_natatki)
                 if (dzenNoch) label7.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else label7.setBackgroundResource(R.drawable.selector_gray)
             }
@@ -926,12 +926,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 else label95.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label103 -> {
-                tolbarTitle = getString(R.string.CARKVA_SVIATY)
+                tolbarTitle = getString(R.string.carkva_sviaty)
                 if (dzenNoch) label103.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else label103.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label104 -> {
-                tolbarTitle = getString(R.string.KALIANDAR_BEL)
+                tolbarTitle = getString(R.string.kaliandar_bel)
                 if (dzenNoch) label104.setBackgroundResource(R.drawable.selector_dark_maranata)
                 else label104.setBackgroundResource(R.drawable.selector_gray)
             }

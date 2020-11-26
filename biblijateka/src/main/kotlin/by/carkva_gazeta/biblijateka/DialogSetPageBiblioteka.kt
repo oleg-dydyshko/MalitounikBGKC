@@ -90,7 +90,7 @@ class DialogSetPageBiblioteka : DialogFragment() {
                     }
                 }
             }
-            builder.setNegativeButton(getString(R.string.CANCEL)) { _: DialogInterface?, _: Int ->
+            builder.setNegativeButton(getString(R.string.cansel)) { _: DialogInterface?, _: Int ->
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(input.windowToken, 0)
             }

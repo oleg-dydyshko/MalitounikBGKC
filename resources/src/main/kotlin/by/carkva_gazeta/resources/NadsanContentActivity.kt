@@ -394,7 +394,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             return newInstance(position, pazicia)
         }
 
-        override fun getPageTitle(position: Int): CharSequence? {
+        override fun getPageTitle(position: Int): CharSequence {
             return resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2) + " " + (position + 1)
         }
 

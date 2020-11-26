@@ -23,7 +23,7 @@
         android:paddingLeft="10dp"
         android:paddingTop="5dp"
         android:paddingRight="10dp"
-        android:text="@string/HRYHARYJAN" />
+        android:text="@string/hryharyjan" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
         android:id="@+id/ula"
@@ -32,7 +32,7 @@
         android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="@string/JULJAN"
+        android:text="@string/juljan"
         android:textColor="@color/colorSecondary_text" />
 
     <ListView

@@ -101,7 +101,7 @@ class DialogBibleNatatkaEdit : DialogFragment() {
                 it.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
                 edit?.setEdit()
             }
-            ad.setNegativeButton(R.string.CANCEL) { _: DialogInterface, _: Int ->
+            ad.setNegativeButton(R.string.cansel) { _: DialogInterface, _: Int ->
                 it.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
                 edit?.editCancel()
             }

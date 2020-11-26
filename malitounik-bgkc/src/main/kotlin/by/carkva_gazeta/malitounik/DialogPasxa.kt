@@ -58,7 +58,7 @@ class DialogPasxa : DialogFragment() {
             val density = resources.displayMetrics.density
             realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(R.string.DATA_SEARCH2)
+            textViewZaglavie.text = resources.getString(R.string.data_search2)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -109,7 +109,7 @@ class DialogPasxa : DialogFragment() {
                     }
                 }
             }
-            builder.setNegativeButton(getString(R.string.CANCEL)) { _: DialogInterface?, _: Int ->
+            builder.setNegativeButton(getString(R.string.cansel)) { _: DialogInterface?, _: Int ->
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(input.windowToken, 0)
             }

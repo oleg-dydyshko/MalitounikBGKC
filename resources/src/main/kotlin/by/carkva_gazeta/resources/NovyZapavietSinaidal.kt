@@ -579,7 +579,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
             return NovyZapavietSinaidalFragment.newInstance(0, kniga, 1)
         }
 
-        override fun getPageTitle(position: Int): CharSequence? {
+        override fun getPageTitle(position: Int): CharSequence {
             return resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (position + 1)
         }
 

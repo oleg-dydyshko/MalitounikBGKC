@@ -64,7 +64,7 @@ class DialogClearHishory : DialogFragment() {
                 builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener.cleanFullHistory() }
             else
                 builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener.cleanHistory(arguments?.getInt("position")?: -1) }
-            builder.setNegativeButton(resources.getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setNegativeButton(resources.getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             builder.setView(linearLayout)
             alert = builder.create()
         }

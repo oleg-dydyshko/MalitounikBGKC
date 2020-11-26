@@ -46,7 +46,7 @@ class MyNatatkiAdd : AppCompatActivity() {
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.my_malitva_add)
-        var title = resources.getString(by.carkva_gazeta.malitounik.R.string.MALITVA_ADD)
+        var title = resources.getString(by.carkva_gazeta.malitounik.R.string.natatka_add)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
@@ -60,7 +60,7 @@ class MyNatatkiAdd : AppCompatActivity() {
         }
         file.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         if (redak) {
-            title = resources.getString(by.carkva_gazeta.malitounik.R.string.malitva_edit)
+            title = resources.getString(by.carkva_gazeta.malitounik.R.string.natatka_edit)
             val res = File("$filesDir/Malitva/$filename").readText().split("<MEMA></MEMA>").toTypedArray()
             if (res[1].contains("<RTE></RTE>")) {
                 val start = res[1].indexOf("<RTE></RTE>")

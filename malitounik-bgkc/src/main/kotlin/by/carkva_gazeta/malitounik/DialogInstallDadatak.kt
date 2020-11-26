@@ -48,7 +48,7 @@ class DialogInstallDadatak : DialogFragment() {
                 intent.data = Uri.parse(url)
                 startActivity(intent)
             }
-            ad.setNegativeButton(getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            ad.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = ad.create()
         }
         return alert

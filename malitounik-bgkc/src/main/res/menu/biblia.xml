@@ -5,7 +5,7 @@
         android:id="@+id/action_glava"
         android:icon="@drawable/bibliya"
         android:orderInCategory="100"
-        android:title="@string/RAZDZEL"
+        android:title="@string/razdzel"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_vybranoe"
@@ -28,7 +28,7 @@
     <item
         android:id="@+id/action_font"
         android:orderInCategory="100"
-        android:title="@string/MENU_FONT_SIZE_APP"
+        android:title="@string/menu_font_size_app"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_bright"

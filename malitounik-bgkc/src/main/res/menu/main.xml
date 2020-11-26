@@ -22,7 +22,7 @@
         android:id="@+id/action_glava"
         android:icon="@drawable/calendar"
         android:orderInCategory="100"
-        android:title="@string/SEARCH_CALL"
+        android:title="@string/search_call"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_mun"
@@ -33,7 +33,7 @@
     <item
         android:id="@+id/tipicon"
         android:orderInCategory="100"
-        android:title="@string/MUNU_SYMBOLS"
+        android:title="@string/munu_symbols"
         app:showAsAction="never" />
     <item
         android:id="@+id/settings"
@@ -49,7 +49,7 @@
         android:id="@+id/action_add"
         android:icon="@drawable/plus"
         android:orderInCategory="100"
-        android:title="@string/MALITVA_ADD"
+        android:title="@string/natatka_add"
         app:showAsAction="always" />
     <item
         android:id="@+id/search_sviatyia"
@@ -59,7 +59,7 @@
     <item
         android:id="@+id/onas"
         android:orderInCategory="100"
-        android:title="@string/PRA_NAS"
+        android:title="@string/pra_nas"
         app:showAsAction="never" />
     <item
         android:id="@+id/help"
@@ -70,7 +70,7 @@
         android:id="@+id/prazdnik"
         android:icon="@drawable/search"
         android:orderInCategory="100"
-        android:title="@string/CARKVA_SVIATY"
+        android:title="@string/carkva_sviaty"
         app:showAsAction="always" />
     <item
         android:id="@+id/pasxa"
@@ -98,7 +98,7 @@
     <item
         android:id="@+id/action_font"
         android:orderInCategory="100"
-        android:title="@string/MENU_FONT_SIZE_APP"
+        android:title="@string/menu_font_size_app"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_dzen_noch"

@@ -168,7 +168,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.CZYTANNE)
+        title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.czytanne)
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }

@@ -1029,7 +1029,7 @@ class SettingsActivity : AppCompatActivity() {
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun notificationChannel(context: Context, channelID: String = NOTIFICATION_CHANNEL_ID_SVIATY) {
-            val name = if (channelID == NOTIFICATION_CHANNEL_ID_SVIATY) context.getString(R.string.SVIATY)
+            val name = if (channelID == NOTIFICATION_CHANNEL_ID_SVIATY) context.getString(R.string.sviaty)
             else context.getString(R.string.sabytie)
             val vibrate = longArrayOf(0, 1000, 700, 1000, 700, 1000)
             val channel = NotificationChannel(channelID, name, NotificationManager.IMPORTANCE_HIGH)

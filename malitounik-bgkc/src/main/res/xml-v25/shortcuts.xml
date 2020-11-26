@@ -32,8 +32,8 @@
         android:shortcutId="compose3"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher"
-        android:shortcutShortLabel="@string/MALITVA_ADD"
-        android:shortcutLongLabel="@string/MALITVA_ADD"
+        android:shortcutShortLabel="@string/natatka_add"
+        android:shortcutLongLabel="@string/natatka_add"
         android:shortcutDisabledMessage="@string/str_disable_message">
         <intent
             android:action="android.intent.action.VIEW"

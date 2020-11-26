@@ -125,7 +125,7 @@ class CaliandarMun : AppCompatActivity() {
             return 2
         }
 
-        override fun getPageTitle(position: Int): CharSequence? {
+        override fun getPageTitle(position: Int): CharSequence {
             return if (position == 0) getString(R.string.mun)
             else getString(R.string.niadzelia)
         }

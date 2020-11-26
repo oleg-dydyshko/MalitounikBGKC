@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:padding="10dp"
-        android:text="@string/FONT_SIZE_APP"
+        android:text="@string/font_size_app"
         android:textColor="@color/colorWhite"
         android:textSize="14sp"
         android:textStyle="bold"

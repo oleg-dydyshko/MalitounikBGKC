@@ -61,7 +61,7 @@ class DialogPrazdnik : DialogFragment() {
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(R.string.CARKVA_SVIATY)
+            textViewZaglavie.text = resources.getString(R.string.carkva_sviaty)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -94,7 +94,7 @@ class DialogPrazdnik : DialogFragment() {
             }
             linear.addView(spinner)
             builder.setView(linear)
-            builder.setNegativeButton(getString(R.string.CANCEL)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int -> mListener.setPrazdnik(arrayList[setid]) }
             alert = builder.create()
         }

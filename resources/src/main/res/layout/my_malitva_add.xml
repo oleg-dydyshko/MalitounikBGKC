@@ -51,7 +51,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="top|start"
-                android:hint="@string/malitva_name"
+                android:hint="@string/natatka_name"
                 android:inputType="text|textAutoCorrect"
                 android:singleLine="true">
 
@@ -71,7 +71,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="top|start"
-                android:hint="@string/malitva"
+                android:hint="@string/natatka"
                 android:imeOptions="actionDone|flagNoEnterAction"
                 android:inputType="textMultiLine|textAutoCorrect|textCapSentences" />
 

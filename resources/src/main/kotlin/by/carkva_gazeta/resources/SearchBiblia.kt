@@ -24,7 +24,6 @@ import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.DialogBibleSearshSettings.DiallogBibleSearshListiner
-import by.carkva_gazeta.resources.R.raw
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.search_biblia.*
@@ -38,7 +37,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSearshListiner, DialogClearHishory.DialogClearHistoryListener {
-    private var seash: ArrayList<Spannable> = ArrayList()
+    private var seash = ArrayList<Spannable>()
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
     private lateinit var chin: SharedPreferences
@@ -52,6 +51,155 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
     private lateinit var historyAdapter: HistoryAdapter
     private var actionExpandOn = false
     private var fierstPosition = 0
+    private var sinodalBible = ArrayMap<String, Int>()
+    private var semuxaBible = ArrayMap<String, Int>()
+    private var searche = false
+
+    init {
+        sinodalBible["sinaidals1"] = R.raw.sinaidals1
+        sinodalBible["sinaidals2"] = R.raw.sinaidals2
+        sinodalBible["sinaidals3"] = R.raw.sinaidals3
+        sinodalBible["sinaidals4"] = R.raw.sinaidals4
+        sinodalBible["sinaidals5"] = R.raw.sinaidals5
+        sinodalBible["sinaidals6"] = R.raw.sinaidals6
+        sinodalBible["sinaidals7"] = R.raw.sinaidals7
+        sinodalBible["sinaidals8"] = R.raw.sinaidals8
+        sinodalBible["sinaidals9"] = R.raw.sinaidals9
+        sinodalBible["sinaidals10"] = R.raw.sinaidals10
+        sinodalBible["sinaidals11"] = R.raw.sinaidals11
+        sinodalBible["sinaidals12"] = R.raw.sinaidals12
+        sinodalBible["sinaidals13"] = R.raw.sinaidals13
+        sinodalBible["sinaidals14"] = R.raw.sinaidals14
+        sinodalBible["sinaidals15"] = R.raw.sinaidals15
+        sinodalBible["sinaidals16"] = R.raw.sinaidals16
+        sinodalBible["sinaidals17"] = R.raw.sinaidals17
+        sinodalBible["sinaidals18"] = R.raw.sinaidals18
+        sinodalBible["sinaidals19"] = R.raw.sinaidals19
+        sinodalBible["sinaidals20"] = R.raw.sinaidals20
+        sinodalBible["sinaidals21"] = R.raw.sinaidals21
+        sinodalBible["sinaidals22"] = R.raw.sinaidals22
+        sinodalBible["sinaidals23"] = R.raw.sinaidals23
+        sinodalBible["sinaidals24"] = R.raw.sinaidals24
+        sinodalBible["sinaidals25"] = R.raw.sinaidals25
+        sinodalBible["sinaidals26"] = R.raw.sinaidals26
+        sinodalBible["sinaidals27"] = R.raw.sinaidals27
+        sinodalBible["sinaidals28"] = R.raw.sinaidals28
+        sinodalBible["sinaidals29"] = R.raw.sinaidals29
+        sinodalBible["sinaidals30"] = R.raw.sinaidals30
+        sinodalBible["sinaidals31"] = R.raw.sinaidals31
+        sinodalBible["sinaidals32"] = R.raw.sinaidals32
+        sinodalBible["sinaidals33"] = R.raw.sinaidals33
+        sinodalBible["sinaidals34"] = R.raw.sinaidals34
+        sinodalBible["sinaidals35"] = R.raw.sinaidals35
+        sinodalBible["sinaidals36"] = R.raw.sinaidals36
+        sinodalBible["sinaidals37"] = R.raw.sinaidals37
+        sinodalBible["sinaidals38"] = R.raw.sinaidals38
+        sinodalBible["sinaidals39"] = R.raw.sinaidals39
+        sinodalBible["sinaidals40"] = R.raw.sinaidals40
+        sinodalBible["sinaidals41"] = R.raw.sinaidals41
+        sinodalBible["sinaidals42"] = R.raw.sinaidals42
+        sinodalBible["sinaidals43"] = R.raw.sinaidals43
+        sinodalBible["sinaidals44"] = R.raw.sinaidals44
+        sinodalBible["sinaidals45"] = R.raw.sinaidals45
+        sinodalBible["sinaidals46"] = R.raw.sinaidals46
+        sinodalBible["sinaidals47"] = R.raw.sinaidals47
+        sinodalBible["sinaidals48"] = R.raw.sinaidals48
+        sinodalBible["sinaidals49"] = R.raw.sinaidals49
+        sinodalBible["sinaidals50"] = R.raw.sinaidals50
+        sinodalBible["sinaidaln1"] = R.raw.sinaidaln1
+        sinodalBible["sinaidaln2"] = R.raw.sinaidaln2
+        sinodalBible["sinaidaln3"] = R.raw.sinaidaln3
+        sinodalBible["sinaidaln4"] = R.raw.sinaidaln4
+        sinodalBible["sinaidaln5"] = R.raw.sinaidaln5
+        sinodalBible["sinaidaln6"] = R.raw.sinaidaln6
+        sinodalBible["sinaidaln7"] = R.raw.sinaidaln7
+        sinodalBible["sinaidaln8"] = R.raw.sinaidaln8
+        sinodalBible["sinaidaln9"] = R.raw.sinaidaln9
+        sinodalBible["sinaidaln10"] = R.raw.sinaidaln10
+        sinodalBible["sinaidaln11"] = R.raw.sinaidaln11
+        sinodalBible["sinaidaln12"] = R.raw.sinaidaln12
+        sinodalBible["sinaidaln13"] = R.raw.sinaidaln13
+        sinodalBible["sinaidaln14"] = R.raw.sinaidaln14
+        sinodalBible["sinaidaln15"] = R.raw.sinaidaln15
+        sinodalBible["sinaidaln16"] = R.raw.sinaidaln16
+        sinodalBible["sinaidaln17"] = R.raw.sinaidaln17
+        sinodalBible["sinaidaln18"] = R.raw.sinaidaln18
+        sinodalBible["sinaidaln19"] = R.raw.sinaidaln19
+        sinodalBible["sinaidaln20"] = R.raw.sinaidaln20
+        sinodalBible["sinaidaln21"] = R.raw.sinaidaln21
+        sinodalBible["sinaidaln22"] = R.raw.sinaidaln22
+        sinodalBible["sinaidaln23"] = R.raw.sinaidaln23
+        sinodalBible["sinaidaln24"] = R.raw.sinaidaln24
+        sinodalBible["sinaidaln25"] = R.raw.sinaidaln25
+        sinodalBible["sinaidaln26"] = R.raw.sinaidaln26
+        sinodalBible["sinaidaln27"] = R.raw.sinaidaln27
+        semuxaBible["biblias1"] = R.raw.biblias1
+        semuxaBible["biblias2"] = R.raw.biblias2
+        semuxaBible["biblias3"] = R.raw.biblias3
+        semuxaBible["biblias4"] = R.raw.biblias4
+        semuxaBible["biblias5"] = R.raw.biblias5
+        semuxaBible["biblias6"] = R.raw.biblias6
+        semuxaBible["biblias7"] = R.raw.biblias7
+        semuxaBible["biblias8"] = R.raw.biblias8
+        semuxaBible["biblias9"] = R.raw.biblias9
+        semuxaBible["biblias10"] = R.raw.biblias10
+        semuxaBible["biblias11"] = R.raw.biblias11
+        semuxaBible["biblias12"] = R.raw.biblias12
+        semuxaBible["biblias13"] = R.raw.biblias13
+        semuxaBible["biblias14"] = R.raw.biblias14
+        semuxaBible["biblias15"] = R.raw.biblias15
+        semuxaBible["biblias16"] = R.raw.biblias16
+        semuxaBible["biblias17"] = R.raw.biblias17
+        semuxaBible["biblias18"] = R.raw.biblias18
+        semuxaBible["biblias19"] = R.raw.biblias19
+        semuxaBible["biblias20"] = R.raw.biblias20
+        semuxaBible["biblias21"] = R.raw.biblias21
+        semuxaBible["biblias22"] = R.raw.biblias22
+        semuxaBible["biblias23"] = R.raw.biblias23
+        semuxaBible["biblias24"] = R.raw.biblias24
+        semuxaBible["biblias25"] = R.raw.biblias25
+        semuxaBible["biblias26"] = R.raw.biblias26
+        semuxaBible["biblias27"] = R.raw.biblias27
+        semuxaBible["biblias28"] = R.raw.biblias28
+        semuxaBible["biblias29"] = R.raw.biblias29
+        semuxaBible["biblias30"] = R.raw.biblias30
+        semuxaBible["biblias31"] = R.raw.biblias31
+        semuxaBible["biblias32"] = R.raw.biblias32
+        semuxaBible["biblias33"] = R.raw.biblias33
+        semuxaBible["biblias34"] = R.raw.biblias34
+        semuxaBible["biblias35"] = R.raw.biblias35
+        semuxaBible["biblias36"] = R.raw.biblias36
+        semuxaBible["biblias37"] = R.raw.biblias37
+        semuxaBible["biblias38"] = R.raw.biblias38
+        semuxaBible["biblias39"] = R.raw.biblias39
+        semuxaBible["biblian1"] = R.raw.biblian1
+        semuxaBible["biblian2"] = R.raw.biblian2
+        semuxaBible["biblian3"] = R.raw.biblian3
+        semuxaBible["biblian4"] = R.raw.biblian4
+        semuxaBible["biblian5"] = R.raw.biblian5
+        semuxaBible["biblian6"] = R.raw.biblian6
+        semuxaBible["biblian7"] = R.raw.biblian7
+        semuxaBible["biblian8"] = R.raw.biblian8
+        semuxaBible["biblian9"] = R.raw.biblian9
+        semuxaBible["biblian10"] = R.raw.biblian10
+        semuxaBible["biblian11"] = R.raw.biblian11
+        semuxaBible["biblian12"] = R.raw.biblian12
+        semuxaBible["biblian13"] = R.raw.biblian13
+        semuxaBible["biblian14"] = R.raw.biblian14
+        semuxaBible["biblian15"] = R.raw.biblian15
+        semuxaBible["biblian16"] = R.raw.biblian16
+        semuxaBible["biblian17"] = R.raw.biblian17
+        semuxaBible["biblian18"] = R.raw.biblian18
+        semuxaBible["biblian19"] = R.raw.biblian19
+        semuxaBible["biblian20"] = R.raw.biblian20
+        semuxaBible["biblian21"] = R.raw.biblian21
+        semuxaBible["biblian22"] = R.raw.biblian22
+        semuxaBible["biblian23"] = R.raw.biblian23
+        semuxaBible["biblian24"] = R.raw.biblian24
+        semuxaBible["biblian25"] = R.raw.biblian25
+        semuxaBible["biblian26"] = R.raw.biblian26
+        semuxaBible["biblian27"] = R.raw.biblian27
+    }
 
     override fun onPause() {
         super.onPause()
@@ -123,8 +271,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 actionExpandOn = true
             }
         }
-        zavet = intent.getIntExtra("zavet", 1)
         var biblia = "semuxa"
+        zavet = intent.getIntExtra("zavet", 1)
         when (zavet) {
             1 -> {
                 title = resources.getString(by.carkva_gazeta.malitounik.R.string.poshuk_semuxa)
@@ -406,8 +554,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             fierstPosition = chin.getInt("search_bible_fierstPosition", 0)
         }
         ListView.setSelection(fierstPosition)
-        setBibleSinodal()
-        setBibleSemuxa()
         setTollbarTheme(title)
     }
 
@@ -567,6 +713,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             if (history.size == 10) break
         }
         if (history.size == 1) invalidateOptionsMenu()
+        historyAdapter.notifyDataSetChanged()
     }
 
     private fun saveHistory() {
@@ -586,6 +733,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         history.clear()
         saveHistory()
         invalidateOptionsMenu()
+        historyAdapter.notifyDataSetChanged()
         actionExpandOn = true
     }
 
@@ -642,9 +790,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     private fun doInBackground(searche: String): ArrayList<Spannable> {
         return when (zavet) {
-            1 -> semuxa(this@SearchBiblia, searche)
-            2 -> sinoidal(this@SearchBiblia, searche)
-            3 -> nadsan(this@SearchBiblia, searche)
+            1 -> semuxa(searche)
+            2 -> sinoidal(searche)
+            3 -> nadsan(searche)
             else -> ArrayList()
         }
     }
@@ -668,6 +816,464 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         prefEditors.putString("search_array", json)
         prefEditors.apply()
         searche = false
+    }
+
+    private fun zamena(replase: String): String {
+        var replase1 = replase
+        replase1 = replase1.replace("ё", "е")
+        replase1 = replase1.replace("и", "і")
+        replase1 = replase1.replace("щ", "ў")
+        replase1 = replase1.replace("ъ", "'")
+        replase1 = replase1.replace("све", "сьве")
+        replase1 = replase1.replace("сві", "сьві")
+        replase1 = replase1.replace("свя", "сьвя")
+        replase1 = replase1.replace("зве", "зьве")
+        replase1 = replase1.replace("зві", "зьві")
+        replase1 = replase1.replace("звя", "зьвя")
+        replase1 = replase1.replace("зме", "зьме")
+        replase1 = replase1.replace("змі", "зьмі")
+        replase1 = replase1.replace("змя", "зьмя")
+        replase1 = replase1.replace("зня", "зьня")
+        replase1 = replase1.replace("сле", "сьле")
+        replase1 = replase1.replace("слі", "сьлі")
+        replase1 = replase1.replace("сль", "сьль")
+        replase1 = replase1.replace("слю", "сьлю")
+        replase1 = replase1.replace("сля", "сьля")
+        replase1 = replase1.replace("сне", "сьне")
+        replase1 = replase1.replace("сні", "сьні")
+        replase1 = replase1.replace("сню", "сьню")
+        replase1 = replase1.replace("сня", "сьня")
+        replase1 = replase1.replace("спе", "сьпе")
+        replase1 = replase1.replace("спі", "сьпі")
+        replase1 = replase1.replace("спя", "сьпя")
+        replase1 = replase1.replace("сце", "сьце")
+        replase1 = replase1.replace("сці", "сьці")
+        replase1 = replase1.replace("сць", "сьць")
+        replase1 = replase1.replace("сцю", "сьцю")
+        replase1 = replase1.replace("сця", "сьця")
+        replase1 = replase1.replace("цце", "цьце")
+        replase1 = replase1.replace("цці", "цьці")
+        replase1 = replase1.replace("ццю", "цьцю")
+        replase1 = replase1.replace("ззе", "зьзе")
+        replase1 = replase1.replace("ззі", "зьзі")
+        replase1 = replase1.replace("ззю", "зьзю")
+        replase1 = replase1.replace("ззя", "зьзя")
+        replase1 = replase1.replace("зле", "зьле")
+        replase1 = replase1.replace("злі", "зьлі")
+        replase1 = replase1.replace("злю", "зьлю")
+        replase1 = replase1.replace("зля", "зьля")
+        replase1 = replase1.replace("збе", "зьбе")
+        replase1 = replase1.replace("збі", "зьбі")
+        replase1 = replase1.replace("збя", "зьбя")
+        replase1 = replase1.replace("нне", "ньне")
+        replase1 = replase1.replace("нні", "ньні")
+        replase1 = replase1.replace("нню", "ньню")
+        replase1 = replase1.replace("ння", "ньня")
+        replase1 = replase1.replace("лле", "льле")
+        replase1 = replase1.replace("ллі", "льлі")
+        replase1 = replase1.replace("ллю", "льлю")
+        replase1 = replase1.replace("лля", "льля")
+        replase1 = replase1.replace("дск", "дзк")
+        replase1 = replase1.replace("дств", "дзтв")
+        replase1 = replase1.replace("з’е", "зье")
+        replase1 = replase1.replace("з’я", "зья")
+        return replase1
+    }
+
+    private fun semuxa(poshuk: String): ArrayList<Spannable> {
+        var poshuk1 = poshuk
+        val dzenNoch = chin.getBoolean("dzen_noch", false)
+        val seashpost = ArrayList<Spannable>()
+        if (poshuk1 != "") {
+            poshuk1 = zamena(poshuk1)
+            if (chin.getInt("pegistr", 0) == 0) poshuk1 = poshuk1.toLowerCase(Locale.getDefault())
+            if (chin.getInt("slovocalkam", 0) == 0) {
+                val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
+                for (aM in m) {
+                    val r = poshuk1.length - 1
+                    if (poshuk1.length >= 3) {
+                        if (poshuk1[r] == aM) {
+                            poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r))
+                        }
+                    }
+                }
+            } else {
+                poshuk1 = " $poshuk1 "
+            }
+            var color = by.carkva_gazeta.malitounik.R.color.colorPrimary
+            if (dzenNoch) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black
+            for (i in 0 until semuxaBible.size) {
+                var biblia = "biblia"
+                if (chin.getInt("biblia_seash", 0) == 1) biblia = "biblian"
+                if (chin.getInt("biblia_seash", 0) == 2) biblia = "biblias"
+                if (semuxaBible.keyAt(i).contains(biblia)) {
+                    var nazva = ""
+                    if (semuxaBible.keyAt(i).contains("biblias1")) nazva = "Быцьцё"
+                    if (semuxaBible.keyAt(i).contains("biblias2")) nazva = "Выхад"
+                    if (semuxaBible.keyAt(i).contains("biblias3")) nazva = "Лявіт"
+                    if (semuxaBible.keyAt(i).contains("biblias4")) nazva = "Лікі"
+                    if (semuxaBible.keyAt(i).contains("biblias5")) nazva = "Другі Закон"
+                    if (semuxaBible.keyAt(i).contains("biblias6")) nazva = "Ісуса сына Нава"
+                    if (semuxaBible.keyAt(i).contains("biblias7")) nazva = "Судзьдзяў"
+                    if (semuxaBible.keyAt(i).contains("biblias8")) nazva = "Рут"
+                    if (semuxaBible.keyAt(i).contains("biblias9")) nazva = "1-я Царстваў"
+                    if (semuxaBible.keyAt(i).contains("biblias10")) nazva = "2-я Царстваў"
+                    if (semuxaBible.keyAt(i).contains("biblias11")) nazva = "3-я Царстваў"
+                    if (semuxaBible.keyAt(i).contains("biblias12")) nazva = "4-я Царстваў"
+                    if (semuxaBible.keyAt(i).contains("biblias13")) nazva = "1-я Летапісаў"
+                    if (semuxaBible.keyAt(i).contains("biblias14")) nazva = "2-я Летапісаў"
+                    if (semuxaBible.keyAt(i).contains("biblias15")) nazva = "Эздры"
+                    if (semuxaBible.keyAt(i).contains("biblias16")) nazva = "Нээміі"
+                    if (semuxaBible.keyAt(i).contains("biblias17")) nazva = "Эстэр"
+                    if (semuxaBible.keyAt(i).contains("biblias18")) nazva = "Ёва"
+                    if (semuxaBible.keyAt(i).contains("biblias19")) nazva = "Псалтыр"
+                    if (semuxaBible.keyAt(i).contains("biblias20")) nazva = "Выслоўяў Саламонавых"
+                    if (semuxaBible.keyAt(i).contains("biblias21")) nazva = "Эклезіяста"
+                    if (semuxaBible.keyAt(i).contains("biblias22")) nazva = "Найвышэйшая Песьня Саламонава"
+                    if (semuxaBible.keyAt(i).contains("biblias23")) nazva = "Ісаі"
+                    if (semuxaBible.keyAt(i).contains("biblias24")) nazva = "Ераміі"
+                    if (semuxaBible.keyAt(i).contains("biblias25")) nazva = "Ераміін Плач"
+                    if (semuxaBible.keyAt(i).contains("biblias26")) nazva = "Езэкііля"
+                    if (semuxaBible.keyAt(i).contains("biblias27")) nazva = "Данііла"
+                    if (semuxaBible.keyAt(i).contains("biblias28")) nazva = "Асіі"
+                    if (semuxaBible.keyAt(i).contains("biblias29")) nazva = "Ёіля"
+                    if (semuxaBible.keyAt(i).contains("biblias30")) nazva = "Амоса"
+                    if (semuxaBible.keyAt(i).contains("biblias31")) nazva = "Аўдзея"
+                    if (semuxaBible.keyAt(i).contains("biblias32")) nazva = "Ёны"
+                    if (semuxaBible.keyAt(i).contains("biblias33")) nazva = "Міхея"
+                    if (semuxaBible.keyAt(i).contains("biblias34")) nazva = "Навума"
+                    if (semuxaBible.keyAt(i).contains("biblias35")) nazva = "Абакума"
+                    if (semuxaBible.keyAt(i).contains("biblias36")) nazva = "Сафона"
+                    if (semuxaBible.keyAt(i).contains("biblias37")) nazva = "Агея"
+                    if (semuxaBible.keyAt(i).contains("biblias38")) nazva = "Захарыі"
+                    if (semuxaBible.keyAt(i).contains("biblias39")) nazva = "Малахіі"
+                    if (semuxaBible.keyAt(i).contains("biblian1")) nazva = "Паводле Мацьвея"
+                    if (semuxaBible.keyAt(i).contains("biblian2")) nazva = "Паводле Марка"
+                    if (semuxaBible.keyAt(i).contains("biblian3")) nazva = "Паводле Лукаша"
+                    if (semuxaBible.keyAt(i).contains("biblian4")) nazva = "Паводле Яна"
+                    if (semuxaBible.keyAt(i).contains("biblian5")) nazva = "Дзеі Апосталаў"
+                    if (semuxaBible.keyAt(i).contains("biblian6")) nazva = "Якава"
+                    if (semuxaBible.keyAt(i).contains("biblian7")) nazva = "1-е Пятра"
+                    if (semuxaBible.keyAt(i).contains("biblian8")) nazva = "2-е Пятра"
+                    if (semuxaBible.keyAt(i).contains("biblian9")) nazva = "1-е Яна Багаслова"
+                    if (semuxaBible.keyAt(i).contains("biblian10")) nazva = "2-е Яна Багаслова"
+                    if (semuxaBible.keyAt(i).contains("biblian11")) nazva = "3-е Яна Багаслова"
+                    if (semuxaBible.keyAt(i).contains("biblian12")) nazva = "Юды"
+                    if (semuxaBible.keyAt(i).contains("biblian13")) nazva = "Да Рымлянаў"
+                    if (semuxaBible.keyAt(i).contains("biblian14")) nazva = "1-е да Карынфянаў"
+                    if (semuxaBible.keyAt(i).contains("biblian15")) nazva = "2-е да Карынфянаў"
+                    if (semuxaBible.keyAt(i).contains("biblian16")) nazva = "Да Галятаў"
+                    if (semuxaBible.keyAt(i).contains("biblian17")) nazva = "Да Эфэсянаў"
+                    if (semuxaBible.keyAt(i).contains("biblian18")) nazva = "Да Піліпянаў"
+                    if (semuxaBible.keyAt(i).contains("biblian19")) nazva = "Да Каласянаў"
+                    if (semuxaBible.keyAt(i).contains("biblian20")) nazva = "1-е да Фесаланікійцаў"
+                    if (semuxaBible.keyAt(i).contains("biblian21")) nazva = "2-е да Фесаланікійцаў"
+                    if (semuxaBible.keyAt(i).contains("biblian22")) nazva = "1-е да Цімафея"
+                    if (semuxaBible.keyAt(i).contains("biblian23")) nazva = "2-е да Цімафея"
+                    if (semuxaBible.keyAt(i).contains("biblian24")) nazva = "Да Ціта"
+                    if (semuxaBible.keyAt(i).contains("biblian25")) nazva = "Да Філімона"
+                    if (semuxaBible.keyAt(i).contains("biblian26")) nazva = "Да Габрэяў"
+                    if (semuxaBible.keyAt(i).contains("biblian27")) nazva = "Адкрыцьцё (Апакаліпсіс)"
+                    val inputStream = resources.openRawResource(semuxaBible.valueAt(i))
+                    val isr = InputStreamReader(inputStream)
+                    val reader = BufferedReader(isr)
+                    var glava = 0
+                    val split = reader.readText().split("===")
+                    inputStream.close()
+                    (1 until split.size).forEach { e ->
+                        glava++
+                        val bibleline = split[e].split("\n")
+                        var stix = 0
+                        for (r in 1 until bibleline.size) {
+                            var prepinanie = bibleline[r]
+                            if (prepinanie.contains("//")) {
+                                val t1 = prepinanie.indexOf("//")
+                                prepinanie = if (t1 == 0) continue else prepinanie.substring(0, t1).trim()
+                            }
+                            stix++
+                            if (chin.getInt("slovocalkam", 0) == 1) prepinanie = " " + bibleline[r] + " "
+                            if (chin.getInt("pegistr", 0) == 0) prepinanie = prepinanie.toLowerCase(Locale.getDefault())
+                            prepinanie = prepinanie.replace(",", "")
+                            prepinanie = prepinanie.replace(".", "")
+                            prepinanie = prepinanie.replace(";", "")
+                            prepinanie = prepinanie.replace(":", "")
+                            prepinanie = prepinanie.replace("-", "")
+                            prepinanie = prepinanie.replace("\"", "")
+                            prepinanie = prepinanie.replace("ё", "е")
+                            prepinanie = prepinanie.replace("<em>", "")
+                            prepinanie = prepinanie.replace("</em>", " ")
+                            prepinanie = prepinanie.replace("<br>", "")
+                            prepinanie = prepinanie.replace("<strong>", "")
+                            prepinanie = prepinanie.replace("</strong>", " ")
+                            if (chin.getInt("slovocalkam", 0) == 0) {
+                                if (prepinanie.contains(poshuk1)) {
+                                    val aSviatyia = bibleline[r]
+                                    val title = "$nazva Гл. $glava".length
+                                    val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                    val t3 = span.indexOf("-->")
+                                    val t1 = span.indexOf(poshuk1, ignoreCase = true)
+                                    val t2 = poshuk1.length
+                                    span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    seashpost.add(span)
+                                }
+                            } else {
+                                if (prepinanie.contains(poshuk1)) {
+                                    val aSviatyia = bibleline[r]
+                                    val t2 = poshuk1.length
+                                    val title = "$nazva Гл. $glava".length
+                                    val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                    val t3 = span.indexOf("-->")
+                                    val t1 = span.indexOf(poshuk1, ignoreCase = true)
+                                    span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    seashpost.add(span)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return seashpost
+    }
+
+    private fun sinoidal(poshuk: String): ArrayList<Spannable> {
+        var poshuk1 = poshuk
+        val dzenNoch = chin.getBoolean("dzen_noch", false)
+        val seashpost = ArrayList<Spannable>()
+        if (poshuk1 != "") {
+            poshuk1 = poshuk1.replace("ё", "е")
+            if (chin.getInt("pegistr", 0) == 0) poshuk1 = poshuk1.toLowerCase(Locale.getDefault())
+            if (chin.getInt("slovocalkam", 0) == 0) {
+                val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
+                for (aM in m) {
+                    val r = poshuk1.length - 1
+                    if (poshuk1[r] == aM) {
+                        poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r))
+                    }
+                }
+            } else {
+                poshuk1 = " $poshuk1 "
+            }
+            var color = by.carkva_gazeta.malitounik.R.color.colorPrimary
+            if (dzenNoch) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black
+            for (i in 0 until sinodalBible.size) {
+                var biblia = "sinaidal"
+                if (chin.getInt("biblia_seash", 0) == 1) biblia = "sinaidaln"
+                if (chin.getInt("biblia_seash", 0) == 2) biblia = "sinaidals"
+                if (sinodalBible.keyAt(i).contains(biblia)) {
+                    var nazva = ""
+                    if (sinodalBible.keyAt(i).contains("sinaidals1")) nazva = "Бытие"
+                    if (sinodalBible.keyAt(i).contains("sinaidals2")) nazva = "Исход"
+                    if (sinodalBible.keyAt(i).contains("sinaidals3")) nazva = "Левит"
+                    if (sinodalBible.keyAt(i).contains("sinaidals4")) nazva = "Числа"
+                    if (sinodalBible.keyAt(i).contains("sinaidals5")) nazva = "Второзаконие"
+                    if (sinodalBible.keyAt(i).contains("sinaidals6")) nazva = "Иисуса Навина"
+                    if (sinodalBible.keyAt(i).contains("sinaidals7")) nazva = "Судей израилевых"
+                    if (sinodalBible.keyAt(i).contains("sinaidals8")) nazva = "Руфи"
+                    if (sinodalBible.keyAt(i).contains("sinaidals9")) nazva = "1-я Царств"
+                    if (sinodalBible.keyAt(i).contains("sinaidals10")) nazva = "2-я Царств"
+                    if (sinodalBible.keyAt(i).contains("sinaidals11")) nazva = "3-я Царств"
+                    if (sinodalBible.keyAt(i).contains("sinaidals12")) nazva = "4-я Царств"
+                    if (sinodalBible.keyAt(i).contains("sinaidals13")) nazva = "1-я Паралипоменон"
+                    if (sinodalBible.keyAt(i).contains("sinaidals14")) nazva = "2-я Паралипоменон"
+                    if (sinodalBible.keyAt(i).contains("sinaidals15")) nazva = "1-я Ездры"
+                    if (sinodalBible.keyAt(i).contains("sinaidals16")) nazva = "Неемии"
+                    if (sinodalBible.keyAt(i).contains("sinaidals17")) nazva = "2-я Ездры"
+                    if (sinodalBible.keyAt(i).contains("sinaidals18")) nazva = "Товита"
+                    if (sinodalBible.keyAt(i).contains("sinaidals19")) nazva = "Иудифи"
+                    if (sinodalBible.keyAt(i).contains("sinaidals20")) nazva = "Есфири"
+                    if (sinodalBible.keyAt(i).contains("sinaidals21")) nazva = "Иова"
+                    if (sinodalBible.keyAt(i).contains("sinaidals22")) nazva = "Псалтирь"
+                    if (sinodalBible.keyAt(i).contains("sinaidals23")) nazva = "Притчи Соломона"
+                    if (sinodalBible.keyAt(i).contains("sinaidals24")) nazva = "Екклезиаста"
+                    if (sinodalBible.keyAt(i).contains("sinaidals25")) nazva = "Песнь песней Соломона"
+                    if (sinodalBible.keyAt(i).contains("sinaidals26")) nazva = "Премудрости Соломона"
+                    if (sinodalBible.keyAt(i).contains("sinaidals27")) nazva = "Премудрости Иисуса, сына Сирахова"
+                    if (sinodalBible.keyAt(i).contains("sinaidals28")) nazva = "Исаии"
+                    if (sinodalBible.keyAt(i).contains("sinaidals29")) nazva = "Иеремии"
+                    if (sinodalBible.keyAt(i).contains("sinaidals30")) nazva = "Плач Иеремии"
+                    if (sinodalBible.keyAt(i).contains("sinaidals31")) nazva = "Послание Иеремии"
+                    if (sinodalBible.keyAt(i).contains("sinaidals32")) nazva = "Варуха"
+                    if (sinodalBible.keyAt(i).contains("sinaidals33")) nazva = "Иезекииля"
+                    if (sinodalBible.keyAt(i).contains("sinaidals34")) nazva = "Даниила"
+                    if (sinodalBible.keyAt(i).contains("sinaidals35")) nazva = "Осии"
+                    if (sinodalBible.keyAt(i).contains("sinaidals36")) nazva = "Иоиля"
+                    if (sinodalBible.keyAt(i).contains("sinaidals37")) nazva = "Амоса"
+                    if (sinodalBible.keyAt(i).contains("sinaidals38")) nazva = "Авдия"
+                    if (sinodalBible.keyAt(i).contains("sinaidals39")) nazva = "Ионы"
+                    if (sinodalBible.keyAt(i).contains("sinaidals40")) nazva = "Михея"
+                    if (sinodalBible.keyAt(i).contains("sinaidals41")) nazva = "Наума"
+                    if (sinodalBible.keyAt(i).contains("sinaidals42")) nazva = "Аввакума"
+                    if (sinodalBible.keyAt(i).contains("sinaidals43")) nazva = "Сафонии"
+                    if (sinodalBible.keyAt(i).contains("sinaidals44")) nazva = "Аггея"
+                    if (sinodalBible.keyAt(i).contains("sinaidals45")) nazva = "Захарии"
+                    if (sinodalBible.keyAt(i).contains("sinaidals46")) nazva = "Малахии"
+                    if (sinodalBible.keyAt(i).contains("sinaidals47")) nazva = "1-я Маккавейская"
+                    if (sinodalBible.keyAt(i).contains("sinaidals48")) nazva = "2-я Маккавейская"
+                    if (sinodalBible.keyAt(i).contains("sinaidals49")) nazva = "3-я Маккавейская"
+                    if (sinodalBible.keyAt(i).contains("sinaidals50")) nazva = "3-я Ездры"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln1")) nazva = "От Матфея"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln2")) nazva = "От Марка"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln3")) nazva = "От Луки"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln4")) nazva = "От Иоанна"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln5")) nazva = "Деяния святых апостолов"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln6")) nazva = "Иакова"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln7")) nazva = "1-е Петра"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln8")) nazva = "2-е Петра"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln9")) nazva = "1-е Иоанна"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln10")) nazva = "2-е Иоанна"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln11")) nazva = "3-е Иоанна"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln12")) nazva = "Иуды"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln13")) nazva = "Римлянам"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln14")) nazva = "1-е Коринфянам"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln15")) nazva = "2-е Коринфянам"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln16")) nazva = "Галатам"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln17")) nazva = "Эфэсянам"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln18")) nazva = "Филиппийцам"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln19")) nazva = "Колоссянам"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln20")) nazva = "1-е Фессалоникийцам (Солунянам)"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln21")) nazva = "2-е Фессалоникийцам (Солунянам)"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln22")) nazva = "1-е Тимофею"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln23")) nazva = "2-е Тимофею"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln24")) nazva = "Титу"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln25")) nazva = "Филимону"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln26")) nazva = "Евреям"
+                    if (sinodalBible.keyAt(i).contains("sinaidaln27")) nazva = "Откровение (Апокалипсис)"
+                    val inputStream = resources.openRawResource(sinodalBible.valueAt(i))
+                    val isr = InputStreamReader(inputStream)
+                    val reader = BufferedReader(isr)
+                    var glava = 0
+                    val split = reader.readText().split("===")
+                    inputStream.close()
+                    (1 until split.size).forEach { e ->
+                        glava++
+                        val bibleline = split[e].split("\n")
+                        var stix = 0
+                        (1 until bibleline.size).forEach { r ->
+                            stix++
+                            var prepinanie = bibleline[r]
+                            if (chin.getInt("slovocalkam", 0) == 1) prepinanie = " " + bibleline[r] + " "
+                            if (chin.getInt("pegistr", 0) == 0) prepinanie = prepinanie.toLowerCase(Locale.getDefault())
+                            prepinanie = prepinanie.replace(",", "")
+                            prepinanie = prepinanie.replace(".", "")
+                            prepinanie = prepinanie.replace(";", "")
+                            prepinanie = prepinanie.replace(":", "")
+                            prepinanie = prepinanie.replace("[", "")
+                            prepinanie = prepinanie.replace("]", "")
+                            prepinanie = prepinanie.replace("-", "")
+                            prepinanie = prepinanie.replace("\"", "")
+                            prepinanie = prepinanie.replace("ё", "е")
+                            if (chin.getInt("slovocalkam", 0) == 0) {
+                                if (prepinanie.contains(poshuk1)) {
+                                    val aSviatyia = bibleline[r]
+                                    val t2 = poshuk1.length
+                                    val title = "$nazva Гл. $glava".length
+                                    val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                    val t3 = span.indexOf("-->")
+                                    val t1 = span.indexOf(poshuk1, ignoreCase = true)
+                                    span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    seashpost.add(span)
+                                }
+                            } else {
+                                if (prepinanie.contains(poshuk1)) {
+                                    val aSviatyia = bibleline[r]
+                                    val t2 = poshuk1.length
+                                    val title = "$nazva Гл. $glava".length
+                                    val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                                    val t3 = span.indexOf("-->")
+                                    val t1 = span.indexOf(poshuk1, ignoreCase = true)
+                                    span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    seashpost.add(span)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return seashpost
+    }
+
+    private fun nadsan(poshuk: String): ArrayList<Spannable> {
+        var poshuk1 = poshuk
+        val dzenNoch = chin.getBoolean("dzen_noch", false)
+        val seashpost = ArrayList<Spannable>()
+        if (poshuk1 != "") {
+            poshuk1 = zamena(poshuk1)
+            if (chin.getInt("pegistr", 0) == 0) poshuk1 = poshuk1.toLowerCase(Locale.getDefault())
+            if (chin.getInt("slovocalkam", 0) == 0) {
+                val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
+                for (aM in m) {
+                    val r = poshuk1.length - 1
+                    if (poshuk1.length >= 3) {
+                        if (poshuk1[r] == aM) {
+                            poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r))
+                        }
+                    }
+                }
+            } else {
+                poshuk1 = " $poshuk1 "
+            }
+            var color = by.carkva_gazeta.malitounik.R.color.colorPrimary
+            if (dzenNoch) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black
+            val nazva = "Псалтыр"
+            val inputStream = resources.openRawResource(R.raw.nadsan_psaltyr)
+            val isr = InputStreamReader(inputStream)
+            val reader = BufferedReader(isr)
+            val split = reader.readText().split("===")
+            inputStream.close()
+            for ((glava, e) in (1 until split.size).withIndex()) {
+                val bibleline = split[e].split("\n")
+                var stix = 0
+                (1 until bibleline.size).forEach { r ->
+                    stix++
+                    var prepinanie = bibleline[r]
+                    if (chin.getInt("pegistr", 0) == 0) prepinanie = prepinanie.toLowerCase(Locale.getDefault())
+                    prepinanie = prepinanie.replace(",", "")
+                    prepinanie = prepinanie.replace(".", "")
+                    prepinanie = prepinanie.replace(";", "")
+                    prepinanie = prepinanie.replace(":", "")
+                    prepinanie = prepinanie.replace("-", "")
+                    prepinanie = prepinanie.replace("\"", "")
+                    prepinanie = prepinanie.replace("ё", "е")
+                    prepinanie = prepinanie.replace("<em>", "")
+                    prepinanie = prepinanie.replace("</em>", " ")
+                    prepinanie = prepinanie.replace("<br>", "")
+                    prepinanie = prepinanie.replace("<strong>", "")
+                    prepinanie = prepinanie.replace("</strong>", " ")
+                    if (chin.getInt("slovocalkam", 0) == 0) {
+                        if (prepinanie.contains(poshuk1)) {
+                            val aSviatyia = bibleline[r]
+                            val t2 = poshuk1.length
+                            val title = "$nazva Гл. $glava".length
+                            val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                            val t3 = span.indexOf("-->")
+                            val t1 = span.indexOf(poshuk1, ignoreCase = true)
+                            span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            seashpost.add(span)
+                        }
+                    } else {
+                        if (prepinanie.contains(poshuk1)) {
+                            val aSviatyia = bibleline[r]
+                            val t2 = poshuk1.length
+                            val title = "$nazva Гл. $glava".length
+                            val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
+                            val t3 = span.indexOf("-->")
+                            val t1 = span.indexOf(poshuk1, ignoreCase = true)
+                            span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            seashpost.add(span)
+                        }
+                    }
+                }
+            }
+        }
+        return seashpost
     }
 
     private inner class MyTextWatcher(private val editText: EditText?, private val filtep: Boolean = false) : TextWatcher {
@@ -755,8 +1361,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             val t1 = seash[position].indexOf("-->")
             viewHolder.text?.text = seash[position].subSequence(t1 + 3, seash[position].length)
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch)
-                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+            if (dzenNoch) viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }
 
@@ -812,487 +1417,5 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     companion object {
         private var zavet = 1
-        private var setSinodalBible: ArrayMap<String, Int> = ArrayMap()
-        private var setSemuxaBible: ArrayMap<String, Int> = ArrayMap()
-        private var searche = false
-
-        private fun setBibleSinodal() {
-            val fields = raw::class.java.fields
-            for (field in fields) {
-                if (field.name.contains("sinaidal")) {
-                    setSinodalBible[field.name] = field.getInt(null)
-                }
-            }
-        }
-
-        private fun setBibleSemuxa() {
-            val fields = raw::class.java.fields
-            for (field in fields) {
-                if (field.name.contains("biblia")) {
-                    setSemuxaBible[field.name] = field.getInt(null)
-                }
-            }
-        }
-
-        private fun zamena(replase: String): String {
-            var replase1 = replase
-            replase1 = replase1.replace("ё", "е")
-            replase1 = replase1.replace("и", "і")
-            replase1 = replase1.replace("щ", "ў")
-            replase1 = replase1.replace("ъ", "'")
-            replase1 = replase1.replace("све", "сьве")
-            replase1 = replase1.replace("сві", "сьві")
-            replase1 = replase1.replace("свя", "сьвя")
-            replase1 = replase1.replace("зве", "зьве")
-            replase1 = replase1.replace("зві", "зьві")
-            replase1 = replase1.replace("звя", "зьвя")
-            replase1 = replase1.replace("зме", "зьме")
-            replase1 = replase1.replace("змі", "зьмі")
-            replase1 = replase1.replace("змя", "зьмя")
-            replase1 = replase1.replace("зня", "зьня")
-            replase1 = replase1.replace("сле", "сьле")
-            replase1 = replase1.replace("слі", "сьлі")
-            replase1 = replase1.replace("сль", "сьль")
-            replase1 = replase1.replace("слю", "сьлю")
-            replase1 = replase1.replace("сля", "сьля")
-            replase1 = replase1.replace("сне", "сьне")
-            replase1 = replase1.replace("сні", "сьні")
-            replase1 = replase1.replace("сню", "сьню")
-            replase1 = replase1.replace("сня", "сьня")
-            replase1 = replase1.replace("спе", "сьпе")
-            replase1 = replase1.replace("спі", "сьпі")
-            replase1 = replase1.replace("спя", "сьпя")
-            replase1 = replase1.replace("сце", "сьце")
-            replase1 = replase1.replace("сці", "сьці")
-            replase1 = replase1.replace("сць", "сьць")
-            replase1 = replase1.replace("сцю", "сьцю")
-            replase1 = replase1.replace("сця", "сьця")
-            replase1 = replase1.replace("цце", "цьце")
-            replase1 = replase1.replace("цці", "цьці")
-            replase1 = replase1.replace("ццю", "цьцю")
-            replase1 = replase1.replace("ззе", "зьзе")
-            replase1 = replase1.replace("ззі", "зьзі")
-            replase1 = replase1.replace("ззю", "зьзю")
-            replase1 = replase1.replace("ззя", "зьзя")
-            replase1 = replase1.replace("зле", "зьле")
-            replase1 = replase1.replace("злі", "зьлі")
-            replase1 = replase1.replace("злю", "зьлю")
-            replase1 = replase1.replace("зля", "зьля")
-            replase1 = replase1.replace("збе", "зьбе")
-            replase1 = replase1.replace("збі", "зьбі")
-            replase1 = replase1.replace("збя", "зьбя")
-            replase1 = replase1.replace("нне", "ньне")
-            replase1 = replase1.replace("нні", "ньні")
-            replase1 = replase1.replace("нню", "ньню")
-            replase1 = replase1.replace("ння", "ньня")
-            replase1 = replase1.replace("лле", "льле")
-            replase1 = replase1.replace("ллі", "льлі")
-            replase1 = replase1.replace("ллю", "льлю")
-            replase1 = replase1.replace("лля", "льля")
-            replase1 = replase1.replace("дск", "дзк")
-            replase1 = replase1.replace("дств", "дзтв")
-            replase1 = replase1.replace("з’е", "зье")
-            replase1 = replase1.replace("з’я", "зья")
-            return replase1
-        }
-
-        private fun semuxa(context: Context, poshuk: String): ArrayList<Spannable> {
-            var poshuk1 = poshuk
-            val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin?.getBoolean("dzen_noch", false)
-            val seashpost = ArrayList<Spannable>()
-            if (poshuk1 != "") {
-                poshuk1 = zamena(poshuk1)
-                if (chin?.getInt("pegistr", 0) == 0) poshuk1 = poshuk1.toLowerCase(Locale.getDefault())
-                if (chin?.getInt("slovocalkam", 0) == 0) {
-                    val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
-                    for (aM in m) {
-                        val r = poshuk1.length - 1
-                        if (poshuk1.length >= 3) {
-                            if (poshuk1[r] == aM) {
-                                poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r))
-                            }
-                        }
-                    }
-                } else {
-                    poshuk1 = " $poshuk1 "
-                }
-                var color = by.carkva_gazeta.malitounik.R.color.colorPrimary //"<font color=#d00505>"
-                if (dzenNoch == true) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black //"<font color=#f44336>"
-                for (i in 0 until setSemuxaBible.size) {
-                    var biblia = "biblia"
-                    if (chin?.getInt("biblia_seash", 0) == 1) biblia = "biblian"
-                    if (chin?.getInt("biblia_seash", 0) == 2) biblia = "biblias"
-                    if (setSemuxaBible.keyAt(i).contains(biblia)) {
-                        var nazva = ""
-                        if (setSemuxaBible.keyAt(i).contains("biblias1")) nazva = "Быцьцё"
-                        if (setSemuxaBible.keyAt(i).contains("biblias2")) nazva = "Выхад"
-                        if (setSemuxaBible.keyAt(i).contains("biblias3")) nazva = "Лявіт"
-                        if (setSemuxaBible.keyAt(i).contains("biblias4")) nazva = "Лікі"
-                        if (setSemuxaBible.keyAt(i).contains("biblias5")) nazva = "Другі Закон"
-                        if (setSemuxaBible.keyAt(i).contains("biblias6")) nazva = "Ісуса сына Нава"
-                        if (setSemuxaBible.keyAt(i).contains("biblias7")) nazva = "Судзьдзяў"
-                        if (setSemuxaBible.keyAt(i).contains("biblias8")) nazva = "Рут"
-                        if (setSemuxaBible.keyAt(i).contains("biblias9")) nazva = "1-я Царстваў"
-                        if (setSemuxaBible.keyAt(i).contains("biblias10")) nazva = "2-я Царстваў"
-                        if (setSemuxaBible.keyAt(i).contains("biblias11")) nazva = "3-я Царстваў"
-                        if (setSemuxaBible.keyAt(i).contains("biblias12")) nazva = "4-я Царстваў"
-                        if (setSemuxaBible.keyAt(i).contains("biblias13")) nazva = "1-я Летапісаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblias14")) nazva = "2-я Летапісаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblias15")) nazva = "Эздры"
-                        if (setSemuxaBible.keyAt(i).contains("biblias16")) nazva = "Нээміі"
-                        if (setSemuxaBible.keyAt(i).contains("biblias17")) nazva = "Эстэр"
-                        if (setSemuxaBible.keyAt(i).contains("biblias18")) nazva = "Ёва"
-                        if (setSemuxaBible.keyAt(i).contains("biblias19")) nazva = "Псалтыр"
-                        if (setSemuxaBible.keyAt(i).contains("biblias20")) nazva = "Выслоўяў Саламонавых"
-                        if (setSemuxaBible.keyAt(i).contains("biblias21")) nazva = "Эклезіяста"
-                        if (setSemuxaBible.keyAt(i).contains("biblias22")) nazva = "Найвышэйшая Песьня Саламонава"
-                        if (setSemuxaBible.keyAt(i).contains("biblias23")) nazva = "Ісаі"
-                        if (setSemuxaBible.keyAt(i).contains("biblias24")) nazva = "Ераміі"
-                        if (setSemuxaBible.keyAt(i).contains("biblias25")) nazva = "Ераміін Плач"
-                        if (setSemuxaBible.keyAt(i).contains("biblias26")) nazva = "Езэкііля"
-                        if (setSemuxaBible.keyAt(i).contains("biblias27")) nazva = "Данііла"
-                        if (setSemuxaBible.keyAt(i).contains("biblias28")) nazva = "Асіі"
-                        if (setSemuxaBible.keyAt(i).contains("biblias29")) nazva = "Ёіля"
-                        if (setSemuxaBible.keyAt(i).contains("biblias30")) nazva = "Амоса"
-                        if (setSemuxaBible.keyAt(i).contains("biblias31")) nazva = "Аўдзея"
-                        if (setSemuxaBible.keyAt(i).contains("biblias32")) nazva = "Ёны"
-                        if (setSemuxaBible.keyAt(i).contains("biblias33")) nazva = "Міхея"
-                        if (setSemuxaBible.keyAt(i).contains("biblias34")) nazva = "Навума"
-                        if (setSemuxaBible.keyAt(i).contains("biblias35")) nazva = "Абакума"
-                        if (setSemuxaBible.keyAt(i).contains("biblias36")) nazva = "Сафона"
-                        if (setSemuxaBible.keyAt(i).contains("biblias37")) nazva = "Агея"
-                        if (setSemuxaBible.keyAt(i).contains("biblias38")) nazva = "Захарыі"
-                        if (setSemuxaBible.keyAt(i).contains("biblias39")) nazva = "Малахіі"
-                        if (setSemuxaBible.keyAt(i).contains("biblian1")) nazva = "Паводле Мацьвея"
-                        if (setSemuxaBible.keyAt(i).contains("biblian2")) nazva = "Паводле Марка"
-                        if (setSemuxaBible.keyAt(i).contains("biblian3")) nazva = "Паводле Лукаша"
-                        if (setSemuxaBible.keyAt(i).contains("biblian4")) nazva = "Паводле Яна"
-                        if (setSemuxaBible.keyAt(i).contains("biblian5")) nazva = "Дзеі Апосталаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian6")) nazva = "Якава"
-                        if (setSemuxaBible.keyAt(i).contains("biblian7")) nazva = "1-е Пятра"
-                        if (setSemuxaBible.keyAt(i).contains("biblian8")) nazva = "2-е Пятра"
-                        if (setSemuxaBible.keyAt(i).contains("biblian9")) nazva = "1-е Яна Багаслова"
-                        if (setSemuxaBible.keyAt(i).contains("biblian10")) nazva = "2-е Яна Багаслова"
-                        if (setSemuxaBible.keyAt(i).contains("biblian11")) nazva = "3-е Яна Багаслова"
-                        if (setSemuxaBible.keyAt(i).contains("biblian12")) nazva = "Юды"
-                        if (setSemuxaBible.keyAt(i).contains("biblian13")) nazva = "Да Рымлянаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian14")) nazva = "1-е да Карынфянаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian15")) nazva = "2-е да Карынфянаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian16")) nazva = "Да Галятаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian17")) nazva = "Да Эфэсянаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian18")) nazva = "Да Піліпянаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian19")) nazva = "Да Каласянаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian20")) nazva = "1-е да Фесаланікійцаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian21")) nazva = "2-е да Фесаланікійцаў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian22")) nazva = "1-е да Цімафея"
-                        if (setSemuxaBible.keyAt(i).contains("biblian23")) nazva = "2-е да Цімафея"
-                        if (setSemuxaBible.keyAt(i).contains("biblian24")) nazva = "Да Ціта"
-                        if (setSemuxaBible.keyAt(i).contains("biblian25")) nazva = "Да Філімона"
-                        if (setSemuxaBible.keyAt(i).contains("biblian26")) nazva = "Да Габрэяў"
-                        if (setSemuxaBible.keyAt(i).contains("biblian27")) nazva = "Адкрыцьцё (Апакаліпсіс)"
-                        val inputStream = context.resources.openRawResource(setSemuxaBible.valueAt(i))
-                        val isr = InputStreamReader(inputStream)
-                        val reader = BufferedReader(isr)
-                        var glava = 0
-                        val split = reader.readText().split("===")
-                        inputStream.close()
-                        (1 until split.size).forEach { e ->
-                            glava++
-                            val bibleline = split[e].split("\n")
-                            var stix = 0
-                            for (r in 1 until bibleline.size) {
-                                var prepinanie = bibleline[r]
-                                if (prepinanie.contains("//")) {
-                                    val t1 = prepinanie.indexOf("//")
-                                    prepinanie = if (t1 == 0) continue else prepinanie.substring(0, t1).trim()
-                                }
-                                stix++
-                                if (chin?.getInt("slovocalkam", 0) == 1) prepinanie = " " + bibleline[r] + " "
-                                if (chin?.getInt("pegistr", 0) == 0) prepinanie = prepinanie.toLowerCase(Locale.getDefault())
-                                prepinanie = prepinanie.replace(",", "")
-                                prepinanie = prepinanie.replace(".", "")
-                                prepinanie = prepinanie.replace(";", "")
-                                prepinanie = prepinanie.replace(":", "")
-                                prepinanie = prepinanie.replace("-", "")
-                                prepinanie = prepinanie.replace("\"", "")
-                                prepinanie = prepinanie.replace("ё", "е")
-                                prepinanie = prepinanie.replace("<em>", "")
-                                prepinanie = prepinanie.replace("</em>", " ")
-                                prepinanie = prepinanie.replace("<br>", "")
-                                prepinanie = prepinanie.replace("<strong>", "")
-                                prepinanie = prepinanie.replace("</strong>", " ")
-                                if (chin?.getInt("slovocalkam", 0) == 0) {
-                                    if (prepinanie.contains(poshuk1)) {
-                                        val aSviatyia = bibleline[r]
-                                        val title = "$nazva Гл. $glava".length
-                                        val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                                        val t3 = span.indexOf("-->")
-                                        val t1 = span.indexOf(poshuk1, ignoreCase = true)
-                                        val t2 = poshuk1.length
-                                        span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        seashpost.add(span)
-                                    }
-                                } else {
-                                    if (prepinanie.contains(poshuk1)) {
-                                        val aSviatyia = bibleline[r]
-                                        val t2 = poshuk1.length
-                                        val title = "$nazva Гл. $glava".length
-                                        val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                                        val t3 = span.indexOf("-->")
-                                        val t1 = span.indexOf(poshuk1, ignoreCase = true)
-                                        span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        seashpost.add(span)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return seashpost
-        }
-
-        private fun sinoidal(context: Context, poshuk: String): ArrayList<Spannable> {
-            var poshuk1 = poshuk
-            val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
-            val seashpost = ArrayList<Spannable>()
-            if (poshuk1 != "") {
-                poshuk1 = poshuk1.replace("ё", "е")
-                if (chin?.getInt("pegistr", 0) == 0) poshuk1 = poshuk1.toLowerCase(Locale.getDefault())
-                if (chin?.getInt("slovocalkam", 0) == 0) {
-                    val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
-                    for (aM in m) {
-                        val r = poshuk1.length - 1
-                        if (poshuk1[r] == aM) {
-                            poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r))
-                        }
-                    }
-                } else {
-                    poshuk1 = " $poshuk1 "
-                }
-                var color = by.carkva_gazeta.malitounik.R.color.colorPrimary //"<font color=#d00505>"
-                if (dzenNoch) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black //"<font color=#f44336>"
-                for (i in 0 until setSinodalBible.size) {
-                    var biblia = "sinaidal"
-                    if (chin?.getInt("biblia_seash", 0) == 1) biblia = "sinaidaln"
-                    if (chin?.getInt("biblia_seash", 0) == 2) biblia = "sinaidals"
-                    if (setSinodalBible.keyAt(i).contains(biblia)) {
-                        var nazva = ""
-                        if (setSinodalBible.keyAt(i).contains("sinaidals1")) nazva = "Бытие"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals2")) nazva = "Исход"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals3")) nazva = "Левит"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals4")) nazva = "Числа"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals5")) nazva = "Второзаконие"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals6")) nazva = "Иисуса Навина"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals7")) nazva = "Судей израилевых"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals8")) nazva = "Руфи"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals9")) nazva = "1-я Царств"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals10")) nazva = "2-я Царств"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals11")) nazva = "3-я Царств"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals12")) nazva = "4-я Царств"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals13")) nazva = "1-я Паралипоменон"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals14")) nazva = "2-я Паралипоменон"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals15")) nazva = "1-я Ездры"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals16")) nazva = "Неемии"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals17")) nazva = "2-я Ездры"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals18")) nazva = "Товита"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals19")) nazva = "Иудифи"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals20")) nazva = "Есфири"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals21")) nazva = "Иова"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals22")) nazva = "Псалтирь"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals23")) nazva = "Притчи Соломона"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals24")) nazva = "Екклезиаста"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals25")) nazva = "Песнь песней Соломона"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals26")) nazva = "Премудрости Соломона"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals27")) nazva = "Премудрости Иисуса, сына Сирахова"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals28")) nazva = "Исаии"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals29")) nazva = "Иеремии"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals30")) nazva = "Плач Иеремии"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals31")) nazva = "Послание Иеремии"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals32")) nazva = "Варуха"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals33")) nazva = "Иезекииля"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals34")) nazva = "Даниила"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals35")) nazva = "Осии"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals36")) nazva = "Иоиля"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals37")) nazva = "Амоса"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals38")) nazva = "Авдия"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals39")) nazva = "Ионы"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals40")) nazva = "Михея"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals41")) nazva = "Наума"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals42")) nazva = "Аввакума"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals43")) nazva = "Сафонии"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals44")) nazva = "Аггея"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals45")) nazva = "Захарии"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals46")) nazva = "Малахии"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals47")) nazva = "1-я Маккавейская"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals48")) nazva = "2-я Маккавейская"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals49")) nazva = "3-я Маккавейская"
-                        if (setSinodalBible.keyAt(i).contains("sinaidals50")) nazva = "3-я Ездры"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln1")) nazva = "От Матфея"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln2")) nazva = "От Марка"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln3")) nazva = "От Луки"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln4")) nazva = "От Иоанна"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln5")) nazva = "Деяния святых апостолов"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln6")) nazva = "Иакова"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln7")) nazva = "1-е Петра"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln8")) nazva = "2-е Петра"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln9")) nazva = "1-е Иоанна"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln10")) nazva = "2-е Иоанна"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln11")) nazva = "3-е Иоанна"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln12")) nazva = "Иуды"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln13")) nazva = "Римлянам"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln14")) nazva = "1-е Коринфянам"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln15")) nazva = "2-е Коринфянам"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln16")) nazva = "Галатам"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln17")) nazva = "Эфэсянам"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln18")) nazva = "Филиппийцам"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln19")) nazva = "Колоссянам"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln20")) nazva = "1-е Фессалоникийцам (Солунянам)"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln21")) nazva = "2-е Фессалоникийцам (Солунянам)"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln22")) nazva = "1-е Тимофею"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln23")) nazva = "2-е Тимофею"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln24")) nazva = "Титу"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln25")) nazva = "Филимону"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln26")) nazva = "Евреям"
-                        if (setSinodalBible.keyAt(i).contains("sinaidaln27")) nazva = "Откровение (Апокалипсис)"
-                        val inputStream = context.resources.openRawResource(setSinodalBible.valueAt(i))
-                        val isr = InputStreamReader(inputStream)
-                        val reader = BufferedReader(isr)
-                        var glava = 0
-                        val split = reader.readText().split("===")
-                        inputStream.close()
-                        (1 until split.size).forEach { e ->
-                            glava++
-                            val bibleline = split[e].split("\n")
-                            var stix = 0
-                            (1 until bibleline.size).forEach { r ->
-                                stix++
-                                var prepinanie = bibleline[r]
-                                if (chin?.getInt("slovocalkam", 0) == 1) prepinanie = " " + bibleline[r] + " "
-                                if (chin?.getInt("pegistr", 0) == 0) prepinanie = prepinanie.toLowerCase(Locale.getDefault())
-                                prepinanie = prepinanie.replace(",", "")
-                                prepinanie = prepinanie.replace(".", "")
-                                prepinanie = prepinanie.replace(";", "")
-                                prepinanie = prepinanie.replace(":", "")
-                                prepinanie = prepinanie.replace("[", "")
-                                prepinanie = prepinanie.replace("]", "")
-                                prepinanie = prepinanie.replace("-", "")
-                                prepinanie = prepinanie.replace("\"", "")
-                                prepinanie = prepinanie.replace("ё", "е")
-                                if (chin?.getInt("slovocalkam", 0) == 0) {
-                                    if (prepinanie.contains(poshuk1)) {
-                                        val aSviatyia = bibleline[r]
-                                        val t2 = poshuk1.length
-                                        val title = "$nazva Гл. $glava".length
-                                        val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                                        val t3 = span.indexOf("-->")
-                                        val t1 = span.indexOf(poshuk1, ignoreCase = true)
-                                        span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        seashpost.add(span)
-                                    }
-                                } else {
-                                    if (prepinanie.contains(poshuk1)) {
-                                        val aSviatyia = bibleline[r]
-                                        val t2 = poshuk1.length
-                                        val title = "$nazva Гл. $glava".length
-                                        val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                                        val t3 = span.indexOf("-->")
-                                        val t1 = span.indexOf(poshuk1, ignoreCase = true)
-                                        span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                        seashpost.add(span)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return seashpost
-        }
-
-        private fun nadsan(context: Context, poshuk: String): ArrayList<Spannable> {
-            var poshuk1 = poshuk
-            val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
-            val seashpost = ArrayList<Spannable>()
-            if (poshuk1 != "") {
-                poshuk1 = zamena(poshuk1)
-                if (chin?.getInt("pegistr", 0) == 0) poshuk1 = poshuk1.toLowerCase(Locale.getDefault())
-                if (chin?.getInt("slovocalkam", 0) == 0) {
-                    val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'и', 'ю', 'ь', 'ы')
-                    for (aM in m) {
-                        val r = poshuk1.length - 1
-                        if (poshuk1.length >= 3) {
-                            if (poshuk1[r] == aM) {
-                                poshuk1 = poshuk1.replace(poshuk1, poshuk1.substring(0, r))
-                            }
-                        }
-                    }
-                } else {
-                    poshuk1 = " $poshuk1 "
-                }
-                var color = by.carkva_gazeta.malitounik.R.color.colorPrimary //"<font color=#d00505>"
-                if (dzenNoch) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black //"<font color=#f44336>"
-                val nazva = "Псалтыр"
-                val inputStream = context.resources.openRawResource(raw.nadsan_psaltyr)
-                val isr = InputStreamReader(inputStream)
-                val reader = BufferedReader(isr)
-                val split = reader.readText().split("===")
-                inputStream.close()
-                for ((glava, e) in (1 until split.size).withIndex()) {
-                    val bibleline = split[e].split("\n")
-                    var stix = 0
-                    (1 until bibleline.size).forEach { r ->
-                        stix++
-                        var prepinanie = bibleline[r]
-                        if (chin?.getInt("pegistr", 0) == 0) prepinanie = prepinanie.toLowerCase(Locale.getDefault())
-                        prepinanie = prepinanie.replace(",", "")
-                        prepinanie = prepinanie.replace(".", "")
-                        prepinanie = prepinanie.replace(";", "")
-                        prepinanie = prepinanie.replace(":", "")
-                        prepinanie = prepinanie.replace("-", "")
-                        prepinanie = prepinanie.replace("\"", "")
-                        prepinanie = prepinanie.replace("ё", "е")
-                        prepinanie = prepinanie.replace("<em>", "")
-                        prepinanie = prepinanie.replace("</em>", " ")
-                        prepinanie = prepinanie.replace("<br>", "")
-                        prepinanie = prepinanie.replace("<strong>", "")
-                        prepinanie = prepinanie.replace("</strong>", " ")
-                        if (chin?.getInt("slovocalkam", 0) == 0) {
-                            if (prepinanie.contains(poshuk1)) {
-                                val aSviatyia = bibleline[r]
-                                val t2 = poshuk1.length
-                                val title = "$nazva Гл. $glava".length
-                                val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                                val t3 = span.indexOf("-->")
-                                val t1 = span.indexOf(poshuk1, ignoreCase = true)
-                                span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                seashpost.add(span)
-                            }
-                        } else {
-                            if (prepinanie.contains(poshuk1)) {
-                                val aSviatyia = bibleline[r]
-                                val t2 = poshuk1.length
-                                val title = "$nazva Гл. $glava".length
-                                val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
-                                val t3 = span.indexOf("-->")
-                                val t1 = span.indexOf(poshuk1, ignoreCase = true)
-                                span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                seashpost.add(span)
-                            }
-                        }
-                    }
-                }
-            }
-            return seashpost
-        }
     }
 }

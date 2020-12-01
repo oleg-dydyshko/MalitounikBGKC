@@ -15,7 +15,10 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import by.carkva_gazeta.malitounik.R
 
 class DialogBibleRazdel : DialogFragment() {
@@ -89,7 +92,7 @@ class DialogBibleRazdel : DialogFragment() {
                 input.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                 input.setBackgroundResource(R.color.colorWhite)
             }
-            input.setPadding(realpadding, realpadding, realpadding, realpadding) //10, 0, 0, 0
+            input.setPadding(realpadding, realpadding, realpadding, realpadding)
             input.requestFocus()
             input.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_GO) {

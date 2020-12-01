@@ -96,6 +96,13 @@ class DialogBibleNatatka : DialogFragment() {
             editTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             editTextView.setText(editText)
             editTextView.requestFocus()
+            if (dzenNoch) {
+                editTextView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                editTextView.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
+            } else {
+                editTextView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                editTextView.setBackgroundResource(R.color.colorWhite)
+            }
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             linearLayout.addView(editTextView)

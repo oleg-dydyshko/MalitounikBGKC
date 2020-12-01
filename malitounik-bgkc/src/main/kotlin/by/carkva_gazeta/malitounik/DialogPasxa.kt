@@ -72,6 +72,13 @@ class DialogPasxa : DialogFragment() {
                 input.setText(sValue)
             }
             input.inputType = InputType.TYPE_CLASS_NUMBER
+            if (dzenNoch) {
+                input.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                input.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
+            } else {
+                input.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                input.setBackgroundResource(R.color.colorWhite)
+            }
             input.requestFocus()
             input.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_GO) {

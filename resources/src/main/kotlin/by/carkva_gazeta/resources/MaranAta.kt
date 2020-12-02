@@ -825,6 +825,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     val builder = StringBuilder()
                     reader.forEachLine {
                         line = it
+                        line = line.replace("\\n", "<br>")
                         if (line.contains("//")) {
                             val t1 = line.indexOf("//")
                             line = line.substring(0, t1).trim()

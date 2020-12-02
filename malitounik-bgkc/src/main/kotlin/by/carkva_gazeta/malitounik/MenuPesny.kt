@@ -29,9 +29,6 @@ import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by oleg on 30.5.16
- */
 class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     private var mLastClickTime: Long = 0
     private var posukPesenTimer: Timer? = null

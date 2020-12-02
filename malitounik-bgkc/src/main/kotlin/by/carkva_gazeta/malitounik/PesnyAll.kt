@@ -504,7 +504,8 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             resursMap["pesny_prasl_30"] = R.raw.pesny_prasl_30
             resursMap["pesny_prasl_31"] = R.raw.pesny_prasl_31
             resursMap["pesny_prasl_32"] = R.raw.pesny_prasl_32
-            resursMap["pesny_prasl_33"] = R.raw.pesny_prasl_34
+            resursMap["pesny_prasl_33"] = R.raw.pesny_prasl_33
+            resursMap["pesny_prasl_34"] = R.raw.pesny_prasl_34
             resursMap["pesny_prasl_35"] = R.raw.pesny_prasl_35
             resursMap["pesny_prasl_36"] = R.raw.pesny_prasl_36
             resursMap["pesny_prasl_37"] = R.raw.pesny_prasl_37

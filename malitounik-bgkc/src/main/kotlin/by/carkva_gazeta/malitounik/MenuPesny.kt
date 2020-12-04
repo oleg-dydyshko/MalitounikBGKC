@@ -7,10 +7,7 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.Editable
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.TextWatcher
+import android.text.*
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
@@ -54,9 +51,8 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         super.onActivityCreated(savedInstanceState)
         activity?.let { fraragment ->
             chin = fraragment.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            if (!menuListDataIsInitialized()) menuListData = getMenuListData(fraragment)
             pesny = arguments?.getString("pesny") ?: "prasl"
-            menuList = getMenuListData(fraragment, pesny)
+            menuList = getMenuListData(pesny)
             adapter = MenuPesnyListAdapter(fraragment)
             ListView.adapter = adapter
             ListView.isVerticalScrollBarEnabled = false
@@ -218,7 +214,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         if (search) {
             searchViewItem.expandActionView()
             menuList.clear()
-            menuList.addAll(menuListData)
+            menuList.addAll(getMenuListData())
             menuList.sort()
             textViewCount?.text = getString(R.string.seash, menuList.size)
             adapter.notifyDataSetChanged()
@@ -228,7 +224,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 search = true
                 menuList.clear()
-                menuList.addAll(menuListData)
+                menuList.addAll(getMenuListData())
                 menuList.sort()
                 textViewCount?.text = getString(R.string.seash, menuList.size)
                 adapter.notifyDataSetChanged()
@@ -241,7 +237,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                 search = false
                 activity?.let {
                     menuList.clear()
-                    menuList.addAll(getMenuListData(it, pesny))
+                    menuList.addAll(getMenuListData(pesny))
                     adapter.notifyDataSetChanged()
                     menu.findItem(R.id.count).isVisible = search
                 }
@@ -324,7 +320,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             posukPesenSchedule = object : TimerTask() {
                 override fun run() {
                     CoroutineScope(Dispatchers.Main).launch {
-                        rawAsset(poshuk)
+                        searchPasny(poshuk)
                     }
                 }
             }
@@ -332,7 +328,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         }
     }
 
-    private fun rawAsset(poshuk: String) {
+    private fun searchPasny(poshuk: String) {
         var poshuk1 = poshuk
         var setClear = true
         if (poshuk1 != "") {
@@ -400,6 +396,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                     }
                 }
             }
+            val menuListData = getMenuListData()
             for (i in menuListData.indices) {
                 val inputStream = resources.openRawResource(menuListData[i].id)
                 val isr = InputStreamReader(inputStream)
@@ -430,6 +427,29 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             adapter.notifyDataSetChanged()
         }
         textViewCount?.text = resources.getString(R.string.seash, menuList.size)
+    }
+
+    private fun listRaw(filename: String) = PesnyAll.resursMap[filename] ?: -1
+
+    private fun getMenuListData(pesny: String = "no_filter"): ArrayList<MenuListData> {
+        var menuListData = ArrayList<MenuListData>()
+        val inputStream = resources.openRawResource(R.raw.pesny_menu)
+        val isr = InputStreamReader(inputStream)
+        val reader = BufferedReader(isr)
+        var line: String
+        reader.forEachLine {
+            line = it
+            val split = line.split("<>")
+            val id = listRaw(split[0])
+            if (id != -1)
+                menuListData.add(MenuListData(id, split[1], split[0]))
+        }
+        if (pesny != "no_filter") {
+            menuListData = menuListData.filter {
+                it.type.contains(pesny)
+            } as ArrayList<MenuListData>
+        }
+        return menuListData
     }
 
     private inner class MyTextWatcher : TextWatcher {
@@ -466,7 +486,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                     }
                     else -> {
                         menuList.clear()
-                        menuList.addAll(menuListData)
+                        menuList.addAll(getMenuListData())
                         menuList.sort()
                         adapter.notifyDataSetChanged()
                         textViewCount?.text = getString(R.string.seash, menuList.size)
@@ -485,7 +505,6 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     }
 
     private inner class MenuPesnyListAdapter(private val activity: Activity) : ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
-
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
@@ -512,48 +531,12 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     }
 
     companion object {
-        private lateinit var menuListData: ArrayList<MenuListData>
-
         fun getInstance(pesny: String): MenuPesny {
             val bundle = Bundle()
             bundle.putString("pesny", pesny)
             val menuPesny = MenuPesny()
             menuPesny.arguments = bundle
             return menuPesny
-        }
-
-        private fun menuListDataIsInitialized() = ::menuListData.isInitialized
-
-        fun getPesniaID(context: Context, name: String): Int {
-            if (!::menuListData.isInitialized) menuListData = getMenuListData(context)
-            for (list_data in menuListData) {
-                if (list_data.data == name) return list_data.id
-            }
-            return -1
-        }
-
-        private fun listRaw(filename: String) = PesnyAll.resursMap[filename] ?: -1
-
-        private fun getMenuListData(context: Context): ArrayList<MenuListData> {
-            val menuListData = ArrayList<MenuListData>()
-            val inputStream = context.resources.openRawResource(R.raw.pesny_menu)
-            val isr = InputStreamReader(inputStream)
-            val reader = BufferedReader(isr)
-            var line: String
-            reader.forEachLine {
-                line = it
-                val split = line.split("<>")
-                menuListData.add(MenuListData(listRaw(split[0]), split[1], split[0]))
-            }
-            return menuListData
-        }
-
-        private fun getMenuListData(context: Context, pesny: String): ArrayList<MenuListData> {
-            if (!::menuListData.isInitialized) menuListData = getMenuListData(context)
-            val menuList = menuListData.filter {
-                it.type.contains(pesny)
-            }
-            return menuList as ArrayList<MenuListData>
         }
     }
 }

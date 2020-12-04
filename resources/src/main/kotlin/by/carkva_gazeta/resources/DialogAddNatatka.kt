@@ -16,7 +16,9 @@ import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.io.BufferedReader
 import java.io.File
+import java.io.FileReader
 import java.util.*
 
 class DialogAddNatatka : DialogFragment() {
@@ -115,7 +117,31 @@ class DialogAddNatatka : DialogFragment() {
                     val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
                     MenuNatatki.myNatatkiFiles = gson.fromJson(fileNatatka.readText(), type)
                 } catch (t: Throwable) {
-                    fileNatatka.delete()
+                    File(activity.filesDir.toString().plus("/Malitva")).walk().forEach { file ->
+                        if (file.isFile) {
+                            val name = file.name
+                            val t1 = name.lastIndexOf("_")
+                            val index = name.substring(t1 + 1).toLong()
+                            val inputStream = FileReader(file)
+                            val reader = BufferedReader(inputStream)
+                            val res = reader.readText().split("<MEMA></MEMA>")
+                            inputStream.close()
+                            var lRTE: Long = 1
+                            if (res[1].contains("<RTE></RTE>")) {
+                                val start = res[1].indexOf("<RTE></RTE>")
+                                val end = res[1].length
+                                lRTE = res[1].substring(start + 11, end).toLong()
+                            }
+                            if (lRTE <= 1) {
+                                lRTE = file.lastModified()
+                            }
+                            MenuNatatki.myNatatkiFiles.add(MyNatatkiFiles(index, lRTE, res[0]))
+                        }
+                    }
+                    fileNatatka.writer().use {
+                        val gson = Gson()
+                        it.write(gson.toJson(MenuNatatki.myNatatkiFiles))
+                    }
                 }
             }
             MenuNatatki.myNatatkiFiles.add(0, MyNatatkiFiles(i, gc.timeInMillis, nazva))

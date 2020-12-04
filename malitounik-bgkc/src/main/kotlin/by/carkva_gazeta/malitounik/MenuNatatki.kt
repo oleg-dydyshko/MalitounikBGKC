@@ -17,7 +17,9 @@ import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
 import kotlinx.android.synthetic.main.vybranoe_bible_list.*
+import java.io.BufferedReader
 import java.io.File
+import java.io.FileReader
 
 class MenuNatatki : NatatkiFragment() {
     private lateinit var adapter: ItemAdapter
@@ -44,13 +46,38 @@ class MenuNatatki : NatatkiFragment() {
                     val gson = Gson()
                     val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
                     myNatatkiFiles = gson.fromJson(file.readText(), type)
-                    myNatatkiFilesSort = k.getInt("natatki_sort", 0)
-                    myNatatkiFiles.sort()
                     activity.invalidateOptionsMenu()
                 } catch (t: Throwable) {
-                    file.delete()
+                    File(activity.filesDir.toString().plus("/Malitva")).walk().forEach {
+                        if (it.isFile) {
+                            val name = it.name
+                            val t1 = name.lastIndexOf("_")
+                            val index = name.substring(t1 + 1).toLong()
+                            val inputStream = FileReader(it)
+                            val reader = BufferedReader(inputStream)
+                            val res = reader.readText().split("<MEMA></MEMA>")
+                            inputStream.close()
+                            var lRTE: Long = 1
+                            if (res[1].contains("<RTE></RTE>")) {
+                                val start = res[1].indexOf("<RTE></RTE>")
+                                val end = res[1].length
+                                lRTE = res[1].substring(start + 11, end).toLong()
+                            }
+                            if (lRTE <= 1) {
+                                lRTE = it.lastModified()
+                            }
+                            myNatatkiFiles.add(MyNatatkiFiles(index, lRTE, res[0]))
+                        }
+                    }
+                    file.writer().use {
+                        val gson = Gson()
+                        it.write(gson.toJson(myNatatkiFiles))
+                    }
                 }
             }
+            myNatatkiFilesSort = k.getInt("natatki_sort", 0)
+            myNatatkiFiles.sort()
+            activity.invalidateOptionsMenu()
             adapter = ItemAdapter(myNatatkiFiles, R.layout.list_item, R.id.image, false)
             drag_list_view.recyclerView.isVerticalScrollBarEnabled = false
             drag_list_view.setLayoutManager(LinearLayoutManager(activity))

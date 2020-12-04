@@ -461,7 +461,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        // Временно: копирование и удаление старых файлов из Библиотеки
+        // Копирование и удаление старых файлов из Библиотеки
         getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.let {
             val file = File("$filesDir/Biblijateka")
             if (file.exists()) file.copyRecursively(it, overwrite = true)

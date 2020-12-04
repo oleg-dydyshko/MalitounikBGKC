@@ -1,9 +1,15 @@
 package by.carkva_gazeta.resources
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.TextUtils
+import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
+import android.view.Menu
+import android.view.MenuItem
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +19,9 @@ import by.carkva_gazeta.malitounik.MyNatatkiFiles
 import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.my_malitva_add.*
+import kotlinx.android.synthetic.main.my_malitva_add.title_toolbar
+import kotlinx.android.synthetic.main.my_malitva_add.toolbar
+import kotlinx.android.synthetic.main.my_malitva_view.*
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -176,5 +185,31 @@ class MyNatatkiAdd : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        val infl = menuInflater
+        infl.inflate(by.carkva_gazeta.malitounik.R.menu.opisanie, menu)
+        for (i in 0 until menu.size()) {
+            val item: MenuItem = menu.getItem(i)
+            val spanString = SpannableString(menu.getItem(i).title.toString())
+            val end = spanString.length
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            item.title = spanString
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id: Int = item.itemId
+        if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
+            val sendIntent = Intent(Intent.ACTION_SEND)
+            sendIntent.putExtra(Intent.EXTRA_TEXT, EditText.text.toString())
+            sendIntent.putExtra(Intent.EXTRA_SUBJECT, title_toolbar.text.toString())
+            sendIntent.type = "text/plain"
+            startActivity(Intent.createChooser(sendIntent, title_toolbar.text.toString()))
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

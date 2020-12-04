@@ -155,8 +155,7 @@ class Opisanie : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id: Int = item.itemId
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
-            val sendIntent = Intent()
-            sendIntent.action = Intent.ACTION_SEND
+            val sendIntent = Intent(Intent.ACTION_SEND)
             var sviatylink = ""
             if (svity != "")
                 sviatylink = "&sviata=true"

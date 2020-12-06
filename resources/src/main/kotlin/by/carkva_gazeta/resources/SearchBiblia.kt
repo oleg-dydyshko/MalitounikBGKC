@@ -46,7 +46,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
     private var autoCompleteTextView: AutoCompleteTextView? = null
     private var textViewCount: TextViewRobotoCondensed? = null
     private var searchView: SearchView? = null
-    private var title = ""
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
     private var actionExpandOn = false
@@ -554,26 +553,19 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             fierstPosition = chin.getInt("search_bible_fierstPosition", 0)
         }
         ListView.setSelection(fierstPosition)
-        setTollbarTheme(title)
+        spinner6.visibility = View.VISIBLE
+        checkBox.visibility = View.VISIBLE
+        checkBox2.visibility = View.VISIBLE
+        val data = arrayOf("Уся Біблія", "Евангельля", "Новы запавет", "Стары запавет")
+        val arrayAdapter = SearchSpinnerAdapter(this, data)
+        spinner6.adapter = arrayAdapter
+        spinner6.setSelection(chin.getInt("biblia_seash", 0))
+        setTollbarTheme()
     }
 
-    private fun setTollbarTheme(title: String) {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
-            } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
-            }
-        }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
+    private fun setTollbarTheme() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text = title
         if (dzenNoch) {
             toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
@@ -1368,13 +1360,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         override fun getFilter(): Filter {
             return object : Filter() {
                 override fun performFiltering(constraint: CharSequence): FilterResults {
-                    var charSequence = constraint
-                    charSequence = charSequence.toString().toLowerCase(Locale.getDefault())
                     val result = FilterResults()
-                    if (charSequence.toString().isNotEmpty()) {
+                    if (constraint.toString().isNotEmpty()) {
                         val founded = ArrayList<Spannable>()
                         for (item in origData) {
-                            if (item.contains(charSequence)) {
+                            if (item.contains(constraint, true)) {
                                 founded.add(item)
                             }
                         }
@@ -1409,6 +1399,41 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 }
             }
         }
+    }
+
+    private inner class SearchSpinnerAdapter(private val context: Activity, private val name: Array<String>) : ArrayAdapter<String?>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, name) {
+        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val v = super.getDropDownView(position, convertView, parent)
+            val textView = v as TextViewRobotoCondensed
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
+            if (dzenNoch) textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+            else textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            return v
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            if (convertView == null) {
+                rootView = context.layoutInflater.inflate(by.carkva_gazeta.malitounik.R.layout.simple_list_item_4, parent, false)
+                viewHolder = ViewHolder()
+                rootView.tag = viewHolder
+                viewHolder.text = rootView.findViewById(by.carkva_gazeta.malitounik.R.id.text1)
+            } else {
+                rootView = convertView
+                viewHolder = rootView.tag as ViewHolder
+            }
+            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
+            if (dzenNoch) viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+            else viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            viewHolder.text?.gravity = Gravity.START
+            viewHolder.text?.setTypeface(null, Typeface.NORMAL)
+            viewHolder.text?.text = name[position]
+            return rootView
+        }
+
     }
 
     private class ViewHolder {

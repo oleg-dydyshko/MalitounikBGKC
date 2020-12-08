@@ -25,7 +25,7 @@ import android.widget.RadioGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.settings_activity.*
+import by.carkva_gazeta.malitounik.databinding.SettingsActivityBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,6 +40,7 @@ class SettingsActivity : AppCompatActivity() {
     private var dzenNoch = false
     private var mLastClickTime: Long = 0
     private var itemDefault = 0
+    private lateinit var binding: SettingsActivityBinding
 
     companion object {
         private const val UPDATE_ALL_WIDGETS = "update_all_widgets"
@@ -1079,17 +1080,18 @@ class SettingsActivity : AppCompatActivity() {
         dzenNoch = k.getBoolean("dzen_noch", false)
         val notification = k.getInt("notification", 2)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
-        setContentView(R.layout.settings_activity)
+        binding = SettingsActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         prefEditor = k.edit()
         val vibr = k.getInt("vibra", 1)
-        if (dzenNoch) vibro.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        vibro.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        if (vibr == 0) vibro.isChecked = false
+        if (dzenNoch) binding.vibro.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.vibro.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        if (vibr == 0) binding.vibro.isChecked = false
         val guk = k.getInt("guk", 1)
-        if (dzenNoch) this.guk.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        this.guk.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        if (guk == 0) this.guk.isChecked = false
-        if (k.getInt("notification", 2) == 0) spinnerTime.visibility = View.GONE
+        if (dzenNoch) binding.guk.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.guk.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        if (guk == 0) binding.guk.isChecked = false
+        if (k.getInt("notification", 2) == 0) binding.spinnerTime.visibility = View.GONE
         val dataTimes = ArrayList<DataTime>()
         for (i in 6..17) {
             dataTimes.add(DataTime(getString(R.string.pavedamic, i), i))
@@ -1098,19 +1100,19 @@ class SettingsActivity : AppCompatActivity() {
             if (time.data == k.getInt("timeNotification", 8)) break
             itemDefault++
         }
-        spinnerTime.adapter = TimeAdapter(this, dataTimes)
-        spinnerTime.setSelection(itemDefault)
-        spinnerTime.onItemSelectedListener = object : OnItemSelectedListener {
+        binding.spinnerTime.adapter = TimeAdapter(this, dataTimes)
+        binding.spinnerTime.setSelection(itemDefault)
+        binding.spinnerTime.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
                 if (itemDefault != i) {
                     prefEditor.putInt("timeNotification", dataTimes[i].data)
                     prefEditor.apply()
                     itemDefault = i
-                    spinnerTime.isEnabled = false
+                    binding.spinnerTime.isEnabled = false
                     CoroutineScope(Dispatchers.IO).launch {
                         setNotifications(this@SettingsActivity, notification)
                         withContext(Dispatchers.Main) {
-                            spinnerTime.isEnabled = true
+                            binding.spinnerTime.isEnabled = true
                         }
                     }
                 }
@@ -1122,9 +1124,9 @@ class SettingsActivity : AppCompatActivity() {
         for (i in 0..15) {
             autoPrag.add(getString(R.string.autoprag_time, i + 5))
         }
-        spinnerAutoPrag.adapter = AutoPragortkaAdapter(this, autoPrag)
-        spinnerAutoPrag.setSelection(k.getInt("autoscrollAutostartTime", 5))
-        spinnerAutoPrag.onItemSelectedListener = object : OnItemSelectedListener {
+        binding.spinnerAutoPrag.adapter = AutoPragortkaAdapter(this, autoPrag)
+        binding.spinnerAutoPrag.setSelection(k.getInt("autoscrollAutostartTime", 5))
+        binding.spinnerAutoPrag.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 prefEditor.putInt("autoscrollAutostartTime", p2)
                 prefEditor.apply()
@@ -1134,13 +1136,13 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibro.visibility = View.GONE
-            this.guk.visibility = View.GONE
+            binding.vibro.visibility = View.GONE
+            binding.guk.visibility = View.GONE
             notificationChannel(this)
             notificationChannel(this, channelID = NOTIFICATION_CHANNEL_ID_SABYTIE)
-            if (k.getInt("notification", 2) > 0) notifiSvizta.visibility = View.VISIBLE
-            notifiSvizta.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-            notifiSvizta.setOnClickListener {
+            if (k.getInt("notification", 2) > 0) binding.notifiSvizta.visibility = View.VISIBLE
+            binding.notifiSvizta.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+            binding.notifiSvizta.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
@@ -1161,27 +1163,27 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
         }
-        textView14.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        textView15.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        textView16.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        notificationView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.textView14.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.textView15.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.textView16.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.notificationView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (dzenNoch) {
-            textView14.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            textView15.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            textView16.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            notificationView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.textView14.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.textView15.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.textView16.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.notificationView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             //textView57.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            secret.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            line.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            line1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            line2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            line3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.secret.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.line.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.line1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.line2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.line3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
         }
-        if (dzenNoch) prav.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        prav.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        secret.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        prav.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        if (dzenNoch) binding.prav.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.prav.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.secret.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.prav.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("pravas", 1)
             } else {
@@ -1189,9 +1191,9 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        if (dzenNoch) pkc.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        pkc.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        pkc.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        if (dzenNoch) binding.pkc.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.pkc.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.pkc.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("pkc", 1)
             } else {
@@ -1199,9 +1201,9 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        if (dzenNoch) dzair.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        dzair.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        dzair.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        if (dzenNoch) binding.dzair.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.dzair.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.dzair.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("gosud", 1)
             } else {
@@ -1209,9 +1211,9 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        if (dzenNoch) praf.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        praf.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        praf.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        if (dzenNoch) binding.praf.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.praf.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.praf.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("pafesii", 1)
             } else {
@@ -1219,14 +1221,14 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        if (k.getInt("pkc", 0) == 1) pkc.isChecked = true
-        if (k.getInt("pravas", 0) == 1) prav.isChecked = true
-        if (k.getInt("gosud", 0) == 1) dzair.isChecked = true
-        if (k.getInt("pafesii", 0) == 1) praf.isChecked = true
-        maranataOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        notificationOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        notificationFull.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        notificationNon.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        if (k.getInt("pkc", 0) == 1) binding.pkc.isChecked = true
+        if (k.getInt("pravas", 0) == 1) binding.prav.isChecked = true
+        if (k.getInt("gosud", 0) == 1) binding.dzair.isChecked = true
+        if (k.getInt("pafesii", 0) == 1) binding.praf.isChecked = true
+        binding.maranataOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.notificationOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.notificationFull.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.notificationNon.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
             val helpNotifi: TextViewRobotoCondensed = findViewById(R.id.help_notifi)
             helpNotifi.visibility = View.VISIBLE
@@ -1236,56 +1238,56 @@ class SettingsActivity : AppCompatActivity() {
                 notifi.show(supportFragmentManager, "help_notification")
             }
         }
-        maranataBel.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        maranataRus.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.maranataBel.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.maranataRus.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         val belarus = k.getBoolean("belarus", false)
         if (belarus) {
-            maranataBel.isChecked = true
-            maranataRus.isChecked = false
+            binding.maranataBel.isChecked = true
+            binding.maranataRus.isChecked = false
         } else {
-            maranataRus.isChecked = true
-            maranataBel.isChecked = false
+            binding.maranataRus.isChecked = true
+            binding.maranataBel.isChecked = false
         }
-        notificationOnly.isChecked = notification == 1
-        notificationFull.isChecked = notification == 2
-        notificationNon.isChecked = notification == 0
+        binding.notificationOnly.isChecked = notification == 1
+        binding.notificationFull.isChecked = notification == 2
+        binding.notificationNon.isChecked = notification == 0
         val sinoidal = k.getInt("sinoidal", 0)
-        if (dzenNoch) this.sinoidal.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        this.sinoidal.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        if (sinoidal == 1) this.sinoidal.isChecked = true
+        if (dzenNoch) binding.sinoidal.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.sinoidal.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        if (sinoidal == 1) binding.sinoidal.isChecked = true
         val maranata = k.getInt("maranata", 0)
-        if (dzenNoch) this.maranata.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        this.maranata.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        if (dzenNoch) binding.maranata.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.maranata.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (maranata == 1) {
-            this.maranata.isChecked = true
+            binding.maranata.isChecked = true
         } else {
-            maranataBel.isClickable = false
-            maranataRus.isClickable = false
-            maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-            maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-            maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataBel.isClickable = false
+            binding.maranataRus.isClickable = false
+            binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
         }
         val dzenNochSettings = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) checkBox5.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        checkBox5.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        if (dzenNochSettings) checkBox5.isChecked = true
+        if (dzenNoch) binding.checkBox5.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.checkBox5.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        if (dzenNochSettings) binding.checkBox5.isChecked = true
         val autoscrollAutostart = k.getBoolean("autoscrollAutostart", false)
-        if (dzenNoch) checkBox6.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        checkBox6.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        if (dzenNoch) binding.checkBox6.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.checkBox6.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (autoscrollAutostart) {
-            checkBox6.isChecked = true
+            binding.checkBox6.isChecked = true
         } else {
-            spinnerAutoPrag.visibility = View.GONE
+            binding.spinnerAutoPrag.visibility = View.GONE
         }
         val scrinOn = k.getBoolean("scrinOn", false)
-        if (dzenNoch) checkBox7.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        checkBox7.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        if (dzenNoch) binding.checkBox7.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.checkBox7.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (scrinOn) {
-            checkBox7.isChecked = true
+            binding.checkBox7.isChecked = true
         }
-        if (dzenNoch) reset.setBackgroundResource(R.drawable.knopka_red_black)
-        reset.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        reset.setOnClickListener {
+        if (dzenNoch) binding.reset.setBackgroundResource(R.drawable.knopka_red_black)
+        binding.reset.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.reset.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
@@ -1306,8 +1308,7 @@ class SettingsActivity : AppCompatActivity() {
                         break
                     }
                 }
-                if (del)
-                    prefEditor.remove(key)
+                if (del) prefEditor.remove(key)
             }
             File("$filesDir/Book").deleteRecursively()
             MainActivity.toastView(this, getString(R.string.save))
@@ -1328,38 +1329,38 @@ class SettingsActivity : AppCompatActivity() {
             prefEditor.putInt("maranata", 0)
             prefEditor.putInt("soundnotification", 0)
             prefEditor.putInt("timeNotification", 8)
-            maranataBel.isClickable = false
-            maranataRus.isClickable = false
-            maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-            maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-            maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataBel.isClickable = false
+            binding.maranataRus.isClickable = false
+            binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             prefEditor.putInt("trafic", 0)
             prefEditor.apply()
-            vibro.isClickable = true
-            vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-            this.guk.isClickable = true
-            this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-            checkBox5.isChecked = false
-            checkBox6.isChecked = false
-            checkBox7.isChecked = false
-            this.maranata.isChecked = false
-            maranataRus.isChecked = true
-            maranataBel.isChecked = false
-            this.sinoidal.isChecked = false
-            notificationOnly.isChecked = false
-            notificationFull.isChecked = true
-            notificationNon.isChecked = false
-            vibro.isChecked = true
-            this.guk.isChecked = true
-            spinnerTime.setSelection(2)
-            spinnerAutoPrag.setSelection(5)
-            pkc.isChecked = false
-            prav.isChecked = false
-            dzair.isChecked = false
-            praf.isChecked = false
+            binding.vibro.isClickable = true
+            binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+            binding.guk.isClickable = true
+            binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+            binding.checkBox5.isChecked = false
+            binding.checkBox6.isChecked = false
+            binding.checkBox7.isChecked = false
+            binding.maranata.isChecked = false
+            binding.maranataRus.isChecked = true
+            binding.maranataBel.isChecked = false
+            binding.sinoidal.isChecked = false
+            binding.notificationOnly.isChecked = false
+            binding.notificationFull.isChecked = true
+            binding.notificationNon.isChecked = false
+            binding.vibro.isChecked = true
+            binding.guk.isChecked = true
+            binding.spinnerTime.setSelection(2)
+            binding.spinnerAutoPrag.setSelection(5)
+            binding.pkc.isChecked = false
+            binding.prav.isChecked = false
+            binding.dzair.isChecked = false
+            binding.praf.isChecked = false
             recreate()
         }
-        maranataGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
+        binding.maranataGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             when (checkedId) {
                 R.id.maranataBel -> {
                     prefEditor.putBoolean("belarus", true)
@@ -1372,112 +1373,112 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        notificationGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
+        binding.notificationGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             when (checkedId) {
                 R.id.notificationOnly -> {
-                    notifiSvizta.visibility = View.VISIBLE
-                    spinnerTime.visibility = View.VISIBLE
+                    binding.notifiSvizta.visibility = View.VISIBLE
+                    binding.spinnerTime.visibility = View.VISIBLE
                     if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
                         val notifi = DialogHelpNotification()
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                     prefEditor.putInt("notification", 1)
-                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                    this.guk.isClickable = true
-                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    binding.guk.isClickable = true
+                    if (dzenNoch) binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     CoroutineScope(Dispatchers.Main).launch {
                         if (dzenNoch) {
-                            vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-                            this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            binding.vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            binding.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
                         } else {
-                            vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-                            this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            binding.vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            binding.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                         }
-                        notificationNon.isClickable = false
-                        notificationFull.isClickable = false
-                        notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
-                        notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
+                        binding.notificationNon.isClickable = false
+                        binding.notificationFull.isClickable = false
+                        binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
+                        binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         withContext(Dispatchers.IO) {
                             setNotifications(this@SettingsActivity, 1)
                         }
-                        notificationNon.isClickable = true
-                        notificationFull.isClickable = true
+                        binding.notificationNon.isClickable = true
+                        binding.notificationFull.isClickable = true
                         if (dzenNoch) {
-                            notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-                            notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
                         } else {
-                            notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-                            notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                         }
                     }
                 }
                 R.id.notificationFull -> {
-                    notifiSvizta.visibility = View.VISIBLE
-                    spinnerTime.visibility = View.VISIBLE
+                    binding.notifiSvizta.visibility = View.VISIBLE
+                    binding.spinnerTime.visibility = View.VISIBLE
                     if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
                         val notifi = DialogHelpNotification()
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                     prefEditor.putInt("notification", 2)
-                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                    this.guk.isClickable = true
-                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    binding.guk.isClickable = true
+                    if (dzenNoch) binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     CoroutineScope(Dispatchers.Main).launch {
                         if (dzenNoch) {
-                            vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-                            this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            binding.vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            binding.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
                         } else {
-                            vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-                            this@SettingsActivity.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            binding.vibro.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            binding.guk.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                         }
-                        notificationOnly.isClickable = false
-                        notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
-                        notificationNon.isClickable = false
-                        notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
+                        binding.notificationOnly.isClickable = false
+                        binding.notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
+                        binding.notificationNon.isClickable = false
+                        binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         withContext(Dispatchers.IO) {
                             setNotifications(this@SettingsActivity, 2)
                         }
-                        notificationOnly.isClickable = true
-                        notificationNon.isClickable = true
+                        binding.notificationOnly.isClickable = true
+                        binding.notificationNon.isClickable = true
                         if (dzenNoch) {
-                            notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-                            notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            binding.notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
                         } else {
-                            notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-                            notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            binding.notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                         }
                     }
                 }
                 R.id.notificationNon -> {
-                    notifiSvizta.visibility = View.GONE
-                    spinnerTime.visibility = View.GONE
+                    binding.notifiSvizta.visibility = View.GONE
+                    binding.spinnerTime.visibility = View.GONE
                     prefEditor.putInt("notification", 0)
-                    if (dzenNoch) vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                    this.guk.isClickable = true
-                    if (dzenNoch) this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else this.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    if (dzenNoch) binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    binding.guk.isClickable = true
+                    if (dzenNoch) binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorWhite)) else binding.guk.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     CoroutineScope(Dispatchers.Main).launch {
-                        notificationOnly.isClickable = false
-                        notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
-                        notificationFull.isClickable = false
-                        notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
+                        binding.notificationOnly.isClickable = false
+                        binding.notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
+                        binding.notificationFull.isClickable = false
+                        binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         withContext(Dispatchers.IO) {
                             setNotifications(this@SettingsActivity, 0)
                         }
-                        notificationOnly.isClickable = true
-                        notificationFull.isClickable = true
+                        binding.notificationOnly.isClickable = true
+                        binding.notificationFull.isClickable = true
                         if (dzenNoch) {
-                            notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
-                            notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            binding.notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
+                            binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorWhite))
                         } else {
-                            notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
-                            notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            binding.notificationOnly.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
+                            binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorPrimary_text))
                         }
                     }
                 }
             }
             prefEditor.apply()
         }
-        vibro.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        binding.vibro.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("vibra", 1)
             } else {
@@ -1485,7 +1486,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        this.sinoidal.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        binding.sinoidal.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("sinoidal", 1)
             } else {
@@ -1493,31 +1494,31 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        this.maranata.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        binding.maranata.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("maranata", 1)
-                maranataBel.isClickable = true
-                maranataRus.isClickable = true
+                binding.maranataBel.isClickable = true
+                binding.maranataRus.isClickable = true
                 if (dzenNoch) {
-                    maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-                    maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-                    maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+                    binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+                    binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+                    binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                 } else {
-                    maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                    maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                    maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                 }
             } else {
                 prefEditor.putInt("maranata", 0)
-                maranataBel.isClickable = false
-                maranataRus.isClickable = false
-                maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-                maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-                maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+                binding.maranataBel.isClickable = false
+                binding.maranataRus.isClickable = false
+                binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+                binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+                binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             }
             prefEditor.apply()
         }
-        this.guk.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        binding.guk.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putInt("guk", 1)
             } else {
@@ -1525,7 +1526,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        checkBox5.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        binding.checkBox5.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putBoolean("dzen_noch", true)
             } else {
@@ -1534,17 +1535,17 @@ class SettingsActivity : AppCompatActivity() {
             prefEditor.apply()
             recreate()
         }
-        checkBox6.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        binding.checkBox6.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putBoolean("autoscrollAutostart", true)
-                spinnerAutoPrag.visibility = View.VISIBLE
+                binding.spinnerAutoPrag.visibility = View.VISIBLE
             } else {
                 prefEditor.putBoolean("autoscrollAutostart", false)
-                spinnerAutoPrag.visibility = View.GONE
+                binding.spinnerAutoPrag.visibility = View.GONE
             }
             prefEditor.apply()
         }
-        checkBox7.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        binding.checkBox7.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
                 prefEditor.putBoolean("scrinOn", true)
                 window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -1554,17 +1555,17 @@ class SettingsActivity : AppCompatActivity() {
             }
             prefEditor.apply()
         }
-        vibro.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        this.guk.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        this.sinoidal.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        this.maranata.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        prav.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        pkc.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        dzair.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        praf.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        checkBox5.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        checkBox6.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        checkBox7.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        binding.vibro.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        binding.guk.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        binding.sinoidal.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        binding.maranata.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        binding.prav.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        binding.pkc.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        binding.dzair.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        binding.praf.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        binding.checkBox5.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        binding.checkBox6.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        binding.checkBox7.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         if (savedInstanceState == null && (notification == 1 || notification == 2)) {
             if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
                 val notifi = DialogHelpNotification()
@@ -1575,24 +1576,24 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text = resources.getText(R.string.tools_item)
+        binding.titleToolbar.text = resources.getText(R.string.tools_item)
         if (dzenNoch) {
-            toolbar.popupTheme = R.style.AppCompatDark
+            binding.toolbar.popupTheme = R.style.AppCompatDark
         }
     }
 

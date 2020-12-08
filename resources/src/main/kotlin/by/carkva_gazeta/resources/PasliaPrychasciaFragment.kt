@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.HelpText
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import kotlinx.android.synthetic.main.akafist_fragment_paslia_prich.*
+import by.carkva_gazeta.resources.databinding.AkafistFragmentPasliaPrichBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -23,6 +23,13 @@ class PasliaPrychasciaFragment : Fragment() {
     private lateinit var k: SharedPreferences
     private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
     private var dzenNoch = false
+    private var _binding: AkafistFragmentPasliaPrichBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +43,7 @@ class PasliaPrychasciaFragment : Fragment() {
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = k.getBoolean("dzen_noch", false)
             fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+            binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             val inputStream = activity.resources.openRawResource(resursID)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
@@ -48,7 +55,7 @@ class PasliaPrychasciaFragment : Fragment() {
                 builder.append(line)
             }
             inputStream.close()
-            TextView.text = MainActivity.fromHtml(builder.toString())
+            binding.TextView.text = MainActivity.fromHtml(builder.toString())
             if (k.getBoolean("help_str", true)) {
                 startActivity(Intent(activity, HelpText::class.java))
                 val prefEditor: SharedPreferences.Editor = k.edit()
@@ -56,13 +63,14 @@ class PasliaPrychasciaFragment : Fragment() {
                 prefEditor.apply()
             }
             if (dzenNoch) {
-                TextView.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                binding.TextView.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
             }
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.akafist_fragment_paslia_prich, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = AkafistFragmentPasliaPrichBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     companion object {

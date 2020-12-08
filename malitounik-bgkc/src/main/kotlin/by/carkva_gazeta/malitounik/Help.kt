@@ -8,11 +8,13 @@ import android.util.TypedValue
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.help.*
+import by.carkva_gazeta.malitounik.databinding.HelpBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class Help : AppCompatActivity() {
+    
+    private lateinit var binding: HelpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
@@ -26,11 +28,12 @@ class Help : AppCompatActivity() {
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.help)
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        textView.movementMethod = LinkMovementMethod.getInstance()
+        binding = HelpBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+        binding.textView.movementMethod = LinkMovementMethod.getInstance()
         if (dzenNoch) {
-            textView.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.textView.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
         }
         val inputStream = resources.openRawResource(R.raw.help)
         val isr = InputStreamReader(inputStream)
@@ -44,11 +47,11 @@ class Help : AppCompatActivity() {
                 builder.append(line)
             }
         }
-        textView.text = MainActivity.fromHtml(builder.toString().replace("<!--version-->", "API " + Build.VERSION.SDK_INT))
-        setSupportActionBar(toolbar)
+        binding.textView.text = MainActivity.fromHtml(builder.toString().replace("<!--version-->", "API " + Build.VERSION.SDK_INT))
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        title_toolbar.text = resources.getString(R.string.help)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.text = resources.getString(R.string.help)
     }
 
     override fun onResume() {

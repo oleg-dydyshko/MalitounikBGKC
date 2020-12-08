@@ -12,12 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import kotlinx.android.synthetic.main.activity_parafii_bgkc.*
+import by.carkva_gazeta.resources.databinding.ActivityParafiiBgkcBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class ParafiiBgkc : AppCompatActivity() {
     private var bgkc = 0
+    private lateinit var binding: ActivityParafiiBgkcBinding
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -35,24 +36,25 @@ class ParafiiBgkc : AppCompatActivity() {
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_parafii_bgkc)
-        setSupportActionBar(toolbar)
+        binding = ActivityParafiiBgkcBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.parafii)
-        val webSettings = WebView.settings
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.parafii)
+        val webSettings = binding.WebView.settings
         webSettings.standardFontFamily = "sans-serif-condensed"
         webSettings.defaultFontSize = fontBiblia.toInt()
         val prynagodnyia = intent.extras?.getInt("bgkc_parafii", 0) ?: 0
@@ -117,8 +119,8 @@ class ParafiiBgkc : AppCompatActivity() {
         }
         builder.append("</body></html>")
         if (dzenNoch)
-            WebView.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
-        WebView.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
+            binding.WebView.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+        binding.WebView.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
         inputStreamReader.close()
     }
 

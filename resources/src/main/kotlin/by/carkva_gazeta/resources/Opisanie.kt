@@ -14,7 +14,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import kotlinx.android.synthetic.main.akafist_under.*
+import by.carkva_gazeta.resources.databinding.AkafistUnderBinding
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -25,6 +25,7 @@ class Opisanie : AppCompatActivity() {
     private var mun = Calendar.getInstance()[Calendar.MONTH]
     private var day = Calendar.getInstance()[Calendar.DATE]
     private var svity = ""
+    private lateinit var binding: AkafistUnderBinding
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -41,7 +42,8 @@ class Opisanie : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.akafist_under)
+        binding = AkafistUnderBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val c = Calendar.getInstance()
         mun = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
@@ -73,9 +75,9 @@ class Opisanie : AppCompatActivity() {
                     builder.append(line)
                 }
                 inputStream.close()
-                TextView.text = MainActivity.fromHtml(builder.toString())
+                binding.TextView.text = MainActivity.fromHtml(builder.toString())
             } else {
-                TextView.text = getString(by.carkva_gazeta.malitounik.R.string.opisanie_error)
+                binding.TextView.text = getString(by.carkva_gazeta.malitounik.R.string.opisanie_error)
             }
         } else {
             inputStream = when (mun) {
@@ -111,30 +113,30 @@ class Opisanie : AppCompatActivity() {
             res = res.replace("<h3 class=\"blocks\">", "<p><strong>")
             res = res.replace("</h3>", "</strong>")
             res = res.replace("</div>", "")
-            TextView.text = MainActivity.fromHtml(res)
+            binding.TextView.text = MainActivity.fromHtml(res)
         }
         setTollbarTheme()
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.zmiest)
+        binding.titleToolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.zmiest)
         if (dzenNoch) {
-            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
 

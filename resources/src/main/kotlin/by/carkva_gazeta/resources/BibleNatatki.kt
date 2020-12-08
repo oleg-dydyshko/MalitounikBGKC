@@ -19,15 +19,12 @@ import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.DialogBibleNatatkaEdit.BibleNatatkaEditlistiner
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
 import by.carkva_gazeta.resources.DialogZakladkaDelite.ZakladkaDeliteListiner
+import by.carkva_gazeta.resources.databinding.BibleZakladkiBinding
 import com.google.gson.Gson
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
-import kotlinx.android.synthetic.main.akafist_list_bible.help
-import kotlinx.android.synthetic.main.akafist_list_bible.title_toolbar
-import kotlinx.android.synthetic.main.akafist_list_bible.toolbar
-import kotlinx.android.synthetic.main.bible_zakladki.*
 import java.io.File
 import java.io.FileWriter
 import java.util.*
@@ -39,13 +36,14 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
     private var semuxa = 1
     private var dzenNoch = false
     private var mLastClickTime: Long = 0
+    private lateinit var binding: BibleZakladkiBinding
 
     override fun setEdit() {
         adapter.notifyDataSetChanged()
     }
 
     override fun editCancel() {
-        drag_list_view.resetSwipedViews(null)
+        binding.dragListView.resetSwipedViews(null)
     }
 
     override fun onDialogEditClick(position: Int) {
@@ -75,8 +73,8 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
                 fileNatatki.delete()
             }
         }
-        help.visibility = View.VISIBLE
-        drag_list_view.visibility = View.GONE
+        binding.help.visibility = View.VISIBLE
+        binding.dragListView.visibility = View.GONE
         invalidateOptionsMenu()
     }
 
@@ -91,23 +89,24 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.bible_zakladki)
+        binding = BibleZakladkiBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         semuxa = intent.getIntExtra("semuxa", 1)
         if (semuxa == 1) data = BibleGlobalList.natatkiSemuxa
         if (semuxa == 2) data = BibleGlobalList.natatkiSinodal
         adapter = ItemAdapter(data, by.carkva_gazeta.malitounik.R.layout.list_item, by.carkva_gazeta.malitounik.R.id.image, false)
-        drag_list_view.recyclerView.isVerticalScrollBarEnabled = false
-        drag_list_view.setLayoutManager(LinearLayoutManager(this))
-        drag_list_view.setAdapter(adapter, false)
-        drag_list_view.setCanDragHorizontally(false)
-        drag_list_view.setCanDragVertically(true)
-        drag_list_view.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
+        binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
+        binding.dragListView.setLayoutManager(LinearLayoutManager(this))
+        binding.dragListView.setAdapter(adapter, false)
+        binding.dragListView.setCanDragHorizontally(false)
+        binding.dragListView.setCanDragVertically(true)
+        binding.dragListView.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
             override fun onItemSwipeStarted(item: ListSwipeItem) {
             }
 
             override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: ListSwipeItem.SwipeDirection) {
                 val adapterItem = item.tag as BibleNatatkiData
-                val position: Int = drag_list_view.adapter.getPositionForItem(adapterItem)
+                val position: Int = binding.dragListView.adapter.getPositionForItem(adapterItem)
                 if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
                     val delite = DialogZakladkaDelite.getInstance(position, data[position].list[5], semuxa, false)
                     delite.show(supportFragmentManager, "zakladka_delite")
@@ -118,7 +117,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
                 }
             }
         })
-        drag_list_view.setDragListListener(object : DragListView.DragListListener {
+        binding.dragListView.setDragListListener(object : DragListView.DragListListener {
             override fun onItemDragStarted(position: Int) {
             }
 
@@ -156,30 +155,30 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
             }
         })
         if (data.size == 0) {
-            help.visibility = View.VISIBLE
-            drag_list_view.visibility = View.GONE
+            binding.help.visibility = View.VISIBLE
+            binding.dragListView.visibility = View.GONE
         }
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.setText(by.carkva_gazeta.malitounik.R.string.natatki_biblii)
+        binding.titleToolbar.setText(by.carkva_gazeta.malitounik.R.string.natatki_biblii)
         if (dzenNoch) {
-            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
 
@@ -244,7 +243,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
     override fun zakladkadiliteItem(position: Int, semuxa: Int) {}
 
     override fun zakladkadiliteItemCancel() {
-        drag_list_view.resetSwipedViews(null)
+        binding.dragListView.resetSwipedViews(null)
     }
 
     override fun natatkidiliteItem(position: Int, semuxa: Int) {
@@ -256,8 +255,8 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
                 if (fileNatatki.exists()) {
                     fileNatatki.delete()
                 }
-                help.visibility = View.VISIBLE
-                drag_list_view.visibility = View.GONE
+                binding.help.visibility = View.VISIBLE
+                binding.dragListView.visibility = View.GONE
             } else {
                 val gson = Gson()
                 val outputStream = FileWriter(fileNatatki)
@@ -273,8 +272,8 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
                 if (fileNatatki.exists()) {
                     fileNatatki.delete()
                 }
-                help.visibility = View.VISIBLE
-                drag_list_view.visibility = View.GONE
+                binding.help.visibility = View.VISIBLE
+                binding.dragListView.visibility = View.GONE
             } else {
                 val gson = Gson()
                 val outputStream = FileWriter(fileNatatki)
@@ -289,8 +288,8 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
         super.onActivityResult(requestCode, resultCode, intent)
         if (requestCode == 500) {
             if (data.size == 0) {
-                help.visibility = View.VISIBLE
-                drag_list_view.visibility = View.GONE
+                binding.help.visibility = View.VISIBLE
+                binding.dragListView.visibility = View.GONE
             }
             adapter.notifyDataSetChanged()
         }

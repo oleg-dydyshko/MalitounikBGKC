@@ -14,8 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
+import by.carkva_gazeta.malitounik.databinding.MenuCaliandarBinding
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.menu_caliandar.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,6 +26,8 @@ class MenuCaliandar : MenuCaliandarFragment() {
     private var listinner: MenuCaliandarPageListinner? = null
     private lateinit var adapter: MyCalendarAdapter
     private var page = 0
+    private var _binding: MenuCaliandarBinding? = null
+    private val binding get() = _binding!!
 
     internal interface MenuCaliandarPageListinner {
         fun setPage(page: Int)
@@ -42,8 +44,14 @@ class MenuCaliandar : MenuCaliandarFragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.menu_caliandar, container, false)
+        _binding = MenuCaliandarBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun delitePadzeia(position: Int) {
@@ -109,9 +117,9 @@ class MenuCaliandar : MenuCaliandarFragment() {
         super.onActivityCreated(savedInstanceState)
         fragmentManager?.let {
             adapter = MyCalendarAdapter(it)
-            pager.adapter = adapter
-            pager.currentItem = page
-            pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            binding.pager.adapter = adapter
+            binding.pager.currentItem = page
+            binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
                 override fun onPageSelected(position: Int) {
                     listinner?.setPage(position)
@@ -135,7 +143,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
         for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until c[Calendar.YEAR]) {
             dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
         }
-        menu.findItem(R.id.action_glava).isVisible = dayyear + c[Calendar.DAY_OF_YEAR] - 1 != pager.currentItem
+        menu.findItem(R.id.action_glava).isVisible = dayyear + c[Calendar.DAY_OF_YEAR] - 1 != binding.pager.currentItem
         menu.findItem(R.id.action_mun).isVisible = true
         menu.findItem(R.id.tipicon).isVisible = true
         menu.findItem(R.id.sabytie).isVisible = true

@@ -29,9 +29,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
+import by.carkva_gazeta.resources.databinding.AkafistMaranAtaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.akafist_maran_ata.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,7 +41,6 @@ import kotlin.collections.ArrayList
 
 class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener {
     private val mHideHandler = Handler(Looper.getMainLooper())
-
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")
     private val mHidePart2Runnable = Runnable {
@@ -96,6 +95,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         get() {
             return MainActivity.getOrientation(this)
         }
+    private lateinit var binding: AkafistMaranAtaBinding
 
     override fun onDialogFontSizePositiveClick() {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
@@ -104,8 +104,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     private fun forceScroll() {
-        val event = MotionEvent.obtain(System.currentTimeMillis(), System.currentTimeMillis(), MotionEvent.ACTION_MOVE, ListView.x, -1f, 0)
-        onTouch(ListView, event)
+        val event = MotionEvent.obtain(System.currentTimeMillis(), System.currentTimeMillis(), MotionEvent.ACTION_MOVE, binding.ListView.x, -1f, 0)
+        onTouch(binding.ListView, event)
     }
 
     private fun checkPosition(position: Int): Int {
@@ -144,7 +144,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.akafist_maran_ata)
+        binding = AkafistMaranAtaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setTollbarTheme()
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
@@ -157,13 +158,13 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         bibleCopyList.clear()
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        ListView.onItemClickListener = this
-        ListView.onItemLongClickListener = this
-        ListView.setOnTouchListener(this)
+        binding.ListView.onItemClickListener = this
+        binding.ListView.onItemLongClickListener = this
+        binding.ListView.setOnTouchListener(this)
         adapter = MaranAtaListAdaprer(this)
-        ListView.adapter = adapter
-        ListView.divider = null
-        ListView.setSelection(maranAtaScrollPosition)
+        binding.ListView.adapter = adapter
+        binding.ListView.divider = null
+        binding.ListView.setSelection(maranAtaScrollPosition)
         cytanne = intent.extras?.getString("cytanneMaranaty") ?: ""
         setMaranata(cytanne)
         if (savedInstanceState != null) {
@@ -172,16 +173,16 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             change = savedInstanceState.getBoolean("change")
             tollBarText = savedInstanceState.getString("tollBarText") ?: ""
-            title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
             paralel = savedInstanceState.getBoolean("paralel", paralel)
-            subtitle_toolbar.text = savedInstanceState.getString("chtenie")
+            binding.subtitleToolbar.text = savedInstanceState.getString("chtenie")
             if (paralel) {
                 paralelPosition = savedInstanceState.getInt("paralelPosition")
                 parralelMestaView(paralelPosition)
             }
         }
-        ListView.post {
-            ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+        binding.ListView.post {
+            binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
                 override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {}
                 override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
                     if (list.adapter == null || list.getChildAt(0) == null) return
@@ -215,15 +216,15 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         if (scroll == 1) {
                             nazva = if (list.lastVisiblePosition - 4 >= 0) maranAta[list.lastVisiblePosition - 4] else maranAta[list.lastVisiblePosition]
                         }
-                        val oldtollBarText = title_toolbar.text.toString()
+                        val oldtollBarText = binding.titleToolbar.text.toString()
                         if (oldtollBarText == "") {
                             nazva = maranAta[list.firstVisiblePosition + 2]
                             if (nazva.contains("nazva+++")) {
                                 val t1 = nazva.indexOf("nazva+++")
                                 val t2 = nazva.indexOf("-->", t1 + 8)
                                 tollBarText = nazva.substring(t1 + 8, t2)
-                                title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
-                                subtitle_toolbar.text = tollBarText
+                                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+                                binding.subtitleToolbar.text = tollBarText
                             }
                         }
                         if (!nazva.contains(tollBarText) && scroll != 0) {
@@ -231,8 +232,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                                 val t1 = nazva.indexOf("nazva+++")
                                 val t2 = nazva.indexOf("-->", t1 + 8)
                                 tollBarText = nazva.substring(t1 + 8, t2)
-                                title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
-                                subtitle_toolbar.text = tollBarText
+                                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+                                binding.subtitleToolbar.text = tollBarText
                             }
                         }
                         mPosition = position
@@ -242,9 +243,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 }
             })
         }
-        constraint.setOnTouchListener(this)
-        if (dzenNoch) progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-        share.setOnClickListener {
+        binding.constraint.setOnTouchListener(this)
+        if (dzenNoch) binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+        binding.share.setOnClickListener {
             if (bibleCopyList.size > 0) {
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
@@ -258,23 +259,23 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
-        copy.setOnClickListener {
+        binding.copy.setOnClickListener {
             if (bibleCopyList.size > 0) {
                 val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("", MainActivity.fromHtml(maranAta[bibleCopyList[0]]).toString())
                 clipboard.setPrimaryClip(clip)
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.copy))
-                linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                linearLayout4.visibility = View.GONE
+                binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                binding.linearLayout4.visibility = View.GONE
                 bibleCopyList.clear()
                 mPedakVisable = false
-                linearLayout5.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                linearLayout5.visibility = View.GONE
+                binding.linearLayout5.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                binding.linearLayout5.visibility = View.GONE
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
-        copyBig.setOnClickListener {
+        binding.copyBig.setOnClickListener {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val copyString = java.lang.StringBuilder()
             bibleCopyList.sort()
@@ -288,14 +289,14 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             val clip = ClipData.newPlainText("", MainActivity.fromHtml(copyString.toString()).toString().trim())
             clipboard.setPrimaryClip(clip)
             MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.copy))
-            linearLayout4.visibility = View.GONE
-            linearLayout5.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-            linearLayout5.visibility = View.GONE
+            binding.linearLayout4.visibility = View.GONE
+            binding.linearLayout5.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+            binding.linearLayout5.visibility = View.GONE
             mPedakVisable = false
             bibleCopyList.clear()
             adapter.notifyDataSetChanged()
         }
-        adpravit.setOnClickListener {
+        binding.adpravit.setOnClickListener {
             if (bibleCopyList.size > 0) {
                 val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val copyString = java.lang.StringBuilder()
@@ -315,7 +316,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
-        imageView2.setOnClickListener {
+        binding.imageView2.setOnClickListener {
             if (bibleCopyList.size > 0) {
                 val i = checkPosition(bibleCopyList[0])
                 if (i != -1) {
@@ -332,15 +333,15 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     setVydelenie.add(0)
                     vydelenie.add(setVydelenie)
                 }
-                linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                linearLayout4.visibility = View.GONE
+                binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                binding.linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
-        imageView3.setOnClickListener {
+        binding.imageView3.setOnClickListener {
             if (bibleCopyList.size > 0) {
                 val i = checkPosition(bibleCopyList[0])
                 if (i != -1) {
@@ -357,15 +358,15 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     setVydelenie.add(1)
                     vydelenie.add(setVydelenie)
                 }
-                linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                linearLayout4.visibility = View.GONE
+                binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                binding.linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
-        imageView4.setOnClickListener {
+        binding.imageView4.setOnClickListener {
             if (bibleCopyList.size > 0) {
                 val i = checkPosition(bibleCopyList[0])
                 if (i != -1) {
@@ -382,8 +383,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     setVydelenie.add(0)
                     vydelenie.add(setVydelenie)
                 }
-                linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                linearLayout4.visibility = View.GONE
+                binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                binding.linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
             } else {
@@ -391,10 +392,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
         }
         if (dzenNoch) {
-            linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-            linearLayout5.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-            copyBig.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
-            adpravit.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
+            binding.linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+            binding.linearLayout5.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+            binding.copyBig.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
+            binding.adpravit.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
         }
         val file: File = if (belarus) File("$filesDir/MaranAtaBel/$cytanne.json") else File("$filesDir/MaranAta/$cytanne.json")
         if (file.exists()) {
@@ -416,38 +417,38 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         } else {
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
-        ListView.post {
-            ListView.smoothScrollToPosition(maranAtaScrollPosition)
+        binding.ListView.post {
+            binding.ListView.smoothScrollToPosition(maranAtaScrollPosition)
         }
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.run { title_toolbar.setHorizontallyScrolling(true) }
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.run { binding.titleToolbar.setHorizontallyScrolling(true) }
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
-            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        if (linearLayout4.visibility == View.VISIBLE || linearLayout5.visibility == View.VISIBLE) {
+        if (binding.linearLayout4.visibility == View.VISIBLE || binding.linearLayout5.visibility == View.VISIBLE) {
             return false
         }
-        val heightConstraintLayout = constraint.height
-        val widthConstraintLayout = constraint.width
+        val heightConstraintLayout = binding.constraint.height
+        val widthConstraintLayout = binding.constraint.width
         val otstup = (10 * resources.displayMetrics.density).toInt()
         val y = event?.y?.toInt() ?: 0
         val x = event?.x?.toInt() ?: 0
@@ -472,9 +473,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     val proc: Int
                     if (x < otstup) {
                         levo = true
-                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                        progress.visibility = View.VISIBLE
+                        binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                        binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                        binding.progress.visibility = View.VISIBLE
                         startProcent()
                     }
                     if (x > widthConstraintLayout - otstup) {
@@ -482,18 +483,18 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         var minmax = ""
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
-                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        progress.visibility = View.VISIBLE
+                        binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
+                        binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                        binding.progress.visibility = View.VISIBLE
                         startProcent()
                     }
                     if (y > heightConstraintLayout - otstup) {
                         niz = true
                         spid = k.getInt("autoscrollSpid", 60)
                         proc = 100 - (spid - 15) * 100 / 215
-                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                        progress.visibility = View.VISIBLE
+                        binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                        binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                        binding.progress.visibility = View.VISIBLE
                         startProcent()
                         autoscroll = k.getBoolean("autoscroll", false)
                         if (!autoscroll) {
@@ -511,8 +512,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                            progress.visibility = View.VISIBLE
+                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                             MainActivity.checkBrightness = false
                         }
@@ -523,8 +524,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                            progress.visibility = View.VISIBLE
+                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                             MainActivity.checkBrightness = false
                         }
@@ -534,8 +535,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             fontBiblia -= 4
                             var min = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                            progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
-                            progress.visibility = View.VISIBLE
+                            binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                             prefEditor.putFloat("font_biblia", fontBiblia)
                             prefEditor.apply()
@@ -548,8 +549,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             fontBiblia += 4
                             var max = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                            progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
-                            progress.visibility = View.VISIBLE
+                            binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                             prefEditor.putFloat("font_biblia", fontBiblia)
                             prefEditor.apply()
@@ -561,9 +562,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         if (spid in 20..235) {
                             spid -= 5
                             val proc = 100 - (spid - 15) * 100 / 215
-                            progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                            progress.visibility = View.VISIBLE
+                            binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                             stopAutoScroll()
                             startAutoScroll()
@@ -573,9 +574,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         if (spid in 10..225) {
                             spid += 5
                             val proc = 100 - (spid - 15) * 100 / 215
-                            progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                            progress.visibility = View.VISIBLE
+                            binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                             stopAutoScroll()
                             startAutoScroll()
@@ -953,13 +954,13 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 CoroutineScope(Dispatchers.Main).launch {
                     forceScroll()
                     if (!mActionDown && !MainActivity.dialogVisable) {
-                        val firstPosition = ListView.firstVisiblePosition
+                        val firstPosition = binding.ListView.firstVisiblePosition
                         if (firstPosition == INVALID_POSITION) {
                             return@launch
                         }
-                        val firstView = ListView.getChildAt(0) ?: return@launch
+                        val firstView = binding.ListView.getChildAt(0) ?: return@launch
                         val newTop = firstView.top - 2
-                        ListView.setSelectionFromTop(firstPosition, newTop)
+                        binding.ListView.setSelectionFromTop(firstPosition, newTop)
                     }
                 }
             }
@@ -1009,7 +1010,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         procentSchedule = object : TimerTask() {
             override fun run() {
                 CoroutineScope(Dispatchers.Main).launch {
-                    progress.visibility = View.GONE
+                    binding.progress.visibility = View.GONE
                 }
             }
         }
@@ -1032,9 +1033,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     override fun onBackPressed() {
         if (paralel) {
-            scroll.visibility = View.GONE
-            ListView.visibility = View.VISIBLE
-            title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+            binding.scroll.visibility = View.GONE
+            binding.ListView.visibility = View.VISIBLE
+            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
             paralel = false
             invalidateOptionsMenu()
         } else if (fullscreenPage) {
@@ -1043,13 +1044,13 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         } else if (mPedakVisable) {
             mPedakVisable = false
             bibleCopyList.clear()
-            if (linearLayout5.visibility == View.VISIBLE) {
-                linearLayout4.visibility = View.GONE
-                linearLayout5.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                linearLayout5.visibility = View.GONE
+            if (binding.linearLayout5.visibility == View.VISIBLE) {
+                binding.linearLayout4.visibility = View.GONE
+                binding.linearLayout5.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                binding.linearLayout5.visibility = View.GONE
             } else {
-                linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                linearLayout4.visibility = View.GONE
+                binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                binding.linearLayout4.visibility = View.GONE
             }
             invalidateOptionsMenu()
         } else {
@@ -1083,10 +1084,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         mPedakVisable = false
         bibleCopyList.clear()
-        linearLayout4.visibility = View.GONE
-        linearLayout5.visibility = View.GONE
+        binding.linearLayout4.visibility = View.GONE
+        binding.linearLayout5.visibility = View.GONE
         val prefEditors = k.edit()
-        maranAtaScrollPosition = ListView.firstVisiblePosition
+        maranAtaScrollPosition = binding.ListView.firstVisiblePosition
         prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
         prefEditors.apply()
         scrollTimer?.cancel()
@@ -1107,7 +1108,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         if (autoscroll) {
             startAutoScroll()
         }
-        progress.visibility = View.GONE
+        binding.progress.visibility = View.GONE
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
@@ -1115,14 +1116,14 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         super.onPrepareOptionsMenu(menu)
         autoscroll = k.getBoolean("autoscroll", false)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
-        if (linearLayout4.visibility == View.VISIBLE || linearLayout5.visibility == View.VISIBLE) {
+        if (binding.linearLayout4.visibility == View.VISIBLE || binding.linearLayout5.visibility == View.VISIBLE) {
             itemAuto.isVisible = false
         } else {
             if (paralel) {
-                subtitle_toolbar.visibility = View.GONE
+                binding.subtitleToolbar.visibility = View.GONE
                 itemAuto.isVisible = false
             } else {
-                subtitle_toolbar.visibility = View.VISIBLE
+                binding.subtitleToolbar.visibility = View.VISIBLE
                 itemAuto.isVisible = true
             }
             mActionDown = false
@@ -1212,9 +1213,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             if (spid in 20..235) {
                 spid -= 5
                 val proc = 100 - (spid - 15) * 100 / 215
-                progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                progress.visibility = View.VISIBLE
+                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                binding.progress.visibility = View.VISIBLE
                 startProcent()
                 stopAutoScroll()
                 startAutoScroll()
@@ -1227,9 +1228,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             if (spid in 10..225) {
                 spid += 5
                 val proc = 100 - (spid - 15) * 100 / 215
-                progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                progress.visibility = View.VISIBLE
+                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                binding.progress.visibility = View.VISIBLE
                 startProcent()
                 stopAutoScroll()
                 startAutoScroll()
@@ -1296,7 +1297,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         outState.putString("tollBarText", tollBarText)
         outState.putBoolean("paralel", paralel)
         outState.putInt("paralelPosition", paralelPosition)
-        outState.putString("chtenie", subtitle_toolbar.text.toString())
+        outState.putString("chtenie", binding.subtitleToolbar.text.toString())
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -1318,9 +1319,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         if (mPedakVisable) {
             if (bibleCopyList.size > 1) {
-                linearLayout5.visibility = View.VISIBLE
+                binding.linearLayout5.visibility = View.VISIBLE
             } else {
-                linearLayout5.visibility = View.GONE
+                binding.linearLayout5.visibility = View.GONE
             }
         }
     }
@@ -1336,14 +1337,14 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     val t3 = maranAta[position].indexOf("<!--")
                     val ch = maranAta[position].substring(t3 + 4, t2)
                     val biblia = ch.split(".")
-                    conteiner.removeAllViewsInLayout()
+                    binding.conteiner.removeAllViewsInLayout()
                     val arrayList = pm.paralel(this, biblia[0] + " " + biblia[1] + "." + biblia[2], maranAta[position].substring(t1 + 1).trim(), belarus)
                     for (i in arrayList.indices) {
-                        conteiner.addView(arrayList[i])
+                        binding.conteiner.addView(arrayList[i])
                     }
-                    scroll.visibility = View.VISIBLE
-                    ListView.visibility = View.GONE
-                    title_toolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, biblia[0] + " " + biblia[1] + "." + biblia[2])
+                    binding.scroll.visibility = View.VISIBLE
+                    binding.ListView.visibility = View.GONE
+                    binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, biblia[0] + " " + biblia[1] + "." + biblia[2])
                     invalidateOptionsMenu()
                 }
             }
@@ -1354,7 +1355,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         if (!autoscroll) {
             if (!maranAta[position].contains("<!--no-->") && maranAta[position].trim() != "") {
                 mPedakVisable = true
-                linearLayout4.visibility = View.VISIBLE
+                binding.linearLayout4.visibility = View.VISIBLE
                 var find = false
                 bibleCopyList.forEach {
                     if (it == position) find = true

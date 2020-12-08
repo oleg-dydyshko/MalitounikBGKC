@@ -14,11 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuListAdaprer
 import by.carkva_gazeta.malitounik.SettingsActivity
-import kotlinx.android.synthetic.main.bgkc_list.*
+import by.carkva_gazeta.resources.databinding.BgkcListBinding
 
 class ParafiiBgkcDekanat : AppCompatActivity() {
     private var bgkc = 0
     private var mLastClickTime: Long = 0
+    private lateinit var binding: BgkcListBinding
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -35,23 +36,24 @@ class ParafiiBgkcDekanat : AppCompatActivity() {
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.bgkc_list)
-        setSupportActionBar(toolbar)
+        binding = BgkcListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.parafii)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.parafii)
         bgkc = intent.getIntExtra("bgkc", 1)
         var data = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.parafii_bgkc_1)
         if (bgkc == 2) {
@@ -64,8 +66,8 @@ class ParafiiBgkcDekanat : AppCompatActivity() {
             data = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.parafii_bgkc_4)
         }
         val adapter = MenuListAdaprer(this, data)
-        ListView.adapter = adapter
-        ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
+        binding.ListView.adapter = adapter
+        binding.ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnItemClickListener
             }

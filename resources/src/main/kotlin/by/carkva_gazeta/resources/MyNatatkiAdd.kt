@@ -17,11 +17,8 @@ import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuNatatki
 import by.carkva_gazeta.malitounik.MyNatatkiFiles
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.resources.databinding.MyMalitvaAddBinding
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.my_malitva_add.*
-import kotlinx.android.synthetic.main.my_malitva_add.title_toolbar
-import kotlinx.android.synthetic.main.my_malitva_add.toolbar
-import kotlinx.android.synthetic.main.my_malitva_view.*
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -32,6 +29,7 @@ class MyNatatkiAdd : AppCompatActivity() {
     private var redak = false
     private var dzenNoch = false
     private var md5sum = ""
+    private lateinit var binding: MyMalitvaAddBinding
 
     override fun onPause() {
         super.onPause()
@@ -54,12 +52,13 @@ class MyNatatkiAdd : AppCompatActivity() {
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.my_malitva_add)
+        binding = MyMalitvaAddBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         var title = resources.getString(by.carkva_gazeta.malitounik.R.string.natatka_add)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-        EditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+        binding.EditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         if (savedInstanceState != null) {
             filename = savedInstanceState.getString("filename") ?: ""
             redak = savedInstanceState.getBoolean("redak", false)
@@ -67,7 +66,7 @@ class MyNatatkiAdd : AppCompatActivity() {
             filename = intent.getStringExtra("filename") ?: ""
             redak = intent.getBooleanExtra("redak", false)
         }
-        file.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+        binding.file.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         if (redak) {
             title = resources.getString(by.carkva_gazeta.malitounik.R.string.natatka_edit)
             val res = File("$filesDir/Malitva/$filename").readText().split("<MEMA></MEMA>").toTypedArray()
@@ -78,39 +77,39 @@ class MyNatatkiAdd : AppCompatActivity() {
             } else {
                 md5sum = md5Sum(res[0] + "<MEMA></MEMA>" + res[1])
             }
-            EditText.setText(res[1])
-            file.setText(res[0])
+            binding.EditText.setText(res[1])
+            binding.file.setText(res[0])
         }
-        file.setSelection(file.text.toString().length)
+        binding.file.setSelection(binding.file.text.toString().length)
         setTollbarTheme(title)
     }
 
     private fun setTollbarTheme(title: String) {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text = title
+        binding.titleToolbar.text = title
         if (dzenNoch) {
-            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
 
     private fun write() {
-        var nazva = file.text.toString()
+        var nazva = binding.file.text.toString()
         var imiafile = "Mae_malitvy"
-        val natatka = EditText.text.toString()
+        val natatka = binding.EditText.text.toString()
         val gc = Calendar.getInstance() as GregorianCalendar
         val editMd5 = md5Sum("$nazva<MEMA></MEMA>$natatka")
         var i: Long = 1
@@ -156,7 +155,7 @@ class MyNatatkiAdd : AppCompatActivity() {
                 it.write(nazva + "<MEMA></MEMA>" + natatka + "<RTE></RTE>" + gc.timeInMillis)
             }
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(EditText.windowToken, 0)
+            imm.hideSoftInputFromWindow(binding.EditText.windowToken, 0)
             redak = true
             filename = file.name
         }
@@ -205,10 +204,10 @@ class MyNatatkiAdd : AppCompatActivity() {
         val id: Int = item.itemId
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
             val sendIntent = Intent(Intent.ACTION_SEND)
-            sendIntent.putExtra(Intent.EXTRA_TEXT, EditText.text.toString())
-            sendIntent.putExtra(Intent.EXTRA_SUBJECT, title_toolbar.text.toString())
+            sendIntent.putExtra(Intent.EXTRA_TEXT, binding.EditText.text.toString())
+            sendIntent.putExtra(Intent.EXTRA_SUBJECT, binding.titleToolbar.text.toString())
             sendIntent.type = "text/plain"
-            startActivity(Intent.createChooser(sendIntent, title_toolbar.text.toString()))
+            startActivity(Intent.createChooser(sendIntent, binding.titleToolbar.text.toString()))
         }
         return super.onOptionsItemSelected(item)
     }

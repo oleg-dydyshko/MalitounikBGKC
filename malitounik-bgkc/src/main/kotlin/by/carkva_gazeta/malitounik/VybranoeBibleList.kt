@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.carkva_gazeta.malitounik.databinding.VybranoeBibleListBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.woxthebox.draglistview.DragItemAdapter
@@ -23,21 +24,21 @@ import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper.OnSwipeListenerAdapter
 import com.woxthebox.draglistview.swipe.ListSwipeItem
 import com.woxthebox.draglistview.swipe.ListSwipeItem.SwipeDirection
-import kotlinx.android.synthetic.main.vybranoe_bible_list.*
 import java.io.File
 
 class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.DialogDeliteBibliVybranoeListener {
     private var dzenNoch = false
     private lateinit var k: SharedPreferences
     private var mLastClickTime: Long = 0
+    private lateinit var binding: VybranoeBibleListBinding
 
     override fun vybranoeDeliteCancel() {
-        drag_list_view.resetSwipedViews(null)
+        binding.dragListView.resetSwipedViews(null)
     }
 
     override fun vybranoeDelite(position: Int) {
-        drag_list_view.adapter.removeItem(position)
-        drag_list_view.resetSwipedViews(null)
+        binding.dragListView.adapter.removeItem(position)
+        binding.dragListView.resetSwipedViews(null)
         val gson = Gson()
         val prefEditors = k.edit()
         if (arrayListVybranoe.isEmpty()) {
@@ -78,8 +79,9 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.vybranoe_bible_list)
-        drag_list_view.recyclerView.isVerticalScrollBarEnabled = false
+        binding = VybranoeBibleListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
         val gson = Gson()
         val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
         var bibleVybranoe = ""
@@ -89,24 +91,24 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
             3 -> bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
         }
         if (bibleVybranoe != "") arrayListVybranoe = gson.fromJson(bibleVybranoe, type)
-        drag_list_view.setLayoutManager(LinearLayoutManager(this))
-        drag_list_view.setAdapter(ItemAdapter(arrayListVybranoe, R.layout.list_item, R.id.image, false), false)
-        drag_list_view.setCanDragHorizontally(false)
-        drag_list_view.setCanDragVertically(true)
-        drag_list_view.setSwipeListener(object : OnSwipeListenerAdapter() {
+        binding.dragListView.setLayoutManager(LinearLayoutManager(this))
+        binding.dragListView.setAdapter(ItemAdapter(arrayListVybranoe, R.layout.list_item, R.id.image, false), false)
+        binding.dragListView.setCanDragHorizontally(false)
+        binding.dragListView.setCanDragVertically(true)
+        binding.dragListView.setSwipeListener(object : OnSwipeListenerAdapter() {
             override fun onItemSwipeStarted(item: ListSwipeItem) {
             }
 
             override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: SwipeDirection) {
                 if (swipedDirection == SwipeDirection.LEFT) {
                     val adapterItem = item.tag as VybranoeBibliaData
-                    val pos: Int = drag_list_view.adapter.getPositionForItem(adapterItem)
+                    val pos: Int = binding.dragListView.adapter.getPositionForItem(adapterItem)
                     val dialog = DialogDeliteBibliaVybranoe.getInstance(pos, arrayListVybranoe[pos].title)
                     dialog.show(supportFragmentManager, "DialogDeliteBibliaVybranoe")
                 }
             }
         })
-        drag_list_view.setDragListListener(object : DragListView.DragListListener {
+        binding.dragListView.setDragListListener(object : DragListView.DragListListener {
             override fun onItemDragStarted(position: Int) {
             }
 
@@ -123,33 +125,33 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
                 prefEditors.apply()
             }
         })
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setTollbarTheme()
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        title_toolbar.text = resources.getText(R.string.str_short_label1)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.text = resources.getText(R.string.str_short_label1)
         when (biblia) {
-            1 -> subtitle_toolbar.text = getString(R.string.title_biblia)
-            2 -> subtitle_toolbar.text = getString(R.string.bsinaidal)
-            3 -> subtitle_toolbar.text = getString(R.string.title_psalter)
+            1 -> binding.subtitleToolbar.text = getString(R.string.title_biblia)
+            2 -> binding.subtitleToolbar.text = getString(R.string.bsinaidal)
+            3 -> binding.subtitleToolbar.text = getString(R.string.title_psalter)
         }
         if (dzenNoch) {
-            toolbar.popupTheme = R.style.AppCompatDark
+            binding.toolbar.popupTheme = R.style.AppCompatDark
         }
     }
 

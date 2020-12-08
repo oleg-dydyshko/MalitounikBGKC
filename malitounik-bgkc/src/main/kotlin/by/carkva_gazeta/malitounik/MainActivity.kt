@@ -29,14 +29,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
+import by.carkva_gazeta.malitounik.databinding.ActivityMainBinding
+import by.carkva_gazeta.malitounik.databinding.AppBarMainBinding
+import by.carkva_gazeta.malitounik.databinding.ContentMainBinding
 import com.google.android.play.core.splitinstall.*
 import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,6 +53,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     private lateinit var c: GregorianCalendar
     private lateinit var k: SharedPreferences
     private lateinit var prefEditors: SharedPreferences.Editor
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var bindingappbar: AppBarMainBinding
+    private lateinit var bindingcontent: ContentMainBinding
     private var idSelect = 0
     private var idOld = -1
     private var dzenNoch = false
@@ -69,7 +72,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
         setDataCalendar = dayyear + day_of_year - 1
         idOld = -1
-        onClick(label1)
+        onClick(binding.label1)
     }
 
     override fun onDialogFontSizePositiveClick() {
@@ -137,16 +140,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
         val density = resources.displayMetrics.density
 
-        logosite.post {
+        binding.logosite.post {
             val bd: BitmapDrawable = ContextCompat.getDrawable(this, R.drawable.logotip) as BitmapDrawable
             val imageHeight = bd.bitmap.height / density
             val imageWidth = bd.bitmap.width / density
-            val widthDp = logosite.width / density
+            val widthDp = binding.logosite.width / density
             val kooficient = widthDp / imageWidth
             val hidch = imageHeight * kooficient
-            val layoutParams: ViewGroup.LayoutParams = logosite.layoutParams
+            val layoutParams: ViewGroup.LayoutParams = binding.logosite.layoutParams
             layoutParams.height = (hidch * density).toInt()
-            logosite.layoutParams = layoutParams
+            binding.logosite.layoutParams = layoutParams
         }
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
     }
@@ -163,7 +166,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        bindingappbar = binding.appBarMain
+        bindingcontent = binding.appBarMain.contentMain
+        setContentView(binding.root)
         if (savedInstanceState != null) {
             idSelect = savedInstanceState.getInt("id")
             idOld = savedInstanceState.getInt("idOld")
@@ -201,20 +207,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 it.write(gson.toJson(MenuNatatki.myNatatkiFiles))
             }
         }
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        bindingappbar.titleToolbar.setOnClickListener {
+            bindingappbar.titleToolbar.setHorizontallyScrolling(true)
+            bindingappbar.titleToolbar.freezesText = true
+            bindingappbar.titleToolbar.marqueeRepeatLimit = -1
+            if (bindingappbar.titleToolbar.isSelected) {
+                bindingappbar.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                bindingappbar.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                bindingappbar.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                bindingappbar.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
-        setSupportActionBar(toolbar)
+        bindingappbar.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
+        setSupportActionBar(bindingappbar.toolbar)
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
@@ -222,111 +228,111 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
         idSelect = k.getInt("id", R.id.label1)
 
-        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
+        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, bindingappbar.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
-        label1.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label2.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label3.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label4.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label5.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label6.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label7.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label8.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label9.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label91.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label92.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label93.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label94.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label95.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label10.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label101.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label102.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label103.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label104.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label105.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label11.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label12.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        label13.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        carkva_link.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label1.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label2.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label3.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label4.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label5.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label6.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label7.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label8.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label9.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label91.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label92.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label93.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label94.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label95.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label10.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label101.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label102.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label103.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label104.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label105.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label11.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label12.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.label13.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        binding.carkvaLink.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
 
         if (dzenNoch) {
-            label91.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            label92.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            label93.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            label94.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            label95.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            label101.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            label102.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            label103.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            label105.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            label104.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            toolbar.popupTheme = R.style.AppCompatDark
+            binding.label91.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label92.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label93.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label94.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label95.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label101.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label102.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label103.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label105.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.label104.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            bindingappbar.toolbar.popupTheme = R.style.AppCompatDark
             setMenuIcon(ContextCompat.getDrawable(this, R.drawable.krest_black))
-            logosite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.logotip_whate))
-            label9a.setBackgroundResource(R.drawable.selector_dark)
-            label10a.setBackgroundResource(R.drawable.selector_dark)
+            binding.logosite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.logotip_whate))
+            binding.label9a.setBackgroundResource(R.drawable.selector_dark)
+            binding.label10a.setBackgroundResource(R.drawable.selector_dark)
         } else {
             setMenuIcon(ContextCompat.getDrawable(this, R.drawable.krest))
-            label9a.setBackgroundResource(R.drawable.selector_default)
-            label10a.setBackgroundResource(R.drawable.selector_default)
+            binding.label9a.setBackgroundResource(R.drawable.selector_default)
+            binding.label10a.setBackgroundResource(R.drawable.selector_default)
         }
         if (k.getInt("sinoidal", 0) == 1) {
-            label11.visibility = View.VISIBLE
+            binding.label11.visibility = View.VISIBLE
         }
-        title9.setOnClickListener(this)
-        title10.setOnClickListener(this)
-        label1.setOnClickListener(this)
-        label2.setOnClickListener(this)
-        label3.setOnClickListener(this)
-        label4.setOnClickListener(this)
-        label5.setOnClickListener(this)
-        label6.setOnClickListener(this)
-        label7.setOnClickListener(this)
-        label8.setOnClickListener(this)
-        label91.setOnClickListener(this)
-        label92.setOnClickListener(this)
-        label93.setOnClickListener(this)
-        label94.setOnClickListener(this)
-        label95.setOnClickListener(this)
-        label101.setOnClickListener(this)
-        label102.setOnClickListener(this)
-        label103.setOnClickListener(this)
-        label104.setOnClickListener(this)
-        label105.setOnClickListener(this)
-        label11.setOnClickListener(this)
-        label12.setOnClickListener(this)
-        label13.setOnClickListener(this)
-        label9a.setOnClickListener(this)
-        label10a.setOnClickListener(this)
+        binding.title9.setOnClickListener(this)
+        binding.title10.setOnClickListener(this)
+        binding.label1.setOnClickListener(this)
+        binding.label2.setOnClickListener(this)
+        binding.label3.setOnClickListener(this)
+        binding.label4.setOnClickListener(this)
+        binding.label5.setOnClickListener(this)
+        binding.label6.setOnClickListener(this)
+        binding.label7.setOnClickListener(this)
+        binding.label8.setOnClickListener(this)
+        binding.label91.setOnClickListener(this)
+        binding.label92.setOnClickListener(this)
+        binding.label93.setOnClickListener(this)
+        binding.label94.setOnClickListener(this)
+        binding.label95.setOnClickListener(this)
+        binding.label101.setOnClickListener(this)
+        binding.label102.setOnClickListener(this)
+        binding.label103.setOnClickListener(this)
+        binding.label104.setOnClickListener(this)
+        binding.label105.setOnClickListener(this)
+        binding.label11.setOnClickListener(this)
+        binding.label12.setOnClickListener(this)
+        binding.label13.setOnClickListener(this)
+        binding.label9a.setOnClickListener(this)
+        binding.label10a.setOnClickListener(this)
 
         val data: Uri? = intent.data
         if (data != null) {
             if (data.toString().contains("shortcuts=1")) {
                 idSelect = R.id.label12
-                onClick(label12)
+                onClick(binding.label12)
             } else if (data.toString().contains("shortcuts=3")) {
                 idSelect = R.id.label7
                 shortcuts = true
-                onClick(label7)
+                onClick(binding.label7)
             } else if (data.toString().contains("shortcuts=4")) {
                 idSelect = R.id.label1
                 shortcuts = true
-                onClick(label1)
+                onClick(binding.label1)
             } else if (data.toString().contains("shortcuts=2")) {
                 idSelect = R.id.label2
                 shortcuts = true
-                onClick(label2)
+                onClick(binding.label2)
             } else if (data.toString().contains("caliandar")) {
                 idSelect = R.id.label1
-                onClick(label1)
+                onClick(binding.label1)
             } else if (data.toString().contains("biblija")) {
                 idSelect = R.id.label8
-                onClick(label8)
+                onClick(binding.label8)
             } else if (!data.toString().contains("https://")) {
                 idSelect = R.id.label2
                 shortcuts = true
-                onClick(label2)
+                onClick(binding.label2)
             }
         }
         val extras = intent.extras
@@ -370,84 +376,84 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
         var scroll = false
         when (idSelect) {
-            R.id.label1 -> onClick(label1)
-            R.id.label2 -> onClick(label2)
-            R.id.label3 -> onClick(label3)
+            R.id.label1 -> onClick(binding.label1)
+            R.id.label2 -> onClick(binding.label2)
+            R.id.label3 -> onClick(binding.label3)
             R.id.label4 -> {
-                if (!label4.isShown) scroll = true
-                onClick(label4)
+                if (!binding.label4.isShown) scroll = true
+                onClick(binding.label4)
             }
             R.id.label5 -> {
-                if (!label5.isShown) scroll = true
-                onClick(label5)
+                if (!binding.label5.isShown) scroll = true
+                onClick(binding.label5)
             }
             R.id.label6 -> {
-                if (!label6.isShown) scroll = true
-                onClick(label6)
+                if (!binding.label6.isShown) scroll = true
+                onClick(binding.label6)
             }
             R.id.label7 -> {
-                if (!label7.isShown) scroll = true
-                onClick(label7)
+                if (!binding.label7.isShown) scroll = true
+                onClick(binding.label7)
             }
             R.id.label8 -> {
-                if (!label8.isShown) scroll = true
-                onClick(label8)
+                if (!binding.label8.isShown) scroll = true
+                onClick(binding.label8)
             }
             R.id.label91 -> {
-                if (!label91.isShown) scroll = true
-                onClick(label91)
+                if (!binding.label91.isShown) scroll = true
+                onClick(binding.label91)
             }
             R.id.label92 -> {
-                if (!label92.isShown) scroll = true
-                onClick(label92)
+                if (!binding.label92.isShown) scroll = true
+                onClick(binding.label92)
             }
             R.id.label93 -> {
-                if (!label93.isShown) scroll = true
-                onClick(label93)
+                if (!binding.label93.isShown) scroll = true
+                onClick(binding.label93)
             }
             R.id.label94 -> {
-                if (!label94.isShown) scroll = true
-                onClick(label94)
+                if (!binding.label94.isShown) scroll = true
+                onClick(binding.label94)
             }
             R.id.label95 -> {
-                if (!label95.isShown) scroll = true
-                onClick(label95)
+                if (!binding.label95.isShown) scroll = true
+                onClick(binding.label95)
             }
             R.id.label101 -> {
-                if (!label101.isShown) scroll = true
-                onClick(label101)
+                if (!binding.label101.isShown) scroll = true
+                onClick(binding.label101)
             }
             R.id.label102 -> {
-                if (!label102.isShown) scroll = true
-                onClick(label102)
+                if (!binding.label102.isShown) scroll = true
+                onClick(binding.label102)
             }
             R.id.label103 -> {
-                if (!label103.isShown) scroll = true
-                onClick(label103)
+                if (!binding.label103.isShown) scroll = true
+                onClick(binding.label103)
             }
             R.id.label104 -> {
-                if (!label104.isShown) scroll = true
-                onClick(label104)
+                if (!binding.label104.isShown) scroll = true
+                onClick(binding.label104)
             }
             R.id.label105 -> {
-                if (!label105.isShown) scroll = true
-                onClick(label105)
+                if (!binding.label105.isShown) scroll = true
+                onClick(binding.label105)
             }
             R.id.label11 -> {
-                if (!label11.isShown) scroll = true
-                onClick(label11)
+                if (!binding.label11.isShown) scroll = true
+                onClick(binding.label11)
             }
             R.id.label12 -> {
-                if (!label12.isShown) scroll = true
-                onClick(label12)
+                if (!binding.label12.isShown) scroll = true
+                onClick(binding.label12)
             }
             R.id.label13 -> {
-                if (!label13.isShown) scroll = true
-                onClick(label13)
+                if (!binding.label13.isShown) scroll = true
+                onClick(binding.label13)
             }
             else -> {
                 idSelect = R.id.label1
-                onClick(label1)
+                onClick(binding.label1)
             }
         }
 
@@ -464,7 +470,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             setPadzeia = false
             setListPadzeia(this)
         }
-        if (scroll) scrollView.post { scrollView.smoothScrollBy(0, scrollView.height) }
+        if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
     }
 
     private fun mkDir() {
@@ -499,19 +505,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }
 
     private fun setMenuIcon(drawable: Drawable?) {
-        ajustCompoundDrawableSizeWithText(label1, drawable)
-        ajustCompoundDrawableSizeWithText(label2, drawable)
-        ajustCompoundDrawableSizeWithText(label3, drawable)
-        ajustCompoundDrawableSizeWithText(label4, drawable)
-        ajustCompoundDrawableSizeWithText(label5, drawable)
-        ajustCompoundDrawableSizeWithText(label6, drawable)
-        ajustCompoundDrawableSizeWithText(label7, drawable)
-        ajustCompoundDrawableSizeWithText(label8, drawable)
-        ajustCompoundDrawableSizeWithText(label9, drawable)
-        ajustCompoundDrawableSizeWithText(label10, drawable)
-        ajustCompoundDrawableSizeWithText(label11, drawable)
-        ajustCompoundDrawableSizeWithText(label12, drawable)
-        ajustCompoundDrawableSizeWithText(label13, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label1, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label2, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label3, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label4, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label5, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label6, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label7, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label8, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label9, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label10, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label11, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label12, drawable)
+        ajustCompoundDrawableSizeWithText(binding.label13, drawable)
     }
 
     override fun onBackPressed() {
@@ -570,7 +576,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }
             setDataCalendar = dayyear + c.get(Calendar.DAY_OF_YEAR) - 1
             idOld = -1
-            onClick(label1)
+            onClick(binding.label1)
         }
         if (id == R.id.settings) {
             val i = Intent(this, SettingsActivity::class.java)
@@ -652,7 +658,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 if (setDataCalendar != dayyear + day) {
                     setDataCalendar = dayyear + day
                     idOld = -1
-                    onClick(label1)
+                    onClick(binding.label1)
                 }
             }
             onStart = true
@@ -668,7 +674,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 if (setDataCalendar != dayyear + day) {
                     setDataCalendar = dayyear + day
                     idOld = -1
-                    onClick(label1)
+                    onClick(binding.label1)
                 }
             }
         }
@@ -767,198 +773,198 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     override fun onClick(view: View?) {
         idSelect = view?.id ?: 0
         if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
             dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
-                label1.setBackgroundResource(R.drawable.selector_dark)
-                label2.setBackgroundResource(R.drawable.selector_dark)
-                label3.setBackgroundResource(R.drawable.selector_dark)
-                label4.setBackgroundResource(R.drawable.selector_dark)
-                label5.setBackgroundResource(R.drawable.selector_dark)
-                label6.setBackgroundResource(R.drawable.selector_dark)
-                label7.setBackgroundResource(R.drawable.selector_dark)
-                label8.setBackgroundResource(R.drawable.selector_dark)
-                label91.setBackgroundResource(R.drawable.selector_dark)
-                label92.setBackgroundResource(R.drawable.selector_dark)
-                label93.setBackgroundResource(R.drawable.selector_dark)
-                label94.setBackgroundResource(R.drawable.selector_dark)
-                label95.setBackgroundResource(R.drawable.selector_dark)
-                label101.setBackgroundResource(R.drawable.selector_dark)
-                label102.setBackgroundResource(R.drawable.selector_dark)
-                label103.setBackgroundResource(R.drawable.selector_dark)
-                label104.setBackgroundResource(R.drawable.selector_dark)
-                label105.setBackgroundResource(R.drawable.selector_dark)
-                label11.setBackgroundResource(R.drawable.selector_dark)
-                label12.setBackgroundResource(R.drawable.selector_dark)
-                label13.setBackgroundResource(R.drawable.selector_dark)
+                binding.label1.setBackgroundResource(R.drawable.selector_dark)
+                binding.label2.setBackgroundResource(R.drawable.selector_dark)
+                binding.label3.setBackgroundResource(R.drawable.selector_dark)
+                binding.label4.setBackgroundResource(R.drawable.selector_dark)
+                binding.label5.setBackgroundResource(R.drawable.selector_dark)
+                binding.label6.setBackgroundResource(R.drawable.selector_dark)
+                binding.label7.setBackgroundResource(R.drawable.selector_dark)
+                binding.label8.setBackgroundResource(R.drawable.selector_dark)
+                binding.label91.setBackgroundResource(R.drawable.selector_dark)
+                binding.label92.setBackgroundResource(R.drawable.selector_dark)
+                binding.label93.setBackgroundResource(R.drawable.selector_dark)
+                binding.label94.setBackgroundResource(R.drawable.selector_dark)
+                binding.label95.setBackgroundResource(R.drawable.selector_dark)
+                binding.label101.setBackgroundResource(R.drawable.selector_dark)
+                binding.label102.setBackgroundResource(R.drawable.selector_dark)
+                binding.label103.setBackgroundResource(R.drawable.selector_dark)
+                binding.label104.setBackgroundResource(R.drawable.selector_dark)
+                binding.label105.setBackgroundResource(R.drawable.selector_dark)
+                binding.label11.setBackgroundResource(R.drawable.selector_dark)
+                binding.label12.setBackgroundResource(R.drawable.selector_dark)
+                binding.label13.setBackgroundResource(R.drawable.selector_dark)
             } else {
-                label1.setBackgroundResource(R.drawable.selector_default)
-                label2.setBackgroundResource(R.drawable.selector_default)
-                label3.setBackgroundResource(R.drawable.selector_default)
-                label4.setBackgroundResource(R.drawable.selector_default)
-                label5.setBackgroundResource(R.drawable.selector_default)
-                label6.setBackgroundResource(R.drawable.selector_default)
-                label7.setBackgroundResource(R.drawable.selector_default)
-                label8.setBackgroundResource(R.drawable.selector_default)
-                label91.setBackgroundResource(R.drawable.selector_default)
-                label92.setBackgroundResource(R.drawable.selector_default)
-                label93.setBackgroundResource(R.drawable.selector_default)
-                label94.setBackgroundResource(R.drawable.selector_default)
-                label95.setBackgroundResource(R.drawable.selector_default)
-                label101.setBackgroundResource(R.drawable.selector_default)
-                label102.setBackgroundResource(R.drawable.selector_default)
-                label103.setBackgroundResource(R.drawable.selector_default)
-                label104.setBackgroundResource(R.drawable.selector_default)
-                label105.setBackgroundResource(R.drawable.selector_default)
-                label11.setBackgroundResource(R.drawable.selector_default)
-                label12.setBackgroundResource(R.drawable.selector_default)
-                label13.setBackgroundResource(R.drawable.selector_default)
+                binding.label1.setBackgroundResource(R.drawable.selector_default)
+                binding.label2.setBackgroundResource(R.drawable.selector_default)
+                binding.label3.setBackgroundResource(R.drawable.selector_default)
+                binding.label4.setBackgroundResource(R.drawable.selector_default)
+                binding.label5.setBackgroundResource(R.drawable.selector_default)
+                binding.label6.setBackgroundResource(R.drawable.selector_default)
+                binding.label7.setBackgroundResource(R.drawable.selector_default)
+                binding.label8.setBackgroundResource(R.drawable.selector_default)
+                binding.label91.setBackgroundResource(R.drawable.selector_default)
+                binding.label92.setBackgroundResource(R.drawable.selector_default)
+                binding.label93.setBackgroundResource(R.drawable.selector_default)
+                binding.label94.setBackgroundResource(R.drawable.selector_default)
+                binding.label95.setBackgroundResource(R.drawable.selector_default)
+                binding.label101.setBackgroundResource(R.drawable.selector_default)
+                binding.label102.setBackgroundResource(R.drawable.selector_default)
+                binding.label103.setBackgroundResource(R.drawable.selector_default)
+                binding.label104.setBackgroundResource(R.drawable.selector_default)
+                binding.label105.setBackgroundResource(R.drawable.selector_default)
+                binding.label11.setBackgroundResource(R.drawable.selector_default)
+                binding.label12.setBackgroundResource(R.drawable.selector_default)
+                binding.label13.setBackgroundResource(R.drawable.selector_default)
             }
         }
 
         prefEditors = k.edit()
         if (idSelect == R.id.label91 || idSelect == R.id.label92 || idSelect == R.id.label93 || idSelect == R.id.label94 || idSelect == R.id.label95) {
-            title9.visibility = View.VISIBLE
-            if (dzenNoch) image2.setImageResource(R.drawable.arrow_up_float_black)
-            else image2.setImageResource(R.drawable.arrow_up_float)
+            binding.title9.visibility = View.VISIBLE
+            if (dzenNoch) binding.image2.setImageResource(R.drawable.arrow_up_float_black)
+            else binding.image2.setImageResource(R.drawable.arrow_up_float)
         }
         if (idSelect == R.id.label101 || idSelect == R.id.label102 || idSelect == R.id.label103 || idSelect == R.id.label104 || idSelect == R.id.label105) {
-            title10.visibility = View.VISIBLE
-            if (dzenNoch) image3.setImageResource(R.drawable.arrow_up_float_black)
-            else image3.setImageResource(R.drawable.arrow_up_float)
+            binding.title10.visibility = View.VISIBLE
+            if (dzenNoch) binding.image3.setImageResource(R.drawable.arrow_up_float_black)
+            else binding.image3.setImageResource(R.drawable.arrow_up_float)
         }
 
         if (idSelect == R.id.label9a) {
-            if (title9.visibility == View.VISIBLE) {
-                title9.visibility = View.GONE
-                image2.setImageResource(R.drawable.arrow_down_float)
+            if (binding.title9.visibility == View.VISIBLE) {
+                binding.title9.visibility = View.GONE
+                binding.image2.setImageResource(R.drawable.arrow_down_float)
             } else {
-                title9.visibility = View.VISIBLE
-                if (dzenNoch) image2.setImageResource(R.drawable.arrow_up_float_black)
-                else image2.setImageResource(R.drawable.arrow_up_float)
-                scrollView.post {
-                    scrollView.smoothScrollBy(0, title9.height)
+                binding.title9.visibility = View.VISIBLE
+                if (dzenNoch) binding.image2.setImageResource(R.drawable.arrow_up_float_black)
+                else binding.image2.setImageResource(R.drawable.arrow_up_float)
+                binding.scrollView.post {
+                    binding.scrollView.smoothScrollBy(0, binding.title9.height)
                 }
             }
         }
         if (idSelect == R.id.label10a) {
-            if (title10.visibility == View.VISIBLE) {
-                title10.visibility = View.GONE
-                image3.setImageResource(R.drawable.arrow_down_float)
+            if (binding.title10.visibility == View.VISIBLE) {
+                binding.title10.visibility = View.GONE
+                binding.image3.setImageResource(R.drawable.arrow_down_float)
             } else {
-                title10.visibility = View.VISIBLE
-                if (dzenNoch) image3.setImageResource(R.drawable.arrow_up_float_black)
-                else image3.setImageResource(R.drawable.arrow_up_float)
-                scrollView.post {
-                    scrollView.smoothScrollBy(0, title10.height)
+                binding.title10.visibility = View.VISIBLE
+                if (dzenNoch) binding.image3.setImageResource(R.drawable.arrow_up_float_black)
+                else binding.image3.setImageResource(R.drawable.arrow_up_float)
+                binding.scrollView.post {
+                    binding.scrollView.smoothScrollBy(0, binding.title10.height)
                 }
             }
         }
         when (idSelect) {
             R.id.label1 -> {
                 tolbarTitle = getString(R.string.kaliandar2)
-                if (dzenNoch) label1.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label1.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label1.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label1.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label2 -> {
                 tolbarTitle = getString(R.string.sajt)
-                if (dzenNoch) label2.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label2.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label2.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label2.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label3 -> {
                 tolbarTitle = getString(R.string.liturgikon)
-                if (dzenNoch) label3.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label3.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label3.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label3.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label4 -> {
                 tolbarTitle = getString(R.string.malitvy)
-                if (dzenNoch) label4.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label4.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label4.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label4.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label5 -> {
                 tolbarTitle = getString(R.string.akafisty)
-                if (dzenNoch) label5.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label5.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label5.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label5.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label6 -> {
                 tolbarTitle = getString(R.string.ruzanec)
-                if (dzenNoch) label6.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label6.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label6.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label6.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label7 -> {
                 tolbarTitle = getString(R.string.maje_natatki)
-                if (dzenNoch) label7.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label7.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label7.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label7.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label8 -> {
                 tolbarTitle = getString(R.string.title_biblia)
-                if (dzenNoch) label8.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label8.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label8.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label8.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label13 -> {
                 tolbarTitle = getString(R.string.title_psalter)
-                if (dzenNoch) label13.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label13.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label13.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label13.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label91 -> {
                 tolbarTitle = getString(R.string.pesny1)
-                if (dzenNoch) label91.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label91.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label91.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label91.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label92 -> {
                 tolbarTitle = getString(R.string.pesny2)
-                if (dzenNoch) label92.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label92.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label92.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label92.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label93 -> {
                 tolbarTitle = getString(R.string.pesny3)
-                if (dzenNoch) label93.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label93.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label93.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label93.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label94 -> {
                 tolbarTitle = getString(R.string.pesny4)
-                if (dzenNoch) label94.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label94.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label94.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label94.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label95 -> {
                 tolbarTitle = getString(R.string.pesny5)
-                if (dzenNoch) label95.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label95.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label95.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label95.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label103 -> {
                 tolbarTitle = getString(R.string.carkva_sviaty)
-                if (dzenNoch) label103.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label103.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label103.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label103.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label104 -> {
                 tolbarTitle = getString(R.string.kaliandar_bel)
-                if (dzenNoch) label104.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label104.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label104.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label104.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label105 -> {
                 tolbarTitle = getString(R.string.parafii)
-                if (dzenNoch) label105.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label105.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label105.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label105.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label102 -> {
                 tolbarTitle = getString(R.string.pamiatka)
-                if (dzenNoch) label102.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label102.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label102.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label102.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label101 -> {
                 tolbarTitle = getString(R.string.spovedz)
-                if (dzenNoch) label101.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label101.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label101.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label101.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label11 -> {
                 tolbarTitle = getString(R.string.bsinaidal)
-                if (dzenNoch) label11.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label11.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label11.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label11.setBackgroundResource(R.drawable.selector_gray)
             }
             R.id.label12 -> {
                 tolbarTitle = getString(R.string.MenuVybranoe)
-                if (dzenNoch) label12.setBackgroundResource(R.drawable.selector_dark_maranata)
-                else label12.setBackgroundResource(R.drawable.selector_gray)
+                if (dzenNoch) binding.label12.setBackgroundResource(R.drawable.selector_dark_maranata)
+                else binding.label12.setBackgroundResource(R.drawable.selector_gray)
             }
         }
 
@@ -967,7 +973,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
 
             c = Calendar.getInstance() as GregorianCalendar
-            if (idSelect != R.id.label2 && linear.visibility == View.VISIBLE) linear.visibility = View.GONE
+            if (idSelect != R.id.label2 && bindingcontent.linear.visibility == View.VISIBLE) bindingcontent.linear.visibility = View.GONE
             when (idSelect) {
                 R.id.label1 -> {
                     var dayyear = 0
@@ -1183,10 +1189,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     prefEditors.putInt("id", idSelect)
                 }
             }
-            toolbar.postDelayed({ ftrans.commitAllowingStateLoss() }, 300)
+            bindingappbar.toolbar.postDelayed({ ftrans.commitAllowingStateLoss() }, 300)
             prefEditors.apply()
         }
-        title_toolbar.text = tolbarTitle
+        bindingappbar.titleToolbar.text = tolbarTitle
         idOld = idSelect
     }
 

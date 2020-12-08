@@ -9,15 +9,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.collection.ArrayMap
 import androidx.fragment.app.Fragment
+import by.carkva_gazeta.malitounik.databinding.MenuBibleBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.menu_bible.*
 
 class MenuBibleSemuxa : Fragment() {
     private var mLastClickTime: Long = 0
+    private var _binding: MenuBibleBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.menu_bible, container, false)
+        _binding = MenuBibleBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -27,14 +35,14 @@ class MenuBibleSemuxa : Fragment() {
             val dzenNoch = k.getBoolean("dzen_noch", false)
             val bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
             if (bibleVybranoe == "") {
-                myBible.visibility = View.GONE
+                binding.myBible.visibility = View.GONE
             } else {
                 val gson = Gson()
                 val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
                 val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
-                if (arrayListVybranoe.isEmpty()) myBible.visibility = View.GONE
+                if (arrayListVybranoe.isEmpty()) binding.myBible.visibility = View.GONE
             }
-            myBible.setOnClickListener {
+            binding.myBible.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
@@ -42,14 +50,14 @@ class MenuBibleSemuxa : Fragment() {
                 VybranoeBibleList.biblia = 1
                 startActivity(Intent(activity, VybranoeBibleList::class.java))
             }
-            novyZavet.setOnClickListener {
+            binding.novyZavet.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 startActivity(Intent(activity, NovyZapavietSemuxaList::class.java))
             }
-            staryZavet.setOnClickListener {
+            binding.staryZavet.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
@@ -59,9 +67,9 @@ class MenuBibleSemuxa : Fragment() {
             val bibleTime = k.getString("bible_time_semuxa", "") ?: ""
             if (bibleTime == "") {
                 bible_time = true
-                prodolzych.visibility = View.GONE
+                binding.prodolzych.visibility = View.GONE
             }
-            prodolzych.setOnClickListener {
+            binding.prodolzych.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
@@ -95,7 +103,7 @@ class MenuBibleSemuxa : Fragment() {
                     }
                 }
             }
-            zakladki.setOnClickListener {
+            binding.zakladki.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
@@ -110,7 +118,7 @@ class MenuBibleSemuxa : Fragment() {
                     fragmentManager?.let { dadatak.show(it, "dadatak") }
                 }
             }
-            natatki.setOnClickListener {
+            binding.natatki.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
@@ -125,7 +133,7 @@ class MenuBibleSemuxa : Fragment() {
                     fragmentManager?.let { dadatak.show(it, "dadatak") }
                 }
             }
-            saeche.setOnClickListener {
+            binding.saeche.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
@@ -140,7 +148,7 @@ class MenuBibleSemuxa : Fragment() {
                     fragmentManager?.let { dadatak.show(it, "dadatak") }
                 }
             }
-            umovy_karystannia.setOnClickListener {
+            binding.umovyKarystannia.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
@@ -149,8 +157,8 @@ class MenuBibleSemuxa : Fragment() {
                 fragmentManager?.let { semukha.show(it, "Alesya_Semukha") }
             }
             if (dzenNoch) {
-                novyZavet.setBackgroundResource(R.drawable.knopka_red_black)
-                staryZavet.setBackgroundResource(R.drawable.knopka_red_black)
+                binding.novyZavet.setBackgroundResource(R.drawable.knopka_red_black)
+                binding.staryZavet.setBackgroundResource(R.drawable.knopka_red_black)
             }
         }
     }

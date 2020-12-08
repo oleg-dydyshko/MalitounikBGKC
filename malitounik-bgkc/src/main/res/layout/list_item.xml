@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     app:leftViewId="@+id/item_left"
     app:rightViewId="@+id/item_right"
-    app:swipeViewId="@+id/item_layout">
+    app:swipeViewId="@+id/item_layout"
+    tools:viewBindingIgnore="true">
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
         android:id="@+id/item_left"

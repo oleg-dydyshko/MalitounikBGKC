@@ -15,9 +15,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import by.carkva_gazeta.malitounik.databinding.MenuPesnyBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.menu_pesny.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,9 +42,17 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     private lateinit var historyAdapter: HistoryAdapter
     private lateinit var chin: SharedPreferences
     private val textWatcher: TextWatcher = MyTextWatcher()
+    private var _binding: MenuPesnyBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.menu_pesny, container, false)
+        _binding = MenuPesnyBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -54,10 +62,10 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             pesny = arguments?.getString("pesny") ?: "prasl"
             menuList = getMenuListData(pesny)
             adapter = MenuPesnyListAdapter(fraragment)
-            ListView.adapter = adapter
-            ListView.isVerticalScrollBarEnabled = false
-            ListView.onItemClickListener = this
-            ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            binding.ListView.adapter = adapter
+            binding.ListView.isVerticalScrollBarEnabled = false
+            binding.ListView.onItemClickListener = this
+            binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
                 override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                     if (i == 1) {
                         val imm1 = fraragment.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -82,27 +90,27 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                         startPosukPesen(searchViewQwery)
                     }
                     searchViewQwery.length in 1..2 -> {
-                        History.visibility = View.VISIBLE
-                        ListView.visibility = View.GONE
+                        binding.History.visibility = View.VISIBLE
+                        binding.ListView.visibility = View.GONE
                     }
                     else -> {
-                        History.visibility = View.GONE
-                        ListView.visibility = View.VISIBLE
+                        binding.History.visibility = View.GONE
+                        binding.ListView.visibility = View.VISIBLE
                     }
                 }
             }
             historyAdapter = HistoryAdapter(fraragment, history, true)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
             if (dzenNoch) {
-                History.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_dark)
-                ListView.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_dark)
+                binding.History.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_dark)
+                binding.ListView.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_dark)
             } else {
-                History.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_default)
-                ListView.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_default)
+                binding.History.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_default)
+                binding.ListView.selector = ContextCompat.getDrawable(fraragment, R.drawable.selector_default)
             }
-            History.adapter = historyAdapter
-            History.onItemClickListener = this
-            History.setOnItemLongClickListener { _, _, position, _ ->
+            binding.History.adapter = historyAdapter
+            binding.History.onItemClickListener = this
+            binding.History.setOnItemLongClickListener { _, _, position, _ ->
                 fragmentManager?.let {
                     val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
                     dialogClearHishory.show(it, "dialogClearHishory")
@@ -241,8 +249,8 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                     adapter.notifyDataSetChanged()
                     menu.findItem(R.id.count).isVisible = search
                 }
-                History.visibility = View.GONE
-                ListView.visibility = View.VISIBLE
+                binding.History.visibility = View.GONE
+                binding.ListView.visibility = View.VISIBLE
                 return true
             }
         })
@@ -476,12 +484,12 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                     edit.length >= 3 -> {
                         stopPosukPesen()
                         startPosukPesen(edit)
-                        History.visibility = View.GONE
-                        ListView.visibility = View.VISIBLE
+                        binding.History.visibility = View.GONE
+                        binding.ListView.visibility = View.VISIBLE
                     }
                     edit.length in 1..2 -> {
-                        History.visibility = View.VISIBLE
-                        ListView.visibility = View.GONE
+                        binding.History.visibility = View.VISIBLE
+                        binding.ListView.visibility = View.GONE
                         textViewCount?.text = "(0)"
                     }
                     else -> {
@@ -490,8 +498,8 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                         menuList.sort()
                         adapter.notifyDataSetChanged()
                         textViewCount?.text = getString(R.string.seash, menuList.size)
-                        History.visibility = View.GONE
-                        ListView.visibility = View.VISIBLE
+                        binding.History.visibility = View.GONE
+                        binding.ListView.visibility = View.VISIBLE
                     }
                 }
                 if (check != 0) {

@@ -18,7 +18,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-                android:id="@+id/title_toolbar"
+                android:id="@+id/titleToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"

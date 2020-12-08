@@ -18,9 +18,9 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.Sabytie.Companion.getColors
+import by.carkva_gazeta.malitounik.databinding.CalendarMunBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.calendar_mun.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,12 +40,14 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
     private val padzei = ArrayList<Padzeia>()
     private var viewId = 0
     private var mLastClickTime: Long = 0
+    private var _binding: CalendarMunBinding? = null
+    private val binding get() = _binding!!
 
     private fun sabytieOn() {
         if (!CaliandarMun.SabytieOnView) {
-            linearLayout.visibility = View.GONE
+            binding.linearLayout.visibility = View.GONE
         } else {
-            linearLayout.visibility = View.VISIBLE
+            binding.linearLayout.visibility = View.VISIBLE
             val c = GregorianCalendar(year, mun, date)
             sabytieView(c[Calendar.DAY_OF_YEAR] - 1)
         }
@@ -93,9 +95,15 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
         }
         return sabytie
     }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.calendar_mun, container, false)
+        _binding = CalendarMunBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -106,58 +114,58 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                 sabytieOn()
                 dzenNoch = chin.getBoolean("dzen_noch", false)
                 if (dzenNoch) {
-                    textView2.setBackgroundResource(R.drawable.calendar_red_black)
-                    button1.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                    button8.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                    button15.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                    button22.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                    button29.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                    button36.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                    binding.textView2.setBackgroundResource(R.drawable.calendar_red_black)
+                    binding.button1.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                    binding.button8.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                    binding.button15.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                    binding.button22.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                    binding.button29.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                    binding.button36.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 }
-                button1.setOnClickListener(this@PageFragmentMonth)
-                button2.setOnClickListener(this@PageFragmentMonth)
-                button3.setOnClickListener(this@PageFragmentMonth)
-                button4.setOnClickListener(this@PageFragmentMonth)
-                button5.setOnClickListener(this@PageFragmentMonth)
-                button6.setOnClickListener(this@PageFragmentMonth)
-                button7.setOnClickListener(this@PageFragmentMonth)
-                button8.setOnClickListener(this@PageFragmentMonth)
-                button9.setOnClickListener(this@PageFragmentMonth)
-                button10.setOnClickListener(this@PageFragmentMonth)
-                button11.setOnClickListener(this@PageFragmentMonth)
-                button12.setOnClickListener(this@PageFragmentMonth)
-                button13.setOnClickListener(this@PageFragmentMonth)
-                button14.setOnClickListener(this@PageFragmentMonth)
-                button15.setOnClickListener(this@PageFragmentMonth)
-                button16.setOnClickListener(this@PageFragmentMonth)
-                button17.setOnClickListener(this@PageFragmentMonth)
-                button18.setOnClickListener(this@PageFragmentMonth)
-                button19.setOnClickListener(this@PageFragmentMonth)
-                button20.setOnClickListener(this@PageFragmentMonth)
-                button21.setOnClickListener(this@PageFragmentMonth)
-                button22.setOnClickListener(this@PageFragmentMonth)
-                button23.setOnClickListener(this@PageFragmentMonth)
-                button24.setOnClickListener(this@PageFragmentMonth)
-                button25.setOnClickListener(this@PageFragmentMonth)
-                button26.setOnClickListener(this@PageFragmentMonth)
-                button27.setOnClickListener(this@PageFragmentMonth)
-                button28.setOnClickListener(this@PageFragmentMonth)
-                button29.setOnClickListener(this@PageFragmentMonth)
-                button30.setOnClickListener(this@PageFragmentMonth)
-                button31.setOnClickListener(this@PageFragmentMonth)
-                button32.setOnClickListener(this@PageFragmentMonth)
-                button33.setOnClickListener(this@PageFragmentMonth)
-                button34.setOnClickListener(this@PageFragmentMonth)
-                button35.setOnClickListener(this@PageFragmentMonth)
-                button36.setOnClickListener(this@PageFragmentMonth)
-                button37.setOnClickListener(this@PageFragmentMonth)
-                button38.setOnClickListener(this@PageFragmentMonth)
-                button39.setOnClickListener(this@PageFragmentMonth)
-                button40.setOnClickListener(this@PageFragmentMonth)
-                button41.setOnClickListener(this@PageFragmentMonth)
-                button42.setOnClickListener(this@PageFragmentMonth)
+                binding.button1.setOnClickListener(this@PageFragmentMonth)
+                binding.button2.setOnClickListener(this@PageFragmentMonth)
+                binding.button3.setOnClickListener(this@PageFragmentMonth)
+                binding.button4.setOnClickListener(this@PageFragmentMonth)
+                binding.button5.setOnClickListener(this@PageFragmentMonth)
+                binding.button6.setOnClickListener(this@PageFragmentMonth)
+                binding.button7.setOnClickListener(this@PageFragmentMonth)
+                binding.button8.setOnClickListener(this@PageFragmentMonth)
+                binding.button9.setOnClickListener(this@PageFragmentMonth)
+                binding.button10.setOnClickListener(this@PageFragmentMonth)
+                binding.button11.setOnClickListener(this@PageFragmentMonth)
+                binding.button12.setOnClickListener(this@PageFragmentMonth)
+                binding.button13.setOnClickListener(this@PageFragmentMonth)
+                binding.button14.setOnClickListener(this@PageFragmentMonth)
+                binding.button15.setOnClickListener(this@PageFragmentMonth)
+                binding.button16.setOnClickListener(this@PageFragmentMonth)
+                binding.button17.setOnClickListener(this@PageFragmentMonth)
+                binding.button18.setOnClickListener(this@PageFragmentMonth)
+                binding.button19.setOnClickListener(this@PageFragmentMonth)
+                binding.button20.setOnClickListener(this@PageFragmentMonth)
+                binding.button21.setOnClickListener(this@PageFragmentMonth)
+                binding.button22.setOnClickListener(this@PageFragmentMonth)
+                binding.button23.setOnClickListener(this@PageFragmentMonth)
+                binding.button24.setOnClickListener(this@PageFragmentMonth)
+                binding.button25.setOnClickListener(this@PageFragmentMonth)
+                binding.button26.setOnClickListener(this@PageFragmentMonth)
+                binding.button27.setOnClickListener(this@PageFragmentMonth)
+                binding.button28.setOnClickListener(this@PageFragmentMonth)
+                binding.button29.setOnClickListener(this@PageFragmentMonth)
+                binding.button30.setOnClickListener(this@PageFragmentMonth)
+                binding.button31.setOnClickListener(this@PageFragmentMonth)
+                binding.button32.setOnClickListener(this@PageFragmentMonth)
+                binding.button33.setOnClickListener(this@PageFragmentMonth)
+                binding.button34.setOnClickListener(this@PageFragmentMonth)
+                binding.button35.setOnClickListener(this@PageFragmentMonth)
+                binding.button36.setOnClickListener(this@PageFragmentMonth)
+                binding.button37.setOnClickListener(this@PageFragmentMonth)
+                binding.button38.setOnClickListener(this@PageFragmentMonth)
+                binding.button39.setOnClickListener(this@PageFragmentMonth)
+                binding.button40.setOnClickListener(this@PageFragmentMonth)
+                binding.button41.setOnClickListener(this@PageFragmentMonth)
+                binding.button42.setOnClickListener(this@PageFragmentMonth)
                 if (CaliandarMun.SabytieOnView) {
-                    linearLayout.visibility = View.VISIBLE
+                    binding.linearLayout.visibility = View.VISIBLE
                     if (savedInstanceState != null) {
                         view?.let {
                             val textView: TextViewRobotoCondensed? = it.findViewById(savedInstanceState.getInt("viewId"))
@@ -201,70 +209,70 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         ++newDay
                         day = "end"
                     }
-                    if (42 - (munAll + wik) >= 6) TableRow.visibility = View.GONE
-                    if (munAll + wik == 29) TableRowPre.visibility = View.GONE
+                    if (42 - (munAll + wik) >= 6) binding.TableRow.visibility = View.GONE
+                    if (munAll + wik == 29) binding.TableRowPre.visibility = View.GONE
                     val calendarPost = GregorianCalendar(year, mun, i)
                     if (e == 1) {
                         if (day == "start") {
-                            button1.text = oldDay.toString()
-                            button1.setBackgroundResource(R.drawable.calendar_bez_posta)
-                            button1.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button1.text = oldDay.toString()
+                            binding.button1.setBackgroundResource(R.drawable.calendar_bez_posta)
+                            binding.button1.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button1.text = day
-                            if (data[i - 1][4].contains("#d00505")) button1.setTypeface(null, Typeface.BOLD)
+                            binding.button1.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button1.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button1.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button1.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button1.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button1.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button1.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button1.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button1.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button1.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button1.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button1.setBackgroundResource(R.drawable.calendar_red_sabytie) else button1.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button1.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button1.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button1.setTypeface(null, Typeface.BOLD)
+                                    binding.button1.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button1.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button1.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button1.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button1.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button1.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button1.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button1.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button1.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button1.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button1.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button1.setBackgroundResource(R.drawable.calendar_red_sabytie) else button1.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button1.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button1.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button1.setTypeface(null, Typeface.NORMAL)
+                                    binding.button1.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button1.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button1.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button1.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button1.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button1.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button1.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button1.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button1.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button1.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button1.setBackgroundResource(R.drawable.calendar_post_sabytie) else button1.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button1.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button1.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button1.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button1.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button1.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button1.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button1.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button1.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button1.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button1.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button1.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button1.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button1.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button1.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button1.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button1.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button1.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button1.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button1.setBackgroundResource(R.drawable.calendar_day_sabytie) else button1.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button1.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button1.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button1.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -273,65 +281,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 2) {
                         if (day == "start") {
-                            button2.text = oldDay.toString()
-                            button2.setBackgroundResource(R.drawable.calendar_day)
-                            button2.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button2.text = oldDay.toString()
+                            binding.button2.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button2.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button2.text = day
-                            if (data[i - 1][4].contains("#d00505")) button2.setTypeface(null, Typeface.BOLD)
+                            binding.button2.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button2.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button2.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button2.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button2.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button2.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button2.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button2.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button2.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button2.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button2.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button2.setBackgroundResource(R.drawable.calendar_red_sabytie) else button2.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button2.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button2.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button2.setTypeface(null, Typeface.BOLD)
+                                    binding.button2.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button2.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button2.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button2.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button2.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button2.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button2.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button2.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button2.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button2.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button2.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button2.setBackgroundResource(R.drawable.calendar_red_sabytie) else button2.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button2.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button2.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button2.setTypeface(null, Typeface.NORMAL)
+                                    binding.button2.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button2.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button2.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button2.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button2.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button2.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button2.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button2.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button2.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button2.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button2.setBackgroundResource(R.drawable.calendar_post_sabytie) else button2.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button2.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button2.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button2.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button2.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button2.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button2.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button2.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button2.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button2.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button2.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button2.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button2.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button2.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button2.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button2.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button2.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button2.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button2.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button2.setBackgroundResource(R.drawable.calendar_day_sabytie) else button2.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button2.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button2.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button2.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -340,65 +348,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 3) {
                         if (day == "start") {
-                            button3.text = oldDay.toString()
-                            button3.setBackgroundResource(R.drawable.calendar_day)
-                            button3.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button3.text = oldDay.toString()
+                            binding.button3.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button3.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button3.text = day
-                            if (data[i - 1][4].contains("#d00505")) button3.setTypeface(null, Typeface.BOLD)
+                            binding.button3.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button3.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button3.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button3.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button3.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button3.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button3.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button3.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button3.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button3.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button3.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button3.setBackgroundResource(R.drawable.calendar_red_sabytie) else button3.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button3.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button3.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button3.setTypeface(null, Typeface.BOLD)
+                                    binding.button3.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button3.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button3.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button3.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button3.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button3.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button3.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button3.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button3.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button3.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button3.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button3.setBackgroundResource(R.drawable.calendar_red_sabytie) else button3.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button3.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button3.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button3.setTypeface(null, Typeface.NORMAL)
+                                    binding.button3.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button3.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button3.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button3.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button3.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button3.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button3.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button3.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button3.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button3.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button3.setBackgroundResource(R.drawable.calendar_post_sabytie) else button3.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button3.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button3.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button3.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button3.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button3.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button3.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button3.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button3.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button3.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button3.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button3.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button3.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button3.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button3.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button3.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button3.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button3.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button3.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button3.setBackgroundResource(R.drawable.calendar_day_sabytie) else button3.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button3.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button3.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button3.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -407,65 +415,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 4) {
                         if (day == "start") {
-                            button4.text = oldDay.toString()
-                            button4.setBackgroundResource(R.drawable.calendar_day)
-                            button4.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button4.text = oldDay.toString()
+                            binding.button4.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button4.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button4.text = day
-                            if (data[i - 1][4].contains("#d00505")) button4.setTypeface(null, Typeface.BOLD)
+                            binding.button4.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button4.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button4.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button4.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button4.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button4.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button4.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button4.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button4.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button4.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button4.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button4.setBackgroundResource(R.drawable.calendar_red_sabytie) else button4.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button4.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button4.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button4.setTypeface(null, Typeface.BOLD)
+                                    binding.button4.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button4.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button4.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button4.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button4.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button4.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button4.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button4.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button4.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button4.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button4.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button4.setBackgroundResource(R.drawable.calendar_red_sabytie) else button4.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button4.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button4.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button4.setTypeface(null, Typeface.NORMAL)
+                                    binding.button4.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button4.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button4.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button4.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button4.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button4.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button4.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button4.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button4.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button4.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button4.setBackgroundResource(R.drawable.calendar_post_sabytie) else button4.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button4.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button4.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button4.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button4.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button4.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button4.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button4.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button4.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button4.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button4.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button4.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button4.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button4.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button4.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button4.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button4.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button4.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button4.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button4.setBackgroundResource(R.drawable.calendar_day_sabytie) else button4.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button4.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button4.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button4.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -474,65 +482,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 5) {
                         if (day == "start") {
-                            button5.text = oldDay.toString()
-                            button5.setBackgroundResource(R.drawable.calendar_day)
-                            button5.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button5.text = oldDay.toString()
+                            binding.button5.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button5.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button5.text = day
-                            if (data[i - 1][4].contains("#d00505")) button5.setTypeface(null, Typeface.BOLD)
+                            binding.button5.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button5.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button5.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button5.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button5.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button5.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button5.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button5.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button5.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button5.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button5.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button5.setBackgroundResource(R.drawable.calendar_red_sabytie) else button5.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button5.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button5.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button5.setTypeface(null, Typeface.BOLD)
+                                    binding.button5.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button5.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button5.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button5.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button5.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button5.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button5.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button5.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button5.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button5.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button5.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button5.setBackgroundResource(R.drawable.calendar_red_sabytie) else button5.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button5.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button5.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button5.setTypeface(null, Typeface.NORMAL)
+                                    binding.button5.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button5.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button5.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button5.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button5.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button5.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button5.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button5.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button5.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button5.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button5.setBackgroundResource(R.drawable.calendar_post_sabytie) else button5.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button5.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button5.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button5.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button5.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button5.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button5.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button5.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button5.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button5.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button5.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button5.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button5.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button5.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button5.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button5.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button5.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button5.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button5.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button5.setBackgroundResource(R.drawable.calendar_day_sabytie) else button5.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button5.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button5.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button5.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -541,65 +549,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 6) {
                         if (day == "start") {
-                            button6.text = oldDay.toString()
-                            button6.setBackgroundResource(R.drawable.calendar_day)
-                            button6.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button6.text = oldDay.toString()
+                            binding.button6.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button6.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button6.text = day
-                            if (data[i - 1][4].contains("#d00505")) button6.setTypeface(null, Typeface.BOLD)
+                            binding.button6.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button6.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button6.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button6.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button6.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button6.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button6.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button6.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button6.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button6.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button6.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button6.setBackgroundResource(R.drawable.calendar_red_sabytie) else button6.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button6.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button6.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button6.setTypeface(null, Typeface.BOLD)
+                                    binding.button6.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button6.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button6.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button6.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button6.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button6.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button6.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button6.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button6.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button6.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button6.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button6.setBackgroundResource(R.drawable.calendar_red_sabytie) else button6.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button6.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button6.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button6.setTypeface(null, Typeface.NORMAL)
+                                    binding.button6.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button6.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button6.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button6.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button6.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button6.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button6.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button6.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button6.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button6.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button6.setBackgroundResource(R.drawable.calendar_post_sabytie) else button6.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button6.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button6.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button6.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button6.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button6.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button6.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button6.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button6.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button6.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button6.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button6.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button6.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button6.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button6.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button6.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button6.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button6.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button6.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button6.setBackgroundResource(R.drawable.calendar_day_sabytie) else button6.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button6.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button6.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button6.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -608,60 +616,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 7) {
                         val sab = sabytieCheck(i)
-                        button7.text = day
-                        if (data[i - 1][4].contains("#d00505")) button7.setTypeface(null, Typeface.BOLD)
+                        binding.button7.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button7.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button7.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button7.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button7.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button7.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button7.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button7.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button7.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button7.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button7.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button7.setBackgroundResource(R.drawable.calendar_red_sabytie) else button7.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button7.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button7.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button7.setTypeface(null, Typeface.BOLD)
+                                binding.button7.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button7.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button7.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button7.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button7.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button7.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button7.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button7.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button7.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button7.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button7.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button7.setBackgroundResource(R.drawable.calendar_red_sabytie) else button7.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button7.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button7.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button7.setTypeface(null, Typeface.NORMAL)
+                                binding.button7.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button7.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button7.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button7.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button7.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button7.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button7.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button7.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button7.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button7.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button7.setBackgroundResource(R.drawable.calendar_post_sabytie) else button7.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button7.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button7.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button7.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button7.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button7.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button7.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button7.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button7.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button7.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button7.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button7.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button7.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button7.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button7.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button7.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button7.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button7.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button7.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button7.setBackgroundResource(R.drawable.calendar_day_sabytie) else button7.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button7.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button7.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button7.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -669,60 +677,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 8) {
                         val sab = sabytieCheck(i)
-                        button8.text = day
-                        if (data[i - 1][4].contains("#d00505")) button8.setTypeface(null, Typeface.BOLD)
+                        binding.button8.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button8.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button8.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button8.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button8.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button8.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button8.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button8.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button8.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button8.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button8.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button8.setBackgroundResource(R.drawable.calendar_red_sabytie) else button8.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button8.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button8.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button8.setTypeface(null, Typeface.BOLD)
+                                binding.button8.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button8.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button8.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button8.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button8.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button8.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button8.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button8.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button8.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button8.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button8.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button8.setBackgroundResource(R.drawable.calendar_red_sabytie) else button8.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button8.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button8.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button8.setTypeface(null, Typeface.NORMAL)
+                                binding.button8.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button8.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button8.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button8.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button8.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button8.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button8.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button8.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button8.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button8.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button8.setBackgroundResource(R.drawable.calendar_post_sabytie) else button8.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button8.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button8.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button8.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button8.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button8.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button8.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button8.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button8.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button8.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button8.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button8.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button8.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button8.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button8.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button8.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button8.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button8.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button8.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button8.setBackgroundResource(R.drawable.calendar_day_sabytie) else button8.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button8.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button8.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button8.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -730,60 +738,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 9) {
                         val sab = sabytieCheck(i)
-                        button9.text = day
-                        if (data[i - 1][4].contains("#d00505")) button9.setTypeface(null, Typeface.BOLD)
+                        binding.button9.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button9.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button9.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button9.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button9.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button9.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button9.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button9.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button9.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button9.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button9.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button9.setBackgroundResource(R.drawable.calendar_red_sabytie) else button9.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button9.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button9.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button9.setTypeface(null, Typeface.BOLD)
+                                binding.button9.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button9.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button9.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button9.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button9.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button9.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button9.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button9.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button9.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button9.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button9.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button9.setBackgroundResource(R.drawable.calendar_red_sabytie) else button9.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button9.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button9.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button9.setTypeface(null, Typeface.NORMAL)
+                                binding.button9.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button9.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button9.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button9.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button9.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button9.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button9.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button9.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button9.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button9.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button9.setBackgroundResource(R.drawable.calendar_post_sabytie) else button9.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button9.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button9.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button9.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button9.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button9.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button9.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button9.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button9.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button9.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button9.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button9.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button9.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button9.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button9.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button9.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button9.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button9.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button9.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button9.setBackgroundResource(R.drawable.calendar_day_sabytie) else button9.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button9.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button9.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button9.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -791,60 +799,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 10) {
                         val sab = sabytieCheck(i)
-                        button10.text = day
-                        if (data[i - 1][4].contains("#d00505")) button10.setTypeface(null, Typeface.BOLD)
+                        binding.button10.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button10.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button10.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button10.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button10.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button10.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button10.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button10.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button10.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button10.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button10.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button10.setBackgroundResource(R.drawable.calendar_red_sabytie) else button10.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button10.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button10.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button10.setTypeface(null, Typeface.BOLD)
+                                binding.button10.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button10.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button10.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button10.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button10.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button10.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button10.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button10.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button10.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button10.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button10.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button10.setBackgroundResource(R.drawable.calendar_red_sabytie) else button10.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button10.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button10.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button10.setTypeface(null, Typeface.NORMAL)
+                                binding.button10.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button10.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button10.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button10.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button10.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button10.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button10.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button10.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button10.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button10.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button10.setBackgroundResource(R.drawable.calendar_post_sabytie) else button10.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button10.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button10.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button10.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button10.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button10.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button10.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button10.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button10.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button10.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button10.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button10.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button10.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button10.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button10.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button10.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button10.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button10.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button10.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button10.setBackgroundResource(R.drawable.calendar_day_sabytie) else button10.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button10.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button10.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button10.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -852,60 +860,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 11) {
                         val sab = sabytieCheck(i)
-                        button11.text = day
-                        if (data[i - 1][4].contains("#d00505")) button11.setTypeface(null, Typeface.BOLD)
+                        binding.button11.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button11.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button11.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button11.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button11.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button11.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button11.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button11.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button11.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button11.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button11.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button11.setBackgroundResource(R.drawable.calendar_red_sabytie) else button11.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button11.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button11.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button11.setTypeface(null, Typeface.BOLD)
+                                binding.button11.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button11.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button11.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button11.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button11.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button11.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button11.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button11.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button11.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button11.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button11.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button11.setBackgroundResource(R.drawable.calendar_red_sabytie) else button11.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button11.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button11.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button11.setTypeface(null, Typeface.NORMAL)
+                                binding.button11.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button11.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button11.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button11.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button11.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button11.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button11.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button11.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button11.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button11.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button11.setBackgroundResource(R.drawable.calendar_post_sabytie) else button11.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button11.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button11.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button11.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button11.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button11.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button11.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button11.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button11.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button11.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button11.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button11.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button11.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button11.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button11.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button11.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button11.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button11.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button11.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button11.setBackgroundResource(R.drawable.calendar_day_sabytie) else button11.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button11.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button11.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button11.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -913,60 +921,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 12) {
                         val sab = sabytieCheck(i)
-                        button12.text = day
-                        if (data[i - 1][4].contains("#d00505")) button12.setTypeface(null, Typeface.BOLD)
+                        binding.button12.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button12.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button12.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button12.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button12.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button12.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button12.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button12.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button12.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button12.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button12.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button12.setBackgroundResource(R.drawable.calendar_red_sabytie) else button12.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button12.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button12.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button12.setTypeface(null, Typeface.BOLD)
+                                binding.button12.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button12.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button12.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button12.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button12.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button12.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button12.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button12.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button12.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button12.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button12.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button12.setBackgroundResource(R.drawable.calendar_red_sabytie) else button12.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button12.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button12.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button12.setTypeface(null, Typeface.NORMAL)
+                                binding.button12.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button12.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button12.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button12.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button12.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button12.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button12.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button12.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button12.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button12.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button12.setBackgroundResource(R.drawable.calendar_post_sabytie) else button12.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button12.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button12.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button12.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button12.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button12.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button12.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button12.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button12.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button12.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button12.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button12.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button12.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button12.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button12.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button12.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button12.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button12.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button12.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button12.setBackgroundResource(R.drawable.calendar_day_sabytie) else button12.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button12.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button12.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button12.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -974,60 +982,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 13) {
                         val sab = sabytieCheck(i)
-                        button13.text = day
-                        if (data[i - 1][4].contains("#d00505")) button13.setTypeface(null, Typeface.BOLD)
+                        binding.button13.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button13.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button13.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button13.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button13.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button13.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button13.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button13.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button13.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button13.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button13.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button13.setBackgroundResource(R.drawable.calendar_red_sabytie) else button13.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button13.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button13.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button13.setTypeface(null, Typeface.BOLD)
+                                binding.button13.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button13.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button13.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button13.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button13.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button13.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button13.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button13.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button13.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button13.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button13.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button13.setBackgroundResource(R.drawable.calendar_red_sabytie) else button13.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button13.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button13.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button13.setTypeface(null, Typeface.NORMAL)
+                                binding.button13.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button13.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button13.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button13.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button13.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button13.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button13.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button13.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button13.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button13.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button13.setBackgroundResource(R.drawable.calendar_post_sabytie) else button13.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button13.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button13.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button13.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button13.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button13.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button13.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button13.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button13.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button13.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button13.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button13.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button13.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button13.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button13.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button13.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button13.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button13.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button13.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button13.setBackgroundResource(R.drawable.calendar_day_sabytie) else button13.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button13.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button13.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button13.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1035,60 +1043,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 14) {
                         val sab = sabytieCheck(i)
-                        button14.text = day
-                        if (data[i - 1][4].contains("#d00505")) button14.setTypeface(null, Typeface.BOLD)
+                        binding.button14.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button14.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button14.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button14.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button14.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button14.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button14.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button14.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button14.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button14.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button14.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button14.setBackgroundResource(R.drawable.calendar_red_sabytie) else button14.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button14.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button14.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button14.setTypeface(null, Typeface.BOLD)
+                                binding.button14.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button14.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button14.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button14.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button14.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button14.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button14.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button14.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button14.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button14.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button14.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button14.setBackgroundResource(R.drawable.calendar_red_sabytie) else button14.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button14.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button14.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button14.setTypeface(null, Typeface.NORMAL)
+                                binding.button14.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button14.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button14.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button14.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button14.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button14.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button14.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button14.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button14.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button14.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button14.setBackgroundResource(R.drawable.calendar_post_sabytie) else button14.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button14.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button14.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button14.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button14.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button14.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button14.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button14.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button14.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button14.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button14.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button14.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button14.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button14.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button14.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button14.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button14.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button14.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button14.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button14.setBackgroundResource(R.drawable.calendar_day_sabytie) else button14.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button14.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button14.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button14.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1096,60 +1104,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 15) {
                         val sab = sabytieCheck(i)
-                        button15.text = day
-                        if (data[i - 1][4].contains("#d00505")) button15.setTypeface(null, Typeface.BOLD)
+                        binding.button15.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button15.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button15.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button15.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button15.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button15.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button15.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button15.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button15.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button15.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button15.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button15.setBackgroundResource(R.drawable.calendar_red_sabytie) else button15.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button15.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button15.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button15.setTypeface(null, Typeface.BOLD)
+                                binding.button15.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button15.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button15.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button15.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button15.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button15.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button15.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button15.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button15.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button15.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button15.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button15.setBackgroundResource(R.drawable.calendar_red_sabytie) else button15.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button15.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button15.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button15.setTypeface(null, Typeface.NORMAL)
+                                binding.button15.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button15.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button15.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button15.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button15.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button15.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button15.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button15.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button15.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button15.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button15.setBackgroundResource(R.drawable.calendar_post_sabytie) else button15.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button15.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button15.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button15.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button15.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button15.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button15.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button15.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button15.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button15.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button15.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button15.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button15.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button15.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button15.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button15.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button15.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button15.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button15.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button15.setBackgroundResource(R.drawable.calendar_day_sabytie) else button15.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button15.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button15.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button15.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1157,60 +1165,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 16) {
                         val sab = sabytieCheck(i)
-                        button16.text = day
-                        if (data[i - 1][4].contains("#d00505")) button16.setTypeface(null, Typeface.BOLD)
+                        binding.button16.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button16.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button16.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button16.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button16.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button16.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button16.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button16.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button16.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button16.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button16.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button16.setBackgroundResource(R.drawable.calendar_red_sabytie) else button16.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button16.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button16.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button16.setTypeface(null, Typeface.BOLD)
+                                binding.button16.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button16.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button16.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button16.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button16.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button16.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button16.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button16.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button16.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button16.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button16.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button16.setBackgroundResource(R.drawable.calendar_red_sabytie) else button16.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button16.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button16.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button16.setTypeface(null, Typeface.NORMAL)
+                                binding.button16.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button16.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button16.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button16.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button16.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button16.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button16.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button16.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button16.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button16.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button16.setBackgroundResource(R.drawable.calendar_post_sabytie) else button16.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button16.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button16.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button16.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button16.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button16.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button16.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button16.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button16.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button16.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button16.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button16.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button16.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button16.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button16.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button16.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button16.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button16.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button16.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button16.setBackgroundResource(R.drawable.calendar_day_sabytie) else button16.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button16.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button16.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button16.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1218,60 +1226,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 17) {
                         val sab = sabytieCheck(i)
-                        button17.text = day
-                        if (data[i - 1][4].contains("#d00505")) button17.setTypeface(null, Typeface.BOLD)
+                        binding.button17.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button17.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button17.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button17.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button17.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button17.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button17.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button17.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button17.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button17.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button17.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button17.setBackgroundResource(R.drawable.calendar_red_sabytie) else button17.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button17.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button17.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button17.setTypeface(null, Typeface.BOLD)
+                                binding.button17.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button17.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button17.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button17.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button17.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button17.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button17.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button17.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button17.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button17.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button17.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button17.setBackgroundResource(R.drawable.calendar_red_sabytie) else button17.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button17.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button17.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button17.setTypeface(null, Typeface.NORMAL)
+                                binding.button17.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button17.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button17.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button17.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button17.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button17.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button17.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button17.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button17.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button17.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button17.setBackgroundResource(R.drawable.calendar_post_sabytie) else button17.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button17.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button17.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button17.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button17.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button17.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button17.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button17.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button17.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button17.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button17.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button17.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button17.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button17.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button17.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button17.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button17.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button17.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button17.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button17.setBackgroundResource(R.drawable.calendar_day_sabytie) else button17.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button17.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button17.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button17.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1279,60 +1287,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 18) {
                         val sab = sabytieCheck(i)
-                        button18.text = day
-                        if (data[i - 1][4].contains("#d00505")) button18.setTypeface(null, Typeface.BOLD)
+                        binding.button18.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button18.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button18.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button18.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button18.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button18.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button18.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button18.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button18.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button18.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button18.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button18.setBackgroundResource(R.drawable.calendar_red_sabytie) else button18.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button18.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button18.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button18.setTypeface(null, Typeface.BOLD)
+                                binding.button18.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button18.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button18.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button18.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button18.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button18.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button18.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button18.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button18.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button18.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button18.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button18.setBackgroundResource(R.drawable.calendar_red_sabytie) else button18.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button18.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button18.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button18.setTypeface(null, Typeface.NORMAL)
+                                binding.button18.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button18.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button18.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button18.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button18.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button18.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button18.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button18.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button18.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button18.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button18.setBackgroundResource(R.drawable.calendar_post_sabytie) else button18.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button18.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button18.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button18.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button18.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button18.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button18.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button18.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button18.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button18.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button18.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button18.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button18.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button18.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button18.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button18.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button18.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button18.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button18.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button18.setBackgroundResource(R.drawable.calendar_day_sabytie) else button18.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button18.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button18.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button18.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1340,60 +1348,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 19) {
                         val sab = sabytieCheck(i)
-                        button19.text = day
-                        if (data[i - 1][4].contains("#d00505")) button19.setTypeface(null, Typeface.BOLD)
+                        binding.button19.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button19.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button19.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button19.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button19.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button19.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button19.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button19.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button19.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button19.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button19.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button19.setBackgroundResource(R.drawable.calendar_red_sabytie) else button19.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button19.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button19.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button19.setTypeface(null, Typeface.BOLD)
+                                binding.button19.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button19.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button19.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button19.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button19.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button19.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button19.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button19.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button19.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button19.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button19.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button19.setBackgroundResource(R.drawable.calendar_red_sabytie) else button19.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button19.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button19.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button19.setTypeface(null, Typeface.NORMAL)
+                                binding.button19.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button19.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button19.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button19.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button19.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button19.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button19.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button19.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button19.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button19.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button19.setBackgroundResource(R.drawable.calendar_post_sabytie) else button19.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button19.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button19.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button19.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button19.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button19.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button19.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button19.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button19.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button19.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button19.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button19.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button19.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button19.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button19.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button19.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button19.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button19.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button19.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button19.setBackgroundResource(R.drawable.calendar_day_sabytie) else button19.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button19.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button19.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button19.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1401,60 +1409,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 20) {
                         val sab = sabytieCheck(i)
-                        button20.text = day
-                        if (data[i - 1][4].contains("#d00505")) button20.setTypeface(null, Typeface.BOLD)
+                        binding.button20.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button20.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button20.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button20.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button20.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button20.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button20.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button20.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button20.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button20.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button20.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button20.setBackgroundResource(R.drawable.calendar_red_sabytie) else button20.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button20.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button20.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button20.setTypeface(null, Typeface.BOLD)
+                                binding.button20.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button20.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button20.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button20.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button20.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button20.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button20.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button20.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button20.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button20.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button20.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button20.setBackgroundResource(R.drawable.calendar_red_sabytie) else button20.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button20.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button20.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button20.setTypeface(null, Typeface.NORMAL)
+                                binding.button20.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button20.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button20.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button20.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button20.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button20.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button20.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button20.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button20.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button20.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button20.setBackgroundResource(R.drawable.calendar_post_sabytie) else button20.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button20.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button20.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button20.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button20.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button20.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button20.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button20.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button20.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button20.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button20.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button20.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button20.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button20.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button20.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button20.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button20.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button20.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button20.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button20.setBackgroundResource(R.drawable.calendar_day_sabytie) else button20.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button20.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button20.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button20.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1462,60 +1470,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 21) {
                         val sab = sabytieCheck(i)
-                        button21.text = day
-                        if (data[i - 1][4].contains("#d00505")) button21.setTypeface(null, Typeface.BOLD)
+                        binding.button21.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button21.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button21.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button21.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button21.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button21.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button21.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button21.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button21.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button21.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button21.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button21.setBackgroundResource(R.drawable.calendar_red_sabytie) else button21.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button21.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button21.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button21.setTypeface(null, Typeface.BOLD)
+                                binding.button21.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button21.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button21.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button21.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button21.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button21.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button21.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button21.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button21.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button21.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button21.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button21.setBackgroundResource(R.drawable.calendar_red_sabytie) else button21.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button21.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button21.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button21.setTypeface(null, Typeface.NORMAL)
+                                binding.button21.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button21.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button21.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button21.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button21.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button21.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button21.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button21.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button21.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button21.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button21.setBackgroundResource(R.drawable.calendar_post_sabytie) else button21.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button21.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button21.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button21.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button21.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button21.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button21.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button21.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button21.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button21.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button21.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button21.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button21.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button21.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button21.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button21.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button21.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button21.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button21.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button21.setBackgroundResource(R.drawable.calendar_day_sabytie) else button21.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button21.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button21.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button21.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1523,60 +1531,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 22) {
                         val sab = sabytieCheck(i)
-                        button22.text = day
-                        if (data[i - 1][4].contains("#d00505")) button22.setTypeface(null, Typeface.BOLD)
+                        binding.button22.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button22.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button22.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button22.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button22.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button22.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button22.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button22.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button22.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button22.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button22.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button22.setBackgroundResource(R.drawable.calendar_red_sabytie) else button22.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button22.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button22.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button22.setTypeface(null, Typeface.BOLD)
+                                binding.button22.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button22.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button22.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button22.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button22.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button22.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button22.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button22.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button22.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button22.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button22.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button22.setBackgroundResource(R.drawable.calendar_red_sabytie) else button22.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button22.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button22.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button22.setTypeface(null, Typeface.NORMAL)
+                                binding.button22.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button22.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button22.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button22.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button22.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button22.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button22.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button22.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button22.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button22.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button22.setBackgroundResource(R.drawable.calendar_post_sabytie) else button22.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button22.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button22.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button22.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button22.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button22.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button22.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button22.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button22.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button22.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button22.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button22.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button22.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button22.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button22.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button22.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button22.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button22.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button22.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button22.setBackgroundResource(R.drawable.calendar_day_sabytie) else button22.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button22.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button22.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button22.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1584,60 +1592,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 23) {
                         val sab = sabytieCheck(i)
-                        button23.text = day
-                        if (data[i - 1][4].contains("#d00505")) button23.setTypeface(null, Typeface.BOLD)
+                        binding.button23.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button23.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button23.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button23.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button23.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button23.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button23.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button23.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button23.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button23.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button23.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button23.setBackgroundResource(R.drawable.calendar_red_sabytie) else button23.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button23.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button23.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button23.setTypeface(null, Typeface.BOLD)
+                                binding.button23.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button23.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button23.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button23.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button23.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button23.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button23.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button23.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button23.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button23.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button23.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button23.setBackgroundResource(R.drawable.calendar_red_sabytie) else button23.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button23.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button23.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button23.setTypeface(null, Typeface.NORMAL)
+                                binding.button23.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button23.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button23.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button23.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button23.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button23.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button23.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button23.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button23.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button23.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button23.setBackgroundResource(R.drawable.calendar_post_sabytie) else button23.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button23.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button23.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button23.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button23.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button23.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button23.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button23.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button23.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button23.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button23.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button23.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button23.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button23.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button23.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button23.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button23.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button23.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button23.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button23.setBackgroundResource(R.drawable.calendar_day_sabytie) else button23.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button23.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button23.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button23.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1645,60 +1653,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 24) {
                         val sab = sabytieCheck(i)
-                        button24.text = day
-                        if (data[i - 1][4].contains("#d00505")) button24.setTypeface(null, Typeface.BOLD)
+                        binding.button24.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button24.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button24.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button24.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button24.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button24.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button24.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button24.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button24.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button24.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button24.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button24.setBackgroundResource(R.drawable.calendar_red_sabytie) else button24.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button24.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button24.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button24.setTypeface(null, Typeface.BOLD)
+                                binding.button24.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button24.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button24.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button24.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button24.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button24.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button24.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button24.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button24.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button24.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button24.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button24.setBackgroundResource(R.drawable.calendar_red_sabytie) else button24.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button24.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button24.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button24.setTypeface(null, Typeface.NORMAL)
+                                binding.button24.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button24.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button24.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button24.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button24.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button24.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button24.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button24.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button24.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button24.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button24.setBackgroundResource(R.drawable.calendar_post_sabytie) else button24.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button24.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button24.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button24.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button24.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button24.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button24.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button24.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button24.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button24.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button24.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button24.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button24.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button24.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button24.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button24.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button24.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button24.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button24.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button24.setBackgroundResource(R.drawable.calendar_day_sabytie) else button24.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button24.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button24.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button24.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1706,60 +1714,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 25) {
                         val sab = sabytieCheck(i)
-                        button25.text = day
-                        if (data[i - 1][4].contains("#d00505")) button25.setTypeface(null, Typeface.BOLD)
+                        binding.button25.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button25.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button25.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button25.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button25.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button25.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button25.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button25.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button25.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button25.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button25.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button25.setBackgroundResource(R.drawable.calendar_red_sabytie) else button25.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button25.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button25.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button25.setTypeface(null, Typeface.BOLD)
+                                binding.button25.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button25.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button25.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button25.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button25.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button25.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button25.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button25.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button25.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button25.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button25.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button25.setBackgroundResource(R.drawable.calendar_red_sabytie) else button25.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button25.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button25.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button25.setTypeface(null, Typeface.NORMAL)
+                                binding.button25.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button25.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button25.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button25.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button25.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button25.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button25.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button25.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button25.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button25.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button25.setBackgroundResource(R.drawable.calendar_post_sabytie) else button25.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button25.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button25.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button25.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button25.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button25.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button25.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button25.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button25.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button25.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button25.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button25.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button25.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button25.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button25.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button25.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button25.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button25.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button25.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button25.setBackgroundResource(R.drawable.calendar_day_sabytie) else button25.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button25.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button25.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button25.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1767,60 +1775,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 26) {
                         val sab = sabytieCheck(i)
-                        button26.text = day
-                        if (data[i - 1][4].contains("#d00505")) button26.setTypeface(null, Typeface.BOLD)
+                        binding.button26.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button26.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button26.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button26.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button26.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button26.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button26.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button26.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button26.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button26.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button26.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button26.setBackgroundResource(R.drawable.calendar_red_sabytie) else button26.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button26.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button26.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button26.setTypeface(null, Typeface.BOLD)
+                                binding.button26.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button26.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button26.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button26.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button26.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button26.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button26.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button26.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button26.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button26.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button26.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button26.setBackgroundResource(R.drawable.calendar_red_sabytie) else button26.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button26.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button26.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button26.setTypeface(null, Typeface.NORMAL)
+                                binding.button26.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button26.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button26.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button26.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button26.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button26.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button26.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button26.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button26.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button26.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button26.setBackgroundResource(R.drawable.calendar_post_sabytie) else button26.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button26.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button26.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button26.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button26.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button26.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button26.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button26.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button26.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button26.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button26.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button26.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button26.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button26.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button26.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button26.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button26.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button26.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button26.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button26.setBackgroundResource(R.drawable.calendar_day_sabytie) else button26.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button26.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button26.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button26.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1828,60 +1836,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 27) {
                         val sab = sabytieCheck(i)
-                        button27.text = day
-                        if (data[i - 1][4].contains("#d00505")) button27.setTypeface(null, Typeface.BOLD)
+                        binding.button27.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button27.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button27.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button27.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button27.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button27.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button27.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button27.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button27.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button27.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button27.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button27.setBackgroundResource(R.drawable.calendar_red_sabytie) else button27.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button27.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button27.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button27.setTypeface(null, Typeface.BOLD)
+                                binding.button27.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button27.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button27.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button27.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button27.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button27.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button27.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button27.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button27.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button27.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button27.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button27.setBackgroundResource(R.drawable.calendar_red_sabytie) else button27.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button27.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button27.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button27.setTypeface(null, Typeface.NORMAL)
+                                binding.button27.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button27.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button27.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button27.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button27.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button27.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button27.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button27.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button27.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button27.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button27.setBackgroundResource(R.drawable.calendar_post_sabytie) else button27.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button27.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button27.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button27.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button27.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button27.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button27.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button27.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button27.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button27.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button27.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button27.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button27.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button27.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button27.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button27.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button27.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button27.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button27.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button27.setBackgroundResource(R.drawable.calendar_day_sabytie) else button27.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button27.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button27.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button27.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1889,60 +1897,60 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 28) {
                         val sab = sabytieCheck(i)
-                        button28.text = day
-                        if (data[i - 1][4].contains("#d00505")) button28.setTypeface(null, Typeface.BOLD)
+                        binding.button28.text = day
+                        if (data[i - 1][4].contains("#d00505")) binding.button28.setTypeface(null, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button28.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button28.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button28.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button28.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button28.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button28.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button28.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button28.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button28.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button28.setBackgroundResource(R.drawable.calendar_red_sabytie) else button28.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button28.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button28.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button28.setTypeface(null, Typeface.BOLD)
+                                binding.button28.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button28.setTypeface(null, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                     if (dzenNoch) {
-                                        if (sab) button28.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button28.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                        if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button28.setBackgroundResource(R.drawable.calendar_red_today_black)
                                     } else {
-                                        if (sab) button28.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button28.setBackgroundResource(R.drawable.calendar_red_today)
+                                        if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button28.setBackgroundResource(R.drawable.calendar_red_today)
                                     }
                                 } else {
                                     if (dzenNoch) {
-                                        if (sab) button28.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button28.setBackgroundResource(R.drawable.calendar_red_black)
+                                        if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button28.setBackgroundResource(R.drawable.calendar_red_black)
                                     } else {
-                                        if (sab) button28.setBackgroundResource(R.drawable.calendar_red_sabytie) else button28.setBackgroundResource(R.drawable.calendar_red)
+                                        if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button28.setBackgroundResource(R.drawable.calendar_red)
                                     }
                                 }
-                                button28.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                button28.setTypeface(null, Typeface.NORMAL)
+                                binding.button28.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                binding.button28.setTypeface(null, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button28.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button28.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button28.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button28.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button28.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button28.setBackgroundResource(R.drawable.calendar_bez_posta)
                                 }
                                 if (post) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button28.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button28.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button28.setBackgroundResource(R.drawable.calendar_post_sabytie) else button28.setBackgroundResource(R.drawable.calendar_post)
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button28.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button28.setBackgroundResource(R.drawable.calendar_post)
                                 }
                                 if (strogiPost) {
-                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button28.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button28.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button28.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button28.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                    button28.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button28.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button28.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                    binding.button28.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                 }
                                 if (!nopost && !post && !strogiPost) {
                                     denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                     if (denNedeli == 1) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button28.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button28.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button28.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button28.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button28.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button28.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     } else {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button28.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button28.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button28.setBackgroundResource(R.drawable.calendar_day_sabytie) else button28.setBackgroundResource(R.drawable.calendar_day)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button28.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button28.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button28.setBackgroundResource(R.drawable.calendar_day)
                                     }
                                 }
                             }
@@ -1950,65 +1958,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 29) {
                         if (day == "end") {
-                            button29.text = newDay.toString()
-                            button29.setBackgroundResource(R.drawable.calendar_bez_posta)
-                            button29.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button29.text = newDay.toString()
+                            binding.button29.setBackgroundResource(R.drawable.calendar_bez_posta)
+                            binding.button29.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button29.text = day
-                            if (data[i - 1][4].contains("#d00505")) button29.setTypeface(null, Typeface.BOLD)
+                            binding.button29.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button29.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button29.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button29.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button29.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button29.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button29.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button29.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button29.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button29.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button29.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button29.setBackgroundResource(R.drawable.calendar_red_sabytie) else button29.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button29.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button29.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button29.setTypeface(null, Typeface.BOLD)
+                                    binding.button29.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button29.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button29.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button29.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button29.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button29.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button29.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button29.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button29.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button29.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button29.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button29.setBackgroundResource(R.drawable.calendar_red_sabytie) else button29.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button29.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button29.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button29.setTypeface(null, Typeface.NORMAL)
+                                    binding.button29.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button29.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button29.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button29.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button29.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button29.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button29.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button29.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button29.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button29.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button29.setBackgroundResource(R.drawable.calendar_post_sabytie) else button29.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button29.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button29.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button29.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button29.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button29.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button29.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button29.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button29.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button29.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button29.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button29.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button29.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button29.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button29.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button29.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button29.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button29.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button29.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button29.setBackgroundResource(R.drawable.calendar_day_sabytie) else button29.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button29.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button29.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button29.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -2017,65 +2025,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 30) {
                         if (day == "end") {
-                            button30.text = newDay.toString()
-                            button30.setBackgroundResource(R.drawable.calendar_day)
-                            button30.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button30.text = newDay.toString()
+                            binding.button30.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button30.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button30.text = day
-                            if (data[i - 1][4].contains("#d00505")) button30.setTypeface(null, Typeface.BOLD)
+                            binding.button30.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button30.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button30.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button30.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button30.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button30.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button30.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button30.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button30.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button30.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button30.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button30.setBackgroundResource(R.drawable.calendar_red_sabytie) else button30.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button30.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button30.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button30.setTypeface(null, Typeface.BOLD)
+                                    binding.button30.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button30.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button30.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button30.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button30.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button30.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button30.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button30.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button30.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button30.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button30.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button30.setBackgroundResource(R.drawable.calendar_red_sabytie) else button30.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button30.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button30.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button30.setTypeface(null, Typeface.NORMAL)
+                                    binding.button30.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button30.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button30.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button30.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button30.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button30.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button30.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button30.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button30.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button30.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button30.setBackgroundResource(R.drawable.calendar_post_sabytie) else button30.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button30.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button30.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button30.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button30.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button30.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button30.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button30.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button30.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button30.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button30.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button30.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button30.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button30.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button30.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button30.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button30.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button30.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button30.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button30.setBackgroundResource(R.drawable.calendar_day_sabytie) else button30.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button30.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button30.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button30.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -2084,65 +2092,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 31) {
                         if (day == "end") {
-                            button31.text = newDay.toString()
-                            button31.setBackgroundResource(R.drawable.calendar_day)
-                            button31.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button31.text = newDay.toString()
+                            binding.button31.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button31.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button31.text = day
-                            if (data[i - 1][4].contains("#d00505")) button31.setTypeface(null, Typeface.BOLD)
+                            binding.button31.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button31.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button31.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button31.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button31.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button31.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button31.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button31.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button31.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button31.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button31.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button31.setBackgroundResource(R.drawable.calendar_red_sabytie) else button31.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button31.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button31.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button31.setTypeface(null, Typeface.BOLD)
+                                    binding.button31.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button31.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button31.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button31.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button31.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button31.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button31.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button31.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button31.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button31.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button31.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button31.setBackgroundResource(R.drawable.calendar_red_sabytie) else button31.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button31.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button31.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button31.setTypeface(null, Typeface.NORMAL)
+                                    binding.button31.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button31.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button31.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button31.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button31.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button31.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button31.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button31.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button31.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button31.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button31.setBackgroundResource(R.drawable.calendar_post_sabytie) else button31.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button31.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button31.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button31.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button31.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button31.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button31.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button31.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button31.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button31.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button31.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button31.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button31.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button31.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button31.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button31.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button31.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button31.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button31.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button31.setBackgroundResource(R.drawable.calendar_day_sabytie) else button31.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button31.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button31.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button31.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -2151,65 +2159,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 32) {
                         if (day == "end") {
-                            button32.text = newDay.toString()
-                            button32.setBackgroundResource(R.drawable.calendar_day)
-                            button32.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button32.text = newDay.toString()
+                            binding.button32.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button32.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button32.text = day
-                            if (data[i - 1][4].contains("#d00505")) button32.setTypeface(null, Typeface.BOLD)
+                            binding.button32.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button32.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button32.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button32.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button32.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button32.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button32.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button32.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button32.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button32.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button32.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button32.setBackgroundResource(R.drawable.calendar_red_sabytie) else button32.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button32.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button32.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button32.setTypeface(null, Typeface.BOLD)
+                                    binding.button32.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button32.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button32.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button32.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button32.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button32.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button32.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button32.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button32.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button32.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button32.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button32.setBackgroundResource(R.drawable.calendar_red_sabytie) else button32.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button32.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button32.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button32.setTypeface(null, Typeface.NORMAL)
+                                    binding.button32.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button32.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button32.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button32.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button32.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button32.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button32.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button32.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button32.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button32.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button32.setBackgroundResource(R.drawable.calendar_post_sabytie) else button32.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button32.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button32.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button32.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button32.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button32.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button32.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button32.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button32.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button32.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button32.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button32.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button32.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button32.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button32.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button32.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button32.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button32.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button32.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button32.setBackgroundResource(R.drawable.calendar_day_sabytie) else button32.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button32.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button32.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button32.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -2218,65 +2226,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 33) {
                         if (day == "end") {
-                            button33.text = newDay.toString()
-                            button33.setBackgroundResource(R.drawable.calendar_day)
-                            button33.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button33.text = newDay.toString()
+                            binding.button33.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button33.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button33.text = day
-                            if (data[i - 1][4].contains("#d00505")) button33.setTypeface(null, Typeface.BOLD)
+                            binding.button33.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button33.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button33.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button33.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button33.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button33.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button33.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button33.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button33.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button33.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button33.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button33.setBackgroundResource(R.drawable.calendar_red_sabytie) else button33.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button33.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button33.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button33.setTypeface(null, Typeface.BOLD)
+                                    binding.button33.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button33.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button33.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button33.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button33.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button33.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button33.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button33.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button33.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button33.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button33.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button33.setBackgroundResource(R.drawable.calendar_red_sabytie) else button33.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button33.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button33.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button33.setTypeface(null, Typeface.NORMAL)
+                                    binding.button33.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button33.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button33.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button33.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button33.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button33.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button33.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button33.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button33.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button33.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button33.setBackgroundResource(R.drawable.calendar_post_sabytie) else button33.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button33.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button33.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button33.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button33.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button33.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button33.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button33.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button33.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button33.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button33.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button33.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button33.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button33.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button33.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button33.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button33.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button33.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button33.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button33.setBackgroundResource(R.drawable.calendar_day_sabytie) else button33.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button33.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button33.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button33.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -2285,65 +2293,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 34) {
                         if (day == "end") {
-                            button34.text = newDay.toString()
-                            button34.setBackgroundResource(R.drawable.calendar_day)
-                            button34.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button34.text = newDay.toString()
+                            binding.button34.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button34.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button34.text = day
-                            if (data[i - 1][4].contains("#d00505")) button34.setTypeface(null, Typeface.BOLD)
+                            binding.button34.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button34.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button34.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button34.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button34.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button34.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button34.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button34.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button34.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button34.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button34.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button34.setBackgroundResource(R.drawable.calendar_red_sabytie) else button34.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button34.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button34.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button34.setTypeface(null, Typeface.BOLD)
+                                    binding.button34.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button34.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button34.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button34.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button34.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button34.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button34.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button34.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button34.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button34.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button34.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button34.setBackgroundResource(R.drawable.calendar_red_sabytie) else button34.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button34.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button34.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button34.setTypeface(null, Typeface.NORMAL)
+                                    binding.button34.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button34.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button34.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button34.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button34.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button34.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button34.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button34.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button34.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button34.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button34.setBackgroundResource(R.drawable.calendar_post_sabytie) else button34.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button34.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button34.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button34.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button34.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button34.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button34.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button34.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button34.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button34.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button34.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button34.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button34.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button34.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button34.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button34.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button34.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button34.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button34.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button34.setBackgroundResource(R.drawable.calendar_day_sabytie) else button34.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button34.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button34.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button34.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -2352,65 +2360,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 35) {
                         if (day == "end") {
-                            button35.text = newDay.toString()
-                            button35.setBackgroundResource(R.drawable.calendar_day)
-                            button35.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button35.text = newDay.toString()
+                            binding.button35.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button35.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button35.text = day
-                            if (data[i - 1][4].contains("#d00505")) button35.setTypeface(null, Typeface.BOLD)
+                            binding.button35.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button35.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button35.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button35.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button35.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button35.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button35.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button35.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button35.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button35.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button35.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button35.setBackgroundResource(R.drawable.calendar_red_sabytie) else button35.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button35.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button35.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button35.setTypeface(null, Typeface.BOLD)
+                                    binding.button35.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button35.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button35.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button35.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button35.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button35.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button35.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button35.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button35.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button35.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button35.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button35.setBackgroundResource(R.drawable.calendar_red_sabytie) else button35.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button35.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button35.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button35.setTypeface(null, Typeface.NORMAL)
+                                    binding.button35.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button35.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button35.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button35.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button35.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button35.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button35.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button35.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button35.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button35.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button35.setBackgroundResource(R.drawable.calendar_post_sabytie) else button35.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button35.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button35.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button35.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button35.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button35.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button35.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button35.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button35.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button35.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button35.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button35.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button35.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button35.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button35.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button35.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button35.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button35.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button35.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button35.setBackgroundResource(R.drawable.calendar_day_sabytie) else button35.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button35.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button35.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button35.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -2419,65 +2427,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 36) {
                         if (day == "end") {
-                            button36.text = newDay.toString()
-                            button36.setBackgroundResource(R.drawable.calendar_bez_posta)
-                            button36.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button36.text = newDay.toString()
+                            binding.button36.setBackgroundResource(R.drawable.calendar_bez_posta)
+                            binding.button36.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button36.text = day
-                            if (data[i - 1][4].contains("#d00505")) button36.setTypeface(null, Typeface.BOLD)
+                            binding.button36.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button36.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button36.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button36.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button36.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button36.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button36.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button36.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button36.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button36.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button36.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button36.setBackgroundResource(R.drawable.calendar_red_sabytie) else button36.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button36.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button36.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button36.setTypeface(null, Typeface.BOLD)
+                                    binding.button36.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button36.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button36.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button36.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button36.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button36.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button36.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button36.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button36.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button36.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button36.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button36.setBackgroundResource(R.drawable.calendar_red_sabytie) else button36.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button36.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button36.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button36.setTypeface(null, Typeface.NORMAL)
+                                    binding.button36.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button36.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button36.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button36.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button36.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button36.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button36.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button36.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button36.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button36.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button36.setBackgroundResource(R.drawable.calendar_post_sabytie) else button36.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button36.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button36.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button36.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button36.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button36.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button36.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button36.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button36.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button36.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button36.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button36.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button36.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button36.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button36.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button36.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button36.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button36.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button36.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button36.setBackgroundResource(R.drawable.calendar_day_sabytie) else button36.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button36.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button36.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button36.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -2486,65 +2494,65 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 37) {
                         if (day == "end") {
-                            button37.text = newDay.toString()
-                            button37.setBackgroundResource(R.drawable.calendar_day)
-                            button37.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button37.text = newDay.toString()
+                            binding.button37.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button37.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         } else {
                             val sab = sabytieCheck(i)
-                            button37.text = day
-                            if (data[i - 1][4].contains("#d00505")) button37.setTypeface(null, Typeface.BOLD)
+                            binding.button37.text = day
+                            if (data[i - 1][4].contains("#d00505")) binding.button37.setTypeface(null, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button37.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button37.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button37.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button37.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button37.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button37.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button37.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button37.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button37.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button37.setBackgroundResource(R.drawable.calendar_red_sabytie) else button37.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button37.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button37.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button37.setTypeface(null, Typeface.BOLD)
+                                    binding.button37.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button37.setTypeface(null, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
                                         if (dzenNoch) {
-                                            if (sab) button37.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else button37.setBackgroundResource(R.drawable.calendar_red_today_black)
+                                            if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_red_today_sabytie_black) else binding.button37.setBackgroundResource(R.drawable.calendar_red_today_black)
                                         } else {
-                                            if (sab) button37.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else button37.setBackgroundResource(R.drawable.calendar_red_today)
+                                            if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_red_sabytie_today) else binding.button37.setBackgroundResource(R.drawable.calendar_red_today)
                                         }
                                     } else {
                                         if (dzenNoch) {
-                                            if (sab) button37.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else button37.setBackgroundResource(R.drawable.calendar_red_black)
+                                            if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_red_sabytie_black) else binding.button37.setBackgroundResource(R.drawable.calendar_red_black)
                                         } else {
-                                            if (sab) button37.setBackgroundResource(R.drawable.calendar_red_sabytie) else button37.setBackgroundResource(R.drawable.calendar_red)
+                                            if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_red_sabytie) else binding.button37.setBackgroundResource(R.drawable.calendar_red)
                                         }
                                     }
-                                    button37.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    button37.setTypeface(null, Typeface.NORMAL)
+                                    binding.button37.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                    binding.button37.setTypeface(null, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button37.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button37.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button37.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button37.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button37.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button37.setBackgroundResource(R.drawable.calendar_bez_posta)
                                     }
                                     if (post) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button37.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else button37.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) button37.setBackgroundResource(R.drawable.calendar_post_sabytie) else button37.setBackgroundResource(R.drawable.calendar_post)
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_post_sabytie_today) else binding.button37.setBackgroundResource(R.drawable.calendar_post_today) else if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_post_sabytie) else binding.button37.setBackgroundResource(R.drawable.calendar_post)
                                     }
                                     if (strogiPost) {
-                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button37.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else button37.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) button37.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else button37.setBackgroundResource(R.drawable.calendar_strogi_post)
-                                        button37.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                                        if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie_today) else binding.button37.setBackgroundResource(R.drawable.calendar_strogi_post_today) else if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_strogi_post_sabytie) else binding.button37.setBackgroundResource(R.drawable.calendar_strogi_post)
+                                        binding.button37.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                                     }
                                     if (!nopost && !post && !strogiPost) {
                                         denNedeli = calendarPost[Calendar.DAY_OF_WEEK]
                                         if (denNedeli == 1) {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button37.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else button37.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) button37.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else button37.setBackgroundResource(R.drawable.calendar_bez_posta)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie_today) else binding.button37.setBackgroundResource(R.drawable.calendar_bez_posta_today) else if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_bez_posta_sabytie) else binding.button37.setBackgroundResource(R.drawable.calendar_bez_posta)
                                         } else {
-                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) button37.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else button37.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) button37.setBackgroundResource(R.drawable.calendar_day_sabytie) else button37.setBackgroundResource(R.drawable.calendar_day)
+                                            if (c[Calendar.DAY_OF_MONTH] == i && munTudey) if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_day_sabytie_today) else binding.button37.setBackgroundResource(R.drawable.calendar_day_today) else if (sab) binding.button37.setBackgroundResource(R.drawable.calendar_day_sabytie) else binding.button37.setBackgroundResource(R.drawable.calendar_day)
                                         }
                                     }
                                 }
@@ -2553,37 +2561,37 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     }
                     if (e == 38) {
                         if (day == "end") {
-                            button38.text = newDay.toString()
-                            button38.setBackgroundResource(R.drawable.calendar_day)
-                            button38.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button38.text = newDay.toString()
+                            binding.button38.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button38.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         }
                     }
                     if (e == 39) {
                         if (day == "end") {
-                            button39.text = newDay.toString()
-                            button39.setBackgroundResource(R.drawable.calendar_day)
-                            button39.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button39.text = newDay.toString()
+                            binding.button39.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button39.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         }
                     }
                     if (e == 40) {
                         if (day == "end") {
-                            button40.text = newDay.toString()
-                            button40.setBackgroundResource(R.drawable.calendar_day)
-                            button40.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button40.text = newDay.toString()
+                            binding.button40.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button40.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         }
                     }
                     if (e == 41) {
                         if (day == "end") {
-                            button41.text = newDay.toString()
-                            button41.setBackgroundResource(R.drawable.calendar_day)
-                            button41.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button41.text = newDay.toString()
+                            binding.button41.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button41.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         }
                     }
                     if (e == 42) {
                         if (day == "end") {
-                            button42.text = newDay.toString()
-                            button42.setBackgroundResource(R.drawable.calendar_day)
-                            button42.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                            binding.button42.text = newDay.toString()
+                            binding.button42.setBackgroundResource(R.drawable.calendar_day)
+                            binding.button42.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                         }
                     }
                 }
@@ -2597,7 +2605,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         activity?.let {
-            if (linearLayout.visibility == View.GONE) {
+            if (binding.linearLayout.visibility == View.GONE) {
                 val intent = Intent()
                 when (v?.id ?: 0) {
                     R.id.button1 -> {
@@ -2912,7 +2920,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
 
     private fun sabytieView(DayYear: Int) {
         activity?.let {
-            linearLayout.removeAllViewsInLayout()
+            binding.linearLayout.removeAllViewsInLayout()
             val gc = Calendar.getInstance() as GregorianCalendar
             var title: String
             val sabytieList = ArrayList<TextViewRobotoCondensed>()
@@ -2998,7 +3006,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
             }
             if (sabytieList.size > 0) {
                 for (i in sabytieList.indices) {
-                    linearLayout.addView(sabytieList[i])
+                    binding.linearLayout.addView(sabytieList[i])
                 }
             }
         }

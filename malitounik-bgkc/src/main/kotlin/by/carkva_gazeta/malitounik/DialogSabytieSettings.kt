@@ -20,7 +20,7 @@ import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.dialog_sabytie_settings.*
+import by.carkva_gazeta.malitounik.databinding.DialogSabytieSettingsBinding
 
 class DialogSabytieSettings : DialogFragment() {
     private lateinit var ringTone: Ringtone
@@ -32,10 +32,17 @@ class DialogSabytieSettings : DialogFragment() {
     private lateinit var k: SharedPreferences
     private lateinit var prefEditor: Editor
     private lateinit var alert: AlertDialog
-    private lateinit var rootView: View
+    private var _binding: DialogSabytieSettingsBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return rootView
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = DialogSabytieSettingsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,78 +50,78 @@ class DialogSabytieSettings : DialogFragment() {
         activity?.let {
             k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            notificationNotification.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            notificationAlarm.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            notificationRingtone.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            notificationPicker.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            binding.notificationNotification.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            binding.notificationAlarm.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            binding.notificationRingtone.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            binding.notificationPicker.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             uriAlarm = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
             uriNotification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             uriRingtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-            notificationAlarm.text = getString(R.string.uriAlarm, RingtoneManager.getRingtone(it, uriAlarm).getTitle(it))
-            notificationNotification.text = getString(R.string.uriNotification, RingtoneManager.getRingtone(it, uriNotification).getTitle(it))
-            notificationRingtone.text = getString(R.string.uriRingtone, RingtoneManager.getRingtone(it, uriRingtone).getTitle(it))
+            binding.notificationAlarm.text = getString(R.string.uriAlarm, RingtoneManager.getRingtone(it, uriAlarm).getTitle(it))
+            binding.notificationNotification.text = getString(R.string.uriNotification, RingtoneManager.getRingtone(it, uriNotification).getTitle(it))
+            binding.notificationRingtone.text = getString(R.string.uriRingtone, RingtoneManager.getRingtone(it, uriRingtone).getTitle(it))
             val soundURI = k.getString("soundURI", "")
             uri = Uri.parse(soundURI)
             ringTone = RingtoneManager.getRingtone(it, uri)
-            if (soundURI == "") notificationPicker.text = "Іншая мелодыя" else notificationPicker.text = getString(R.string.uriPicker, ringTone.getTitle(it))
+            if (soundURI == "") binding.notificationPicker.text = "Іншая мелодыя" else binding.notificationPicker.text = getString(R.string.uriPicker, ringTone.getTitle(it))
             val sound = k.getInt("soundnotification", 0)
-            notificationGrupRington.setOnCheckedChangeListener(grupRington())
-            notificationNotification.isChecked = sound == 0
-            notificationAlarm.isChecked = sound == 1
-            notificationRingtone.isChecked = sound == 2
-            notificationPicker.isChecked = sound == 3
-            if (dzenNoch) guk.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            guk.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            binding.notificationGrupRington.setOnCheckedChangeListener(grupRington())
+            binding.notificationNotification.isChecked = sound == 0
+            binding.notificationAlarm.isChecked = sound == 1
+            binding.notificationRingtone.isChecked = sound == 2
+            binding.notificationPicker.isChecked = sound == 3
+            if (dzenNoch) binding.guk.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            binding.guk.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val gukInt = k.getInt("guk", 1)
             if (gukInt == 0) {
-                guk.isChecked = false
-                notificationNotification.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                notificationAlarm.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                notificationRingtone.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                notificationPicker.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                notificationGrupRington.setOnCheckedChangeListener(null)
-                notificationNotification.isClickable = false
-                notificationAlarm.isClickable = false
-                notificationRingtone.isClickable = false
-                notificationPicker.isClickable = false
+                binding.guk.isChecked = false
+                binding.notificationNotification.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                binding.notificationAlarm.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                binding.notificationRingtone.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                binding.notificationPicker.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                binding.notificationGrupRington.setOnCheckedChangeListener(null)
+                binding.notificationNotification.isClickable = false
+                binding.notificationAlarm.isClickable = false
+                binding.notificationRingtone.isClickable = false
+                binding.notificationPicker.isClickable = false
             } else {
-                play.setOnClickListener(play())
-                stop.setOnClickListener(stop())
+                binding.play.setOnClickListener(play())
+                binding.stop.setOnClickListener(stop())
             }
-            guk.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            binding.guk.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
                 prefEditor = k.edit()
                 if (isChecked) {
                     if (dzenNoch) {
-                        notificationNotification.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        notificationAlarm.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        notificationRingtone.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        notificationPicker.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.notificationNotification.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.notificationAlarm.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.notificationRingtone.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.notificationPicker.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     } else {
-                        notificationNotification.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                        notificationAlarm.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                        notificationRingtone.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                        notificationPicker.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        binding.notificationNotification.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        binding.notificationAlarm.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        binding.notificationRingtone.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        binding.notificationPicker.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                     }
-                    notificationGrupRington.setOnCheckedChangeListener(grupRington())
-                    notificationNotification.isClickable = true
-                    notificationAlarm.isClickable = true
-                    notificationRingtone.isClickable = true
-                    notificationPicker.isClickable = true
-                    play.setOnClickListener(play())
-                    stop.setOnClickListener(stop())
+                    binding.notificationGrupRington.setOnCheckedChangeListener(grupRington())
+                    binding.notificationNotification.isClickable = true
+                    binding.notificationAlarm.isClickable = true
+                    binding.notificationRingtone.isClickable = true
+                    binding.notificationPicker.isClickable = true
+                    binding.play.setOnClickListener(play())
+                    binding.stop.setOnClickListener(stop())
                     prefEditor.putInt("guk", 1)
                 } else {
-                    notificationNotification.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                    notificationAlarm.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                    notificationRingtone.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                    notificationPicker.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                    notificationGrupRington.setOnCheckedChangeListener(null)
-                    notificationNotification.isClickable = false
-                    notificationAlarm.isClickable = false
-                    notificationRingtone.isClickable = false
-                    notificationPicker.isClickable = false
-                    play.setOnClickListener(null)
-                    stop.setOnClickListener(null)
+                    binding.notificationNotification.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                    binding.notificationAlarm.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                    binding.notificationRingtone.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                    binding.notificationPicker.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                    binding.notificationGrupRington.setOnCheckedChangeListener(null)
+                    binding.notificationNotification.isClickable = false
+                    binding.notificationAlarm.isClickable = false
+                    binding.notificationRingtone.isClickable = false
+                    binding.notificationPicker.isClickable = false
+                    binding.play.setOnClickListener(null)
+                    binding.stop.setOnClickListener(null)
                     prefEditor.putInt("guk", 0)
                 }
                 prefEditor.apply()
@@ -129,8 +136,7 @@ class DialogSabytieSettings : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val ad = AlertDialog.Builder(it, style)
-            rootView = View.inflate(it, R.layout.dialog_sabytie_settings, null)
-            ad.setView(rootView)
+            ad.setView(binding.root)
             ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = ad.create()
         }
@@ -142,16 +148,16 @@ class DialogSabytieSettings : DialogFragment() {
             activity?.let {
                 ringTone.stop()
                 when {
-                    notificationAlarm.isChecked -> {
+                    binding.notificationAlarm.isChecked -> {
                         ringTone = RingtoneManager.getRingtone(it, uriAlarm)
                     }
-                    notificationNotification.isChecked -> {
+                    binding.notificationNotification.isChecked -> {
                         ringTone = RingtoneManager.getRingtone(it, uriNotification)
                     }
-                    notificationRingtone.isChecked -> {
+                    binding.notificationRingtone.isChecked -> {
                         ringTone = RingtoneManager.getRingtone(it, uriRingtone)
                     }
-                    notificationPicker.isChecked -> {
+                    binding.notificationPicker.isChecked -> {
                         uri = Uri.parse(k.getString("soundURI", ""))
                         ringTone = RingtoneManager.getRingtone(it, uri)
                     }
@@ -196,7 +202,7 @@ class DialogSabytieSettings : DialogFragment() {
             uri = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
             activity?.let {
                 ringTone = RingtoneManager.getRingtone(it, uri)
-                notificationPicker.text = getString(R.string.uriPicker, ringTone.getTitle(it))
+                binding.notificationPicker.text = getString(R.string.uriPicker, ringTone.getTitle(it))
             }
             prefEditor = k.edit()
             prefEditor.putString("soundURI", uri.toString())

@@ -10,17 +10,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import by.carkva_gazeta.malitounik.databinding.MenuPsalterBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.menu_psalter.*
 
 class MenuPsalterNadsana : Fragment(), View.OnClickListener {
     private lateinit var k: SharedPreferences
     private var mLastClickTime: Long = 0
     private var bibleTime = ""
+    private var _binding: MenuPsalterBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.menu_psalter, container, false)
+        _binding = MenuPsalterBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -31,50 +39,50 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
             bibleTime = k.getString("psalter_time_psalter_nadsan", "") ?: ""
             if (bibleTime == "") {
                 MenuBibleSemuxa.bible_time = true
-                prodolzych.visibility = View.GONE
+                binding.prodolzych.visibility = View.GONE
             }
             val bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
             if (bibleVybranoe == "") {
-                myBible.visibility = View.GONE
+                binding.myBible.visibility = View.GONE
             } else {
                 val gson = Gson()
                 val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
                 val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
-                if (arrayListVybranoe.isEmpty()) myBible.visibility = View.GONE
+                if (arrayListVybranoe.isEmpty()) binding.myBible.visibility = View.GONE
             }
-            myBible.setOnClickListener(this)
-            psalter.setOnClickListener(this)
-            prodolzych.setOnClickListener(this)
-            pravila_chtenia.setOnClickListener(this)
-            malitva_pered.setOnClickListener(this)
-            malitva_posle.setOnClickListener(this)
-            pesni.setOnClickListener(this)
-            pravila.setOnClickListener(this)
+            binding.myBible.setOnClickListener(this)
+            binding.psalter.setOnClickListener(this)
+            binding.prodolzych.setOnClickListener(this)
+            binding.pravilaChtenia.setOnClickListener(this)
+            binding.malitvaPered.setOnClickListener(this)
+            binding.malitvaPosle.setOnClickListener(this)
+            binding.pesni.setOnClickListener(this)
+            binding.pravila.setOnClickListener(this)
             if (dzenNoch) {
-                psalter.setBackgroundResource(R.drawable.knopka_red_black)
+                binding.psalter.setBackgroundResource(R.drawable.knopka_red_black)
             }
-            textView1.setOnClickListener(this)
-            textView2.setOnClickListener(this)
-            textView3.setOnClickListener(this)
-            textView4.setOnClickListener(this)
-            textView5.setOnClickListener(this)
-            textView6.setOnClickListener(this)
-            textView7.setOnClickListener(this)
-            textView8.setOnClickListener(this)
-            textView9.setOnClickListener(this)
-            textView10.setOnClickListener(this)
-            textView11.setOnClickListener(this)
-            textView12.setOnClickListener(this)
-            textView13.setOnClickListener(this)
-            textView14.setOnClickListener(this)
-            textView15.setOnClickListener(this)
-            textView16.setOnClickListener(this)
-            textView17.setOnClickListener(this)
-            textView18.setOnClickListener(this)
-            textView19.setOnClickListener(this)
-            textView20.setOnClickListener(this)
+            binding.textView1.setOnClickListener(this)
+            binding.textView2.setOnClickListener(this)
+            binding.textView3.setOnClickListener(this)
+            binding.textView4.setOnClickListener(this)
+            binding.textView5.setOnClickListener(this)
+            binding.textView6.setOnClickListener(this)
+            binding.textView7.setOnClickListener(this)
+            binding.textView8.setOnClickListener(this)
+            binding.textView9.setOnClickListener(this)
+            binding.textView10.setOnClickListener(this)
+            binding.textView11.setOnClickListener(this)
+            binding.textView12.setOnClickListener(this)
+            binding.textView13.setOnClickListener(this)
+            binding.textView14.setOnClickListener(this)
+            binding.textView15.setOnClickListener(this)
+            binding.textView16.setOnClickListener(this)
+            binding.textView17.setOnClickListener(this)
+            binding.textView18.setOnClickListener(this)
+            binding.textView19.setOnClickListener(this)
+            binding.textView20.setOnClickListener(this)
             if (dzenNoch) {
-                textViewtitle.setBackgroundResource(R.drawable.nadsanblack)
+                binding.textViewtitle.setBackgroundResource(R.drawable.nadsanblack)
             }
         }
     }
@@ -117,7 +125,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.NADSANMALITVYIPESNI)
                     intent.putExtra("malitva", 0)
-                    intent.putExtra("malitva_title", malitva_pered.text.toString())
+                    intent.putExtra("malitva_title", binding.malitvaPered.text.toString())
                     startActivity(intent)
                 }
             } else {
@@ -131,7 +139,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.NADSANMALITVYIPESNI)
                     intent.putExtra("malitva", 1)
-                    intent.putExtra("malitva_title", malitva_posle.text.toString())
+                    intent.putExtra("malitva_title", binding.malitvaPosle.text.toString())
                     startActivity(intent)
                 }
             } else {
@@ -145,7 +153,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.NADSANMALITVYIPESNI)
                     intent.putExtra("malitva", 2)
-                    intent.putExtra("malitva_title", pesni.text.toString())
+                    intent.putExtra("malitva_title", binding.pesni.text.toString())
                     startActivity(intent)
                 }
             } else {

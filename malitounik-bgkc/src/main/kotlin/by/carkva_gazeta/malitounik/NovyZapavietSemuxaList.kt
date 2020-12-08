@@ -15,12 +15,13 @@ import android.widget.BaseExpandableListAdapter
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.content_bible.*
+import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
 
 class NovyZapavietSemuxaList : AppCompatActivity() {
     private var dzenNoch = false
     private var mLastClickTime: Long = 0
     private val groups = ArrayList<ArrayList<String>>()
+    private lateinit var binding: ContentBibleBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +29,10 @@ class NovyZapavietSemuxaList : AppCompatActivity() {
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.content_bible)
-        if (dzenNoch)
-            elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
-        else
-            elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
+        binding = ContentBibleBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        if (dzenNoch) binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        else binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         val children1 = ArrayList<String>()
         val children2 = ArrayList<String>()
         val children3 = ArrayList<String>()
@@ -161,8 +161,8 @@ class NovyZapavietSemuxaList : AppCompatActivity() {
         }
         groups.add(children27)
         val adapter = ExpListAdapterNovyZapaviet(this)
-        elvMain.setAdapter(adapter)
-        elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
+        binding.elvMain.setAdapter(adapter)
+        binding.elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnChildClickListener true
             }
@@ -190,24 +190,24 @@ class NovyZapavietSemuxaList : AppCompatActivity() {
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.setText(R.string.novy_zapaviet)
+        binding.titleToolbar.setText(R.string.novy_zapaviet)
         if (dzenNoch) {
-            toolbar.popupTheme = R.style.AppCompatDark
+            binding.toolbar.popupTheme = R.style.AppCompatDark
         }
     }
 
@@ -311,8 +311,7 @@ class NovyZapavietSemuxaList : AppCompatActivity() {
             val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch)
-                textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            if (dzenNoch) textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             textChild.text = groups[groupPosition][childPosition]
             return rootView
         }

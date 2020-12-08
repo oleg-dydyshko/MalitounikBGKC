@@ -13,19 +13,26 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.carkva_gazeta.malitounik.databinding.MenuVybranoeBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
-import kotlinx.android.synthetic.main.vybranoe_bible_list.*
 import java.io.File
 
 class MenuVybranoe : VybranoeFragment() {
     private lateinit var adapter: ItemAdapter
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
+    private var _binding: MenuVybranoeBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +40,7 @@ class MenuVybranoe : VybranoeFragment() {
     }
 
     override fun fileDeliteCancel() {
-        drag_list_view.resetSwipedViews(null)
+        binding.dragListView.resetSwipedViews(null)
     }
 
     override fun fileDelite(position: Int) {
@@ -69,7 +76,8 @@ class MenuVybranoe : VybranoeFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.menu_vybranoe, container, false)
+        _binding = MenuVybranoeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -89,12 +97,12 @@ class MenuVybranoe : VybranoeFragment() {
                 }
             }
             adapter = ItemAdapter(vybranoe, R.layout.list_item, R.id.image, false)
-            drag_list_view.recyclerView.isVerticalScrollBarEnabled = false
-            drag_list_view.setLayoutManager(LinearLayoutManager(fragmentActivity))
-            drag_list_view.setAdapter(adapter, false)
-            drag_list_view.setCanDragHorizontally(false)
-            drag_list_view.setCanDragVertically(true)
-            drag_list_view.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
+            binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
+            binding.dragListView.setLayoutManager(LinearLayoutManager(fragmentActivity))
+            binding.dragListView.setAdapter(adapter, false)
+            binding.dragListView.setCanDragHorizontally(false)
+            binding.dragListView.setCanDragVertically(true)
+            binding.dragListView.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
                 override fun onItemSwipeStarted(item: ListSwipeItem) {
                 }
 
@@ -102,14 +110,14 @@ class MenuVybranoe : VybranoeFragment() {
                     if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
                         fragmentManager?.let {
                             val adapterItem = item.tag as VybranoeData
-                            val pos: Int = drag_list_view.adapter.getPositionForItem(adapterItem)
+                            val pos: Int = binding.dragListView.adapter.getPositionForItem(adapterItem)
                             val dd = DialogDelite.getInstance(pos, "", "з выбранага", adapter.itemList[pos].data)
                             fragmentManager?.let { dd.show(it, "dialog_dilite") }
                         }
                     }
                 }
             })
-            drag_list_view.setDragListListener(object : DragListView.DragListListener {
+            binding.dragListView.setDragListListener(object : DragListView.DragListListener {
                 override fun onItemDragStarted(position: Int) {
                 }
 

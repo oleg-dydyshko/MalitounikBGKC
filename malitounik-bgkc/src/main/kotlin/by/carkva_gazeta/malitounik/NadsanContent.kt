@@ -11,24 +11,26 @@ import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.content_psalter.*
+import by.carkva_gazeta.malitounik.databinding.ContentPsalterBinding
 
 class NadsanContent : AppCompatActivity() {
     private var dzenNoch = false
     private var mLastClickTime: Long = 0
+    private lateinit var binding: ContentPsalterBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = chin.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.content_psalter)
+        binding = ContentPsalterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val arrayList = ArrayList<String>()
         for (i in 1..151) {
             arrayList.add(getString(R.string.psalom2) + " " + i)
         }
-        listView.adapter = MenuListAdaprer(this, arrayList)
-        listView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
+        binding.listView.adapter = MenuListAdaprer(this, arrayList)
+        binding.listView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnItemClickListener
             }
@@ -54,24 +56,24 @@ class NadsanContent : AppCompatActivity() {
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.setText(R.string.title_psalter)
+        binding.titleToolbar.setText(R.string.title_psalter)
         if (dzenNoch) {
-            toolbar.popupTheme = R.style.AppCompatDark
+            binding.toolbar.popupTheme = R.style.AppCompatDark
         }
     }
 

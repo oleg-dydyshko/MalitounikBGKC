@@ -22,7 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
-import kotlinx.android.synthetic.main.akafist_under.*
+import by.carkva_gazeta.resources.databinding.AkafistUnderBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -67,6 +67,7 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         get() {
             return MainActivity.getOrientation(this)
         }
+    private lateinit var binding: AkafistUnderBinding
 
     override fun onResume() {
         super.onResume()
@@ -77,7 +78,7 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
 
     override fun onDialogFontSizePositiveClick() {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+        binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -92,8 +93,9 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.akafist_under)
-        constraint.setOnTouchListener(this)
+        binding = AkafistUnderBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.constraint.setOnTouchListener(this)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
@@ -101,8 +103,8 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         if (dzenNoch)
-            progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-        TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+            binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+        binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         val id = intent.extras?.getInt("id", R.raw.bogashlugbovya12_1) ?: R.raw.bogashlugbovya12_1
         resurs = intent.extras?.getString("type", "bogashlugbovya12_1") ?: "bogashlugbovya12_1"
         title = intent.extras?.getString("title", "") ?: ""
@@ -117,7 +119,7 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
             builder.append(line)
         }
         inputStream.close()
-        TextView.text = MainActivity.fromHtml(builder.toString())
+        binding.TextView.text = MainActivity.fromHtml(builder.toString())
         men = Bogashlugbovya.checkVybranoe(this, resurs)
         if (k.getBoolean("help_str", true)) {
             startActivity(Intent(this, HelpText::class.java))
@@ -133,24 +135,24 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text = title
+        binding.titleToolbar.text = title
         if (dzenNoch) {
-            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
 
@@ -165,7 +167,7 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         procentSchedule = object : TimerTask() {
             override fun run() {
                 CoroutineScope(Dispatchers.Main).launch {
-                    progress.visibility = View.GONE
+                    binding.progress.visibility = View.GONE
                 }
             }
         }
@@ -173,7 +175,7 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        val widthConstraintLayout = constraint.width
+        val widthConstraintLayout = binding.constraint.width
         val otstup = (10 * resources.displayMetrics.density).toInt()
         val y = event?.y?.toInt() ?: 0
         val x = event?.x?.toInt() ?: 0
@@ -187,9 +189,9 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
                     n = event?.y?.toInt() ?: 0
                     if (x < otstup) {
                         levo = true
-                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                        progress.visibility = View.VISIBLE
+                        binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                        binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                        binding.progress.visibility = View.VISIBLE
                         startProcent()
                     }
                     if (x > widthConstraintLayout - otstup) {
@@ -197,9 +199,9 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
                         var minmax = ""
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
-                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        progress.visibility = View.VISIBLE
+                        binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
+                        binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                        binding.progress.visibility = View.VISIBLE
                         startProcent()
                     }
                 }
@@ -210,9 +212,9 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
-                            progress.visibility = View.VISIBLE
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                         }
                     }
@@ -222,9 +224,9 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
-                            progress.visibility = View.VISIBLE
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                         }
                     }
@@ -233,11 +235,11 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
                             fontBiblia -= 4
                             prefEditor.putFloat("font_biblia", fontBiblia)
                             prefEditor.apply()
-                            TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                            binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
                             var min = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                            progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
-                            progress.visibility = View.VISIBLE
+                            binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                         }
                     }
@@ -246,11 +248,11 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
                             fontBiblia += 4
                             prefEditor.putFloat("font_biblia", fontBiblia)
                             prefEditor.apply()
-                            TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+                            binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
                             var max = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                            progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
-                            progress.visibility = View.VISIBLE
+                            binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                         }
                     }

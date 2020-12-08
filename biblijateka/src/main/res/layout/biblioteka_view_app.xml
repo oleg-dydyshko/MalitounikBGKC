@@ -40,6 +40,8 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/biblioteka_view_content" />
+    <include
+        android:id="@+id/bibliotekaViewContent"
+        layout="@layout/biblioteka_view_content" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

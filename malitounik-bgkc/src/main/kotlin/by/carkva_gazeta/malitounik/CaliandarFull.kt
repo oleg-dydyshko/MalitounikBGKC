@@ -26,9 +26,9 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import by.carkva_gazeta.malitounik.databinding.CalaindarBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.calaindar.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,6 +49,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
     private var sabytieTitle: String = ""
     private var position = 0
     private var mLastClickTime: Long = 0
+    private var _binding: CalaindarBinding? = null
+    private val binding get() = _binding!!
 
     private fun getData(mun: Int): String {
         return if (MenuCaliandar.munKal == mun && MenuCaliandar.dataJson != "") {
@@ -92,6 +94,11 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             return dayyear
         }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -102,7 +109,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.calaindar, container, false)
+        _binding = CalaindarBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -120,236 +128,236 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             tileMe?.tileModeX = Shader.TileMode.REPEAT
             if (data[day][20] != "" && data[day][0].toInt() == 1) {
                 val ton = data[day][20]
-                textTitleChyt.text = getString(R.string.bible_natatki, ton, textTitleChyt.text)
-                textTitleChyt.setOnClickListener(this@CaliandarFull)
+                binding.textTitleChyt.text = getString(R.string.bible_natatki, ton, binding.textTitleChyt.text)
+                binding.textTitleChyt.setOnClickListener(this@CaliandarFull)
             } else {
-                textTitleChyt.isEnabled = false
+                binding.textTitleChyt.isEnabled = false
             }
-            textChytanne.setOnClickListener(this@CaliandarFull)
-            textChytanneSviatyia.setOnClickListener(this@CaliandarFull)
-            textChytanneSviatyiaDop.setOnClickListener(this@CaliandarFull)
+            binding.textChytanne.setOnClickListener(this@CaliandarFull)
+            binding.textChytanneSviatyia.setOnClickListener(this@CaliandarFull)
+            binding.textChytanneSviatyiaDop.setOnClickListener(this@CaliandarFull)
             val maranataSh = k?.getInt("maranata", 0) ?: 0
             if (maranataSh == 1) {
-                maranata.setOnClickListener(this@CaliandarFull)
+                binding.maranata.setOnClickListener(this@CaliandarFull)
                 if (dzenNoch) {
                     activity?.let {
-                        maranata.setBackgroundResource(R.drawable.selector_dark_maranata)
-                        maranata.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textTitleMaranata.setBackgroundResource(R.drawable.selector_dark_maranata)
-                        textTitleMaranata.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.maranata.setBackgroundResource(R.drawable.selector_dark_maranata)
+                        binding.maranata.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textTitleMaranata.setBackgroundResource(R.drawable.selector_dark_maranata)
+                        binding.textTitleMaranata.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     }
                 }
-                maranata.visibility = View.VISIBLE
-                textTitleMaranata.visibility = View.VISIBLE
+                binding.maranata.visibility = View.VISIBLE
+                binding.textTitleMaranata.visibility = View.VISIBLE
                 var dataMaranAta = data[day][13]
                 if (k?.getBoolean("belarus", false) == true) dataMaranAta = MainActivity.translateToBelarus(dataMaranAta)
-                maranata.text = dataMaranAta
+                binding.maranata.text = dataMaranAta
             }
-            znakTipicona.setOnClickListener(this@CaliandarFull)
+            binding.znakTipicona.setOnClickListener(this@CaliandarFull)
             if (data[day][21] != "") {
-                textBlaslavenne.text = data[day][21]
-                textBlaslavenne.visibility = View.VISIBLE
+                binding.textBlaslavenne.text = data[day][21]
+                binding.textBlaslavenne.visibility = View.VISIBLE
             }
             if (dzenNoch) {
                 activity?.let {
-                    textSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                    textSviatyia.setBackgroundResource(R.drawable.selector_dark)
-                    textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                    textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                    textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
-                    textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                    binding.textSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                    binding.textSviatyia.setBackgroundResource(R.drawable.selector_dark)
+                    binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                    binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                    binding.textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
+                    binding.textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 }
             }
-            textDenNedeli.text = nedelName[data[day][0].toInt()]
-            textChislo.text = data[day][1]
-            if (data[day][3].toInt() != c[Calendar.YEAR]) textMesiac.text = getString(R.string.mesiach, monthName[data[day][2].toInt()], data[day][3])
-            else textMesiac.text = monthName[data[day][2].toInt()]
+            binding.textDenNedeli.text = nedelName[data[day][0].toInt()]
+            binding.textChislo.text = data[day][1]
+            if (data[day][3].toInt() != c[Calendar.YEAR]) binding.textMesiac.text = getString(R.string.mesiach, monthName[data[day][2].toInt()], data[day][3])
+            else binding.textMesiac.text = monthName[data[day][2].toInt()]
             if (!data[day][4].contains("no_sviatyia")) {
                 var dataSviatyia = data[day][4]
                 if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
-                textSviatyia.text = MainActivity.fromHtml(dataSviatyia)
+                binding.textSviatyia.text = MainActivity.fromHtml(dataSviatyia)
             } else {
-                polosa1.visibility = View.GONE
-                polosa2.visibility = View.GONE
-                textSviatyia.visibility = View.GONE
+                binding.polosa1.visibility = View.GONE
+                binding.polosa2.visibility = View.GONE
+                binding.textSviatyia.visibility = View.GONE
             }
-            textSviatyia.setOnClickListener(this@CaliandarFull)
+            binding.textSviatyia.setOnClickListener(this@CaliandarFull)
             if (!data[day][6].contains("no_sviaty")) {
-                textCviatyGlavnyia.text = data[day][6]
-                textCviatyGlavnyia.visibility = View.VISIBLE
+                binding.textCviatyGlavnyia.text = data[day][6]
+                binding.textCviatyGlavnyia.visibility = View.VISIBLE
                 if (data[day][6].contains("Пачатак") || data[day][6].contains("Вялікі") || data[day][6].contains("Вялікая") || data[day][6].contains("ВЕЧАР") || data[day][6].contains("Палова")) {
                     activity?.let {
-                        if (dzenNoch) textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        else textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        if (dzenNoch) binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        else binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                     }
-                    textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
-                    textCviatyGlavnyia.isEnabled = false
+                    binding.textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
+                    binding.textCviatyGlavnyia.isEnabled = false
                 } else {
-                    if (data[day][6].toLowerCase(Locale.getDefault()).contains("нядзел") || data[day][6].toLowerCase(Locale.getDefault()).contains("дзень") || data[day][6].toLowerCase(Locale.getDefault()).contains("сьветл")) textCviatyGlavnyia.isEnabled = false
-                    else textCviatyGlavnyia.setOnClickListener(this@CaliandarFull)
+                    if (data[day][6].toLowerCase(Locale.getDefault()).contains("нядзел") || data[day][6].toLowerCase(Locale.getDefault()).contains("дзень") || data[day][6].toLowerCase(Locale.getDefault()).contains("сьветл")) binding.textCviatyGlavnyia.isEnabled = false
+                    else binding.textCviatyGlavnyia.setOnClickListener(this@CaliandarFull)
                 }
             }
             activity?.let {
                 when (data[day][7].toInt()) {
                     1 -> {
-                        textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                        textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                        textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                        textDenNedeli.setBackgroundResource(R.drawable.selector_bez_posta)
-                        textChislo.setBackgroundResource(R.drawable.selector_bez_posta)
-                        textMesiac.setBackgroundResource(R.drawable.selector_bez_posta)
-                        textTitleChyt.setBackgroundResource(R.drawable.selector_bez_posta)
-                        textChytanne.setBackgroundResource(R.drawable.selector_bez_posta)
-                        textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_bez_posta)
-                        textChytanneSviatyia.setBackgroundResource(R.drawable.selector_bez_posta)
-                        textBlaslavenne.setBackgroundResource(R.drawable.selector_bez_posta)
-                        textPamerlyia.setBackgroundResource(R.drawable.selector_bez_posta)
+                        binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        binding.textDenNedeli.setBackgroundResource(R.drawable.selector_bez_posta)
+                        binding.textChislo.setBackgroundResource(R.drawable.selector_bez_posta)
+                        binding.textMesiac.setBackgroundResource(R.drawable.selector_bez_posta)
+                        binding.textTitleChyt.setBackgroundResource(R.drawable.selector_bez_posta)
+                        binding.textChytanne.setBackgroundResource(R.drawable.selector_bez_posta)
+                        binding.textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_bez_posta)
+                        binding.textChytanneSviatyia.setBackgroundResource(R.drawable.selector_bez_posta)
+                        binding.textBlaslavenne.setBackgroundResource(R.drawable.selector_bez_posta)
+                        binding.textPamerlyia.setBackgroundResource(R.drawable.selector_bez_posta)
                         if (data[day][0].contains("6")) {
-                            textPost.visibility = View.VISIBLE
-                            textPost.text = resources.getString(R.string.No_post)
+                            binding.textPost.visibility = View.VISIBLE
+                            binding.textPost.text = resources.getString(R.string.No_post)
                         }
                     }
                     2 -> {
-                        textTitleChyt.setBackgroundResource(R.drawable.selector_post)
-                        textChytanne.setBackgroundResource(R.drawable.selector_post)
-                        textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_post)
-                        textChytanneSviatyia.setBackgroundResource(R.drawable.selector_post)
-                        textBlaslavenne.setBackgroundResource(R.drawable.selector_post)
-                        textDenNedeli.setBackgroundResource(R.drawable.selector_post)
-                        textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                        textChislo.setBackgroundResource(R.drawable.selector_post)
-                        textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                        textMesiac.setBackgroundResource(R.drawable.selector_post)
-                        textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                        textPamerlyia.setBackgroundResource(R.drawable.selector_post)
+                        binding.textTitleChyt.setBackgroundResource(R.drawable.selector_post)
+                        binding.textChytanne.setBackgroundResource(R.drawable.selector_post)
+                        binding.textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_post)
+                        binding.textChytanneSviatyia.setBackgroundResource(R.drawable.selector_post)
+                        binding.textBlaslavenne.setBackgroundResource(R.drawable.selector_post)
+                        binding.textDenNedeli.setBackgroundResource(R.drawable.selector_post)
+                        binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        binding.textChislo.setBackgroundResource(R.drawable.selector_post)
+                        binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        binding.textMesiac.setBackgroundResource(R.drawable.selector_post)
+                        binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        binding.textPamerlyia.setBackgroundResource(R.drawable.selector_post)
                         if (data[day][0].contains("6")) {
-                            PostFish.visibility = View.VISIBLE
-                            textPost.visibility = View.VISIBLE
+                            binding.PostFish.visibility = View.VISIBLE
+                            binding.textPost.visibility = View.VISIBLE
                             if (dzenNoch) {
-                                PostFish.setImageResource(R.drawable.fishe_whate)
+                                binding.PostFish.setImageResource(R.drawable.fishe_whate)
                             }
                         }
                     }
                     3 -> {
-                        textDenNedeli.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textChislo.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textMesiac.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textTitleChyt.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textTitleChyt.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textChytanne.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textChytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textChytanneSviatyiaDop.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textChytanneSviatyia.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textChytanneSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textBlaslavenne.setBackgroundResource(R.drawable.selector_strogi_post)
-                        textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textPost.text = resources.getString(R.string.Strogi_post)
-                        textPamerlyia.text = resources.getString(R.string.Strogi_post)
-                        textPamerlyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textPost.visibility = View.VISIBLE
-                        PostFish.visibility = View.VISIBLE
-                        if (dzenNoch) PostFish.setImageResource(R.drawable.fishe_red_black) else PostFish.setImageResource(R.drawable.fishe_red)
+                        binding.textDenNedeli.setBackgroundResource(R.drawable.selector_strogi_post)
+                        binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textChislo.setBackgroundResource(R.drawable.selector_strogi_post)
+                        binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textMesiac.setBackgroundResource(R.drawable.selector_strogi_post)
+                        binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textTitleChyt.setBackgroundResource(R.drawable.selector_strogi_post)
+                        binding.textTitleChyt.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textChytanne.setBackgroundResource(R.drawable.selector_strogi_post)
+                        binding.textChytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_strogi_post)
+                        binding.textChytanneSviatyiaDop.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textChytanneSviatyia.setBackgroundResource(R.drawable.selector_strogi_post)
+                        binding.textChytanneSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textBlaslavenne.setBackgroundResource(R.drawable.selector_strogi_post)
+                        binding.textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textPost.text = resources.getString(R.string.Strogi_post)
+                        binding.textPamerlyia.text = resources.getString(R.string.Strogi_post)
+                        binding.textPamerlyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textPost.visibility = View.VISIBLE
+                        binding.PostFish.visibility = View.VISIBLE
+                        if (dzenNoch) binding.PostFish.setImageResource(R.drawable.fishe_red_black) else binding.PostFish.setImageResource(R.drawable.fishe_red)
                     }
                     else -> {
-                        textDenNedeli.setBackgroundResource(R.color.colorDivider)
-                        textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                        textChislo.setBackgroundResource(R.color.colorDivider)
-                        textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                        textMesiac.setBackgroundResource(R.color.colorDivider)
-                        textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        binding.textDenNedeli.setBackgroundResource(R.color.colorDivider)
+                        binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        binding.textChislo.setBackgroundResource(R.color.colorDivider)
+                        binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                        binding.textMesiac.setBackgroundResource(R.color.colorDivider)
+                        binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                     }
                 }
             }
             if (data[day][5].contains("1") || data[day][5].contains("2") || data[day][5].contains("3")) {
-                textDenNedeli.setBackgroundResource(rColorColorprimary)
-                textChislo.setBackgroundResource(rColorColorprimary)
-                textMesiac.setBackgroundResource(rColorColorprimary)
+                binding.textDenNedeli.setBackgroundResource(rColorColorprimary)
+                binding.textChislo.setBackgroundResource(rColorColorprimary)
+                binding.textMesiac.setBackgroundResource(rColorColorprimary)
                 activity?.let {
-                    textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                    textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                    textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                    binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                    binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                    binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 }
             }
             if (data[day][5].contains("2")) {
-                textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
+                binding.textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
             }
             if (data[day][8] != "") {
-                textPredsviaty.text = MainActivity.fromHtml(data[day][8])
-                textPredsviaty.visibility = View.VISIBLE
+                binding.textPredsviaty.text = MainActivity.fromHtml(data[day][8])
+                binding.textPredsviaty.visibility = View.VISIBLE
             }
-            textChytanne.text = data[day][9]
-            if (data[day][9] == "Прабачьце, няма дадзеных" || data[day][9] == "Літургіі няма") textChytanne.isEnabled = false
-            if (data[day][9] == "") textChytanne.visibility = View.GONE
+            binding.textChytanne.text = data[day][9]
+            if (data[day][9] == "Прабачьце, няма дадзеных" || data[day][9] == "Літургіі няма") binding.textChytanne.isEnabled = false
+            if (data[day][9] == "") binding.textChytanne.visibility = View.GONE
             if (data[day][10] != "") {
-                textChytanneSviatyia.text = data[day][10]
-                textChytanneSviatyia.visibility = View.VISIBLE
+                binding.textChytanneSviatyia.text = data[day][10]
+                binding.textChytanneSviatyia.visibility = View.VISIBLE
             }
             if (data[day][11] != "") {
-                textChytanneSviatyiaDop.text = data[day][11]
-                textChytanneSviatyiaDop.visibility = View.VISIBLE
+                binding.textChytanneSviatyiaDop.text = data[day][11]
+                binding.textChytanneSviatyiaDop.visibility = View.VISIBLE
             }
             when (data[day][12].toInt()) {
                 1 -> {
-                    if (dzenNoch) znakTipicona.setImageResource(R.drawable.znaki_krest_black) else znakTipicona.setImageResource(R.drawable.znaki_krest)
-                    znakTipicona.visibility = View.VISIBLE
+                    if (dzenNoch) binding.znakTipicona.setImageResource(R.drawable.znaki_krest_black) else binding.znakTipicona.setImageResource(R.drawable.znaki_krest)
+                    binding.znakTipicona.visibility = View.VISIBLE
                 }
                 2 -> {
-                    if (dzenNoch) znakTipicona.setImageResource(R.drawable.znaki_krest_v_kruge_black)
-                    else znakTipicona.setImageResource(R.drawable.znaki_krest_v_kruge)
-                    znakTipicona.visibility = View.VISIBLE
+                    if (dzenNoch) binding.znakTipicona.setImageResource(R.drawable.znaki_krest_v_kruge_black)
+                    else binding.znakTipicona.setImageResource(R.drawable.znaki_krest_v_kruge)
+                    binding.znakTipicona.visibility = View.VISIBLE
                 }
                 3 -> {
-                    if (dzenNoch) znakTipicona.setImageResource(R.drawable.znaki_krest_v_polukruge_black) else znakTipicona.setImageResource(R.drawable.znaki_krest_v_polukruge)
-                    znakTipicona.visibility = View.VISIBLE
+                    if (dzenNoch) binding.znakTipicona.setImageResource(R.drawable.znaki_krest_v_polukruge_black) else binding.znakTipicona.setImageResource(R.drawable.znaki_krest_v_polukruge)
+                    binding.znakTipicona.visibility = View.VISIBLE
                 }
                 4 -> {
-                    if (dzenNoch) znakTipicona.setImageResource(R.drawable.znaki_ttk_black_black) else znakTipicona.setImageResource(R.drawable.znaki_ttk)
-                    znakTipicona.visibility = View.VISIBLE
+                    if (dzenNoch) binding.znakTipicona.setImageResource(R.drawable.znaki_ttk_black_black) else binding.znakTipicona.setImageResource(R.drawable.znaki_ttk)
+                    binding.znakTipicona.visibility = View.VISIBLE
                 }
                 5 -> {
-                    znakTipicona.visibility = View.VISIBLE
+                    binding.znakTipicona.visibility = View.VISIBLE
                     if (dzenNoch) {
-                        znakTipicona.setImageResource(R.drawable.znaki_ttk_whate)
+                        binding.znakTipicona.setImageResource(R.drawable.znaki_ttk_whate)
                     } else {
-                        znakTipicona.setImageResource(R.drawable.znaki_ttk_black)
+                        binding.znakTipicona.setImageResource(R.drawable.znaki_ttk_black)
                     }
                 }
             }
             if (k?.getInt("pravas", 0) == 1) {
                 if (data[day][14] != "") {
-                    pravaslavie.visibility = View.VISIBLE
-                    pravaslavie.text = data[day][14]
+                    binding.pravaslavie.visibility = View.VISIBLE
+                    binding.pravaslavie.text = data[day][14]
                 }
             }
             if (k?.getInt("pkc", 0) == 1) {
                 if (data[day][19] != "") {
-                    RKC.visibility = View.VISIBLE
-                    RKC.text = data[day][19]
+                    binding.RKC.visibility = View.VISIBLE
+                    binding.RKC.text = data[day][19]
                 }
             }
             if (k?.getInt("gosud", 0) == 1) {
                 if (data[day][16] != "") {
-                    gosudarstvo.visibility = View.VISIBLE
-                    gosudarstvo.text = data[day][16]
+                    binding.gosudarstvo.visibility = View.VISIBLE
+                    binding.gosudarstvo.text = data[day][16]
                 }
                 if (data[day][15] != "") {
-                    gosudarstvo.visibility = View.VISIBLE
-                    gosudarstvo.text = data[day][15]
-                    activity?.let { gosudarstvo.setTextColor(ContextCompat.getColor(it, rColorColorprimary)) }
+                    binding.gosudarstvo.visibility = View.VISIBLE
+                    binding.gosudarstvo.text = data[day][15]
+                    activity?.let { binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, rColorColorprimary)) }
                 }
             }
             if (k?.getInt("pafesii", 0) == 1) {
                 if (data[day][17] != "") {
-                    prafesional.visibility = View.VISIBLE
-                    prafesional.text = data[day][17]
+                    binding.prafesional.visibility = View.VISIBLE
+                    binding.prafesional.text = data[day][17]
                 }
             }
             if (data[day][18].contains("1")) {
-                textPamerlyia.visibility = View.VISIBLE
+                binding.textPamerlyia.visibility = View.VISIBLE
             }
             if (MainActivity.padzeia.size > 0) {
                 val extras = activity?.intent?.extras
@@ -365,8 +373,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 }
             }
             if (Sabytie.editCaliandar) {
-                scroll.post {
-                    scroll.fullScroll(ScrollView.FOCUS_DOWN)
+                binding.scroll.post {
+                    binding.scroll.fullScroll(ScrollView.FOCUS_DOWN)
                     Sabytie.editCaliandar = false
                 }
             }
@@ -615,7 +623,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                                 val llp2 = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
                                 llp2.setMargins(0, 0, 0, 0)
                                 textViewT.layoutParams = llp2
-                                scroll.post { scroll.fullScroll(ScrollView.FOCUS_DOWN) }
+                                binding.scroll.post { binding.scroll.fullScroll(ScrollView.FOCUS_DOWN) }
                             } else {
                                 textViewT.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0)
                                 textViewT.layoutParams = llp
@@ -628,9 +636,9 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             val llp2 = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
                             llp2.setMargins(0, 0, 0, 0)
                             textViewT.layoutParams = llp2
-                            scroll.post {
+                            binding.scroll.post {
                                 activity.intent?.removeExtra("sabytieView")
-                                scroll.fullScroll(ScrollView.FOCUS_DOWN)
+                                binding.scroll.fullScroll(ScrollView.FOCUS_DOWN)
                                 if (!Sabytie.editCaliandar) {
                                     val shakeanimation = AnimationUtils.loadAnimation(activity, R.anim.shake)
                                     textViewT.startAnimation(shakeanimation)
@@ -645,7 +653,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             }
         }
         for (i in sabytieList.indices) {
-            padzei.addView(sabytieList[i])
+            binding.padzei.addView(sabytieList[i])
         }
     }
 

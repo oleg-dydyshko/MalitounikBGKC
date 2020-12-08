@@ -17,7 +17,7 @@ import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-import kotlinx.android.synthetic.main.activity_bible_page_fragment.*
+import by.carkva_gazeta.resources.databinding.ActivityBiblePageFragmentBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -27,6 +27,13 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
     private var listPosition: ListPosition? = null
     private var bible: ArrayList<String> = ArrayList()
     private lateinit var adapter: ListAdaprer
+    private var _binding: ActivityBiblePageFragmentBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     internal interface ListPosition {
         fun getListPosition(position: Int)
@@ -43,9 +50,9 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
         BibleGlobalList.mPedakVisable = false
         BibleGlobalList.bibleCopyList.clear()
         activity?.let {
-            linearLayout6.animation = AnimationUtils.loadAnimation(it.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+            binding.linearLayout6.animation = AnimationUtils.loadAnimation(it.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
         }
-        linearLayout6.visibility = View.GONE
+        binding.linearLayout6.visibility = View.GONE
         adapter.notifyDataSetChanged()
     }
 
@@ -66,12 +73,13 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
         super.onPause()
         BibleGlobalList.mPedakVisable = false
         BibleGlobalList.bibleCopyList.clear()
-        linearLayout6.visibility = View.GONE
+        binding.linearLayout6.visibility = View.GONE
         adapter.notifyDataSetChanged()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.activity_bible_page_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = ActivityBiblePageFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -88,18 +96,18 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
             }
             adapter.notifyDataSetChanged()
             if (BibleGlobalList.bibleCopyList.size == bible.size)
-                copyBigFull.visibility = View.GONE
+                binding.copyBigFull.visibility = View.GONE
             else
-                copyBigFull.visibility = View.VISIBLE
+                binding.copyBigFull.visibility = View.VISIBLE
         }
     }
 
     override fun onItemLongClick(parent: AdapterView<*>, view: View?, position: Int, id: Long): Boolean {
         BibleGlobalList.mPedakVisable = true
         activity?.let {
-            if (linearLayout6.visibility == View.GONE) {
-                linearLayout6.animation = AnimationUtils.loadAnimation(it.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_top)
-                linearLayout6.visibility = View.VISIBLE
+            if (binding.linearLayout6.visibility == View.GONE) {
+                binding.linearLayout6.animation = AnimationUtils.loadAnimation(it.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_top)
+                binding.linearLayout6.visibility = View.VISIBLE
             }
         }
         var find = false
@@ -114,18 +122,18 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
         }
         adapter.notifyDataSetChanged()
         if (BibleGlobalList.bibleCopyList.size == bible.size)
-            copyBigFull.visibility = View.GONE
+            binding.copyBigFull.visibility = View.GONE
         else
-            copyBigFull.visibility = View.VISIBLE
+            binding.copyBigFull.visibility = View.VISIBLE
         return true
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        listView.setSelection(NadsanContentActivity.fierstPosition)
-        listView.onItemLongClickListener = this
-        listView.onItemClickListener = this
-        listView.setOnScrollListener(object : AbsListView.OnScrollListener {
+        binding.listView.setSelection(NadsanContentActivity.fierstPosition)
+        binding.listView.onItemLongClickListener = this
+        binding.listView.onItemClickListener = this
+        binding.listView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
                 listPosition?.getListPosition(view.firstVisiblePosition)
             }
@@ -144,27 +152,27 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
         }
         activity?.let { activity ->
             adapter = ListAdaprer(activity)
-            listView.divider = null
-            listView.adapter = adapter
-            listView.setSelection(pazicia)
-            listView.isVerticalScrollBarEnabled = false
+            binding.listView.divider = null
+            binding.listView.adapter = adapter
+            binding.listView.setSelection(pazicia)
+            binding.listView.isVerticalScrollBarEnabled = false
             val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
-                copyBig.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
-                copyBigFull.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
-                adpravit.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
-                linearLayout6.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+                binding.copyBig.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
+                binding.copyBigFull.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
+                binding.adpravit.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
+                binding.linearLayout6.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
             }
-            copyBigFull.setOnClickListener {
+            binding.copyBigFull.setOnClickListener {
                 BibleGlobalList.bibleCopyList.clear()
                 bible.forEachIndexed { index, _ ->
                     BibleGlobalList.bibleCopyList.add(index)
                 }
                 adapter.notifyDataSetChanged()
-                copyBigFull.visibility = View.GONE
+                binding.copyBigFull.visibility = View.GONE
             }
-            copyBig.setOnClickListener {
+            binding.copyBig.setOnClickListener {
                 if (BibleGlobalList.bibleCopyList.size > 0) {
                     val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                     val copyString = StringBuilder()
@@ -175,8 +183,8 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
                     val clip = ClipData.newPlainText("", MainActivity.fromHtml(copyString.toString()).toString().trim())
                     clipboard.setPrimaryClip(clip)
                     MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.copy))
-                    linearLayout6.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                    linearLayout6.visibility = View.GONE
+                    binding.linearLayout6.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                    binding.linearLayout6.visibility = View.GONE
                     BibleGlobalList.mPedakVisable = false
                     BibleGlobalList.bibleCopyList.clear()
                     adapter.notifyDataSetChanged()
@@ -184,7 +192,7 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
                     MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
                 }
             }
-            adpravit.setOnClickListener {
+            binding.adpravit.setOnClickListener {
                 if (BibleGlobalList.bibleCopyList.size > 0) {
                     val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                     val copyString = java.lang.StringBuilder()

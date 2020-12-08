@@ -8,18 +8,17 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.dialog_font.*
+import by.carkva_gazeta.malitounik.databinding.DialogFontBinding
 
 class DialogFontSize : DialogFragment() {
     private lateinit var mListener: DialogFontSizeListener
     private lateinit var alert: AlertDialog
-    private lateinit var rootView: View
+    private lateinit var binding: DialogFontBinding
 
     interface DialogFontSizeListener {
         fun onDialogFontSizePositiveClick()
@@ -43,7 +42,7 @@ class DialogFontSize : DialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("seekbar", seekBar.progress)
+        outState.putInt("seekbar", binding.seekBar.progress)
     }
 
     private fun setProgress(fontBiblia: Int): Int {
@@ -82,42 +81,46 @@ class DialogFontSize : DialogFragment() {
         return font
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            MainActivity.dialogVisable = true
+            binding = DialogFontBinding.inflate(LayoutInflater.from(it))
+            val builder = AlertDialog.Builder(it)
+            builder.setView(binding.root)
+            alert = builder.create()
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
             if (dzenNoch) {
-                title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                textSize.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                zmauchanni.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                cansel.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                ok.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                zmauchanni.setBackgroundResource(R.drawable.selector_dialog_font_dark)
-                cansel.setBackgroundResource(R.drawable.selector_dialog_font_dark)
-                ok.setBackgroundResource(R.drawable.selector_dialog_font_dark)
+                binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                binding.textSize.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                binding.zmauchanni.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                binding.cansel.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                binding.ok.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                binding.zmauchanni.setBackgroundResource(R.drawable.selector_dialog_font_dark)
+                binding.cansel.setBackgroundResource(R.drawable.selector_dialog_font_dark)
+                binding.ok.setBackgroundResource(R.drawable.selector_dialog_font_dark)
             }
-            textSize.text = getString(R.string.get_font, fontBiblia.toInt())
-            zmauchanni.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            cansel.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            ok.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
-            zmauchanni.setOnClickListener {
+            binding.textSize.text = getString(R.string.get_font, fontBiblia.toInt())
+            binding.zmauchanni.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+            binding.cansel.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+            binding.ok.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
+            binding.zmauchanni.setOnClickListener {
                 val prefEditors = k.edit()
                 prefEditors.putFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
                 prefEditors.apply()
                 mListener.onDialogFontSizePositiveClick()
                 dialog?.cancel()
             }
-            cansel.setOnClickListener {
+            binding.cansel.setOnClickListener {
                 val prefEditors = k.edit()
                 prefEditors.putFloat("font_biblia", fontBiblia)
                 prefEditors.apply()
                 mListener.onDialogFontSizePositiveClick()
                 dialog?.cancel()
             }
-            ok.setOnClickListener {
-                val progress = seekBar.progress
+            binding.ok.setOnClickListener {
+                val progress = binding.seekBar.progress
                 val prefEditors = k.edit()
                 prefEditors.putFloat("font_biblia", getFont(progress))
                 prefEditors.apply()
@@ -126,48 +129,33 @@ class DialogFontSize : DialogFragment() {
             }
             if (savedInstanceState != null) {
                 val seekbar = savedInstanceState.getInt("seekbar")
-                seekBar.progress = seekbar
+                binding.seekBar.progress = seekbar
             } else {
-                seekBar.progress = setProgress(fontBiblia.toInt())
+                binding.seekBar.progress = setProgress(fontBiblia.toInt())
             }
-            seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            binding.seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                     val prefEditors = k.edit()
                     prefEditors.putFloat("font_biblia", getFont(progress))
                     prefEditors.apply()
-                    textSize.text = getString(R.string.get_font, getFont(progress).toInt())
+                    binding.textSize.text = getString(R.string.get_font, getFont(progress).toInt())
                     mListener.onDialogFontSizePositiveClick()
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar) {
-                    title.visibility = View.GONE
-                    zmauchanni.visibility = View.GONE
-                    cansel.visibility = View.GONE
-                    ok.visibility = View.GONE
+                    binding.title.visibility = View.GONE
+                    binding.zmauchanni.visibility = View.GONE
+                    binding.cansel.visibility = View.GONE
+                    binding.ok.visibility = View.GONE
                 }
 
                 override fun onStopTrackingTouch(seekBar: SeekBar) {
-                    title.visibility = View.VISIBLE
-                    zmauchanni.visibility = View.VISIBLE
-                    cansel.visibility = View.VISIBLE
-                    ok.visibility = View.VISIBLE
+                    binding.title.visibility = View.VISIBLE
+                    binding.zmauchanni.visibility = View.VISIBLE
+                    binding.cansel.visibility = View.VISIBLE
+                    binding.ok.visibility = View.VISIBLE
                 }
             })
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dialog?.window?.setDimAmount(0f)
-        return rootView
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        activity?.let {
-            MainActivity.dialogVisable = true
-            rootView = View.inflate(it, R.layout.dialog_font, null)
-            val builder = AlertDialog.Builder(it)
-            builder.setView(rootView)
-            alert = builder.create()
         }
         return alert
     }

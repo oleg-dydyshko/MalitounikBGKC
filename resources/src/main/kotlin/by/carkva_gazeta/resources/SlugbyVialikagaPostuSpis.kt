@@ -20,7 +20,7 @@ import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-import kotlinx.android.synthetic.main.akafist_list_bible.*
+import by.carkva_gazeta.resources.databinding.AkafistListBibleBinding
 
 /**
  * Created by oleg on 30.5.16
@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.akafist_list_bible.*
 class SlugbyVialikagaPostuSpis : AppCompatActivity() {
     private var mLastClickTime: Long = 0
     private val data = ArrayList<Data>()
+    private lateinit var binding: AkafistListBibleBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -35,26 +36,27 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.akafist_list_bible)
-        setSupportActionBar(toolbar)
+        binding = AkafistListBibleBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        title_toolbar.text = intent.extras?.getString("title")
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.text = intent.extras?.getString("title")
                 ?: getString(by.carkva_gazeta.malitounik.R.string.slugby_vialikaga_postu)
         if (dzenNoch) {
-            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
         when (intent.extras?.getInt("resurs") ?: 0) {
             12 -> {
@@ -125,10 +127,10 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
             }
         }
         val adapter = ListAdaprer(this)
-        ListView.adapter = adapter
-        if (dzenNoch) ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-        else ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
-        ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
+        binding.ListView.adapter = adapter
+        if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+        else binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+        binding.ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnItemClickListener
             }

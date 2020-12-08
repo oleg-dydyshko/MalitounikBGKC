@@ -18,7 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.pashalii.*
+import by.carkva_gazeta.malitounik.databinding.PashaliiBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -26,6 +26,13 @@ class MenuPashalii : PashaliiFragment() {
     private val pasxi = ArrayList<Pashalii>()
     private lateinit var myArrayAdapter: MyArrayAdapter
     private var mLastClickTime: Long = 0
+    private var _binding: PashaliiBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +45,8 @@ class MenuPashalii : PashaliiFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.pashalii, container, false)
+        _binding = PashaliiBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -46,19 +54,19 @@ class MenuPashalii : PashaliiFragment() {
         activity?.let {
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            val titlespan = SpannableString(title.text)
+            val titlespan = SpannableString(binding.title.text)
             titlespan.setSpan(UnderlineSpan(), 0, titlespan.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            title.text = titlespan
+            binding.title.text = titlespan
             if (dzenNoch) {
-                title.setBackgroundResource(R.drawable.selector_dark)
-                title.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                binding.title.setBackgroundResource(R.drawable.selector_dark)
+                binding.title.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             } else {
-                title.setBackgroundResource(R.drawable.selector_default)
+                binding.title.setBackgroundResource(R.drawable.selector_default)
             }
-            title.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            gri.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            ula.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            title.setOnClickListener {
+            binding.title.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            binding.gri.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            binding.ula.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            binding.title.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@setOnClickListener
                 }
@@ -66,14 +74,12 @@ class MenuPashalii : PashaliiFragment() {
                 val intent = Intent(activity, Pasxa::class.java)
                 startActivity(intent)
             }
-            if (savedInstanceState == null)
-                setArrayPasha()
-            else
-                setArrayPasha(savedInstanceState.getInt("year"))
+            if (savedInstanceState == null) setArrayPasha()
+            else setArrayPasha(savedInstanceState.getInt("year"))
             myArrayAdapter = MyArrayAdapter(it)
-            pasha.adapter = myArrayAdapter
-            pasha.selector = ContextCompat.getDrawable(it, android.R.color.transparent)
-            pasha.isClickable = false
+            binding.pasha.adapter = myArrayAdapter
+            binding.pasha.selector = ContextCompat.getDrawable(it, android.R.color.transparent)
+            binding.pasha.isClickable = false
         }
     }
 
@@ -97,8 +103,7 @@ class MenuPashalii : PashaliiFragment() {
         var monthP: Int
         var dataPrav: Int
         var monthPrav: Int
-        val monthName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня",
-                "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
+        val monthName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
         for (i in yearG..yearG2) {
             val a = i % 19
             val b = i % 4
@@ -136,8 +141,7 @@ class MenuPashalii : PashaliiFragment() {
             if (vek == "18") pravas.add(Calendar.DATE, 12)
             if (vek == "19" || vek == "20") pravas.add(Calendar.DATE, 13)
             var sovpadenie = false
-            if (katolic[Calendar.DAY_OF_YEAR] == pravas[Calendar.DAY_OF_YEAR])
-                sovpadenie = true
+            if (katolic[Calendar.DAY_OF_YEAR] == pravas[Calendar.DAY_OF_YEAR]) sovpadenie = true
             pasxi.add(Pashalii(dataP.toString() + " " + monthName[monthP - 1] + " " + i, pravas[Calendar.DATE].toString() + " " + monthName[pravas[Calendar.MONTH]], i, year, sovpadenie))
         }
     }

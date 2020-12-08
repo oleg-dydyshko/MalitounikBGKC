@@ -28,8 +28,8 @@ import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.DialogBibleRazdel.Companion.getInstance
 import by.carkva_gazeta.resources.DialogBibleRazdel.DialogBibleRazdelListener
 import by.carkva_gazeta.resources.NadsanContentPage.Companion.newInstance
+import by.carkva_gazeta.resources.databinding.ActivityBibleBinding
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_bible.*
 import java.io.File
 
 class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NadsanContentPage.ListPosition {
@@ -65,12 +65,13 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         get() {
             return MainActivity.getOrientation(this)
         }
+    private lateinit var binding: ActivityBibleBinding
 
     override fun onPause() {
         super.onPause()
         val prefEditors = k.edit()
         val set = ArrayMap<String, Int>()
-        set["glava"] = pager.currentItem
+        set["glava"] = binding.pager.currentItem
         set["stix"] = fierstPosition
         val gson = Gson()
         prefEditors.putString("psalter_time_psalter_nadsan", gson.toJson(set))
@@ -78,11 +79,11 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     }
 
     override fun onDialogFontSizePositiveClick() {
-        pager.adapter?.notifyDataSetChanged()
+        binding.pager.adapter?.notifyDataSetChanged()
     }
 
     override fun onComplete(glava: Int) {
-        pager.currentItem = glava
+        binding.pager.currentItem = glava
     }
 
     override fun getListPosition(position: Int) {
@@ -100,7 +101,8 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_bible)
+        binding = ActivityBibleBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         glava = if (intent.extras?.containsKey("kafizma") == true) {
             setKafizma(intent.extras?.getInt("kafizma", 1) ?: 1)
         } else {
@@ -110,24 +112,24 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
             trak = true
         }
-        pagerTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        for (i in 0 until pagerTabStrip.childCount) {
-            val nextChild = pagerTabStrip.getChildAt(i)
+        binding.pagerTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        for (i in 0 until binding.pagerTabStrip.childCount) {
+            val nextChild = binding.pagerTabStrip.getChildAt(i)
             if (nextChild is TextView) {
                 nextChild.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
             }
         }
         val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
-        pager.adapter = adapterViewPager
-        title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.psalter)
-        subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2, getKafizma(glava))
-        pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        binding.pager.adapter = adapterViewPager
+        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.psalter)
+        binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2, getKafizma(glava))
+        binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             }
 
             override fun onPageSelected(position: Int) {
                 if (glava != position) fierstPosition = 0
-                subtitle_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2, getKafizma(position))
+                binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2, getKafizma(position))
                 men = VybranoeBibleList.checkVybranoe(this@NadsanContentActivity, 0, position, 3)
                 invalidateOptionsMenu()
             }
@@ -141,7 +143,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
-        pager.currentItem = glava
+        binding.pager.currentItem = glava
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -150,23 +152,23 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
-            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
 
@@ -237,8 +239,8 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
                 show()
             }
             BibleGlobalList.mPedakVisable -> {
-                val adapter = pager.adapter as MyPagerAdapter
-                val fragment = adapter.getFragment(pager.currentItem) as BackPressedFragment
+                val adapter = binding.pager.adapter as MyPagerAdapter
+                val fragment = adapter.getFragment(binding.pager.currentItem) as BackPressedFragment
                 fragment.onBackPressedFragment()
             }
             checkSetDzenNoch -> {
@@ -276,7 +278,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             checkSetDzenNoch = true
-            men = VybranoeBibleList.setVybranoe(this, resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2), 0, pager.currentItem, bibleName = 3)
+            men = VybranoeBibleList.setVybranoe(this, resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2), 0, binding.pager.currentItem, bibleName = 3)
             if (men) {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
                 if (!VybranoeBibleList.checkVybranoe("3")) {

@@ -12,13 +12,14 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.akafist_list.*
+import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
 
 class MalitvyPasliaPrychascia : AppCompatActivity() {
     private val data: Array<out String>
         get() = resources.getStringArray(R.array.malitvy_pasli_prychastia)
     private var result = false
     private var mLastClickTime: Long = 0
+    private lateinit var binding: AkafistListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -26,32 +27,33 @@ class MalitvyPasliaPrychascia : AppCompatActivity() {
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.akafist_list)
-        setSupportActionBar(toolbar)
+        binding = AkafistListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        title_toolbar.text = resources.getText(R.string.pasliaPrychscia)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.text = resources.getText(R.string.pasliaPrychscia)
         if (dzenNoch) {
-            toolbar.popupTheme = R.style.AppCompatDark
+            binding.toolbar.popupTheme = R.style.AppCompatDark
         }
         if (dzenNoch)
-            ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         else
-            ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
-        ListView.adapter = MenuListAdaprer(this, data)
-        ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
+            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
+        binding.ListView.adapter = MenuListAdaprer(this, data)
+        binding.ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnItemClickListener
             }

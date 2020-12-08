@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
-import kotlinx.android.synthetic.main.calendat_tab2.*
+import by.carkva_gazeta.malitounik.databinding.CalendatTab2Binding
 import java.util.*
 
 class CaliandarMunTab2 : Fragment() {
@@ -33,9 +33,17 @@ class CaliandarMunTab2 : Fragment() {
     private var day = 0
     private var posMun = 0
     private var yearG = 0
+    private var _binding: CalendatTab2Binding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.calendat_tab2, container, false)
+        _binding = CalendatTab2Binding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -48,19 +56,19 @@ class CaliandarMunTab2 : Fragment() {
             yearG = arguments?.getInt("yearG") ?: 0
             fragmentManager?.let {
                 adapterViewPagerNedel = MyCalendarNedelAdapter(it)
-                pagerNedel.adapter = adapterViewPagerNedel
+                binding.pagerNedel.adapter = adapterViewPagerNedel
             }
-            imageButton.setOnClickListener { pagerNedel.currentItem = pagerNedel.currentItem - 1 }
-            imageButton2.setOnClickListener { pagerNedel.currentItem = pagerNedel.currentItem + 1 }
+            binding.imageButton.setOnClickListener { binding.pagerNedel.currentItem = binding.pagerNedel.currentItem - 1 }
+            binding.imageButton2.setOnClickListener { binding.pagerNedel.currentItem = binding.pagerNedel.currentItem + 1 }
             if (dzenNoch) {
-                imageButton.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.levo_catedra))
-                imageButton2.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.pravo_catedra))
-                nedelName.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
+                binding.imageButton.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.levo_catedra))
+                binding.imageButton2.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.pravo_catedra))
+                binding.nedelName.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
             }
-            if (adapterViewPagerNedel.count - 1 == pagerNedel.currentItem) imageButton2.visibility = View.GONE
-            if (pagerNedel.currentItem == 0) imageButton.visibility = View.GONE
+            if (adapterViewPagerNedel.count - 1 == binding.pagerNedel.currentItem) binding.imageButton2.visibility = View.GONE
+            if (binding.pagerNedel.currentItem == 0) binding.imageButton.visibility = View.GONE
         }
-        pagerNedel.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        binding.pagerNedel.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
@@ -73,13 +81,13 @@ class CaliandarMunTab2 : Fragment() {
                 var ned = start[Calendar.WEEK_OF_YEAR]
                 for (i in 0 until adapterViewPagerNedel.count) {
                     if (position == i) {
-                        nedelName.text = getString(R.string.tydzen_name, ned)
+                        binding.nedelName.text = getString(R.string.tydzen_name, ned)
                     }
                     start.add(Calendar.DATE, 7)
                     ned = start[Calendar.WEEK_OF_YEAR]
                 }
-                if (adapterViewPagerNedel.count - 1 == position) imageButton2.visibility = View.GONE else imageButton2.visibility = View.VISIBLE
-                if (position == 0) imageButton.visibility = View.GONE else imageButton.visibility = View.VISIBLE
+                if (adapterViewPagerNedel.count - 1 == position) binding.imageButton2.visibility = View.GONE else binding.imageButton2.visibility = View.VISIBLE
+                if (position == 0) binding.imageButton.visibility = View.GONE else binding.imageButton.visibility = View.VISIBLE
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
@@ -115,8 +123,8 @@ class CaliandarMunTab2 : Fragment() {
                     var dayFull = dayyear + calendarEnd[Calendar.DAY_OF_YEAR] - 7 - (8 - ost)
                     if (dayFull < 0) dayFull = 0
                     if (e == dayFull) {
-                        pagerNedel.currentItem = count2
-                        nedelName.text = getString(R.string.tydzen_name, calendarEnd[Calendar.WEEK_OF_YEAR])
+                        binding.pagerNedel.currentItem = count2
+                        binding.nedelName.text = getString(R.string.tydzen_name, calendarEnd[Calendar.WEEK_OF_YEAR])
                     }
                     if (e % 7 == 0) {
                         count2++
@@ -128,8 +136,8 @@ class CaliandarMunTab2 : Fragment() {
                     var dayFull = dayyear + c2[Calendar.DAY_OF_YEAR] - 7 - (8 - ost)
                     if (dayFull < 0) dayFull = 0
                     if (e == dayFull) {
-                        pagerNedel.currentItem = count2
-                        nedelName.text = getString(R.string.tydzen_name, c2[Calendar.WEEK_OF_YEAR])
+                        binding.pagerNedel.currentItem = count2
+                        binding.nedelName.text = getString(R.string.tydzen_name, c2[Calendar.WEEK_OF_YEAR])
                     }
                     if (e % 7 == 0) {
                         count2++
@@ -141,8 +149,8 @@ class CaliandarMunTab2 : Fragment() {
                     var dayFull = dayyear + calendarStart[Calendar.DAY_OF_YEAR] - 7 - (8 - ost)
                     if (dayFull < 0) dayFull = 0
                     if (e == dayFull) {
-                        pagerNedel.currentItem = count2
-                        nedelName.text = getString(R.string.tydzen_name, calendarStart[Calendar.WEEK_OF_YEAR])
+                        binding.pagerNedel.currentItem = count2
+                        binding.nedelName.text = getString(R.string.tydzen_name, calendarStart[Calendar.WEEK_OF_YEAR])
                     }
                     if (e % 7 == 0) {
                         count2++

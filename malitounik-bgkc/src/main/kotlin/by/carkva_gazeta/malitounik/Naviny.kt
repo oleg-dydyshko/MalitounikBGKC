@@ -21,12 +21,13 @@ import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
-import kotlinx.android.synthetic.main.naviny.*
+import by.carkva_gazeta.malitounik.databinding.NavinyBinding
 
 class Naviny : AppCompatActivity() {
 
     private lateinit var kq: SharedPreferences
     private var dzenNoch = false
+    private lateinit var binding: NavinyBinding
 
     @SuppressLint("SetTextI18n", "SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,23 +36,24 @@ class Naviny : AppCompatActivity() {
         dzenNoch = kq.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         if (kq.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.naviny)
-        swipeRefreshLayout.setOnRefreshListener {
+        binding = NavinyBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.swipeRefreshLayout.setOnRefreshListener {
             if (MainActivity.isNetworkAvailable(this)) {
-                viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
-                viewWeb.reload()
+                binding.viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+                binding.viewWeb.reload()
             } else error()
-            swipeRefreshLayout.isRefreshing = false
+            binding.swipeRefreshLayout.isRefreshing = false
         }
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
+        binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         if (dzenNoch) {
             if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-                WebSettingsCompat.setForceDark(viewWeb.settings, WebSettingsCompat.FORCE_DARK_ON)
+                WebSettingsCompat.setForceDark(binding.viewWeb.settings, WebSettingsCompat.FORCE_DARK_ON)
             }
-            toolbarprogress.setBackgroundResource(R.drawable.progress_bar_black)
+            binding.toolbarprogress.setBackgroundResource(R.drawable.progress_bar_black)
         }
         val naviny = kq.getInt("naviny", 0)
-        viewWeb.apply {
+        binding.viewWeb.apply {
             settings.apply {
                 javaScriptEnabled = true
                 javaScriptCanOpenWindowsAutomatically = true
@@ -65,43 +67,43 @@ class Naviny : AppCompatActivity() {
                 cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             }
         }
-        viewWeb.webViewClient = MyWebViewClient()
-        viewWeb.webChromeClient = MyWebChromeClient()
+        binding.viewWeb.webViewClient = MyWebViewClient()
+        binding.viewWeb.webChromeClient = MyWebChromeClient()
         var error = false
         when (naviny) {
             0 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    viewWeb.loadUrl("https://carkva-gazeta.by/")
+                    binding.viewWeb.loadUrl("https://carkva-gazeta.by/")
                 } else error = true
             }
             1 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
+                    binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
                 } else error = true
             }
             2 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
+                    binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
                 } else error = true
             }
             3 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
+                    binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
                 } else error = true
             }
             4 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
+                    binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
                 } else error = true
             }
             5 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
+                    binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
                 } else error = true
             }
             6 -> {
                 if (MainActivity.isNetworkAvailable(this)) {
-                    viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
+                    binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
                 } else error = true
             }
         }
@@ -133,22 +135,22 @@ class Naviny : AppCompatActivity() {
             window.attributes = lp
         }
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        viewWeb.onResume()
+        binding.viewWeb.onResume()
     }
 
     override fun onPause() {
-        viewWeb.onPause()
+        binding.viewWeb.onPause()
         super.onPause()
     }
 
     override fun onDestroy() {
-        viewWeb?.destroy()
+        binding.viewWeb.destroy()
         super.onDestroy()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.action_forward).isVisible = viewWeb.canGoForward()
+        menu.findItem(R.id.action_forward).isVisible = binding.viewWeb.canGoForward()
         return true
     }
 
@@ -156,37 +158,37 @@ class Naviny : AppCompatActivity() {
         val id = item.itemId
         var error = false
         if (id == R.id.action_forward) {
-            viewWeb.goForward()
+            binding.viewWeb.goForward()
         }
         if (id == R.id.action_update) {
             if (MainActivity.isNetworkAvailable(this)) {
-                viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
-                viewWeb.reload()
+                binding.viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+                binding.viewWeb.reload()
             } else error = true
         }
         if (id == R.id.action_chrome) {
-            val webBackForwardList = viewWeb.copyBackForwardList()
+            val webBackForwardList = binding.viewWeb.copyBackForwardList()
             val webHistoryItem = webBackForwardList.currentItem
             onChrome(webHistoryItem?.url ?: "https://carkva-gazeta.by")
         }
         if (id == R.id.num) {
             if (MainActivity.isNetworkAvailable(this)) {
-                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
+                binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
             } else error = true
         }
         if (id == R.id.sva) {
             if (MainActivity.isNetworkAvailable(this)) {
-                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
+                binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
             } else error = true
         }
         if (id == R.id.his) {
             if (MainActivity.isNetworkAvailable(this)) {
-                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
+                binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
             } else error = true
         }
         if (id == R.id.gra) {
             if (MainActivity.isNetworkAvailable(this)) {
-                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
+                binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
             } else error = true
         }
         if (id == R.id.calendar) {
@@ -205,12 +207,12 @@ class Naviny : AppCompatActivity() {
         }
         if (id == R.id.it) {
             if (MainActivity.isNetworkAvailable(this)) {
-                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
+                binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
             } else error = true
         }
         if (id == R.id.ik) {
             if (MainActivity.isNetworkAvailable(this)) {
-                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
+                binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
             } else error = true
         }
         if (id == R.id.bib) {
@@ -222,7 +224,7 @@ class Naviny : AppCompatActivity() {
                 intent.putExtra("site", true)
                 startActivity(intent)
             } else {
-                viewWeb.loadUrl("https://carkva-gazeta.by/index.php?bib=")
+                binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?bib=")
             }
         }
         if (error) {
@@ -232,7 +234,7 @@ class Naviny : AppCompatActivity() {
     }
 
     private fun onChrome(url: String) {
-        viewWeb.stopLoading()
+        binding.viewWeb.stopLoading()
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.setPackage("com.android.chrome")
@@ -250,30 +252,30 @@ class Naviny : AppCompatActivity() {
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.text = "«Царква» — беларуская грэка-каталіцкая газета"
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.text = "«Царква» — беларуская грэка-каталіцкая газета"
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
-            toolbar.popupTheme = R.style.AppCompatDark
+            binding.toolbar.popupTheme = R.style.AppCompatDark
         }
     }
 
     override fun onBackPressed() {
-        if (viewWeb.canGoBack()) {
-            viewWeb.goBack()
+        if (binding.viewWeb.canGoBack()) {
+            binding.viewWeb.goBack()
             invalidateOptionsMenu()
         } else {
             super.onBackPressed()
@@ -284,15 +286,15 @@ class Naviny : AppCompatActivity() {
 
         override fun onProgressChanged(view: WebView?, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
-            toolbarprogress.setValue(newProgress)
+            binding.toolbarprogress.setValue(newProgress)
             if (newProgress == 100) {
-                toolbarprogress.visibility = View.INVISIBLE
+                binding.toolbarprogress.visibility = View.INVISIBLE
                 val title = view?.title ?: "«Царква» — беларуская грэка-каталіцкая газета"
-                title_toolbar.text = title
-                if (viewWeb.settings.cacheMode != WebSettings.LOAD_CACHE_ELSE_NETWORK)
-                    viewWeb.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+                binding.titleToolbar.text = title
+                if (binding.viewWeb.settings.cacheMode != WebSettings.LOAD_CACHE_ELSE_NETWORK)
+                    binding.viewWeb.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             } else {
-                toolbarprogress.visibility = View.VISIBLE
+                binding.toolbarprogress.visibility = View.VISIBLE
             }
         }
 

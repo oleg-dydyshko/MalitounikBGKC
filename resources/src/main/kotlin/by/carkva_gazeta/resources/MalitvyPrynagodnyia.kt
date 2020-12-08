@@ -17,9 +17,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.resources.databinding.AkafistListBibleBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.akafist_list_bible.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -35,6 +35,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
     private var actionExpandOn = false
+    private lateinit var binding: AkafistListBibleBinding
 
     private fun addHistory(item: String) {
         val temp = ArrayList<String>()
@@ -47,8 +48,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         history.add(item)
         for (i in 0 until temp.size) {
             history.add(temp[i])
-            if (history.size == 10)
-                break
+            if (history.size == 10) break
         }
     }
 
@@ -71,8 +71,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
     override fun cleanHistory(position: Int) {
         history.removeAt(position)
         saveHistopy()
-        if (history.size == 0)
-            invalidateOptionsMenu()
+        if (history.size == 0) invalidateOptionsMenu()
         historyAdapter.notifyDataSetChanged()
     }
 
@@ -104,29 +103,30 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.akafist_list_bible)
-        setSupportActionBar(toolbar)
+        binding = AkafistListBibleBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (savedInstanceState != null) {
             searchViewQwery = savedInstanceState.getString("SearchViewQwery", "")
             actionExpandOn = savedInstanceState.getBoolean("actionExpandOn")
         }
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
-        title_toolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.prynagodnyia)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
+        binding.titleToolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.prynagodnyia)
         if (dzenNoch) {
-            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
         data.add(MenuListData(R.raw.prynagodnyia_0, "Малітва аб блаславеньні", "prynagodnyia_0"))
         data.add(MenuListData(R.raw.prynagodnyia_1, "Малітва аб дапамозе ў выбары жыцьцёвай дарогі дзіцяці", "prynagodnyia_1"))
@@ -167,14 +167,14 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         data.add(MenuListData(R.raw.prynagodnyia_36, "Малітва за Айчыну - Ян Павел II", "prynagodnyia_36"))
         data.sort()
         adapter = MenuListAdaprer(this)
-        ListView.adapter = adapter
-        if (dzenNoch) ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-        else ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
-        ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+        binding.ListView.adapter = adapter
+        if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+        else binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+        binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
                 if (firstVisibleItem == 1) {
                     val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm1.hideSoftInputFromWindow(ListView.windowToken, 0)
+                    imm1.hideSoftInputFromWindow(binding.ListView.windowToken, 0)
                 }
             }
 
@@ -182,7 +182,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             }
 
         })
-        ListView.setOnItemClickListener { _, _, position, _ ->
+        binding.ListView.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
             }
@@ -193,7 +193,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             intent.putExtra("prynagodnyiaType", data[position].type)
             startActivity(intent)
             val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(ListView.windowToken, 0)
+            imm.hideSoftInputFromWindow(binding.ListView.windowToken, 0)
             if (autoCompleteTextView.text.toString() != "") {
                 addHistory(data[position].data)
                 saveHistopy()
@@ -207,10 +207,10 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             history.addAll(gson.fromJson(json, type))
         }
         historyAdapter = HistoryAdapter(this, history)
-        if (dzenNoch) History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-        else History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
-        History.adapter = historyAdapter
-        History.setOnItemClickListener { _, _, position, _ ->
+        if (dzenNoch) binding.History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+        else binding.History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+        binding.History.adapter = historyAdapter
+        binding.History.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
             }
@@ -225,7 +225,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             saveHistopy()
             actionExpandOn = false
         }
-        History.setOnItemLongClickListener { _, _, position, _ ->
+        binding.History.setOnItemLongClickListener { _, _, position, _ ->
             val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
             return@setOnItemLongClickListener true
@@ -287,14 +287,13 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         if (actionExpandOn) {
             searchViewItem.expandActionView()
             if (history.size > 0) {
-                History.visibility = View.VISIBLE
-                ListView.visibility = View.GONE
+                binding.History.visibility = View.VISIBLE
+                binding.ListView.visibility = View.GONE
             }
         }
         searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                if (history.size > 0)
-                    actionExpandOn = true
+                if (history.size > 0) actionExpandOn = true
                 return true
             }
 
@@ -366,11 +365,11 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
                 }
             }
             if (editPosition == 0 && actionExpandOn) {
-                History.visibility = View.VISIBLE
-                ListView.visibility = View.GONE
+                binding.History.visibility = View.VISIBLE
+                binding.ListView.visibility = View.GONE
             } else {
-                History.visibility = View.GONE
-                ListView.visibility = View.VISIBLE
+                binding.History.visibility = View.GONE
+                binding.ListView.visibility = View.VISIBLE
             }
             adapter.filter.filter(edit)
         }
@@ -394,8 +393,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             val dzenNoch = chin.getBoolean("dzen_noch", false)
             viewHolder.text?.text = data[position].data
             viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch)
-                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+            if (dzenNoch) viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }
 

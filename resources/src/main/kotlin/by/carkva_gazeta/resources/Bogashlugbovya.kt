@@ -23,9 +23,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.resources.databinding.BogasluzbovyaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.bogasluzbovya.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -93,6 +93,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         get() {
             return MainActivity.getOrientation(this)
         }
+    private lateinit var binding: BogasluzbovyaBinding
 
     companion object {
         private val resursMap = ArrayMap<String, Int>()
@@ -300,10 +301,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     override fun onDialogFontSizePositiveClick() {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        if (scrollView2.visibility == View.VISIBLE) {
-            TextView.textSize = fontBiblia
+        if (binding.scrollView2.visibility == View.VISIBLE) {
+            binding.TextView.textSize = fontBiblia
         } else {
-            val webSettings = WebView.settings
+            val webSettings = binding.WebView.settings
             webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
             webSettings.blockNetworkImage = true
             webSettings.loadsImagesAutomatically = true
@@ -325,7 +326,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         invalidateOptionsMenu()
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (!MainActivity.checkBrightness) {
@@ -337,45 +338,46 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-        setContentView(R.layout.bogasluzbovya)
+        binding = BogasluzbovyaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         resurs = intent?.getStringExtra("resurs") ?: ""
         if (resurs.contains("pesny")) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         title = intent?.getStringExtra("title") ?: ""
         loadData()
         autoscroll = k.getBoolean("autoscroll", false)
         spid =  k.getInt("autoscrollSpid", 60)
-        WebView.setOnTouchListener(this)
+        binding.WebView.setOnTouchListener(this)
         val client = MyWebViewClient()
         client.setOnLinkListenner(this)
-        WebView.webViewClient = client
-        scrollView2.setOnScrollChangedCallback(this)
-        constraint.setOnTouchListener(this)
+        binding.WebView.webViewClient = client
+        binding.scrollView2.setOnScrollChangedCallback(this)
+        binding.constraint.setOnTouchListener(this)
         autoscroll = k.getBoolean("autoscroll", false)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             editVybranoe = savedInstanceState.getBoolean("editVybranoe")
             MainActivity.dialogVisable = false
             if (savedInstanceState.getBoolean("seach")) {
-                textSearch.visibility = View.VISIBLE
-                textCount.visibility = View.VISIBLE
-                imageView6.visibility = View.VISIBLE
-                imageView5.visibility = View.VISIBLE
+                binding.textSearch.visibility = View.VISIBLE
+                binding.textCount.visibility = View.VISIBLE
+                binding.imageView6.visibility = View.VISIBLE
+                binding.imageView5.visibility = View.VISIBLE
             }
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        TextView.textSize = fontBiblia
+        binding.TextView.textSize = fontBiblia
         if (dzenNoch) {
-            progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            WebView.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+            binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            binding.WebView.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
         }
         men = checkVybranoe(this, resurs)
-        val webSettings = WebView.settings
+        val webSettings = binding.WebView.settings
         webSettings.standardFontFamily = "sans-serif-condensed"
         webSettings.defaultFontSize = fontBiblia.toInt()
         webSettings.javaScriptEnabled = true
         positionY = (k.getInt(resurs + "Scroll", 0) / resources.displayMetrics.density).toInt()
-        WebView.setOnScrollChangedCallback(this)
-        WebView.setOnBottomListener(this)
+        binding.WebView.setOnScrollChangedCallback(this)
+        binding.WebView.setOnBottomListener(this)
         if (k.getBoolean("help_str", true)) {
             startActivity(Intent(this, HelpText::class.java))
             val prefEditor: Editor = k.edit()
@@ -390,24 +392,24 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text = title
+        binding.titleToolbar.text = title
         if (dzenNoch) {
-            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
 
@@ -427,7 +429,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun loadData() = CoroutineScope(Dispatchers.Main).launch {
-        progressBar.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.VISIBLE
         val res = withContext(Dispatchers.IO) {
             val builder = StringBuilder()
             val id = resursMap[resurs]?: R.raw.bogashlugbovya1
@@ -562,30 +564,30 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (t1 != -1) bogashlugbovya = false
         }
         if ((resurs.contains("bogashlugbovya") && bogashlugbovya) || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("ton")) {
-            scrollView2.visibility = View.GONE
+            binding.scrollView2.visibility = View.GONE
             if (resurs.contains("ton")) mAutoScroll = false
-            WebView.visibility = View.VISIBLE
-            WebView.loadDataWithBaseURL("malitounikApp-app//carkva-gazeta.by/", res, "text/html", "utf-8", null)
+            binding.WebView.visibility = View.VISIBLE
+            binding.WebView.loadDataWithBaseURL("malitounikApp-app//carkva-gazeta.by/", res, "text/html", "utf-8", null)
             if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 autoStartScroll()
             }
         } else {
-            WebView.visibility = View.GONE
-            scrollView2.visibility = View.VISIBLE
-            TextView.text = MainActivity.fromHtml(res)
+            binding.WebView.visibility = View.GONE
+            binding.scrollView2.visibility = View.VISIBLE
+            binding.TextView.text = MainActivity.fromHtml(res)
             positionY = k.getInt(resurs + "Scroll", 0)
-            scrollView2.post { scrollView2.scrollBy(0, positionY) }
+            binding.scrollView2.post { binding.scrollView2.scrollBy(0, positionY) }
             mAutoScroll = false
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            WebView.setFindListener { activeMatchOrdinal, numberOfMatches, _ ->
-                if (numberOfMatches == 0) textCount.setText(by.carkva_gazeta.malitounik.R.string.niama)
-                else textCount.text = (activeMatchOrdinal + 1).toString().plus(" ($numberOfMatches)")
+            binding.WebView.setFindListener { activeMatchOrdinal, numberOfMatches, _ ->
+                if (numberOfMatches == 0) binding.textCount.setText(by.carkva_gazeta.malitounik.R.string.niama)
+                else binding.textCount.text = (activeMatchOrdinal + 1).toString().plus(" ($numberOfMatches)")
             }
-            if (dzenNoch) imageView6.setImageResource(by.carkva_gazeta.malitounik.R.drawable.up_black)
-            imageView6.setOnClickListener { WebView.findNext(false) }
-            textSearch.addTextChangedListener(object : TextWatcher {
+            if (dzenNoch) binding.imageView6.setImageResource(by.carkva_gazeta.malitounik.R.drawable.up_black)
+            binding.imageView6.setOnClickListener { binding.WebView.findNext(false) }
+            binding.textSearch.addTextChangedListener(object : TextWatcher {
                 var editPosition = 0
                 var check = 0
                 var editch = true
@@ -600,13 +602,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         edit = edit.replace("Щ", "Ў")
                         edit = edit.replace("Ъ", "'")
                         if (check != 0) {
-                            textSearch.removeTextChangedListener(this)
-                            textSearch.setText(edit)
-                            textSearch.setSelection(editPosition)
-                            textSearch.addTextChangedListener(this)
+                            binding.textSearch.removeTextChangedListener(this)
+                            binding.textSearch.setText(edit)
+                            binding.textSearch.setSelection(editPosition)
+                            binding.textSearch.addTextChangedListener(this)
                         }
                     }
-                    WebView.findAllAsync(edit)
+                    binding.WebView.findAllAsync(edit)
                 }
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -618,11 +620,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     editPosition = start + count
                 }
             })
-            if (dzenNoch) imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.niz_back)
-            imageView5.setOnClickListener { WebView.findNext(true) }
+            if (dzenNoch) binding.imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.niz_back)
+            binding.imageView5.setOnClickListener { binding.WebView.findNext(true) }
         }
         invalidateOptionsMenu()
-        progressBar.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
     }
 
     private fun autoStartScroll() {
@@ -666,7 +668,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         procentSchedule = object : TimerTask() {
             override fun run() {
                 CoroutineScope(Dispatchers.Main).launch {
-                    progress.visibility = View.GONE
+                    binding.progress.visibility = View.GONE
                 }
             }
         }
@@ -695,7 +697,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             override fun run() {
                 CoroutineScope(Dispatchers.Main).launch {
                     if (!mActionDown && !MainActivity.dialogVisable) {
-                        WebView.scrollBy(0, 2)
+                        binding.WebView.scrollBy(0, 2)
                     }
                 }
             }
@@ -705,8 +707,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        val heightConstraintLayout = constraint.height
-        val widthConstraintLayout = constraint.width
+        val heightConstraintLayout = binding.constraint.height
+        val widthConstraintLayout = binding.constraint.width
         val otstup = (10 * resources.displayMetrics.density).toInt()
         val y = event?.y?.toInt() ?: 0
         val x = event?.x?.toInt() ?: 0
@@ -719,7 +721,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 MotionEvent.ACTION_UP -> mActionDown = false
                 MotionEvent.ACTION_MOVE -> {
                     val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(textSearch.windowToken, 0)
+                    imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
                 }
             }
             return false
@@ -735,9 +737,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     val proc: Int
                     if (x < otstup) {
                         levo = true
-                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                        progress.visibility = View.VISIBLE
+                        binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                        binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                        binding.progress.visibility = View.VISIBLE
                         startProcent()
                     }
                     if (x > widthConstraintLayout - otstup) {
@@ -745,18 +747,18 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         var minmax = ""
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
-                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        progress.visibility = View.VISIBLE
+                        binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
+                        binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                        binding.progress.visibility = View.VISIBLE
                         startProcent()
                     }
                     if (y > heightConstraintLayout - otstup) {
                         niz = true
                         spid =  k.getInt("autoscrollSpid", 60)
                         proc = 100 - (spid - 15) * 100 / 215
-                        progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                        progress.visibility = View.VISIBLE
+                        binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                        binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                        binding.progress.visibility = View.VISIBLE
                         startProcent()
                         autoscroll = k.getBoolean("autoscroll", false)
                         if (!autoscroll) {
@@ -774,9 +776,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
-                            progress.visibility = View.VISIBLE
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                         }
                     }
@@ -786,9 +788,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             val lp = window.attributes
                             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                             window.attributes = lp
-                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                             MainActivity.checkBrightness = false
-                            progress.visibility = View.VISIBLE
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                         }
                     }
@@ -797,7 +799,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             fontBiblia -= 4
                             prefEditor.putFloat("font_biblia", fontBiblia)
                             prefEditor.apply()
-                            val webSettings = WebView.settings
+                            val webSettings = binding.WebView.settings
                             webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
                             //webSettings.setAppCacheEnabled(false)
                             webSettings.blockNetworkImage = true
@@ -807,8 +809,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             webSettings.defaultFontSize = fontBiblia.toInt()
                             var min = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                            progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
-                            progress.visibility = View.VISIBLE
+                            binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                         }
                     }
@@ -817,7 +819,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             fontBiblia += 4
                             prefEditor.putFloat("font_biblia", fontBiblia)
                             prefEditor.apply()
-                            val webSettings = WebView.settings
+                            val webSettings = binding.WebView.settings
                             webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
                             //webSettings.setAppCacheEnabled(false)
                             webSettings.blockNetworkImage = true
@@ -827,8 +829,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             webSettings.defaultFontSize = fontBiblia.toInt()
                             var max = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                            progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
-                            progress.visibility = View.VISIBLE
+                            binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                         }
                     }
@@ -836,9 +838,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         if (spid in 20..235) {
                             spid -= 5
                             val proc = 100 - (spid - 15) * 100 / 215
-                            progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                            progress.visibility = View.VISIBLE
+                            binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                             stopAutoScroll()
                             startAutoScroll()
@@ -848,9 +850,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         if (spid in 10..225) {
                             spid += 5
                             val proc = 100 - (spid - 15) * 100 / 215
-                            progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                            progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                            progress.visibility = View.VISIBLE
+                            binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                            binding.progress.visibility = View.VISIBLE
                             startProcent()
                             stopAutoScroll()
                             startAutoScroll()
@@ -981,11 +983,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             recreate()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_find) {
-            textSearch.visibility = View.VISIBLE
-            textCount.visibility = View.VISIBLE
-            imageView6.visibility = View.VISIBLE
-            imageView5.visibility = View.VISIBLE
-            textSearch.requestFocus()
+            binding.textSearch.visibility = View.VISIBLE
+            binding.textCount.visibility = View.VISIBLE
+            binding.imageView6.visibility = View.VISIBLE
+            binding.imageView5.visibility = View.VISIBLE
+            binding.textSearch.requestFocus()
             val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
         }
@@ -1003,9 +1005,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (spid in 20..235) {
                 spid -= 5
                 val proc = 100 - (spid - 15) * 100 / 215
-                progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                progress.visibility = View.VISIBLE
+                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                binding.progress.visibility = View.VISIBLE
                 startProcent()
                 stopAutoScroll()
                 startAutoScroll()
@@ -1018,9 +1020,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (spid in 10..225) {
                 spid += 5
                 val proc = 100 - (spid - 15) * 100 / 215
-                progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                progress.visibility = View.VISIBLE
+                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                binding.progress.visibility = View.VISIBLE
                 startProcent()
                 stopAutoScroll()
                 startAutoScroll()
@@ -1082,17 +1084,17 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (fullscreenPage) {
             fullscreenPage = false
             show()
-        } else if (textSearch.visibility == View.VISIBLE) {
+        } else if (binding.textSearch.visibility == View.VISIBLE) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                textSearch.visibility = View.GONE
-                textCount.visibility = View.GONE
-                imageView6.visibility = View.GONE
-                imageView5.visibility = View.GONE
-                WebView.findAllAsync("")
-                textSearch.setText("")
-                textCount.setText(by.carkva_gazeta.malitounik.R.string.niama)
+                binding.textSearch.visibility = View.GONE
+                binding.textCount.visibility = View.GONE
+                binding.imageView6.visibility = View.GONE
+                binding.imageView5.visibility = View.GONE
+                binding.WebView.findAllAsync("")
+                binding.textSearch.setText("")
+                binding.textCount.setText(by.carkva_gazeta.malitounik.R.string.niama)
                 val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(textSearch.windowToken, 0)
+                imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
             }
         } else {
             if (editVybranoe)
@@ -1154,7 +1156,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("editVybranoe", editVybranoe)
-        if (textSearch.visibility == View.VISIBLE)
+        if (binding.textSearch.visibility == View.VISIBLE)
             outState.putBoolean("seach", true)
         else
             outState.putBoolean("seach", false)

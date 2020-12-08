@@ -18,9 +18,9 @@ import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import by.carkva_gazeta.malitounik.databinding.SearchSviatyiaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.search_sviatyia.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,6 +47,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
     private var actionExpandOn = true
+    private lateinit var binding: SearchSviatyiaBinding
 
     override fun onResume() {
         super.onResume()
@@ -145,7 +146,8 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
-        setContentView(R.layout.search_sviatyia)
+        binding = SearchSviatyiaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val searchSvityxString = chin.getString("search_svityx_string", "") ?: ""
         if (searchSvityxString != "") {
             if (savedInstanceState == null) {
@@ -158,14 +160,14 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                 }
             }
         } else {
-            History.visibility = View.VISIBLE
-            ListView.visibility = View.GONE
+            binding.History.visibility = View.VISIBLE
+            binding.ListView.visibility = View.GONE
         }
         historyAdapter = HistoryAdapter(this, history, true)
-        if (dzenNoch) History.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
-        else History.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
-        History.adapter = historyAdapter
-        History.setOnItemClickListener { _, _, position, _ ->
+        if (dzenNoch) binding.History.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        else binding.History.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
+        binding.History.adapter = historyAdapter
+        binding.History.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
             }
@@ -182,7 +184,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             saveHistopy()
             finish()
         }
-        History.setOnItemLongClickListener { _, _, position, _ ->
+        binding.History.setOnItemLongClickListener { _, _, position, _ ->
             val t1 = history[position].indexOf("</em><br>")
             val hishoryResult = history[position].substring(t1 + 9)
             val dialogClearHishory = DialogClearHishory.getInstance(position, MainActivity.fromHtml(hishoryResult).toString())
@@ -200,18 +202,18 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                 stopPosukSviatyx()
                 startPosukSviatyx(searchSvityxString)
             } else {
-                History.visibility = View.VISIBLE
-                ListView.visibility = View.GONE
+                binding.History.visibility = View.VISIBLE
+                binding.ListView.visibility = View.GONE
             }
         } else if (searchSvityxString.length < 3) {
-            History.visibility = View.VISIBLE
-            ListView.visibility = View.GONE
+            binding.History.visibility = View.VISIBLE
+            binding.ListView.visibility = View.GONE
         }
         adapter = SearchListAdapter(this, arrayRes)
-        if (dzenNoch) ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
-        else ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
-        ListView.adapter = adapter
-        ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+        if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        else binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
+        binding.ListView.adapter = adapter
+        binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                 if (i == 1) { // Скрываем клавиатуру
                     val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -221,7 +223,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
 
             override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
         })
-        ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
+        binding.ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnItemClickListener
             }
@@ -284,24 +286,24 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text = resources.getText(R.string.search_svityia)
+        binding.titleToolbar.text = resources.getText(R.string.search_svityia)
         if (dzenNoch) {
-            toolbar.popupTheme = R.style.AppCompatDark
+            binding.toolbar.popupTheme = R.style.AppCompatDark
         }
     }
 
@@ -546,8 +548,8 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                 if (edit.length >= 3) {
                     stopPosukSviatyx()
                     startPosukSviatyx(edit)
-                    History.visibility = View.GONE
-                    ListView.visibility = View.VISIBLE
+                    binding.History.visibility = View.GONE
+                    binding.ListView.visibility = View.VISIBLE
                 } else {
                     if (actionExpandOn) {
                         arrayRes.clear()
@@ -559,8 +561,8 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                         prefEditors.putString("search_svityx_array", json)
                         prefEditors.putString("search_svityx_string", edit)
                         prefEditors.apply()
-                        History.visibility = View.VISIBLE
-                        ListView.visibility = View.GONE
+                        binding.History.visibility = View.VISIBLE
+                        binding.ListView.visibility = View.GONE
                     }
                 }
                 if (check != 0) {

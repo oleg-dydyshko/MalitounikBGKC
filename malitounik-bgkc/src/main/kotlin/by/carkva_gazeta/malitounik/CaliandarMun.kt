@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
+import by.carkva_gazeta.malitounik.databinding.CalendarBinding
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.calendar.*
 import java.util.*
 
 class CaliandarMun : AppCompatActivity() {
@@ -26,6 +26,7 @@ class CaliandarMun : AppCompatActivity() {
     private var dzenNoch = false
     private lateinit var chin: SharedPreferences
     private var sabytue = false
+    private lateinit var binding: CalendarBinding
 
     override fun onResume() {
         super.onResume()
@@ -48,14 +49,15 @@ class CaliandarMun : AppCompatActivity() {
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.calendar)
-        setSupportActionBar(toolbar)
+        binding = CalendarBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         sabytue = intent.getBooleanExtra("sabytie", false)
-        if (sabytue) title_toolbar.setText(R.string.get_date) else title_toolbar.setText(R.string.kaliandar)
+        if (sabytue) binding.titleToolbar.setText(R.string.get_date) else binding.titleToolbar.setText(R.string.kaliandar)
         if (dzenNoch) {
-            toolbar.popupTheme = R.style.AppCompatDark
+            binding.toolbar.popupTheme = R.style.AppCompatDark
         }
         c = Calendar.getInstance() as GregorianCalendar
         posMun = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
@@ -63,10 +65,10 @@ class CaliandarMun : AppCompatActivity() {
         if (yearG > SettingsActivity.GET_CALIANDAR_YEAR_MAX) yearG = SettingsActivity.GET_CALIANDAR_YEAR_MAX
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         CaliandarNedzel.setDenNedeli = true
-        tabPager.adapter = MyTabPagerAdapter(supportFragmentManager)
-        tabLayout.setupWithViewPager(tabPager)
-        tabPager.currentItem = chin.getInt("nedelia", 0)
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.tabPager.adapter = MyTabPagerAdapter(supportFragmentManager)
+        binding.tabLayout.setupWithViewPager(binding.tabPager)
+        binding.tabPager.currentItem = chin.getInt("nedelia", 0)
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
 
@@ -75,7 +77,7 @@ class CaliandarMun : AppCompatActivity() {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val position = tab?.position ?: 0
-                tabPager.currentItem = position
+                binding.tabPager.currentItem = position
                 val editor = chin.edit()
                 editor.putInt("nedelia", position)
                 editor.apply()

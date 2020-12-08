@@ -12,14 +12,15 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.dialog_widget_config.*
+import by.carkva_gazeta.malitounik.databinding.DialogWidgetConfigBinding
 
 class DialogWidgetConfig : DialogFragment() {
     private var configDzenNoch = false
     private var widgetID = 0
     private lateinit var mListener: DialogWidgetConfigListener
     private lateinit var alert: AlertDialog
-    private lateinit var rootView: View
+    private var _binding: DialogWidgetConfigBinding? = null
+    private val binding get() = _binding!!
 
     internal interface DialogWidgetConfigListener {
         fun onDialogWidgetConfigPositiveClick()
@@ -46,20 +47,26 @@ class DialogWidgetConfig : DialogFragment() {
         activity?.finish()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            checkBox20.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-            checkBox20.isChecked = k.getBoolean("dzen_noch_widget_day$widgetID", false)
-            checkBox20.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            binding.checkBox20.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+            binding.checkBox20.isChecked = k.getBoolean("dzen_noch_widget_day$widgetID", false)
+            binding.checkBox20.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
                 configDzenNoch = isChecked
             }
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return rootView
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = DialogWidgetConfigBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -69,13 +76,12 @@ class DialogWidgetConfig : DialogFragment() {
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            rootView = View.inflate(it, R.layout.dialog_widget_config, null)
             builder.setPositiveButton(resources.getText(R.string.ok)) { dialog: DialogInterface, _: Int ->
                 save()
                 mListener.onDialogWidgetConfigPositiveClick()
                 dialog.cancel()
             }
-            builder.setView(rootView)
+            builder.setView(binding.root)
             alert = builder.create()
         }
         return alert

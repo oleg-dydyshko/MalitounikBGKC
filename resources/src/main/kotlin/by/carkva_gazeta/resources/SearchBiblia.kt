@@ -24,9 +24,9 @@ import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.DialogBibleSearshSettings.DiallogBibleSearshListiner
+import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.search_biblia.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,6 +53,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
     private var sinodalBible = ArrayMap<String, Int>()
     private var semuxaBible = ArrayMap<String, Int>()
     private var searche = false
+    private lateinit var binding: SearchBibliaBinding
 
     init {
         sinodalBible["sinaidals1"] = R.raw.sinaidals1
@@ -202,7 +203,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     override fun onPause() {
         super.onPause()
-        prefEditors.putString("search_string_filter", editText2.text.toString())
+        prefEditors.putString("search_string_filter", binding.editText2.text.toString())
         prefEditors.putInt("search_bible_fierstPosition", fierstPosition)
         prefEditors.apply()
     }
@@ -218,8 +219,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 addHistory(it)
                 saveHistory()
                 execute(edit)
-                History.visibility = View.GONE
-                ListView.visibility = View.VISIBLE
+                binding.History.visibility = View.GONE
+                binding.ListView.visibility = View.VISIBLE
             }
         }
     }
@@ -236,13 +237,14 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.search_biblia)
-        filter_grup.visibility = View.VISIBLE
-        buttonx2.setOnClickListener(this)
+        binding = SearchBibliaBinding.inflate(layoutInflater)
+        setContentView(binding.rootView)
+        binding.filterGrup.visibility = View.VISIBLE
+        binding.buttonx2.setOnClickListener(this)
         if (dzenNoch) {
-            buttonx2.setImageResource(by.carkva_gazeta.malitounik.R.drawable.cancel)
+            binding.buttonx2.setImageResource(by.carkva_gazeta.malitounik.R.drawable.cancel)
         }
-        editText2.addTextChangedListener(MyTextWatcher(editText2, true))
+        binding.editText2.addTextChangedListener(MyTextWatcher(binding.editText2, true))
         if (intent.getIntExtra("zavet", 1) != zavet) {
             prefEditors.putString("search_string", "")
             prefEditors.putString("search_string_filter", "")
@@ -292,10 +294,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             history.addAll(gson.fromJson(json, type))
         }
         adapter = SearchBibliaListAdaprer(this)
-        ListView.adapter = adapter
-        if (dzenNoch) ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-        else ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
-        ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+        binding.ListView.adapter = adapter
+        if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+        else binding.ListView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+        binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(absListView: AbsListView, i: Int) {
                 fierstPosition = absListView.firstVisiblePosition
                 if (i == 1) { // Скрываем клавиатуру
@@ -306,8 +308,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
             override fun onScroll(absListView: AbsListView, i: Int, i1: Int, i2: Int) {}
         })
-        editText2.setText(chin.getString("search_string_filter", ""))
-        ListView.setOnItemClickListener { adapterView: AdapterView<*>, _: View?, position: Int, _: Long ->
+        binding.editText2.setText(chin.getString("search_string_filter", ""))
+        binding.ListView.setOnItemClickListener { adapterView: AdapterView<*>, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
             }
@@ -470,7 +472,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 val intent = Intent(this@SearchBiblia, NadsanContentActivity::class.java)
                 intent.putExtra("glava", glava - 1)
                 intent.putExtra("stix", stix - 1)
-                prefEditors.putInt("search_position", ListView.firstVisiblePosition)
+                prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
                 prefEditors.apply()
                 startActivity(intent)
             } else {
@@ -481,7 +483,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         intent.putExtra("glava", glava - 1)
                         intent.putExtra("stix", stix - 1)
                         prefEditors.putBoolean("novyzavet", false)
-                        prefEditors.putInt("search_position", ListView.firstVisiblePosition)
+                        prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
                         prefEditors.apply()
                         startActivity(intent)
                     } else {
@@ -490,7 +492,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         intent.putExtra("glava", glava - 1)
                         intent.putExtra("stix", stix - 1)
                         prefEditors.putBoolean("novyzavet", false)
-                        prefEditors.putInt("search_position", ListView.firstVisiblePosition)
+                        prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
                         prefEditors.apply()
                         startActivity(intent)
                     }
@@ -501,7 +503,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         intent.putExtra("glava", glava - 1)
                         intent.putExtra("stix", stix - 1)
                         prefEditors.putBoolean("novyzavet", true)
-                        prefEditors.putInt("search_position", ListView.firstVisiblePosition)
+                        prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
                         prefEditors.apply()
                         startActivity(intent)
                     } else {
@@ -510,7 +512,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         intent.putExtra("glava", glava - 1)
                         intent.putExtra("stix", stix - 1)
                         prefEditors.putBoolean("novyzavet", true)
-                        prefEditors.putInt("search_position", ListView.firstVisiblePosition)
+                        prefEditors.putInt("search_position", binding.ListView.firstVisiblePosition)
                         prefEditors.apply()
                         startActivity(intent)
                     }
@@ -518,10 +520,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             }
         }
         historyAdapter = HistoryAdapter(this, history)
-        if (dzenNoch) History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-        else History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
-        History.adapter = historyAdapter
-        History.setOnItemClickListener { _, _, position, _ ->
+        if (dzenNoch) binding.History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+        else binding.History.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+        binding.History.adapter = historyAdapter
+        binding.History.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
             }
@@ -529,8 +531,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             val edit = history[position]
             addHistory(edit)
             saveHistory()
-            History.visibility = View.GONE
-            ListView.visibility = View.VISIBLE
+            binding.History.visibility = View.GONE
+            binding.ListView.visibility = View.VISIBLE
             searche = true
             prefEditors.putString("search_string", edit)
             prefEditors.apply()
@@ -538,41 +540,41 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             searchView?.clearFocus()
             execute(edit)
         }
-        History.setOnItemLongClickListener { _, _, position, _ ->
+        binding.History.setOnItemLongClickListener { _, _, position, _ ->
             val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
             return@setOnItemLongClickListener true
         }
         if (savedInstanceState != null) {
             val listView = savedInstanceState.getBoolean("list_view")
-            if (listView) ListView.visibility = View.VISIBLE
+            if (listView) binding.ListView.visibility = View.VISIBLE
             actionExpandOn = listView
             fierstPosition = savedInstanceState.getInt("fierstPosition")
         } else {
             fierstPosition = chin.getInt("search_bible_fierstPosition", 0)
         }
-        ListView.setSelection(fierstPosition)
+        binding.ListView.setSelection(fierstPosition)
         val data = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.serche_bible)
         val arrayAdapter = SearchSpinnerAdapter(this, data)
-        spinner6.adapter = arrayAdapter
-        spinner6.setSelection(chin.getInt("biblia_seash", 0))
-        rootView.viewTreeObserver.addOnGlobalLayoutListener {
-            val heightDiff = rootView.rootView.height - rootView.height
-            val keyword = rootView.rootView.height / 4
+        binding.spinner6.adapter = arrayAdapter
+        binding.spinner6.setSelection(chin.getInt("biblia_seash", 0))
+        binding.rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val heightDiff = binding.rootView.rootView.height - binding.rootView.height
+            val keyword = binding.rootView.rootView.height / 4
             if (heightDiff > keyword) {
-                settings_grup.visibility = View.VISIBLE
+                binding.settingsGrup.visibility = View.VISIBLE
             } else {
-                settings_grup.visibility = View.GONE
+                binding.settingsGrup.visibility = View.GONE
             }
         }
         setTollbarTheme()
     }
 
     private fun setTollbarTheme() {
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
-            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
 
@@ -604,8 +606,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                         searche = true
                         addHistory(edit)
                         saveHistory()
-                        History.visibility = View.GONE
-                        ListView.visibility = View.VISIBLE
+                        binding.History.visibility = View.GONE
+                        binding.ListView.visibility = View.VISIBLE
                         execute(edit)
                     } else {
                         MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.seashmin))
@@ -747,13 +749,13 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
     override fun onClick(view: View?) {
         val idSelect = view?.id ?: 0
         if (idSelect == R.id.buttonx2) {
-            editText2.setText("")
+            binding.editText2.setText("")
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean("list_view", ListView.visibility == View.VISIBLE)
+        outState.putBoolean("list_view", binding.ListView.visibility == View.VISIBLE)
         outState.putInt("fierstPosition", fierstPosition)
         prefEditors.putString("search_string", autoCompleteTextView?.text.toString())
         prefEditors.apply()
@@ -774,8 +776,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         prefEditors = chin.edit()
         adapter.clear()
         textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
-        progressBar.visibility = View.VISIBLE
-        ListView.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE
+        binding.ListView.visibility = View.GONE
         var edit = autoCompleteTextView?.text.toString()
         if (edit != "") {
             edit = edit.trim()
@@ -796,14 +798,14 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     private fun onPostExecute(result: ArrayList<Spannable>) {
         adapter.addAll(result)
-        adapter.filter.filter(editText2?.text.toString())
+        adapter.filter.filter(binding.editText2.text.toString())
         textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, adapter.count)
         if (chin.getString("search_string", "") != "") {
-            ListView?.post { ListView.setSelection(chin.getInt("search_position", 0)) }
+            binding.ListView.post { binding.ListView.setSelection(chin.getInt("search_position", 0)) }
         }
-        progressBar.visibility = View.GONE
-        History.visibility = View.GONE
-        ListView.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
+        binding.History.visibility = View.GONE
+        binding.ListView.visibility = View.VISIBLE
         val arrayList = ArrayList<String>()
         result.forEach {
             arrayList.add(MainActivity.toHtml(it))
@@ -1306,19 +1308,19 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             }
             if (editText?.id == by.carkva_gazeta.malitounik.R.id.search_src_text) {
                 if (actionExpandOn && editPosition != 0) {
-                    History.visibility = View.GONE
-                    ListView.visibility = View.VISIBLE
+                    binding.History.visibility = View.GONE
+                    binding.ListView.visibility = View.VISIBLE
                     actionExpandOn = false
                 } else {
                     if (searche && editPosition != 0) {
-                        History.visibility = View.GONE
-                        ListView.visibility = View.VISIBLE
+                        binding.History.visibility = View.GONE
+                        binding.ListView.visibility = View.VISIBLE
                         editText.clearFocus()
                         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(editText.windowToken, 0)
                     } else {
-                        History.visibility = View.VISIBLE
-                        ListView.visibility = View.GONE
+                        binding.History.visibility = View.VISIBLE
+                        binding.ListView.visibility = View.GONE
                         textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
                     }
                 }

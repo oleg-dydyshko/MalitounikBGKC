@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
-import kotlinx.android.synthetic.main.calendat_tab1.*
+import by.carkva_gazeta.malitounik.databinding.CalendatTab1Binding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -38,6 +38,13 @@ class CaliandarMunTab1 : Fragment() {
     private var day = 0
     private var posMun = 0
     private var yearG = 0
+    private var _binding: CalendatTab1Binding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +52,8 @@ class CaliandarMunTab1 : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.calendat_tab1, container, false)
+        _binding = CalendatTab1Binding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -57,48 +65,48 @@ class CaliandarMunTab1 : Fragment() {
             posMun = arguments?.getInt("posMun") ?: 0
             yearG = arguments?.getInt("yearG") ?: 0
             val adapter = CaliandarMunAdapter(activity, names)
-            spinner.adapter = adapter
+            binding.spinner.adapter = adapter
             val data2 = ArrayList<String>()
             for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) {
                 data2.add(i.toString())
             }
             val adapter2 = CaliandarMunAdapter(activity, data2)
-            spinner2.adapter = adapter2
+            binding.spinner2.adapter = adapter2
 
             fragmentManager?.let {
                 adapterViewPager = MyPagerAdapter(it)
-                pager.adapter = adapterViewPager
+                binding.pager.adapter = adapterViewPager
             }
             val c = Calendar.getInstance() as GregorianCalendar
             val son = (yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + posMun
-            pager.currentItem = son
-            spinner.setSelection(posMun)
-            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            binding.pager.currentItem = son
+            binding.spinner.setSelection(posMun)
+            binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     val son1 = (yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + position
                     posMun = position
-                    val pagepos1 = pager.currentItem
+                    val pagepos1 = binding.pager.currentItem
                     if (pagepos1 != son1) {
-                        pager.currentItem = son1
+                        binding.pager.currentItem = son1
                     }
                 }
 
                 override fun onNothingSelected(arg0: AdapterView<*>?) {}
             }
-            spinner2.setSelection(yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN)
-            spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            binding.spinner2.setSelection(yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN)
+            binding.spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                     yearG = (parent.selectedItem as String).toInt()
                     val son1 = (yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + posMun
-                    val pagepos1 = pager.currentItem
+                    val pagepos1 = binding.pager.currentItem
                     if (pagepos1 != son1) {
-                        pager.currentItem = son1
+                        binding.pager.currentItem = son1
                     }
                 }
 
                 override fun onNothingSelected(arg0: AdapterView<*>?) {}
             }
-            pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
                 override fun onPageSelected(position: Int) {
                     for (i in 0 until adapterViewPager.count) {
@@ -115,8 +123,8 @@ class CaliandarMunTab1 : Fragment() {
                                 }
                                 r++
                             }
-                            spinner.setSelection(posMun)
-                            spinner2.setSelection(yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN)
+                            binding.spinner.setSelection(posMun)
+                            binding.spinner2.setSelection(yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN)
                         }
                     }
                 }

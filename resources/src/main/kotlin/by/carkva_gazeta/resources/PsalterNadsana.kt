@@ -16,11 +16,12 @@ import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.malitounik.DialogNadsanPravila
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import kotlinx.android.synthetic.main.nadsan_pravila.*
+import by.carkva_gazeta.resources.databinding.NadsanPravilaBinding
 
 class PsalterNadsana : AppCompatActivity(), View.OnClickListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
+    private lateinit var binding: NadsanPravilaBinding
     
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
@@ -33,12 +34,13 @@ class PsalterNadsana : AppCompatActivity(), View.OnClickListener {
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.nadsan_pravila)
+        binding = NadsanPravilaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val pNadsana = k.getInt("pravalaNadsana", 1)
-        buttonleft.setOnClickListener(this)
-        buttonrighth.setOnClickListener(this)
-        if (pNadsana == 1) buttonleft.visibility = View.GONE
-        if (pNadsana == 5) buttonrighth.visibility = View.GONE
+        binding.buttonleft.setOnClickListener(this)
+        binding.buttonrighth.setOnClickListener(this)
+        if (pNadsana == 1) binding.buttonleft.visibility = View.GONE
+        if (pNadsana == 5) binding.buttonrighth.visibility = View.GONE
         val ftrans = supportFragmentManager.beginTransaction()
         ftrans.setCustomAnimations(by.carkva_gazeta.malitounik.R.anim.alphainfragment, by.carkva_gazeta.malitounik.R.anim.alphaoutfragment)
         when (pNadsana) {
@@ -106,29 +108,29 @@ class PsalterNadsana : AppCompatActivity(), View.OnClickListener {
             }
         }
         ftrans.commit()
-        if (pNadsana == 1) buttonleft.visibility = View.GONE else buttonleft.visibility = View.VISIBLE
-        if (pNadsana == 5) buttonrighth.visibility = View.GONE else buttonrighth.visibility = View.VISIBLE
+        if (pNadsana == 1) binding.buttonleft.visibility = View.GONE else binding.buttonleft.visibility = View.VISIBLE
+        if (pNadsana == 5) binding.buttonrighth.visibility = View.GONE else binding.buttonrighth.visibility = View.VISIBLE
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.setText(by.carkva_gazeta.malitounik.R.string.title_psalter_privila)
+        binding.titleToolbar.setText(by.carkva_gazeta.malitounik.R.string.title_psalter_privila)
         if (dzenNoch) {
-            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
 

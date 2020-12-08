@@ -7,11 +7,12 @@ import android.util.TypedValue
 import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.pasxa.*
+import by.carkva_gazeta.malitounik.databinding.PasxaBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class Pasxa : AppCompatActivity() {
+    private lateinit var binding: PasxaBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
@@ -24,29 +25,30 @@ class Pasxa : AppCompatActivity() {
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.pasxa)
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding = PasxaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        title_toolbar.text = resources.getText(R.string.pascha_kaliandar_bel)
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.text = resources.getText(R.string.pascha_kaliandar_bel)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val inputStream = resources.openRawResource(R.raw.pasxa)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
-        pasxa.text = reader.readText()
-        pasxa.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+        binding.pasxa.text = reader.readText()
+        binding.pasxa.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
     }
 
     override fun onResume() {

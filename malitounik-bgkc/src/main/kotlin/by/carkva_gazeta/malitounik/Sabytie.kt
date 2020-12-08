@@ -27,11 +27,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.DialogContextMenuSabytie.DialogContextMenuSabytieListener
 import by.carkva_gazeta.malitounik.DialogDelite.DialogDeliteListener
 import by.carkva_gazeta.malitounik.DialogSabytieSave.DialogSabytieSaveListener
+import by.carkva_gazeta.malitounik.databinding.SabytieBinding
 import com.google.gson.Gson
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
-import kotlinx.android.synthetic.main.sabytie.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -85,12 +85,13 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     private var mLastClickTime: Long = 0
     private lateinit var colorAdapter: ColorAdapter
     private var nazvaPadzei = "Назва падзеі"
+    private lateinit var binding: SabytieBinding
 
     override fun sabytieTimePositive(nomerDialoga: Int, hour: Int, minute: Int) {
         if (nomerDialoga == 1) {
-            da = label1.text.toString()
-            daK = label12.text.toString()
-            taK = label22.text.toString()
+            da = binding.label1.text.toString()
+            daK = binding.label12.text.toString()
+            taK = binding.label22.text.toString()
             c = Calendar.getInstance() as GregorianCalendar
             c.timeInMillis = result
             timeH = hour
@@ -109,28 +110,28 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 gc12 = GregorianCalendar(date[2].toInt(), date[1].toInt() - 1, date[0].toInt(), timeH, timeM, 0)
                 gcK = GregorianCalendar(dateK[2].toInt(), dateK[1].toInt() - 1, dateK[0].toInt(), timeK[0].toInt(), timeK[1].toInt(), 0)
                 if (gc12.timeInMillis > gcK.timeInMillis) {
-                    label22.text = ta
+                    binding.label22.text = ta
                 }
             }
-            label2.text = ta
-            val temp = editText2.text
-            editText2.setText("")
-            editText2.text = temp
+            binding.label2.text = ta
+            val temp = binding.editText2.text
+            binding.editText2.setText("")
+            binding.editText2.text = temp
         }
         if (nomerDialoga == 2) {
             var tr = ""
             if (minute < 10) tr = "0"
             taK = "$hour:$tr$minute"
-            label22.text = taK
-            val days = label1.text.toString().split(".")
+            binding.label22.text = taK
+            val days = binding.label1.text.toString().split(".")
             val gc1 = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
-            val days2 = label12.text.toString().split(".")
+            val days2 = binding.label12.text.toString().split(".")
             val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
             val kon = gc2[Calendar.DAY_OF_YEAR]
             val res = gc1[Calendar.DAY_OF_YEAR]
             if (kon - res == 0) {
-                val times = label2.text.toString().split(":")
-                val times2 = label22.text.toString().split(":")
+                val times = binding.label2.text.toString().split(":")
+                val times2 = binding.label22.text.toString().split(":")
                 val gc3 = GregorianCalendar(gc2[Calendar.YEAR], gc2[Calendar.MONTH], gc2[Calendar.DAY_OF_MONTH], times[0].toInt(), times[1].toInt(), 0)
                 val gc4 = GregorianCalendar(gc2[Calendar.YEAR], gc2[Calendar.MONTH], gc2[Calendar.DAY_OF_MONTH], times2[0].toInt(), times2[1].toInt(), 0)
                 if (gc4.timeInMillis - gc3.timeInMillis < 1000) {
@@ -140,7 +141,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     if (gc2[Calendar.DAY_OF_MONTH] < 10) nol112 = "0"
                     if (gc2[Calendar.MONTH] < 9) nol212 = "0"
                     val da1 = nol112 + gc2[Calendar.DAY_OF_MONTH] + "." + nol212 + (gc2[Calendar.MONTH] + 1) + "." + gc2[Calendar.YEAR]
-                    label12.text = da1
+                    binding.label12.text = da1
                 }
             }
         }
@@ -161,13 +162,14 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.sabytie)
-        labelbutton12.setOnClickListener(View.OnClickListener {
+        binding = SabytieBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.labelbutton12.setOnClickListener(View.OnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val w = labelbutton12.text.toString().split(".")
+            val w = binding.labelbutton12.text.toString().split(".")
             val gc = GregorianCalendar(w[2].toInt(), w[1].toInt() - 1, w[0].toInt())
             yearG = gc[Calendar.YEAR]
             munG = gc[Calendar.MONTH]
@@ -178,21 +180,21 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             i.putExtra("sabytie", true)
             startActivityForResult(i, 1093)
         })
-        radioGroup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
+        binding.radioGroup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             when (checkedId) {
                 R.id.radioButton1 -> {
                     radio = 1
-                    radioButton2a.visibility = View.GONE
-                    labelbutton12.visibility = View.GONE
+                    binding.radioButton2a.visibility = View.GONE
+                    binding.labelbutton12.visibility = View.GONE
                 }
                 R.id.radioButton2 -> {
                     radio = 2
-                    radioButton2a.visibility = View.VISIBLE
-                    labelbutton12.visibility = View.GONE
+                    binding.radioButton2a.visibility = View.VISIBLE
+                    binding.labelbutton12.visibility = View.GONE
                 }
                 R.id.radioButton3 -> {
                     if (idMenu != 3) {
-                        val w = labelbutton12.text.toString().split(".")
+                        val w = binding.labelbutton12.text.toString().split(".")
                         val gc = GregorianCalendar(w[2].toInt(), w[1].toInt() - 1, w[0].toInt())
                         yearG = gc[Calendar.YEAR]
                         munG = gc[Calendar.MONTH]
@@ -204,8 +206,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         startActivityForResult(i, 1093)
                     }
                     radio = 3
-                    radioButton2a.visibility = View.GONE
-                    labelbutton12.visibility = View.VISIBLE
+                    binding.radioButton2a.visibility = View.GONE
+                    binding.labelbutton12.visibility = View.VISIBLE
                 }
             }
         }
@@ -216,7 +218,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         var nol2 = ""
         if (c[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
         if (c[Calendar.MONTH] < 9) nol2 = "0"
-        labelbutton12.text = resources.getString(R.string.Sabytie, nol1, c[Calendar.DAY_OF_MONTH], nol2, c[Calendar.MONTH] + 1, c[Calendar.YEAR])
+        binding.labelbutton12.text = resources.getString(R.string.Sabytie, nol1, c[Calendar.DAY_OF_MONTH], nol2, c[Calendar.MONTH] + 1, c[Calendar.YEAR])
         c.add(Calendar.DATE, -1)
         result = c.timeInMillis
         c.add(Calendar.HOUR_OF_DAY, 1)
@@ -232,64 +234,64 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         da = nol1 + c[Calendar.DAY_OF_MONTH] + "." + nol2 + (c[Calendar.MONTH] + 1) + "." + c[Calendar.YEAR]
         ta = "$timeH:00"
         color = 0
-        label1.text = da
+        binding.label1.text = da
         val notifi = arrayOf("хвілінаў", "часоў", "дзён", "тыдняў")
         val adapter2 = SpinnerAdapter(this, notifi)
-        spinner3.adapter = adapter2
-        spinner3.onItemSelectedListener = object : OnItemSelectedListener {
+        binding.spinner3.adapter = adapter2
+        binding.spinner3.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 posit = position
-                val temp = editText2.text
-                editText2.setText("")
-                editText2.text = temp
+                val temp = binding.editText2.text
+                binding.editText2.setText("")
+                binding.editText2.text = temp
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         val repit = arrayOf("Няма", "Кожны дзень", "Па будных днях", "Два дні праз два", "Кожны тыдзень", "Кожныя два тыдні", "Кожныя чатыры тыдні", "Кожны месяц", "Раз на год")
         val adapter3 = SpinnerAdapter(this, repit)
-        spinner4.adapter = adapter3
-        spinner4.onItemSelectedListener = object : OnItemSelectedListener {
+        binding.spinner4.adapter = adapter3
+        binding.spinner4.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(spinner4.windowToken, 0)
+                imm.hideSoftInputFromWindow(binding.spinner4.windowToken, 0)
                 repitL = position
                 if (repitL == 7) {
-                    radioButton3.isClickable = false
-                    radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorSecondary_text))
+                    binding.radioButton3.isClickable = false
+                    binding.radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorSecondary_text))
                 } else {
-                    radioButton3.isClickable = true
-                    if (dzenNoch) radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite)) else radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
+                    binding.radioButton3.isClickable = true
+                    if (dzenNoch) binding.radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite)) else binding.radioButton3.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
                 }
-                if (repitL == 0) radioButton1.isChecked = true
+                if (repitL == 0) binding.radioButton1.isChecked = true
                 if (repitL > 0) {
-                    radioGroup.visibility = View.VISIBLE
+                    binding.radioGroup.visibility = View.VISIBLE
                 } else {
-                    radioGroup.visibility = View.GONE
-                    radioButton2a.visibility = View.GONE
-                    labelbutton12.visibility = View.GONE
+                    binding.radioGroup.visibility = View.GONE
+                    binding.radioButton2a.visibility = View.GONE
+                    binding.labelbutton12.visibility = View.GONE
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         colorAdapter = ColorAdapter(this)
-        spinner5.adapter = colorAdapter
-        spinner5.onItemSelectedListener = object : OnItemSelectedListener {
+        binding.spinner5.adapter = colorAdapter
+        binding.spinner5.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 color = position
-                spinner5.setSelection(position)
+                binding.spinner5.setSelection(position)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-        spinner5.setSelection(0)
-        label1.setOnClickListener {
+        binding.spinner5.setSelection(0)
+        binding.label1.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val w = label1.text.toString().split(".")
+            val w = binding.label1.text.toString().split(".")
             val gc = GregorianCalendar(w[2].toInt(), w[1].toInt() - 1, w[0].toInt())
             yearG = gc[Calendar.YEAR]
             munG = gc[Calendar.MONTH]
@@ -300,22 +302,22 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             i.putExtra("sabytie", true)
             startActivityForResult(i, 109)
         }
-        label2.text = ta
-        label2.setOnClickListener {
+        binding.label2.text = ta
+        binding.label2.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val dialogSabytieTime = DialogSabytieTime.getInstance(1, label2.text.toString())
+            val dialogSabytieTime = DialogSabytieTime.getInstance(1, binding.label2.text.toString())
             dialogSabytieTime.show(supportFragmentManager, "dialogSabytieTime")
         }
-        label12.text = da
-        label12.setOnClickListener {
+        binding.label12.text = da
+        binding.label12.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val w = label12.text.toString().split(".")
+            val w = binding.label12.text.toString().split(".")
             val gc = GregorianCalendar(w[2].toInt(), w[1].toInt() - 1, w[0].toInt())
             yearG = gc[Calendar.YEAR]
             munG = gc[Calendar.MONTH]
@@ -326,83 +328,83 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             i.putExtra("sabytie", true)
             startActivityForResult(i, 1092)
         }
-        label22.text = ta
-        label22.setOnClickListener {
+        binding.label22.text = ta
+        binding.label22.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val dialogSabytieTime = DialogSabytieTime.getInstance(2, label22.text.toString())
+            val dialogSabytieTime = DialogSabytieTime.getInstance(2, binding.label22.text.toString())
             dialogSabytieTime.show(supportFragmentManager, "dialogSabytieTime")
         }
-        checkBox2.setOnCheckedChangeListener { _, isChecked ->
+        binding.checkBox2.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                linearKonec.visibility = View.GONE
+                binding.linearKonec.visibility = View.GONE
                 konec = false
             } else {
-                linearKonec.visibility = View.VISIBLE
+                binding.linearKonec.visibility = View.VISIBLE
                 konec = true
             }
         }
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.setOnClickListener {
+        binding.titleToolbar.setOnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
-        title_toolbar.text = resources.getString(R.string.sabytie)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
+        binding.titleToolbar.text = resources.getString(R.string.sabytie)
         if (dzenNoch) {
-            pacatak.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-            kanec.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-            pavedamic.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-            pavtor.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-            cvet.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-            pazov.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-            label1.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-            label2.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-            label12.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-            label22.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-            checkBox2.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-            label1.setBackgroundResource(R.drawable.selector_dark)
-            label2.setBackgroundResource(R.drawable.selector_dark)
-            label12.setBackgroundResource(R.drawable.selector_dark)
-            label22.setBackgroundResource(R.drawable.selector_dark)
-            checkBox2.setBackgroundResource(R.drawable.selector_dark)
-            labelbutton12.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-            labelbutton12.setBackgroundResource(R.drawable.selector_dark)
-            toolbar.popupTheme = R.style.AppCompatDark
+            binding.pacatak.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.kanec.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.pavedamic.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.pavtor.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.cvet.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.pazov.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.label1.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.label2.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.label12.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.label22.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.checkBox2.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.label1.setBackgroundResource(R.drawable.selector_dark)
+            binding.label2.setBackgroundResource(R.drawable.selector_dark)
+            binding.label12.setBackgroundResource(R.drawable.selector_dark)
+            binding.label22.setBackgroundResource(R.drawable.selector_dark)
+            binding.checkBox2.setBackgroundResource(R.drawable.selector_dark)
+            binding.labelbutton12.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+            binding.labelbutton12.setBackgroundResource(R.drawable.selector_dark)
+            binding.toolbar.popupTheme = R.style.AppCompatDark
         }
         MainActivity.padzeia.sort()
         for (i in 0 until MainActivity.padzeia.size) {
             sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
         }
         adapter = SabytieAdapter(sabytie2, R.layout.list_item_sabytie, R.id.image, false)
-        drag_list_view.recyclerView.isVerticalScrollBarEnabled = false
-        drag_list_view.setLayoutManager(LinearLayoutManager(this))
-        drag_list_view.setAdapter(adapter, false)
-        drag_list_view.setCanDragHorizontally(false)
-        drag_list_view.setCanDragVertically(true)
-        drag_list_view.setCanDragVertically(false)
-        drag_list_view.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
+        binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
+        binding.dragListView.setLayoutManager(LinearLayoutManager(this))
+        binding.dragListView.setAdapter(adapter, false)
+        binding.dragListView.setCanDragHorizontally(false)
+        binding.dragListView.setCanDragVertically(true)
+        binding.dragListView.setCanDragVertically(false)
+        binding.dragListView.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
             override fun onItemSwipeStarted(item: ListSwipeItem) {
             }
 
             override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: ListSwipeItem.SwipeDirection) {
                 val adapterItem = item.tag as SabytieDataAdapter
-                val pos: Int = drag_list_view.adapter.getPositionForItem(adapterItem)
+                val pos: Int = binding.dragListView.adapter.getPositionForItem(adapterItem)
                 if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
                     onDialogDeliteClick(pos)
                 }
@@ -417,36 +419,36 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             save = savedInstanceState.getBoolean("save")
             idMenu = savedInstanceState.getInt("idMenu")
             if (savedInstanceState.getBoolean("titleLayout")) {
-                titleLayout.visibility = View.VISIBLE
-                drag_list_view.visibility = View.GONE
+                binding.titleLayout.visibility = View.VISIBLE
+                binding.dragListView.visibility = View.GONE
                 invalidateOptionsMenu()
             }
             ta = savedInstanceState.getString("ta") ?: "0:0"
             da = savedInstanceState.getString("da") ?: "0.0.0"
             taK = savedInstanceState.getString("taK") ?: "0:0"
             daK = savedInstanceState.getString("daK") ?: "0.0.0"
-            label1.text = da
-            label2.text = ta
-            label12.text = daK
-            label22.text = taK
+            binding.label1.text = da
+            binding.label2.text = ta
+            binding.label12.text = daK
+            binding.label22.text = taK
         }
-        editText.addTextChangedListener(MyTextWatcher(editText))
-        editText2.addTextChangedListener(MyTextWatcher(editText2))
-        editSave = editText.text.toString().trim()
-        edit2Save = editText2.text.toString()
-        daSave = label1.text.toString()
-        taSave = label2.text.toString()
-        daKSave = label12.text.toString()
-        taKSave = label22.text.toString()
-        labelbutton12Save = labelbutton12.text.toString()
-        editText4Save = editText4.text.toString()
-        colorSave = spinner5.selectedItemPosition
+        binding.editText.addTextChangedListener(MyTextWatcher(binding.editText))
+        binding.editText2.addTextChangedListener(MyTextWatcher(binding.editText2))
+        editSave = binding.editText.text.toString().trim()
+        edit2Save = binding.editText2.text.toString()
+        daSave = binding.label1.text.toString()
+        taSave = binding.label2.text.toString()
+        daKSave = binding.label12.text.toString()
+        taKSave = binding.label22.text.toString()
+        labelbutton12Save = binding.labelbutton12.text.toString()
+        editText4Save = binding.editText4.text.toString()
+        colorSave = binding.spinner5.selectedItemPosition
         radioSave = radio
         if (intent.extras?.getBoolean("shortcuts", false) == true) {
             addSabytie()
         }
         if (intent.extras?.getBoolean("edit", false) == true) {
-            val position = intent.extras?.getInt("position")?: 0
+            val position = intent.extras?.getInt("position") ?: 0
             onSabytieRedaktor(position)
             editCaliandar = true
         }
@@ -456,52 +458,52 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         save = true
         back = true
         val p = MainActivity.padzeia[position]
-        editText.setText(p.padz)
-        label1.text = p.dat
-        label2.text = p.tim
-        label12.text = p.datK
-        label22.text = p.timK
-        if (p.sec == "-1") editText2.setText("") else editText2.setText(p.sec)
-        spinner3.setSelection(p.vybtime)
-        spinner4.setSelection(p.repit)
-        spinner5.setSelection(p.color)
-        labelbutton12Save = labelbutton12.text.toString()
-        editText4Save = editText4.text.toString()
+        binding.editText.setText(p.padz)
+        binding.label1.text = p.dat
+        binding.label2.text = p.tim
+        binding.label12.text = p.datK
+        binding.label22.text = p.timK
+        if (p.sec == "-1") binding.editText2.setText("") else binding.editText2.setText(p.sec)
+        binding.spinner3.setSelection(p.vybtime)
+        binding.spinner4.setSelection(p.repit)
+        binding.spinner5.setSelection(p.color)
+        labelbutton12Save = binding.labelbutton12.text.toString()
+        editText4Save = binding.editText4.text.toString()
         radioSave = radio
         vybtimeSave = p.vybtime
         repitSave = p.repit
         colorSave = p.color
         color = p.color
-        if (p.repit > 0) radioGroup.visibility = View.VISIBLE else radioGroup.visibility = View.GONE
+        if (p.repit > 0) binding.radioGroup.visibility = View.VISIBLE else binding.radioGroup.visibility = View.GONE
         nomer = position
-        titleLayout.visibility = View.VISIBLE
-        drag_list_view.visibility = View.GONE
+        binding.titleLayout.visibility = View.VISIBLE
+        binding.dragListView.visibility = View.GONE
         idMenu = 3
         time = p.count
         val count = time.split(".")
         when {
-            time == "0" -> radioButton1.isChecked = true
+            time == "0" -> binding.radioButton1.isChecked = true
             count.size == 1 -> {
-                radioButton2.isChecked = true
-                editText4.setText(time)
+                binding.radioButton2.isChecked = true
+                binding.editText4.setText(time)
             }
             else -> {
-                radioButton3.isChecked = true
-                labelbutton12.text = time
+                binding.radioButton3.isChecked = true
+                binding.labelbutton12.text = time
             }
         }
         repitL = p.repit
-        editSave = editText.text.toString().trim()
-        edit2Save = editText2.text.toString()
-        daSave = label1.text.toString()
-        taSave = label2.text.toString()
-        daKSave = label12.text.toString()
-        taKSave = label22.text.toString()
+        editSave = binding.editText.text.toString().trim()
+        edit2Save = binding.editText2.text.toString()
+        daSave = binding.label1.text.toString()
+        taSave = binding.label2.text.toString()
+        daKSave = binding.label12.text.toString()
+        taKSave = binding.label22.text.toString()
         invalidateOptionsMenu()
     }
 
     override fun fileDeliteCancel() {
-        drag_list_view.resetSwipedViews(null)
+        binding.dragListView.resetSwipedViews(null)
     }
 
     override fun fileDelite(position: Int, file: String) {
@@ -536,29 +538,29 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         pIntent.cancel()
                     }
                 } else {
-                        for (p in del) {
-                            if (p.padz.contains(filen)) {
-                                if (p.sec != "-1") {
-                                    val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
-                                    val londs3 = p.paznic / 100000L
-                                    val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
-                                    am.cancel(pIntent)
-                                    pIntent.cancel()
-                                }
+                    for (p in del) {
+                        if (p.padz.contains(filen)) {
+                            if (p.sec != "-1") {
+                                val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
+                                val londs3 = p.paznic / 100000L
+                                val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                am.cancel(pIntent)
+                                pIntent.cancel()
                             }
                         }
                     }
-                } else {
-                    for (p in del) {
-                        if (p.sec != "-1") {
-                            val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
-                            val londs3 = p.paznic / 100000L
-                            val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
-                            am.cancel(pIntent)
-                            pIntent.cancel()
-                        }
+                }
+            } else {
+                for (p in del) {
+                    if (p.sec != "-1") {
+                        val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
+                        val londs3 = p.paznic / 100000L
+                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                        am.cancel(pIntent)
+                        pIntent.cancel()
                     }
                 }
+            }
         }
         MainActivity.toastView(this@Sabytie, getString(R.string.remove_padzea))
     }
@@ -569,16 +571,16 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     }
 
     override fun onBackPressed() {
-        val editSaveN = editText.text.toString().trim()
-        val edit2SaveN = editText2.text.toString()
-        val edit4SaveN = editText4.text.toString()
-        val daSaveN = label1.text.toString()
-        val taSaveN = label2.text.toString()
-        val daKSaveN = label12.text.toString()
-        val taKSaveN = label22.text.toString()
+        val editSaveN = binding.editText.text.toString().trim()
+        val edit2SaveN = binding.editText2.text.toString()
+        val edit4SaveN = binding.editText4.text.toString()
+        val daSaveN = binding.label1.text.toString()
+        val taSaveN = binding.label2.text.toString()
+        val daKSaveN = binding.label12.text.toString()
+        val taKSaveN = binding.label22.text.toString()
         if (editCaliandar) {
             onSupportNavigateUp()
-        } else if (!(edit2SaveN == edit2Save && editSaveN == editSave && daSaveN == daSave && daKSaveN == daKSave && taSaveN == taSave && taKSaveN == taKSave && spinner3.selectedItemPosition == vybtimeSave && spinner4.selectedItemPosition == repitSave && spinner5.selectedItemPosition == colorSave && labelbutton12Save == labelbutton12.text.toString() && editText4Save == edit4SaveN && radioSave == radio) && drag_list_view.visibility == View.GONE) {
+        } else if (!(edit2SaveN == edit2Save && editSaveN == editSave && daSaveN == daSave && daKSaveN == daKSave && taSaveN == taSave && taKSaveN == taKSave && binding.spinner3.selectedItemPosition == vybtimeSave && binding.spinner4.selectedItemPosition == repitSave && binding.spinner5.selectedItemPosition == colorSave && labelbutton12Save == binding.labelbutton12.text.toString() && editText4Save == edit4SaveN && radioSave == radio) && binding.dragListView.visibility == View.GONE) {
             val dialogSabytieSave = DialogSabytieSave()
             dialogSabytieSave.show(supportFragmentManager, "sabytie_save")
         } else if (back) {
@@ -635,9 +637,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 yearG = setCal[Calendar.YEAR]
                 munG = setCal[Calendar.MONTH]
                 if (requestCode == 109) {
-                    val days = label1.text.toString().split(".")
+                    val days = binding.label1.text.toString().split(".")
                     val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
-                    val days2 = label12.text.toString().split(".")
+                    val days2 = binding.label12.text.toString().split(".")
                     val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
                     val kon = gc2[Calendar.DAY_OF_YEAR]
                     val res = gc[Calendar.DAY_OF_YEAR]
@@ -647,7 +649,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         nol1 = if (setCal[Calendar.DAY_OF_MONTH] < 10) "0" else ""
                         nol2 = if (setCal[Calendar.MONTH] < 9) "0" else ""
                         da1 = nol1 + setCal[Calendar.DAY_OF_MONTH] + "." + nol2 + (setCal[Calendar.MONTH] + 1) + "." + setCal[Calendar.YEAR]
-                        label12.text = da1
+                        binding.label12.text = da1
                         if (gc2[Calendar.YEAR] > gc[Calendar.YEAR]) {
                             var leapYear = 365
                             if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 366
@@ -656,46 +658,46 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             nol1 = if (setCal[Calendar.DAY_OF_MONTH] < 10) "0" else ""
                             nol2 = if (setCal[Calendar.MONTH] < 9) "0" else ""
                             da1 = nol1 + setCal[Calendar.DAY_OF_MONTH] + "." + nol2 + (setCal[Calendar.MONTH] + 1) + "." + setCal[Calendar.YEAR]
-                            label12.text = da1
+                            binding.label12.text = da1
                         }
                     }
-                    label1.text = da
+                    binding.label1.text = da
                     nol1 = ""
                     nol2 = ""
                     setCal.add(Calendar.DATE, 1)
                     if (setCal[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
                     if (setCal[Calendar.MONTH] < 9) nol2 = "0"
-                    val days3 = labelbutton12.text.toString().split(".")
+                    val days3 = binding.labelbutton12.text.toString().split(".")
                     val gc3 = GregorianCalendar(days3[2].toInt(), days3[1].toInt() - 1, days3[0].toInt(), 0, 0, 0)
-                    val days4 = label1.text.toString().split(".")
+                    val days4 = binding.label1.text.toString().split(".")
                     val gc4 = GregorianCalendar(days4[2].toInt(), days4[1].toInt() - 1, days4[0].toInt(), 0, 0, 0)
                     val kon2 = gc3.timeInMillis
                     val resul = gc4.timeInMillis
-                    if (kon2 - resul < 0) labelbutton12.text = resources.getString(R.string.Sabytie, nol1, setCal[Calendar.DAY_OF_MONTH], nol2, setCal[Calendar.MONTH] + 1, setCal[Calendar.YEAR])
-                    val temp = editText2.text
-                    editText2.setText("")
-                    editText2.text = temp
+                    if (kon2 - resul < 0) binding.labelbutton12.text = resources.getString(R.string.Sabytie, nol1, setCal[Calendar.DAY_OF_MONTH], nol2, setCal[Calendar.MONTH] + 1, setCal[Calendar.YEAR])
+                    val temp = binding.editText2.text
+                    binding.editText2.setText("")
+                    binding.editText2.text = temp
                 }
                 if (requestCode == 1092) {
-                    label12.text = da
-                    val days = label1.text.toString().split(".")
+                    binding.label12.text = da
+                    val days = binding.label1.text.toString().split(".")
                     val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
-                    val days2 = label12.text.toString().split(".")
+                    val days2 = binding.label12.text.toString().split(".")
                     val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
                     val kon = gc2.timeInMillis
                     result = gc.timeInMillis
                     if (kon - result < 0) {
                         MainActivity.toastView(this@Sabytie, getString(R.string.data_sabytie_error))
-                        da = label1.text.toString()
-                        label12.text = da
+                        da = binding.label1.text.toString()
+                        binding.label12.text = da
                     }
                 }
                 if (requestCode == 1093) {
-                    labelbutton12.text = da
-                    val days = label1.text.toString().split(".")
+                    binding.labelbutton12.text = da
+                    val days = binding.label1.text.toString().split(".")
                     val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
                     gc.add(Calendar.DATE, 1)
-                    val days2 = labelbutton12.text.toString().split(".")
+                    val days2 = binding.labelbutton12.text.toString().split(".")
                     val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
                     val kon = gc2.timeInMillis
                     val resul = gc.timeInMillis
@@ -705,7 +707,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         nol2 = ""
                         if (gc[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
                         if (gc[Calendar.MONTH] < 9) nol2 = "0"
-                        labelbutton12.text = resources.getString(R.string.Sabytie, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR])
+                        binding.labelbutton12.text = resources.getString(R.string.Sabytie, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR])
                     }
                 }
             }
@@ -795,17 +797,17 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         if (id == R.id.action_save) {
             redak = true
             back = false
-            val edit = editText.text.toString().trim()
-            var edit2 = editText2.text.toString()
-            da = label1.text.toString()
-            ta = label2.text.toString()
-            daK = label12.text.toString()
-            taK = label22.text.toString()
+            val edit = binding.editText.text.toString().trim()
+            var edit2 = binding.editText2.text.toString()
+            da = binding.label1.text.toString()
+            ta = binding.label2.text.toString()
+            daK = binding.label12.text.toString()
+            taK = binding.label22.text.toString()
             if (edit != "") {
                 var londs: Long = 0
                 var londs2: Long = 0
-                val days = label1.text.toString().split(".")
-                val times = label2.text.toString().split(":")
+                val days = binding.label1.text.toString().split(".")
+                val times = binding.label2.text.toString().split(":")
                 val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                 result = gc.timeInMillis
                 if (!konec) {
@@ -857,7 +859,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         var leapYear = 365 - dayof + 365 + 1
                         if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 365 - dayof + 366 + 1
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
@@ -869,7 +871,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -938,7 +940,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         var leapYear = 365 - dayof + 365 + 1
                         if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 365 - dayof + 366 + 1
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
@@ -950,7 +952,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -1002,7 +1004,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         var leapYear = 365 - dayof + 365 + 1
                         if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 365 - dayof + 366 + 1
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
@@ -1014,7 +1016,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -1068,7 +1070,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 52 - dayof + 52 + 1
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.WEEK_OF_YEAR] - dayof
@@ -1080,7 +1082,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -1145,11 +1147,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
                         val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        
+
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 26 - dayof / 2 + 26 + 1
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
@@ -1161,7 +1163,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -1226,11 +1228,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
                         val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        
+
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 13 - dayof / 4 + 13
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
@@ -1242,7 +1244,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -1310,7 +1312,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         val dayof = gc[Calendar.MONTH] + 1
                         var leapYear = 12 - dayof + 12 + 1
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
@@ -1322,7 +1324,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -1370,7 +1372,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                         var leapYear = 10
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -1420,43 +1422,43 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 for (i in 0 until MainActivity.padzeia.size) {
                     sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
                 }
-                if (editText2.text.toString() != "") {
+                if (binding.editText2.text.toString() != "") {
                     if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
                         val notifi = DialogHelpNotification()
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                 }
                 adapter.notifyDataSetChanged()
-                editText.setText("")
-                editText2.setText("")
+                binding.editText.setText("")
+                binding.editText2.setText("")
                 MainActivity.toastView(this@Sabytie, getString(R.string.save))
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(editText.windowToken, 0)
-                titleLayout.visibility = View.GONE
-                drag_list_view.visibility = View.VISIBLE
+                imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
+                binding.titleLayout.visibility = View.GONE
+                binding.dragListView.visibility = View.VISIBLE
                 idMenu = 1
                 invalidateOptionsMenu()
             } else {
-                editText.startAnimation(shakeanimation)
+                binding.editText.startAnimation(shakeanimation)
             }
         }
         if (id == R.id.action_save_redak) {
             redak = true
             back = false
             val p = MainActivity.padzeia[nomer]
-            val edit = editText.text.toString().trim()
-            var edit2 = editText2.text.toString()
-            da = label1.text.toString()
-            ta = label2.text.toString()
-            daK = label12.text.toString()
-            taK = label22.text.toString()
+            val edit = binding.editText.text.toString().trim()
+            var edit2 = binding.editText2.text.toString()
+            da = binding.label1.text.toString()
+            ta = binding.label2.text.toString()
+            daK = binding.label12.text.toString()
+            taK = binding.label22.text.toString()
             if (edit != "") {
                 var intent: Intent
                 var pIntent: PendingIntent
                 var londs: Long = 0
                 var londs2: Long = 0
-                val days = label1.text.toString().split(".")
-                val times = label2.text.toString().split(":")
+                val days = binding.label1.text.toString().split(".")
+                val times = binding.label2.text.toString().split(":")
                 val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                 result = gc.timeInMillis
                 if (!konec) {
@@ -1522,7 +1524,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         var leapYear = 365 - dayof + 365 + 1
                         if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 365 - dayof + 366 + 1
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd = gc3[Calendar.DAY_OF_YEAR] - dayof
@@ -1534,7 +1536,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -1603,7 +1605,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         var leapYear = 365 - dayof + 365 + 1
                         if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 365 - dayof + 366 + 1
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
@@ -1615,7 +1617,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -1667,7 +1669,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         var leapYear = 365 - dayof + 365 + 1
                         if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 365 - dayof + 366 + 1
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
@@ -1679,7 +1681,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -1730,11 +1732,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
                         val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        
+
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 52 - dayof + 52 + 1
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.WEEK_OF_YEAR] - dayof
@@ -1746,7 +1748,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -1814,7 +1816,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 26 - dayof / 2 + 26 + 1
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
@@ -1826,7 +1828,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -1894,7 +1896,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         val dayof = gc[Calendar.WEEK_OF_YEAR]
                         var leapYear = 13 - dayof / 4 + 13
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
@@ -1906,7 +1908,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -1974,7 +1976,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         val dayof = gc[Calendar.MONTH] + 1
                         var leapYear = 12 - dayof + 12 + 1
                         if (radio == 3) {
-                            time = labelbutton12.text.toString()
+                            time = binding.labelbutton12.text.toString()
                             val tim = time.split(".")
                             val gc3 = GregorianCalendar(tim[2].toInt(), tim[1].toInt() - 1, tim[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                             var resd: Int = gc3[Calendar.DAY_OF_YEAR] - dayof
@@ -1986,7 +1988,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             leapYear = resd + 1
                         }
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -2032,10 +2034,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         gc[rdat[2].toInt(), rdat[1].toInt() - 1, rdat[0].toInt(), times[0].toInt(), times[1].toInt()] = 0
                         val rdat2 = daK.split(".")
                         val gc2 = GregorianCalendar(rdat2[2].toInt(), rdat2[1].toInt() - 1, rdat2[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
-                        
+
                         var leapYear = 10
                         if (radio == 2) {
-                            time = editText4.text.toString()
+                            time = binding.editText4.text.toString()
                             if (time == "") time = "1"
                             leapYear = time.toInt()
                         }
@@ -2085,19 +2087,19 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 for (i in 0 until MainActivity.padzeia.size) {
                     sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
                 }
-                if (editText2.text.toString() != "") {
+                if (binding.editText2.text.toString() != "") {
                     if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
                         val notifi = DialogHelpNotification()
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                 }
                 adapter.notifyDataSetChanged()
-                editText.setText("")
-                editText2.setText("")
-                spinner3.setSelection(0)
-                spinner4.setSelection(0)
-                spinner5.setSelection(0)
-                radioGroup.visibility = View.GONE
+                binding.editText.setText("")
+                binding.editText2.setText("")
+                binding.spinner3.setSelection(0)
+                binding.spinner4.setSelection(0)
+                binding.spinner5.setSelection(0)
+                binding.radioGroup.visibility = View.GONE
                 var nol1 = ""
                 var nol2 = ""
                 c.add(Calendar.HOUR_OF_DAY, 1)
@@ -2105,19 +2107,19 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 if (c[Calendar.MONTH] < 9) nol2 = "0"
                 da = nol1 + c[Calendar.DAY_OF_MONTH] + "." + nol2 + (c[Calendar.MONTH] + 1) + "." + c[Calendar.YEAR]
                 ta = "$timeH:00"
-                label1.text = da
-                label2.text = ta
-                label12.text = da
-                label22.text = ta
+                binding.label1.text = da
+                binding.label2.text = ta
+                binding.label12.text = da
+                binding.label22.text = ta
                 MainActivity.toastView(this@Sabytie, getString(R.string.save))
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(editText.windowToken, 0)
-                titleLayout.visibility = View.GONE
-                drag_list_view.visibility = View.VISIBLE
+                imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
+                binding.titleLayout.visibility = View.GONE
+                binding.dragListView.visibility = View.VISIBLE
                 idMenu = 1
                 invalidateOptionsMenu()
             } else {
-                editText.startAnimation(shakeanimation)
+                binding.editText.startAnimation(shakeanimation)
             }
             if (editCaliandar) {
                 CaliandarFull.editCaliandarTitle = edit
@@ -2132,22 +2134,22 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             var nol2 = ""
             if (c[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
             if (c[Calendar.MONTH] < 9) nol2 = "0"
-            editText.setText("")
-            editText2.setText("")
-            spinner3.setSelection(0)
-            spinner4.setSelection(0)
-            spinner5.setSelection(0)
-            radioGroup.visibility = View.GONE
+            binding.editText.setText("")
+            binding.editText2.setText("")
+            binding.spinner3.setSelection(0)
+            binding.spinner4.setSelection(0)
+            binding.spinner5.setSelection(0)
+            binding.radioGroup.visibility = View.GONE
             da = nol1 + c[Calendar.DAY_OF_MONTH] + "." + nol2 + (c[Calendar.MONTH] + 1) + "." + c[Calendar.YEAR]
             ta = "$timeH:00"
-            label1.text = da
-            label2.text = ta
-            label12.text = da
-            label22.text = ta
+            binding.label1.text = da
+            binding.label2.text = ta
+            binding.label12.text = da
+            binding.label22.text = ta
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(editText.windowToken, 0)
-            titleLayout.visibility = View.GONE
-            drag_list_view.visibility = View.VISIBLE
+            imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
+            binding.titleLayout.visibility = View.GONE
+            binding.dragListView.visibility = View.VISIBLE
             idMenu = 1
             invalidateOptionsMenu()
             if (editCaliandar) {
@@ -2165,57 +2167,56 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     }
 
     private fun onSabytieRedaktor(pos: Int) {
-        drag_list_view.resetSwipedViews(null)
+        binding.dragListView.resetSwipedViews(null)
         val timeC: String
         save = true
         back = true
         val p = MainActivity.padzeia[pos]
-        editText.setText(p.padz)
-        label1.text = p.dat
-        label2.text = p.tim
-        label12.text = p.datK
-        label22.text = p.timK
-        if (p.sec == "-1") editText2.setText("") else editText2.setText(p.sec)
-        spinner3.setSelection(p.vybtime)
-        spinner4.setSelection(p.repit)
-        spinner5.setSelection(p.color)
-        labelbutton12Save = labelbutton12.text.toString()
-        editText4Save = editText4.text.toString()
+        binding.editText.setText(p.padz)
+        binding.label1.text = p.dat
+        binding.label2.text = p.tim
+        binding.label12.text = p.datK
+        binding.label22.text = p.timK
+        if (p.sec == "-1") binding.editText2.setText("") else binding.editText2.setText(p.sec)
+        binding.spinner3.setSelection(p.vybtime)
+        binding.spinner4.setSelection(p.repit)
+        binding.spinner5.setSelection(p.color)
+        labelbutton12Save = binding.labelbutton12.text.toString()
+        editText4Save = binding.editText4.text.toString()
         radioSave = radio
         vybtimeSave = p.vybtime
         repitSave = p.repit
         colorSave = p.color
         color = p.color
         konec = p.konecSabytie
-        checkBox2.isChecked = !konec
-        if (konec)
-            linearKonec.visibility = View.VISIBLE
-        if (p.repit > 0) radioGroup.visibility = View.VISIBLE else radioGroup.visibility = View.GONE
+        binding.checkBox2.isChecked = !konec
+        if (konec) binding.linearKonec.visibility = View.VISIBLE
+        if (p.repit > 0) binding.radioGroup.visibility = View.VISIBLE else binding.radioGroup.visibility = View.GONE
         nomer = pos
-        titleLayout.visibility = View.VISIBLE
-        drag_list_view.visibility = View.GONE
+        binding.titleLayout.visibility = View.VISIBLE
+        binding.dragListView.visibility = View.GONE
         idMenu = 3
         timeC = p.count
         val count = timeC.split(".")
         when {
-            timeC == "0" -> radioButton1.isChecked = true
+            timeC == "0" -> binding.radioButton1.isChecked = true
             count.size == 1 -> {
-                radioButton2.isChecked = true
-                editText4.setText(timeC)
+                binding.radioButton2.isChecked = true
+                binding.editText4.setText(timeC)
             }
             else -> {
-                radioButton3.isChecked = true
-                labelbutton12.text = timeC
+                binding.radioButton3.isChecked = true
+                binding.labelbutton12.text = timeC
             }
         }
         repitL = p.repit
         time = timeC
-        editSave = editText.text.toString().trim()
-        edit2Save = editText2.text.toString()
-        daSave = label1.text.toString()
-        taSave = label2.text.toString()
-        daKSave = label12.text.toString()
-        taKSave = label22.text.toString()
+        editSave = binding.editText.text.toString().trim()
+        edit2Save = binding.editText2.text.toString()
+        daSave = binding.label1.text.toString()
+        taSave = binding.label2.text.toString()
+        daKSave = binding.label12.text.toString()
+        taKSave = binding.label22.text.toString()
         invalidateOptionsMenu()
     }
 
@@ -2224,7 +2225,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         save = false
         back = true
         konec = false
-        checkBox2.isChecked = !konec
+        binding.checkBox2.isChecked = !konec
         var nol1 = ""
         var nol2 = ""
         if (c[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
@@ -2239,22 +2240,22 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         if (c[Calendar.MONTH] < 9) nol2 = "0"
         daK = nol1 + c[Calendar.DAY_OF_MONTH] + "." + nol2 + (c[Calendar.MONTH] + 1) + "." + c[Calendar.YEAR]
         taK = ta
-        titleLayout.visibility = View.VISIBLE
-        drag_list_view.visibility = View.GONE
-        label1.text = da
-        label2.text = ta
-        label12.text = daK
-        label22.text = taK
+        binding.titleLayout.visibility = View.VISIBLE
+        binding.dragListView.visibility = View.GONE
+        binding.label1.text = da
+        binding.label2.text = ta
+        binding.label12.text = daK
+        binding.label22.text = taK
         idMenu = 2
-        spinner4.setSelection(0)
-        spinner5.setSelection(0)
+        binding.spinner4.setSelection(0)
+        binding.spinner5.setSelection(0)
         color = 0
-        editSave = editText.text.toString().trim()
-        edit2Save = editText2.text.toString()
-        daSave = label1.text.toString()
-        taSave = label2.text.toString()
-        daKSave = label12.text.toString()
-        taKSave = label22.text.toString()
+        editSave = binding.editText.text.toString().trim()
+        edit2Save = binding.editText2.text.toString()
+        daSave = binding.label1.text.toString()
+        taSave = binding.label2.text.toString()
+        daKSave = binding.label12.text.toString()
+        taKSave = binding.label22.text.toString()
         invalidateOptionsMenu()
     }
 
@@ -2352,12 +2353,12 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         outState.putBoolean("redak", redak)
         outState.putBoolean("back", back)
         outState.putBoolean("save", save)
-        outState.putBoolean("titleLayout", titleLayout.visibility == View.VISIBLE)
+        outState.putBoolean("titleLayout", binding.titleLayout.visibility == View.VISIBLE)
         outState.putInt("idMenu", idMenu)
-        outState.putString("ta", label2.text.toString())
-        outState.putString("da", label1.text.toString())
-        outState.putString("taK", label22.text.toString())
-        outState.putString("daK", label12.text.toString())
+        outState.putString("ta", binding.label2.text.toString())
+        outState.putString("da", binding.label1.text.toString())
+        outState.putString("taK", binding.label22.text.toString())
+        outState.putString("daK", binding.label12.text.toString())
     }
 
     private inner class SabytieAdapter(list: ArrayList<SabytieDataAdapter>, private val mLayoutId: Int, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<SabytieDataAdapter, SabytieAdapter.ViewHolder>() {
@@ -2537,10 +2538,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
             viewHolder.text?.text = spinnerList[position]
             viewHolder.text?.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            if (dzenNoch)
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-             else
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
+            if (dzenNoch) viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
+            else viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
             return rootView
         }
 
@@ -2549,10 +2548,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val text: TextView = view.findViewById(R.id.text1)
             text.text = spinnerList[position]
             text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            if (dzenNoch)
-                text.setBackgroundResource(R.drawable.selector_dark)
-            else
-                text.setBackgroundResource(R.drawable.selector_default)
+            if (dzenNoch) text.setBackgroundResource(R.drawable.selector_dark)
+            else text.setBackgroundResource(R.drawable.selector_default)
             return view
         }
     }
@@ -2585,8 +2582,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 }
                 if (id == R.id.editText2) {
                     if (edit != "") {
-                        val days = label1.text.toString().split(".")
-                        val times = label2.text.toString().split(":")
+                        val days = binding.label1.text.toString().split(".")
+                        val times = binding.label2.text.toString().split(":")
                         val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), times[0].toInt(), times[1].toInt(), 0)
                         result = gc.timeInMillis
                         var londs = edit.toLong()
@@ -2604,19 +2601,19 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         if (gc[Calendar.DATE] < 10) nol1 = "0"
                         if (gc[Calendar.MONTH] < 9) nol2 = "0"
                         if (gc[Calendar.MINUTE] < 10) nol3 = "0"
-                        pavedamic2.text = getString(R.string.sabytie_pavedam, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR], gc[Calendar.HOUR_OF_DAY], nol3, gc[Calendar.MINUTE])
+                        binding.pavedamic2.text = getString(R.string.sabytie_pavedam, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR], gc[Calendar.HOUR_OF_DAY], nol3, gc[Calendar.MINUTE])
                         val gcReal = Calendar.getInstance() as GregorianCalendar
                         if (gcReal.timeInMillis > londs2) {
-                            if (dzenNoch) pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_black))
-                            else pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary))
+                            if (dzenNoch) binding.pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_black))
+                            else binding.pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary))
                         } else {
-                            if (dzenNoch) pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite))
-                            else pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
+                            if (dzenNoch) binding.pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite))
+                            else binding.pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
                         }
                     } else {
-                        pavedamic2.text = getString(R.string.sabytie_no_pavedam)
-                        if (dzenNoch) pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite))
-                        else pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
+                        binding.pavedamic2.text = getString(R.string.sabytie_no_pavedam)
+                        if (dzenNoch) binding.pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite))
+                        else binding.pavedamic2.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorPrimary_text))
                     }
                 }
                 if (check != 0) {

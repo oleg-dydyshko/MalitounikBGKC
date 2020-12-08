@@ -18,7 +18,7 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
-import kotlinx.android.synthetic.main.nadsan_malitvy_i_pesny.*
+import by.carkva_gazeta.resources.databinding.NadsanMalitvyIPesnyBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -51,10 +51,11 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         get() {
             return MainActivity.getOrientation(this)
         }
+    private lateinit var binding: NadsanMalitvyIPesnyBinding
 
     override fun onDialogFontSizePositiveClick() {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        malitvy_i_pesny.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+        binding.malitvyIPesny.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +69,8 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.nadsan_malitvy_i_pesny)
+        binding = NadsanMalitvyIPesnyBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         if (intent.extras != null) {
             var pedsny = R.raw.nadsan_pered
             when (intent.extras?.getInt("malitva", 0)) {
@@ -87,14 +89,14 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
                 builder.append(line)
             }
             inputStream.close()
-            malitvy_i_pesny.text = MainActivity.fromHtml(builder.toString())
+            binding.malitvyIPesny.text = MainActivity.fromHtml(builder.toString())
         }
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        malitvy_i_pesny.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+        binding.malitvyIPesny.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -104,24 +106,24 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text = intent.extras?.getString("malitva_title")
+        binding.titleToolbar.text = intent.extras?.getString("malitva_title")
         if (dzenNoch) {
-            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
 

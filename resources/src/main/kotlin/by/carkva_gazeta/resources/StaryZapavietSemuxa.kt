@@ -26,9 +26,9 @@ import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.DialogBibleRazdel.Companion.getInstance
 import by.carkva_gazeta.resources.DialogBibleRazdel.DialogBibleRazdelListener
+import by.carkva_gazeta.resources.databinding.ActivityBibleBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.activity_bible.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -72,6 +72,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         get() {
             return MainActivity.getOrientation(this)
         }
+    private lateinit var binding: ActivityBibleBinding
 
     private fun clearEmptyPosition() {
         val remove = ArrayList<ArrayList<Int>>()
@@ -96,7 +97,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         val set = ArrayMap<String, Int>()
         set["zavet"] = 0
         set["kniga"] = kniga
-        set["glava"] = pager.currentItem
+        set["glava"] = binding.pager.currentItem
         set["stix"] = fierstPosition
         val gson = Gson()
         prefEditors.putString("bible_time_semuxa", gson.toJson(set))
@@ -135,11 +136,11 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
     }
 
     override fun onDialogFontSizePositiveClick() {
-        pager.adapter?.notifyDataSetChanged()
+        binding.pager.adapter?.notifyDataSetChanged()
     }
 
     override fun onComplete(glava: Int) {
-        pager.currentItem = glava
+        binding.pager.currentItem = glava
     }
 
     override fun getListPosition(position: Int) {
@@ -151,14 +152,14 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
     }
 
     override fun addZakladka(color: Int) {
-        val adapter = pager.adapter as StaryZapavietSemuxa.MyPagerAdapter
-        val fragment = adapter.getFragment(pager.currentItem) as BackPressedFragment
+        val adapter = binding.pager.adapter as StaryZapavietSemuxa.MyPagerAdapter
+        val fragment = adapter.getFragment(binding.pager.currentItem) as BackPressedFragment
         fragment.addZakladka(color)
     }
 
     override fun addNatatka() {
-        val adapter = pager.adapter as MyPagerAdapter
-        val fragment = adapter.getFragment(pager.currentItem) as BackPressedFragment
+        val adapter = binding.pager.adapter as MyPagerAdapter
+        val fragment = adapter.getFragment(binding.pager.currentItem) as BackPressedFragment
         fragment.addNatatka()
     }
 
@@ -177,7 +178,8 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_bible)
+        binding = ActivityBibleBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         kniga = intent.extras?.getInt("kniga", 0) ?: 0
         glava = intent.extras?.getInt("glava", 0) ?: 0
         if (intent.extras?.containsKey("stix") == true) {
@@ -185,16 +187,16 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
             trak = true
         }
         BibleGlobalList.mListGlava = 0
-        pagerTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        for (i in 0 until pagerTabStrip.childCount) {
-            val nextChild = pagerTabStrip.getChildAt(i)
+        binding.pagerTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+        for (i in 0 until binding.pagerTabStrip.childCount) {
+            val nextChild = binding.pagerTabStrip.getChildAt(i)
             if (nextChild is TextView) {
                 nextChild.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
             }
         }
         val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
-        pager.adapter = adapterViewPager
-        pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        binding.pager.adapter = adapterViewPager
+        binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             }
 
@@ -376,7 +378,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
                 setOnClic(cytanneParalelnye, cytanneSours)
             }
         }
-        pager.currentItem = glava
+        binding.pager.currentItem = glava
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -394,25 +396,25 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
     }
 
     private fun setTollbarTheme() {
-        title_toolbar.setOnClickListener {
-            title_toolbar.setHorizontallyScrolling(true)
-            title_toolbar.freezesText = true
-            title_toolbar.marqueeRepeatLimit = -1
-            if (title_toolbar.isSelected) {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.END
-                title_toolbar.isSelected = false
+        binding.titleToolbar.setOnClickListener {
+            binding.titleToolbar.setHorizontallyScrolling(true)
+            binding.titleToolbar.freezesText = true
+            binding.titleToolbar.marqueeRepeatLimit = -1
+            if (binding.titleToolbar.isSelected) {
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
+                binding.titleToolbar.isSelected = false
             } else {
-                title_toolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                title_toolbar.isSelected = true
+                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                binding.titleToolbar.isSelected = true
             }
         }
-        title_toolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(toolbar)
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
-        subtitle_toolbar.text = title
+        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
+        binding.subtitleToolbar.text = title
         if (dzenNoch) {
-            toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
 
@@ -429,19 +431,19 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
 
     override fun onBackPressed() {
         if (paralel) {
-            scroll.visibility = View.GONE
-            pager.visibility = View.VISIBLE
-            subtitle_toolbar.visibility = View.VISIBLE
-            title_toolbar.text = getString(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
-            subtitle_toolbar.text = title
+            binding.scroll.visibility = View.GONE
+            binding.pager.visibility = View.VISIBLE
+            binding.subtitleToolbar.visibility = View.VISIBLE
+            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
+            binding.subtitleToolbar.text = title
             paralel = false
             invalidateOptionsMenu()
         } else if (fullscreenPage) {
             fullscreenPage = false
             show()
         } else if (BibleGlobalList.mPedakVisable) {
-            val adapter = pager.adapter as MyPagerAdapter
-            val fragment = adapter.getFragment(pager.currentItem) as BackPressedFragment
+            val adapter = binding.pager.adapter as MyPagerAdapter
+            val fragment = adapter.getFragment(binding.pager.currentItem) as BackPressedFragment
             fragment.onBackPressedFragment()
         } else {
             if (setedit || checkSetDzenNoch) {
@@ -584,15 +586,15 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         this.cytanneParalelnye = cytanneParalelnye ?: ""
         this.cytanneSours = cytanneSours ?: ""
         val pm = ParalelnyeMesta()
-        conteiner.removeAllViewsInLayout()
+        binding.conteiner.removeAllViewsInLayout()
         val arrayList = pm.paralel(this@StaryZapavietSemuxa, this.cytanneSours, this.cytanneParalelnye, true)
         for (textView in arrayList) {
-            conteiner.addView(textView)
+            binding.conteiner.addView(textView)
         }
-        scroll.visibility = View.VISIBLE
-        pager.visibility = View.GONE
-        title_toolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)
-        subtitle_toolbar.visibility = View.GONE
+        binding.scroll.visibility = View.VISIBLE
+        binding.pager.visibility = View.GONE
+        binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)
+        binding.subtitleToolbar.visibility = View.GONE
         invalidateOptionsMenu()
     }
 

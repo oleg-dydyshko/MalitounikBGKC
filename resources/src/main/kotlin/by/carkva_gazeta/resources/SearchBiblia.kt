@@ -237,12 +237,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.search_biblia)
-        buttonx2.visibility = View.VISIBLE
+        filter_grup.visibility = View.VISIBLE
         buttonx2.setOnClickListener(this)
         if (dzenNoch) {
             buttonx2.setImageResource(by.carkva_gazeta.malitounik.R.drawable.cancel)
         }
-        editText2.visibility = View.VISIBLE
         editText2.addTextChangedListener(MyTextWatcher(editText2, true))
         if (intent.getIntExtra("zavet", 1) != zavet) {
             prefEditors.putString("search_string", "")
@@ -553,13 +552,19 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             fierstPosition = chin.getInt("search_bible_fierstPosition", 0)
         }
         ListView.setSelection(fierstPosition)
-        spinner6.visibility = View.VISIBLE
-        checkBox.visibility = View.VISIBLE
-        checkBox2.visibility = View.VISIBLE
-        val data = arrayOf("Уся Біблія", "Евангельля", "Новы запавет", "Стары запавет")
+        val data = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.serche_bible)
         val arrayAdapter = SearchSpinnerAdapter(this, data)
         spinner6.adapter = arrayAdapter
         spinner6.setSelection(chin.getInt("biblia_seash", 0))
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val heightDiff = rootView.rootView.height - rootView.height
+            val keyword = rootView.rootView.height / 4
+            if (heightDiff > keyword) {
+                settings_grup.visibility = View.VISIBLE
+            } else {
+                settings_grup.visibility = View.GONE
+            }
+        }
         setTollbarTheme()
     }
 
@@ -1401,7 +1406,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         }
     }
 
-    private inner class SearchSpinnerAdapter(private val context: Activity, private val name: Array<String>) : ArrayAdapter<String?>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, name) {
+    private inner class SearchSpinnerAdapter(private val context: Activity, private val name: Array<String>) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, name) {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val v = super.getDropDownView(position, convertView, parent)

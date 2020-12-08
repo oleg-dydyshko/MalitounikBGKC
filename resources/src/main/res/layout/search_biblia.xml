@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="start">
@@ -83,7 +84,6 @@
         android:imeOptions="actionDone"
         android:inputType="text"
         android:singleLine="true"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/barrier2"
         app:layout_constraintEnd_toStartOf="@+id/buttonx2"
         app:layout_constraintStart_toStartOf="parent" />
@@ -94,7 +94,6 @@
         android:layout_height="20dp"
         android:padding="5dp"
         android:src="@drawable/cancel_black"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/editText2"
         app:layout_constraintEnd_toStartOf="@+id/spinner6"
         app:layout_constraintTop_toTopOf="@+id/editText2"
@@ -106,7 +105,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/editText2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editText2" />
@@ -115,10 +113,7 @@
         android:id="@+id/checkBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:text="@string/registr"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/checkBox2"
         app:layout_constraintStart_toStartOf="parent" />
@@ -130,9 +125,22 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/dakladnae_supadzenne"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/filter_grup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="editText2,buttonx2" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/settings_grup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="spinner6,checkBox,checkBox2" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"

@@ -1040,7 +1040,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                             prepinanie = prepinanie.replace("</strong>", " ", registr)
                             if (chin.getInt("slovocalkam", 0) == 0) {
                                 if (prepinanie.contains(poshuk1, registr)) {
-                                    val aSviatyia = bibleline[r]
+                                    val aSviatyia = MainActivity.fromHtml(bibleline[r])
                                     val title = "$nazva Гл. $glava".length
                                     val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
                                     val t3 = span.indexOf("-->")
@@ -1052,7 +1052,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                                 }
                             } else {
                                 if (prepinanie.contains(poshuk1, registr)) {
-                                    val aSviatyia = bibleline[r]
+                                    val aSviatyia = MainActivity.fromHtml(bibleline[r])
                                     val t2 = poshuk1.length
                                     val title = "$nazva Гл. $glava".length
                                     val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
@@ -1288,7 +1288,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                     prepinanie = prepinanie.replace("</strong>", " ", registr)
                     if (chin.getInt("slovocalkam", 0) == 0) {
                         if (prepinanie.contains(poshuk1, registr)) {
-                            val aSviatyia = bibleline[r]
+                            val aSviatyia = MainActivity.fromHtml(bibleline[r])
                             val t2 = poshuk1.length
                             val title = "$nazva Гл. $glava".length
                             val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
@@ -1300,7 +1300,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                         }
                     } else {
                         if (prepinanie.contains(poshuk1, registr)) {
-                            val aSviatyia = bibleline[r]
+                            val aSviatyia = MainActivity.fromHtml(bibleline[r])
                             val t2 = poshuk1.length
                             val title = "$nazva Гл. $glava".length
                             val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")

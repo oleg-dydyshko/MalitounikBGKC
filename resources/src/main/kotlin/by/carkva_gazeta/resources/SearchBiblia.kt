@@ -23,7 +23,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
-import by.carkva_gazeta.resources.DialogBibleSearshSettings.DiallogBibleSearshListiner
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -36,7 +37,7 @@ import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSearshListiner, DialogClearHishory.DialogClearHistoryListener {
+class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHishory.DialogClearHistoryListener {
     private var seash = ArrayList<Spannable>()
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
@@ -213,18 +214,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-    }
-
-    override fun onSetSettings(edit: String?) {
-        edit?.let {
-            if (edit.length >= 3) {
-                addHistory(it)
-                saveHistory()
-                execute(edit)
-                binding.History.visibility = View.GONE
-                binding.ListView.visibility = View.VISIBLE
-            }
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -556,7 +545,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             fierstPosition = chin.getInt("search_bible_fierstPosition", 0)
         }
         binding.ListView.setSelection(fierstPosition)
-        val data = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.serche_bible)
+        val data = if (zavet == 3) arrayOf(getString(by.carkva_gazeta.malitounik.R.string.psalter))
+        else resources.getStringArray(by.carkva_gazeta.malitounik.R.array.serche_bible)
         val arrayAdapter = SearchSpinnerAdapter(this, data)
         binding.spinner6.adapter = arrayAdapter
         binding.spinner6.setSelection(chin.getInt("biblia_seash", 0))
@@ -699,10 +689,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == by.carkva_gazeta.malitounik.R.id.action_settings) {
-            val dialogBiblesearshsettings = DialogBibleSearshSettings.getInstance(autoCompleteTextView?.text.toString())
-            dialogBiblesearshsettings.show(supportFragmentManager, "bible_searsh_settings")
-        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_clean_histopy) {
             val dialogClearHishory = DialogClearHishory.getInstance()
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
@@ -855,64 +841,65 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
     }
 
     private fun zamena(replase: String): String {
+        val registr = chin.getBoolean("pegistrbukv", true)
         var replase1 = replase
-        replase1 = replase1.replace("ё", "е")
-        replase1 = replase1.replace("и", "і")
-        replase1 = replase1.replace("щ", "ў")
-        replase1 = replase1.replace("ъ", "'")
-        replase1 = replase1.replace("све", "сьве")
-        replase1 = replase1.replace("сві", "сьві")
-        replase1 = replase1.replace("свя", "сьвя")
-        replase1 = replase1.replace("зве", "зьве")
-        replase1 = replase1.replace("зві", "зьві")
-        replase1 = replase1.replace("звя", "зьвя")
-        replase1 = replase1.replace("зме", "зьме")
-        replase1 = replase1.replace("змі", "зьмі")
-        replase1 = replase1.replace("змя", "зьмя")
-        replase1 = replase1.replace("зня", "зьня")
-        replase1 = replase1.replace("сле", "сьле")
-        replase1 = replase1.replace("слі", "сьлі")
-        replase1 = replase1.replace("сль", "сьль")
-        replase1 = replase1.replace("слю", "сьлю")
-        replase1 = replase1.replace("сля", "сьля")
-        replase1 = replase1.replace("сне", "сьне")
-        replase1 = replase1.replace("сні", "сьні")
-        replase1 = replase1.replace("сню", "сьню")
-        replase1 = replase1.replace("сня", "сьня")
-        replase1 = replase1.replace("спе", "сьпе")
-        replase1 = replase1.replace("спі", "сьпі")
-        replase1 = replase1.replace("спя", "сьпя")
-        replase1 = replase1.replace("сце", "сьце")
-        replase1 = replase1.replace("сці", "сьці")
-        replase1 = replase1.replace("сць", "сьць")
-        replase1 = replase1.replace("сцю", "сьцю")
-        replase1 = replase1.replace("сця", "сьця")
-        replase1 = replase1.replace("цце", "цьце")
-        replase1 = replase1.replace("цці", "цьці")
-        replase1 = replase1.replace("ццю", "цьцю")
-        replase1 = replase1.replace("ззе", "зьзе")
-        replase1 = replase1.replace("ззі", "зьзі")
-        replase1 = replase1.replace("ззю", "зьзю")
-        replase1 = replase1.replace("ззя", "зьзя")
-        replase1 = replase1.replace("зле", "зьле")
-        replase1 = replase1.replace("злі", "зьлі")
-        replase1 = replase1.replace("злю", "зьлю")
-        replase1 = replase1.replace("зля", "зьля")
-        replase1 = replase1.replace("збе", "зьбе")
-        replase1 = replase1.replace("збі", "зьбі")
-        replase1 = replase1.replace("збя", "зьбя")
-        replase1 = replase1.replace("нне", "ньне")
-        replase1 = replase1.replace("нні", "ньні")
-        replase1 = replase1.replace("нню", "ньню")
-        replase1 = replase1.replace("ння", "ньня")
-        replase1 = replase1.replace("лле", "льле")
-        replase1 = replase1.replace("ллі", "льлі")
-        replase1 = replase1.replace("ллю", "льлю")
-        replase1 = replase1.replace("лля", "льля")
-        replase1 = replase1.replace("дск", "дзк")
-        replase1 = replase1.replace("дств", "дзтв")
-        replase1 = replase1.replace("з’е", "зье")
-        replase1 = replase1.replace("з’я", "зья")
+        replase1 = replase1.replace("ё", "е", registr)
+        replase1 = replase1.replace("и", "і", registr)
+        replase1 = replase1.replace("щ", "ў", registr)
+        replase1 = replase1.replace("ъ", "'", registr)
+        replase1 = replase1.replace("све", "сьве", registr)
+        replase1 = replase1.replace("сві", "сьві", registr)
+        replase1 = replase1.replace("свя", "сьвя", registr)
+        replase1 = replase1.replace("зве", "зьве", registr)
+        replase1 = replase1.replace("зві", "зьві", registr)
+        replase1 = replase1.replace("звя", "зьвя", registr)
+        replase1 = replase1.replace("зме", "зьме", registr)
+        replase1 = replase1.replace("змі", "зьмі", registr)
+        replase1 = replase1.replace("змя", "зьмя", registr)
+        replase1 = replase1.replace("зня", "зьня", registr)
+        replase1 = replase1.replace("сле", "сьле", registr)
+        replase1 = replase1.replace("слі", "сьлі", registr)
+        replase1 = replase1.replace("сль", "сьль", registr)
+        replase1 = replase1.replace("слю", "сьлю", registr)
+        replase1 = replase1.replace("сля", "сьля", registr)
+        replase1 = replase1.replace("сне", "сьне", registr)
+        replase1 = replase1.replace("сні", "сьні", registr)
+        replase1 = replase1.replace("сню", "сьню", registr)
+        replase1 = replase1.replace("сня", "сьня", registr)
+        replase1 = replase1.replace("спе", "сьпе", registr)
+        replase1 = replase1.replace("спі", "сьпі", registr)
+        replase1 = replase1.replace("спя", "сьпя", registr)
+        replase1 = replase1.replace("сце", "сьце", registr)
+        replase1 = replase1.replace("сці", "сьці", registr)
+        replase1 = replase1.replace("сць", "сьць", registr)
+        replase1 = replase1.replace("сцю", "сьцю", registr)
+        replase1 = replase1.replace("сця", "сьця", registr)
+        replase1 = replase1.replace("цце", "цьце", registr)
+        replase1 = replase1.replace("цці", "цьці", registr)
+        replase1 = replase1.replace("ццю", "цьцю", registr)
+        replase1 = replase1.replace("ззе", "зьзе", registr)
+        replase1 = replase1.replace("ззі", "зьзі", registr)
+        replase1 = replase1.replace("ззю", "зьзю", registr)
+        replase1 = replase1.replace("ззя", "зьзя", registr)
+        replase1 = replase1.replace("зле", "зьле", registr)
+        replase1 = replase1.replace("злі", "зьлі", registr)
+        replase1 = replase1.replace("злю", "зьлю", registr)
+        replase1 = replase1.replace("зля", "зьля", registr)
+        replase1 = replase1.replace("збе", "зьбе", registr)
+        replase1 = replase1.replace("збі", "зьбі", registr)
+        replase1 = replase1.replace("збя", "зьбя", registr)
+        replase1 = replase1.replace("нне", "ньне", registr)
+        replase1 = replase1.replace("нні", "ньні", registr)
+        replase1 = replase1.replace("нню", "ньню", registr)
+        replase1 = replase1.replace("ння", "ньня", registr)
+        replase1 = replase1.replace("лле", "льле", registr)
+        replase1 = replase1.replace("ллі", "льлі", registr)
+        replase1 = replase1.replace("ллю", "льлю", registr)
+        replase1 = replase1.replace("лля", "льля", registr)
+        replase1 = replase1.replace("дск", "дзк", registr)
+        replase1 = replase1.replace("дств", "дзтв", registr)
+        replase1 = replase1.replace("з’е", "зье", registr)
+        replase1 = replase1.replace("з’я", "зья", registr)
         return replase1
     }
 
@@ -942,86 +929,87 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 val biblia = chin.getInt("biblia_seash", 0)
                 var nazva = ""
                 if (biblia == 0 || biblia == 3 || biblia == 4) {
-                    if (semuxaBible.keyAt(i).contains("biblias1")) nazva = "Быцьцё"
-                    if (semuxaBible.keyAt(i).contains("biblias2")) nazva = "Выхад"
-                    if (semuxaBible.keyAt(i).contains("biblias3")) nazva = "Лявіт"
-                    if (semuxaBible.keyAt(i).contains("biblias4")) nazva = "Лікі"
-                    if (semuxaBible.keyAt(i).contains("biblias5")) nazva = "Другі Закон"
+                    if (semuxaBible.keyAt(i) == "biblias1") nazva = "Быцьцё"
+                    if (semuxaBible.keyAt(i) == "biblias2") nazva = "Выхад"
+                    if (semuxaBible.keyAt(i) == "biblias3") nazva = "Лявіт"
+                    if (semuxaBible.keyAt(i) == "biblias4") nazva = "Лікі"
+                    if (semuxaBible.keyAt(i) == "biblias5") nazva = "Другі Закон"
                 }
                 if (biblia == 0 || biblia == 4) {
-                    if (semuxaBible.keyAt(i).contains("biblias6")) nazva = "Ісуса сына Нава"
-                    if (semuxaBible.keyAt(i).contains("biblias7")) nazva = "Судзьдзяў"
-                    if (semuxaBible.keyAt(i).contains("biblias8")) nazva = "Рут"
-                    if (semuxaBible.keyAt(i).contains("biblias9")) nazva = "1-я Царстваў"
-                    if (semuxaBible.keyAt(i).contains("biblias10")) nazva = "2-я Царстваў"
-                    if (semuxaBible.keyAt(i).contains("biblias11")) nazva = "3-я Царстваў"
-                    if (semuxaBible.keyAt(i).contains("biblias12")) nazva = "4-я Царстваў"
-                    if (semuxaBible.keyAt(i).contains("biblias13")) nazva = "1-я Летапісаў"
-                    if (semuxaBible.keyAt(i).contains("biblias14")) nazva = "2-я Летапісаў"
-                    if (semuxaBible.keyAt(i).contains("biblias15")) nazva = "Эздры"
-                    if (semuxaBible.keyAt(i).contains("biblias16")) nazva = "Нээміі"
-                    if (semuxaBible.keyAt(i).contains("biblias17")) nazva = "Эстэр"
-                    if (semuxaBible.keyAt(i).contains("biblias18")) nazva = "Ёва"
-                    if (semuxaBible.keyAt(i).contains("biblias19")) nazva = "Псалтыр"
-                    if (semuxaBible.keyAt(i).contains("biblias20")) nazva = "Выслоўяў Саламонавых"
-                    if (semuxaBible.keyAt(i).contains("biblias21")) nazva = "Эклезіяста"
-                    if (semuxaBible.keyAt(i).contains("biblias22")) nazva = "Найвышэйшая Песьня Саламонава"
-                    if (semuxaBible.keyAt(i).contains("biblias23")) nazva = "Ісаі"
-                    if (semuxaBible.keyAt(i).contains("biblias24")) nazva = "Ераміі"
-                    if (semuxaBible.keyAt(i).contains("biblias25")) nazva = "Ераміін Плач"
-                    if (semuxaBible.keyAt(i).contains("biblias26")) nazva = "Езэкііля"
-                    if (semuxaBible.keyAt(i).contains("biblias27")) nazva = "Данііла"
-                    if (semuxaBible.keyAt(i).contains("biblias28")) nazva = "Асіі"
-                    if (semuxaBible.keyAt(i).contains("biblias29")) nazva = "Ёіля"
-                    if (semuxaBible.keyAt(i).contains("biblias30")) nazva = "Амоса"
-                    if (semuxaBible.keyAt(i).contains("biblias31")) nazva = "Аўдзея"
-                    if (semuxaBible.keyAt(i).contains("biblias32")) nazva = "Ёны"
-                    if (semuxaBible.keyAt(i).contains("biblias33")) nazva = "Міхея"
-                    if (semuxaBible.keyAt(i).contains("biblias34")) nazva = "Навума"
-                    if (semuxaBible.keyAt(i).contains("biblias35")) nazva = "Абакума"
-                    if (semuxaBible.keyAt(i).contains("biblias36")) nazva = "Сафона"
-                    if (semuxaBible.keyAt(i).contains("biblias37")) nazva = "Агея"
-                    if (semuxaBible.keyAt(i).contains("biblias38")) nazva = "Захарыі"
-                    if (semuxaBible.keyAt(i).contains("biblias39")) nazva = "Малахіі"
+                    if (semuxaBible.keyAt(i) == "biblias6") nazva = "Ісуса сына Нава"
+                    if (semuxaBible.keyAt(i) == "biblias7") nazva = "Судзьдзяў"
+                    if (semuxaBible.keyAt(i) == "biblias8") nazva = "Рут"
+                    if (semuxaBible.keyAt(i) == "biblias9") nazva = "1-я Царстваў"
+                    if (semuxaBible.keyAt(i) == "biblias10") nazva = "2-я Царстваў"
+                    if (semuxaBible.keyAt(i) == "biblias11") nazva = "3-я Царстваў"
+                    if (semuxaBible.keyAt(i) == "biblias12") nazva = "4-я Царстваў"
+                    if (semuxaBible.keyAt(i) == "biblias13") nazva = "1-я Летапісаў"
+                    if (semuxaBible.keyAt(i) == "biblias14") nazva = "2-я Летапісаў"
+                    if (semuxaBible.keyAt(i) == "biblias15") nazva = "Эздры"
+                    if (semuxaBible.keyAt(i) == "biblias16") nazva = "Нээміі"
+                    if (semuxaBible.keyAt(i) == "biblias17") nazva = "Эстэр"
+                    if (semuxaBible.keyAt(i) == "biblias18") nazva = "Ёва"
+                    if (semuxaBible.keyAt(i) == "biblias19") nazva = "Псалтыр"
+                    if (semuxaBible.keyAt(i) == "biblias20") nazva = "Выслоўяў Саламонавых"
+                    if (semuxaBible.keyAt(i) == "biblias21") nazva = "Эклезіяста"
+                    if (semuxaBible.keyAt(i) == "biblias22") nazva = "Найвышэйшая Песьня Саламонава"
+                    if (semuxaBible.keyAt(i) == "biblias23") nazva = "Ісаі"
+                    if (semuxaBible.keyAt(i) == "biblias24") nazva = "Ераміі"
+                    if (semuxaBible.keyAt(i) == "biblias25") nazva = "Ераміін Плач"
+                    if (semuxaBible.keyAt(i) == "biblias26") nazva = "Езэкііля"
+                    if (semuxaBible.keyAt(i) == "biblias27") nazva = "Данііла"
+                    if (semuxaBible.keyAt(i) == "biblias28") nazva = "Асіі"
+                    if (semuxaBible.keyAt(i) == "biblias29") nazva = "Ёіля"
+                    if (semuxaBible.keyAt(i) == "biblias30") nazva = "Амоса"
+                    if (semuxaBible.keyAt(i) == "biblias31") nazva = "Аўдзея"
+                    if (semuxaBible.keyAt(i) == "biblias32") nazva = "Ёны"
+                    if (semuxaBible.keyAt(i) == "biblias33") nazva = "Міхея"
+                    if (semuxaBible.keyAt(i) == "biblias34") nazva = "Навума"
+                    if (semuxaBible.keyAt(i) == "biblias35") nazva = "Абакума"
+                    if (semuxaBible.keyAt(i) == "biblias36") nazva = "Сафона"
+                    if (semuxaBible.keyAt(i) == "biblias37") nazva = "Агея"
+                    if (semuxaBible.keyAt(i) == "biblias38") nazva = "Захарыі"
+                    if (semuxaBible.keyAt(i) == "biblias39") nazva = "Малахіі"
                 }
                 if (biblia == 0 || biblia == 1 || biblia == 2) {
-                    if (semuxaBible.keyAt(i).contains("biblian1")) nazva = "Паводле Мацьвея"
-                    if (semuxaBible.keyAt(i).contains("biblian2")) nazva = "Паводле Марка"
-                    if (semuxaBible.keyAt(i).contains("biblian3")) nazva = "Паводле Лукаша"
-                    if (semuxaBible.keyAt(i).contains("biblian4")) nazva = "Паводле Яна"
+                    if (semuxaBible.keyAt(i) == "biblian1") nazva = "Паводле Мацьвея"
+                    if (semuxaBible.keyAt(i) == "biblian2") nazva = "Паводле Марка"
+                    if (semuxaBible.keyAt(i) == "biblian3") nazva = "Паводле Лукаша"
+                    if (semuxaBible.keyAt(i) == "biblian4") nazva = "Паводле Яна"
                 }
                 if (biblia == 0 || biblia == 2) {
-                    if (semuxaBible.keyAt(i).contains("biblian5")) nazva = "Дзеі Апосталаў"
-                    if (semuxaBible.keyAt(i).contains("biblian6")) nazva = "Якава"
-                    if (semuxaBible.keyAt(i).contains("biblian7")) nazva = "1-е Пятра"
-                    if (semuxaBible.keyAt(i).contains("biblian8")) nazva = "2-е Пятра"
-                    if (semuxaBible.keyAt(i).contains("biblian9")) nazva = "1-е Яна Багаслова"
-                    if (semuxaBible.keyAt(i).contains("biblian10")) nazva = "2-е Яна Багаслова"
-                    if (semuxaBible.keyAt(i).contains("biblian11")) nazva = "3-е Яна Багаслова"
-                    if (semuxaBible.keyAt(i).contains("biblian12")) nazva = "Юды"
-                    if (semuxaBible.keyAt(i).contains("biblian13")) nazva = "Да Рымлянаў"
-                    if (semuxaBible.keyAt(i).contains("biblian14")) nazva = "1-е да Карынфянаў"
-                    if (semuxaBible.keyAt(i).contains("biblian15")) nazva = "2-е да Карынфянаў"
-                    if (semuxaBible.keyAt(i).contains("biblian16")) nazva = "Да Галятаў"
-                    if (semuxaBible.keyAt(i).contains("biblian17")) nazva = "Да Эфэсянаў"
-                    if (semuxaBible.keyAt(i).contains("biblian18")) nazva = "Да Піліпянаў"
-                    if (semuxaBible.keyAt(i).contains("biblian19")) nazva = "Да Каласянаў"
-                    if (semuxaBible.keyAt(i).contains("biblian20")) nazva = "1-е да Фесаланікійцаў"
-                    if (semuxaBible.keyAt(i).contains("biblian21")) nazva = "2-е да Фесаланікійцаў"
-                    if (semuxaBible.keyAt(i).contains("biblian22")) nazva = "1-е да Цімафея"
-                    if (semuxaBible.keyAt(i).contains("biblian23")) nazva = "2-е да Цімафея"
-                    if (semuxaBible.keyAt(i).contains("biblian24")) nazva = "Да Ціта"
-                    if (semuxaBible.keyAt(i).contains("biblian25")) nazva = "Да Філімона"
-                    if (semuxaBible.keyAt(i).contains("biblian26")) nazva = "Да Габрэяў"
-                    if (semuxaBible.keyAt(i).contains("biblian27")) nazva = "Адкрыцьцё (Апакаліпсіс)"
+                    if (semuxaBible.keyAt(i) == "biblian5") nazva = "Дзеі Апосталаў"
+                    if (semuxaBible.keyAt(i) == "biblian6") nazva = "Якава"
+                    if (semuxaBible.keyAt(i) == "biblian7") nazva = "1-е Пятра"
+                    if (semuxaBible.keyAt(i) == "biblian8") nazva = "2-е Пятра"
+                    if (semuxaBible.keyAt(i) == "biblian9") nazva = "1-е Яна Багаслова"
+                    if (semuxaBible.keyAt(i) == "biblian10") nazva = "2-е Яна Багаслова"
+                    if (semuxaBible.keyAt(i) == "biblian11") nazva = "3-е Яна Багаслова"
+                    if (semuxaBible.keyAt(i) == "biblian12") nazva = "Юды"
+                    if (semuxaBible.keyAt(i) == "biblian13") nazva = "Да Рымлянаў"
+                    if (semuxaBible.keyAt(i) == "biblian14") nazva = "1-е да Карынфянаў"
+                    if (semuxaBible.keyAt(i) == "biblian15") nazva = "2-е да Карынфянаў"
+                    if (semuxaBible.keyAt(i) == "biblian16") nazva = "Да Галятаў"
+                    if (semuxaBible.keyAt(i) == "biblian17") nazva = "Да Эфэсянаў"
+                    if (semuxaBible.keyAt(i) == "biblian18") nazva = "Да Піліпянаў"
+                    if (semuxaBible.keyAt(i) == "biblian19") nazva = "Да Каласянаў"
+                    if (semuxaBible.keyAt(i) == "biblian20") nazva = "1-е да Фесаланікійцаў"
+                    if (semuxaBible.keyAt(i) == "biblian21") nazva = "2-е да Фесаланікійцаў"
+                    if (semuxaBible.keyAt(i) == "biblian22") nazva = "1-е да Цімафея"
+                    if (semuxaBible.keyAt(i) == "biblian23") nazva = "2-е да Цімафея"
+                    if (semuxaBible.keyAt(i) == "biblian24") nazva = "Да Ціта"
+                    if (semuxaBible.keyAt(i) == "biblian25") nazva = "Да Філімона"
+                    if (semuxaBible.keyAt(i) == "biblian26") nazva = "Да Габрэяў"
+                    if (semuxaBible.keyAt(i) == "biblian27") nazva = "Адкрыцьцё (Апакаліпсіс)"
                 }
                 if (nazva != "") {
                     val inputStream = resources.openRawResource(semuxaBible.valueAt(i))
                     val isr = InputStreamReader(inputStream)
                     val reader = BufferedReader(isr)
                     var glava = 0
-                    val split = reader.readText().split("===")
-                    inputStream.close()
+                    val split = reader.use {
+                        it.readText().split("===")
+                    }
                     (1 until split.size).forEach { e ->
                         glava++
                         val bibleline = split[e].split("\n")
@@ -1103,97 +1091,98 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                 val biblia = chin.getInt("biblia_seash", 0)
                 var nazva = ""
                 if (biblia == 0 || biblia == 3 || biblia == 4) {
-                    if (sinodalBible.keyAt(i).contains("sinaidals1")) nazva = "Бытие"
-                    if (sinodalBible.keyAt(i).contains("sinaidals2")) nazva = "Исход"
-                    if (sinodalBible.keyAt(i).contains("sinaidals3")) nazva = "Левит"
-                    if (sinodalBible.keyAt(i).contains("sinaidals4")) nazva = "Числа"
-                    if (sinodalBible.keyAt(i).contains("sinaidals5")) nazva = "Второзаконие"
+                    if (sinodalBible.keyAt(i) == "sinaidals1") nazva = "Бытие"
+                    if (sinodalBible.keyAt(i) == "sinaidals2") nazva = "Исход"
+                    if (sinodalBible.keyAt(i) == "sinaidals3") nazva = "Левит"
+                    if (sinodalBible.keyAt(i) == "sinaidals4") nazva = "Числа"
+                    if (sinodalBible.keyAt(i) == "sinaidals5") nazva = "Второзаконие"
                 }
                 if (biblia == 0 || biblia == 4) {
-                    if (sinodalBible.keyAt(i).contains("sinaidals6")) nazva = "Иисуса Навина"
-                    if (sinodalBible.keyAt(i).contains("sinaidals7")) nazva = "Судей израилевых"
-                    if (sinodalBible.keyAt(i).contains("sinaidals8")) nazva = "Руфи"
-                    if (sinodalBible.keyAt(i).contains("sinaidals9")) nazva = "1-я Царств"
-                    if (sinodalBible.keyAt(i).contains("sinaidals10")) nazva = "2-я Царств"
-                    if (sinodalBible.keyAt(i).contains("sinaidals11")) nazva = "3-я Царств"
-                    if (sinodalBible.keyAt(i).contains("sinaidals12")) nazva = "4-я Царств"
-                    if (sinodalBible.keyAt(i).contains("sinaidals13")) nazva = "1-я Паралипоменон"
-                    if (sinodalBible.keyAt(i).contains("sinaidals14")) nazva = "2-я Паралипоменон"
-                    if (sinodalBible.keyAt(i).contains("sinaidals15")) nazva = "1-я Ездры"
-                    if (sinodalBible.keyAt(i).contains("sinaidals16")) nazva = "Неемии"
-                    if (sinodalBible.keyAt(i).contains("sinaidals17")) nazva = "2-я Ездры"
-                    if (sinodalBible.keyAt(i).contains("sinaidals18")) nazva = "Товита"
-                    if (sinodalBible.keyAt(i).contains("sinaidals19")) nazva = "Иудифи"
-                    if (sinodalBible.keyAt(i).contains("sinaidals20")) nazva = "Есфири"
-                    if (sinodalBible.keyAt(i).contains("sinaidals21")) nazva = "Иова"
-                    if (sinodalBible.keyAt(i).contains("sinaidals22")) nazva = "Псалтирь"
-                    if (sinodalBible.keyAt(i).contains("sinaidals23")) nazva = "Притчи Соломона"
-                    if (sinodalBible.keyAt(i).contains("sinaidals24")) nazva = "Екклезиаста"
-                    if (sinodalBible.keyAt(i).contains("sinaidals25")) nazva = "Песнь песней Соломона"
-                    if (sinodalBible.keyAt(i).contains("sinaidals26")) nazva = "Премудрости Соломона"
-                    if (sinodalBible.keyAt(i).contains("sinaidals27")) nazva = "Премудрости Иисуса, сына Сирахова"
-                    if (sinodalBible.keyAt(i).contains("sinaidals28")) nazva = "Исаии"
-                    if (sinodalBible.keyAt(i).contains("sinaidals29")) nazva = "Иеремии"
-                    if (sinodalBible.keyAt(i).contains("sinaidals30")) nazva = "Плач Иеремии"
-                    if (sinodalBible.keyAt(i).contains("sinaidals31")) nazva = "Послание Иеремии"
-                    if (sinodalBible.keyAt(i).contains("sinaidals32")) nazva = "Варуха"
-                    if (sinodalBible.keyAt(i).contains("sinaidals33")) nazva = "Иезекииля"
-                    if (sinodalBible.keyAt(i).contains("sinaidals34")) nazva = "Даниила"
-                    if (sinodalBible.keyAt(i).contains("sinaidals35")) nazva = "Осии"
-                    if (sinodalBible.keyAt(i).contains("sinaidals36")) nazva = "Иоиля"
-                    if (sinodalBible.keyAt(i).contains("sinaidals37")) nazva = "Амоса"
-                    if (sinodalBible.keyAt(i).contains("sinaidals38")) nazva = "Авдия"
-                    if (sinodalBible.keyAt(i).contains("sinaidals39")) nazva = "Ионы"
-                    if (sinodalBible.keyAt(i).contains("sinaidals40")) nazva = "Михея"
-                    if (sinodalBible.keyAt(i).contains("sinaidals41")) nazva = "Наума"
-                    if (sinodalBible.keyAt(i).contains("sinaidals42")) nazva = "Аввакума"
-                    if (sinodalBible.keyAt(i).contains("sinaidals43")) nazva = "Сафонии"
-                    if (sinodalBible.keyAt(i).contains("sinaidals44")) nazva = "Аггея"
-                    if (sinodalBible.keyAt(i).contains("sinaidals45")) nazva = "Захарии"
-                    if (sinodalBible.keyAt(i).contains("sinaidals46")) nazva = "Малахии"
-                    if (sinodalBible.keyAt(i).contains("sinaidals47")) nazva = "1-я Маккавейская"
-                    if (sinodalBible.keyAt(i).contains("sinaidals48")) nazva = "2-я Маккавейская"
-                    if (sinodalBible.keyAt(i).contains("sinaidals49")) nazva = "3-я Маккавейская"
-                    if (sinodalBible.keyAt(i).contains("sinaidals50")) nazva = "3-я Ездры"
+                    if (sinodalBible.keyAt(i) == "sinaidals6") nazva = "Иисуса Навина"
+                    if (sinodalBible.keyAt(i) == "sinaidals7") nazva = "Судей израилевых"
+                    if (sinodalBible.keyAt(i) == "sinaidals8") nazva = "Руфи"
+                    if (sinodalBible.keyAt(i) == "sinaidals9") nazva = "1-я Царств"
+                    if (sinodalBible.keyAt(i) == "sinaidals10") nazva = "2-я Царств"
+                    if (sinodalBible.keyAt(i) == "sinaidals11") nazva = "3-я Царств"
+                    if (sinodalBible.keyAt(i) == "sinaidals12") nazva = "4-я Царств"
+                    if (sinodalBible.keyAt(i) == "sinaidals13") nazva = "1-я Паралипоменон"
+                    if (sinodalBible.keyAt(i) == "sinaidals14") nazva = "2-я Паралипоменон"
+                    if (sinodalBible.keyAt(i) == "sinaidals15") nazva = "1-я Ездры"
+                    if (sinodalBible.keyAt(i) == "sinaidals16") nazva = "Неемии"
+                    if (sinodalBible.keyAt(i) == "sinaidals17") nazva = "2-я Ездры"
+                    if (sinodalBible.keyAt(i) == "sinaidals18") nazva = "Товита"
+                    if (sinodalBible.keyAt(i) == "sinaidals19") nazva = "Иудифи"
+                    if (sinodalBible.keyAt(i) == "sinaidals20") nazva = "Есфири"
+                    if (sinodalBible.keyAt(i) == "sinaidals21") nazva = "Иова"
+                    if (sinodalBible.keyAt(i) == "sinaidals22") nazva = "Псалтирь"
+                    if (sinodalBible.keyAt(i) == "sinaidals23") nazva = "Притчи Соломона"
+                    if (sinodalBible.keyAt(i) == "sinaidals24") nazva = "Екклезиаста"
+                    if (sinodalBible.keyAt(i) == "sinaidals25") nazva = "Песнь песней Соломона"
+                    if (sinodalBible.keyAt(i) == "sinaidals26") nazva = "Премудрости Соломона"
+                    if (sinodalBible.keyAt(i) == "sinaidals27") nazva = "Премудрости Иисуса, сына Сирахова"
+                    if (sinodalBible.keyAt(i) == "sinaidals28") nazva = "Исаии"
+                    if (sinodalBible.keyAt(i) == "sinaidals29") nazva = "Иеремии"
+                    if (sinodalBible.keyAt(i) == "sinaidals30") nazva = "Плач Иеремии"
+                    if (sinodalBible.keyAt(i) == "sinaidals31") nazva = "Послание Иеремии"
+                    if (sinodalBible.keyAt(i) == "sinaidals32") nazva = "Варуха"
+                    if (sinodalBible.keyAt(i) == "sinaidals33") nazva = "Иезекииля"
+                    if (sinodalBible.keyAt(i) == "sinaidals34") nazva = "Даниила"
+                    if (sinodalBible.keyAt(i) == "sinaidals35") nazva = "Осии"
+                    if (sinodalBible.keyAt(i) == "sinaidals36") nazva = "Иоиля"
+                    if (sinodalBible.keyAt(i) == "sinaidals37") nazva = "Амоса"
+                    if (sinodalBible.keyAt(i) == "sinaidals38") nazva = "Авдия"
+                    if (sinodalBible.keyAt(i) == "sinaidals39") nazva = "Ионы"
+                    if (sinodalBible.keyAt(i) == "sinaidals40") nazva = "Михея"
+                    if (sinodalBible.keyAt(i) == "sinaidals41") nazva = "Наума"
+                    if (sinodalBible.keyAt(i) == "sinaidals42") nazva = "Аввакума"
+                    if (sinodalBible.keyAt(i) == "sinaidals43") nazva = "Сафонии"
+                    if (sinodalBible.keyAt(i) == "sinaidals44") nazva = "Аггея"
+                    if (sinodalBible.keyAt(i) == "sinaidals45") nazva = "Захарии"
+                    if (sinodalBible.keyAt(i) == "sinaidals46") nazva = "Малахии"
+                    if (sinodalBible.keyAt(i) == "sinaidals47") nazva = "1-я Маккавейская"
+                    if (sinodalBible.keyAt(i) == "sinaidals48") nazva = "2-я Маккавейская"
+                    if (sinodalBible.keyAt(i) == "sinaidals49") nazva = "3-я Маккавейская"
+                    if (sinodalBible.keyAt(i) == "sinaidals50") nazva = "3-я Ездры"
                 }
                 if (biblia == 0 || biblia == 1 || biblia == 2) {
-                    if (sinodalBible.keyAt(i).contains("sinaidaln1")) nazva = "От Матфея"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln2")) nazva = "От Марка"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln3")) nazva = "От Луки"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln4")) nazva = "От Иоанна"
+                    if (sinodalBible.keyAt(i) == "sinaidaln1") nazva = "От Матфея"
+                    if (sinodalBible.keyAt(i) == "sinaidaln2") nazva = "От Марка"
+                    if (sinodalBible.keyAt(i) == "sinaidaln3") nazva = "От Луки"
+                    if (sinodalBible.keyAt(i) == "sinaidaln4") nazva = "От Иоанна"
                 }
                 if (biblia == 0 || biblia == 2) {
-                    if (sinodalBible.keyAt(i).contains("sinaidaln5")) nazva = "Деяния святых апостолов"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln6")) nazva = "Иакова"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln7")) nazva = "1-е Петра"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln8")) nazva = "2-е Петра"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln9")) nazva = "1-е Иоанна"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln10")) nazva = "2-е Иоанна"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln11")) nazva = "3-е Иоанна"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln12")) nazva = "Иуды"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln13")) nazva = "Римлянам"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln14")) nazva = "1-е Коринфянам"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln15")) nazva = "2-е Коринфянам"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln16")) nazva = "Галатам"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln17")) nazva = "Эфэсянам"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln18")) nazva = "Филиппийцам"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln19")) nazva = "Колоссянам"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln20")) nazva = "1-е Фессалоникийцам (Солунянам)"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln21")) nazva = "2-е Фессалоникийцам (Солунянам)"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln22")) nazva = "1-е Тимофею"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln23")) nazva = "2-е Тимофею"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln24")) nazva = "Титу"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln25")) nazva = "Филимону"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln26")) nazva = "Евреям"
-                    if (sinodalBible.keyAt(i).contains("sinaidaln27")) nazva = "Откровение (Апокалипсис)"
+                    if (sinodalBible.keyAt(i) == "sinaidaln5") nazva = "Деяния святых апостолов"
+                    if (sinodalBible.keyAt(i) == "sinaidaln6") nazva = "Иакова"
+                    if (sinodalBible.keyAt(i) == "sinaidaln7") nazva = "1-е Петра"
+                    if (sinodalBible.keyAt(i) == "sinaidaln8") nazva = "2-е Петра"
+                    if (sinodalBible.keyAt(i) == "sinaidaln9") nazva = "1-е Иоанна"
+                    if (sinodalBible.keyAt(i) == "sinaidaln10") nazva = "2-е Иоанна"
+                    if (sinodalBible.keyAt(i) == "sinaidaln11") nazva = "3-е Иоанна"
+                    if (sinodalBible.keyAt(i) == "sinaidaln12") nazva = "Иуды"
+                    if (sinodalBible.keyAt(i) == "sinaidaln13") nazva = "Римлянам"
+                    if (sinodalBible.keyAt(i) == "sinaidaln14") nazva = "1-е Коринфянам"
+                    if (sinodalBible.keyAt(i) == "sinaidaln15") nazva = "2-е Коринфянам"
+                    if (sinodalBible.keyAt(i) == "sinaidaln16") nazva = "Галатам"
+                    if (sinodalBible.keyAt(i) == "sinaidaln17") nazva = "Эфэсянам"
+                    if (sinodalBible.keyAt(i) == "sinaidaln18") nazva = "Филиппийцам"
+                    if (sinodalBible.keyAt(i) == "sinaidaln19") nazva = "Колоссянам"
+                    if (sinodalBible.keyAt(i) == "sinaidaln20") nazva = "1-е Фессалоникийцам (Солунянам)"
+                    if (sinodalBible.keyAt(i) == "sinaidaln21") nazva = "2-е Фессалоникийцам (Солунянам)"
+                    if (sinodalBible.keyAt(i) == "sinaidaln22") nazva = "1-е Тимофею"
+                    if (sinodalBible.keyAt(i) == "sinaidaln23") nazva = "2-е Тимофею"
+                    if (sinodalBible.keyAt(i) == "sinaidaln24") nazva = "Титу"
+                    if (sinodalBible.keyAt(i) == "sinaidaln25") nazva = "Филимону"
+                    if (sinodalBible.keyAt(i) == "sinaidaln26") nazva = "Евреям"
+                    if (sinodalBible.keyAt(i) == "sinaidaln27") nazva = "Откровение (Апокалипсис)"
                 }
                 if (nazva != "") {
                     val inputStream = resources.openRawResource(sinodalBible.valueAt(i))
                     val isr = InputStreamReader(inputStream)
                     val reader = BufferedReader(isr)
                     var glava = 0
-                    val split = reader.readText().split("===")
-                    inputStream.close()
+                    val split = reader.use {
+                        it.readText().split("===")
+                    }
                     (1 until split.size).forEach { e ->
                         glava++
                         val bibleline = split[e].split("\n")
@@ -1213,7 +1202,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                             prepinanie = prepinanie.replace("ё", "е", registr)
                             if (chin.getInt("slovocalkam", 0) == 0) {
                                 if (prepinanie.contains(poshuk1, registr)) {
-                                    val aSviatyia = bibleline[r]
+                                    var aSviatyia = bibleline[r]
+                                    aSviatyia = aSviatyia.replace("\\n", "\n")
                                     val t2 = poshuk1.length
                                     val title = "$nazva Гл. $glava".length
                                     val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
@@ -1225,7 +1215,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
                                 }
                             } else {
                                 if (prepinanie.contains(poshuk1, registr)) {
-                                    val aSviatyia = bibleline[r]
+                                    var aSviatyia = bibleline[r]
+                                    aSviatyia = aSviatyia.replace("\\n", "\n")
                                     val t2 = poshuk1.length
                                     val title = "$nazva Гл. $glava".length
                                     val span = SpannableString("<!--stix.$stix::glava.$glava-->$nazva Гл. $glava\n$aSviatyia")
@@ -1266,12 +1257,13 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             }
             var color = by.carkva_gazeta.malitounik.R.color.colorPrimary
             if (dzenNoch) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black
-            val nazva = "Псалтыр"
+            val nazva = getString(by.carkva_gazeta.malitounik.R.string.psalter)
             val inputStream = resources.openRawResource(R.raw.nadsan_psaltyr)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
-            val split = reader.readText().split("===")
-            inputStream.close()
+            val split = reader.use {
+                it.readText().split("===")
+            }
             for ((glava, e) in (1 until split.size).withIndex()) {
                 val bibleline = split[e].split("\n")
                 var stix = 0
@@ -1375,7 +1367,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
 
     internal inner class SearchBibliaListAdaprer(context: Activity) : ArrayAdapter<Spannable>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, seash) {
         private val origData: ArrayList<Spannable> = ArrayList(seash)
-        private val activity: Activity = context
         override fun addAll(collection: Collection<Spannable>) {
             super.addAll(collection)
             origData.addAll(collection)
@@ -1390,18 +1381,19 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                rootView = activity.layoutInflater.inflate(by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, parent, false)
-                viewHolder = ViewHolder()
+                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(by.carkva_gazeta.malitounik.R.id.label)
+                viewHolder.text = binding.label
             } else {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
             val t1 = seash[position].indexOf("-->")
-            viewHolder.text?.text = seash[position].subSequence(t1 + 3, seash[position].length)
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+            viewHolder.text.text = seash[position].subSequence(t1 + 3, seash[position].length)
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }
 
@@ -1449,11 +1441,12 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
         }
     }
 
-    private inner class SearchSpinnerAdapter(private val context: Activity, private val name: Array<String>) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, name) {
+    private inner class SearchSpinnerAdapter(context: Activity, private val name: Array<String>) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_4, name) {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextViewRobotoCondensed
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            textView.gravity = Gravity.START
             if (dzenNoch) textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
             else textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             return v
@@ -1463,28 +1456,26 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DiallogBibleSear
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                rootView = context.layoutInflater.inflate(by.carkva_gazeta.malitounik.R.layout.simple_list_item_4, parent, false)
-                viewHolder = ViewHolder()
+                val binding = SimpleListItem4Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(by.carkva_gazeta.malitounik.R.id.text1)
+                viewHolder.text = binding.text1
             } else {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            if (dzenNoch) viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-            else viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
-            viewHolder.text?.gravity = Gravity.START
-            viewHolder.text?.setTypeface(null, Typeface.NORMAL)
-            viewHolder.text?.text = name[position]
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            if (dzenNoch) viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+            else viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            viewHolder.text.gravity = Gravity.START
+            viewHolder.text.text = name[position]
             return rootView
         }
 
     }
 
-    private class ViewHolder {
-        var text: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolder(var text: TextViewRobotoCondensed)
 
     companion object {
         private var zavet = 1

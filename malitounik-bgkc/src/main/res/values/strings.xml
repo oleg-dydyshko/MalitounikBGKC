@@ -122,7 +122,6 @@
     <string name="paralel_smoll">Паралельныя месцы для %1$s</string>
     <string name="paralel_opis">%1$s \n</string>
     <string name="sabytie">Падзеі</string>
-    <string name="settings_poshuk">НАЛАДЫ ПОШУКУ</string>
     <string name="poshuk_semuxa">Пошук па перакладу В. Сёмухі</string>
     <string name="poshuk">Пошук</string>
     <string name="poshuk_sinoidal">Пошук па Сінадальным расейскім перакладзе</string>
@@ -317,7 +316,6 @@
     <string name="adpravit">Адправіць</string>
     <string name="open_chrome">Адчыніць у Chrome</string>
     <string name="update_site">Абнавіць</string>
-    <string name="srttengs_serce">Налады пошуку</string>
     <string name="clean_histopy">Ачысьціць гісторыю пошуку</string>
     <string name="clean_histopy_title">АЧЫСЬЦІЦЬ ГІСТОРЫЮ?</string>
     <string name="all_clean_histopy">Вы сапраўды жадаеце выдаліць усю гісторыю пошуку?</string>

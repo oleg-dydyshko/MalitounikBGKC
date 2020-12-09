@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.malitounik.databinding.CalendatTab1Binding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -189,33 +190,34 @@ class CaliandarMunTab1 : Fragment() {
             val viewHolder: ViewHolder
             val day = Calendar.getInstance() as GregorianCalendar
             if (convertView == null) {
-                convert = layoutInflater.inflate(R.layout.simple_list_item_4, parent, false)
-                viewHolder = ViewHolder()
+                val binding = SimpleListItem4Binding.inflate(LayoutInflater.from(context), parent, false)
+                convert = binding.root
+                viewHolder = ViewHolder(binding.text1)
                 convert.tag = viewHolder
-                viewHolder.text = convert.findViewById(R.id.text1)
+                viewHolder.text = binding.text1
             } else {
                 convert = convertView
                 viewHolder = convert.tag as ViewHolder
             }
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
             if (dzenNoch)
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
+                viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
             else
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
+                viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
-                    viewHolder.text?.setTypeface(null, Typeface.BOLD)
+                    viewHolder.text.setTypeface(null, Typeface.BOLD)
                 } else {
-                    viewHolder.text?.setTypeface(null, Typeface.NORMAL)
+                    viewHolder.text.setTypeface(null, Typeface.NORMAL)
                 }
-                viewHolder.text?.text = names[position]
+                viewHolder.text.text = names[position]
             } else {
                 if (day[Calendar.YEAR] == position + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
-                    viewHolder.text?.setTypeface(null, Typeface.BOLD)
+                    viewHolder.text.setTypeface(null, Typeface.BOLD)
                 } else {
-                    viewHolder.text?.setTypeface(null, Typeface.NORMAL)
+                    viewHolder.text.setTypeface(null, Typeface.NORMAL)
                 }
-                arrayList?.let { viewHolder.text?.text = it[position] }
+                arrayList?.let { viewHolder.text.text = it[position] }
             }
             return convert
         }
@@ -242,7 +244,5 @@ class CaliandarMunTab1 : Fragment() {
         }
     }
 
-    private class ViewHolder {
-        var text: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolder(var text: TextViewRobotoCondensed)
 }

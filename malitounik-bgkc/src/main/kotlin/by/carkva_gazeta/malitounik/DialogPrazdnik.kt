@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -17,6 +18,7 @@ import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -111,7 +113,7 @@ class DialogPrazdnik : DialogFragment() {
         }
     }
 
-    private inner class ListAdapter(private val mContext: Activity) : ArrayAdapter<Int>(mContext, R.layout.simple_list_item_1, arrayList) {
+    private inner class ListAdapter(mContext: Activity) : ArrayAdapter<Int>(mContext, R.layout.simple_list_item_1, arrayList) {
         private val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         private val gc = Calendar.getInstance() as GregorianCalendar
@@ -119,22 +121,22 @@ class DialogPrazdnik : DialogFragment() {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                rootView = mContext.layoutInflater.inflate(R.layout.simple_list_item_1, parent, false)
-                viewHolder = ViewHolder()
+                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(R.id.text1)
             } else {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (gc[Calendar.YEAR] == arrayList[position]) viewHolder.text?.setTypeface(null, Typeface.BOLD) else viewHolder.text?.setTypeface(null, Typeface.NORMAL)
-            viewHolder.text?.text = arrayList[position].toString()
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+            if (gc[Calendar.YEAR] == arrayList[position]) viewHolder.text.setTypeface(null, Typeface.BOLD) else viewHolder.text.setTypeface(null, Typeface.NORMAL)
+            viewHolder.text.text = arrayList[position].toString()
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (dzenNoch)
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_dialog_font_dark)
+                viewHolder.text.setBackgroundResource(R.drawable.selector_dialog_font_dark)
             else
-                viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
+                viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             return rootView
         }
 
@@ -153,7 +155,5 @@ class DialogPrazdnik : DialogFragment() {
         }
     }
 
-    private class ViewHolder {
-        var text: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolder(var text: TextViewRobotoCondensed)
 }

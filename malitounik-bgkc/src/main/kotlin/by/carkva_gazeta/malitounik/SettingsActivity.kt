@@ -14,10 +14,7 @@ import android.os.SystemClock
 import android.provider.Settings
 import android.text.TextUtils
 import android.util.TypedValue
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
@@ -26,6 +23,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.SettingsActivityBinding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -1597,7 +1595,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private class TimeAdapter(private val activity: Activity, private val dataTimes: ArrayList<DataTime>) : ArrayAdapter<DataTime>(activity, R.layout.simple_list_item_1, dataTimes) {
+    private class TimeAdapter(activity: Activity, private val dataTimes: ArrayList<DataTime>) : ArrayAdapter<DataTime>(activity, R.layout.simple_list_item_1, dataTimes) {
         private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private val dzenNoch = k.getBoolean("dzen_noch", false)
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -1618,24 +1616,24 @@ class SettingsActivity : AppCompatActivity() {
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                rootView = activity.layoutInflater.inflate(R.layout.simple_list_item_1, parent, false)
-                viewHolder = ViewHolder()
+                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(R.id.text1)
             } else {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-            viewHolder.text?.text = dataTimes[position].string
-            if (dzenNoch) viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-            else viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+            viewHolder.text.text = dataTimes[position].string
+            if (dzenNoch) viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
+            else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             return rootView
         }
 
     }
 
-    private class AutoPragortkaAdapter(private val activity: Activity, private val dataTimes: ArrayList<String>) : ArrayAdapter<String>(activity, R.layout.simple_list_item_1, dataTimes) {
+    private class AutoPragortkaAdapter(activity: Activity, private val dataTimes: ArrayList<String>) : ArrayAdapter<String>(activity, R.layout.simple_list_item_1, dataTimes) {
         private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private val dzenNoch = k.getBoolean("dzen_noch", false)
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -1656,26 +1654,24 @@ class SettingsActivity : AppCompatActivity() {
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                rootView = activity.layoutInflater.inflate(R.layout.simple_list_item_1, parent, false)
-                viewHolder = ViewHolder()
+                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(R.id.text1)
             } else {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-            viewHolder.text?.text = dataTimes[position]
-            if (dzenNoch) viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-            else viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+            viewHolder.text.text = dataTimes[position]
+            if (dzenNoch) viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
+            else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             return rootView
         }
 
     }
 
-    private class ViewHolder {
-        var text: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolder(var text: TextViewRobotoCondensed)
 
     private class DataTime(val string: String, val data: Int)
 }

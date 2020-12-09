@@ -194,7 +194,6 @@ class CaliandarMunTab1 : Fragment() {
                 convert = binding.root
                 viewHolder = ViewHolder(binding.text1)
                 convert.tag = viewHolder
-                viewHolder.text = binding.text1
             } else {
                 convert = convertView
                 viewHolder = convert.tag as ViewHolder

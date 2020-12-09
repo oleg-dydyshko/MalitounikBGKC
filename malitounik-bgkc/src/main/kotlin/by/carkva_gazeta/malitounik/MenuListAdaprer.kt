@@ -4,9 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 
 class MenuListAdaprer : ArrayAdapter<String> {
     private val mContext: Activity
@@ -45,26 +47,24 @@ class MenuListAdaprer : ArrayAdapter<String> {
         val rootView: View
         val viewHolder: ViewHolder
         if (mView == null) {
-            rootView = mContext.layoutInflater.inflate(R.layout.simple_list_item_2, parent, false)
-            viewHolder = ViewHolder()
+            val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+            rootView = binding.root
+            viewHolder = ViewHolder(binding.label)
             rootView.tag = viewHolder
-            viewHolder.text = rootView.findViewById(R.id.label)
         } else {
             rootView = mView
             viewHolder = rootView.tag as ViewHolder
         }
         val dzenNoch = k.getBoolean("dzen_noch", false)
         if (itemsL != null)
-            viewHolder.text?.text = itemsL?.get(position)
+            viewHolder.text.text = itemsL?.get(position)
         if (items != null)
-            viewHolder.text?.text = items?.get(position)
-        viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            viewHolder.text.text = items?.get(position)
+        viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
         if (dzenNoch)
-            viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         return rootView
     }
 
-    private class ViewHolder {
-        var text: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolder(var text: TextViewRobotoCondensed)
 }

@@ -5,11 +5,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
+import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -87,25 +89,23 @@ class MenuPadryxtoukaDaSpovedzi : PadryxtoukaPamiatkaListFragment() {
             val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val ea: ViewHolder
             if (convertView == null) {
-                ea = ViewHolder()
-                rootView = activity.layoutInflater.inflate(R.layout.simple_list_item_maranata, parent, false)
-                ea.textView = rootView.findViewById(R.id.label)
+                val binding = SimpleListItemMaranataBinding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                ea = ViewHolder(binding.label)
                 rootView.tag = ea
             } else {
                 rootView = convertView
                 ea = rootView.tag as ViewHolder
             }
-            ea.textView?.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
-            ea.textView?.text = MainActivity.fromHtml(list[position])
+            ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
+            ea.textView.text = MainActivity.fromHtml(list[position])
             if (k.getBoolean("dzen_noch", false)) {
-                ea.textView?.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
+                ea.textView.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
             }
             return rootView
         }
 
     }
 
-    private class ViewHolder {
-        var textView: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolder(var textView: TextViewRobotoCondensed)
 }

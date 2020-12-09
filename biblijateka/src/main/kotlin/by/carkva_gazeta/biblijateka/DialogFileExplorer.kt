@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -18,6 +19,7 @@ import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.biblijateka.databinding.BiblijatekaSimpleListItemBinding
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import com.google.android.play.core.splitcompat.SplitCompat
@@ -231,28 +233,26 @@ class DialogFileExplorer : DialogFragment() {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                rootView = mContext.layoutInflater.inflate(R.layout.biblijateka_simple_list_item, parent, false)
-                viewHolder = ViewHolder()
+                val binding = BiblijatekaSimpleListItemBinding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(R.id.label)
             } else {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text?.text = fileList[position].name
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            viewHolder.text.text = fileList[position].name
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val image = ContextCompat.getDrawable(mContext, fileList[position].resources)
             val density = resources.displayMetrics.density.toInt()
             image?.setBounds(0, 0, 48 * density, 48 * density)
-            viewHolder.text?.setCompoundDrawables(image, null, null, null)
+            viewHolder.text.setCompoundDrawables(image, null, null, null)
             return rootView
         }
 
     }
 
-    private class ViewHolder {
-        var text: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolder(var text: TextViewRobotoCondensed)
     
     private class MyFile(val name: String, val resources: Int)
 }

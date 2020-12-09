@@ -549,7 +549,17 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         else resources.getStringArray(by.carkva_gazeta.malitounik.R.array.serche_bible)
         val arrayAdapter = SearchSpinnerAdapter(this, data)
         binding.spinner6.adapter = arrayAdapter
-        binding.spinner6.setSelection(chin.getInt("biblia_seash", 0))
+        if (zavet != 3) {
+            binding.spinner6.setSelection(chin.getInt("biblia_seash", 0))
+            binding.spinner6.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    prefEditors.putInt("biblia_seash", position)
+                    prefEditors.apply()
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+        }
         binding.rootView.viewTreeObserver.addOnGlobalLayoutListener {
             val heightDiff = binding.rootView.rootView.height - binding.rootView.height
             val keywordView = binding.rootView.rootView.height / 4
@@ -559,14 +569,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         binding.editText2.setOnFocusChangeListener { _, hasFocus ->
             edittext2Focus = hasFocus
             settingsView()
-        }
-        binding.spinner6.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                prefEditors.putInt("biblia_seash", position)
-                prefEditors.apply()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         if (!chin.getBoolean("pegistrbukv", true)) binding.checkBox.isChecked = true
         binding.checkBox.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
@@ -838,6 +840,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         prefEditors.putString("search_array", json)
         prefEditors.apply()
         searche = false
+        val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm1.hideSoftInputFromWindow(autoCompleteTextView?.windowToken, 0)
     }
 
     private fun zamena(replase: String): String {
@@ -1385,7 +1389,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder
-                viewHolder.text = binding.label
             } else {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
@@ -1460,7 +1463,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 rootView = binding.root
                 viewHolder = ViewHolder(binding.text1)
                 rootView.tag = viewHolder
-                viewHolder.text = binding.text1
             } else {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder

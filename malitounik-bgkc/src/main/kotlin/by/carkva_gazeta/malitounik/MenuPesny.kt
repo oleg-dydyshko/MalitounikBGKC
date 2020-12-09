@@ -16,6 +16,7 @@ import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.MenuPesnyBinding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -512,31 +513,29 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         }
     }
 
-    private inner class MenuPesnyListAdapter(private val activity: Activity) : ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
+    private inner class MenuPesnyListAdapter(activity: Activity) : ArrayAdapter<MenuListData>(activity, R.layout.simple_list_item_2, R.id.label, menuList) {
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                rootView = activity.layoutInflater.inflate(R.layout.simple_list_item_2, parent, false)
-                viewHolder = ViewHolder()
+                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(R.id.label)
             } else {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            viewHolder.text?.text = menuList[position].data
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            viewHolder.text.text = menuList[position].data
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch)
-                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+                viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }
     }
 
-    private class ViewHolder {
-        var text: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolder(var text: TextViewRobotoCondensed)
 
     companion object {
         fun getInstance(pesny: String): MenuPesny {

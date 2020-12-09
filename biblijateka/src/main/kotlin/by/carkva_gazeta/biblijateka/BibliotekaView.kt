@@ -43,6 +43,7 @@ import androidx.core.view.GravityCompat
 import by.carkva_gazeta.biblijateka.databinding.BibliotekaViewAppBinding
 import by.carkva_gazeta.biblijateka.databinding.BibliotekaViewBinding
 import by.carkva_gazeta.biblijateka.databinding.BibliotekaViewContentBinding
+import by.carkva_gazeta.biblijateka.databinding.SimpleListItemBibliotekaBinding
 import by.carkva_gazeta.malitounik.*
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
@@ -1973,22 +1974,20 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             val rootView: View
             val viewHolder: ViewHolder
             if (convertView == null) {
-                rootView = activity.layoutInflater.inflate(R.layout.simple_list_item_biblioteka, parent, false)
-                viewHolder = ViewHolder()
+                val binding = SimpleListItemBibliotekaBinding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.label, binding.imageView2, binding.buttonPopup)
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(R.id.label)
-                viewHolder.imageView = rootView.findViewById(R.id.imageView2)
-                viewHolder.buttonPopup = rootView.findViewById(R.id.button_popup)
             } else {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.imageView?.setBackgroundResource(R.drawable.frame_image_biblioteka)
-            viewHolder.imageView?.layoutParams?.width = width / 2
-            viewHolder.imageView?.layoutParams?.height = (width / 2 * 1.4F).toInt()
-            viewHolder.imageView?.requestLayout()
+            viewHolder.imageView.setBackgroundResource(R.drawable.frame_image_biblioteka)
+            viewHolder.imageView.layoutParams?.width = width / 2
+            viewHolder.imageView.layoutParams?.height = (width / 2 * 1.4F).toInt()
+            viewHolder.imageView.requestLayout()
             if (arrayList[position].size == 3) {
-                viewHolder.buttonPopup?.visibility = View.GONE
+                viewHolder.buttonPopup.visibility = View.GONE
                 if (arrayList[position][2] != "") {
                     CoroutineScope(Dispatchers.Main).launch {
                         val bitmap = withContext(Dispatchers.IO) {
@@ -1996,16 +1995,16 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                             options.inPreferredConfig = Bitmap.Config.ARGB_8888
                             return@withContext BitmapFactory.decodeFile(arrayList[position][2], options)
                         }
-                        viewHolder.imageView?.setImageBitmap(bitmap)
-                        viewHolder.imageView?.visibility = View.VISIBLE
+                        viewHolder.imageView.setImageBitmap(bitmap)
+                        viewHolder.imageView.visibility = View.VISIBLE
                     }
                 } else {
-                    viewHolder.imageView?.visibility = View.GONE
+                    viewHolder.imageView.visibility = View.GONE
                 }
             } else {
-                viewHolder.buttonPopup?.visibility = View.VISIBLE
-                viewHolder.buttonPopup?.let {
-                    viewHolder.buttonPopup?.setOnClickListener {
+                viewHolder.buttonPopup.visibility = View.VISIBLE
+                viewHolder.buttonPopup.let {
+                    viewHolder.buttonPopup.setOnClickListener {
                         showPopupMenu(it, position, arrayList[position][0])
                     }
                 }
@@ -2018,23 +2017,19 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                             options.inPreferredConfig = Bitmap.Config.ARGB_8888
                             return@withContext BitmapFactory.decodeFile("$filesDir/image_temp/" + arrayList[position][5].substring(t1 + 1), options)
                         }
-                        viewHolder.imageView?.setImageBitmap(bitmap)
-                        viewHolder.imageView?.visibility = View.VISIBLE
+                        viewHolder.imageView.setImageBitmap(bitmap)
+                        viewHolder.imageView.visibility = View.VISIBLE
                     }
                 }
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch)
-                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            viewHolder.text?.text = arrayList[position][0]
+                viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            viewHolder.text.text = arrayList[position][0]
             return rootView
         }
     }
 
-    private class ViewHolder {
-        var text: TextViewRobotoCondensed? = null
-        var imageView: ImageView? = null
-        var buttonPopup: ImageView? = null
-    }
+    private class ViewHolder(var text: TextViewRobotoCondensed, var imageView: ImageView, var buttonPopup: ImageView)
 }

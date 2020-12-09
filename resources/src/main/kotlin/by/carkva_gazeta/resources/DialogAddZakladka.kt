@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -17,6 +18,7 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+import by.carkva_gazeta.malitounik.databinding.SimpleListItemColorBinding
 
 class DialogAddZakladka : DialogFragment() {
     private var realpadding = 0
@@ -100,15 +102,15 @@ class DialogAddZakladka : DialogFragment() {
             val rootView: View
             val viewHolder: ViewHolderColor
             if (convertView == null) {
-                rootView = layoutInflater.inflate(R.layout.simple_list_item_color, parent, false)
-                viewHolder = ViewHolderColor()
+                val binding = SimpleListItemColorBinding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolderColor(binding.label)
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(R.id.label)
             } else {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolderColor
             }
-            viewHolder.text?.setBackgroundColor(Color.parseColor(ExpArrayAdapterParallel.colors[position]))
+            viewHolder.text.setBackgroundColor(Color.parseColor(ExpArrayAdapterParallel.colors[position]))
             return rootView
         }
 
@@ -121,7 +123,5 @@ class DialogAddZakladka : DialogFragment() {
         }
     }
 
-    private class ViewHolderColor {
-        var text: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolderColor(var text: TextViewRobotoCondensed)
 }

@@ -19,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.PashaliiBinding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItemSviatyBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -152,19 +153,19 @@ class MenuPashalii : PashaliiFragment() {
             val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val ea: ViewHolder
             if (convertView == null) {
-                ea = ViewHolder()
-                rootView = context.layoutInflater.inflate(R.layout.simple_list_item_sviaty, parent, false)
-                ea.textView = rootView.findViewById(R.id.label)
+                val binding = SimpleListItemSviatyBinding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                ea = ViewHolder(binding.label)
                 rootView.tag = ea
             } else {
                 rootView = convertView
                 ea = rootView.tag as ViewHolder
             }
-            ea.textView?.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
+            ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
             var color = R.color.colorPrimary_text
             var colorP = R.color.colorPrimary
             if (k.getBoolean("dzen_noch", false)) {
-                ea.textView?.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
+                ea.textView.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
                 color = R.color.colorWhite
                 colorP = R.color.colorPrimary_black
             }
@@ -187,14 +188,12 @@ class MenuPashalii : PashaliiFragment() {
                     pasxa.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), 0, pasxi[position].katolic.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
-            ea.textView?.text = pasxa
+            ea.textView.text = pasxa
             return rootView
         }
     }
 
-    private class ViewHolder {
-        var textView: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolder(var textView: TextViewRobotoCondensed)
 
     private class Pashalii(val katolic: String, val pravas: String, val katolicYear: Int, val search: Int, val sovpadenie: Boolean)
 }

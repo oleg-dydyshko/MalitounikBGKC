@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -21,6 +22,7 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -95,15 +97,15 @@ class DialogTitleBiblioteka : DialogFragment() {
         return alert
     }
 
-    internal inner class TitleListAdaprer(private val mContext: Activity) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_2, R.id.label, bookmarks) {
+    internal inner class TitleListAdaprer(mContext: Activity) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_2, R.id.label, bookmarks) {
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {
-                rootView = mContext.layoutInflater.inflate(R.layout.simple_list_item_2, parent, false)
-                viewHolder = ViewHolder()
+                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(R.id.label)
             } else {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
@@ -112,21 +114,19 @@ class DialogTitleBiblioteka : DialogFragment() {
             var t1 = bookmarks[position].indexOf("<>")
             if (t1 == -1) {
                 t1 = bookmarks[position].indexOf("<str>")
-                viewHolder.text?.text = bookmarks[position].substring(t1 + 5)
+                viewHolder.text.text = bookmarks[position].substring(t1 + 5)
             } else {
-                viewHolder.text?.text = bookmarks[position].substring(t1 + 2)
+                viewHolder.text.text = bookmarks[position].substring(t1 + 2)
             }
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch)
-                viewHolder.text?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+                viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }
 
     }
 
-    private class ViewHolder {
-        var text: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolder(var text: TextViewRobotoCondensed)
 
     companion object {
         fun getInstance(bookmarks: ArrayList<String>?): DialogTitleBiblioteka {

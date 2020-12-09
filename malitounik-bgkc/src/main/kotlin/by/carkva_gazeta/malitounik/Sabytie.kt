@@ -28,6 +28,8 @@ import by.carkva_gazeta.malitounik.DialogContextMenuSabytie.DialogContextMenuSab
 import by.carkva_gazeta.malitounik.DialogDelite.DialogDeliteListener
 import by.carkva_gazeta.malitounik.DialogSabytieSave.DialogSabytieSaveListener
 import by.carkva_gazeta.malitounik.databinding.SabytieBinding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItemColorBinding
 import com.google.gson.Gson
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
@@ -2496,18 +2498,18 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val rootView: View
             val viewHolder: ViewHolderColor
             if (convertView == null) {
-                rootView = this@Sabytie.layoutInflater.inflate(R.layout.simple_list_item_color, parent, false)
-                viewHolder = ViewHolderColor()
+                val binding = SimpleListItemColorBinding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolderColor(binding.label)
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(R.id.label)
             } else {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolderColor
             }
-            viewHolder.text?.setBackgroundColor(Color.parseColor(colors[position]))
-            viewHolder.text?.text = nazvaPadzei
-            viewHolder.text?.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            viewHolder.text?.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite))
+            viewHolder.text.setBackgroundColor(Color.parseColor(colors[position]))
+            viewHolder.text.text = nazvaPadzei
+            viewHolder.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
+            viewHolder.text.setTextColor(ContextCompat.getColor(this@Sabytie, R.color.colorWhite))
             return rootView
         }
 
@@ -2528,18 +2530,18 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val rootView: View
             val viewHolder: ViewHolderColor
             if (convertView == null) {
-                rootView = this@Sabytie.layoutInflater.inflate(R.layout.simple_list_item_1, parent, false)
-                viewHolder = ViewHolderColor()
+                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolderColor(binding.text1)
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(R.id.text1)
             } else {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolderColor
             }
-            viewHolder.text?.text = spinnerList[position]
-            viewHolder.text?.textSize = SettingsActivity.GET_FONT_SIZE_MIN
-            if (dzenNoch) viewHolder.text?.setBackgroundResource(R.drawable.selector_dark)
-            else viewHolder.text?.setBackgroundResource(R.drawable.selector_default)
+            viewHolder.text.text = spinnerList[position]
+            viewHolder.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
+            if (dzenNoch) viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
+            else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             return rootView
         }
 
@@ -2554,9 +2556,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
     }
 
-    private class ViewHolderColor {
-        var text: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolderColor(var text: TextViewRobotoCondensed)
 
     private inner class MyTextWatcher(private val editTextWatcher: EditTextRobotoCondensed) : TextWatcher {
         private var editPosition = 0

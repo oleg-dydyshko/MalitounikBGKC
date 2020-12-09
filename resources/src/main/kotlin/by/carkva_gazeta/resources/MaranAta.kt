@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
+import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
 import by.carkva_gazeta.resources.databinding.AkafistMaranAtaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -1622,17 +1623,17 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null || setFont) {
-                rootView = activity.layoutInflater.inflate(by.carkva_gazeta.malitounik.R.layout.simple_list_item_maranata, parent, false)
-                viewHolder = ViewHolder()
+                val binding = SimpleListItemMaranataBinding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.label)
                 rootView.tag = viewHolder
-                viewHolder.text = rootView.findViewById(by.carkva_gazeta.malitounik.R.id.label)
             } else {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text?.tag = position
+            viewHolder.text.tag = position
             var textView = maranAta[position]
-            viewHolder.text?.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             textView = textView.replace("+-+", "")
             var t1 = textView.indexOf("$")
             val ssb: SpannableStringBuilder
@@ -1679,20 +1680,20 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     if (vydelenie[pos][3] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
-            viewHolder.text?.text = ssb
+            viewHolder.text.text = ssb
             if (bibleCopyList.size > 0 && bibleCopyList.contains(position) && mPedakVisable) {
                 if (dzenNoch) {
-                    viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark2)
-                    viewHolder.text?.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                    viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark2)
+                    viewHolder.text.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
                 } else {
-                    viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorDivider)
+                    viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorDivider)
                 }
             } else {
                 if (dzenNoch) {
-                    viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-                    viewHolder.text?.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                    viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                    viewHolder.text.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
                 } else {
-                    viewHolder.text?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+                    viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
                 }
             }
             return rootView
@@ -1700,9 +1701,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     }
 
-    private class ViewHolder {
-        var text: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolder(var text: TextViewRobotoCondensed)
 
     companion object {
         private var mPedakVisable = false

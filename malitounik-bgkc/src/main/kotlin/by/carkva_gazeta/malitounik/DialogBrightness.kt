@@ -18,8 +18,14 @@ import by.carkva_gazeta.malitounik.databinding.DialogFontBinding
 
 class DialogBrightness : DialogFragment() {
     private lateinit var alert: AlertDialog
-    private lateinit var binding: DialogFontBinding
-    
+    private var _binding: DialogFontBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         MainActivity.dialogVisable = false
@@ -35,7 +41,7 @@ class DialogBrightness : DialogFragment() {
                     MainActivity.brightness = 15
                 }
             }
-            binding = DialogFontBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogFontBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it)
             builder.setView(binding.root)
             alert = builder.create()

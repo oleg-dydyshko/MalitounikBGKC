@@ -18,7 +18,8 @@ import by.carkva_gazeta.malitounik.databinding.DialogFontBinding
 class DialogFontSize : DialogFragment() {
     private lateinit var mListener: DialogFontSizeListener
     private lateinit var alert: AlertDialog
-    private lateinit var binding: DialogFontBinding
+    private var _binding: DialogFontBinding? = null
+    private val binding get() = _binding!!
 
     interface DialogFontSizeListener {
         fun onDialogFontSizePositiveClick()
@@ -33,6 +34,11 @@ class DialogFontSize : DialogFragment() {
                 throw ClassCastException("$activity must implement DialogFontSizeListener")
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -84,7 +90,7 @@ class DialogFontSize : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             MainActivity.dialogVisable = true
-            binding = DialogFontBinding.inflate(LayoutInflater.from(it))
+            _binding = DialogFontBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it)
             builder.setView(binding.root)
             alert = builder.create()

@@ -143,7 +143,7 @@ class DialogPrazdnik : DialogFragment() {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            val text: TextViewRobotoCondensed = v.findViewById(R.id.text1)
+            val text = v.findViewById<TextViewRobotoCondensed>(R.id.text1)
             text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (gc[Calendar.YEAR] == arrayList[position]) text.setTypeface(null, Typeface.BOLD) else text.setTypeface(null, Typeface.NORMAL)
             text.text = arrayList[position].toString()

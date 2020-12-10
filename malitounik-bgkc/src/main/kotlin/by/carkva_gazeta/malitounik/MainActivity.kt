@@ -27,7 +27,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
 import by.carkva_gazeta.malitounik.databinding.ActivityMainBinding
 import by.carkva_gazeta.malitounik.databinding.AppBarMainBinding
@@ -521,8 +520,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }
 
     override fun onBackPressed() {
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             if (back_pressed + 2000 > System.currentTimeMillis()) {
                 moveTaskToBack(true)
                 prefEditors = k.edit()
@@ -548,7 +546,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 toastView(this, getString(R.string.exit))
             }
         } else {
-            drawer.openDrawer(GravityCompat.START)
+            binding.drawerLayout.openDrawer(GravityCompat.START)
         }
     }
 

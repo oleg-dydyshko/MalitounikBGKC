@@ -2515,7 +2515,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = super.getDropDownView(position, convertView, parent)
-            val text: TextView = view.findViewById(R.id.label)
+            val text = view.findViewById<TextViewRobotoCondensed>(R.id.label)
             text.setBackgroundColor(Color.parseColor(colors[position]))
             text.text = nazvaPadzei
             text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
@@ -2547,7 +2547,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = super.getDropDownView(position, convertView, parent)
-            val text: TextView = view.findViewById(R.id.text1)
+            val text = view.findViewById<TextViewRobotoCondensed>(R.id.text1)
             text.text = spinnerList[position]
             text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) text.setBackgroundResource(R.drawable.selector_dark)

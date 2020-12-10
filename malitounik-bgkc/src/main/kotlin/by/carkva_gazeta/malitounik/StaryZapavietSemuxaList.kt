@@ -341,7 +341,7 @@ class StaryZapavietSemuxaList : AppCompatActivity() {
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = mContext.layoutInflater.inflate(R.layout.group_view, parent, false)
-            val textGroup: TextViewRobotoCondensed = rootView.findViewById(R.id.textGroup)
+            val textGroup = rootView.findViewById<TextViewRobotoCondensed>(R.id.textGroup)
             textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             when (groupPosition) {
                 0 -> textGroup.text = "Быцьцё"
@@ -389,7 +389,7 @@ class StaryZapavietSemuxaList : AppCompatActivity() {
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = mContext.layoutInflater.inflate(R.layout.child_view, parent, false)
-            val textChild: TextViewRobotoCondensed = rootView.findViewById(R.id.textChild)
+            val textChild = rootView.findViewById<TextViewRobotoCondensed>(R.id.textChild)
             val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val dzenNoch = k.getBoolean("dzen_noch", false)

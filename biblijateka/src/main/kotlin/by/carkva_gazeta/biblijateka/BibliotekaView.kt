@@ -490,7 +490,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             i?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(i)
         }
-        pdfView = findViewById(R.id.pdfView)
+        pdfView = bindingcontent.pdfView
 
         autoscroll = k.getBoolean("autoscroll", false)
         adapter = BibliotekaAdapter(this)
@@ -654,10 +654,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         binding.label6.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
 
         var drawable = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.krest)
-        val title = findViewById<TextViewRobotoCondensed>(R.id.title)
         if (dzenNoch) {
             drawable = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.krest_black)
-            title.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            binding.title.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.label6.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
         } else {
             binding.label6.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)

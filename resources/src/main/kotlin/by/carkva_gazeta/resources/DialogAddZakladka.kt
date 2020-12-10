@@ -11,7 +11,10 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -116,7 +119,7 @@ class DialogAddZakladka : DialogFragment() {
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = super.getDropDownView(position, convertView, parent)
-            val text: TextView = view.findViewById(R.id.label)
+            val text = view.findViewById<TextViewRobotoCondensed>(R.id.label)
             text.text = ""
             text.setBackgroundColor(Color.parseColor(ExpArrayAdapterParallel.colors[position]))
             return view

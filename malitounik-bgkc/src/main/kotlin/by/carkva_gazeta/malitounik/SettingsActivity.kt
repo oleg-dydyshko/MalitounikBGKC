@@ -1228,10 +1228,9 @@ class SettingsActivity : AppCompatActivity() {
         binding.notificationFull.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.notificationNon.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
-            val helpNotifi: TextViewRobotoCondensed = findViewById(R.id.help_notifi)
-            helpNotifi.visibility = View.VISIBLE
-            helpNotifi.textSize = GET_FONT_SIZE_MIN
-            helpNotifi.setOnClickListener {
+            binding.helpNotifi.visibility = View.VISIBLE
+            binding.helpNotifi.textSize = GET_FONT_SIZE_MIN
+            binding.helpNotifi.setOnClickListener {
                 val notifi = DialogHelpNotification()
                 notifi.show(supportFragmentManager, "help_notification")
             }
@@ -1327,6 +1326,11 @@ class SettingsActivity : AppCompatActivity() {
             prefEditor.putInt("maranata", 0)
             prefEditor.putInt("soundnotification", 0)
             prefEditor.putInt("timeNotification", 8)
+            prefEditor.putString("search_string", "")
+            prefEditor.putString("search_string_filter", "")
+            prefEditor.putInt("biblia_seash", 0)
+            prefEditor.putBoolean("pegistrbukv", true)
+            prefEditor.putInt("slovocalkam", 0)
             binding.maranataBel.isClickable = false
             binding.maranataRus.isClickable = false
             binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))

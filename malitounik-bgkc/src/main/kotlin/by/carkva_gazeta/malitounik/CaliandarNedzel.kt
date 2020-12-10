@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -13,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.ListFragment
+import by.carkva_gazeta.malitounik.databinding.CalaindarNedelBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -156,95 +158,85 @@ class CaliandarNedzel : ListFragment() {
             val view: View
             val viewHolder: ViewHolder
             if (rootView == null) {
-                view = mContext.layoutInflater.inflate(R.layout.calaindar_nedel, parent, false)
-                viewHolder = ViewHolder()
+                val binding = CalaindarNedelBinding.inflate(LayoutInflater.from(context), parent, false)
+                view = binding.root
+                viewHolder = ViewHolder(binding.textCalendar, binding.textCviatyGlavnyia, binding.textSviatyia, binding.textPost, binding.linearView)
                 view.tag = viewHolder
-                viewHolder.textCalendar = view.findViewById(R.id.textCalendar)
-                viewHolder.textPraz = view.findViewById(R.id.textCviatyGlavnyia)
-                viewHolder.textSviat = view.findViewById(R.id.textSviatyia)
-                viewHolder.textPostS = view.findViewById(R.id.textPost)
-                viewHolder.linearLayout = view.findViewById(R.id.linearView)
             } else {
                 view = rootView
                 viewHolder = view.tag as ViewHolder
             }
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-            viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorDivider))
-            viewHolder.textSviat?.visibility = View.VISIBLE
-            viewHolder.textPraz?.visibility = View.GONE
-            viewHolder.textPostS?.visibility = View.GONE
-            viewHolder.textPraz?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-            viewHolder.textPraz?.setTypeface(null, Typeface.BOLD)
+            viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+            viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorDivider))
+            viewHolder.textSviat.visibility = View.VISIBLE
+            viewHolder.textPraz.visibility = View.GONE
+            viewHolder.textPostS.visibility = View.GONE
+            viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+            viewHolder.textPraz.setTypeface(null, Typeface.BOLD)
             if (dzenNoch) {
-                viewHolder.textSviat?.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
-                viewHolder.textPraz?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
+                viewHolder.textSviat.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
+                viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
             }
             if (c[Calendar.YEAR] == arrayList[position][3].toInt() && c[Calendar.DATE] == arrayList[position][1].toInt() && c[Calendar.MONTH] == arrayList[position][2].toInt()) {
-                if (dzenNoch) viewHolder.linearLayout?.setBackgroundResource(R.drawable.calendar_nedel_today_black)
-                else viewHolder.linearLayout?.setBackgroundResource(R.drawable.calendar_nedel_today)
+                if (dzenNoch) viewHolder.linearLayout.setBackgroundResource(R.drawable.calendar_nedel_today_black)
+                else viewHolder.linearLayout.setBackgroundResource(R.drawable.calendar_nedel_today)
             }
-            if (arrayList[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar?.text = getString(R.string.tydzen_name3, nedelName[arrayList[position][0].toInt()], arrayList[position][1], munName[arrayList[position][2].toInt()], arrayList[position][3])
-            else viewHolder.textCalendar?.text = getString(R.string.tydzen_name2, nedelName[arrayList[position][0].toInt()], arrayList[position][1], munName[arrayList[position][2].toInt()])
+            if (arrayList[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar.text = getString(R.string.tydzen_name3, nedelName[arrayList[position][0].toInt()], arrayList[position][1], munName[arrayList[position][2].toInt()], arrayList[position][3])
+            else viewHolder.textCalendar.text = getString(R.string.tydzen_name2, nedelName[arrayList[position][0].toInt()], arrayList[position][1], munName[arrayList[position][2].toInt()])
             var sviatyia = arrayList[position][4]
             if (dzenNoch) {
                 sviatyia = sviatyia.replace("#d00505", "#f44336")
             }
-            viewHolder.textSviat?.text = MainActivity.fromHtml(sviatyia)
-            if (arrayList[position][4].contains("no_sviatyia")) viewHolder.textSviat?.visibility = View.GONE
-            viewHolder.textPraz?.text = arrayList[position][6]
-            if (!arrayList[position][6].contains("no_sviaty")) viewHolder.textPraz?.visibility = View.VISIBLE
+            viewHolder.textSviat.text = MainActivity.fromHtml(sviatyia)
+            if (arrayList[position][4].contains("no_sviatyia")) viewHolder.textSviat.visibility = View.GONE
+            viewHolder.textPraz.text = arrayList[position][6]
+            if (!arrayList[position][6].contains("no_sviaty")) viewHolder.textPraz.visibility = View.VISIBLE
             // убот = субота
             if (arrayList[position][6].contains("Пачатак") || arrayList[position][6].contains("Вялікі") || arrayList[position][6].contains("Вялікая") || arrayList[position][6].contains("убот") || arrayList[position][6].contains("ВЕЧАР") || arrayList[position][6].contains("Палова")) {
-                viewHolder.textPraz?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                viewHolder.textPraz?.setTypeface(null, Typeface.NORMAL)
+                viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                viewHolder.textPraz.setTypeface(null, Typeface.NORMAL)
             }
             when (arrayList[position][7].toInt()) {
                 1 -> {
-                    viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                    viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
-                    viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                    viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
-                    viewHolder.textPostS?.text = mContext.resources.getString(R.string.No_post)
+                    viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                    viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
+                    viewHolder.textPostS.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                    viewHolder.textPostS.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
+                    viewHolder.textPostS.text = mContext.resources.getString(R.string.No_post)
                 }
                 2 -> {
-                    viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                    viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
-                    viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                    viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
-                    viewHolder.textPostS?.text = mContext.resources.getString(R.string.Post)
+                    viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                    viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
+                    viewHolder.textPostS.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
+                    viewHolder.textPostS.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPost))
+                    viewHolder.textPostS.text = mContext.resources.getString(R.string.Post)
                 }
                 3 -> {
-                    viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
-                    viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
+                    viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
+                    viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
                 }
             }
             if (arrayList[position][5].contains("1") || arrayList[position][5].contains("2") || arrayList[position][5].contains("3")) {
-                viewHolder.textCalendar?.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
-                if (dzenNoch) viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black)) else viewHolder.textCalendar?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+                viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
+                if (dzenNoch) viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black)) else viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
             }
             if (arrayList[position][5].contains("2")) {
-                viewHolder.textPraz?.setTypeface(null, Typeface.NORMAL)
+                viewHolder.textPraz.setTypeface(null, Typeface.NORMAL)
             }
             if (arrayList[position][7].contains("3")) {
-                viewHolder.textPostS?.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
-                viewHolder.textPostS?.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
-                viewHolder.textPostS?.text = mContext.resources.getString(R.string.Strogi_post)
-                viewHolder.textPostS?.visibility = View.VISIBLE
+                viewHolder.textPostS.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
+                viewHolder.textPostS.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
+                viewHolder.textPostS.text = mContext.resources.getString(R.string.Strogi_post)
+                viewHolder.textPostS.visibility = View.VISIBLE
             } else if (arrayList[position][0].contains("6")) { // Пятница
-                viewHolder.textPostS?.visibility = View.VISIBLE
+                viewHolder.textPostS.visibility = View.VISIBLE
             }
             return view
         }
     }
 
-    private class ViewHolder {
-        var linearLayout: LinearLayout? = null
-        var textCalendar: TextViewRobotoCondensed? = null
-        var textPraz: TextViewRobotoCondensed? = null
-        var textSviat: TextViewRobotoCondensed? = null
-        var textPostS: TextViewRobotoCondensed? = null
-    }
+    private class ViewHolder(var textCalendar: TextViewRobotoCondensed, var textPraz: TextViewRobotoCondensed, var textSviat: TextViewRobotoCondensed, var textPostS: TextViewRobotoCondensed, var linearLayout: LinearLayout)
 
     companion object {
         var setDenNedeli = false

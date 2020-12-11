@@ -11,11 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.malitounik.databinding.VybranoeBibleListBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -92,7 +91,7 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
         }
         if (bibleVybranoe != "") arrayListVybranoe = gson.fromJson(bibleVybranoe, type)
         binding.dragListView.setLayoutManager(LinearLayoutManager(this))
-        binding.dragListView.setAdapter(ItemAdapter(arrayListVybranoe, R.layout.list_item, R.id.image, false), false)
+        binding.dragListView.setAdapter(ItemAdapter(arrayListVybranoe, R.id.image, false), false)
         binding.dragListView.setCanDragHorizontally(false)
         binding.dragListView.setCanDragVertically(true)
         binding.dragListView.setSwipeListener(object : OnSwipeListenerAdapter() {
@@ -165,23 +164,22 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
     }
 
-    private inner class ItemAdapter(list: ArrayList<VybranoeBibliaData>, private val mLayoutId: Int, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<VybranoeBibliaData, ItemAdapter.ViewHolder>() {
+    private inner class ItemAdapter(list: ArrayList<VybranoeBibliaData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<VybranoeBibliaData, ItemAdapter.ViewHolder>() {
         private var dzenNoch = false
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view: View = LayoutInflater.from(parent.context).inflate(mLayoutId, parent, false)
-            (view as ListSwipeItem).supportedSwipeDirection = SwipeDirection.LEFT
-            val textview = view.findViewById<TextViewRobotoCondensed>(R.id.text)
+            val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            view.root.supportedSwipeDirection = SwipeDirection.LEFT
             val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = k.getBoolean("dzen_noch", false)
-            textview.textSize = SettingsActivity.GET_FONT_SIZE_MIN
+            view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
-                view.findViewById<TextViewRobotoCondensed>(R.id.item_left).setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
-                view.findViewById<TextViewRobotoCondensed>(R.id.item_right).setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
-                view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_dark_list)
-                view.setBackgroundResource(R.color.colorprimary_material_dark)
+                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
+                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
+                view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
+                view.root.setBackgroundResource(R.color.colorprimary_material_dark)
             } else {
-                view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_default_list)
-                view.setBackgroundResource(R.color.colorDivider)
+                view.itemLayout.setBackgroundResource(R.drawable.selector_default_list)
+                view.root.setBackgroundResource(R.color.colorDivider)
             }
             return ViewHolder(view)
         }
@@ -197,8 +195,8 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
             return mItemList[position].id
         }
 
-        private inner class ViewHolder(itemView: View) : DragItemAdapter.ViewHolder(itemView, mGrabHandleId, mDragOnLongPress) {
-            var mText: TextView = itemView.findViewById(R.id.text)
+        private inner class ViewHolder(itemView: ListItemBinding) : DragItemAdapter.ViewHolder(itemView.root, mGrabHandleId, mDragOnLongPress) {
+            var mText = itemView.text
             override fun onItemClicked(view: View) {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return

@@ -6,10 +6,9 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.*
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.malitounik.databinding.MenuVybranoeBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -86,7 +85,7 @@ class MenuNatatki : NatatkiFragment() {
             myNatatkiFilesSort = k.getInt("natatki_sort", 0)
             myNatatkiFiles.sort()
             activity.invalidateOptionsMenu()
-            adapter = ItemAdapter(myNatatkiFiles, R.layout.list_item, R.id.image, false)
+            adapter = ItemAdapter(myNatatkiFiles, R.id.image, false)
             binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
             binding.dragListView.setLayoutManager(LinearLayoutManager(activity))
             binding.dragListView.setAdapter(adapter, false)
@@ -239,22 +238,21 @@ class MenuNatatki : NatatkiFragment() {
         }
     }
 
-    private inner class ItemAdapter(list: ArrayList<MyNatatkiFiles>, private val mLayoutId: Int, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<MyNatatkiFiles, ItemAdapter.ViewHolder>() {
+    private inner class ItemAdapter(list: ArrayList<MyNatatkiFiles>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<MyNatatkiFiles, ItemAdapter.ViewHolder>() {
         private var dzenNoch = false
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view: View = LayoutInflater.from(parent.context).inflate(mLayoutId, parent, false)
-            val textview = view.findViewById<TextViewRobotoCondensed>(R.id.text)
+            val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = k.getBoolean("dzen_noch", false)
-            textview.textSize = SettingsActivity.GET_FONT_SIZE_MIN
+            view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
-                view.findViewById<TextViewRobotoCondensed>(R.id.item_left).setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
-                view.findViewById<TextViewRobotoCondensed>(R.id.item_right).setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
-                view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_dark_list)
-                view.setBackgroundResource(R.color.colorprimary_material_dark)
+                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
+                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
+                view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
+                view.root.setBackgroundResource(R.color.colorprimary_material_dark)
             } else {
-                view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_default_list)
-                view.setBackgroundResource(R.color.colorDivider)
+                view.itemLayout.setBackgroundResource(R.drawable.selector_default_list)
+                view.root.setBackgroundResource(R.color.colorDivider)
             }
             return ViewHolder(view)
         }
@@ -270,8 +268,8 @@ class MenuNatatki : NatatkiFragment() {
             return mItemList[position].id
         }
 
-        private inner class ViewHolder(itemView: View) : DragItemAdapter.ViewHolder(itemView, mGrabHandleId, mDragOnLongPress) {
-            var mText: TextView = itemView.findViewById(R.id.text)
+        private inner class ViewHolder(itemView: ListItemBinding) : DragItemAdapter.ViewHolder(itemView.root, mGrabHandleId, mDragOnLongPress) {
+            var mText = itemView.text
             override fun onItemClicked(view: View) {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return

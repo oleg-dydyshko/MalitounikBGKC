@@ -7,8 +7,6 @@ import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -52,23 +50,6 @@ class DialogWidgetConfig : DialogFragment() {
         _binding = null
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        activity?.let {
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            binding.checkBox20.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-            binding.checkBox20.isChecked = k.getBoolean("dzen_noch_widget_day$widgetID", false)
-            binding.checkBox20.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-                configDzenNoch = isChecked
-            }
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = DialogWidgetConfigBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -80,6 +61,12 @@ class DialogWidgetConfig : DialogFragment() {
                 save()
                 mListener.onDialogWidgetConfigPositiveClick()
                 dialog.cancel()
+            }
+            _binding = DialogWidgetConfigBinding.inflate(LayoutInflater.from(it))
+            binding.checkBox20.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+            binding.checkBox20.isChecked = chin.getBoolean("dzen_noch_widget_day$widgetID", false)
+            binding.checkBox20.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+                configDzenNoch = isChecked
             }
             builder.setView(binding.root)
             alert = builder.create()

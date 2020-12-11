@@ -10,12 +10,11 @@ import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.resources.DialogBibleNatatkaEdit.BibleNatatkaEditlistiner
 import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAllZakladkiINatatkiListener
 import by.carkva_gazeta.resources.DialogZakladkaDelite.ZakladkaDeliteListiner
@@ -94,7 +93,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
         semuxa = intent.getIntExtra("semuxa", 1)
         if (semuxa == 1) data = BibleGlobalList.natatkiSemuxa
         if (semuxa == 2) data = BibleGlobalList.natatkiSinodal
-        adapter = ItemAdapter(data, by.carkva_gazeta.malitounik.R.layout.list_item, by.carkva_gazeta.malitounik.R.id.image, false)
+        adapter = ItemAdapter(data, by.carkva_gazeta.malitounik.R.id.image, false)
         binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
         binding.dragListView.setLayoutManager(LinearLayoutManager(this))
         binding.dragListView.setAdapter(adapter, false)
@@ -295,26 +294,25 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
         }
     }
 
-    private inner class ItemAdapter(list: ArrayList<BibleNatatkiData>, private val mLayoutId: Int, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<BibleNatatkiData, ItemAdapter.ViewHolder>() {
+    private inner class ItemAdapter(list: ArrayList<BibleNatatkiData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<BibleNatatkiData, ItemAdapter.ViewHolder>() {
         private var dzenNoch = false
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view: View = LayoutInflater.from(parent.context).inflate(mLayoutId, parent, false)
-            val textview = view.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.text)
+            val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = k.getBoolean("dzen_noch", false)
-            textview.textSize = SettingsActivity.GET_FONT_SIZE_MIN
+            view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
                 ExpArrayAdapterParallel.colors[0] = "#FFFFFF"
                 ExpArrayAdapterParallel.colors[1] = "#f44336"
-                view.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_left).setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-                view.findViewById<TextViewRobotoCondensed>(by.carkva_gazeta.malitounik.R.id.item_right).setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-                view.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark_list)
-                view.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+                view.itemLayout.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark_list)
+                view.root.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
             } else {
                 ExpArrayAdapterParallel.colors[0] = "#000000"
                 ExpArrayAdapterParallel.colors[1] = "#D00505"
-                view.findViewById<ConstraintLayout>(by.carkva_gazeta.malitounik.R.id.item_layout).setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default_list)
-                view.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorDivider)
+                view.itemLayout.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default_list)
+                view.root.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorDivider)
             }
             return ViewHolder(view)
         }
@@ -329,8 +327,8 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
             return mItemList[position].id
         }
 
-        private inner class ViewHolder(itemView: View) : DragItemAdapter.ViewHolder(itemView, mGrabHandleId, mDragOnLongPress) {
-            var mText: TextView = itemView.findViewById(by.carkva_gazeta.malitounik.R.id.text)
+        private inner class ViewHolder(itemView: ListItemBinding) : DragItemAdapter.ViewHolder(itemView.root, mGrabHandleId, mDragOnLongPress) {
+            var mText = itemView.text
             override fun onItemClicked(view: View) {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return

@@ -21,12 +21,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.DialogContextMenuSabytie.DialogContextMenuSabytieListener
 import by.carkva_gazeta.malitounik.DialogDelite.DialogDeliteListener
 import by.carkva_gazeta.malitounik.DialogSabytieSave.DialogSabytieSaveListener
+import by.carkva_gazeta.malitounik.databinding.ListItemSabytieBinding
 import by.carkva_gazeta.malitounik.databinding.SabytieBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemColorBinding
@@ -393,7 +393,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         for (i in 0 until MainActivity.padzeia.size) {
             sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
         }
-        adapter = SabytieAdapter(sabytie2, R.layout.list_item_sabytie, R.id.image, false)
+        adapter = SabytieAdapter(sabytie2, R.id.image, false)
         binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
         binding.dragListView.setLayoutManager(LinearLayoutManager(this))
         binding.dragListView.setAdapter(adapter, false)
@@ -2363,23 +2363,22 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         outState.putString("daK", binding.label12.text.toString())
     }
 
-    private inner class SabytieAdapter(list: ArrayList<SabytieDataAdapter>, private val mLayoutId: Int, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<SabytieDataAdapter, SabytieAdapter.ViewHolder>() {
+    private inner class SabytieAdapter(list: ArrayList<SabytieDataAdapter>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<SabytieDataAdapter, SabytieAdapter.ViewHolder>() {
         private var dzenNoch = false
         private val day = Calendar.getInstance() as GregorianCalendar
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view: View = LayoutInflater.from(parent.context).inflate(mLayoutId, parent, false)
-            val textview = view.findViewById<TextViewRobotoCondensed>(R.id.text)
+            val view = ListItemSabytieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = k.getBoolean("dzen_noch", false)
-            textview.textSize = SettingsActivity.GET_FONT_SIZE_MIN
+            view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
-                view.findViewById<TextViewRobotoCondensed>(R.id.item_left).setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
-                view.findViewById<TextViewRobotoCondensed>(R.id.item_right).setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
-                view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_dark_list)
-                view.setBackgroundResource(R.color.colorprimary_material_dark)
+                view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
+                view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
+                view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
+                view.root.setBackgroundResource(R.color.colorprimary_material_dark)
             } else {
-                view.findViewById<ConstraintLayout>(R.id.item_layout).setBackgroundResource(R.drawable.selector_default_list)
-                view.setBackgroundResource(R.color.colorDivider)
+                view.itemLayout.setBackgroundResource(R.drawable.selector_default_list)
+                view.root.setBackgroundResource(R.color.colorDivider)
             }
             return ViewHolder(view)
         }
@@ -2429,10 +2428,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             popup.show()
         }
 
-        private inner class ViewHolder(itemView: View) : DragItemAdapter.ViewHolder(itemView, mGrabHandleId, mDragOnLongPress) {
-            var mText: TextViewRobotoCondensed = itemView.findViewById(R.id.text)
-            val color: TextViewRobotoCondensed = itemView.findViewById(R.id.color)
-            val buttonPopup: ImageView = itemView.findViewById(R.id.button_popup)
+        private inner class ViewHolder(itemView: ListItemSabytieBinding) : DragItemAdapter.ViewHolder(itemView.root, mGrabHandleId, mDragOnLongPress) {
+            var mText = itemView.text
+            val color = itemView.color
+            val buttonPopup = itemView.buttonPopup
 
             override fun onItemLongClicked(view: View): Boolean {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {

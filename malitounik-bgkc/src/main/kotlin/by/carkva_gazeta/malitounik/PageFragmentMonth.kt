@@ -166,16 +166,6 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                 binding.button42.setOnClickListener(this@PageFragmentMonth)
                 if (CaliandarMun.SabytieOnView) {
                     binding.linearLayout.visibility = View.VISIBLE
-                    if (savedInstanceState != null) {
-                        view?.let {
-                            val textView: TextViewRobotoCondensed? = it.findViewById(savedInstanceState.getInt("viewId"))
-                            if (textView != null) {
-                                pageNumberFull = savedInstanceState.getInt("pageNumberFull")
-                                wik = savedInstanceState.getInt("wik")
-                                onClick(textView)
-                            }
-                        }
-                    }
                 }
                 val c = Calendar.getInstance() as GregorianCalendar
                 var munTudey = false
@@ -2909,13 +2899,6 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                 }
             }
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt("viewId", viewId)
-        outState.putInt("pageNumberFull", pageNumberFull)
-        outState.putInt("wik", wik)
     }
 
     private fun sabytieView(DayYear: Int) {

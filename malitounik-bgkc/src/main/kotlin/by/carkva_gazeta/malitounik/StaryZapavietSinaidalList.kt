@@ -7,15 +7,14 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.text.TextUtils
 import android.util.TypedValue
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.BaseExpandableListAdapter
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
+import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
 
 class StaryZapavietSinaidalList : AppCompatActivity() {
     private var dzenNoch = false
@@ -395,74 +394,72 @@ class StaryZapavietSinaidalList : AppCompatActivity() {
         }
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = mContext.layoutInflater.inflate(R.layout.group_view, parent, false)
-            val textGroup = rootView.findViewById<TextViewRobotoCondensed>(R.id.textGroup)
-            textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            rootView.textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             when (groupPosition) {
-                0 -> textGroup.text = "Бытие"
-                1 -> textGroup.text = "Исход"
-                2 -> textGroup.text = "Левит"
-                3 -> textGroup.text = "Числа"
-                4 -> textGroup.text = "Второзаконие"
-                5 -> textGroup.text = "Иисуса Навина"
-                6 -> textGroup.text = "Судей израилевых"
-                7 -> textGroup.text = "Руфи"
-                8 -> textGroup.text = "1-я Царств"
-                9 -> textGroup.text = "2-я Царств"
-                10 -> textGroup.text = "3-я Царств"
-                11 -> textGroup.text = "4-я Царств"
-                12 -> textGroup.text = "1-я Паралипоменон"
-                13 -> textGroup.text = "2-я Паралипоменон"
-                14 -> textGroup.text = "1-я Ездры"
-                15 -> textGroup.text = "Неемии"
-                16 -> textGroup.text = "2-я Ездры"
-                17 -> textGroup.text = "Товита"
-                18 -> textGroup.text = "Иудифи"
-                19 -> textGroup.text = "Есфири"
-                20 -> textGroup.text = "Иова"
-                21 -> textGroup.text = "Псалтирь"
-                22 -> textGroup.text = "Притчи Соломона"
-                23 -> textGroup.text = "Екклезиаста"
-                24 -> textGroup.text = "Песнь песней Соломона"
-                25 -> textGroup.text = "Премудрости Соломона"
-                26 -> textGroup.text = "Премудрости Иисуса, сына Сирахова"
-                27 -> textGroup.text = "Исаии"
-                28 -> textGroup.text = "Иеремии"
-                29 -> textGroup.text = "Плач Иеремии"
-                30 -> textGroup.text = "Послание Иеремии"
-                31 -> textGroup.text = "Варуха"
-                32 -> textGroup.text = "Иезекииля"
-                33 -> textGroup.text = "Даниила"
-                34 -> textGroup.text = "Осии"
-                35 -> textGroup.text = "Иоиля"
-                36 -> textGroup.text = "Амоса"
-                37 -> textGroup.text = "Авдия"
-                38 -> textGroup.text = "Ионы"
-                39 -> textGroup.text = "Михея"
-                40 -> textGroup.text = "Наума"
-                41 -> textGroup.text = "Аввакума"
-                42 -> textGroup.text = "Сафонии"
-                43 -> textGroup.text = "Аггея"
-                44 -> textGroup.text = "Захарии"
-                45 -> textGroup.text = "Малахии"
-                46 -> textGroup.text = "1-я Маккавейская"
-                47 -> textGroup.text = "2-я Маккавейская"
-                48 -> textGroup.text = "3-я Маккавейская"
-                49 -> textGroup.text = "3-я Ездры"
+                0 -> rootView.textGroup.text = "Бытие"
+                1 -> rootView.textGroup.text = "Исход"
+                2 -> rootView.textGroup.text = "Левит"
+                3 -> rootView.textGroup.text = "Числа"
+                4 -> rootView.textGroup.text = "Второзаконие"
+                5 -> rootView.textGroup.text = "Иисуса Навина"
+                6 -> rootView.textGroup.text = "Судей израилевых"
+                7 -> rootView.textGroup.text = "Руфи"
+                8 -> rootView.textGroup.text = "1-я Царств"
+                9 -> rootView.textGroup.text = "2-я Царств"
+                10 -> rootView.textGroup.text = "3-я Царств"
+                11 -> rootView.textGroup.text = "4-я Царств"
+                12 -> rootView.textGroup.text = "1-я Паралипоменон"
+                13 -> rootView.textGroup.text = "2-я Паралипоменон"
+                14 -> rootView.textGroup.text = "1-я Ездры"
+                15 -> rootView.textGroup.text = "Неемии"
+                16 -> rootView.textGroup.text = "2-я Ездры"
+                17 -> rootView.textGroup.text = "Товита"
+                18 -> rootView.textGroup.text = "Иудифи"
+                19 -> rootView.textGroup.text = "Есфири"
+                20 -> rootView.textGroup.text = "Иова"
+                21 -> rootView.textGroup.text = "Псалтирь"
+                22 -> rootView.textGroup.text = "Притчи Соломона"
+                23 -> rootView.textGroup.text = "Екклезиаста"
+                24 -> rootView.textGroup.text = "Песнь песней Соломона"
+                25 -> rootView.textGroup.text = "Премудрости Соломона"
+                26 -> rootView.textGroup.text = "Премудрости Иисуса, сына Сирахова"
+                27 -> rootView.textGroup.text = "Исаии"
+                28 -> rootView.textGroup.text = "Иеремии"
+                29 -> rootView.textGroup.text = "Плач Иеремии"
+                30 -> rootView.textGroup.text = "Послание Иеремии"
+                31 -> rootView.textGroup.text = "Варуха"
+                32 -> rootView.textGroup.text = "Иезекииля"
+                33 -> rootView.textGroup.text = "Даниила"
+                34 -> rootView.textGroup.text = "Осии"
+                35 -> rootView.textGroup.text = "Иоиля"
+                36 -> rootView.textGroup.text = "Амоса"
+                37 -> rootView.textGroup.text = "Авдия"
+                38 -> rootView.textGroup.text = "Ионы"
+                39 -> rootView.textGroup.text = "Михея"
+                40 -> rootView.textGroup.text = "Наума"
+                41 -> rootView.textGroup.text = "Аввакума"
+                42 -> rootView.textGroup.text = "Сафонии"
+                43 -> rootView.textGroup.text = "Аггея"
+                44 -> rootView.textGroup.text = "Захарии"
+                45 -> rootView.textGroup.text = "Малахии"
+                46 -> rootView.textGroup.text = "1-я Маккавейская"
+                47 -> rootView.textGroup.text = "2-я Маккавейская"
+                48 -> rootView.textGroup.text = "3-я Маккавейская"
+                49 -> rootView.textGroup.text = "3-я Ездры"
             }
-            return rootView
+            return rootView.root
         }
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = mContext.layoutInflater.inflate(R.layout.child_view, parent, false)
-            val textChild = rootView.findViewById<TextViewRobotoCondensed>(R.id.textChild)
+            val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
             val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            rootView.textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch)
-                textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            textChild.text = groups[groupPosition][childPosition]
-            return rootView
+                rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            rootView.textChild.text = groups[groupPosition][childPosition]
+            return rootView.root
         }
 
         override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {

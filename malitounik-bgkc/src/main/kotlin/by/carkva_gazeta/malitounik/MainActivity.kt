@@ -1286,15 +1286,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
 
         fun downloadDynamicModule(context: Activity) {
-            val progressBarModule: ProgressBar = context.findViewById(R.id.progressBarModule)
-            val layoutDialod: LinearLayout = context.findViewById(R.id.linear)
-            val layoutDialod2: LinearLayout = context.findViewById(R.id.linear2)
-            val text: TextViewRobotoCondensed = context.findViewById(R.id.textProgress)
+            val progressBarModule = context.findViewById<ProgressBar>(R.id.progressBarModule)
+            val layoutDialod = context.findViewById<LinearLayout>(R.id.linear)
+            val layoutDialod2 = context.findViewById<LinearLayout>(R.id.linear2)
+            val text = context.findViewById<TextViewRobotoCondensed>(R.id.textProgress)
             val k: SharedPreferences = context.getSharedPreferences("biblia", MODE_PRIVATE)
             val dzenNoch: Boolean = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 layoutDialod2.setBackgroundResource(R.color.colorbackground_material_dark)
-                val maduleDownload: TextViewRobotoCondensed = context.findViewById(R.id.module_download)
+                val maduleDownload = context.findViewById<TextViewRobotoCondensed>(R.id.module_download)
                 maduleDownload.setBackgroundResource(R.color.colorPrimary_black)
             }
             val splitInstallManager = SplitInstallManagerFactory.create(context)

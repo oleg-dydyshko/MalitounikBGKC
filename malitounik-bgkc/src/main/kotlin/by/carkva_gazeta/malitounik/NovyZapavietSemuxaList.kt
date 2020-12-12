@@ -7,15 +7,14 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.text.TextUtils
 import android.util.TypedValue
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.BaseExpandableListAdapter
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
+import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
 
 class NovyZapavietSemuxaList : AppCompatActivity() {
     private var dzenNoch = false
@@ -270,50 +269,48 @@ class NovyZapavietSemuxaList : AppCompatActivity() {
         }
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = mContext.layoutInflater.inflate(R.layout.group_view, parent, false)
-            val textGroup = rootView.findViewById<TextViewRobotoCondensed>(R.id.textGroup)
-            textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            rootView.textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             when (groupPosition) {
-                0 -> textGroup.text = "Паводле Мацьвея"
-                1 -> textGroup.text = "Паводле Марка"
-                2 -> textGroup.text = "Паводле Лукаша"
-                3 -> textGroup.text = "Паводле Яна"
-                4 -> textGroup.text = "Дзеі Апосталаў"
-                5 -> textGroup.text = "Якава"
-                6 -> textGroup.text = "1-е Пятра"
-                7 -> textGroup.text = "2-е Пятра"
-                8 -> textGroup.text = "1-е Яна Багаслова"
-                9 -> textGroup.text = "2-е Яна Багаслова"
-                10 -> textGroup.text = "3-е Яна Багаслова"
-                11 -> textGroup.text = "Юды"
-                12 -> textGroup.text = "Да Рымлянаў"
-                13 -> textGroup.text = "1-е да Карынфянаў"
-                14 -> textGroup.text = "2-е да Карынфянаў"
-                15 -> textGroup.text = "Да Галятаў"
-                16 -> textGroup.text = "Да Эфэсянаў"
-                17 -> textGroup.text = "Да Піліпянаў"
-                18 -> textGroup.text = "Да Каласянаў"
-                19 -> textGroup.text = "1-е да Фесаланікійцаў"
-                20 -> textGroup.text = "2-е да Фесаланікійцаў"
-                21 -> textGroup.text = "1-е да Цімафея"
-                22 -> textGroup.text = "2-е да Цімафея"
-                23 -> textGroup.text = "Да Ціта"
-                24 -> textGroup.text = "Да Філімона"
-                25 -> textGroup.text = "Да Габрэяў"
-                26 -> textGroup.text = "Адкрыцьцё (Апакаліпсіс)"
+                0 -> rootView.textGroup.text = "Паводле Мацьвея"
+                1 -> rootView.textGroup.text = "Паводле Марка"
+                2 -> rootView.textGroup.text = "Паводле Лукаша"
+                3 -> rootView.textGroup.text = "Паводле Яна"
+                4 -> rootView.textGroup.text = "Дзеі Апосталаў"
+                5 -> rootView.textGroup.text = "Якава"
+                6 -> rootView.textGroup.text = "1-е Пятра"
+                7 -> rootView.textGroup.text = "2-е Пятра"
+                8 -> rootView.textGroup.text = "1-е Яна Багаслова"
+                9 -> rootView.textGroup.text = "2-е Яна Багаслова"
+                10 -> rootView.textGroup.text = "3-е Яна Багаслова"
+                11 -> rootView.textGroup.text = "Юды"
+                12 -> rootView.textGroup.text = "Да Рымлянаў"
+                13 -> rootView.textGroup.text = "1-е да Карынфянаў"
+                14 -> rootView.textGroup.text = "2-е да Карынфянаў"
+                15 -> rootView.textGroup.text = "Да Галятаў"
+                16 -> rootView.textGroup.text = "Да Эфэсянаў"
+                17 -> rootView.textGroup.text = "Да Піліпянаў"
+                18 -> rootView.textGroup.text = "Да Каласянаў"
+                19 -> rootView.textGroup.text = "1-е да Фесаланікійцаў"
+                20 -> rootView.textGroup.text = "2-е да Фесаланікійцаў"
+                21 -> rootView.textGroup.text = "1-е да Цімафея"
+                22 -> rootView.textGroup.text = "2-е да Цімафея"
+                23 -> rootView.textGroup.text = "Да Ціта"
+                24 -> rootView.textGroup.text = "Да Філімона"
+                25 -> rootView.textGroup.text = "Да Габрэяў"
+                26 -> rootView.textGroup.text = "Адкрыцьцё (Апакаліпсіс)"
             }
-            return rootView
+            return rootView.root
         }
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = mContext.layoutInflater.inflate(R.layout.child_view, parent, false)
-            val textChild = rootView.findViewById<TextViewRobotoCondensed>(R.id.textChild)
+            val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
             val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            rootView.textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch) textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            textChild.text = groups[groupPosition][childPosition]
-            return rootView
+            if (dzenNoch) rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            rootView.textChild.text = groups[groupPosition][childPosition]
+            return rootView.root
         }
 
         override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {

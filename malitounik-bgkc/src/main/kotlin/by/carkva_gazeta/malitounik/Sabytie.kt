@@ -255,8 +255,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         binding.spinner4.adapter = adapter3
         binding.spinner4.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(binding.spinner4.windowToken, 0)
                 repitL = position
                 if (repitL == 7) {
                     binding.radioButton3.isClickable = false
@@ -2220,6 +2218,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         daKSave = binding.label12.text.toString()
         taKSave = binding.label22.text.toString()
         invalidateOptionsMenu()
+        binding.editText.requestFocus()
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
     private fun addSabytie() {
@@ -2259,6 +2260,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         daKSave = binding.label12.text.toString()
         taKSave = binding.label22.text.toString()
         invalidateOptionsMenu()
+        binding.editText.requestFocus()
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
     override fun sabytieDelAll() {
@@ -2282,6 +2286,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 }
             }
         }
+        sabytie2.clear()
         adapter.notifyDataSetChanged()
         MainActivity.toastView(this, getString(R.string.remove_padzea))
     }
@@ -2546,7 +2551,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = super.getDropDownView(position, convertView, parent)
-            val text = view.findViewById<TextViewRobotoCondensed>(R.id.text1)
+            val text = view as TextViewRobotoCondensed
             text.text = spinnerList[position]
             text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) text.setBackgroundResource(R.drawable.selector_dark)

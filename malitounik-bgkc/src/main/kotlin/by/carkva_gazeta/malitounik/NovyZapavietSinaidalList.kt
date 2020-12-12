@@ -7,15 +7,14 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.text.TextUtils
 import android.util.TypedValue
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.BaseExpandableListAdapter
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
+import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
 
 class NovyZapavietSinaidalList : AppCompatActivity() {
     private var dzenNoch = false
@@ -272,51 +271,49 @@ class NovyZapavietSinaidalList : AppCompatActivity() {
         }
 
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = mContext.layoutInflater.inflate(R.layout.group_view, parent, false)
-            val textGroup = rootView.findViewById<TextViewRobotoCondensed>(R.id.textGroup)
-            textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            rootView.textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             when (groupPosition) {
-                0 -> textGroup.text = "От Матфея"
-                1 -> textGroup.text = "От Марка"
-                2 -> textGroup.text = "От Луки"
-                3 -> textGroup.text = "От Иоанна"
-                4 -> textGroup.text = "Деяния святых апостолов"
-                5 -> textGroup.text = "Иакова"
-                6 -> textGroup.text = "1-е Петра"
-                7 -> textGroup.text = "2-е Петра"
-                8 -> textGroup.text = "1-е Иоанна"
-                9 -> textGroup.text = "2-е Иоанна"
-                10 -> textGroup.text = "3-е Иоанна"
-                11 -> textGroup.text = "Иуды"
-                12 -> textGroup.text = "Римлянам"
-                13 -> textGroup.text = "1-е Коринфянам"
-                14 -> textGroup.text = "2-е Коринфянам"
-                15 -> textGroup.text = "Галатам"
-                16 -> textGroup.text = "Ефесянам"
-                17 -> textGroup.text = "Филиппийцам"
-                18 -> textGroup.text = "Колоссянам"
-                19 -> textGroup.text = "1-е Фессалоникийцам (Солунянам)"
-                20 -> textGroup.text = "2-е Фессалоникийцам (Солунянам)"
-                21 -> textGroup.text = "1-е Тимофею"
-                22 -> textGroup.text = "2-е Тимофею"
-                23 -> textGroup.text = "Титу"
-                24 -> textGroup.text = "Филимону"
-                25 -> textGroup.text = "Евреям"
-                26 -> textGroup.text = "Откровение (Апокалипсис)"
+                0 -> rootView.textGroup.text = "От Матфея"
+                1 -> rootView.textGroup.text = "От Марка"
+                2 -> rootView.textGroup.text = "От Луки"
+                3 -> rootView.textGroup.text = "От Иоанна"
+                4 -> rootView.textGroup.text = "Деяния святых апостолов"
+                5 -> rootView.textGroup.text = "Иакова"
+                6 -> rootView.textGroup.text = "1-е Петра"
+                7 -> rootView.textGroup.text = "2-е Петра"
+                8 -> rootView.textGroup.text = "1-е Иоанна"
+                9 -> rootView.textGroup.text = "2-е Иоанна"
+                10 -> rootView.textGroup.text = "3-е Иоанна"
+                11 -> rootView.textGroup.text = "Иуды"
+                12 -> rootView.textGroup.text = "Римлянам"
+                13 -> rootView.textGroup.text = "1-е Коринфянам"
+                14 -> rootView.textGroup.text = "2-е Коринфянам"
+                15 -> rootView.textGroup.text = "Галатам"
+                16 -> rootView.textGroup.text = "Ефесянам"
+                17 -> rootView.textGroup.text = "Филиппийцам"
+                18 -> rootView.textGroup.text = "Колоссянам"
+                19 -> rootView.textGroup.text = "1-е Фессалоникийцам (Солунянам)"
+                20 -> rootView.textGroup.text = "2-е Фессалоникийцам (Солунянам)"
+                21 -> rootView.textGroup.text = "1-е Тимофею"
+                22 -> rootView.textGroup.text = "2-е Тимофею"
+                23 -> rootView.textGroup.text = "Титу"
+                24 -> rootView.textGroup.text = "Филимону"
+                25 -> rootView.textGroup.text = "Евреям"
+                26 -> rootView.textGroup.text = "Откровение (Апокалипсис)"
             }
-            return rootView
+            return rootView.root
         }
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
-            val rootView = mContext.layoutInflater.inflate(R.layout.child_view, parent, false)
-            val textChild = rootView.findViewById<TextViewRobotoCondensed>(R.id.textChild)
+            val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
             val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            rootView.textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch)
-                textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            textChild.text = groups[groupPosition][childPosition]
-            return rootView
+                rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            rootView.textChild.text = groups[groupPosition][childPosition]
+            return rootView.root
         }
 
         override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {

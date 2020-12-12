@@ -237,7 +237,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         ta = "$timeH:00"
         color = 0
         binding.label1.text = da
-        val notifi = arrayOf("хвілінаў", "часоў", "дзён", "тыдняў")
+        val notifi = resources.getStringArray(R.array.sabytie_izmerenie)
         val adapter2 = SpinnerAdapter(this, notifi)
         binding.spinner3.adapter = adapter2
         binding.spinner3.onItemSelectedListener = object : OnItemSelectedListener {
@@ -250,7 +250,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-        val repit = arrayOf("Няма", "Кожны дзень", "Па будных днях", "Два дні праз два", "Кожны тыдзень", "Кожныя два тыдні", "Кожныя чатыры тыдні", "Кожны месяц", "Раз на год")
+        val repit = resources.getStringArray(R.array.sabytie_repit)
         val adapter3 = SpinnerAdapter(this, repit)
         binding.spinner4.adapter = adapter3
         binding.spinner4.onItemSelectedListener = object : OnItemSelectedListener {
@@ -500,6 +500,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         daKSave = binding.label12.text.toString()
         taKSave = binding.label22.text.toString()
         invalidateOptionsMenu()
+        binding.editText.requestFocus()
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
     override fun fileDeliteCancel() {

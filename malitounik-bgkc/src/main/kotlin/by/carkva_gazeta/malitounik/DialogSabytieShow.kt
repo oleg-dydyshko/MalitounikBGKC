@@ -13,7 +13,6 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import java.util.*
 
 class DialogSabytieShow : DialogFragment() {
     private var title = ""
@@ -47,7 +46,7 @@ class DialogSabytieShow : DialogFragment() {
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             val textViewT = TextViewRobotoCondensed(it)
-            textViewT.text = title.toUpperCase(Locale.getDefault())
+            textViewT.text = title
             textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)

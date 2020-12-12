@@ -14,7 +14,6 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
@@ -22,7 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogSabytieSettingsBinding
 
-class DialogSabytieSettings : DialogFragment() {
+class DialogSabytieSettings : DialogFragment(), View.OnClickListener {
     private lateinit var ringTone: Ringtone
     private var uriAlarm: Uri? = null
     private var uriNotification: Uri? = null
@@ -40,16 +39,13 @@ class DialogSabytieSettings : DialogFragment() {
         _binding = null
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = DialogSabytieSettingsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            _binding = DialogSabytieSettingsBinding.inflate(LayoutInflater.from(it))
             binding.notificationNotification.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             binding.notificationAlarm.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             binding.notificationRingtone.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
@@ -85,8 +81,8 @@ class DialogSabytieSettings : DialogFragment() {
                 binding.notificationRingtone.isClickable = false
                 binding.notificationPicker.isClickable = false
             } else {
-                binding.play.setOnClickListener(play())
-                binding.stop.setOnClickListener(stop())
+                binding.play.setOnClickListener(this)
+                binding.stop.setOnClickListener(this)
             }
             binding.guk.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
                 prefEditor = k.edit()
@@ -107,8 +103,8 @@ class DialogSabytieSettings : DialogFragment() {
                     binding.notificationAlarm.isClickable = true
                     binding.notificationRingtone.isClickable = true
                     binding.notificationPicker.isClickable = true
-                    binding.play.setOnClickListener(play())
-                    binding.stop.setOnClickListener(stop())
+                    binding.play.setOnClickListener(this)
+                    binding.stop.setOnClickListener(this)
                     prefEditor.putInt("guk", 1)
                 } else {
                     binding.notificationNotification.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
@@ -126,15 +122,6 @@ class DialogSabytieSettings : DialogFragment() {
                 }
                 prefEditor.apply()
             }
-        }
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        activity?.let {
-            k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
-            var style = R.style.AlertDialogTheme
-            if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val ad = AlertDialog.Builder(it, style)
             ad.setView(binding.root)
             ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
@@ -143,34 +130,40 @@ class DialogSabytieSettings : DialogFragment() {
         return alert
     }
 
-    private fun play(): View.OnClickListener {
-        return View.OnClickListener {
-            activity?.let {
-                ringTone.stop()
-                when {
-                    binding.notificationAlarm.isChecked -> {
-                        ringTone = RingtoneManager.getRingtone(it, uriAlarm)
-                    }
-                    binding.notificationNotification.isChecked -> {
-                        ringTone = RingtoneManager.getRingtone(it, uriNotification)
-                    }
-                    binding.notificationRingtone.isChecked -> {
-                        ringTone = RingtoneManager.getRingtone(it, uriRingtone)
-                    }
-                    binding.notificationPicker.isChecked -> {
-                        uri = Uri.parse(k.getString("soundURI", ""))
-                        ringTone = RingtoneManager.getRingtone(it, uri)
-                    }
-                }
-                ringTone.play()
-            }
+    override fun onClick(v: View?) {
+        val id = v?.id ?: 0
+        if (id == R.id.play) {
+            play()
+        }
+        if (id == R.id.stop) {
+            stop()
         }
     }
 
-    private fun stop(): View.OnClickListener {
-        return View.OnClickListener {
-            ringTone.stop()
+    private fun play() {
+        activity?.let {
+            stop()
+            when {
+                binding.notificationAlarm.isChecked -> {
+                    ringTone = RingtoneManager.getRingtone(it, uriAlarm)
+                }
+                binding.notificationNotification.isChecked -> {
+                    ringTone = RingtoneManager.getRingtone(it, uriNotification)
+                }
+                binding.notificationRingtone.isChecked -> {
+                    ringTone = RingtoneManager.getRingtone(it, uriRingtone)
+                }
+                binding.notificationPicker.isChecked -> {
+                    uri = Uri.parse(k.getString("soundURI", ""))
+                    ringTone = RingtoneManager.getRingtone(it, uri)
+                }
+            }
+            ringTone.play()
         }
+    }
+
+    private fun stop() {
+        ringTone.stop()
     }
 
     private fun grupRington(): RadioGroup.OnCheckedChangeListener {

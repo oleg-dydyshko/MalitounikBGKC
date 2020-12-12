@@ -499,5 +499,22 @@
         <item>Пяцікніжжа</item>
         <item>Стары запавет</item>
     </string-array>
+    <string-array name="sabytie_izmerenie">
+        <item>хвілінаў</item>
+        <item>часоў</item>
+        <item>дзён</item>
+        <item>тыдняў</item>
+    </string-array>
+    <string-array name="sabytie_repit">
+        <item>Няма</item>
+        <item>Кожны дзень</item>
+        <item>Па будных днях</item>
+        <item>Два дні праз два</item>
+        <item>Кожны тыдзень</item>
+        <item>Кожныя два тыдні</item>
+        <item>Кожныя чатыры тыдні</item>
+        <item>Кожны месяц</item>
+        <item>Раз на год</item>
+    </string-array>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

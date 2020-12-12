@@ -11,7 +11,6 @@ import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -27,12 +26,14 @@ class DialogTipicon : DialogFragment() {
         _binding = null
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
             val tipicon = arguments?.getInt("tipicon") ?: 0
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
+            var style = R.style.AlertDialogTheme
+            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            _binding = TipiconBinding.inflate(LayoutInflater.from(it))
             binding.t1.visibility = View.GONE
             binding.t2.visibility = View.GONE
             binding.t3.visibility = View.GONE
@@ -86,20 +87,6 @@ class DialogTipicon : DialogFragment() {
                 binding.image4.setImageResource(R.drawable.znaki_ttk_black_black)
                 binding.image5.setImageResource(R.drawable.znaki_red_kub_black)
             }
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = TipiconBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        activity?.let {
-            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
-            var style = R.style.AlertDialogTheme
-            if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
             builder.setView(binding.root)
             builder.setPositiveButton(it.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }

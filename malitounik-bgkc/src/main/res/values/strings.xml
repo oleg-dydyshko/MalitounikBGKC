@@ -220,6 +220,7 @@
     <string name="uriNotification">Гук апавяшчэньня: %1$s</string>
     <string name="uriRingtone">Гук званка: %1$s</string>
     <string name="uriPicker">Іншая мелодыя: %1$s</string>
+    <string name="uriPicker2">Іншая мелодыя</string>
     <string name="content_open_popup">Адчыніць Popup Menu</string>
     <string name="redagaktirovat">Рэдагаваць</string>
     <string name="delite">Выдаліць</string>
@@ -277,8 +278,8 @@
     <string name="poshuk_nadsan">Пошук па перакладу А. Надсана</string>
     <string name="niama">Няма</string>
     <string name="searche_text">Пошук у тэксьце</string>
-    <string name="sort_alf">Сарціроўка па алфавіце</string>
-    <string name="sort_time">Сарціроўка па часе</string>
+    <string name="sort_alf">Сартаваць паводле алфавіту</string>
+    <string name="sort_time">Сартаваць паводле часу</string>
     <string name="title_biblijateka">Бібліятэка Царквы</string>
     <string name="title_download_module">СПАМПОЎВАЕМ \"БІБЛІЯТЭКУ ЦАРКВЫ\"</string>
     <string name="title_resources">Рэсурсы Дадатка</string>
@@ -494,7 +495,7 @@
     </string-array>
     <string-array name="serche_bible">
         <item>Уся Біблія</item>
-        <item>Евангельля</item>
+        <item>Евангельлі</item>
         <item>Новы запавет</item>
         <item>Пяцікніжжа</item>
         <item>Стары запавет</item>

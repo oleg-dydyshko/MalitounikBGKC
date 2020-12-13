@@ -59,7 +59,8 @@ class DialogSabytieSettings : DialogFragment(), View.OnClickListener {
             val soundURI = k.getString("soundURI", "")
             uri = Uri.parse(soundURI)
             ringTone = RingtoneManager.getRingtone(it, uri)
-            if (soundURI == "") binding.notificationPicker.text = "Іншая мелодыя" else binding.notificationPicker.text = getString(R.string.uriPicker, ringTone.getTitle(it))
+            if (soundURI == "") binding.notificationPicker.text = getString(R.string.uriPicker2)
+            else binding.notificationPicker.text = getString(R.string.uriPicker, ringTone.getTitle(it))
             val sound = k.getInt("soundnotification", 0)
             binding.notificationGrupRington.setOnCheckedChangeListener(grupRington())
             binding.notificationNotification.isChecked = sound == 0

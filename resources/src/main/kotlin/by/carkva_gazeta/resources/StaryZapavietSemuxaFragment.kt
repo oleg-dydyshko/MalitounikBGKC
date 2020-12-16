@@ -27,7 +27,7 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
     private var knigaReal = 0
     private var clicParalelListiner: ClicParalelListiner? = null
     private var listPositionListiner: ListPositionListiner? = null
-    private lateinit var adapter: ExpArrayAdapterParallel
+    private lateinit var adapter: BibleArrayAdapterParallel
     private var bible: ArrayList<String> = ArrayList()
     private val knigaBible: String
         get() {
@@ -627,7 +627,7 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
             if (it.trim() != "") bible.add(it)
         }
         activity?.let { activity ->
-            adapter = ExpArrayAdapterParallel(activity, bible, knigaReal, page, false, 1)
+            adapter = BibleArrayAdapterParallel(activity, bible, knigaReal, page, false, 1)
             binding.listView.divider = null
             binding.listView.adapter = adapter
             binding.listView.setSelection(pazicia)

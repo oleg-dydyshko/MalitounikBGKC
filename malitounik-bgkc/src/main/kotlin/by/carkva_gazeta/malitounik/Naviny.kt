@@ -6,18 +6,21 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Message
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.webkit.*
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
@@ -252,24 +255,32 @@ class Naviny : AppCompatActivity() {
     }
 
     private fun setTollbarTheme() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            binding.titleToolbar.setTextCursorDrawable(R.color.colorWhite)
+        } else {
+            val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
+            f.isAccessible = true
+            f.set(binding.titleToolbar, 0)
+        }
         binding.titleToolbar.setOnClickListener {
-            binding.titleToolbar.setHorizontallyScrolling(true)
-            binding.titleToolbar.freezesText = true
-            binding.titleToolbar.marqueeRepeatLimit = -1
-            if (binding.titleToolbar.isSelected) {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
-                binding.titleToolbar.isSelected = false
-            } else {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
-                binding.titleToolbar.isSelected = true
+            if (binding.titleToolbar.text?.contains("https://") != true) {
+                binding.titleToolbar.setText(binding.viewWeb.url)
+                binding.titleToolbar.isCursorVisible = true
             }
         }
-        binding.titleToolbar.text = "«Царква» — беларуская грэка-каталіцкая газета"
+        binding.titleToolbar.setOnEditorActionListener { l, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                binding.viewWeb.loadUrl(l.text.toString())
+            }
+            false
+        }
+        binding.titleToolbar.setText("«Царква» — беларуская грэка-каталіцкая газета")
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
+            binding.titleToolbar.setBackgroundResource(R.color.colorprimary_material_dark)
         }
     }
 
@@ -288,21 +299,24 @@ class Naviny : AppCompatActivity() {
             super.onProgressChanged(view, newProgress)
             binding.toolbarprogress.setValue(newProgress)
             if (newProgress == 100) {
+                val imm12 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm12.hideSoftInputFromWindow(binding.viewWeb.windowToken, 0)
                 binding.toolbarprogress.visibility = View.INVISIBLE
                 val title = view?.title ?: "«Царква» — беларуская грэка-каталіцкая газета"
-                binding.titleToolbar.text = title
-                if (binding.viewWeb.settings.cacheMode != WebSettings.LOAD_CACHE_ELSE_NETWORK)
-                    binding.viewWeb.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+                binding.titleToolbar.setText(title)
+                if (binding.viewWeb.settings.cacheMode != WebSettings.LOAD_CACHE_ELSE_NETWORK) binding.viewWeb.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             } else {
                 binding.toolbarprogress.visibility = View.VISIBLE
             }
+            binding.titleToolbar.requestFocus()
+            binding.titleToolbar.isCursorVisible = false
         }
 
         override fun onCreateWindow(view: WebView?, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message?): Boolean {
-            view?: return false
+            view ?: return false
             val href = view.handler.obtainMessage()
             view.requestFocusNodeHref(href)
-            val url = href.data.getString("url")?: ""
+            val url = href.data.getString("url") ?: ""
             onChrome(url)
             return true
         }

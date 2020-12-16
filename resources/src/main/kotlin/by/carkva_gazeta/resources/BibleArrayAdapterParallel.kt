@@ -17,21 +17,21 @@ import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibleBinding
 
-internal class ExpArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val Zapavet: Boolean, private val mPerevod: Int) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) { // 1-Сёмуха, 2-Синоидальный, 3-Псалтырь Надсана
+internal class BibleArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val Zapavet: Boolean, private val mPerevod: Int) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) { // 1-Сёмуха, 2-Синоидальный, 3-Псалтырь Надсана
     private val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
     private val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup): View {
         val rootView: View
-        val ea: ExpArrayAdapterParallelItems
+        val ea: BibleArrayAdapterParallelItems
         if (convertView == null) {
             val binding = SimpleListItemBibleBinding.inflate(LayoutInflater.from(context), viewGroup, false)
             rootView = binding.root
-            ea = ExpArrayAdapterParallelItems(binding.label)
+            ea = BibleArrayAdapterParallelItems(binding.label)
             rootView.tag = ea
         } else {
             rootView = convertView
-            ea = rootView.tag as ExpArrayAdapterParallelItems
+            ea = rootView.tag as BibleArrayAdapterParallelItems
         }
         ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
         val parallel = BibliaParallelChtenia()
@@ -651,7 +651,7 @@ internal class ExpArrayAdapterParallel(private val context: Activity, private va
         return ssb
     }
 
-    private class ExpArrayAdapterParallelItems(var textView: TextViewRobotoCondensed)
+    private class BibleArrayAdapterParallelItems(var textView: TextViewRobotoCondensed)
 
     companion object {
         val colors = arrayOf("#000000", "#D00505", "#800080", "#C71585", "#FF00FF", "#F4A460", "#D2691E", "#A52A2A", "#1E90FF", "#6A5ACD", "#228B22", "#9ACD32", "#20B2AA")

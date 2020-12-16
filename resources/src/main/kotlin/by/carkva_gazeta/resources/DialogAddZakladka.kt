@@ -60,12 +60,12 @@ class DialogAddZakladka : DialogFragment() {
             linear.orientation = LinearLayout.VERTICAL
             val textViewZaglavie = TextViewRobotoCondensed(it)
             if (dzenNoch) {
-                ExpArrayAdapterParallel.colors[0] = "#FFFFFF"
-                ExpArrayAdapterParallel.colors[1] = "#f44336"
+                BibleArrayAdapterParallel.colors[0] = "#FFFFFF"
+                BibleArrayAdapterParallel.colors[1] = "#f44336"
                 textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             } else {
-                ExpArrayAdapterParallel.colors[0] = "#000000"
-                ExpArrayAdapterParallel.colors[1] = "#D00505"
+                BibleArrayAdapterParallel.colors[0] = "#000000"
+                BibleArrayAdapterParallel.colors[1] = "#D00505"
                 textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             }
             val density = resources.displayMetrics.density
@@ -100,7 +100,7 @@ class DialogAddZakladka : DialogFragment() {
         return alert
     }
 
-    private inner class ColorAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_color, R.id.label, ExpArrayAdapterParallel.colors) {
+    private inner class ColorAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.simple_list_item_color, R.id.label, BibleArrayAdapterParallel.colors) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val viewHolder: ViewHolderColor
@@ -113,7 +113,7 @@ class DialogAddZakladka : DialogFragment() {
                 rootView = convertView
                 viewHolder = rootView.tag as ViewHolderColor
             }
-            viewHolder.text.setBackgroundColor(Color.parseColor(ExpArrayAdapterParallel.colors[position]))
+            viewHolder.text.setBackgroundColor(Color.parseColor(BibleArrayAdapterParallel.colors[position]))
             return rootView
         }
 
@@ -121,7 +121,7 @@ class DialogAddZakladka : DialogFragment() {
             val view = super.getDropDownView(position, convertView, parent)
             val text = view.findViewById<TextViewRobotoCondensed>(R.id.label)
             text.text = ""
-            text.setBackgroundColor(Color.parseColor(ExpArrayAdapterParallel.colors[position]))
+            text.setBackgroundColor(Color.parseColor(BibleArrayAdapterParallel.colors[position]))
             return view
         }
     }

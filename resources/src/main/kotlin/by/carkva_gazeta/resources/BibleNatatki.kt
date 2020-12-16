@@ -302,15 +302,15 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
             dzenNoch = k.getBoolean("dzen_noch", false)
             view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) {
-                ExpArrayAdapterParallel.colors[0] = "#FFFFFF"
-                ExpArrayAdapterParallel.colors[1] = "#f44336"
+                BibleArrayAdapterParallel.colors[0] = "#FFFFFF"
+                BibleArrayAdapterParallel.colors[1] = "#f44336"
                 view.itemLeft.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
                 view.itemRight.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
                 view.itemLayout.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark_list)
                 view.root.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
             } else {
-                ExpArrayAdapterParallel.colors[0] = "#000000"
-                ExpArrayAdapterParallel.colors[1] = "#D00505"
+                BibleArrayAdapterParallel.colors[0] = "#000000"
+                BibleArrayAdapterParallel.colors[1] = "#D00505"
                 view.itemLayout.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default_list)
                 view.root.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorDivider)
             }

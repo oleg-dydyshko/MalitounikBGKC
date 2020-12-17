@@ -1179,6 +1179,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 return true
             }
         }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_help) {
+            startActivity(Intent(this, HelpText::class.java))
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             change = true
             item.isChecked = !item.isChecked

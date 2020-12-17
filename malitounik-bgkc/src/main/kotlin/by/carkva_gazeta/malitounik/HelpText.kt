@@ -46,4 +46,9 @@ class HelpText : AppCompatActivity() {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+    }
 }

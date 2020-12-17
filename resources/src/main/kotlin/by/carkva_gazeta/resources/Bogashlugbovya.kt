@@ -971,6 +971,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         val id: Int = item.itemId
+        if (id == by.carkva_gazeta.malitounik.R.id.action_help) {
+            startActivity(Intent(this, HelpText::class.java))
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             editVybranoe = true
             item.isChecked = !item.isChecked

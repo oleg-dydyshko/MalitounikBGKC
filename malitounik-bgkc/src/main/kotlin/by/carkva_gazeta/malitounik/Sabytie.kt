@@ -452,6 +452,13 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             onSabytieRedaktor(position)
             editCaliandar = true
         }
+        if (k.getBoolean("help_sabytie_list_view", true)) {
+            val dialogHelpListView = DialogHelpListView.getInstance(2)
+            dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("help_sabytie_list_view", false)
+            prefEditor.apply()
+        }
     }
 
     override fun onDialogEditClick(position: Int) {
@@ -2165,6 +2172,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
         if (id == R.id.action_add) {
             addSabytie()
+        }
+        if (id == R.id.action_help) {
+            val dialogHelpListView = DialogHelpListView.getInstance(2)
+            dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
         }
         return super.onOptionsItemSelected(item)
     }

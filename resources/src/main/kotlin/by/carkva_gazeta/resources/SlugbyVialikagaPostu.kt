@@ -320,6 +320,9 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         val id = item.itemId
+        if (id == by.carkva_gazeta.malitounik.R.id.action_help) {
+            startActivity(Intent(this, HelpText::class.java))
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             traker = true
             item.isChecked = !item.isChecked

@@ -166,6 +166,7 @@ class Naviny : AppCompatActivity() {
         if (id == R.id.action_update) {
             if (MainActivity.isNetworkAvailable(this)) {
                 binding.viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+                binding.viewWeb.clearCache(true)
                 binding.viewWeb.reload()
             } else error = true
         }

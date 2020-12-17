@@ -131,6 +131,13 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         } else {
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
+        if (k.getBoolean("help_paslia_prichastia", true)) {
+            val dialogHelpListView = DialogHelpListView.getInstance(3)
+            dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("help_paslia_prichastia", false)
+            prefEditor.apply()
+        }
     }
 
     private fun setTollbarTheme() {
@@ -173,6 +180,10 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         val id = item.itemId
+        if (id == by.carkva_gazeta.malitounik.R.id.action_help) {
+            val dialogHelpListView = DialogHelpListView.getInstance(3)
+            dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             checkSetDzenNoch = true
             item.isChecked = !item.isChecked

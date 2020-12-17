@@ -536,6 +536,9 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         val id = item.itemId
+        if (id == R.id.action_help) {
+            startActivity(Intent(this, HelpText::class.java))
+        }
         if (id == R.id.action_dzen_noch) {
             checkSetDzenNoch = true
             item.isChecked = !item.isChecked

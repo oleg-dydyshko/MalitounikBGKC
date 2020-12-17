@@ -631,6 +631,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 dadatak.show(supportFragmentManager, "dadatak")
             }
         }
+        if (id == R.id.action_help) {
+            val dialogHelpListView = DialogHelpListView.getInstance(1)
+            dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -702,6 +706,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             menu.findItem(R.id.action_font).isVisible = false
             menu.findItem(R.id.action_bright).isVisible = false
             menu.findItem(R.id.action_dzen_noch).isVisible = false
+            menu.findItem(R.id.action_help).isVisible = false
             when (idSelect) {
                 R.id.label101 -> {
                     menu.findItem(R.id.action_font).isVisible = true
@@ -719,6 +724,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     menu.findItem(R.id.action_add).isVisible = true
                     menu.findItem(R.id.sortdate).isVisible = true
                     menu.findItem(R.id.sorttime).isVisible = true
+                    menu.findItem(R.id.action_help).isVisible = true
                     when (k.getInt("natatki_sort", 0)) {
                         0 -> {
                             menu.findItem(R.id.sortdate).isChecked = false
@@ -737,6 +743,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 R.id.label12 -> {
                     menu.findItem(R.id.trash).isVisible = true
                     menu.findItem(R.id.sortdate).isVisible = true
+                    menu.findItem(R.id.action_help).isVisible = true
                     menu.findItem(R.id.sortdate).isChecked = k.getInt("vybranoe_sort", 1) == 1
                 }
                 R.id.label13 -> menu.findItem(R.id.search_nadsan).isVisible = true
@@ -815,7 +822,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 binding.label13.setBackgroundResource(R.drawable.selector_default)
             }
         }
-
         prefEditors = k.edit()
         if (idSelect == R.id.label91 || idSelect == R.id.label92 || idSelect == R.id.label93 || idSelect == R.id.label94 || idSelect == R.id.label95) {
             binding.title9.visibility = View.VISIBLE
@@ -1187,6 +1193,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             prefEditors.apply()
         }
         bindingappbar.titleToolbar.text = tolbarTitle
+        if (idSelect == R.id.label7 || idSelect == R.id.label12) {
+            if (k.getBoolean("help_main_list_view", true)) {
+                val dialogHelpListView = DialogHelpListView.getInstance(1)
+                dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
+                prefEditors.putBoolean("help_main_list_view", false)
+                prefEditors.apply()
+            }
+        }
         idOld = idSelect
     }
 

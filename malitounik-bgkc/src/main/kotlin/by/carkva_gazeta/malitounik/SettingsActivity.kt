@@ -1294,7 +1294,7 @@ class SettingsActivity : AppCompatActivity() {
             noDelite.add("WIDGET")
             noDelite.add("history")
             noDelite.add("Vybranoe")
-            noDelite.add("help_str")
+            noDelite.add("help_")
             noDelite.add("FullscreenHelp")
             noDelite.add("bible_time")
             for ((key) in k.all) {

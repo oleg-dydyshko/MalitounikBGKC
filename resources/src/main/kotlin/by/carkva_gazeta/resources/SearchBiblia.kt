@@ -28,10 +28,7 @@ import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
@@ -57,6 +54,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
     private lateinit var binding: SearchBibliaBinding
     private var keyword = false
     private var edittext2Focus = false
+    private var timerStartSearch: Timer? = null
+    private var timerTaskStartSearch: TimerTask? = null
+    private var myTextWatcher: MyTextWatcher? = null
+    private var job: Job? = null
 
     init {
         sinodalBible["sinaidals1"] = R.raw.sinaidals1
@@ -206,6 +207,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
 
     override fun onPause() {
         super.onPause()
+        stopTimerSarche()
         prefEditors.putString("search_string_filter", binding.editText2.text.toString())
         prefEditors.putInt("search_bible_fierstPosition", fierstPosition)
         prefEditors.apply()
@@ -520,16 +522,14 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             val edit = history[position]
-            addHistory(edit)
-            saveHistory()
-            binding.History.visibility = View.GONE
-            binding.ListView.visibility = View.VISIBLE
-            searche = true
             prefEditors.putString("search_string", edit)
             prefEditors.apply()
+            autoCompleteTextView?.removeTextChangedListener(myTextWatcher)
             autoCompleteTextView?.setText(edit)
+            autoCompleteTextView?.setSelection(edit.length)
+            autoCompleteTextView?.addTextChangedListener(myTextWatcher)
             searchView?.clearFocus()
-            execute(edit)
+            goSearche()
         }
         binding.History.setOnItemLongClickListener { _, _, position, _ ->
             val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
@@ -625,22 +625,13 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 f.set(autoCompleteTextView, 0)
             }
             val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            autoCompleteTextView?.addTextChangedListener(MyTextWatcher(autoCompleteTextView))
+            myTextWatcher = MyTextWatcher(autoCompleteTextView)
+            autoCompleteTextView?.addTextChangedListener(myTextWatcher)
             autoCompleteTextView?.setText(chin.getString("search_string", ""))
             autoCompleteTextView?.setSelection(autoCompleteTextView?.text?.length ?: 0)
             autoCompleteTextView?.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    val edit = autoCompleteTextView?.text.toString()
-                    if (edit.length >= 3) {
-                        searche = true
-                        addHistory(edit)
-                        saveHistory()
-                        binding.History.visibility = View.GONE
-                        binding.ListView.visibility = View.VISIBLE
-                        execute(edit)
-                    } else {
-                        MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.seashmin))
-                    }
+                    goSearche()
                 }
                 true
             }
@@ -650,6 +641,22 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 changeSearchViewElements(view.getChildAt(i))
             }
         }
+    }
+
+    private fun goSearche() {
+        job?.cancel()
+        val edit = autoCompleteTextView?.text.toString()
+        if (edit.length >= 3) {
+            searche = true
+            addHistory(edit)
+            saveHistory()
+            binding.History.visibility = View.GONE
+            binding.ListView.visibility = View.VISIBLE
+            execute(edit)
+        } else {
+            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.seashmin))
+        }
+        stopTimerSarche()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -787,7 +794,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
     }
 
     private fun execute(searche: String) {
-        CoroutineScope(Dispatchers.Main).launch {
+        job = CoroutineScope(Dispatchers.Main).launch {
             onPreExecute()
             val result = withContext(Dispatchers.IO) {
                 return@withContext doInBackground(searche)
@@ -797,6 +804,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
     }
 
     private fun onPreExecute() {
+        autoCompleteTextView?.removeTextChangedListener(myTextWatcher)
         searche = true
         prefEditors = chin.edit()
         adapter.clear()
@@ -807,9 +815,11 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         if (edit != "") {
             edit = edit.trim()
             autoCompleteTextView?.setText(edit)
+            autoCompleteTextView?.setSelection(edit.length)
             prefEditors.putString("search_string", edit)
             prefEditors.apply()
         }
+        autoCompleteTextView?.addTextChangedListener(myTextWatcher)
     }
 
     private fun doInBackground(searche: String): ArrayList<Spannable> {
@@ -1317,6 +1327,24 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         return seashpost
     }
 
+    private fun stopTimerSarche() {
+        timerStartSearch?.cancel()
+        timerTaskStartSearch = null
+    }
+
+    private fun startTimerSarche() {
+        stopTimerSarche()
+        timerStartSearch = Timer()
+        timerTaskStartSearch = object : TimerTask() {
+            override fun run() {
+                CoroutineScope(Dispatchers.Main).launch {
+                    goSearche()
+                }
+            }
+        }
+        timerStartSearch?.schedule(timerTaskStartSearch, 3000)
+    }
+
     private inner class MyTextWatcher(private val editText: EditText?, private val filtep: Boolean = false) : TextWatcher {
         private var editPosition = 0
         private var check = 0
@@ -1362,6 +1390,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                         binding.ListView.visibility = View.GONE
                         textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
                     }
+                }
+                if (edit.length >= 3) {
+                    stopTimerSarche()
+                    startTimerSarche()
                 }
             }
             if (filtep) adapter.filter.filter(edit)

@@ -40,18 +40,11 @@ class DialogHelpListView : DialogFragment() {
             linearLayout.addView(textViewZaglavie)
             val textView = TextViewRobotoCondensed(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            var texthelp = getString(R.string.help_list_view)
-            if (arguments?.getInt("help") == 2) {
-                val t1 = texthelp.indexOf("\n")
-                val t2 = texthelp.indexOf(",")
-                val t3 = texthelp.indexOf(".\n", t2)
-                val texthelp2 = texthelp.substring(t1 + 1, t2)
-                val texthelp3 = texthelp.substring(t3)
-                texthelp = texthelp2.plus(texthelp3)
+            when (arguments?.getInt("help") ?: 1) {
+                1 -> textView.text = getString(R.string.help_list_view)
+                2 -> textView.text = getString(R.string.help_list_sabytie)
+                3 -> textView.text = getString(R.string.help_paslia_prychastia)
             }
-            if (arguments?.getInt("help") == 3)
-                texthelp = getString(R.string.help_paslia_prychastia)
-            textView.text = texthelp
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             scrollView.addView(textView)

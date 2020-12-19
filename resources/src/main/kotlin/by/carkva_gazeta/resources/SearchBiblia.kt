@@ -28,7 +28,10 @@ import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
@@ -54,10 +57,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
     private lateinit var binding: SearchBibliaBinding
     private var keyword = false
     private var edittext2Focus = false
-    private var timerStartSearch: Timer? = null
-    private var timerTaskStartSearch: TimerTask? = null
-    private var myTextWatcher: MyTextWatcher? = null
-    private var job: Job? = null
 
     init {
         sinodalBible["sinaidals1"] = R.raw.sinaidals1
@@ -207,7 +206,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
 
     override fun onPause() {
         super.onPause()
-        stopTimerSarche()
         prefEditors.putString("search_string_filter", binding.editText2.text.toString())
         prefEditors.putInt("search_bible_fierstPosition", fierstPosition)
         prefEditors.apply()
@@ -522,14 +520,16 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             val edit = history[position]
+            addHistory(edit)
+            saveHistory()
+            binding.History.visibility = View.GONE
+            binding.ListView.visibility = View.VISIBLE
+            searche = true
             prefEditors.putString("search_string", edit)
             prefEditors.apply()
-            autoCompleteTextView?.removeTextChangedListener(myTextWatcher)
             autoCompleteTextView?.setText(edit)
-            autoCompleteTextView?.setSelection(edit.length)
-            autoCompleteTextView?.addTextChangedListener(myTextWatcher)
             searchView?.clearFocus()
-            goSearche()
+            execute(edit)
         }
         binding.History.setOnItemLongClickListener { _, _, position, _ ->
             val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
@@ -555,10 +555,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     prefEditors.putInt("biblia_seash", position)
                     prefEditors.apply()
-                    if (autoCompleteTextView?.length() ?: 0 >= 3) {
-                        stopTimerSarche()
-                        startTimerSarche()
-                    }
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -582,10 +578,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 prefEditors.putBoolean("pegistrbukv", true)
             }
             prefEditors.apply()
-            if (autoCompleteTextView?.length() ?: 0 >= 3) {
-                stopTimerSarche()
-                startTimerSarche()
-            }
         }
         if (chin.getInt("slovocalkam", 0) == 1) binding.checkBox2.isChecked = true
         binding.checkBox2.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
@@ -595,10 +587,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 prefEditors.putInt("slovocalkam", 0)
             }
             prefEditors.apply()
-            if (autoCompleteTextView?.length() ?: 0 >= 3) {
-                stopTimerSarche()
-                startTimerSarche()
-            }
         }
         setTollbarTheme()
     }
@@ -637,13 +625,22 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 f.set(autoCompleteTextView, 0)
             }
             val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            myTextWatcher = MyTextWatcher(autoCompleteTextView)
-            autoCompleteTextView?.addTextChangedListener(myTextWatcher)
+            autoCompleteTextView?.addTextChangedListener(MyTextWatcher(autoCompleteTextView))
             autoCompleteTextView?.setText(chin.getString("search_string", ""))
             autoCompleteTextView?.setSelection(autoCompleteTextView?.text?.length ?: 0)
             autoCompleteTextView?.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    goSearche()
+                    val edit = autoCompleteTextView?.text.toString()
+                    if (edit.length >= 3) {
+                        searche = true
+                        addHistory(edit)
+                        saveHistory()
+                        binding.History.visibility = View.GONE
+                        binding.ListView.visibility = View.VISIBLE
+                        execute(edit)
+                    } else {
+                        MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.seashmin))
+                    }
                 }
                 true
             }
@@ -652,22 +649,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
             for (i in 0 until view.childCount) {
                 changeSearchViewElements(view.getChildAt(i))
             }
-        }
-    }
-
-    private fun goSearche() {
-        job?.cancel()
-        stopTimerSarche()
-        val edit = autoCompleteTextView?.text.toString()
-        if (edit.length >= 3) {
-            searche = true
-            addHistory(edit)
-            saveHistory()
-            binding.History.visibility = View.GONE
-            binding.ListView.visibility = View.VISIBLE
-            execute(edit)
-        } else {
-            MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.seashmin))
         }
     }
 
@@ -806,7 +787,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
     }
 
     private fun execute(searche: String) {
-        job = CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             onPreExecute()
             val result = withContext(Dispatchers.IO) {
                 return@withContext doInBackground(searche)
@@ -816,21 +797,19 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
     }
 
     private fun onPreExecute() {
-        autoCompleteTextView?.removeTextChangedListener(myTextWatcher)
         searche = true
         prefEditors = chin.edit()
         adapter.clear()
         textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
         binding.progressBar.visibility = View.VISIBLE
         binding.ListView.visibility = View.GONE
-        val edit = autoCompleteTextView?.text.toString()
+        var edit = autoCompleteTextView?.text.toString()
         if (edit != "") {
+            edit = edit.trim()
             autoCompleteTextView?.setText(edit)
-            autoCompleteTextView?.setSelection(edit.length)
             prefEditors.putString("search_string", edit)
             prefEditors.apply()
         }
-        autoCompleteTextView?.addTextChangedListener(myTextWatcher)
     }
 
     private fun doInBackground(searche: String): ArrayList<Spannable> {
@@ -861,8 +840,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         prefEditors.putString("search_array", json)
         prefEditors.apply()
         searche = false
-        //val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        //imm1.hideSoftInputFromWindow(autoCompleteTextView?.windowToken, 0)
+        val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm1.hideSoftInputFromWindow(autoCompleteTextView?.windowToken, 0)
     }
 
     private fun zamena(replase: String): String {
@@ -1338,24 +1317,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         return seashpost
     }
 
-    private fun stopTimerSarche() {
-        timerStartSearch?.cancel()
-        timerTaskStartSearch = null
-    }
-
-    private fun startTimerSarche() {
-        stopTimerSarche()
-        timerStartSearch = Timer()
-        timerTaskStartSearch = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch {
-                    goSearche()
-                }
-            }
-        }
-        timerStartSearch?.schedule(timerTaskStartSearch, 0)
-    }
-
     private inner class MyTextWatcher(private val editText: EditText?, private val filtep: Boolean = false) : TextWatcher {
         private var editPosition = 0
         private var check = 0
@@ -1394,17 +1355,13 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                         binding.History.visibility = View.GONE
                         binding.ListView.visibility = View.VISIBLE
                         editText.clearFocus()
-                        //val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        //imm.hideSoftInputFromWindow(editText.windowToken, 0)
+                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(editText.windowToken, 0)
                     } else {
                         binding.History.visibility = View.VISIBLE
                         binding.ListView.visibility = View.GONE
                         textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
                     }
-                }
-                if (edit.length >= 3) {
-                    stopTimerSarche()
-                    startTimerSarche()
                 }
             }
             if (filtep) adapter.filter.filter(edit)

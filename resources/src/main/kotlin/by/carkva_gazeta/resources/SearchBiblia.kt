@@ -555,6 +555,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     prefEditors.putInt("biblia_seash", position)
                     prefEditors.apply()
+                    if (autoCompleteTextView?.length() ?: 0 >= 3) {
+                        stopTimerSarche()
+                        startTimerSarche()
+                    }
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -578,6 +582,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 prefEditors.putBoolean("pegistrbukv", true)
             }
             prefEditors.apply()
+            if (autoCompleteTextView?.length() ?: 0 >= 3) {
+                stopTimerSarche()
+                startTimerSarche()
+            }
         }
         if (chin.getInt("slovocalkam", 0) == 1) binding.checkBox2.isChecked = true
         binding.checkBox2.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
@@ -587,6 +595,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 prefEditors.putInt("slovocalkam", 0)
             }
             prefEditors.apply()
+            if (autoCompleteTextView?.length() ?: 0 >= 3) {
+                stopTimerSarche()
+                startTimerSarche()
+            }
         }
         setTollbarTheme()
     }
@@ -645,6 +657,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
 
     private fun goSearche() {
         job?.cancel()
+        stopTimerSarche()
         val edit = autoCompleteTextView?.text.toString()
         if (edit.length >= 3) {
             searche = true
@@ -656,7 +669,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         } else {
             MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.seashmin))
         }
-        stopTimerSarche()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -811,9 +823,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         textViewCount?.text = getString(by.carkva_gazeta.malitounik.R.string.seash, 0)
         binding.progressBar.visibility = View.VISIBLE
         binding.ListView.visibility = View.GONE
-        var edit = autoCompleteTextView?.text.toString()
+        val edit = autoCompleteTextView?.text.toString()
         if (edit != "") {
-            edit = edit.trim()
             autoCompleteTextView?.setText(edit)
             autoCompleteTextView?.setSelection(edit.length)
             prefEditors.putString("search_string", edit)
@@ -850,8 +861,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         prefEditors.putString("search_array", json)
         prefEditors.apply()
         searche = false
-        val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm1.hideSoftInputFromWindow(autoCompleteTextView?.windowToken, 0)
+        //val imm1 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        //imm1.hideSoftInputFromWindow(autoCompleteTextView?.windowToken, 0)
     }
 
     private fun zamena(replase: String): String {
@@ -1342,7 +1353,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 }
             }
         }
-        timerStartSearch?.schedule(timerTaskStartSearch, 3000)
+        timerStartSearch?.schedule(timerTaskStartSearch, 0)
     }
 
     private inner class MyTextWatcher(private val editText: EditText?, private val filtep: Boolean = false) : TextWatcher {
@@ -1383,8 +1394,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                         binding.History.visibility = View.GONE
                         binding.ListView.visibility = View.VISIBLE
                         editText.clearFocus()
-                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(editText.windowToken, 0)
+                        //val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        //imm.hideSoftInputFromWindow(editText.windowToken, 0)
                     } else {
                         binding.History.visibility = View.VISIBLE
                         binding.ListView.visibility = View.GONE

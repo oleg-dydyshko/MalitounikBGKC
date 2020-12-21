@@ -1268,9 +1268,11 @@ class SettingsActivity : AppCompatActivity() {
         } else {
             binding.maranataBel.isClickable = false
             binding.maranataRus.isClickable = false
+            binding.semuxaReplaceSinoidal.isClickable = false
             binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.semuxaReplaceSinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
         }
         val dzenNochSettings = k.getBoolean("dzen_noch", false)
         if (dzenNoch) binding.checkBox5.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -1339,11 +1341,14 @@ class SettingsActivity : AppCompatActivity() {
             prefEditor.putInt("biblia_seash", 0)
             prefEditor.putBoolean("pegistrbukv", true)
             prefEditor.putInt("slovocalkam", 0)
+            prefEditor.putBoolean("semuxa_replace_sinoidal", false)
             binding.maranataBel.isClickable = false
             binding.maranataRus.isClickable = false
+            binding.semuxaReplaceSinoidal.isClickable = false
             binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.semuxaReplaceSinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             prefEditor.putInt("trafic", 0)
             prefEditor.apply()
             binding.vibro.isClickable = true
@@ -1514,22 +1519,27 @@ class SettingsActivity : AppCompatActivity() {
                 prefEditor.putInt("maranata", 1)
                 binding.maranataBel.isClickable = true
                 binding.maranataRus.isClickable = true
+                binding.semuxaReplaceSinoidal.isClickable = true
                 if (dzenNoch) {
                     binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                     binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                     binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+                    binding.semuxaReplaceSinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                 } else {
                     binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    binding.semuxaReplaceSinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                 }
             } else {
                 prefEditor.putInt("maranata", 0)
                 binding.maranataBel.isClickable = false
                 binding.maranataRus.isClickable = false
+                binding.semuxaReplaceSinoidal.isClickable = false
                 binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
                 binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
                 binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+                binding.semuxaReplaceSinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             }
             prefEditor.apply()
         }
@@ -1542,30 +1552,24 @@ class SettingsActivity : AppCompatActivity() {
             prefEditor.apply()
         }
         binding.checkBox5.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            if (isChecked) {
-                prefEditor.putBoolean("dzen_noch", true)
-            } else {
-                prefEditor.putBoolean("dzen_noch", false)
-            }
+            prefEditor.putBoolean("dzen_noch", isChecked)
             prefEditor.apply()
             recreate()
         }
         binding.checkBox6.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            prefEditor.putBoolean("autoscrollAutostart", isChecked)
             if (isChecked) {
-                prefEditor.putBoolean("autoscrollAutostart", true)
                 binding.spinnerAutoPrag.visibility = View.VISIBLE
             } else {
-                prefEditor.putBoolean("autoscrollAutostart", false)
                 binding.spinnerAutoPrag.visibility = View.GONE
             }
             prefEditor.apply()
         }
         binding.checkBox7.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            prefEditor.putBoolean("scrinOn", isChecked)
             if (isChecked) {
-                prefEditor.putBoolean("scrinOn", true)
                 window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             } else {
-                prefEditor.putBoolean("scrinOn", false)
                 window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
             prefEditor.apply()

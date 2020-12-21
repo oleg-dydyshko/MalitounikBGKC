@@ -23,12 +23,10 @@ import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.databinding.AkafistUnderBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.*
+import java.lang.Runnable
 
 class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private val mHideHandler = Handler(Looper.getMainLooper())
@@ -60,14 +58,13 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
     private var title = ""
     private var levo = false
     private var pravo = false
-    private var procentTimer: Timer = Timer()
-    private var procentSchedule: TimerTask? = null
     private val uiAnimationDelay: Long = 300
     private val orientation: Int
         get() {
             return MainActivity.getOrientation(this)
         }
     private lateinit var binding: AkafistUnderBinding
+    private var procentJob: Job? = null
 
     override fun onResume() {
         super.onResume()
@@ -156,22 +153,12 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         }
     }
 
-    private fun stopProcent() {
-        procentTimer.cancel()
-        procentSchedule = null
-    }
-
     private fun startProcent() {
-        stopProcent()
-        procentTimer = Timer()
-        procentSchedule = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch {
-                    binding.progress.visibility = View.GONE
-                }
-            }
+        procentJob?.cancel()
+        procentJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(1000)
+            binding.progress.visibility = View.GONE
         }
-        procentTimer.schedule(procentSchedule, 1000)
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {

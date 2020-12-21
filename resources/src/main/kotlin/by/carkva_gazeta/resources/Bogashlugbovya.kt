@@ -26,14 +26,12 @@ import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.databinding.BogasluzbovyaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.lang.Runnable
 import java.util.*
 
 class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, InteractiveScrollView.OnScrollChangedCallback, MyWebViewClient.OnLinkListenner {
@@ -73,14 +71,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var spid = 60
     private var resurs = ""
     private var men = true
-    private var scrollTimer: Timer? = null
-    private var procentTimer: Timer? = null
-    private var resetTimer: Timer? = null
-    private var autoscrollTimer: Timer? = null
-    private var scrollerSchedule: TimerTask? = null
-    private var procentSchedule: TimerTask? = null
-    private var resetSchedule: TimerTask? = null
-    private var autoscrollSchedule: TimerTask? = null
     private var levo = false
     private var pravo = false
     private var niz = false
@@ -94,6 +84,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             return MainActivity.getOrientation(this)
         }
     private lateinit var binding: BogasluzbovyaBinding
+    private var autoScrollJob: Job? = null
+    private var autoStartScrollJob: Job? = null
+    private var procentJob: Job? = null
 
     companion object {
         private val resursMap = ArrayMap<String, Int>()
@@ -628,82 +621,62 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun autoStartScroll() {
-        stopAutoStartScroll()
-        autoscrollTimer = Timer()
-        autoscrollSchedule = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch {
-                    stopAutoScroll()
-                    startAutoScroll()
-                    val prefEditor: Editor = k.edit()
-                    prefEditor.putBoolean("autoscroll", true)
-                    prefEditor.apply()
-                    invalidateOptionsMenu()
+        if (autoScrollJob?.isActive != true) {
+            var autoTime: Long = 10000
+            for (i in 0..15) {
+                if (i == k.getInt("autoscrollAutostartTime", 5)) {
+                    autoTime = (i + 5) * 1000L
+                    break
                 }
             }
-        }
-        var autoTime: Long = 10000
-        for (i in 0..15) {
-            if (i == k.getInt("autoscrollAutostartTime", 5)) {
-                autoTime = (i + 5) * 1000L
-                break
+            autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                delay(autoTime)
+                startAutoScroll()
+                val prefEditor: Editor = k.edit()
+                prefEditor.putBoolean("autoscroll", true)
+                prefEditor.apply()
+                invalidateOptionsMenu()
             }
         }
-        autoscrollTimer?.schedule(autoscrollSchedule, autoTime)
     }
 
     private fun stopAutoStartScroll() {
-        autoscrollTimer?.cancel()
-        autoscrollSchedule = null
+        autoStartScrollJob?.cancel()
     }
 
     private fun stopProcent() {
-        procentTimer?.cancel()
-        procentSchedule = null
+        procentJob?.cancel()
     }
 
     private fun startProcent() {
         stopProcent()
-        procentTimer = Timer()
-        procentSchedule = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch {
-                    binding.progress.visibility = View.GONE
-                }
-            }
+        procentJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(1000)
+            binding.progress.visibility = View.GONE
         }
-        procentTimer?.schedule(procentSchedule, 1000)
     }
 
-    private fun stopAutoScroll() {
-        scrollTimer?.cancel()
-        scrollerSchedule = null
-        if (!k.getBoolean("scrinOn", false)) {
-            resetTimer = Timer()
-            resetSchedule = object : TimerTask() {
-                override fun run() {
-                    CoroutineScope(Dispatchers.Main).launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
-                }
+    private fun stopAutoScroll(delayDisplayOff: Boolean = true) {
+        autoScrollJob?.cancel()
+        if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(60000)
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
-            resetTimer?.schedule(resetSchedule, 60000)
         }
     }
 
     private fun startAutoScroll() {
-        resetTimer?.cancel()
-        scrollTimer = Timer()
-        resetSchedule = null
-        scrollerSchedule = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch {
-                    if (!mActionDown && !MainActivity.dialogVisable) {
-                        binding.WebView.scrollBy(0, 2)
-                    }
+        stopAutoStartScroll()
+        autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+            while (isActive) {
+                if (!mActionDown && !MainActivity.dialogVisable) {
+                    binding.WebView.scrollBy(0, 2)
                 }
+                delay(spid.toLong())
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -842,8 +815,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                             binding.progress.visibility = View.VISIBLE
                             startProcent()
-                            stopAutoScroll()
-                            startAutoScroll()
                         }
                     }
                     if (y > heightConstraintLayout - otstup && x < yS && x % 25 == 0) {
@@ -854,8 +825,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                             binding.progress.visibility = View.VISIBLE
                             startProcent()
-                            stopAutoScroll()
-                            startAutoScroll()
                         }
                     }
                 }
@@ -1012,8 +981,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 binding.progress.visibility = View.VISIBLE
                 startProcent()
-                stopAutoScroll()
-                startAutoScroll()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()
@@ -1027,8 +994,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 binding.progress.visibility = View.VISIBLE
                 startProcent()
-                stopAutoScroll()
-                startAutoScroll()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()
@@ -1112,16 +1077,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val prefEditor = k.edit()
         prefEditor.putInt(resurs + "Scroll", positionY)
         prefEditor.apply()
-        stopAutoScroll()
+        stopAutoScroll(false)
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer?.cancel()
-        resetTimer?.cancel()
-        autoscrollTimer?.cancel()
-        procentTimer?.cancel()
-        scrollerSchedule = null
-        procentSchedule = null
-        autoscrollSchedule = null
-        resetSchedule = null
+        autoScrollJob?.cancel()
+        autoStartScrollJob?.cancel()
+        procentJob?.cancel()
     }
 
     override fun onResume() {

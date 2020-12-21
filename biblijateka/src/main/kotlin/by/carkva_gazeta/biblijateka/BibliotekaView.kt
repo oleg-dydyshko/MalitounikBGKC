@@ -58,13 +58,11 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kursx.parser.fb2.*
 import com.shockwave.pdfium.PdfDocument
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.json.JSONObject
 import org.xml.sax.SAXException
 import java.io.*
+import java.lang.Runnable
 import java.lang.reflect.Type
 import java.net.HttpURLConnection
 import java.net.URL
@@ -122,12 +120,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var fb2: FictionBook? = null
     private var fb2PageText = ""
     private var spid = 60
-    private var scrollTimer: Timer = Timer()
-    private var procentTimer: Timer = Timer()
-    private var resetTimer: Timer = Timer()
-    private var scrollerSchedule: TimerTask? = null
-    private var procentSchedule: TimerTask? = null
-    private var resetSchedule: TimerTask? = null
+    private var autoScrollJob: Job? = null
+    private var autoStartScrollJob: Job? = null
+    private var procentJob: Job? = null
     private var autoscroll = false
     private lateinit var animInRight: Animation
     private lateinit var animOutRight: Animation
@@ -829,19 +824,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
         }
         val file = File(filePath)
-        pdfView.fromFile(file).enableAntialiasing(true)
-            .enableSwipe(true)
-            .swipeHorizontal(false).enableDoubletap(true).defaultPage(defaultPage)
-            .onLoad(this)
-            .onPageChange(this)
-            .onError(this)
-            .enableAnnotationRendering(false)
-            .password(null).scrollHandle(null).enableAntialiasing(true)
-            .spacing(2).autoSpacing(false)
-            .pageFitPolicy(FitPolicy.WIDTH).pageSnap(false)
-            .pageFling(false)
-            .nightMode(k.getBoolean("inversion", false))
-            .load()
+        pdfView.fromFile(file).enableAntialiasing(true).enableSwipe(true).swipeHorizontal(false).enableDoubletap(true).defaultPage(defaultPage).onLoad(this).onPageChange(this).onError(this).enableAnnotationRendering(false).password(null).scrollHandle(null).enableAntialiasing(true).spacing(2).autoSpacing(false).pageFitPolicy(FitPolicy.WIDTH).pageSnap(false).pageFling(false).nightMode(k.getBoolean("inversion", false)).load()
     }
 
     private fun loadFileTXT() {
@@ -938,7 +921,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             defaultPage = 0
             positionY = 0
         }
-        val split = biblioteka?.content?.get(defaultPage)?.get(1)?.split("#")?: ArrayList()
+        val split = biblioteka?.content?.get(defaultPage)?.get(1)?.split("#") ?: ArrayList()
         bindingcontent.webView.loadUrl("file://" + dir.absolutePath.toString() + "/" + split[0])
         bindingcontent.webView.scrollTo(0, positionY)
         bookTitle.clear()
@@ -1438,8 +1421,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 bindingcontent.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 bindingcontent.progress.visibility = View.VISIBLE
                 startProcent()
-                stopAutoScroll()
-                startAutoScroll()
                 prefEditor.putInt("autoscrollSpid", spid)
             }
         }
@@ -1451,8 +1432,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 bindingcontent.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 bindingcontent.progress.visibility = View.VISIBLE
                 startProcent()
-                stopAutoScroll()
-                startAutoScroll()
                 prefEditor.putInt("autoscrollSpid", spid)
             }
         }
@@ -1481,13 +1460,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             prefEditor.putInt(fileName, defaultPage)
         }
         prefEditor.apply()
-        stopAutoScroll()
-        scrollTimer.cancel()
-        resetTimer.cancel()
-        procentTimer.cancel()
-        scrollerSchedule = null
-        procentSchedule = null
-        resetSchedule = null
+        stopAutoScroll(false)
+        autoScrollJob?.cancel()
+        autoStartScrollJob?.cancel()
+        procentJob?.cancel()
     }
 
     override fun onBackPressed() {
@@ -1836,36 +1812,27 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         return true
     }
 
-    private fun stopAutoScroll() {
+    private fun stopAutoScroll(delayDisplayOff: Boolean = true) {
+        autoScrollJob?.cancel()
         bindingcontent.webView.setOnBottomListener(null)
-        scrollTimer.cancel()
-        scrollerSchedule = null
-        if (!k.getBoolean("scrinOn", false)) {
-            resetTimer = Timer()
-            resetSchedule = object : TimerTask() {
-                override fun run() {
-                    CoroutineScope(Dispatchers.Main).launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
-                }
+        if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(60000)
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
-            resetTimer.schedule(resetSchedule, 60000)
         }
     }
 
     private fun startAutoScroll() {
-        resetTimer.cancel()
         bindingcontent.webView.setOnBottomListener(this)
-        scrollTimer = Timer()
-        resetSchedule = null
-        scrollerSchedule = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch {
-                    if (!mActionDown && !binding.drawerLayout.isDrawerOpen(GravityCompat.START) && !MainActivity.dialogVisable) {
-                        bindingcontent.webView.scrollBy(0, 2)
-                    }
+        autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+            while (isActive) {
+                if (!mActionDown && !binding.drawerLayout.isDrawerOpen(GravityCompat.START) && !MainActivity.dialogVisable) {
+                    bindingcontent.webView.scrollBy(0, 2)
                 }
+                delay(spid.toLong())
             }
         }
-        scrollTimer.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
@@ -1882,22 +1849,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
     }
 
-    private fun stopProcent() {
-        procentTimer.cancel()
-        procentSchedule = null
-    }
-
     private fun startProcent() {
-        stopProcent()
-        procentTimer = Timer()
-        procentSchedule = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch {
-                    bindingcontent.progress.visibility = View.GONE
-                }
-            }
+        procentJob?.cancel()
+        procentJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(1000)
+            bindingcontent.progress.visibility = View.GONE
         }
-        procentTimer.schedule(procentSchedule, 1000)
     }
 
     private fun showPopupMenu(view: View, position: Int, name: String) {
@@ -2022,8 +1979,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch)
-                viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolder.text.text = arrayList[position][0]
             return rootView

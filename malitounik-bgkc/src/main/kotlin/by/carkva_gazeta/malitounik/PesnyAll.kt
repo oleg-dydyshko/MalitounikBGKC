@@ -24,12 +24,11 @@ import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.PesnyBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
+import java.lang.Runnable
 import java.util.*
 
 class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener {
@@ -63,14 +62,13 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     private var pravo = false
     private var resurs = ""
     private var checkSetDzenNoch = false
-    private var procentTimer: Timer = Timer()
-    private var procentSchedule: TimerTask? = null
     private val uiAnimationDelay: Long = 300
     private val orientation: Int
         get() {
             return MainActivity.getOrientation(this)
         }
     private lateinit var binding: PesnyBinding
+    private var procentJob: Job? = null
 
     companion object {
         val resursMap = ArrayMap<String, Int>()
@@ -371,22 +369,12 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         }
     }
 
-    private fun stopProcent() {
-        procentTimer.cancel()
-        procentSchedule = null
-    }
-
     private fun startProcent() {
-        stopProcent()
-        procentTimer = Timer()
-        procentSchedule = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch {
-                    binding.progress.visibility = View.GONE
-                }
-            }
+        procentJob?.cancel()
+        procentJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(1000)
+            binding.progress.visibility = View.GONE
         }
-        procentTimer.schedule(procentSchedule, 1000)
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {

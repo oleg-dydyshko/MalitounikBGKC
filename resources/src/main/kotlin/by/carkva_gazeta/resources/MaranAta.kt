@@ -33,12 +33,9 @@ import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
 import by.carkva_gazeta.resources.databinding.AkafistMaranAtaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.*
-import java.util.*
-import kotlin.collections.ArrayList
+import java.lang.Runnable
 
 class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener {
     private val mHideHandler = Handler(Looper.getMainLooper())
@@ -72,14 +69,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var yS = 0
     private var spid = 60
     private var belarus = false
-    private var scrollTimer: Timer? = null
-    private var autoscrollTimer: Timer? = null
-    private var procentTimer: Timer? = null
-    private var resetTimer: Timer? = null
-    private var scrollerSchedule: TimerTask? = null
-    private var autoscrollSchedule: TimerTask? = null
-    private var procentSchedule: TimerTask? = null
-    private var resetSchedule: TimerTask? = null
     private var levo = false
     private var pravo = false
     private var niz = false
@@ -98,6 +87,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             return MainActivity.getOrientation(this)
         }
     private lateinit var binding: AkafistMaranAtaBinding
+    private var autoScrollJob: Job? = null
+    private var autoStartScrollJob: Job? = null
+    private var procentJob: Job? = null
 
     override fun onDialogFontSizePositiveClick() {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
@@ -568,8 +560,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                             binding.progress.visibility = View.VISIBLE
                             startProcent()
-                            stopAutoScroll()
-                            startAutoScroll()
                         }
                     }
                     if (y > heightConstraintLayout - otstup && x < yS && x % 25 == 0) {
@@ -580,8 +570,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                             binding.progress.visibility = View.VISIBLE
                             startProcent()
-                            stopAutoScroll()
-                            startAutoScroll()
                         }
                     }
                 }
@@ -951,91 +939,66 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         adapter.notifyDataSetChanged()
     }
 
-    private fun stopAutoScroll() {
-        scrollTimer?.cancel()
-        scrollerSchedule = null
-        if (!k.getBoolean("scrinOn", false)) {
-            resetTimer = Timer()
-            resetSchedule = object : TimerTask() {
-                override fun run() {
-                    CoroutineScope(Dispatchers.Main).launch { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
-                }
+    private fun stopAutoScroll(delayDisplayOff: Boolean = true) {
+        autoScrollJob?.cancel()
+        if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(60000)
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
-            resetTimer?.schedule(resetSchedule, 60000)
         }
     }
 
     private fun startAutoScroll() {
-        resetTimer?.cancel()
-        autoscrollTimer?.cancel()
-        scrollTimer = Timer()
-        resetSchedule = null
-        scrollerSchedule = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch {
-                    forceScroll()
-                    if (!mActionDown && !MainActivity.dialogVisable) {
-                        val firstPosition = binding.ListView.firstVisiblePosition
-                        if (firstPosition == INVALID_POSITION) {
-                            return@launch
-                        }
-                        val firstView = binding.ListView.getChildAt(0) ?: return@launch
-                        val newTop = firstView.top - 2
-                        binding.ListView.setSelectionFromTop(firstPosition, newTop)
+        stopAutoStartScroll()
+        autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+            while (isActive) {
+                forceScroll()
+                if (!mActionDown && !MainActivity.dialogVisable) {
+                    val firstPosition = binding.ListView.firstVisiblePosition
+                    if (firstPosition == INVALID_POSITION) {
+                        return@launch
                     }
+                    val firstView = binding.ListView.getChildAt(0) ?: return@launch
+                    val newTop = firstView.top - 2
+                    binding.ListView.setSelectionFromTop(firstPosition, newTop)
                 }
+                delay(spid.toLong())
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        scrollTimer?.schedule(scrollerSchedule, spid.toLong(), spid.toLong())
     }
 
     private fun autoStartScroll() {
-        stopAutoStartScroll()
-        autoscrollTimer = Timer()
-        autoscrollSchedule = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch {
-                    stopAutoScroll()
-                    startAutoScroll()
-                    val prefEditor: Editor = k.edit()
-                    prefEditor.putBoolean("autoscroll", true)
-                    prefEditor.apply()
-                    invalidateOptionsMenu()
+        if (autoScrollJob?.isActive != true) {
+            var autoTime: Long = 10000
+            for (i in 0..15) {
+                if (i == k.getInt("autoscrollAutostartTime", 5)) {
+                    autoTime = (i + 5) * 1000L
+                    break
                 }
             }
-        }
-        var autoTime: Long = 10000
-        for (i in 0..15) {
-            if (i == k.getInt("autoscrollAutostartTime", 5)) {
-                autoTime = (i + 5) * 1000L
-                break
+            autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                delay(autoTime)
+                startAutoScroll()
+                val prefEditor: Editor = k.edit()
+                prefEditor.putBoolean("autoscroll", true)
+                prefEditor.apply()
+                invalidateOptionsMenu()
             }
         }
-        autoscrollTimer?.schedule(autoscrollSchedule, autoTime)
     }
 
     private fun stopAutoStartScroll() {
-        autoscrollTimer?.cancel()
-        autoscrollSchedule = null
-    }
-
-    private fun stopProcent() {
-        procentTimer?.cancel()
-        procentSchedule = null
+        autoStartScrollJob?.cancel()
     }
 
     private fun startProcent() {
-        stopProcent()
-        procentTimer = Timer()
-        procentSchedule = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch {
-                    binding.progress.visibility = View.GONE
-                }
-            }
+        procentJob?.cancel()
+        procentJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(1000)
+            binding.progress.visibility = View.GONE
         }
-        procentTimer?.schedule(procentSchedule, 1000)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -1085,7 +1048,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     override fun onPause() {
         super.onPause()
-        stopAutoScroll()
+        stopAutoScroll(false)
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         clearEmptyPosition()
         val file: File = if (belarus) {
@@ -1111,14 +1074,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         maranAtaScrollPosition = binding.ListView.firstVisiblePosition
         prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
         prefEditors.apply()
-        scrollTimer?.cancel()
-        autoscrollTimer?.cancel()
-        resetTimer?.cancel()
-        procentTimer?.cancel()
-        scrollerSchedule = null
-        autoscrollSchedule = null
-        procentSchedule = null
-        resetSchedule = null
+        autoScrollJob?.cancel()
+        autoStartScrollJob?.cancel()
+        procentJob?.cancel()
     }
 
     override fun onResume() {
@@ -1241,8 +1199,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 binding.progress.visibility = View.VISIBLE
                 startProcent()
-                stopAutoScroll()
-                startAutoScroll()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()
@@ -1256,8 +1212,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
                 binding.progress.visibility = View.VISIBLE
                 startProcent()
-                stopAutoScroll()
-                startAutoScroll()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()

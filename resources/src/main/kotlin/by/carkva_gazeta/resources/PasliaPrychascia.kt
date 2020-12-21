@@ -26,9 +26,8 @@ import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.databinding.AkafistActivityPasliaPrichBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.lang.Runnable
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -61,8 +60,6 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     private var n = 0
     private var levo = false
     private var pravo = false
-    private var procentTimer: Timer = Timer()
-    private var procentSchedule: TimerTask? = null
     private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
     private val uiAnimationDelay: Long = 300
     private val orientation: Int
@@ -70,6 +67,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             return MainActivity.getOrientation(this)
         }
     private lateinit var binding: AkafistActivityPasliaPrichBinding
+    private var procentJob: Job? = null
 
     override fun onResume() {
         super.onResume()
@@ -359,22 +357,12 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         return true
     }
 
-    private fun stopProcent() {
-        procentTimer.cancel()
-        procentSchedule = null
-    }
-
     private fun startProcent() {
-        stopProcent()
-        procentTimer = Timer()
-        procentSchedule = object : TimerTask() {
-            override fun run() {
-                CoroutineScope(Dispatchers.Main).launch {
-                    binding.progress.visibility = View.GONE
-                }
-            }
+        procentJob?.cancel()
+        procentJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(1000)
+            binding.progress.visibility = View.GONE
         }
-        procentTimer.schedule(procentSchedule, 1000)
     }
 
     override fun onBackPressed() {

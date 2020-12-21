@@ -21,6 +21,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -29,8 +30,6 @@ import kotlin.collections.ArrayList
 
 class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     private var mLastClickTime: Long = 0
-    private var posukPesenTimer: Timer? = null
-    private var posukPesenSchedule: TimerTask? = null
     private var editText: AutoCompleteTextView? = null
     private var textViewCount: TextViewRobotoCondensed? = null
     private var searchView: SearchView? = null
@@ -45,6 +44,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     private val textWatcher: TextWatcher = MyTextWatcher()
     private var _binding: MenuPesnyBinding? = null
     private val binding get() = _binding!!
+    private var posukPesenJob: Job? = null
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -312,28 +312,12 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     }
 
     private fun stopPosukPesen() {
-        if (posukPesenTimer != null) {
-            posukPesenTimer?.cancel()
-            posukPesenTimer = null
-        }
-        posukPesenSchedule = null
+        posukPesenJob?.cancel()
     }
 
     private fun startPosukPesen(poshuk: String) {
-        if (posukPesenTimer == null) {
-            posukPesenTimer = Timer()
-            if (posukPesenSchedule != null) {
-                posukPesenSchedule?.cancel()
-                posukPesenSchedule = null
-            }
-            posukPesenSchedule = object : TimerTask() {
-                override fun run() {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        searchPasny(poshuk)
-                    }
-                }
-            }
-            posukPesenTimer?.schedule(posukPesenSchedule, 0)
+        posukPesenJob = CoroutineScope(Dispatchers.Main).launch {
+            searchPasny(poshuk)
         }
     }
 

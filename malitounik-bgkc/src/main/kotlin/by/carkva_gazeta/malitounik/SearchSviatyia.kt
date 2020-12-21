@@ -24,6 +24,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -33,8 +34,6 @@ import kotlin.collections.ArrayList
 class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistoryListener {
     private lateinit var adapter: SearchListAdapter
     private var dzenNoch = false
-    private var posukPesenTimer: Timer? = null
-    private var posukPesenSchedule: TimerTask? = null
     private var editText: AutoCompleteTextView? = null
     private var textViewCount: TextViewRobotoCondensed? = null
     private var searchView: SearchView? = null
@@ -49,6 +48,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
     private lateinit var historyAdapter: HistoryAdapter
     private var actionExpandOn = true
     private lateinit var binding: SearchSviatyiaBinding
+    private var posukPesenJob: Job? = null
 
     override fun onResume() {
         super.onResume()
@@ -358,26 +358,12 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
     }
 
     private fun stopPosukSviatyx() {
-        if (posukPesenTimer != null) {
-            posukPesenTimer?.cancel()
-            posukPesenTimer = null
-        }
-        posukPesenSchedule = null
+        posukPesenJob?.cancel()
     }
 
     private fun startPosukSviatyx(poshuk: String) {
-        if (posukPesenTimer == null) {
-            posukPesenTimer = Timer()
-            if (posukPesenSchedule != null) {
-                posukPesenSchedule?.cancel()
-                posukPesenSchedule = null
-            }
-            posukPesenSchedule = object : TimerTask() {
-                override fun run() {
-                    CoroutineScope(Dispatchers.Main).launch { rawAsset(poshuk) }
-                }
-            }
-            posukPesenTimer?.schedule(posukPesenSchedule, 0)
+        posukPesenJob = CoroutineScope(Dispatchers.Main).launch {
+            rawAsset(poshuk)
         }
     }
 

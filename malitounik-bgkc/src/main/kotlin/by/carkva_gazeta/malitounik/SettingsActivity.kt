@@ -1178,12 +1178,6 @@ class SettingsActivity : AppCompatActivity() {
             binding.line3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
         }
-        if (dzenNoch) binding.semuxaReplaceSinoidal.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-        binding.semuxaReplaceSinoidal.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        binding.semuxaReplaceSinoidal.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            prefEditor.putBoolean("semuxa_replace_sinoidal", isChecked)
-            prefEditor.apply()
-        }
         if (dzenNoch) binding.prav.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.prav.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.secret.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
@@ -1229,7 +1223,6 @@ class SettingsActivity : AppCompatActivity() {
         if (k.getInt("pravas", 0) == 1) binding.prav.isChecked = true
         if (k.getInt("gosud", 0) == 1) binding.dzair.isChecked = true
         if (k.getInt("pafesii", 0) == 1) binding.praf.isChecked = true
-        if (k.getBoolean("semuxa_replace_sinoidal", false)) binding.semuxaReplaceSinoidal.isChecked = true
         binding.maranataOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.notificationOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.notificationFull.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
@@ -1251,7 +1244,6 @@ class SettingsActivity : AppCompatActivity() {
         } else {
             binding.maranataRus.isChecked = true
             binding.maranataBel.isChecked = false
-            binding.semuxaReplaceSinoidal.visibility = View.GONE
         }
         binding.notificationOnly.isChecked = notification == 1
         binding.notificationFull.isChecked = notification == 2
@@ -1268,11 +1260,9 @@ class SettingsActivity : AppCompatActivity() {
         } else {
             binding.maranataBel.isClickable = false
             binding.maranataRus.isClickable = false
-            binding.semuxaReplaceSinoidal.isClickable = false
             binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-            binding.semuxaReplaceSinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
         }
         val dzenNochSettings = k.getBoolean("dzen_noch", false)
         if (dzenNoch) binding.checkBox5.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -1341,14 +1331,11 @@ class SettingsActivity : AppCompatActivity() {
             prefEditor.putInt("biblia_seash", 0)
             prefEditor.putBoolean("pegistrbukv", true)
             prefEditor.putInt("slovocalkam", 0)
-            prefEditor.putBoolean("semuxa_replace_sinoidal", false)
             binding.maranataBel.isClickable = false
             binding.maranataRus.isClickable = false
-            binding.semuxaReplaceSinoidal.isClickable = false
             binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-            binding.semuxaReplaceSinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             prefEditor.putInt("trafic", 0)
             prefEditor.apply()
             binding.vibro.isClickable = true
@@ -1373,19 +1360,16 @@ class SettingsActivity : AppCompatActivity() {
             binding.prav.isChecked = false
             binding.dzair.isChecked = false
             binding.praf.isChecked = false
-            binding.semuxaReplaceSinoidal.isChecked = false
             recreate()
         }
         binding.maranataGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             when (checkedId) {
                 R.id.maranataBel -> {
                     prefEditor.putBoolean("belarus", true)
-                    binding.semuxaReplaceSinoidal.visibility = View.VISIBLE
                     val semuxaNoKnigi = DialogSemuxaNoKnigi()
                     semuxaNoKnigi.show(supportFragmentManager, "semuxa_no_knigi")
                 }
                 R.id.maranataRus -> {
-                    binding.semuxaReplaceSinoidal.visibility = View.GONE
                     prefEditor.putBoolean("belarus", false)
                 }
                 else -> {
@@ -1519,27 +1503,22 @@ class SettingsActivity : AppCompatActivity() {
                 prefEditor.putInt("maranata", 1)
                 binding.maranataBel.isClickable = true
                 binding.maranataRus.isClickable = true
-                binding.semuxaReplaceSinoidal.isClickable = true
                 if (dzenNoch) {
                     binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                     binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                     binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-                    binding.semuxaReplaceSinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                 } else {
                     binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
-                    binding.semuxaReplaceSinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                 }
             } else {
                 prefEditor.putInt("maranata", 0)
                 binding.maranataBel.isClickable = false
                 binding.maranataRus.isClickable = false
-                binding.semuxaReplaceSinoidal.isClickable = false
                 binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
                 binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
                 binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
-                binding.semuxaReplaceSinoidal.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             }
             prefEditor.apply()
         }
@@ -1585,7 +1564,6 @@ class SettingsActivity : AppCompatActivity() {
         binding.checkBox5.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         binding.checkBox6.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         binding.checkBox7.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        binding.semuxaReplaceSinoidal.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         if (savedInstanceState == null && (notification == 1 || notification == 2)) {
             if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
                 val notifi = DialogHelpNotification()

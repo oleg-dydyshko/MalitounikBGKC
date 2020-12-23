@@ -659,23 +659,21 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 }
                 val r = resources
                 var inputStream = r.openRawResource(R.raw.biblias1)
-                var error = false
+                var replace = true
                 if (belarus) {
-                    val zamena = k.getBoolean("semuxa_replace_sinoidal", false)
-                    if (zamena) {
-                        when (nomer) {
-                            17 -> inputStream = r.openRawResource(R.raw.sinaidals17)
-                            18 -> inputStream = r.openRawResource(R.raw.sinaidals18)
-                            19 -> inputStream = r.openRawResource(R.raw.sinaidals19)
-                            26 -> inputStream = r.openRawResource(R.raw.sinaidals26)
-                            27 -> inputStream = r.openRawResource(R.raw.sinaidals27)
-                            31 -> inputStream = r.openRawResource(R.raw.sinaidals31)
-                            32 -> inputStream = r.openRawResource(R.raw.sinaidals32)
-                            47 -> inputStream = r.openRawResource(R.raw.sinaidals47)
-                            48 -> inputStream = r.openRawResource(R.raw.sinaidals48)
-                            49 -> inputStream = r.openRawResource(R.raw.sinaidals49)
-                            50 -> inputStream = r.openRawResource(R.raw.sinaidals50)
-                        }
+                    when (nomer) {
+                        17 -> inputStream = r.openRawResource(R.raw.sinaidals17)
+                        18 -> inputStream = r.openRawResource(R.raw.sinaidals18)
+                        19 -> inputStream = r.openRawResource(R.raw.sinaidals19)
+                        26 -> inputStream = r.openRawResource(R.raw.sinaidals26)
+                        27 -> inputStream = r.openRawResource(R.raw.sinaidals27)
+                        31 -> inputStream = r.openRawResource(R.raw.sinaidals31)
+                        32 -> inputStream = r.openRawResource(R.raw.sinaidals32)
+                        47 -> inputStream = r.openRawResource(R.raw.sinaidals47)
+                        48 -> inputStream = r.openRawResource(R.raw.sinaidals48)
+                        49 -> inputStream = r.openRawResource(R.raw.sinaidals49)
+                        50 -> inputStream = r.openRawResource(R.raw.sinaidals50)
+                        else -> replace = false
                     }
                     when (nomer) {
                         1 -> inputStream = r.openRawResource(R.raw.biblias1)
@@ -744,9 +742,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         75 -> inputStream = r.openRawResource(R.raw.biblian25)
                         76 -> inputStream = r.openRawResource(R.raw.biblian26)
                         77 -> inputStream = r.openRawResource(R.raw.biblian27)
-                        else -> error = true
                     }
-                    if (zamena) error = false
                 } else {
                     when (nomer) {
                         1 -> inputStream = r.openRawResource(R.raw.sinaidals1)
@@ -827,104 +823,102 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         76 -> inputStream = r.openRawResource(R.raw.sinaidaln26)
                         77 -> inputStream = r.openRawResource(R.raw.sinaidaln27)
                     }
+                    replace = false
                 }
-                if (!error) {
-                    val isr = InputStreamReader(inputStream)
-                    val reader = BufferedReader(isr)
-                    var line: String
-                    val builder = StringBuilder()
-                    reader.forEachLine {
-                        line = it
-                        line = line.replace("\\n", "<br>")
-                        if (line.contains("//")) {
-                            val t1 = line.indexOf("//")
-                            line = line.substring(0, t1).trim()
-                            if (line != "") builder.append(line).append("\n")
-                        } else {
-                            builder.append(line).append("\n")
-                        }
+                if (replace) {
+                    maranAta.add("<!--no--><br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>")
+                }
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                var line: String
+                val builder = StringBuilder()
+                reader.forEachLine {
+                    line = it
+                    line = line.replace("\\n", "<br>")
+                    if (line.contains("//")) {
+                        val t1 = line.indexOf("//")
+                        line = line.substring(0, t1).trim()
+                        if (line != "") builder.append(line).append("\n")
+                    } else {
+                        builder.append(line).append("\n")
                     }
-                    inputStream.close()
-                    if (chten.size == 6 && i == 3) {
-                        if (belarus) {
-                            maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n")
-                        } else {
-                            maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n")
-                        }
+                }
+                inputStream.close()
+                if (chten.size == 6 && i == 3) {
+                    if (belarus) {
+                        maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n")
+                    } else {
+                        maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n")
                     }
-                    val split2 = builder.toString().split("===")
-                    if (konec == split2.size) konec -= 1
-                    var vN: Int
-                    var vK: Int
-                    val r1 = StringBuilder()
-                    var r2 = ""
-                    for (e in nachalo..konec) {
-                        if (stixn != -1) {
-                            if (s5 != -1) {
-                                if (e == nachalo) {
-                                    vN = if (belarus) split2[e].indexOf("$stixn. ") else split2[e].indexOf("$stixn ")
-                                    r1.append(split2[e].substring(vN).trim())
-                                }
-                                if (e != nachalo && e != konec) {
-                                    r1.append("\n").append(split2[e].trim())
-                                }
-                                if (e == konec) {
-                                    val vK1: Int = if (belarus) split2[e].indexOf("$stixk. ") else split2[e].indexOf("$stixk ")
-                                    vK = split2[e].indexOf("\n", vK1)
-                                    r2 = split2[e].substring(0, vK)
-                                }
-                            } else {
-                                var vK1: Int
-                                if (belarus) {
-                                    vN = split2[e].indexOf("$stixn. ")
-                                    vK1 = split2[e].indexOf("$stixk. ")
-                                } else {
-                                    vN = split2[e].indexOf("$stixn ")
-                                    vK1 = split2[e].indexOf("$stixk ")
-                                }
-                                vK = split2[e].indexOf("\n", vK1)
-                                r1.append(split2[e].substring(vN, vK))
-                            }
-                        } else {
-                            if (belarus) {
-                                maranAta.add("<!--no--><!--nazva+++$nazvaBel $e--><br><strong>$nazvaFullBel $e</strong><br>\n")
-                            } else {
-                                maranAta.add("<!--no--><!--nazva+++$nazva $e--><br><strong>$nazvaFull $e</strong><br>\n")
-                            }
-                            val splitline = split2[e].trim().split("\n")
-                            var i3: Int
-                            for (i2 in splitline.indices) {
-                                i3 = if (kniga.contains("Сир") && e == 1 && i2 >= 8) i2 - 7 else i2 + 1
-                                if (belarus) maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazvaBel + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n") else maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazva + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
-                            }
-                        }
-                    }
+                }
+                val split2 = builder.toString().split("===")
+                if (konec == split2.size) konec -= 1
+                var vN: Int
+                var vK: Int
+                val r1 = StringBuilder()
+                var r2 = ""
+                for (e in nachalo..konec) {
                     if (stixn != -1) {
-                        val t1 = fit.indexOf(".")
-                        if (belarus) {
-                            maranAta.add("<!--no--><!--nazva+++$nazvaBel " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFullBel + " " + fit.substring(s2 + 1) + "</strong><br>\n")
-                        } else {
-                            maranAta.add("<!--no--><!--nazva+++$nazva " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n")
-                        }
-                        val res1 = r1.toString().trim().split("\n")
-                        var i2 = 0
-                        var i3 = stixn
-                        while (i2 < res1.size) {
-                            if (belarus) maranAta.add("<!--$kniga.$nachalo.$i3--><!--nazva+++$nazvaBel " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n") else maranAta.add("<!--$kniga.$nachalo.$i3--><!--nazva+++$nazva " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n")
-                            i2++
-                            i3++
-                        }
-                        if (konec - nachalo != 0) {
-                            val res2 = r2.trim().split("\n")
-                            for (i21 in res2.indices) {
-                                if (belarus) maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazvaBel + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n") else maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazva + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n")
+                        if (s5 != -1) {
+                            if (e == nachalo) {
+                                vN = if (belarus) split2[e].indexOf("$stixn. ") else split2[e].indexOf("$stixn ")
+                                r1.append(split2[e].substring(vN).trim())
                             }
+                            if (e != nachalo && e != konec) {
+                                r1.append("\n").append(split2[e].trim())
+                            }
+                            if (e == konec) {
+                                val vK1: Int = if (belarus) split2[e].indexOf("$stixk. ") else split2[e].indexOf("$stixk ")
+                                vK = split2[e].indexOf("\n", vK1)
+                                r2 = split2[e].substring(0, vK)
+                            }
+                        } else {
+                            var vK1: Int
+                            if (belarus) {
+                                vN = split2[e].indexOf("$stixn. ")
+                                vK1 = split2[e].indexOf("$stixk. ")
+                            } else {
+                                vN = split2[e].indexOf("$stixn ")
+                                vK1 = split2[e].indexOf("$stixk ")
+                            }
+                            vK = split2[e].indexOf("\n", vK1)
+                            r1.append(split2[e].substring(vN, vK))
+                        }
+                    } else {
+                        if (belarus) {
+                            maranAta.add("<!--no--><!--nazva+++$nazvaBel $e--><br><strong>$nazvaFullBel $e</strong><br>\n")
+                        } else {
+                            maranAta.add("<!--no--><!--nazva+++$nazva $e--><br><strong>$nazvaFull $e</strong><br>\n")
+                        }
+                        val splitline = split2[e].trim().split("\n")
+                        var i3: Int
+                        for (i2 in splitline.indices) {
+                            i3 = if (kniga.contains("Сир") && e == 1 && i2 >= 8) i2 - 7 else i2 + 1
+                            if (belarus) maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazvaBel + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n") else maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazva + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
                         }
                     }
-                } else {
-                    // Только Семуха
-                    maranAta.add("<!--no--><br><strong>$nazvaFullBel ${fit.substring(s2 + 1)}</strong><br>\n")
-                    maranAta.add("<!--no--><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>\n")
+                }
+                if (stixn != -1) {
+                    val t1 = fit.indexOf(".")
+                    if (belarus) {
+                        maranAta.add("<!--no--><!--nazva+++$nazvaBel " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFullBel + " " + fit.substring(s2 + 1) + "</strong><br>\n")
+                    } else {
+                        maranAta.add("<!--no--><!--nazva+++$nazva " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n")
+                    }
+                    val res1 = r1.toString().trim().split("\n")
+                    var i2 = 0
+                    var i3 = stixn
+                    while (i2 < res1.size) {
+                        if (belarus) maranAta.add("<!--$kniga.$nachalo.$i3--><!--nazva+++$nazvaBel " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n") else maranAta.add("<!--$kniga.$nachalo.$i3--><!--nazva+++$nazva " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n")
+                        i2++
+                        i3++
+                    }
+                    if (konec - nachalo != 0) {
+                        val res2 = r2.trim().split("\n")
+                        for (i21 in res2.indices) {
+                            if (belarus) maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazvaBel + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n") else maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazva + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n")
+                        }
+                    }
                 }
             } catch (t: Throwable) {
                 val t1 = fit.lastIndexOf(" ")

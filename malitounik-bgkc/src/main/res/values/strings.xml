@@ -259,7 +259,7 @@
     <string name="natatki_biblii2">нататку</string>
     <string name="stix_ru">/Стих</string>
     <string name="stix_by">/Верш</string>
-    <string name="semuxa_maran_ata_error">У перакладзе Бібліі В.Сёмухі такой кнігі не існуе\n</string>
+    <string name="semuxa_maran_ata_error">У перакладзе Бібліі на беларускую мову В. Сёмухі гэтая кніга адсутнічае\n</string>
     <string name="end_fabreary_be">Чытаецца 28.02 альбо 1.03</string>
     <string name="end_fabreary_ru">Читается 28.02 или 1.03</string>
     <string name="get_date">Выберыце дату</string>
@@ -520,6 +520,5 @@
     <string name="help_list_view">Націснуўшы на стрэлкі можна перамяшчаць пункт меню ў адвольнае месца.\nРухам направа па пункце меню - яго рэдагаваньне, калі даступна.\nРухам налева па пункце меню - яго выдаленьне.</string>
     <string name="help_list_sabytie">Рухам направа па пункце меню - яго рэдагаваньне.\nРухам налева па пункце меню - яго выдаленьне.</string>
     <string name="help_paslia_prychastia">Рухам направа або налева можна хутка перамыкаць малітвы пасля cьвятога прычасьця.</string>
-    <string name="semuxa_replace">Паказваць кнігі Сінадальнга расейскага перакладу, замест адсутных кніг Бібліі В. Сёмухі</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

@@ -103,8 +103,13 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             change = savedInstanceState.getBoolean("change")
+        } else {
+            toTwoList = intent.extras?.getInt("position", 0) ?: 0
+            if (k.getBoolean("autoscrollAutostart", false)) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                autoStartScroll()
+            }
         }
-        toTwoList = intent.extras?.getInt("position", 0) ?: 0
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         binding.constraint.setOnTouchListener(this)
         binding.InteractiveScroll.setOnBottomReachedListener(object : OnBottomReachedListener {
@@ -132,10 +137,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             val prefEditor: Editor = k.edit()
             prefEditor.putBoolean("help_str", false)
             prefEditor.apply()
-        }
-        if (k.getBoolean("autoscrollAutostart", false)) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            autoStartScroll()
         }
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
@@ -528,10 +529,12 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             cytannelist.add(textView2)
             binding.LinearButtom.addView(textView2)
         }
-        binding.InteractiveScroll.postDelayed({
-            val y = binding.LinearButtom.y + binding.LinearButtom.getChildAt(toTwoList).y
-            binding.InteractiveScroll.smoothScrollTo(0, y.toInt())
-        }, 700)
+        if (toTwoList != 0) {
+            binding.InteractiveScroll.postDelayed({
+                val y = binding.LinearButtom.y + binding.LinearButtom.getChildAt(toTwoList).y
+                binding.InteractiveScroll.smoothScrollTo(0, y.toInt())
+            }, 700)
+        }
     }
 
     private fun autoStartScroll() {
@@ -543,7 +546,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
                     break
                 }
             }
-            autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+            autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(autoTime)
                 startAutoScroll()
                 val prefEditor: Editor = k.edit()
@@ -580,6 +583,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
     }
 
     private fun startAutoScroll() {
+        stopAutoStartScroll()
         cytannelist.forEach {
             it.setTextIsSelectable(false)
         }
@@ -691,6 +695,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
                 prefEditor.putBoolean("dzen_noch", false)
             }
             prefEditor.apply()
+            toTwoList = 0
             recreate()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_orientation) {

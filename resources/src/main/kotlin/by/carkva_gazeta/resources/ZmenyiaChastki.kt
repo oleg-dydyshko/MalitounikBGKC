@@ -53,7 +53,7 @@ internal class ZmenyiaChastki(context: Context) {
     fun zmenya(apostal: Int): String {
         val kal = Calendar.getInstance() as GregorianCalendar
         val data = arrayData[kal[Calendar.DATE] - 1][9]
-        return if (data.contains("Прабачьце, няма дадзеных")) "<em>Прабачьце, няма дадзеных</em>" else chtenia(arrayData[kal[Calendar.DATE] - 1][9], apostal)
+        return if (data.contains(context.resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + context.resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em>" else chtenia(arrayData[kal[Calendar.DATE] - 1][9], apostal)
     }
 
     private fun chtenia(w: String, apostal: Int): String {

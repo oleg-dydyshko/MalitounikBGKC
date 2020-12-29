@@ -5,13 +5,14 @@ plugins {
 
 android {
     compileSdkVersion 30
+    buildToolsVersion '30.0.2'
 
     defaultConfig {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 14
         targetSdkVersion 30
-        versionCode 43691
-        versionName "3.8.8.13"
+        versionCode 43692
+        versionName "3.8.8.14"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -50,7 +51,6 @@ android {
     }
 
     dynamicFeatures = [':resources', ':biblijateka']
-    buildToolsVersion '30.0.2'
 }
 
 dependencies {

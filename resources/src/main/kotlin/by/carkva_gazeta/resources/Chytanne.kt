@@ -105,8 +105,13 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             change = savedInstanceState.getBoolean("change")
+        } else {
+            nedelia = intent.extras?.getInt("nedelia", -1) ?: -1
+            if (k.getBoolean("autoscrollAutostart", false)) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                autoStartScroll()
+            }
         }
-        nedelia = intent.extras?.getInt("nedelia", -1) ?: -1
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         binding.constraint.setOnTouchListener(this)
         binding.InteractiveScroll.setOnBottomReachedListener(object : OnBottomReachedListener {
@@ -134,10 +139,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             val prefEditor: Editor = k.edit()
             prefEditor.putBoolean("help_str", false)
             prefEditor.apply()
-        }
-        if (k.getBoolean("autoscrollAutostart", false)) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            autoStartScroll()
         }
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
@@ -931,6 +932,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     }
 
     private fun startAutoScroll() {
+        stopAutoStartScroll()
         cytannelist.forEach {
             it.setTextIsSelectable(false)
         }

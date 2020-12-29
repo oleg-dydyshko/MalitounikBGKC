@@ -520,5 +520,31 @@
     <string name="help_list_view">Націснуўшы на стрэлкі можна перамяшчаць пункт меню ў адвольнае месца.\nРухам направа па пункце меню - яго рэдагаваньне, калі даступна.\nРухам налева па пункце меню - яго выдаленьне.</string>
     <string name="help_list_sabytie">Рухам направа па пункце меню - яго рэдагаваньне.\nРухам налева па пункце меню - яго выдаленьне.</string>
     <string name="help_paslia_prychastia">Рухам направа або налева можна хутка перамыкаць малітвы пасля cьвятога прычасьця.</string>
+    <string name="no_danyx">Прабачце, няма дадзеных</string>
+    <string name="no_lityrgii">Літургіі няма</string>
+    <string-array name="dni_nedeli">
+        <item />
+        <item>нядзеля</item>
+        <item>панядзелак</item>
+        <item>аўторак</item>
+        <item>серада</item>
+        <item>чацьвер</item>
+        <item>пятніца</item>
+        <item>субота</item>
+    </string-array>
+    <string-array name="meciac">
+        <item>СТУДЗЕНЯ</item>
+        <item>ЛЮТАГА</item>
+        <item>САКАВІКА</item>
+        <item>КРАСАВІКА</item>
+        <item>ТРАЎНЯ</item>
+        <item>ЧЭРВЕНЯ</item>
+        <item>ЛІПЕНЯ</item>
+        <item>ЖНІЎНЯ</item>
+        <item>ВЕРАСЬНЯ</item>
+        <item>КАСТРЫЧНІКА</item>
+        <item>ЛІСТАПАДА</item>
+        <item>СЬНЕЖНЯ</item>
+    </string-array>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

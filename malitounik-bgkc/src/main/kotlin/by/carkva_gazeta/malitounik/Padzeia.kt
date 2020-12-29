@@ -2,9 +2,6 @@ package by.carkva_gazeta.malitounik
 
 import java.util.*
 
-/**
- * Created by oleg on 10.5.17
- */
 data class Padzeia(val padz: String, val dat: String, val tim: String, val paznic: Long, val vybtime: Int, val sec: String, val datK: String, val timK: String, val repit: Int, val count: String, val color: Int, val konecSabytie: Boolean) : Comparable<Padzeia> {
     override fun compareTo(other: Padzeia): Int {
         val days = dat.split(".")

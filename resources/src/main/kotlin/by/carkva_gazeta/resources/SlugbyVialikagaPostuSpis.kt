@@ -20,9 +20,6 @@ import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.resources.databinding.AkafistListBibleBinding
 
-/**
- * Created by oleg on 30.5.16
- */
 class SlugbyVialikagaPostuSpis : AppCompatActivity() {
     private var mLastClickTime: Long = 0
     private val data = ArrayList<Data>()

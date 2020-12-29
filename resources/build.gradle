@@ -5,6 +5,7 @@ plugins {
 
 android {
     compileSdkVersion 30
+    buildToolsVersion '30.0.2'
 
     defaultConfig {
         minSdkVersion 14
@@ -31,7 +32,6 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
-    buildToolsVersion '30.0.2'
 }
 
 dependencies {

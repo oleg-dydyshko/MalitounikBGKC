@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.widget.ScrollView
 
@@ -24,7 +23,6 @@ class InteractiveScrollView : ScrollView {
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
         val view = getChildAt(childCount - 1)
         val diff = view.bottom - (height + scrollY)
-        Log.d("Oleg", scrollY.toString())
         if (diff == 0) {
             mListener?.onBottomReached()
         }

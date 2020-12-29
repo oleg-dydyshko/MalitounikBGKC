@@ -11,9 +11,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 
-/**
- * Created by oleg on 5.9.17
- */
 class DialogSemuxaNoKnigi : DialogFragment() {
     private lateinit var alert: AlertDialog
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

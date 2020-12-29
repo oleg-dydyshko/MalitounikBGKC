@@ -155,8 +155,7 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
     }
 
     override fun onBackPressed() {
-        if (arrayListVybranoe.isEmpty()) onSupportNavigateUp()
-        else super.onBackPressed()
+        onSupportNavigateUp()
     }
 
     override fun onResume() {

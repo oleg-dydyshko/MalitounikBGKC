@@ -336,7 +336,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         resurs = intent?.getStringExtra("resurs") ?: ""
         if (resurs.contains("pesny")) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         title = intent?.getStringExtra("title") ?: ""
-        loadData()
+        loadData(savedInstanceState)
         autoscroll = k.getBoolean("autoscroll", false)
         spid =  k.getInt("autoscrollSpid", 60)
         binding.WebView.setOnTouchListener(this)
@@ -421,7 +421,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         return script
     }
 
-    private fun loadData() = CoroutineScope(Dispatchers.Main).launch {
+    private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
         binding.progressBar.visibility = View.VISIBLE
         val res = withContext(Dispatchers.IO) {
             val builder = StringBuilder()
@@ -561,9 +561,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (resurs.contains("ton")) mAutoScroll = false
             binding.WebView.visibility = View.VISIBLE
             binding.WebView.loadDataWithBaseURL("malitounikApp-app//carkva-gazeta.by/", res, "text/html", "utf-8", null)
-            if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                autoStartScroll()
+            if (savedInstanceState == null) {
+                if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
+                    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                    autoStartScroll()
+                }
             }
         } else {
             binding.WebView.visibility = View.GONE

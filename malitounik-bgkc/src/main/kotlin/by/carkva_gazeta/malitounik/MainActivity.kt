@@ -1492,7 +1492,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             cytanne = cytanne.replace("Муч.", "")
             cytanne = cytanne.replace("Крыжу", "")
             cytanne = cytanne.replace("Вобр.", "")
-            cytanne = cytanne.replace("Нов_году.", "")
+            cytanne = cytanne.replace("Новаму году.", "")
             cytanne = cytanne.replace("Вял.", "")
             cytanne = cytanne.replace("Арх.", "")
             cytanne = cytanne.replace("Абнаўл.", "")

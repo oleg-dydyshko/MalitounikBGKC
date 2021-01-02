@@ -2477,6 +2477,6 @@ class WidgetMun : AppWidgetProvider() {
     }
 
     private fun prorok(day: Int): Boolean { // когда выпадают Прарокі
-        return !data[day - 1][4].contains("no_sviatyia") && data[day - 1][4].contains("#d00505")
+        return !data[day - 1][4].contains("no_sviatyia") && data[day - 1][4].contains("<font color=#d00505><strong>")
     }
 }

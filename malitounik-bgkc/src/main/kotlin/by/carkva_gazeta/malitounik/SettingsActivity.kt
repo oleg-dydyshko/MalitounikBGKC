@@ -109,7 +109,8 @@ class SettingsActivity : AppCompatActivity() {
 
         fun setNotifications(context: Context, notifications: Int) {
             val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val c = Calendar.getInstance() as GregorianCalendar
+            var c = Calendar.getInstance() as GregorianCalendar
+            c.add(Calendar.DATE, 1)
             var intent: Intent
             var pIntent: PendingIntent
             val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -172,6 +173,7 @@ class SettingsActivity : AppCompatActivity() {
                     }
                 }
             }
+            c = Calendar.getInstance() as GregorianCalendar
             MainActivity.padzeia.forEach {
                 if (it.sec != "-1") {
                     if (it.count == "0") {

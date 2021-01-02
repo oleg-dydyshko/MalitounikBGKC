@@ -176,68 +176,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 autoStartScroll()
             }
         }
-        binding.ListView.post {
-            binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
-                override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {}
-                override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
-                    if (list.adapter == null || list.getChildAt(0) == null) return
-                    val position = list.firstVisiblePosition
-                    maranAtaScrollPosition = position
-                    if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
-                        autoscroll = false
-                        stopAutoScroll()
-                        val prefEditors = k.edit()
-                        prefEditors.putBoolean("autoscroll", false)
-                        prefEditors.apply()
-                        invalidateOptionsMenu()
-                    }
-                    setFont = false
-                    val offset = list.getChildAt(0).top
-                    if (mPosition < position) {
-                        mOffset = 0
-                    }
-                    val scroll: Int
-                    scroll = if (mPosition == position && mOffset == offset) {
-                        0
-                    } else if (mPosition > position && mOffset > offset) {
-                        1
-                    } else if (mPosition == position && mOffset < offset) {
-                        1
-                    } else {
-                        1
-                    }
-                    if (!onsave) {
-                        var nazva = ""
-                        if (scroll == 1) {
-                            nazva = if (list.lastVisiblePosition - 4 >= 0) maranAta[list.lastVisiblePosition - 4] else maranAta[list.lastVisiblePosition]
-                        }
-                        val oldtollBarText = binding.titleToolbar.text.toString()
-                        if (oldtollBarText == "") {
-                            nazva = maranAta[list.firstVisiblePosition + 2]
-                            if (nazva.contains("nazva+++")) {
-                                val t1 = nazva.indexOf("nazva+++")
-                                val t2 = nazva.indexOf("-->", t1 + 8)
-                                tollBarText = nazva.substring(t1 + 8, t2)
-                                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
-                                binding.subtitleToolbar.text = tollBarText
-                            }
-                        }
-                        if (!nazva.contains(tollBarText) && scroll != 0) {
-                            if (nazva.contains("nazva+++")) {
-                                val t1 = nazva.indexOf("nazva+++")
-                                val t2 = nazva.indexOf("-->", t1 + 8)
-                                tollBarText = nazva.substring(t1 + 8, t2)
-                                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
-                                binding.subtitleToolbar.text = tollBarText
-                            }
-                        }
-                        mPosition = position
-                        mOffset = offset
-                    }
-                    onsave = false
-                }
-            })
-        }
         binding.constraint.setOnTouchListener(this)
         if (dzenNoch) binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
         binding.share.setOnClickListener {
@@ -412,6 +350,66 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         } else {
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
+        binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {}
+            override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+                if (list.adapter == null || list.getChildAt(0) == null) return
+                val position = list.firstVisiblePosition
+                maranAtaScrollPosition = position
+                if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
+                    autoscroll = false
+                    stopAutoScroll()
+                    val prefEditors = k.edit()
+                    prefEditors.putBoolean("autoscroll", false)
+                    prefEditors.apply()
+                    invalidateOptionsMenu()
+                }
+                setFont = false
+                val offset = list.getChildAt(0).top
+                if (mPosition < position) {
+                    mOffset = 0
+                }
+                val scroll: Int
+                scroll = if (mPosition == position && mOffset == offset) {
+                    0
+                } else if (mPosition > position && mOffset > offset) {
+                    1
+                } else if (mPosition == position && mOffset < offset) {
+                    1
+                } else {
+                    1
+                }
+                if (!onsave) {
+                    var nazva = ""
+                    if (scroll == 1) {
+                        nazva = if (list.lastVisiblePosition - 4 >= 0) maranAta[list.lastVisiblePosition - 4] else maranAta[list.lastVisiblePosition]
+                    }
+                    val oldtollBarText = binding.titleToolbar.text.toString()
+                    if (oldtollBarText == "") {
+                        nazva = maranAta[list.firstVisiblePosition + 2]
+                        if (nazva.contains("nazva+++")) {
+                            val t1 = nazva.indexOf("nazva+++")
+                            val t2 = nazva.indexOf("-->", t1 + 8)
+                            tollBarText = nazva.substring(t1 + 8, t2)
+                            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+                            binding.subtitleToolbar.text = tollBarText
+                        }
+                    }
+                    if (!nazva.contains(tollBarText) && scroll != 0) {
+                        if (nazva.contains("nazva+++")) {
+                            val t1 = nazva.indexOf("nazva+++")
+                            val t2 = nazva.indexOf("-->", t1 + 8)
+                            tollBarText = nazva.substring(t1 + 8, t2)
+                            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+                            binding.subtitleToolbar.text = tollBarText
+                        }
+                    }
+                    mPosition = position
+                    mOffset = offset
+                }
+                onsave = false
+            }
+        })
         binding.ListView.post {
             binding.ListView.smoothScrollToPosition(maranAtaScrollPosition)
         }
@@ -948,6 +946,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         stopAutoStartScroll()
         autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
             while (isActive) {
+                delay(spid.toLong())
                 forceScroll()
                 if (!mActionDown && !MainActivity.dialogVisable) {
                     val firstPosition = binding.ListView.firstVisiblePosition
@@ -958,7 +957,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     val newTop = firstView.top - 2
                     binding.ListView.setSelectionFromTop(firstPosition, newTop)
                 }
-                delay(spid.toLong())
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -1069,7 +1067,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         maranAtaScrollPosition = binding.ListView.firstVisiblePosition
         prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
         prefEditors.apply()
-        autoScrollJob?.cancel()
         autoStartScrollJob?.cancel()
         procentJob?.cancel()
     }

@@ -672,10 +672,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         stopAutoStartScroll()
         autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
             while (isActive) {
+                delay(spid.toLong())
                 if (!mActionDown && !MainActivity.dialogVisable) {
                     binding.WebView.scrollBy(0, 2)
                 }
-                delay(spid.toLong())
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -1081,7 +1081,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         prefEditor.apply()
         stopAutoScroll(false)
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        autoScrollJob?.cancel()
         autoStartScrollJob?.cancel()
         procentJob?.cancel()
     }

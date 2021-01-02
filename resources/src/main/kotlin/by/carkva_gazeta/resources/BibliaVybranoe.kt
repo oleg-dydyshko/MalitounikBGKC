@@ -589,10 +589,10 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
         }
         autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
             while (isActive) {
+                delay(spid.toLong())
                 if (!mActionDown && !MainActivity.dialogVisable) {
                     binding.InteractiveScroll.smoothScrollBy(0, 2)
                 }
-                delay(spid.toLong())
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -661,7 +661,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
     override fun onPause() {
         super.onPause()
         stopAutoScroll(false)
-        autoScrollJob?.cancel()
         autoStartScrollJob?.cancel()
         procentJob?.cancel()
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

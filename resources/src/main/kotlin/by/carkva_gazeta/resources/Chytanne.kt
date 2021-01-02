@@ -938,10 +938,10 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         }
         autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
             while (isActive) {
+                delay(spid.toLong())
                 if (!mActionDown && !MainActivity.dialogVisable) {
                     binding.InteractiveScroll.smoothScrollBy(0, 2)
                 }
-                delay(spid.toLong())
             }
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -1015,7 +1015,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         super.onPause()
         stopAutoScroll(false)
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        autoScrollJob?.cancel()
         autoStartScrollJob?.cancel()
         procentJob?.cancel()
     }

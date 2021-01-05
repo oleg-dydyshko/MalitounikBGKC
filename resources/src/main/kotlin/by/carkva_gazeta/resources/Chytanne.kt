@@ -854,7 +854,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                             error()
                         }
                     } catch (t: Throwable) {
-                        t.printStackTrace()
                         error()
                     }
                 }
@@ -867,7 +866,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 }, 700)
             }
         } catch (t: Throwable) {
-            t.printStackTrace()
             error()
         }
     }

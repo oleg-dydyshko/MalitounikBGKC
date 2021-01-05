@@ -291,6 +291,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
             val w = binding.label1.text.toString().split(".")
             val gc = GregorianCalendar(w[2].toInt(), w[1].toInt() - 1, w[0].toInt())
             yearG = gc[Calendar.YEAR]
@@ -308,6 +310,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
             val dialogSabytieTime = DialogSabytieTime.getInstance(1, binding.label2.text.toString())
             dialogSabytieTime.show(supportFragmentManager, "dialogSabytieTime")
         }
@@ -317,6 +321,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
             val w = binding.label12.text.toString().split(".")
             val gc = GregorianCalendar(w[2].toInt(), w[1].toInt() - 1, w[0].toInt())
             yearG = gc[Calendar.YEAR]
@@ -334,6 +340,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
             val dialogSabytieTime = DialogSabytieTime.getInstance(2, binding.label22.text.toString())
             dialogSabytieTime.show(supportFragmentManager, "dialogSabytieTime")
         }

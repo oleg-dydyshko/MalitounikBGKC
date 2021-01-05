@@ -194,7 +194,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
                         binding.textCviatyGlavnyia.isEnabled = false
                     } else {
-                        if (data[day][6].toLowerCase(Locale.getDefault()).contains("нядзел") || data[day][6].toLowerCase(Locale.getDefault()).contains("дзень") || data[day][6].toLowerCase(Locale.getDefault()).contains("сьветл")) binding.textCviatyGlavnyia.isEnabled = false
+                        if (data[day][6].contains("нядзел", true) || data[day][6].contains("дзень", true) || data[day][6].contains("сьветл", true)) binding.textCviatyGlavnyia.isEnabled = false
                         else binding.textCviatyGlavnyia.setOnClickListener(this@CaliandarFull)
                     }
                 }

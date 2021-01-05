@@ -331,6 +331,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         try {
             fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
             var w = intent.extras?.getString("cytanne") ?: ""
+            val ignoreScroll = !w.contains("На вячэрні", true)
             w = MainActivity.removeZnakiAndSlovy(w)
             val split = w.split(";")
             var knigaN: String
@@ -859,7 +860,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 }
                 if (i == 0) toTwoList = cytannelist.size
             }
-            if (k.getBoolean("utran", true) && (nedelia == 1 || nedelia == 2 || nedelia == 3) && split.size > 2 && savedInstanceState == null) {
+            if (k.getBoolean("utran", true) && (nedelia == 1 || nedelia == 2 || nedelia == 3) && split.size > 2 && savedInstanceState == null && ignoreScroll) {
                 binding.InteractiveScroll.postDelayed({
                     val y = binding.LinearButtom.y + binding.LinearButtom.getChildAt(toTwoList).y
                     binding.InteractiveScroll.smoothScrollTo(0, y.toInt())

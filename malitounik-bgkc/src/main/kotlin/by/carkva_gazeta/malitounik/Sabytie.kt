@@ -171,6 +171,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 return@OnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
             val w = binding.labelbutton12.text.toString().split(".")
             val gc = GregorianCalendar(w[2].toInt(), w[1].toInt() - 1, w[0].toInt())
             yearG = gc[Calendar.YEAR]
@@ -183,6 +185,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             startActivityForResult(i, 1093)
         })
         binding.radioGroup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
             when (checkedId) {
                 R.id.radioButton1 -> {
                     radio = 1

@@ -109,27 +109,30 @@ class SettingsActivity : AppCompatActivity() {
 
         fun setNotifications(context: Context, notifications: Int) {
             val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            var c = Calendar.getInstance() as GregorianCalendar
-            c.add(Calendar.DATE, 1)
             var intent: Intent
-            var pIntent: PendingIntent
+            var pIntent: PendingIntent?
             val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (chin.getBoolean("WIDGET_MUN_ENABLED", false)) {
-                val munAk = c[Calendar.MONTH]
-                val yearAk = c[Calendar.YEAR]
+                val cw = Calendar.getInstance() as GregorianCalendar
+                val munAk = cw[Calendar.MONTH]
+                val yearAk = cw[Calendar.YEAR]
                 var resetWid = false
                 intent = Intent(context, WidgetMun::class.java)
                 intent.action = UPDATE_ALL_WIDGETS
+                pIntent = PendingIntent.getBroadcast(context, 51, intent, PendingIntent.FLAG_NO_CREATE)
+                if (pIntent != null) {
+                    cw.add(Calendar.DATE, 1)
+                }
                 pIntent = PendingIntent.getBroadcast(context, 51, intent, 0)
                 when {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
+                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(cw[Calendar.YEAR], cw[Calendar.MONTH], cw[Calendar.DAY_OF_MONTH]), pIntent)
                     }
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                        am.setExact(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
+                        am.setExact(AlarmManager.RTC_WAKEUP, mkTime(cw[Calendar.YEAR], cw[Calendar.MONTH], cw[Calendar.DAY_OF_MONTH]), pIntent)
                     }
                     else -> {
-                        am[AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH])] = pIntent
+                        am[AlarmManager.RTC_WAKEUP, mkTime(cw[Calendar.YEAR], cw[Calendar.MONTH], cw[Calendar.DAY_OF_MONTH])] = pIntent
                     }
                 }
                 val thisAppWidget = ComponentName(context.packageName, context.packageName + ".Widget_mun")
@@ -158,22 +161,27 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
             if (chin.getBoolean("WIDGET_ENABLED", false)) {
+                val cw = Calendar.getInstance() as GregorianCalendar
                 intent = Intent(context, Widget::class.java)
                 intent.action = UPDATE_ALL_WIDGETS
+                pIntent = PendingIntent.getBroadcast(context, 50, intent, PendingIntent.FLAG_NO_CREATE)
+                if (pIntent != null) {
+                    cw.add(Calendar.DATE, 1)
+                }
                 pIntent = PendingIntent.getBroadcast(context, 50, intent, 0)
                 when {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
+                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(cw[Calendar.YEAR], cw[Calendar.MONTH], cw[Calendar.DAY_OF_MONTH]), pIntent)
                     }
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                        am.setExact(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
+                        am.setExact(AlarmManager.RTC_WAKEUP, mkTime(cw[Calendar.YEAR], cw[Calendar.MONTH], cw[Calendar.DAY_OF_MONTH]), pIntent)
                     }
                     else -> {
-                        am[AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH])] = pIntent
+                        am[AlarmManager.RTC_WAKEUP, mkTime(cw[Calendar.YEAR], cw[Calendar.MONTH], cw[Calendar.DAY_OF_MONTH])] = pIntent
                     }
                 }
             }
-            c = Calendar.getInstance() as GregorianCalendar
+            val c = Calendar.getInstance() as GregorianCalendar
             MainActivity.padzeia.forEach {
                 if (it.sec != "-1") {
                     if (it.count == "0") {

@@ -134,6 +134,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 } else {
                     binding.textTitleChyt.isEnabled = false
                 }
+                binding.kniga.setOnClickListener(this@CaliandarFull)
                 binding.textChytanne.setOnClickListener(this@CaliandarFull)
                 binding.textChytanneSviatyia.setOnClickListener(this@CaliandarFull)
                 binding.textChytanneSviatyiaDop.setOnClickListener(this@CaliandarFull)
@@ -207,6 +208,10 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textDenNedeli.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textChislo.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textMesiac.setBackgroundResource(R.drawable.selector_bez_posta)
+                            if (dzenNoch)
+                                binding.kniga.setImageResource(R.drawable.book_bez_posta_black)
+                            else
+                                binding.kniga.setImageResource(R.drawable.book_bez_posta)
                             binding.textTitleChyt.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textChytanne.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_bez_posta)
@@ -230,6 +235,10 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                             binding.textMesiac.setBackgroundResource(R.drawable.selector_post)
                             binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                            if (dzenNoch)
+                                binding.kniga.setImageResource(R.drawable.book_post_black)
+                            else
+                                binding.kniga.setImageResource(R.drawable.book_post)
                             binding.textPamerlyia.setBackgroundResource(R.drawable.selector_post)
                             if (data[day][0].contains("6")) {
                                 binding.PostFish.visibility = View.VISIBLE
@@ -246,6 +255,10 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             binding.textMesiac.setBackgroundResource(R.drawable.selector_strogi_post)
                             binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                            if (dzenNoch)
+                                binding.kniga.setImageResource(R.drawable.book_strogi_post_black)
+                            else
+                                binding.kniga.setImageResource(R.drawable.book_strogi_post)
                             binding.textTitleChyt.setBackgroundResource(R.drawable.selector_strogi_post)
                             binding.textTitleChyt.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             binding.textChytanne.setBackgroundResource(R.drawable.selector_strogi_post)
@@ -270,6 +283,10 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                             binding.textMesiac.setBackgroundResource(R.color.colorDivider)
                             binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                            if (dzenNoch)
+                                binding.kniga.setImageResource(R.drawable.book_divider_black)
+                            else
+                                binding.kniga.setImageResource(R.drawable.book_divider)
                         }
                     }
                 }
@@ -277,6 +294,10 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     binding.textDenNedeli.setBackgroundResource(rColorColorprimary)
                     binding.textChislo.setBackgroundResource(rColorColorprimary)
                     binding.textMesiac.setBackgroundResource(rColorColorprimary)
+                    if (dzenNoch)
+                        binding.kniga.setImageResource(R.drawable.book_red_black)
+                    else
+                        binding.kniga.setImageResource(R.drawable.book_red)
                     it.let {
                         binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -395,6 +416,11 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         }
         MainActivity.setDataCalendar = dayyear + dayYear
         when (v?.id ?: 0) {
+            R.id.kniga -> {
+                fragmentManager?.let {
+                    CalindarGrid().show(it, "grid")
+                }
+            }
             R.id.textCviatyGlavnyia -> if (MainActivity.checkmoduleResources(activity)) {
                 activity?.let {
                     val i = Intent()

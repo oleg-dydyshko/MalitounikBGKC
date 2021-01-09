@@ -74,6 +74,18 @@
                 android:contentDescription="@string/empty" />
 
             <ImageView
+                android:id="@+id/kniga"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/book_divider"
+                android:contentDescription="@string/empty" />
+
+            <ImageView
                 android:id="@+id/PostFish"
                 android:layout_width="25dp"
                 android:layout_height="12dp"

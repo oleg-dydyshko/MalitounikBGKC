@@ -46,7 +46,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
     private var rColorColorprimary = R.color.colorPrimary
     private val data = ArrayList<ArrayList<String>>()
     private val gson = Gson()
-    private var sabytieTitle: String = ""
+    private var sabytieTitle = ""
     private var position = 0
     private var mLastClickTime: Long = 0
     private var _binding: CalaindarBinding? = null

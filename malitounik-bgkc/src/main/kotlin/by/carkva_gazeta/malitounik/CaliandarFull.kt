@@ -418,7 +418,13 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         when (v?.id ?: 0) {
             R.id.kniga -> {
                 fragmentManager?.let {
-                    CalindarGrid().show(it, "grid")
+                    val colorDialog = if (data[day][5].contains("1") || data[day][5].contains("2") || data[day][5].contains("3")) {
+                        4
+                    } else {
+                        data[day][7].toInt()
+                    }
+                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20], data[day][0].toInt(), data[day][1].toInt(), data[day][2].toInt())
+                    dialogCalindarGrid.show(it, "grid")
                 }
             }
             R.id.textCviatyGlavnyia -> if (MainActivity.checkmoduleResources(activity)) {

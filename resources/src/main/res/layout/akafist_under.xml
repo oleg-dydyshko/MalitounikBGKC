@@ -61,7 +61,6 @@
                 android:layout_marginRight="3dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:textColor="@color/colorPrimary_text"
                 android:textIsSelectable="true"
                 android:textSize="18sp" />
 

@@ -57,24 +57,24 @@ class DialogCalindarGrid : DialogFragment() {
             val mItemArray = ArrayList<CalindarGrigData>()
             if (post == 3 || post == 4) {
                 mItemArray.add(CalindarGrigData(1, R.drawable.moon2_white, "Вячэрня"))
-                mItemArray.add(CalindarGrigData(2, R.drawable.moon_white, "Павячэр'е"))
-                mItemArray.add(CalindarGrigData(3, R.drawable.sun_white, "Апоўначы"))
+                mItemArray.add(CalindarGrigData(2, R.drawable.moon_white, "Павячэрніца"))
+                mItemArray.add(CalindarGrigData(3, R.drawable.sun_white, "Полуночніца"))
                 mItemArray.add(CalindarGrigData(4, R.drawable.sun2_white, "Ютрань"))
-                mItemArray.add(CalindarGrigData(5, R.drawable.clock_white, "Часы"))
+                mItemArray.add(CalindarGrigData(5, R.drawable.clock_white, "Гадзіны"))
                 mItemArray.add(CalindarGrigData(6, R.drawable.carkva_white, "Літургія"))
-                mItemArray.add(CalindarGrigData(7, R.drawable.man_white, "Жыціе"))
-                mItemArray.add(CalindarGrigData(8, R.drawable.book_white, "Жамчужыны"))
-                mItemArray.add(CalindarGrigData(9, R.drawable.kanon_white, "Статут"))
+                mItemArray.add(CalindarGrigData(7, R.drawable.man_white, "Жыцьці"))
+                mItemArray.add(CalindarGrigData(8, R.drawable.book_white, "Пярліны"))
+                mItemArray.add(CalindarGrigData(9, R.drawable.kanon_white, "Устаў"))
             } else {
                 mItemArray.add(CalindarGrigData(1, R.drawable.moon2_black, "Вячэрня"))
-                mItemArray.add(CalindarGrigData(2, R.drawable.moon_black, "Павячэр'е"))
-                mItemArray.add(CalindarGrigData(3, R.drawable.sun_black, "Апоўначы"))
+                mItemArray.add(CalindarGrigData(2, R.drawable.moon_black, "Павячэрніца"))
+                mItemArray.add(CalindarGrigData(3, R.drawable.sun_black, "Полуночніца"))
                 mItemArray.add(CalindarGrigData(4, R.drawable.sun2_black, "Ютрань"))
-                mItemArray.add(CalindarGrigData(5, R.drawable.clock_black, "Часы"))
+                mItemArray.add(CalindarGrigData(5, R.drawable.clock_black, "Гадзіны"))
                 mItemArray.add(CalindarGrigData(6, R.drawable.carkva_black, "Літургія"))
-                mItemArray.add(CalindarGrigData(7, R.drawable.man_black, "Жыціе"))
-                mItemArray.add(CalindarGrigData(8, R.drawable.book_black, "Жамчужыны"))
-                mItemArray.add(CalindarGrigData(9, R.drawable.kanon_black, "Статут"))
+                mItemArray.add(CalindarGrigData(7, R.drawable.man_black, "Жыцьці"))
+                mItemArray.add(CalindarGrigData(8, R.drawable.book_black, "Пярліны"))
+                mItemArray.add(CalindarGrigData(9, R.drawable.kanon_black, "Устаў"))
             }
             binding.dragGridView.setLayoutManager(GridLayoutManager(it, 3))
             val listAdapter = ItemAdapter(mItemArray, R.id.item_layout, true)
@@ -99,18 +99,18 @@ class DialogCalindarGrid : DialogFragment() {
             dzenNoch = k.getBoolean("dzen_noch", false)
             view.text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             when (post) {
-                1 -> view.itemLayout.setBackgroundResource(R.color.colorBezPosta)
-                2 -> view.itemLayout.setBackgroundResource(R.color.colorPost)
+                1 -> view.itemLayout.setBackgroundResource(R.drawable.selector_grid_bez_posta)
+                2 -> view.itemLayout.setBackgroundResource(R.drawable.selector_grid_post)
                 3 -> {
-                    view.itemLayout.setBackgroundResource(R.color.colorStrogiPost)
+                    view.itemLayout.setBackgroundResource(R.drawable.selector_grid_strogi_post)
                     view.text.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
                 }
                 4 -> {
-                    if (dzenNoch) view.itemLayout.setBackgroundResource(R.color.colorPrimary_black)
-                    else view.itemLayout.setBackgroundResource(R.color.colorPrimary)
+                    if (dzenNoch) view.itemLayout.setBackgroundResource(R.drawable.selector_grid_red_dark)
+                    else view.itemLayout.setBackgroundResource(R.drawable.selector_grid_red)
                     view.text.setTextColor(ContextCompat.getColor(parent.context, R.color.colorWhite))
                 }
-                else -> view.itemLayout.setBackgroundResource(R.color.colorDivider)
+                else -> view.itemLayout.setBackgroundResource(R.drawable.selector_grid_gray)
             }
             /*if (dzenNoch) {
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
@@ -144,8 +144,8 @@ class DialogCalindarGrid : DialogFragment() {
                 mLastClickTime = SystemClock.elapsedRealtime()
                 activity?.let { fragmentActivity ->
                     if (MainActivity.checkmoduleResources(activity)) {
-                        when (itemList[adapterPosition].id) {
-                            6L -> {
+                        when (itemList[adapterPosition].id.toInt()) {
+                            6 -> {
                                 val intent = Intent()
                                 intent.setClassName(fragmentActivity, MainActivity.TON)
                                 if (ton.contains("Тон")) {
@@ -165,12 +165,21 @@ class DialogCalindarGrid : DialogFragment() {
                                 startActivity(intent)
                                 dialog?.cancel()
                             }
-                            7L -> {
+                            7 -> {
                                 val i = Intent()
                                 i.setClassName(fragmentActivity, MainActivity.OPISANIE)
                                 i.putExtra("mun", mun)
                                 i.putExtra("day", data)
                                 startActivity(i)
+                                dialog?.cancel()
+                            }
+                            4 -> {
+                                val data = resources.getStringArray(R.array.bogaslugbovuia)
+                                val intent = Intent()
+                                intent.setClassName(fragmentActivity, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("title", data[3])
+                                intent.putExtra("resurs", "bogashlugbovya6")
+                                startActivity(intent)
                                 dialog?.cancel()
                             }
                             else -> {

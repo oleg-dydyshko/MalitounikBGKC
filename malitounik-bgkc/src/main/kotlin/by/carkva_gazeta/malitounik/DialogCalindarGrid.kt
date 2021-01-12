@@ -58,7 +58,7 @@ class DialogCalindarGrid : DialogFragment() {
             if (post == 3 || post == 4) {
                 mItemArray.add(CalindarGrigData(1, R.drawable.moon2_white, "Вячэрня"))
                 mItemArray.add(CalindarGrigData(2, R.drawable.moon_white, "Павячэрніца"))
-                mItemArray.add(CalindarGrigData(3, R.drawable.sun_white, "Полуночніца"))
+                mItemArray.add(CalindarGrigData(3, R.drawable.sun_white, "Паўночніца"))
                 mItemArray.add(CalindarGrigData(4, R.drawable.sun2_white, "Ютрань"))
                 mItemArray.add(CalindarGrigData(5, R.drawable.clock_white, "Гадзіны"))
                 mItemArray.add(CalindarGrigData(6, R.drawable.carkva_white, "Літургія"))
@@ -68,7 +68,7 @@ class DialogCalindarGrid : DialogFragment() {
             } else {
                 mItemArray.add(CalindarGrigData(1, R.drawable.moon2_black, "Вячэрня"))
                 mItemArray.add(CalindarGrigData(2, R.drawable.moon_black, "Павячэрніца"))
-                mItemArray.add(CalindarGrigData(3, R.drawable.sun_black, "Полуночніца"))
+                mItemArray.add(CalindarGrigData(3, R.drawable.sun_black, "Паўночніца"))
                 mItemArray.add(CalindarGrigData(4, R.drawable.sun2_black, "Ютрань"))
                 mItemArray.add(CalindarGrigData(5, R.drawable.clock_black, "Гадзіны"))
                 mItemArray.add(CalindarGrigData(6, R.drawable.carkva_black, "Літургія"))
@@ -79,8 +79,8 @@ class DialogCalindarGrid : DialogFragment() {
             binding.dragGridView.setLayoutManager(GridLayoutManager(it, 3))
             val listAdapter = ItemAdapter(mItemArray, R.id.item_layout, true)
             binding.dragGridView.setAdapter(listAdapter, true)
-            binding.dragGridView.setCanDragHorizontally(false)
-            binding.dragGridView.setCanDragVertically(false)
+            binding.dragGridView.setCanDragHorizontally(true)
+            binding.dragGridView.setCanDragVertically(true)
             binding.dragGridView.setCustomDragItem(null)
         }
         return alert
@@ -174,13 +174,17 @@ class DialogCalindarGrid : DialogFragment() {
                                 dialog?.cancel()
                             }
                             4 -> {
-                                val data = resources.getStringArray(R.array.bogaslugbovuia)
-                                val intent = Intent()
-                                intent.setClassName(fragmentActivity, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[3])
-                                intent.putExtra("resurs", "bogashlugbovya6")
-                                startActivity(intent)
-                                dialog?.cancel()
+                                if (denNedzeli == 1) {
+                                    val data = resources.getStringArray(R.array.bogaslugbovuia)
+                                    val intent = Intent()
+                                    intent.setClassName(fragmentActivity, MainActivity.BOGASHLUGBOVYA)
+                                    intent.putExtra("title", data[3])
+                                    intent.putExtra("resurs", "bogashlugbovya6")
+                                    startActivity(intent)
+                                    dialog?.cancel()
+                                } else {
+                                    MainActivity.toastView(fragmentActivity, itemList[adapterPosition].title)
+                                }
                             }
                             else -> {
                                 MainActivity.toastView(fragmentActivity, itemList[adapterPosition].title)

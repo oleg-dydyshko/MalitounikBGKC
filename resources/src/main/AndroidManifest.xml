@@ -84,14 +84,7 @@
             android:name="by.carkva_gazeta.resources.MyNatatkiAdd"
             android:label="@string/natatka_add"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateVisible|adjustResize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.MyNatatkiView"
-            android:theme="@style/AppTheme">
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />

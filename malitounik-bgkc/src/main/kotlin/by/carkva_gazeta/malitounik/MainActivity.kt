@@ -1218,7 +1218,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         const val SLUGBYVIALIKAGAPOSTUSPIS = "by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"
         const val MALITVYPRYNAGODNYIA = "by.carkva_gazeta.resources.MalitvyPrynagodnyia"
         const val MYNATATKIADD = "by.carkva_gazeta.resources.MyNatatkiAdd"
-        const val MYNATATKIVIEW = "by.carkva_gazeta.resources.MyNatatkiView"
         const val PARAFIIBGKC = "by.carkva_gazeta.resources.ParafiiBgkc"
         const val PARAFIIBGKCDEKANAT = "by.carkva_gazeta.resources.ParafiiBgkcDekanat"
         const val NADSANMALITVYIPESNI = "by.carkva_gazeta.resources.NadsanMalitvyIPesni"

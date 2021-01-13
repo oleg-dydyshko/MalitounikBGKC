@@ -157,7 +157,7 @@ class MenuNatatki : NatatkiFragment() {
                 val intent = Intent()
                 intent.setClassName(it, MainActivity.MYNATATKIADD)
                 intent.putExtra("filename", "Mae_malitvy_" + f.id)
-                intent.putExtra("redak", true)
+                intent.putExtra("redak", 2)
                 startActivity(intent)
             }
         } else {
@@ -228,7 +228,7 @@ class MenuNatatki : NatatkiFragment() {
             activity?.let {
                 val intent = Intent()
                 intent.setClassName(it, MainActivity.MYNATATKIADD)
-                intent.putExtra("redak", false)
+                intent.putExtra("redak", 1)
                 intent.putExtra("filename", "")
                 startActivity(intent)
             }
@@ -279,7 +279,8 @@ class MenuNatatki : NatatkiFragment() {
                     activity?.let {
                         val f = itemList[adapterPosition]
                         val intent = Intent()
-                        intent.setClassName(it, MainActivity.MYNATATKIVIEW)
+                        intent.setClassName(it, MainActivity.MYNATATKIADD) //intent.setClassName(it, MainActivity.MYNATATKIVIEW)
+                        intent.putExtra("redak", 3)
                         intent.putExtra("filename", "Mae_malitvy_" + f.id)
                         startActivity(intent)
                     }

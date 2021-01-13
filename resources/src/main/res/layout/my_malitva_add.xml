@@ -18,12 +18,14 @@
             app:contentInsetStartWithNavigation="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-                android:id="@+id/title_toolbar"
+            <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+                android:id="@+id/file"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:hint="@string/natatka_name"
+                android:inputType="text|textAutoCorrect"
                 android:singleLine="true"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -37,44 +39,17 @@
         android:scrollbarStyle="insideOverlay"
         android:scrollbars="none">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+            android:id="@+id/EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
-                android:id="@+id/file"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|start"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:gravity="top|start"
-                android:hint="@string/natatka_name"
-                android:inputType="text|textAutoCorrect"
-                android:singleLine="true">
-
-                <requestFocus />
-            </by.carkva_gazeta.malitounik.EditTextRobotoCondensed>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorSecondary_text" />
-
-            <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
-                android:id="@+id/EditText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="top|start"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:gravity="top|start"
-                android:hint="@string/natatka"
-                android:imeOptions="actionDone|flagNoEnterAction"
-                android:inputType="textMultiLine|textAutoCorrect|textCapSentences" />
-
-        </LinearLayout>
+            android:layout_gravity="top|start"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="top|start"
+            android:hint="@string/natatka"
+            android:imeOptions="actionDone|flagNoEnterAction"
+            android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
+            android:textIsSelectable="true" />
     </ScrollView>
 </LinearLayout>

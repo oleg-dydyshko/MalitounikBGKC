@@ -14,7 +14,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import by.carkva_gazeta.malitounik.databinding.CalindarGridBinding
 import by.carkva_gazeta.malitounik.databinding.GridItemBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.woxthebox.draglistview.DragItemAdapter
+import com.woxthebox.draglistview.DragListView
 
 class DialogCalindarGrid : DialogFragment() {
 
@@ -41,6 +44,7 @@ class DialogCalindarGrid : DialogFragment() {
     private var denNedzeli = 1
     private var data = 1
     private var mun = 0
+    private var mItemArray = ArrayList<CalindarGrigData>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
@@ -54,27 +58,21 @@ class DialogCalindarGrid : DialogFragment() {
             denNedzeli = arguments?.getInt("denNedzeli") ?: 1
             data = arguments?.getInt("data") ?: 1
             mun = arguments?.getInt("mun") ?: 0
-            val mItemArray = ArrayList<CalindarGrigData>()
-            if (post == 3 || post == 4) {
-                mItemArray.add(CalindarGrigData(1, R.drawable.moon2_white, "Вячэрня"))
-                mItemArray.add(CalindarGrigData(2, R.drawable.moon_white, "Павячэрніца"))
-                mItemArray.add(CalindarGrigData(3, R.drawable.sun_white, "Паўночніца"))
-                mItemArray.add(CalindarGrigData(4, R.drawable.sun2_white, "Ютрань"))
-                mItemArray.add(CalindarGrigData(5, R.drawable.clock_white, "Гадзіны"))
-                mItemArray.add(CalindarGrigData(6, R.drawable.carkva_white, "Літургія"))
-                mItemArray.add(CalindarGrigData(7, R.drawable.man_white, "Жыцьці"))
-                mItemArray.add(CalindarGrigData(8, R.drawable.book_white, "Пярліны"))
-                mItemArray.add(CalindarGrigData(9, R.drawable.kanon_white, "Устаў"))
+            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            if (k.getString("caliandarGrid", "") != "") {
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<CalindarGrigData>>() {}.type
+                mItemArray = gson.fromJson(k.getString("caliandarGrid", ""), type)
             } else {
-                mItemArray.add(CalindarGrigData(1, R.drawable.moon2_black, "Вячэрня"))
-                mItemArray.add(CalindarGrigData(2, R.drawable.moon_black, "Павячэрніца"))
-                mItemArray.add(CalindarGrigData(3, R.drawable.sun_black, "Паўночніца"))
-                mItemArray.add(CalindarGrigData(4, R.drawable.sun2_black, "Ютрань"))
-                mItemArray.add(CalindarGrigData(5, R.drawable.clock_black, "Гадзіны"))
-                mItemArray.add(CalindarGrigData(6, R.drawable.carkva_black, "Літургія"))
-                mItemArray.add(CalindarGrigData(7, R.drawable.man_black, "Жыцьці"))
-                mItemArray.add(CalindarGrigData(8, R.drawable.book_black, "Пярліны"))
-                mItemArray.add(CalindarGrigData(9, R.drawable.kanon_black, "Устаў"))
+                mItemArray.add(CalindarGrigData(1, R.drawable.moon2_black, R.drawable.moon2_white, "Вячэрня"))
+                mItemArray.add(CalindarGrigData(2, R.drawable.moon_black, R.drawable.moon_white, "Павячэрніца"))
+                mItemArray.add(CalindarGrigData(3, R.drawable.sun_black, R.drawable.sun_white, "Паўночніца"))
+                mItemArray.add(CalindarGrigData(4, R.drawable.sun2_black, R.drawable.sun2_white, "Ютрань"))
+                mItemArray.add(CalindarGrigData(5, R.drawable.clock_black, R.drawable.clock_white, "Гадзіны"))
+                mItemArray.add(CalindarGrigData(6, R.drawable.carkva_black, R.drawable.carkva_white, "Літургія"))
+                mItemArray.add(CalindarGrigData(7, R.drawable.man_black, R.drawable.man_white, "Жыцьці"))
+                mItemArray.add(CalindarGrigData(8, R.drawable.book_black, R.drawable.book_white, "Пярліны"))
+                mItemArray.add(CalindarGrigData(9, R.drawable.kanon_black, R.drawable.kanon_white, "Устаў"))
             }
             binding.dragGridView.setLayoutManager(GridLayoutManager(it, 3))
             val listAdapter = ItemAdapter(mItemArray, R.id.item_layout, true)
@@ -82,6 +80,22 @@ class DialogCalindarGrid : DialogFragment() {
             binding.dragGridView.setCanDragHorizontally(true)
             binding.dragGridView.setCanDragVertically(true)
             binding.dragGridView.setCustomDragItem(null)
+            binding.dragGridView.setDragListListener(object : DragListView.DragListListener {
+                override fun onItemDragStarted(position: Int) {
+                }
+
+                override fun onItemDragging(itemPosition: Int, x: Float, y: Float) {
+                }
+
+                override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
+                    if (fromPosition != toPosition) {
+                        val gson = Gson()
+                        val edit = it.getSharedPreferences("biblia", Context.MODE_PRIVATE).edit()
+                        edit.putString("caliandarGrid", gson.toJson(mItemArray))
+                        edit.apply()
+                    }
+                }
+            })
         }
         return alert
     }
@@ -127,7 +141,11 @@ class DialogCalindarGrid : DialogFragment() {
             val text = mItemList[position].title
             holder.mText.text = text
             holder.itemView.tag = mItemList[position]
-            holder.mImage.setImageResource(mItemList[position].image)
+            if (post == 3 || post == 4) {
+                holder.mImage.setImageResource(mItemList[position].imageWhite)
+            } else {
+                holder.mImage.setImageResource(mItemList[position].imageBlack)
+            }
         }
 
         override fun getUniqueItemId(position: Int): Long {
@@ -221,5 +239,5 @@ class DialogCalindarGrid : DialogFragment() {
         }
     }
 
-    private data class CalindarGrigData(val id: Long, val image: Int, val title: String)
+    private data class CalindarGrigData(val id: Long, val imageBlack: Int, val imageWhite: Int, val title: String)
 }

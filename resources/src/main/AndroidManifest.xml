@@ -81,7 +81,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.MyNatatkiAdd"
+            android:name="by.carkva_gazeta.resources.MyNatatki"
             android:label="@string/natatka_add"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize">

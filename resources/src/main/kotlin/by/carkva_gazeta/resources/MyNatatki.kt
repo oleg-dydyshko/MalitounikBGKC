@@ -20,20 +20,20 @@ import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuNatatki
 import by.carkva_gazeta.malitounik.MyNatatkiFiles
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.resources.databinding.MyMalitvaAddBinding
+import by.carkva_gazeta.resources.databinding.MyNatatkiBinding
 import com.google.gson.Gson
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
 
-class MyNatatkiAdd : AppCompatActivity() {
+class MyNatatki : AppCompatActivity() {
     private var filename = ""
     private var redak = 3
     private var edit = true
     private var dzenNoch = false
     private var md5sum = ""
-    private lateinit var binding: MyMalitvaAddBinding
+    private lateinit var binding: MyNatatkiBinding
     private var editDrawer: Drawable? = null
 
     override fun onPause() {
@@ -57,7 +57,7 @@ class MyNatatkiAdd : AppCompatActivity() {
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        binding = MyMalitvaAddBinding.inflate(layoutInflater)
+        binding = MyNatatkiBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         binding.EditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
@@ -129,6 +129,8 @@ class MyNatatkiAdd : AppCompatActivity() {
         binding.EditText.keyListener = null
         binding.file.keyListener = null
         editDrawer = binding.EditText.background
+        binding.EditText.isCursorVisible = false
+        binding.file.isCursorVisible = false
         binding.EditText.setBackgroundResource(android.R.color.transparent)
         binding.file.setBackgroundResource(android.R.color.transparent)
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -240,6 +242,8 @@ class MyNatatkiAdd : AppCompatActivity() {
                 binding.file.background = editDrawer
                 binding.EditText.requestFocus()
                 binding.EditText.setSelection(binding.EditText.text.toString().length)
+                binding.EditText.isCursorVisible = true
+                binding.file.isCursorVisible = true
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
                 edit = false

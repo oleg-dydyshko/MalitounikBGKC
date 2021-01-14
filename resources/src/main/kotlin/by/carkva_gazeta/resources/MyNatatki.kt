@@ -16,6 +16,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuNatatki
 import by.carkva_gazeta.malitounik.MyNatatkiFiles
@@ -218,6 +219,17 @@ class MyNatatki : AppCompatActivity() {
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        val editItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_edit)
+        if (edit) {
+            editItem.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.natatka_edit)
+        } else {
+            editItem.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.natatka)
+        }
+        return true
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         val infl = menuInflater
@@ -239,7 +251,7 @@ class MyNatatki : AppCompatActivity() {
                 binding.EditText.keyListener = binding.EditText.tag as KeyListener
                 binding.file.keyListener = binding.file.tag as KeyListener
                 binding.EditText.background = editDrawer
-                binding.file.background = editDrawer
+                binding.file.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)
                 binding.EditText.requestFocus()
                 binding.EditText.setSelection(binding.EditText.text.toString().length)
                 binding.EditText.isCursorVisible = true
@@ -254,6 +266,7 @@ class MyNatatki : AppCompatActivity() {
                 prepareSave()
                 edit = true
             }
+            invalidateOptionsMenu()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
             write()

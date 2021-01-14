@@ -126,13 +126,6 @@ class DialogCalindarGrid : DialogFragment() {
                 }
                 else -> view.itemLayout.setBackgroundResource(R.drawable.selector_grid_gray)
             }
-            /*if (dzenNoch) {
-                view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
-                view.root.setBackgroundResource(R.color.colorprimary_material_dark)
-            } else {
-                view.itemLayout.setBackgroundResource(R.drawable.selector_default_list)
-                view.root.setBackgroundResource(R.color.colorDivider)
-            }*/
             return ViewHolder(view)
         }
 
@@ -213,24 +206,6 @@ class DialogCalindarGrid : DialogFragment() {
                         fragmentManager?.let { dadatak.show(it, "dadatak") }
                     }
                 }
-                /*if (MainActivity.checkmoduleResources(this@CalindarGrid)) {
-                    val f = itemList[adapterPosition]
-                    val intent = Intent()
-                    intent.setClassName(this@CalindarGrid, MainActivity.MYNATATKIVIEW)
-                    intent.putExtra("filename", "Mae_malitvy_" + f.id)
-                    startActivity(intent)
-                } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(supportFragmentManager, "dadatak")
-                }*/
-            }
-
-            override fun onItemLongClicked(view: View): Boolean {
-                /*fragmentManager?.let {
-                    val contextMenu = DialogContextMenu.getInstance(adapterPosition, itemList[adapterPosition].title)
-                    contextMenu.show(it, "context_menu")
-                }*/
-                return true
             }
         }
 

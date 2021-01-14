@@ -50,10 +50,10 @@ class Opisanie : AppCompatActivity() {
         svity = intent.extras?.getString("svity", "") ?: ""
         var inputStream: InputStream? = null
         if (intent.extras?.getBoolean("glavnyia", false) == true) {
-            if (svity.toLowerCase(Locale.getDefault()).contains("уваход у ерусалім")) inputStream = resources.openRawResource(R.raw.opisanie_sv0)
-            if (svity.toLowerCase(Locale.getDefault()).contains("уваскрасеньне")) inputStream = resources.openRawResource(R.raw.opisanie_sv1)
-            if (svity.toLowerCase(Locale.getDefault()).contains("узьнясеньне")) inputStream = resources.openRawResource(R.raw.opisanie_sv2)
-            if (svity.toLowerCase(Locale.getDefault()).contains("зыход")) inputStream = resources.openRawResource(R.raw.opisanie_sv3)
+            if (svity.contains("уваход у ерусалім", true)) inputStream = resources.openRawResource(R.raw.opisanie_sv0)
+            if (svity.contains("уваскрасеньне", true)) inputStream = resources.openRawResource(R.raw.opisanie_sv1)
+            if (svity.contains("узьнясеньне", true)) inputStream = resources.openRawResource(R.raw.opisanie_sv2)
+            if (svity.contains("зыход", true)) inputStream = resources.openRawResource(R.raw.opisanie_sv3)
             val resFile = day.toString() + "_" + mun
             if (resFile.contains("1_0")) inputStream = resources.openRawResource(R.raw.opisanie1_0)
             if (resFile.contains("2_1")) inputStream = resources.openRawResource(R.raw.opisanie2_1)

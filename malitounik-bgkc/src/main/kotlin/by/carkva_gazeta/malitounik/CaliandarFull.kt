@@ -59,9 +59,10 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             val inputStream = resources.openRawResource(MainActivity.caliandar(context, mun))
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
-            val builder = reader.readText()
+            val builder = reader.use {
+                it.readText()
+            }
             MenuCaliandar.dataJson = builder
-            isr.close()
             MenuCaliandar.munKal = mun
             builder
         }
@@ -208,10 +209,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textDenNedeli.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textChislo.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textMesiac.setBackgroundResource(R.drawable.selector_bez_posta)
-                            if (dzenNoch)
-                                binding.kniga.setImageResource(R.drawable.book_bez_posta_black)
-                            else
-                                binding.kniga.setImageResource(R.drawable.book_bez_posta)
+                            if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_bez_posta_black)
+                            else binding.kniga.setImageResource(R.drawable.book_bez_posta)
                             binding.textTitleChyt.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textChytanne.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_bez_posta)
@@ -235,10 +234,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                             binding.textMesiac.setBackgroundResource(R.drawable.selector_post)
                             binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                            if (dzenNoch)
-                                binding.kniga.setImageResource(R.drawable.book_post_black)
-                            else
-                                binding.kniga.setImageResource(R.drawable.book_post)
+                            if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_post_black)
+                            else binding.kniga.setImageResource(R.drawable.book_post)
                             binding.textPamerlyia.setBackgroundResource(R.drawable.selector_post)
                             if (data[day][0].contains("6")) {
                                 binding.PostFish.visibility = View.VISIBLE
@@ -255,10 +252,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             binding.textMesiac.setBackgroundResource(R.drawable.selector_strogi_post)
                             binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                            if (dzenNoch)
-                                binding.kniga.setImageResource(R.drawable.book_strogi_post_black)
-                            else
-                                binding.kniga.setImageResource(R.drawable.book_strogi_post)
+                            if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_strogi_post_black)
+                            else binding.kniga.setImageResource(R.drawable.book_strogi_post)
                             binding.textTitleChyt.setBackgroundResource(R.drawable.selector_strogi_post)
                             binding.textTitleChyt.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             binding.textChytanne.setBackgroundResource(R.drawable.selector_strogi_post)
@@ -283,10 +278,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                             binding.textMesiac.setBackgroundResource(R.color.colorDivider)
                             binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                            if (dzenNoch)
-                                binding.kniga.setImageResource(R.drawable.book_divider_black)
-                            else
-                                binding.kniga.setImageResource(R.drawable.book_divider)
+                            if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_divider_black)
+                            else binding.kniga.setImageResource(R.drawable.book_divider)
                         }
                     }
                 }
@@ -294,10 +287,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     binding.textDenNedeli.setBackgroundResource(rColorColorprimary)
                     binding.textChislo.setBackgroundResource(rColorColorprimary)
                     binding.textMesiac.setBackgroundResource(rColorColorprimary)
-                    if (dzenNoch)
-                        binding.kniga.setImageResource(R.drawable.book_red_black)
-                    else
-                        binding.kniga.setImageResource(R.drawable.book_red)
+                    if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_red_black)
+                    else binding.kniga.setImageResource(R.drawable.book_red)
                     it.let {
                         binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))

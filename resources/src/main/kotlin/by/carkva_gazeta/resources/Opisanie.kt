@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.AkafistUnderBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -97,22 +99,13 @@ class Opisanie : AppCompatActivity() {
             }
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
-            val builder = StringBuilder()
-            reader.forEachLine {
-                builder.append(it)
+            val builder = reader.use {
+                it.readText()
             }
-            inputStream.close()
-            val dataR: String = if (day < 10) "0$day" else day.toString()
-            mun++
-            val munR: String = if (mun < 10) "0$mun" else mun.toString()
-            var res = builder.toString()
-            val tN = res.indexOf("<div id=\"$dataR$munR\">")
-            val tK = res.indexOf("</div>", tN)
-            res = res.substring(tN, tK + 6)
-            res = res.replace("<div id=\"$dataR$munR\">", "")
-            res = res.replace("<h3 class=\"blocks\">", "<p><strong>")
-            res = res.replace("</h3>", "</strong>")
-            res = res.replace("</div>", "")
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<String>>() {}.type
+            val arrayList: ArrayList<String> = gson.fromJson(builder, type)
+            val res = arrayList[day - 1]
             binding.TextView.text = MainActivity.fromHtml(res)
         }
         setTollbarTheme()
@@ -151,6 +144,12 @@ class Opisanie : AppCompatActivity() {
             spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_edit).isVisible = false
         return true
     }
 

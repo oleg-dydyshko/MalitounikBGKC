@@ -196,7 +196,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
                         binding.textCviatyGlavnyia.isEnabled = false
                     } else {
-                        if (data[day][6].contains("нядзел", true) || data[day][6].contains("дзень", true) || data[day][6].contains("сьветл", true)) binding.textCviatyGlavnyia.isEnabled = false
+                        if (data[day][6].contains("нядзел", true) || data[day][6].contains("сьветл", true)) binding.textCviatyGlavnyia.isEnabled = false
                         else binding.textCviatyGlavnyia.setOnClickListener(this@CaliandarFull)
                     }
                 }
@@ -420,12 +420,30 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             }
             R.id.textCviatyGlavnyia -> if (MainActivity.checkmoduleResources(activity)) {
                 activity?.let {
+                    val svity = data[day][6]
+                    var daysv = data[day][1].toInt()
+                    var munsv = data[day][2].toInt() + 1
+                    if (svity.contains("уваход у ерусалім", true)) {
+                        daysv = -1
+                        munsv = 0
+                    }
+                    if (svity.contains("уваскрасеньне", true)) {
+                        daysv = -1
+                        munsv = 1
+                    }
+                    if (svity.contains("узьнясеньне", true)) {
+                        daysv = -1
+                        munsv = 2
+                    }
+                    if (svity.contains("зыход", true)) {
+                        daysv = -1
+                        munsv = 3
+                    }
                     val i = Intent()
                     i.setClassName(it, MainActivity.OPISANIE)
                     i.putExtra("glavnyia", true)
-                    i.putExtra("svity", data[day][6])
-                    i.putExtra("mun", data[day][2].toInt())
-                    i.putExtra("day", data[day][1].toInt())
+                    i.putExtra("mun", munsv)
+                    i.putExtra("day", daysv)
                     startActivity(i)
                 }
             } else {
@@ -436,7 +454,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 activity?.let {
                     val i = Intent()
                     i.setClassName(it, MainActivity.OPISANIE)
-                    i.putExtra("mun", data[day][2].toInt())
+                    i.putExtra("mun", data[day][2].toInt() + 1)
                     i.putExtra("day", data[day][1].toInt())
                     startActivity(i)
                 }

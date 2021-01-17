@@ -24,9 +24,9 @@ import java.util.*
 
 class Opisanie : AppCompatActivity() {
     private var dzenNoch = false
-    private var mun = Calendar.getInstance()[Calendar.MONTH]
+    private var mun = Calendar.getInstance()[Calendar.MONTH] + 1
     private var day = Calendar.getInstance()[Calendar.DATE]
-    private var svity = ""
+    private var svity = false
     private lateinit var binding: AkafistUnderBinding
     override fun onResume() {
         super.onResume()
@@ -47,54 +47,40 @@ class Opisanie : AppCompatActivity() {
         binding = AkafistUnderBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val c = Calendar.getInstance()
-        mun = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
+        mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: c[Calendar.MONTH] + 1
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
-        svity = intent.extras?.getString("svity", "") ?: ""
-        var inputStream: InputStream? = null
-        if (intent.extras?.getBoolean("glavnyia", false) == true) {
-            if (svity.contains("уваход у ерусалім", true)) inputStream = resources.openRawResource(R.raw.opisanie_sv0)
-            if (svity.contains("уваскрасеньне", true)) inputStream = resources.openRawResource(R.raw.opisanie_sv1)
-            if (svity.contains("узьнясеньне", true)) inputStream = resources.openRawResource(R.raw.opisanie_sv2)
-            if (svity.contains("зыход", true)) inputStream = resources.openRawResource(R.raw.opisanie_sv3)
-            val resFile = day.toString() + "_" + mun
-            if (resFile.contains("1_0")) inputStream = resources.openRawResource(R.raw.opisanie1_0)
-            if (resFile.contains("2_1")) inputStream = resources.openRawResource(R.raw.opisanie2_1)
-            if (resFile.contains("6_0")) inputStream = resources.openRawResource(R.raw.opisanie6_0)
-            if (resFile.contains("6_7")) inputStream = resources.openRawResource(R.raw.opisanie6_7)
-            if (resFile.contains("8_8")) inputStream = resources.openRawResource(R.raw.opisanie8_8)
-            if (resFile.contains("14_8")) inputStream = resources.openRawResource(R.raw.opisanie14_8)
-            if (resFile.contains("15_7")) inputStream = resources.openRawResource(R.raw.opisanie15_7)
-            if (resFile.contains("25_2")) inputStream = resources.openRawResource(R.raw.opisanie25_2)
-            if (resFile.contains("21_10")) inputStream = resources.openRawResource(R.raw.opisanie21_10)
-            if (resFile.contains("25_11")) inputStream = resources.openRawResource(R.raw.opisanie25_11)
-            if (inputStream != null) {
-                val isr = InputStreamReader(inputStream)
-                val reader = BufferedReader(isr)
-                var line: String
-                val builder = StringBuilder()
-                reader.forEachLine {
-                    line = it.replace("h3", "h6")
-                    builder.append(line)
+        svity = intent.extras?.getBoolean("glavnyia", false) ?: false
+        val inputStream: InputStream
+        if (svity) {
+            inputStream = resources.openRawResource(R.raw.opisanie_sviat)
+            val isr = InputStreamReader(inputStream)
+            val reader = BufferedReader(isr)
+            val builder = reader.use {
+                it.readText()
+            }
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+            val arrayList: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
+            binding.TextView.text = getString(by.carkva_gazeta.malitounik.R.string.opisanie_error)
+            arrayList.forEach {
+                if (day == it[0].toInt() && mun == it[1].toInt()) {
+                    binding.TextView.text = MainActivity.fromHtml(it[2])
                 }
-                inputStream.close()
-                binding.TextView.text = MainActivity.fromHtml(builder.toString())
-            } else {
-                binding.TextView.text = getString(by.carkva_gazeta.malitounik.R.string.opisanie_error)
             }
         } else {
             inputStream = when (mun) {
-                0 -> resources.openRawResource(R.raw.opisanie1)
-                1 -> resources.openRawResource(R.raw.opisanie2)
-                2 -> resources.openRawResource(R.raw.opisanie3)
-                3 -> resources.openRawResource(R.raw.opisanie4)
-                4 -> resources.openRawResource(R.raw.opisanie5)
-                5 -> resources.openRawResource(R.raw.opisanie6)
-                6 -> resources.openRawResource(R.raw.opisanie7)
-                7 -> resources.openRawResource(R.raw.opisanie8)
-                8 -> resources.openRawResource(R.raw.opisanie9)
-                9 -> resources.openRawResource(R.raw.opisanie10)
-                10 -> resources.openRawResource(R.raw.opisanie11)
-                11 -> resources.openRawResource(R.raw.opisanie12)
+                1 -> resources.openRawResource(R.raw.opisanie1)
+                2 -> resources.openRawResource(R.raw.opisanie2)
+                3 -> resources.openRawResource(R.raw.opisanie3)
+                4 -> resources.openRawResource(R.raw.opisanie4)
+                5 -> resources.openRawResource(R.raw.opisanie5)
+                6 -> resources.openRawResource(R.raw.opisanie6)
+                7 -> resources.openRawResource(R.raw.opisanie7)
+                8 -> resources.openRawResource(R.raw.opisanie8)
+                9 -> resources.openRawResource(R.raw.opisanie9)
+                10 -> resources.openRawResource(R.raw.opisanie10)
+                11 -> resources.openRawResource(R.raw.opisanie11)
+                12 -> resources.openRawResource(R.raw.opisanie12)
                 else -> resources.openRawResource(R.raw.opisanie1)
             }
             val isr = InputStreamReader(inputStream)
@@ -158,8 +144,7 @@ class Opisanie : AppCompatActivity() {
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
             val sendIntent = Intent(Intent.ACTION_SEND)
             var sviatylink = ""
-            if (svity != "")
-                sviatylink = "&sviata=true"
+            if (svity) sviatylink = "&sviata=1"
             sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=3$sviatylink&date=$day&month=$mun")
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))

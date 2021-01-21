@@ -46,15 +46,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             window.setDecorFitsSystemWindows(false)
             val controller = window.insetsController
             controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior =
-                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
     private val mShowPart2Runnable = Runnable {
@@ -87,6 +81,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var autoScrollJob: Job? = null
     private var autoStartScrollJob: Job? = null
     private var procentJob: Job? = null
+    private var resetTollbarJob: Job? = null
 
     companion object {
         private val resursMap = ArrayMap<String, Int>()
@@ -263,8 +258,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             val vybranoe = MenuVybranoe.vybranoe
             if (vybranoe.size != 0) {
                 vybranoe.forEach {
-                    if (result < it.id)
-                        result = it.id
+                    if (result < it.id) result = it.id
                 }
                 result++
             }
@@ -338,7 +332,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         title = intent?.getStringExtra("title") ?: ""
         loadData(savedInstanceState)
         autoscroll = k.getBoolean("autoscroll", false)
-        spid =  k.getInt("autoscrollSpid", 60)
+        spid = k.getInt("autoscrollSpid", 60)
         binding.WebView.setOnTouchListener(this)
         val client = MyWebViewClient()
         client.setOnLinkListenner(this)
@@ -386,15 +380,18 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
-            binding.titleToolbar.setHorizontallyScrolling(true)
-            binding.titleToolbar.freezesText = true
-            binding.titleToolbar.marqueeRepeatLimit = -1
+            val layoutParams = binding.toolbar.layoutParams
             if (binding.titleToolbar.isSelected) {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
-                binding.titleToolbar.isSelected = false
+                resetTollbarJob?.cancel()
+                resetTollbar(layoutParams)
             } else {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                binding.titleToolbar.isSingleLine = false
                 binding.titleToolbar.isSelected = true
+                resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(5000)
+                    resetTollbar(layoutParams)
+                }
             }
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
@@ -404,6 +401,16 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (dzenNoch) {
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
+    }
+
+    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
+        val tv = TypedValue()
+        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            layoutParams.height = actionBarHeight
+        }
+        binding.titleToolbar.isSelected = false
+        binding.titleToolbar.isSingleLine = true
     }
 
     private fun scrollWebView(): StringBuilder {
@@ -425,7 +432,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         binding.progressBar.visibility = View.VISIBLE
         val res = withContext(Dispatchers.IO) {
             val builder = StringBuilder()
-            val id = resursMap[resurs]?: R.raw.bogashlugbovya1
+            val id = resursMap[resurs] ?: R.raw.bogashlugbovya1
             val inputStream: InputStream = resources.openRawResource(id)
             val zmenyiaChastki = ZmenyiaChastki(this@Bogashlugbovya)
             val gregorian = Calendar.getInstance() as GregorianCalendar
@@ -729,7 +736,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                     if (y > heightConstraintLayout - otstup) {
                         niz = true
-                        spid =  k.getInt("autoscrollSpid", 60)
+                        spid = k.getInt("autoscrollSpid", 60)
                         proc = 100 - (spid - 15) * 100 / 215
                         binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
@@ -868,8 +875,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val itemVybranoe: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec")) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = true
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = true
         }
         if (mAutoScroll) {
             autoscroll = k.getBoolean("autoscroll", false)
@@ -1016,10 +1022,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             editVybranoe = true
             men = setVybranoe(this, resurs, title)
             if (men) {
-                MainActivity.toastView(
-                    this,
-                    getString(by.carkva_gazeta.malitounik.R.string.addVybranoe)
-                )
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
             }
             invalidateOptionsMenu()
         }
@@ -1067,10 +1070,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
             }
         } else {
-            if (editVybranoe)
-                onSupportNavigateUp()
-            else
-                super.onBackPressed()
+            if (editVybranoe) onSupportNavigateUp()
+            else super.onBackPressed()
         }
     }
 
@@ -1090,7 +1091,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         setTollbarTheme()
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
-        spid =  k.getInt("autoscrollSpid", 60)
+        spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
             startAutoScroll()
         }
@@ -1120,10 +1121,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("editVybranoe", editVybranoe)
-        if (binding.textSearch.visibility == View.VISIBLE)
-            outState.putBoolean("seach", true)
-        else
-            outState.putBoolean("seach", false)
+        if (binding.textSearch.visibility == View.VISIBLE) outState.putBoolean("seach", true)
+        else outState.putBoolean("seach", false)
     }
 
     override fun onActivityStart() {

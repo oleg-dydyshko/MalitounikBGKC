@@ -72,11 +72,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         onClick(binding.label1)
     }
 
-    override fun onDialogFontSizePositiveClick() {
+    override fun onDialogFontSize(fontSize: Float) {
         val menuPadryxtoukaDaSpovedzi = supportFragmentManager.findFragmentByTag("MenuPadryxtoukaDaSpovedzi") as? MenuPadryxtoukaDaSpovedzi
-        menuPadryxtoukaDaSpovedzi?.onDialogFontSizePositiveClick()
+        menuPadryxtoukaDaSpovedzi?.onDialogFontSize(fontSize)
         val menuPamiatka = supportFragmentManager.findFragmentByTag("MenuPamiatka") as? MenuPamiatka
-        menuPamiatka?.onDialogFontSizePositiveClick()
+        menuPamiatka?.onDialogFontSize(fontSize)
     }
 
     override fun setPage(page: Int) {

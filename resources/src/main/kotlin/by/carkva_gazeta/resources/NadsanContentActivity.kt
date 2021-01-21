@@ -78,7 +78,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         prefEditors.apply()
     }
 
-    override fun onDialogFontSizePositiveClick() {
+    override fun onDialogFontSize(fontSize: Float) {
         binding.pager.adapter?.notifyDataSetChanged()
     }
 

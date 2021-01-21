@@ -286,8 +286,8 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
     }
 
-    override fun onDialogFontSizePositiveClick() {
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+    override fun onDialogFontSize(fontSize: Float) {
+        fontBiblia = fontSize
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
     }
 

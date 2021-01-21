@@ -76,7 +76,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
-    override fun onDialogFontSizePositiveClick() {
+    override fun onDialogFontSize(fontSize: Float) {
         binding.pager.adapter?.notifyDataSetChanged()
     }
 
@@ -313,7 +313,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
                             fontBiblia -= 4
                             prefEditor.putFloat("font_biblia", fontBiblia)
                             prefEditor.apply()
-                            onDialogFontSizePositiveClick()
+                            binding.pager.adapter?.notifyDataSetChanged()
                             var min = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
                             binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
@@ -326,7 +326,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
                             fontBiblia += 4
                             prefEditor.putFloat("font_biblia", fontBiblia)
                             prefEditor.apply()
-                            onDialogFontSizePositiveClick()
+                            binding.pager.adapter?.notifyDataSetChanged()
                             var max = ""
                             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
                             binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)

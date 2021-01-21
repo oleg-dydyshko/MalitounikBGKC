@@ -53,8 +53,8 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         }
     private lateinit var binding: NadsanMalitvyIPesnyBinding
 
-    override fun onDialogFontSizePositiveClick() {
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+    override fun onDialogFontSize(fontSize: Float) {
+        fontBiblia = fontSize
         binding.malitvyIPesny.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
     }
 

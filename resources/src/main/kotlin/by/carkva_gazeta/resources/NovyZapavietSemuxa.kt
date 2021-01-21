@@ -135,7 +135,7 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
         }
     }
 
-    override fun onDialogFontSizePositiveClick() {
+    override fun onDialogFontSize(fontSize: Float) {
         binding.pager.adapter?.notifyDataSetChanged()
     }
 

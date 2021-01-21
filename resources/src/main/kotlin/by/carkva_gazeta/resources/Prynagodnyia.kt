@@ -73,7 +73,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
-    override fun onDialogFontSizePositiveClick() {
+    override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
     }

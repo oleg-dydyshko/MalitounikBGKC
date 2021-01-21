@@ -24,7 +24,7 @@ class MenuPamiatka : PadryxtoukaPamiatkaListFragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onDialogFontSizePositiveClick() {
+    override fun onDialogFontSize(fontSize: Float) {
         adapter.notifyDataSetChanged()
     }
 

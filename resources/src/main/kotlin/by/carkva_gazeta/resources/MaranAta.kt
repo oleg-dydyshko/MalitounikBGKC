@@ -91,8 +91,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var autoStartScrollJob: Job? = null
     private var procentJob: Job? = null
 
-    override fun onDialogFontSizePositiveClick() {
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+    override fun onDialogFontSize(fontSize: Float) {
+        fontBiblia = fontSize
         setFont = true
         adapter.notifyDataSetChanged()
     }

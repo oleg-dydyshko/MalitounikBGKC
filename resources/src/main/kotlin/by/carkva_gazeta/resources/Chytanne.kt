@@ -80,8 +80,8 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var autoStartScrollJob: Job? = null
     private var procentJob: Job? = null
 
-    override fun onDialogFontSizePositiveClick() {
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+    override fun onDialogFontSize(fontSize: Float) {
+        fontBiblia = fontSize
         cytannelist.forEach {
             it.textSize = fontBiblia
         }

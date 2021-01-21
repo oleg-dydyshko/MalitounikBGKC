@@ -292,8 +292,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
     }
 
-    override fun onDialogFontSizePositiveClick() {
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+    override fun onDialogFontSize(fontSize: Float) {
+        fontBiblia = fontSize
         if (binding.scrollView2.visibility == View.VISIBLE) {
             binding.TextView.textSize = fontBiblia
         } else {

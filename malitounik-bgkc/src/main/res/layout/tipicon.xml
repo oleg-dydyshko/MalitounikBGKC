@@ -55,19 +55,6 @@
                 android:textColor="@color/colorWhite" />
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@color/colorDivider"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="@string/zvychaynye_dny" />
-
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -106,6 +93,19 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/No_post" />
+
+            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorDivider"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/zvychaynye_dny" />
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                 android:id="@+id/textView7"

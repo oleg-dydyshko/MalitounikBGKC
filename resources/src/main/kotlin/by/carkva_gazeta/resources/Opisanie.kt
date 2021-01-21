@@ -2,6 +2,7 @@ package by.carkva_gazeta.resources
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -12,6 +13,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.AkafistUnderBinding
@@ -22,12 +24,15 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.*
 
-class Opisanie : AppCompatActivity() {
+class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     private var dzenNoch = false
     private var mun = Calendar.getInstance()[Calendar.MONTH] + 1
     private var day = Calendar.getInstance()[Calendar.DATE]
     private var svity = false
     private lateinit var binding: AkafistUnderBinding
+    private var change = false
+    private lateinit var chin: SharedPreferences
+
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -39,7 +44,7 @@ class Opisanie : AppCompatActivity() {
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = chin.getBoolean("dzen_noch", false)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
@@ -50,6 +55,11 @@ class Opisanie : AppCompatActivity() {
         mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: c[Calendar.MONTH] + 1
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         svity = intent.extras?.getBoolean("glavnyia", false) ?: false
+        if (savedInstanceState != null) {
+            change = savedInstanceState.getBoolean("change")
+        }
+        val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         val inputStream: InputStream
         if (svity) {
             inputStream = resources.openRawResource(R.raw.opisanie_sviat)
@@ -97,6 +107,10 @@ class Opisanie : AppCompatActivity() {
         setTollbarTheme()
     }
 
+    override fun onDialogFontSize(fontSize: Float) {
+        binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
+    }
+
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
             binding.titleToolbar.setHorizontallyScrolling(true)
@@ -119,6 +133,14 @@ class Opisanie : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if (change) {
+            onSupportNavigateUp()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         val infl = menuInflater
@@ -136,11 +158,34 @@ class Opisanie : AppCompatActivity() {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_edit).isVisible = false
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
         return true
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("change", change)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id: Int = item.itemId
+        if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
+            change = true
+            val prefEditor = chin.edit()
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                prefEditor.putBoolean("dzen_noch", true)
+            } else {
+                prefEditor.putBoolean("dzen_noch", false)
+            }
+            prefEditor.apply()
+            recreate()
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
+            val dialogFontSize = DialogFontSize()
+            dialogFontSize.show(supportFragmentManager, "font")
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
             val sendIntent = Intent(Intent.ACTION_SEND)
             var sviatylink = ""

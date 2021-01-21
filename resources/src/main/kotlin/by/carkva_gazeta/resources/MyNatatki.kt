@@ -2,6 +2,7 @@ package by.carkva_gazeta.resources
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -17,10 +18,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.MenuNatatki
-import by.carkva_gazeta.malitounik.MyNatatkiFiles
-import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.databinding.MyNatatkiBinding
 import com.google.gson.Gson
 import java.io.File
@@ -28,7 +26,7 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
 
-class MyNatatki : AppCompatActivity() {
+class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     private var filename = ""
     private var redak = 3
     private var edit = true
@@ -36,6 +34,7 @@ class MyNatatki : AppCompatActivity() {
     private var md5sum = ""
     private lateinit var binding: MyNatatkiBinding
     private var editDrawer: Drawable? = null
+    private lateinit var k: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -54,7 +53,7 @@ class MyNatatki : AppCompatActivity() {
             window.attributes = lp
         }
         md5sum = md5Sum("<MEMA></MEMA>")
-        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -124,6 +123,10 @@ class MyNatatki : AppCompatActivity() {
         if (dzenNoch) {
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
+    }
+
+    override fun onDialogFontSize(fontSize: Float) {
+        binding.EditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
     }
 
     private fun prepareSave() {
@@ -227,13 +230,13 @@ class MyNatatki : AppCompatActivity() {
         } else {
             editItem.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.natatka)
         }
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(by.carkva_gazeta.malitounik.R.menu.opisanie, menu)
+        menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.opisanie, menu)
         for (i in 0 until menu.size()) {
             val item: MenuItem = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -246,6 +249,21 @@ class MyNatatki : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id: Int = item.itemId
+        if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
+            item.isChecked = !item.isChecked
+            val prefEditor = k.edit()
+            if (item.isChecked) {
+                prefEditor.putBoolean("dzen_noch", true)
+            } else {
+                prefEditor.putBoolean("dzen_noch", false)
+            }
+            prefEditor.apply()
+            recreate()
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
+            val dialogFontSize = DialogFontSize()
+            dialogFontSize.show(supportFragmentManager, "font")
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_edit) {
             if (edit) {
                 binding.EditText.keyListener = binding.EditText.tag as KeyListener

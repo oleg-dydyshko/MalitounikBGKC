@@ -74,8 +74,8 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
     }
 
-    override fun onDialogFontSizePositiveClick() {
-        fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+    override fun onDialogFontSize(fontSize: Float) {
+        fontBiblia = fontSize
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
     }
 

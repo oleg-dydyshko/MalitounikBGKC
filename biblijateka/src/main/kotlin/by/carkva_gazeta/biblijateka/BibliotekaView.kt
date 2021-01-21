@@ -203,13 +203,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         stopAutoScroll()
     }
 
-    override fun onDialogFontSizePositiveClick() {
-        val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+    override fun onDialogFontSize(fontSize: Float) {
         if (bindingcontent.scrollViewB.visibility == View.VISIBLE) {
-            bindingcontent.textViewB.textSize = fontBiblia
+            bindingcontent.textViewB.textSize = fontSize
         } else {
             val webSettings: WebSettings = bindingcontent.webView.settings
-            webSettings.defaultFontSize = fontBiblia.toInt()
+            webSettings.defaultFontSize = fontSize.toInt()
         }
     }
 

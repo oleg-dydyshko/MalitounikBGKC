@@ -23,7 +23,7 @@ class DialogFontSize : DialogFragment() {
     private val binding get() = _binding!!
 
     interface DialogFontSizeListener {
-        fun onDialogFontSizePositiveClick()
+        fun onDialogFontSize(fontSize: Float)
     }
 
     override fun onAttach(context: Context) {
@@ -121,22 +121,23 @@ class DialogFontSize : DialogFragment() {
                 val prefEditors = k.edit()
                 prefEditors.putFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
                 prefEditors.apply()
-                mListener.onDialogFontSizePositiveClick()
+                mListener.onDialogFontSize(SettingsActivity.GET_DEFAULT_FONT_SIZE)
                 dialog?.cancel()
             }
             binding.cansel.setOnClickListener {
                 val prefEditors = k.edit()
                 prefEditors.putFloat("font_biblia", fontBiblia)
                 prefEditors.apply()
-                mListener.onDialogFontSizePositiveClick()
+                mListener.onDialogFontSize(fontBiblia)
                 dialog?.cancel()
             }
             binding.ok.setOnClickListener {
                 val progress = binding.seekBar.progress
+                val fontSize = getFont(progress)
                 val prefEditors = k.edit()
-                prefEditors.putFloat("font_biblia", getFont(progress))
+                prefEditors.putFloat("font_biblia", fontSize)
                 prefEditors.apply()
-                mListener.onDialogFontSizePositiveClick()
+                mListener.onDialogFontSize(fontSize)
                 dialog?.cancel()
             }
             if (savedInstanceState != null) {
@@ -148,10 +149,11 @@ class DialogFontSize : DialogFragment() {
             binding.seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                     val prefEditors = k.edit()
-                    prefEditors.putFloat("font_biblia", getFont(progress))
+                    val fontSize = getFont(progress)
+                    prefEditors.putFloat("font_biblia", fontSize)
                     prefEditors.apply()
-                    binding.textSize.text = getString(R.string.get_font, getFont(progress).toInt())
-                    mListener.onDialogFontSizePositiveClick()
+                    binding.textSize.text = getString(R.string.get_font, fontSize.toInt())
+                    mListener.onDialogFontSize(fontSize)
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar) {

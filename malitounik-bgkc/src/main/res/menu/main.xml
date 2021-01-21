@@ -76,6 +76,12 @@
         android:id="@+id/pasxa"
         android:icon="@drawable/search"
         android:orderInCategory="100"
+        android:title="@string/poshuk"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/pasxa_opis"
+        android:icon="@drawable/natatka"
+        android:orderInCategory="100"
         android:title="@string/pascha_kaliandar_bel"
         app:showAsAction="always" />
     <!--<item

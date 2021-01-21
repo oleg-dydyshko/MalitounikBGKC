@@ -11,10 +11,7 @@ import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.provider.Settings
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
@@ -60,6 +57,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     private var dzenNoch = false
     private var tolbarTitle = ""
     private var shortcuts = false
+    private var mLastClickTime: Long = 0
 
     override fun setDataCalendar(day_of_year: Int, year: Int) {
         c = Calendar.getInstance() as GregorianCalendar
@@ -561,6 +559,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return super.onOptionsItemSelected(item)
+        }
+        mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_glava) {
             var dayyear = 0
@@ -583,6 +585,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         if (id == R.id.help) {
             val i = Intent(this, Help::class.java)
             startActivity(i)
+        }
+        if (id == R.id.pasxa_opis) {
+            val intent = Intent(this, Pasxa::class.java)
+            startActivity(intent)
         }
         if (id == R.id.pasxa) {
             val pasxa = DialogPasxa()
@@ -695,6 +701,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             menu.findItem(R.id.action_mun).isVisible = false
             menu.findItem(R.id.action_glava).isVisible = false
             menu.findItem(R.id.tipicon).isVisible = false
+            menu.findItem(R.id.pasxa_opis).isVisible = false
             menu.findItem(R.id.pasxa).isVisible = false
             menu.findItem(R.id.trash).isVisible = false
             menu.findItem(R.id.sabytie).isVisible = false
@@ -719,7 +726,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     menu.findItem(R.id.action_dzen_noch).isVisible = true
                 }
                 R.id.label103 -> menu.findItem(R.id.prazdnik).isVisible = true
-                R.id.label104 -> menu.findItem(R.id.pasxa).isVisible = true
+                R.id.label104 -> {
+                    menu.findItem(R.id.pasxa_opis).isVisible = true
+                    menu.findItem(R.id.pasxa).isVisible = true
+                }
                 R.id.label7 -> {
                     menu.findItem(R.id.action_add).isVisible = true
                     menu.findItem(R.id.sortdate).isVisible = true

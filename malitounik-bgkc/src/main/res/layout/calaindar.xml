@@ -82,8 +82,9 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
+                android:contentDescription="@string/empty"
                 android:src="@drawable/book_divider"
-                android:contentDescription="@string/empty" />
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/PostFish"

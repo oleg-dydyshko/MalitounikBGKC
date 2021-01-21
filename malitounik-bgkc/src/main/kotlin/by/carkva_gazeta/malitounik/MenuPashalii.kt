@@ -2,16 +2,12 @@ package by.carkva_gazeta.malitounik
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.os.SystemClock
 import android.text.Spannable
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +22,6 @@ import kotlin.collections.ArrayList
 class MenuPashalii : PashaliiFragment() {
     private val pasxi = ArrayList<Pashalii>()
     private lateinit var myArrayAdapter: MyArrayAdapter
-    private var mLastClickTime: Long = 0
     private var _binding: PashaliiBinding? = null
     private val binding get() = _binding!!
 
@@ -53,28 +48,8 @@ class MenuPashalii : PashaliiFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {
-            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
-            val titlespan = SpannableString(binding.title.text)
-            titlespan.setSpan(UnderlineSpan(), 0, titlespan.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            binding.title.text = titlespan
-            if (dzenNoch) {
-                binding.title.setBackgroundResource(R.drawable.selector_dark)
-                binding.title.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            } else {
-                binding.title.setBackgroundResource(R.drawable.selector_default)
-            }
-            binding.title.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
             binding.gri.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
             binding.ula.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            binding.title.setOnClickListener {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                    return@setOnClickListener
-                }
-                mLastClickTime = SystemClock.elapsedRealtime()
-                val intent = Intent(activity, Pasxa::class.java)
-                startActivity(intent)
-            }
             if (savedInstanceState == null) setArrayPasha()
             else setArrayPasha(savedInstanceState.getInt("year"))
             myArrayAdapter = MyArrayAdapter(it)

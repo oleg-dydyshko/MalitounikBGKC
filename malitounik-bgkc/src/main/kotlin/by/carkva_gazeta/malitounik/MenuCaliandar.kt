@@ -167,8 +167,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
     }
 
     private class MyCalendarAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
-        var currentFragment: Fragment? = null
-            private set
+        private var currentFragment: Fragment? = null
         private var mun = Calendar.JANUARY
         private var year = SettingsActivity.GET_CALIANDAR_YEAR_MIN
         private val c = Calendar.getInstance() as GregorianCalendar

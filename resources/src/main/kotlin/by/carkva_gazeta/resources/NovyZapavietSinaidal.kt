@@ -11,7 +11,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
@@ -28,9 +27,11 @@ import by.carkva_gazeta.resources.DialogBibleRazdel.DialogBibleRazdelListener
 import by.carkva_gazeta.resources.databinding.ActivityBibleBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
+import java.lang.Runnable
 
 class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NovyZapavietSinaidalFragment.ClicParalelListiner, NovyZapavietSinaidalFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
     private val mHideHandler = Handler(Looper.getMainLooper())
@@ -72,6 +73,8 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
             return MainActivity.getOrientation(this)
         }
     private lateinit var binding: ActivityBibleBinding
+    private var resetTollbarJob: Job? = null
+    private var resetSubTollbarJob: Job? = null
 
     private fun clearEmptyPosition() {
         val remove = ArrayList<ArrayList<Int>>()
@@ -132,6 +135,8 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
                 it.write(gson.toJson(BibleGlobalList.natatkiSinodal))
             }
         }
+        resetTollbarJob?.cancel()
+        resetSubTollbarJob?.cancel()
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -348,15 +353,33 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
 
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
-            binding.titleToolbar.setHorizontallyScrolling(true)
-            binding.titleToolbar.freezesText = true
-            binding.titleToolbar.marqueeRepeatLimit = -1
+            val layoutParams = binding.toolbar.layoutParams
             if (binding.titleToolbar.isSelected) {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
-                binding.titleToolbar.isSelected = false
+                resetTollbarJob?.cancel()
+                resetTollbar(layoutParams)
             } else {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                binding.titleToolbar.isSingleLine = false
                 binding.titleToolbar.isSelected = true
+                resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(5000)
+                    resetTollbar(layoutParams)
+                }
+            }
+        }
+        binding.subtitleToolbar.setOnClickListener {
+            val layoutParams = binding.toolbar.layoutParams
+            if (binding.subtitleToolbar.isSelected) {
+                resetSubTollbarJob?.cancel()
+                resetSubTollbar(layoutParams)
+            } else {
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                binding.subtitleToolbar.isSingleLine = false
+                binding.subtitleToolbar.isSelected = true
+                resetSubTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(5000)
+                    resetSubTollbar(layoutParams)
+                }
             }
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
@@ -367,6 +390,26 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
         if (dzenNoch) {
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
+    }
+
+    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
+        val tv = TypedValue()
+        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            layoutParams.height = actionBarHeight
+        }
+        binding.titleToolbar.isSelected = false
+        binding.titleToolbar.isSingleLine = true
+    }
+
+    private fun resetSubTollbar(layoutParams: ViewGroup.LayoutParams) {
+        val tv = TypedValue()
+        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            layoutParams.height = actionBarHeight
+        }
+        binding.subtitleToolbar.isSelected = false
+        binding.subtitleToolbar.isSingleLine = true
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

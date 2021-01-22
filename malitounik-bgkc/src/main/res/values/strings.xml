@@ -522,6 +522,8 @@
     <string name="help_paslia_prychastia">Рухам направа або налева можна хутка перамыкаць малітвы пасля cьвятога прычасьця.</string>
     <string name="no_danyx">Прабачце, няма дадзеных</string>
     <string name="no_lityrgii">Літургіі няма</string>
+    <string name="skip_utran">Прапусьціць ютрань</string>
+    <string name="onli_kanon_knigi">У Бібліі толькі кананічныя кнігі</string>
     <string-array name="dni_nedeli">
         <item />
         <item>нядзеля</item>

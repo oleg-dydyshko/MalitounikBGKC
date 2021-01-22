@@ -34,10 +34,7 @@ import com.google.gson.Gson
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileWriter
 import java.util.*
@@ -88,6 +85,12 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     private lateinit var colorAdapter: ColorAdapter
     private var nazvaPadzei = "Назва падзеі"
     private lateinit var binding: SabytieBinding
+    private var resetTollbarJob: Job? = null
+
+    override fun onPause() {
+        super.onPause()
+        resetTollbarJob?.cancel()
+    }
 
     override fun sabytieTimePositive(nomerDialoga: Int, hour: Int, minute: Int) {
         if (nomerDialoga == 1) {
@@ -361,19 +364,18 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnClickListener
-            }
-            mLastClickTime = SystemClock.elapsedRealtime()
-            binding.titleToolbar.setHorizontallyScrolling(true)
-            binding.titleToolbar.freezesText = true
-            binding.titleToolbar.marqueeRepeatLimit = -1
+            val layoutParams = binding.toolbar.layoutParams
             if (binding.titleToolbar.isSelected) {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
-                binding.titleToolbar.isSelected = false
+                resetTollbarJob?.cancel()
+                resetTollbar(layoutParams)
             } else {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                binding.titleToolbar.isSingleLine = false
                 binding.titleToolbar.isSelected = true
+                resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(5000)
+                    resetTollbar(layoutParams)
+                }
             }
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
@@ -471,6 +473,16 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             prefEditor.putBoolean("help_sabytie_list_view", false)
             prefEditor.apply()
         }
+    }
+
+    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
+        val tv = TypedValue()
+        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            layoutParams.height = actionBarHeight
+        }
+        binding.titleToolbar.isSelected = false
+        binding.titleToolbar.isSingleLine = true
     }
 
     override fun onDialogEditClick(position: Int) {

@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.TextUtils
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
@@ -15,11 +15,19 @@ import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.MenuListAdaprer
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.BgkcListBinding
+import kotlinx.coroutines.*
 
 class ParafiiBgkcDekanat : AppCompatActivity() {
     private var bgkc = 0
     private var mLastClickTime: Long = 0
     private lateinit var binding: BgkcListBinding
+    private var resetTollbarJob: Job? = null
+
+    override fun onPause() {
+        super.onPause()
+        resetTollbarJob?.cancel()
+    }
+
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -41,15 +49,18 @@ class ParafiiBgkcDekanat : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setOnClickListener {
-            binding.titleToolbar.setHorizontallyScrolling(true)
-            binding.titleToolbar.freezesText = true
-            binding.titleToolbar.marqueeRepeatLimit = -1
+            val layoutParams = binding.toolbar.layoutParams
             if (binding.titleToolbar.isSelected) {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
-                binding.titleToolbar.isSelected = false
+                resetTollbarJob?.cancel()
+                resetTollbar(layoutParams)
             } else {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                binding.titleToolbar.isSingleLine = false
                 binding.titleToolbar.isSelected = true
+                resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(5000)
+                    resetTollbar(layoutParams)
+                }
             }
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
@@ -77,6 +88,16 @@ class ParafiiBgkcDekanat : AppCompatActivity() {
             intent.putExtra("bgkc", bgkc)
             startActivityForResult(intent, 25)
         }
+    }
+
+    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
+        val tv = TypedValue()
+        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            layoutParams.height = actionBarHeight
+        }
+        binding.titleToolbar.isSelected = false
+        binding.titleToolbar.isSingleLine = true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

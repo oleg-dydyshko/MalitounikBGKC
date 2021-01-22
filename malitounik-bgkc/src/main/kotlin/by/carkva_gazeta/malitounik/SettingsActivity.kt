@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.provider.Settings
-import android.text.TextUtils
 import android.util.TypedValue
 import android.view.*
 import android.widget.AdapterView
@@ -24,10 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.SettingsActivityBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
@@ -39,6 +35,7 @@ class SettingsActivity : AppCompatActivity() {
     private var mLastClickTime: Long = 0
     private var itemDefault = 0
     private lateinit var binding: SettingsActivityBinding
+    private var resetTollbarJob: Job? = null
 
     companion object {
         private const val UPDATE_ALL_WIDGETS = "update_all_widgets"
@@ -1059,6 +1056,11 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        resetTollbarJob?.cancel()
+    }
+
     override fun onResume() {
         super.onResume()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
@@ -1376,8 +1378,10 @@ class SettingsActivity : AppCompatActivity() {
             when (checkedId) {
                 R.id.maranataBel -> {
                     prefEditor.putBoolean("belarus", true)
-                    val semuxaNoKnigi = DialogSemuxaNoKnigi()
-                    semuxaNoKnigi.show(supportFragmentManager, "semuxa_no_knigi")
+                    if (k.getBoolean("SemuxaNoKnigi", true)) {
+                        val semuxaNoKnigi = DialogSemuxaNoKnigi()
+                        semuxaNoKnigi.show(supportFragmentManager, "semuxa_no_knigi")
+                    }
                 }
                 R.id.maranataRus -> {
                     prefEditor.putBoolean("belarus", false)
@@ -1585,15 +1589,18 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
-            binding.titleToolbar.setHorizontallyScrolling(true)
-            binding.titleToolbar.freezesText = true
-            binding.titleToolbar.marqueeRepeatLimit = -1
+            val layoutParams = binding.toolbar.layoutParams
             if (binding.titleToolbar.isSelected) {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
-                binding.titleToolbar.isSelected = false
+                resetTollbarJob?.cancel()
+                resetTollbar(layoutParams)
             } else {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                binding.titleToolbar.isSingleLine = false
                 binding.titleToolbar.isSelected = true
+                resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(5000)
+                    resetTollbar(layoutParams)
+                }
             }
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN + 4.toFloat())
@@ -1603,6 +1610,16 @@ class SettingsActivity : AppCompatActivity() {
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
+    }
+
+    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
+        val tv = TypedValue()
+        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            layoutParams.height = actionBarHeight
+        }
+        binding.titleToolbar.isSelected = false
+        binding.titleToolbar.isSingleLine = true
     }
 
     private class TimeAdapter(activity: Activity, private val dataTimes: ArrayList<DataTime>) : ArrayAdapter<DataTime>(activity, R.layout.simple_list_item_1, dataTimes) {

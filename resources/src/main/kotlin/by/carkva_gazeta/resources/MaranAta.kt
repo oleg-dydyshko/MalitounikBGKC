@@ -14,7 +14,6 @@ import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
-import android.text.TextUtils
 import android.text.style.*
 import android.util.TypedValue
 import android.view.*
@@ -90,6 +89,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var autoScrollJob: Job? = null
     private var autoStartScrollJob: Job? = null
     private var procentJob: Job? = null
+    private var resetTollbarJob: Job? = null
+    private var resetSubTollbarJob: Job? = null
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -417,15 +418,33 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
-            binding.titleToolbar.run { binding.titleToolbar.setHorizontallyScrolling(true) }
-            binding.titleToolbar.freezesText = true
-            binding.titleToolbar.marqueeRepeatLimit = -1
+            val layoutParams = binding.toolbar.layoutParams
             if (binding.titleToolbar.isSelected) {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.END
-                binding.titleToolbar.isSelected = false
+                resetTollbarJob?.cancel()
+                resetTollbar(layoutParams)
             } else {
-                binding.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                binding.titleToolbar.isSingleLine = false
                 binding.titleToolbar.isSelected = true
+                resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(5000)
+                    resetTollbar(layoutParams)
+                }
+            }
+        }
+        binding.subtitleToolbar.setOnClickListener {
+            val layoutParams = binding.toolbar.layoutParams
+            if (binding.subtitleToolbar.isSelected) {
+                resetSubTollbarJob?.cancel()
+                resetSubTollbar(layoutParams)
+            } else {
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                binding.subtitleToolbar.isSingleLine = false
+                binding.subtitleToolbar.isSelected = true
+                resetSubTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(5000)
+                    resetSubTollbar(layoutParams)
+                }
             }
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
@@ -434,6 +453,26 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         if (dzenNoch) {
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
+    }
+
+    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
+        val tv = TypedValue()
+        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            layoutParams.height = actionBarHeight
+        }
+        binding.titleToolbar.isSelected = false
+        binding.titleToolbar.isSingleLine = true
+    }
+
+    private fun resetSubTollbar(layoutParams: ViewGroup.LayoutParams) {
+        val tv = TypedValue()
+        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            layoutParams.height = actionBarHeight
+        }
+        binding.subtitleToolbar.isSelected = false
+        binding.subtitleToolbar.isSingleLine = true
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -1069,6 +1108,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         prefEditors.apply()
         autoStartScrollJob?.cancel()
         procentJob?.cancel()
+        resetTollbarJob?.cancel()
+        resetSubTollbarJob?.cancel()
     }
 
     override fun onResume() {
@@ -1123,6 +1164,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isChecked = k.getBoolean("paralel_maranata", true)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isVisible = true
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).isVisible = true
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).isChecked = k.getBoolean("belarus", false)
         return true
     }
 
@@ -1142,12 +1185,26 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        val prefEditor: Editor = k.edit()
+        val prefEditor = k.edit()
         if (id == android.R.id.home) {
             if (paralel) {
                 onBackPressed()
                 return true
             }
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_semuxa) {
+            item.isChecked = !item.isChecked
+            if (item.isChecked) {
+                prefEditor.putBoolean("belarus", true)
+                if (k.getBoolean("SemuxaNoKnigi", true)) {
+                    val semuxaNoKnigi = DialogSemuxaNoKnigi()
+                    semuxaNoKnigi.show(supportFragmentManager, "semuxa_no_knigi")
+                }
+            } else {
+                prefEditor.putBoolean("belarus", false)
+            }
+            prefEditor.apply()
+            recreate()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_help) {
             startActivity(Intent(this, HelpText::class.java))

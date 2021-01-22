@@ -38,7 +38,15 @@
         android:checkable="true"
         android:checked="true"
         android:orderInCategory="100"
-        android:title="Прапусьціць ютрань"
+        android:title="@string/skip_utran"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_semuxa"
+        android:checkable="true"
+        android:checked="false"
+        android:orderInCategory="100"
+        android:title="@string/title_biblia"
         android:visible="false"
         app:showAsAction="never" />
     <item

@@ -1084,6 +1084,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         autoStartScrollJob?.cancel()
         procentJob?.cancel()
+        resetTollbarJob?.cancel()
     }
 
     override fun onResume() {

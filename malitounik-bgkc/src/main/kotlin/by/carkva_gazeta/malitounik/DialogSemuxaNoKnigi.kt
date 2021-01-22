@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
+import android.widget.CheckBox
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -34,10 +35,24 @@ class DialogSemuxaNoKnigi : DialogFragment() {
             linearLayout.addView(textViewZaglavie)
             val textView = TextViewRobotoCondensed(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView.text = "У Бібліі толькі кананічныя кнігі"
+            textView.text = getString(R.string.onli_kanon_knigi)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             linearLayout.addView(textView)
+            val checkBox = CheckBox(it)
+            checkBox.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            checkBox.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+            checkBox.text = getString(R.string.sabytie_check_mun)
+            checkBox.setOnCheckedChangeListener { _, isChecked ->
+                val edit = chin.edit()
+                if (isChecked) {
+                    edit.putBoolean("SemuxaNoKnigi", false)
+                } else {
+                    edit.putBoolean("SemuxaNoKnigi", true)
+                }
+                edit.apply()
+            }
+            linearLayout.addView(checkBox)
             ad.setView(linearLayout)
             ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = ad.create()

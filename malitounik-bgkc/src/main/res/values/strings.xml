@@ -103,12 +103,12 @@
     <string name="search">Пошук песень</string>
     <string name="rsinaidal">Глава</string>
     <string name="psinaidal">Псалтирь</string>
-    <string name="bsinaidal">БІБЛІЯ ў Сінадальным расейскім перакладзе</string>
+    <string name="bsinaidal">Біблія ў расейскім Сінадальным перакладзе</string>
     <string name="stsinaidal">Ветхий завет</string>
     <string name="novsinaidal">Новый завет</string>
     <string name="maranata">Штодзённае чытаньне Бібліі за год:</string>
     <string name="maranata2">Штодзённае чытаньне Бібліі за год</string>
-    <string name="maranata_opis">Прачытаньне Бібліі за год паводле плану супольнасьці “Maran atha”, выкарыстоўваючы:</string>
+    <string name="maranata_opis">Прачытаньне Бібліі за год паводле плану супольнасьці “Maran atha”</string>
     <string name="pasliaPrychscia">Малітвы пасьля сьвятога прычасьця</string>
     <string name="vybranoe">Дадаць у Выбранае</string>
     <string name="vybranoe_del">Выдаліць з Выбранага</string>
@@ -229,7 +229,7 @@
     <string name="download">Спампаваць</string>
     <string name="pkc">Урачыстасьці і сьвяты ў рыма-католікаў Беларусі</string>
     <string name="search_svityia">Пошук сьвятых і сьвятаў</string>
-    <string name="blok_orientation">Блакіроўка арыентацыі</string>
+    <string name="blok_orientation">Блакаваньне арыентацыі</string>
     <string name="inversion">Інверсія</string>
     <string name="set_page_bibliateka">Выбраць старонку</string>
     <string name="zmest">Зьмест</string>
@@ -369,9 +369,9 @@
     <string name="sabytie_bez_kanca">Без канца</string>
     <string name="dvuna_i_vial">Двунадзясятыя\nі вялікія сьвяты</string>
     <string name="help_davedka">Даведка</string>
-    <string name="help_set_font">Рэгуліроўка\nшрыфту</string>
-    <string name="help_set_bridnes">Рэгуліроўка\nяркасьці</string>
-    <string name="help_on_auto_scroll">Уключэньне\nі рэгуліроўка аўтапрагорткі</string>
+    <string name="help_set_font">Рэгуляваньне\nшрыфту</string>
+    <string name="help_set_bridnes">Рэгуляваньне\nяркасьці</string>
+    <string name="help_on_auto_scroll">Уключэньне\nі рэгуляваньне аўтапрагорткі</string>
     <string-array name="malitvy_pasli_prychastia">
         <item>Малітва падзякі</item>
         <item>Малітва сьв. Васіля Вялікага</item>

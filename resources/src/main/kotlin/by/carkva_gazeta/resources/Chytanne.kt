@@ -996,12 +996,10 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         } else {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)

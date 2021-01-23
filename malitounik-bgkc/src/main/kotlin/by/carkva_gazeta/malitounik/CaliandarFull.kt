@@ -43,7 +43,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
     private var day = 0
     private var year = 0
     private var dzenNoch = false
-    private var rColorColorprimary = R.color.colorPrimary
+    private var rColorColorprimary = R.drawable.selector_red
     private val data = ArrayList<ArrayList<String>>()
     private val gson = Gson()
     private var sabytieTitle = ""
@@ -125,7 +125,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 val c = Calendar.getInstance() as GregorianCalendar
                 val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
                 dzenNoch = k.getBoolean("dzen_noch", false)
-                if (dzenNoch) rColorColorprimary = R.color.colorPrimary_black
+                if (dzenNoch) rColorColorprimary = R.drawable.selector_red_dark
                 val tileMe = BitmapDrawable(it.resources, BitmapFactory.decodeResource(resources, R.drawable.calendar_fon))
                 tileMe.tileModeX = Shader.TileMode.REPEAT
                 if (data[day][20] != "" && data[day][0].toInt() == 1) {
@@ -294,6 +294,20 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     }
+                    if (data[day][7].toInt() != 3) {
+                        binding.textTitleChyt.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textTitleChyt.setBackgroundResource(rColorColorprimary)
+                        binding.textChytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textChytanne.setBackgroundResource(rColorColorprimary)
+                        binding.textChytanneSviatyiaDop.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textChytanneSviatyiaDop.setBackgroundResource(rColorColorprimary)
+                        binding.textChytanneSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textChytanneSviatyia.setBackgroundResource(rColorColorprimary)
+                        binding.textPamerlyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textPamerlyia.setBackgroundResource(rColorColorprimary)
+                        binding.textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.textBlaslavenne.setBackgroundResource(rColorColorprimary)
+                    }
                 }
                 if (data[day][5].contains("2")) {
                     binding.textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
@@ -360,7 +374,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     if (data[day][15] != "") {
                         binding.gosudarstvo.visibility = View.VISIBLE
                         binding.gosudarstvo.text = data[day][15]
-                        it.let { binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, rColorColorprimary)) }
+                        it.let {
+                            if (dzenNoch)
+                                binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                            else
+                                binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary))
+                        }
                     }
                 }
                 if (k.getInt("pafesii", 0) == 1) {

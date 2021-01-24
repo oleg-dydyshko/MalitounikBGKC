@@ -409,13 +409,13 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         }
                         var polstixaA = false
                         var polstixaB = false
-                        if (knigaK.contains("а")) {
+                        if (knigaK.contains("а", true)) {
                             polstixaA = true
-                            knigaK = knigaK.replace("а", "")
+                            knigaK = knigaK.replace("а", "", true)
                         }
-                        if (knigaN.contains("б")) {
+                        if (knigaN.contains("б", true)) {
                             polstixaB = true
-                            knigaN = knigaN.replace("б", "")
+                            knigaN = knigaN.replace("б", "", true)
                         }
                         var spln = ""
                         if (i > 0) spln = "\n"

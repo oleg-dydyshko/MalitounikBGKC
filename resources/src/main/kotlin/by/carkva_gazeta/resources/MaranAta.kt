@@ -82,16 +82,13 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var mOffset = 0
     private val uiAnimationDelay: Long = 300
     private val orientation: Int
-        get() {
-            return MainActivity.getOrientation(this)
-        }
+        get() = MainActivity.getOrientation(this)
     private lateinit var binding: AkafistMaranAtaBinding
     private var autoScrollJob: Job? = null
     private var autoStartScrollJob: Job? = null
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
     private var resetSubTollbarJob: Job? = null
-    private var canselStopScrollJob: Job? = null
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -177,8 +174,38 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 autoStartScroll()
             }
         }
+        binding.actionPlus.setOnClickListener {
+            if (spid in 20..235) {
+                spid -= 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                binding.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
+        binding.actionMinus.setOnClickListener {
+            if (spid in 10..225) {
+                spid += 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                binding.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
         binding.constraint.setOnTouchListener(this)
-        if (dzenNoch) binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+        if (dzenNoch) {
+            binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
+            binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
+        }
         binding.share.setOnClickListener {
             if (bibleCopyList.size > 0) {
                 val sendIntent = Intent()
@@ -489,21 +516,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         if (id == R.id.ListView) {
             stopAutoStartScroll()
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
-                MotionEvent.ACTION_DOWN -> {
-                    mActionDown = true
-                    canselStopScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                        delay(7000)
-                        stopAutoScroll()
-                        val prefEditors = k.edit()
-                        prefEditors.putBoolean("autoscroll", false)
-                        prefEditors.apply()
-                        invalidateOptionsMenu()
-                    }
-                }
-                MotionEvent.ACTION_UP -> {
-                    mActionDown = false
-                    canselStopScrollJob?.cancel()
-                }
+                MotionEvent.ACTION_DOWN -> mActionDown = true
+                MotionEvent.ACTION_UP -> mActionDown = false
             }
             return false
         }
@@ -985,6 +999,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     private fun stopAutoScroll(delayDisplayOff: Boolean = true) {
+        binding.actionMinus.visibility = View.GONE
+        binding.actionPlus.visibility = View.GONE
         autoScrollJob?.cancel()
         if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -995,6 +1011,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     private fun startAutoScroll() {
+        binding.actionMinus.visibility = View.VISIBLE
+        binding.actionPlus.visibility = View.VISIBLE
         stopAutoStartScroll()
         autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
             while (isActive) {
@@ -1073,6 +1091,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         } else if (mPedakVisable) {
             mPedakVisable = false
             bibleCopyList.clear()
+            adapter.notifyDataSetChanged()
             if (binding.linearLayout5.visibility == View.VISIBLE) {
                 binding.linearLayout4.visibility = View.GONE
                 binding.linearLayout5.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
@@ -1123,7 +1142,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         procentJob?.cancel()
         resetTollbarJob?.cancel()
         resetSubTollbarJob?.cancel()
-        canselStopScrollJob?.cancel()
     }
 
     override fun onResume() {
@@ -1157,15 +1175,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
 
         if (autoscroll) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
             itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
-            itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         } else {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
             itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
-            itemAuto.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }
 
         val spanString = SpannableString(itemAuto.title.toString())
@@ -1252,32 +1264,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
             prefEditor.apply()
             adapter.notifyDataSetChanged()
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_plus) {
-            if (spid in 20..235) {
-                spid -= 5
-                val proc = 100 - (spid - 15) * 100 / 215
-                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                binding.progress.visibility = View.VISIBLE
-                startProcent()
-                val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
-                prefEditors.apply()
-            }
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_minus) {
-            if (spid in 10..225) {
-                spid += 5
-                val proc = 100 - (spid - 15) * 100 / 215
-                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                binding.progress.visibility = View.VISIBLE
-                startProcent()
-                val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
-                prefEditors.apply()
-            }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)

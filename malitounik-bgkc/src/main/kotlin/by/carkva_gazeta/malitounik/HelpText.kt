@@ -1,6 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ class HelpText : AppCompatActivity() {
     private var dzenNoch = false
     private lateinit var binding: HelpTextBinding
     private var resetTollbarJob: Job? = null
+    private lateinit var k: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -26,10 +28,9 @@ class HelpText : AppCompatActivity() {
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding = HelpTextBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.helpOk.setOnClickListener { finish() }
@@ -71,5 +72,6 @@ class HelpText : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 }

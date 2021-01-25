@@ -2,6 +2,7 @@ package by.carkva_gazeta.malitounik
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
@@ -19,6 +20,7 @@ class NadsanContent : AppCompatActivity() {
     private var mLastClickTime: Long = 0
     private lateinit var binding: ContentPsalterBinding
     private var resetTollbarJob: Job? = null
+    private lateinit var chin: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -26,10 +28,9 @@ class NadsanContent : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = chin.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         binding = ContentPsalterBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -106,5 +107,6 @@ class NadsanContent : AppCompatActivity() {
             window.attributes = lp
         }
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 }

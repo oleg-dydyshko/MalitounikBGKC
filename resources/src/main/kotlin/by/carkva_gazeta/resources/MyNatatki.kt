@@ -56,7 +56,6 @@ class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding = MyNatatkiBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
@@ -220,6 +219,7 @@ class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {

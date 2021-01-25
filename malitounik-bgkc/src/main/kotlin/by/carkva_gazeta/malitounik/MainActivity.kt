@@ -149,6 +149,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             binding.logosite.layoutParams = layoutParams
         }
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun ajustCompoundDrawableSizeWithText(textView: TextViewRobotoCondensed, leftDrawable: Drawable?) {
@@ -161,7 +162,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         k = getSharedPreferences("biblia", MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindingappbar = binding.appBarMain

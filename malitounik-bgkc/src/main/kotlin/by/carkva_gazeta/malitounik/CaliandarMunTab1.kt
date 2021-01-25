@@ -20,19 +20,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class CaliandarMunTab1 : Fragment() {
-
-    companion object {
-        fun getInstance(posMun: Int, yearG: Int, day: Int): CaliandarMunTab1 {
-            val frag = CaliandarMunTab1()
-            val bundle = Bundle()
-            bundle.putInt("posMun", posMun)
-            bundle.putInt("yearG", yearG)
-            bundle.putInt("day", day)
-            frag.arguments = bundle
-            return frag
-        }
-    }
-
     private lateinit var adapterViewPager: SmartFragmentStatePagerAdapter
     private var dzenNoch = false
     private val names = arrayOf("СТУДЗЕНЬ", "ЛЮТЫ", "САКАВІК", "КРАСАВІК", "ТРАВЕНЬ", "ЧЭРВЕНЬ", "ЛІПЕНЬ", "ЖНІВЕНЬ", "ВЕРАСЕНЬ", "КАСТРЫЧНІК", "ЛІСТАПАД", "СЬНЕЖАНЬ")
@@ -41,6 +28,11 @@ class CaliandarMunTab1 : Fragment() {
     private var yearG = 0
     private var _binding: CalendatTab1Binding? = null
     private val binding get() = _binding!!
+    private var munListener: CaliandarMunTab1Listener? = null
+
+    interface CaliandarMunTab1Listener {
+        fun setDayAndMun1(day: Int, mun: Int, year: Int)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -90,6 +82,7 @@ class CaliandarMunTab1 : Fragment() {
                     if (pagepos1 != son1) {
                         binding.pager.currentItem = son1
                     }
+                    munListener?.setDayAndMun1(day, posMun, yearG)
                 }
 
                 override fun onNothingSelected(arg0: AdapterView<*>?) {}
@@ -103,6 +96,7 @@ class CaliandarMunTab1 : Fragment() {
                     if (pagepos1 != son1) {
                         binding.pager.currentItem = son1
                     }
+                    munListener?.setDayAndMun1(day, posMun, yearG)
                 }
 
                 override fun onNothingSelected(arg0: AdapterView<*>?) {}
@@ -119,6 +113,7 @@ class CaliandarMunTab1 : Fragment() {
                                     if (i == t) {
                                         yearG = r
                                         posMun = w
+
                                     }
                                     t++
                                 }
@@ -126,6 +121,7 @@ class CaliandarMunTab1 : Fragment() {
                             }
                             binding.spinner.setSelection(posMun)
                             binding.spinner2.setSelection(yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN)
+                            munListener?.setDayAndMun1(day, posMun, yearG)
                         }
                     }
                 }
@@ -165,10 +161,8 @@ class CaliandarMunTab1 : Fragment() {
             val v = super.getDropDownView(position, convertView, parent)
             val textView = v as TextViewRobotoCondensed
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            if (dzenNoch)
-                textView.setBackgroundResource(R.drawable.selector_dark)
-            else
-                textView.setBackgroundResource(R.drawable.selector_default)
+            if (dzenNoch) textView.setBackgroundResource(R.drawable.selector_dark)
+            else textView.setBackgroundResource(R.drawable.selector_default)
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
                     textView.setTypeface(null, Typeface.BOLD)
@@ -199,10 +193,8 @@ class CaliandarMunTab1 : Fragment() {
                 viewHolder = convert.tag as ViewHolder
             }
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            if (dzenNoch)
-                viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
-            else
-                viewHolder.text.setBackgroundResource(R.drawable.selector_default)
+            if (dzenNoch) viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
+            else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
                     viewHolder.text.setTypeface(null, Typeface.BOLD)
@@ -244,4 +236,17 @@ class CaliandarMunTab1 : Fragment() {
     }
 
     private class ViewHolder(var text: TextViewRobotoCondensed)
+
+    companion object {
+        fun getInstance(posMun: Int, yearG: Int, day: Int, listener: CaliandarMunTab1Listener): CaliandarMunTab1 {
+            val frag = CaliandarMunTab1()
+            frag.munListener = listener
+            val bundle = Bundle()
+            bundle.putInt("posMun", posMun)
+            bundle.putInt("yearG", yearG)
+            bundle.putInt("day", day)
+            frag.arguments = bundle
+            return frag
+        }
+    }
 }

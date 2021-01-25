@@ -1,6 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
@@ -15,6 +16,7 @@ import java.io.InputStreamReader
 class Help : AppCompatActivity() {
     
     private lateinit var binding: HelpBinding
+    private lateinit var k: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
@@ -22,11 +24,10 @@ class Help : AppCompatActivity() {
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         val dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         binding = HelpBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -57,5 +58,6 @@ class Help : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 }

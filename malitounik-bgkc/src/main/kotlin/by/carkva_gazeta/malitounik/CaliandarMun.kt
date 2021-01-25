@@ -12,25 +12,38 @@ import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.PagerAdapter
 import by.carkva_gazeta.malitounik.databinding.CalendarBinding
 import com.google.android.material.tabs.TabLayout
 import java.util.*
 
-class CaliandarMun : AppCompatActivity() {
-    private var yearG = 0
-    private var posMun = 0
-    private var day = 0
-    private lateinit var c: GregorianCalendar
+class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, CaliandarMunTab2.CaliandarMunTab2Listener {
+    private var yearG1 = 0
+    private var posMun1 = 0
+    private var day1 = 0
+    private var yearG2 = 0
+    private var posMun2 = 0
+    private var day2 = 0
     private var dzenNoch = false
     private lateinit var chin: SharedPreferences
     private var sabytue = false
     private lateinit var binding: CalendarBinding
 
+    override fun setDayAndMun1(day: Int, mun: Int, year: Int) {
+        day1 = day
+        posMun1 = mun
+        yearG1 = year
+    }
+
+    override fun setDayAndMun2(day: Int, mun: Int, year: Int) {
+        day2 = day
+        posMun2 = mun
+        yearG2 = year
+    }
+
     override fun onResume() {
         super.onResume()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onBackPressed() {
@@ -47,7 +60,6 @@ class CaliandarMun : AppCompatActivity() {
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = chin.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         binding = CalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -59,15 +71,22 @@ class CaliandarMun : AppCompatActivity() {
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
-        c = Calendar.getInstance() as GregorianCalendar
-        posMun = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
-        yearG = intent.extras?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
-        if (yearG > SettingsActivity.GET_CALIANDAR_YEAR_MAX) yearG = SettingsActivity.GET_CALIANDAR_YEAR_MAX
-        day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
+        val c = Calendar.getInstance() as GregorianCalendar
+        posMun1 = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
+        posMun2 = posMun1
+        yearG1 = intent.extras?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
+        if (yearG1 > SettingsActivity.GET_CALIANDAR_YEAR_MAX) yearG1 = SettingsActivity.GET_CALIANDAR_YEAR_MAX
+        yearG2 = yearG1
+        day1 = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
+        day2 = day1
         CaliandarNedzel.setDenNedeli = true
-        binding.tabPager.adapter = MyTabPagerAdapter(supportFragmentManager)
-        binding.tabLayout.setupWithViewPager(binding.tabPager)
-        binding.tabPager.currentItem = chin.getInt("nedelia", 0)
+        val nedelia = chin.getInt("nedelia", 0)
+        binding.tabLayout.getTabAt(nedelia)?.select()
+        if (nedelia == 0) {
+            replaceFragment(CaliandarMunTab1.getInstance(posMun1, yearG1, day1, this))
+        } else {
+            replaceFragment(CaliandarMunTab2.getInstance(posMun2, yearG2, day2, this))
+        }
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
@@ -77,13 +96,24 @@ class CaliandarMun : AppCompatActivity() {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val position = tab?.position ?: 0
-                binding.tabPager.currentItem = position
+                if (position == 0) {
+                    replaceFragment(CaliandarMunTab1.getInstance(posMun1, yearG1, day1, this@CaliandarMun))
+                } else {
+                    replaceFragment(CaliandarMunTab2.getInstance(posMun2, yearG2, day2, this@CaliandarMun))
+                }
                 val editor = chin.edit()
                 editor.putInt("nedelia", position)
                 editor.apply()
                 invalidateOptionsMenu()
             }
         })
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(binding.fragmentContainer.id, fragment)
+        transaction.commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -120,29 +150,6 @@ class CaliandarMun : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private inner class MyTabPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
-        override fun getCount(): Int {
-            return 2
-        }
-
-        override fun getPageTitle(position: Int): CharSequence {
-            return if (position == 0) getString(R.string.mun)
-            else getString(R.string.niadzelia)
-        }
-
-        override fun getItem(position: Int): Fragment {
-            return if (position == 0) {
-                CaliandarMunTab1.getInstance(posMun, yearG, day)
-            } else {
-                CaliandarMunTab2.getInstance(posMun, yearG, day)
-            }
-        }
-
-        override fun getItemPosition(ob: Any): Int {
-            return PagerAdapter.POSITION_NONE
-        }
     }
 
     companion object {

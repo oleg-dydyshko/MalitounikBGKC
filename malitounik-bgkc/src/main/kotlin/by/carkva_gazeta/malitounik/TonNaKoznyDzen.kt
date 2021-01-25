@@ -2,6 +2,7 @@ package by.carkva_gazeta.malitounik
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
@@ -22,6 +23,7 @@ class TonNaKoznyDzen : AppCompatActivity() {
         get() = resources.getStringArray(R.array.ton_kogny_dzen)
     private lateinit var binding: AkafistListBinding
     private var resetTollbarJob: Job? = null
+    private lateinit var chin: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -29,10 +31,9 @@ class TonNaKoznyDzen : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         binding = AkafistListBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -100,6 +101,7 @@ class TonNaKoznyDzen : AppCompatActivity() {
             window.attributes = lp
         }
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

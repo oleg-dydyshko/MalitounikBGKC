@@ -135,9 +135,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var site = false
     private var mActionDown = false
     private val orientation: Int
-        get() {
-            return MainActivity.getOrientation(this)
-        }
+        get() = MainActivity.getOrientation(this)
     private val animationListenerOutRight: AnimationListener = object : AnimationListener {
         override fun onAnimationStart(animation: Animation) {}
         override fun onAnimationEnd(animation: Animation) {
@@ -470,7 +468,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         binding = BibliotekaViewBinding.inflate(layoutInflater)
         bindingappbar = binding.bibliotekaViewApp
@@ -1737,6 +1734,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun hide() {

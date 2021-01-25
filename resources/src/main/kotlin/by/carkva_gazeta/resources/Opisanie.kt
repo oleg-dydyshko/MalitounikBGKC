@@ -43,6 +43,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +56,6 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         dzenNoch = chin.getBoolean("dzen_noch", false)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding = AkafistUnderBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val c = Calendar.getInstance()

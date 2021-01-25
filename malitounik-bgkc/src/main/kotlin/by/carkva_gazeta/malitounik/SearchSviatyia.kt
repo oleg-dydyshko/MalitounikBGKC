@@ -56,6 +56,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
     override fun onResume() {
         super.onResume()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -147,7 +148,6 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         c = Calendar.getInstance() as GregorianCalendar
         dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         binding = SearchSviatyiaBinding.inflate(layoutInflater)

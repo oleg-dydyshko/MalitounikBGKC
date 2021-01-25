@@ -14,19 +14,6 @@ import by.carkva_gazeta.malitounik.databinding.CalendatTab2Binding
 import java.util.*
 
 class CaliandarMunTab2 : Fragment() {
-
-    companion object {
-        fun getInstance(posMun: Int, yearG: Int, day: Int): CaliandarMunTab2 {
-            val frag = CaliandarMunTab2()
-            val bundle = Bundle()
-            bundle.putInt("posMun", posMun)
-            bundle.putInt("yearG", yearG)
-            bundle.putInt("day", day)
-            frag.arguments = bundle
-            return frag
-        }
-    }
-
     private var dzenNoch = false
     private lateinit var adapterViewPagerNedel: SmartFragmentStatePagerAdapter
     private val c = Calendar.getInstance() as GregorianCalendar
@@ -35,6 +22,11 @@ class CaliandarMunTab2 : Fragment() {
     private var yearG = 0
     private var _binding: CalendatTab2Binding? = null
     private val binding get() = _binding!!
+    private var tydzenListener: CaliandarMunTab2Listener? = null
+
+    interface CaliandarMunTab2Listener {
+        fun setDayAndMun2(day: Int, mun: Int, year: Int)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -82,6 +74,7 @@ class CaliandarMunTab2 : Fragment() {
                 for (i in 0 until adapterViewPagerNedel.count) {
                     if (position == i) {
                         binding.nedelName.text = getString(R.string.tydzen_name, ned)
+                        tydzenListener?.setDayAndMun2(start[Calendar.DATE], start[Calendar.MONTH], start[Calendar.YEAR])
                     }
                     start.add(Calendar.DATE, 7)
                     ned = start[Calendar.WEEK_OF_YEAR]
@@ -209,6 +202,19 @@ class CaliandarMunTab2 : Fragment() {
         init {
             val calendarStart = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
             if (calendarStart[Calendar.DAY_OF_WEEK] == Calendar.SUNDAY) cor = 0
+        }
+    }
+
+    companion object {
+        fun getInstance(posMun: Int, yearG: Int, day: Int, listener: CaliandarMunTab2Listener): CaliandarMunTab2 {
+            val frag = CaliandarMunTab2()
+            frag.tydzenListener = listener
+            val bundle = Bundle()
+            bundle.putInt("posMun", posMun)
+            bundle.putInt("yearG", yearG)
+            bundle.putInt("day", day)
+            frag.arguments = bundle
+            return frag
         }
     }
 }

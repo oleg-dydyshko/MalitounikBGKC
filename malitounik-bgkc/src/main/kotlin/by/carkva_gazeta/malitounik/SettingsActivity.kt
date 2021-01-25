@@ -1064,6 +1064,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -1086,7 +1087,6 @@ class SettingsActivity : AppCompatActivity() {
         }
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         dzenNoch = k.getBoolean("dzen_noch", false)
         val notification = k.getInt("notification", 2)
         if (dzenNoch) setTheme(R.style.AppCompatDark)

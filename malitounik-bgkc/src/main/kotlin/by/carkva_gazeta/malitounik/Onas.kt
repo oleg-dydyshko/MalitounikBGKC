@@ -1,6 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.util.TypedValue
@@ -15,6 +16,7 @@ import java.io.InputStreamReader
 class Onas : AppCompatActivity() {
     private lateinit var binding: OnasBinding
     private var resetTollbarJob: Job? = null
+    private lateinit var k: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -27,10 +29,9 @@ class Onas : AppCompatActivity() {
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         binding = OnasBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -88,5 +89,6 @@ class Onas : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 }

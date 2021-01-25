@@ -82,7 +82,6 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         binding = VybranoeBibleListBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -180,6 +179,7 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
     override fun onResume() {
         super.onResume()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

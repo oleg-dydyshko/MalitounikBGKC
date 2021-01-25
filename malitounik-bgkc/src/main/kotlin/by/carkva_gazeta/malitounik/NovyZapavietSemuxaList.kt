@@ -3,6 +3,7 @@ package by.carkva_gazeta.malitounik
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
@@ -22,6 +23,7 @@ class NovyZapavietSemuxaList : AppCompatActivity() {
     private val groups = ArrayList<ArrayList<String>>()
     private lateinit var binding: ContentBibleBinding
     private var resetTollbarJob: Job? = null
+    private lateinit var k: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -30,10 +32,9 @@ class NovyZapavietSemuxaList : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         if (dzenNoch) binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
@@ -256,6 +257,7 @@ class NovyZapavietSemuxaList : AppCompatActivity() {
         }
         setTollbarTheme()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private inner class ExpListAdapterNovyZapaviet(private val mContext: Activity) : BaseExpandableListAdapter() {

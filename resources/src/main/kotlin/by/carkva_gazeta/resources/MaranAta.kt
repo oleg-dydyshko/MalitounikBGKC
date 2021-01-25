@@ -91,6 +91,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
     private var resetSubTollbarJob: Job? = null
+    private var canselStopScrollJob: Job? = null
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -138,7 +139,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         maranAtaScrollPosition = k.getInt("maranAtaScrollPasition", 0)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding = AkafistMaranAtaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setTollbarTheme()
@@ -489,8 +489,21 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         if (id == R.id.ListView) {
             stopAutoStartScroll()
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
-                MotionEvent.ACTION_DOWN -> mActionDown = true
-                MotionEvent.ACTION_UP -> mActionDown = false
+                MotionEvent.ACTION_DOWN -> {
+                    mActionDown = true
+                    canselStopScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                        delay(7000)
+                        stopAutoScroll()
+                        val prefEditors = k.edit()
+                        prefEditors.putBoolean("autoscroll", false)
+                        prefEditors.apply()
+                        invalidateOptionsMenu()
+                    }
+                }
+                MotionEvent.ACTION_UP -> {
+                    mActionDown = false
+                    canselStopScrollJob?.cancel()
+                }
             }
             return false
         }
@@ -1110,6 +1123,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         procentJob?.cancel()
         resetTollbarJob?.cancel()
         resetSubTollbarJob?.cancel()
+        canselStopScrollJob?.cancel()
     }
 
     override fun onResume() {
@@ -1122,6 +1136,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         binding.progress.visibility = View.GONE
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {

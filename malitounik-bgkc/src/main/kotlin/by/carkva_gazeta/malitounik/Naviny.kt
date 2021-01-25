@@ -38,7 +38,6 @@ class Naviny : AppCompatActivity() {
         kq = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = kq.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
-        if (kq.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding = NavinyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.swipeRefreshLayout.setOnRefreshListener {
@@ -139,6 +138,7 @@ class Naviny : AppCompatActivity() {
         }
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
         binding.viewWeb.onResume()
+        if (kq.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onPause() {

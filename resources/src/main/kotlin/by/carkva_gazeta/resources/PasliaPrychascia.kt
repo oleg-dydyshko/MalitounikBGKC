@@ -79,6 +79,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         setTollbarTheme()
         if (fullscreenPage) hide()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -96,7 +97,6 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         dzenNoch = k.getBoolean("dzen_noch", false)
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         binding = AkafistActivityPasliaPrichBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -1,6 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.MenuItem
@@ -15,6 +16,7 @@ import java.io.InputStreamReader
 class Pasxa : AppCompatActivity() {
     private lateinit var binding: PasxaBinding
     private var resetTollbarJob: Job? = null
+    private lateinit var chin: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -27,7 +29,7 @@ class Pasxa : AppCompatActivity() {
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
@@ -75,6 +77,7 @@ class Pasxa : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

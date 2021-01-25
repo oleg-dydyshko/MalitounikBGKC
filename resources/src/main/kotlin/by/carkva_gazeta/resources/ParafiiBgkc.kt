@@ -3,6 +3,7 @@ package by.carkva_gazeta.resources
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.MenuItem
@@ -21,6 +22,7 @@ class ParafiiBgkc : AppCompatActivity() {
     private var bgkc = 0
     private lateinit var binding: ActivityParafiiBgkcBinding
     private var resetTollbarJob: Job? = null
+    private lateinit var k: SharedPreferences
 
     override fun onPause() {
         super.onPause()
@@ -30,6 +32,7 @@ class ParafiiBgkc : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,11 +41,10 @@ class ParafiiBgkc : AppCompatActivity() {
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         val dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         binding = ActivityParafiiBgkcBinding.inflate(layoutInflater)
         setContentView(binding.root)

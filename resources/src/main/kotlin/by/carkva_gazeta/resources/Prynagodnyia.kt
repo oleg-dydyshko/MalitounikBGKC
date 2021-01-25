@@ -76,6 +76,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         setTollbarTheme()
         if (fullscreenPage) hide()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -94,7 +95,6 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         dzenNoch = k.getBoolean("dzen_noch", false)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding = AkafistUnderBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.constraint.setOnTouchListener(this)

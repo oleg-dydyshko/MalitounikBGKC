@@ -165,7 +165,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             setTheme(R.style.AppCompatDark)
             colors[0] = "#f44336"
         }
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         binding = SabytieBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -751,6 +750,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     override fun onResume() {
         super.onResume()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

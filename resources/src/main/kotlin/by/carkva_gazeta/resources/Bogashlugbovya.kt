@@ -34,7 +34,8 @@ import java.io.InputStreamReader
 import java.lang.Runnable
 import java.util.*
 
-class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, InteractiveScrollView.OnScrollChangedCallback, MyWebViewClient.OnLinkListenner {
+class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener,
+    InteractiveScrollView.OnScrollChangedCallback, MyWebViewClient.OnLinkListenner {
 
     private val ulAnimationDelay = 300
     private val mHideHandler: Handler = Handler(Looper.getMainLooper())
@@ -375,6 +376,32 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         } else {
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
+        binding.actionPlus.setOnClickListener {
+            if (spid in 20..235) {
+                spid -= 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                binding.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
+        binding.actionMinus.setOnClickListener {
+            if (spid in 10..225) {
+                spid += 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                binding.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
     }
 
     private fun setTollbarTheme() {
@@ -445,8 +472,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 if (dzenNoch) line = line.replace("#d00505", "#f44336")
                 line = line.replace("<head>", "<head>" + scrollWebView())
                 line = line.replace("<body>", "<body onload='toY()'>")
-                line = if (dzenNoch) line.replace("<html><head>", "<html><head><style type=\"text/css\">::selection {background: #eb9b9a} body{-webkit-tap-highlight-color: rgba(244,67,54,0.2); color: #fff; background-color: #303030; margin: 0; padding: 0}</style>")
-                else line.replace("<html><head>", "<html><head><style type=\"text/css\">::selection {background: #eb9b9a} body{-webkit-tap-highlight-color: rgba(208,5,5,0.1); margin: 0; padding: 0}</style>")
+                line = if (dzenNoch) line.replace("<html><head>",
+                    "<html><head><style type=\"text/css\">::selection {background: #eb9b9a} body{-webkit-tap-highlight-color: rgba(244,67,54,0.2); color: #fff; background-color: #303030; margin: 0; padding: 0}</style>")
+                else line.replace("<html><head>",
+                    "<html><head><style type=\"text/css\">::selection {background: #eb9b9a} body{-webkit-tap-highlight-color: rgba(208,5,5,0.1); margin: 0; padding: 0}</style>")
                 if (resurs.contains("bogashlugbovya")) {
                     if (line.contains("<KANDAK></KANDAK>")) {
                         line = line.replace("<KANDAK></KANDAK>", "")
@@ -581,49 +610,47 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             binding.scrollView2.post { binding.scrollView2.scrollBy(0, positionY) }
             mAutoScroll = false
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            binding.WebView.setFindListener { activeMatchOrdinal, numberOfMatches, _ ->
-                if (numberOfMatches == 0) binding.textCount.setText(by.carkva_gazeta.malitounik.R.string.niama)
-                else binding.textCount.text = (activeMatchOrdinal + 1).toString().plus(" ($numberOfMatches)")
-            }
-            if (dzenNoch) binding.imageView6.setImageResource(by.carkva_gazeta.malitounik.R.drawable.up_black)
-            binding.imageView6.setOnClickListener { binding.WebView.findNext(false) }
-            binding.textSearch.addTextChangedListener(object : TextWatcher {
-                var editPosition = 0
-                var check = 0
-                var editch = true
-
-                override fun afterTextChanged(s: Editable?) {
-                    var edit = s.toString()
-                    if (editch) {
-                        edit = edit.replace("и", "і")
-                        edit = edit.replace("щ", "ў")
-                        edit = edit.replace("ъ", "'")
-                        edit = edit.replace("И", "І")
-                        edit = edit.replace("Щ", "Ў")
-                        edit = edit.replace("Ъ", "'")
-                        if (check != 0) {
-                            binding.textSearch.removeTextChangedListener(this)
-                            binding.textSearch.setText(edit)
-                            binding.textSearch.setSelection(editPosition)
-                            binding.textSearch.addTextChangedListener(this)
-                        }
-                    }
-                    binding.WebView.findAllAsync(edit)
-                }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                    editch = count != after
-                    check = after
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    editPosition = start + count
-                }
-            })
-            if (dzenNoch) binding.imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.niz_back)
-            binding.imageView5.setOnClickListener { binding.WebView.findNext(true) }
+        binding.WebView.setFindListener { activeMatchOrdinal, numberOfMatches, _ ->
+            if (numberOfMatches == 0) binding.textCount.setText(by.carkva_gazeta.malitounik.R.string.niama)
+            else binding.textCount.text = (activeMatchOrdinal + 1).toString().plus(" ($numberOfMatches)")
         }
+        if (dzenNoch) binding.imageView6.setImageResource(by.carkva_gazeta.malitounik.R.drawable.up_black)
+        binding.imageView6.setOnClickListener { binding.WebView.findNext(false) }
+        binding.textSearch.addTextChangedListener(object : TextWatcher {
+            var editPosition = 0
+            var check = 0
+            var editch = true
+
+            override fun afterTextChanged(s: Editable?) {
+                var edit = s.toString()
+                if (editch) {
+                    edit = edit.replace("и", "і")
+                    edit = edit.replace("щ", "ў")
+                    edit = edit.replace("ъ", "'")
+                    edit = edit.replace("И", "І")
+                    edit = edit.replace("Щ", "Ў")
+                    edit = edit.replace("Ъ", "'")
+                    if (check != 0) {
+                        binding.textSearch.removeTextChangedListener(this)
+                        binding.textSearch.setText(edit)
+                        binding.textSearch.setSelection(editPosition)
+                        binding.textSearch.addTextChangedListener(this)
+                    }
+                }
+                binding.WebView.findAllAsync(edit)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                editch = count != after
+                check = after
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                editPosition = start + count
+            }
+        })
+        if (dzenNoch) binding.imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.niz_back)
+        binding.imageView5.setOnClickListener { binding.WebView.findNext(true) }
         invalidateOptionsMenu()
         binding.progressBar.visibility = View.GONE
     }
@@ -665,6 +692,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun stopAutoScroll(delayDisplayOff: Boolean = true) {
+        binding.actionMinus.visibility = View.GONE
+        binding.actionPlus.visibility = View.GONE
         autoScrollJob?.cancel()
         if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -675,6 +704,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun startAutoScroll() {
+        binding.actionMinus.visibility = View.VISIBLE
+        binding.actionPlus.visibility = View.VISIBLE
         stopAutoStartScroll()
         autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
             while (isActive) {
@@ -782,7 +813,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             prefEditor.apply()
                             val webSettings = binding.WebView.settings
                             webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
-                            //webSettings.setAppCacheEnabled(false)
                             webSettings.blockNetworkImage = true
                             webSettings.loadsImagesAutomatically = true
                             webSettings.setGeolocationEnabled(false)
@@ -802,7 +832,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             prefEditor.apply()
                             val webSettings = binding.WebView.settings
                             webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
-                            //webSettings.setAppCacheEnabled(false)
                             webSettings.blockNetworkImage = true
                             webSettings.loadsImagesAutomatically = true
                             webSettings.setGeolocationEnabled(false)
@@ -874,20 +903,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val itemVybranoe: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec")) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = true
+            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = true
         }
         if (mAutoScroll) {
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {
-                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
-                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
                 itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
-                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             } else {
-                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
-                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
                 itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
-                menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             }
         } else {
             itemAuto.isVisible = false
@@ -980,32 +1003,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 prefEditor.putBoolean("orientation", false)
             }
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_plus) {
-            if (spid in 20..235) {
-                spid -= 5
-                val proc = 100 - (spid - 15) * 100 / 215
-                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                binding.progress.visibility = View.VISIBLE
-                startProcent()
-                val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
-                prefEditors.apply()
-            }
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_minus) {
-            if (spid in 10..225) {
-                spid += 5
-                val proc = 100 - (spid - 15) * 100 / 215
-                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                binding.progress.visibility = View.VISIBLE
-                startProcent()
-                val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
-                prefEditors.apply()
-            }
-        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {
@@ -1057,17 +1054,15 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             fullscreenPage = false
             show()
         } else if (binding.textSearch.visibility == View.VISIBLE) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                binding.textSearch.visibility = View.GONE
-                binding.textCount.visibility = View.GONE
-                binding.imageView6.visibility = View.GONE
-                binding.imageView5.visibility = View.GONE
-                binding.WebView.findAllAsync("")
-                binding.textSearch.setText("")
-                binding.textCount.setText(by.carkva_gazeta.malitounik.R.string.niama)
-                val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
-            }
+            binding.textSearch.visibility = View.GONE
+            binding.textCount.visibility = View.GONE
+            binding.imageView6.visibility = View.GONE
+            binding.imageView5.visibility = View.GONE
+            binding.WebView.findAllAsync("")
+            binding.textSearch.setText("")
+            binding.textCount.setText(by.carkva_gazeta.malitounik.R.string.niama)
+            val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
         } else {
             if (editVybranoe) onSupportNavigateUp()
             else super.onBackPressed()

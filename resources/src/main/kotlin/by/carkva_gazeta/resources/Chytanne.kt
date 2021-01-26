@@ -144,6 +144,32 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         } else {
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
+        binding.actionPlus.setOnClickListener {
+            if (spid in 20..235) {
+                spid -= 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                binding.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
+        binding.actionMinus.setOnClickListener {
+            if (spid in 10..225) {
+                spid += 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                binding.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
     }
 
     private fun setTollbarTheme() {
@@ -932,6 +958,8 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     }
 
     private fun stopAutoScroll(delayDisplayOff: Boolean = true) {
+        binding.actionMinus.visibility = View.GONE
+        binding.actionPlus.visibility = View.GONE
         autoScrollJob?.cancel()
         cytannelist.forEach {
             it.setTextIsSelectable(true)
@@ -945,6 +973,8 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     }
 
     private fun startAutoScroll() {
+        binding.actionMinus.visibility = View.VISIBLE
+        binding.actionPlus.visibility = View.VISIBLE
         stopAutoStartScroll()
         cytannelist.forEach {
             it.setTextIsSelectable(false)
@@ -992,12 +1022,8 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         super.onPrepareOptionsMenu(menu)
         autoscroll = k.getBoolean("autoscroll", false)
         if (autoscroll) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
         } else {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
@@ -1078,32 +1104,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             } else {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                 prefEditor.putBoolean("orientation", false)
-            }
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_plus) {
-            if (spid in 20..235) {
-                spid -= 5
-                val proc = 100 - (spid - 15) * 100 / 215
-                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                binding.progress.visibility = View.VISIBLE
-                startProcent()
-                val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
-                prefEditors.apply()
-            }
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_minus) {
-            if (spid in 10..225) {
-                spid += 5
-                val proc = 100 - (spid - 15) * 100 / 215
-                binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                binding.progress.visibility = View.VISIBLE
-                startProcent()
-                val prefEditors = k.edit()
-                prefEditors.putInt("autoscrollSpid", spid)
-                prefEditors.apply()
             }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {

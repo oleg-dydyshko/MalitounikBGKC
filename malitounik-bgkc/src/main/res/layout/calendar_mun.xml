@@ -23,7 +23,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_red"
                 android:gravity="center"
-                android:text="Ндз"
+                android:text="@string/ndz"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
@@ -34,7 +34,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_title"
                 android:gravity="center"
-                android:text="Пн"
+                android:text="@string/pn"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
@@ -45,7 +45,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_title"
                 android:gravity="center"
-                android:text="Аў"
+                android:text="@string/au"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
@@ -56,7 +56,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_title"
                 android:gravity="center"
-                android:text="Ср"
+                android:text="@string/sp"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
@@ -67,7 +67,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_title"
                 android:gravity="center"
-                android:text="Чц"
+                android:text="@string/ch"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
@@ -78,7 +78,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_title"
                 android:gravity="center"
-                android:text="Пт"
+                android:text="@string/pt"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
@@ -89,7 +89,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_title"
                 android:gravity="center"
-                android:text="Сб"
+                android:text="@string/sb"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
         </LinearLayout>

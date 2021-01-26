@@ -25,13 +25,13 @@
                 android:id="@+id/TextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="3dp"
                 android:layout_marginRight="3dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:textColor="@color/colorPrimary_text"
                 android:textIsSelectable="true"
                 android:textSize="18sp" />
-
         </LinearLayout>
     </by.carkva_gazeta.malitounik.InteractiveScrollView>
 

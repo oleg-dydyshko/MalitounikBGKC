@@ -73,8 +73,9 @@ import java.util.zip.ZipInputStream
 import javax.xml.parsers.ParserConfigurationException
 import kotlin.collections.ArrayList
 
-class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback,
-    WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
+class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener,
+    OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener,
+    DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
 
     private val uiAnimationDelaY: Long = 300
     private val mHideHandler: Handler = Handler(Looper.getMainLooper())
@@ -423,8 +424,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         val t2: Int = filePath.lastIndexOf("/")
         val image: String = filePath.substring(t2 + 1)
         val t1 = image.lastIndexOf(".")
-        val imageTemp = File(filesDir.toString() + "/image_temp/" + image.substring(0, t1) + ".png")
-        if (imageTemp.exists()) temp.add(filesDir.toString() + "/image_temp/" + image.substring(0, t1) + ".png")
+        val imageTemp = File("$filesDir/image_temp/" + image.substring(0, t1) + ".png")
+        if (imageTemp.exists()) temp.add("$filesDir/image_temp/" + image.substring(0, t1) + ".png")
         else temp.add("")
         naidaunia.add(temp)
         val prefEditor: SharedPreferences.Editor = k.edit()
@@ -500,15 +501,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     filePath = file.absolutePath
                     fileName = file.name
                     if (!File(arrayList[position][2]).exists()) {
-                        val permissionCheck = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                        } else {
-                            1
-                        }
+                        val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                         if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
-                            }
+                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
                             return@setOnItemClickListener
                         }
                     }
@@ -665,6 +660,33 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         binding.label5.setOnClickListener(this)
         binding.label6.setOnClickListener(this)
 
+        bindingcontent.actionPlus.setOnClickListener {
+            if (spid in 20..235) {
+                spid -= 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                bindingcontent.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                bindingcontent.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                bindingcontent.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
+        bindingcontent.actionMinus.setOnClickListener {
+            if (spid in 10..225) {
+                spid += 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                bindingcontent.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
+                bindingcontent.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                bindingcontent.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
+
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -768,15 +790,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 val t1 = filePath.indexOf("raw:")
                 filePath = filePath.substring(t1 + 4)
             }
-            val permissionCheck = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-            } else {
-                1
-            }
+            val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
             if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
-                }
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
             } else {
                 when {
                     fileName.toLowerCase(Locale.getDefault()).contains(".pdf") -> {
@@ -820,7 +836,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
         }
         val file = File(filePath)
-        pdfView.fromFile(file).enableAntialiasing(true).enableSwipe(true).swipeHorizontal(false).enableDoubletap(true).defaultPage(defaultPage).onLoad(this).onPageChange(this).onError(this).enableAnnotationRendering(false).password(null).scrollHandle(null).enableAntialiasing(true).spacing(2).autoSpacing(false).pageFitPolicy(FitPolicy.WIDTH).pageSnap(false).pageFling(false).nightMode(k.getBoolean("inversion", false)).load()
+        pdfView.fromFile(file).enableAntialiasing(true).enableSwipe(true).swipeHorizontal(false).enableDoubletap(true).defaultPage(defaultPage).onLoad(this).onPageChange(this).onError(this)
+            .enableAnnotationRendering(false).password(null).scrollHandle(null).enableAntialiasing(true).spacing(2).autoSpacing(false).pageFitPolicy(FitPolicy.WIDTH).pageSnap(false).pageFling(false)
+            .nightMode(k.getBoolean("inversion", false)).load()
     }
 
     private fun loadFileTXT() {
@@ -1103,7 +1121,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                                         if (t1 != -1) {
                                             val t2 = text.indexOf("]", t1 + 1)
                                             notes.add(text.substring(t1 + 1, t2))
-                                            text = text.substring(0, t1) + "<sup><a id=\"s_" + text.substring(t1 + 1, t2) + "\" href=\"#n_" + text.substring(t1 + 1, t2) + "\">" + text.substring(t1, t2 + 1) + "</a></sup>" + text.substring(t2 + 1)
+                                            text = text.substring(0, t1) + "<sup><a id=\"s_" + text.substring(t1 + 1, t2) + "\" href=\"#n_" + text.substring(t1 + 1, t2) + "\">" + text.substring(t1,
+                                                t2 + 1) + "</a></sup>" + text.substring(t2 + 1)
                                         }
                                         sb.append(text).append("<p>").append("\n")
                                     }
@@ -1117,7 +1136,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                                 for (r in 0 until notesK.size) {
                                     for (w in 0 until notes.size) {
                                         if (notesK[r].titles[0].paragraphs[0].text.contains(notes[w])) {
-                                            sb.append("[").append(notes[w]).append("] ").append(notesK[r].elements[0].text).append("<p>").append("\n").append(" <a id=\"n_").append(notes[w]).append("\" href=\"#s_").append(notes[w]).append("\">Назад</a>").append("<p>").append("\n")
+                                            sb.append("[").append(notes[w]).append("] ").append(notesK[r].elements[0].text).append("<p>").append("\n").append(" <a id=\"n_").append(notes[w])
+                                                .append("\" href=\"#s_").append(notes[w]).append("\">Назад</a>").append("<p>").append("\n")
                                         }
                                     }
                                 }
@@ -1160,7 +1180,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                                     if (t3 != -1) {
                                         val t2 = text.indexOf("]", t3 + 1)
                                         notes.add(text.substring(t3 + 1, t2))
-                                        text = text.substring(0, t3) + "<sup><a id=\"s_" + text.substring(t3 + 1, t2) + "\" href=\"#n_" + text.substring(t3 + 1, t2) + "\">" + text.substring(t3, t2 + 1) + "</a></sup>" + text.substring(t2 + 1)
+                                        text = text.substring(0, t3) + "<sup><a id=\"s_" + text.substring(t3 + 1, t2) + "\" href=\"#n_" + text.substring(t3 + 1, t2) + "\">" + text.substring(t3,
+                                            t2 + 1) + "</a></sup>" + text.substring(t2 + 1)
                                     }
                                     sb.append(text).append("<p>").append("\n")
                                 }
@@ -1174,7 +1195,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                             for (r in 0 until notesK.size) {
                                 for (w in 0 until notes.size) {
                                     if (notesK[r].titles[0].paragraphs[0].text.contains(notes[w])) {
-                                        sb.append("[").append(notes[w]).append("] ").append(notesK[r].elements[0].text).append("<p>").append("\n").append(" <a id=\"n_").append(notes[w]).append("\" href=\"#s_").append(notes[w]).append("\">Назад</a>").append("<p>").append("\n")
+                                        sb.append("[").append(notes[w]).append("] ").append(notesK[r].elements[0].text).append("<p>").append("\n").append(" <a id=\"n_").append(notes[w])
+                                            .append("\" href=\"#s_").append(notes[w]).append("\">Назад</a>").append("<p>").append("\n")
                                     }
                                 }
                             }
@@ -1206,12 +1228,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 if (this.menu) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = true
             } else {
                 if (autoscroll) {
-                    menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = true
-                    menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = true
                     itemAuto.title = getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
                 } else {
-                    menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
-                    menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
                     itemAuto.title = getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
                 }
                 when {
@@ -1280,7 +1298,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         if (dzenNoch) {
             bindingappbar.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
-        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, bindingappbar.toolbar, by.carkva_gazeta.malitounik.R.string.navigation_drawer_open, by.carkva_gazeta.malitounik.R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(this,
+            binding.drawerLayout,
+            bindingappbar.toolbar,
+            by.carkva_gazeta.malitounik.R.string.navigation_drawer_open,
+            by.carkva_gazeta.malitounik.R.string.navigation_drawer_close)
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
     }
@@ -1409,28 +1431,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_plus) {
-            if (spid in 20..235) {
-                spid -= 5
-                val proc = 100 - (spid - 15) * 100 / 215
-                bindingcontent.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                bindingcontent.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                bindingcontent.progress.visibility = View.VISIBLE
-                startProcent()
-                prefEditor.putInt("autoscrollSpid", spid)
-            }
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_minus) {
-            if (spid in 10..225) {
-                spid += 5
-                val proc = 100 - (spid - 15) * 100 / 215
-                bindingcontent.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                bindingcontent.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                bindingcontent.progress.visibility = View.VISIBLE
-                startProcent()
-                prefEditor.putInt("autoscrollSpid", spid)
-            }
-        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {
@@ -1520,11 +1520,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     override fun onClick(view: View?) {
         stopAutoScroll()
         idSelect = view?.id ?: 0
-        val permissionCheck = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-        } else {
-            1
-        }
+        val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
         var rub = -1
         if (dzenNoch) {
             binding.label1.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
@@ -1588,9 +1584,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
             R.id.label6 -> {
                 if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
-                    }
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
                 } else {
                     bindingcontent.progressBar2.visibility = View.GONE
                     val fileExplorer = DialogFileExplorer()
@@ -1749,7 +1743,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             window.setDecorFitsSystemWindows(true)
             val controller = window.insetsController
             controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            //controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
@@ -1810,6 +1803,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     private fun stopAutoScroll(delayDisplayOff: Boolean = true) {
+        bindingcontent.actionMinus.visibility = View.GONE
+        bindingcontent.actionPlus.visibility = View.GONE
         autoScrollJob?.cancel()
         bindingcontent.webView.setOnBottomListener(null)
         if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
@@ -1821,6 +1816,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     private fun startAutoScroll() {
+        bindingcontent.actionMinus.visibility = View.VISIBLE
+        bindingcontent.actionPlus.visibility = View.VISIBLE
         bindingcontent.webView.setOnBottomListener(this)
         autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
             while (isActive) {

@@ -1259,8 +1259,6 @@ class SettingsActivity : AppCompatActivity() {
         binding.maranata.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (maranata == 1) {
             binding.maranata.isChecked = true
-        } else {
-            binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
         }
         val dzenNochSettings = k.getBoolean("dzen_noch", false)
         if (dzenNoch) binding.checkBox5.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -1329,7 +1327,6 @@ class SettingsActivity : AppCompatActivity() {
             prefEditor.putInt("biblia_seash", 0)
             prefEditor.putBoolean("pegistrbukv", true)
             prefEditor.putInt("slovocalkam", 0)
-            binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             prefEditor.putInt("trafic", 0)
             prefEditor.apply()
             binding.vibro.isClickable = true
@@ -1485,7 +1482,6 @@ class SettingsActivity : AppCompatActivity() {
                 }
             } else {
                 prefEditor.putInt("maranata", 0)
-                binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             }
             prefEditor.apply()
         }

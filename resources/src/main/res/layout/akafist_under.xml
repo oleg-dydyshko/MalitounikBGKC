@@ -62,8 +62,8 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:textIsSelectable="true"
-                android:textSize="18sp" />
-
+                android:textSize="18sp"
+                android:layout_marginEnd="3dp" />
         </LinearLayout>
     </by.carkva_gazeta.malitounik.InteractiveScrollView>
 

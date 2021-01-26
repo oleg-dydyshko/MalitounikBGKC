@@ -12,6 +12,8 @@
     <string name="error_up">ПАМЫЛКА</string>
     <string name="ok">Добра</string>
     <string name="cansel">Адмена</string>
+    <string name="ok_u">ДОБРА</string>
+    <string name="cansel_u">АДМЕНА</string>
     <string name="title_biblia">БІБЛІЯ (пераклад В. Сёмухі)</string>
     <string name="tools_item">Налады</string>
     <string name="search_call">Абраць сёньняшні дзень</string>
@@ -524,6 +526,20 @@
     <string name="no_lityrgii">Літургіі няма</string>
     <string name="skip_utran">Прапусьціць ютрань</string>
     <string name="onli_kanon_knigi">У Бібліі толькі кананічныя кнігі</string>
+    <string name="pvaslavnye_sviaty">Праваслаўныя сьвяты</string>
+    <string name="ryma_katalickia_sviaty">Рыма-каталіцкія сьвяты</string>
+    <string name="dziarjaunyia_sviaty">Дзяржаўныя сьвяты</string>
+    <string name="prafisijnyia_sviaty">Прафісійныя сьвяты</string>
+    <string name="ndz">Ндз</string>
+    <string name="pn">Пн</string>
+    <string name="au">Аў</string>
+    <string name="sp">Ср</string>
+    <string name="ch">Чц</string>
+    <string name="pt">Пт</string>
+    <string name="sb">Сб</string>
+    <string name="font_pa_zmauchanni">ПА ЗМАЎЧАНЬНІ</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
     <string-array name="dni_nedeli">
         <item />
         <item>нядзеля</item>

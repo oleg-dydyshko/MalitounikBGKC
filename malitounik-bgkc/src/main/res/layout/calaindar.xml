@@ -178,7 +178,6 @@
             android:paddingEnd="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
-            android:text="Вялеб. Яна, Сяргея, Патрыка і інш. айцоў, замучаных у лаўры сьв. Савы"
             android:textSize="18sp" />
 
         <View
@@ -221,7 +220,6 @@
             android:paddingTop="5dp"
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
-            android:text="Дз 15.5-34; Ян 10.17-28"
             android:textColor="@color/colorPrimary_text"
             android:textSize="18sp" />
 
@@ -239,7 +237,6 @@
             android:paddingTop="5dp"
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
-            android:text="Дз 15.5-34; Ян 10.17-28"
             android:textColor="@color/colorPrimary_text"
             android:textSize="18sp"
             android:textStyle="italic"
@@ -258,7 +255,6 @@
             android:paddingTop="5dp"
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
-            android:text="Дз 15.5-34; Ян 10.17-28"
             android:textColor="@color/colorPrimary_text"
             android:textSize="18sp"
             android:textStyle="italic"
@@ -331,7 +327,6 @@
             android:paddingTop="5dp"
             android:paddingEnd="10dp"
             android:paddingBottom="5dp"
-            android:text="Дз 15.5-34; Ян 10.17-28"
             android:textSize="18sp"
             android:visibility="gone" />
 
@@ -357,7 +352,7 @@
             android:paddingEnd="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
-            android:text="Праваслаўныя сьвяты"
+            android:text="@string/pvaslavnye_sviaty"
             android:textColor="@color/colorSecondary_text"
             android:textSize="18sp"
             android:textStyle="italic"
@@ -376,7 +371,7 @@
             android:paddingEnd="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
-            android:text="Рыма-каталіцкія сьвяты"
+            android:text="@string/ryma_katalickia_sviaty"
             android:textColor="@color/colorSecondary_text"
             android:textSize="18sp"
             android:textStyle="italic"
@@ -395,7 +390,7 @@
             android:paddingEnd="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
-            android:text="Дзяржаўныя сьвяты"
+            android:text="@string/dziarjaunyia_sviaty"
             android:textColor="@color/colorSecondary_text"
             android:textSize="18sp"
             android:textStyle="italic"
@@ -414,7 +409,7 @@
             android:paddingEnd="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
-            android:text="Прафісійныя сьвяты"
+            android:text="@string/prafisijnyia_sviaty"
             android:textColor="@color/colorSecondary_text"
             android:textSize="18sp"
             android:textStyle="italic"

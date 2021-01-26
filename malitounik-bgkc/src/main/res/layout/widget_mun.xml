@@ -18,15 +18,15 @@
             android:id="@+id/imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_gravity="left"
-            android:contentDescription="Лева календаря"
-            android:paddingBottom="5dp"
+            android:contentDescription="@string/empty"
             android:paddingLeft="10dp"
-            android:paddingRight="33dp"
             android:paddingTop="5dp"
+            android:paddingRight="33dp"
+            android:paddingBottom="5dp"
             android:src="@drawable/levo_catedra"
             tools:ignore="RtlHardcoded" />
 
@@ -50,13 +50,13 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="end"
-            android:contentDescription="Права календаря"
-            android:paddingBottom="5dp"
-            android:paddingLeft="33dp"
+            android:contentDescription="@string/empty"
             android:paddingStart="33dp"
-            android:paddingRight="10dp"
-            android:paddingEnd="10dp"
+            android:paddingLeft="33dp"
             android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
             android:src="@drawable/pravo_catedra" />
     </RelativeLayout>
 
@@ -80,7 +80,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_mun_red"
                 android:gravity="center"
-                android:text="Ндз"
+                android:text="@string/ndz"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
@@ -91,7 +91,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_mun_title"
                 android:gravity="center"
-                android:text="Пн"
+                android:text="@string/pn"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
@@ -102,7 +102,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_mun_title"
                 android:gravity="center"
-                android:text="Аў"
+                android:text="@string/au"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
@@ -113,7 +113,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_mun_title"
                 android:gravity="center"
-                android:text="Ср"
+                android:text="@string/sp"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
@@ -124,7 +124,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_mun_title"
                 android:gravity="center"
-                android:text="Чц"
+                android:text="@string/ch"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
@@ -135,7 +135,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_mun_title"
                 android:gravity="center"
-                android:text="Пт"
+                android:text="@string/pt"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
 
@@ -146,7 +146,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/calendar_mun_title"
                 android:gravity="center"
-                android:text="Сб"
+                android:text="@string/sb"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
         </LinearLayout>

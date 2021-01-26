@@ -503,8 +503,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.action_share).isVisible = true
-        menu.findItem(R.id.action_plus).isVisible = false
-        menu.findItem(R.id.action_minus).isVisible = false
         menu.findItem(R.id.action_auto).isVisible = false
         if (men) {
             menu.findItem(R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, R.drawable.star_big_on)

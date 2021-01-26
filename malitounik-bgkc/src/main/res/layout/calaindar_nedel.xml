@@ -17,7 +17,6 @@
         android:gravity="center"
         android:padding="5dp"
         android:singleLine="true"
-        android:text="пятніца"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -46,7 +45,6 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingBottom="5dp"
-        android:text="Вялеб. Яна, Сяргея, Патрыка і інш. айцоў, замучаных у лаўры сьв. Савы"
         android:textSize="18sp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -59,7 +57,6 @@
         android:paddingStart="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:text="Пост"
         android:textSize="14sp"
         android:visibility="gone" />
 </LinearLayout>

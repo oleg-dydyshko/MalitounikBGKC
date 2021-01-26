@@ -162,8 +162,6 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_plus).isVisible = false
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_minus).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_help).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)

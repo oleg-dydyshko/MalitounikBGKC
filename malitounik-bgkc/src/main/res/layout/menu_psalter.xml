@@ -85,10 +85,10 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
+            app:columnCount="5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/myBible"
-            app:columnCount="5">
+            app:layout_constraintTop_toBottomOf="@+id/myBible">
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                 android:id="@+id/textViewtitle"
@@ -194,8 +194,8 @@
                 android:text="7"
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="14sp"
-                app:layout_gravity="fill"
-                app:layout_columnWeight="1" />
+                app:layout_columnWeight="1"
+                app:layout_gravity="fill" />
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                 android:id="@+id/textView8"

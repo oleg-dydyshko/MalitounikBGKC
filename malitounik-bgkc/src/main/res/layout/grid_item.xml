@@ -15,7 +15,8 @@
         android:layout_height="36dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="5dp"
-        android:src="@drawable/carkva_black" />
+        android:src="@drawable/carkva_black"
+        android:contentDescription="@string/empty" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
         android:id="@+id/text"

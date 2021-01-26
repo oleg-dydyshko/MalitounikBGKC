@@ -644,6 +644,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             drawable = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.krest_black)
             binding.title.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.label6.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+            bindingcontent.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
+            bindingcontent.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         } else {
             binding.label6.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
         }

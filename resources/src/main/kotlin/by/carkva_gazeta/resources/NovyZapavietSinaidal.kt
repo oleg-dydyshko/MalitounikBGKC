@@ -69,12 +69,9 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
     private var men = true
     private val uiAnimationDelay: Long = 300
     private val orientation: Int
-        get() {
-            return MainActivity.getOrientation(this)
-        }
+        get() = MainActivity.getOrientation(this)
     private lateinit var binding: ActivityBibleBinding
     private var resetTollbarJob: Job? = null
-    private var resetSubTollbarJob: Job? = null
 
     private fun clearEmptyPosition() {
         val remove = ArrayList<ArrayList<Int>>()
@@ -136,7 +133,6 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
             }
         }
         resetTollbarJob?.cancel()
-        resetSubTollbarJob?.cancel()
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -352,34 +348,10 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
 
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
-            val layoutParams = binding.toolbar.layoutParams
-            if (binding.titleToolbar.isSelected) {
-                resetTollbarJob?.cancel()
-                resetTollbar(layoutParams)
-            } else {
-                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                binding.titleToolbar.isSingleLine = false
-                binding.titleToolbar.isSelected = true
-                resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
-                    delay(5000)
-                    resetTollbar(layoutParams)
-                }
-            }
+            fullTextTollbar()
         }
         binding.subtitleToolbar.setOnClickListener {
-            val layoutParams = binding.toolbar.layoutParams
-            if (binding.subtitleToolbar.isSelected) {
-                resetSubTollbarJob?.cancel()
-                resetSubTollbar(layoutParams)
-            } else {
-                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                binding.subtitleToolbar.isSingleLine = false
-                binding.subtitleToolbar.isSelected = true
-                resetSubTollbarJob = CoroutineScope(Dispatchers.Main).launch {
-                    delay(5000)
-                    resetSubTollbar(layoutParams)
-                }
-            }
+            fullTextTollbar()
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)
@@ -391,6 +363,23 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
         }
     }
 
+    private fun fullTextTollbar() {
+        val layoutParams = binding.toolbar.layoutParams
+        resetTollbarJob?.cancel()
+        if (binding.titleToolbar.isSelected) {
+            resetTollbar(layoutParams)
+        } else {
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            binding.titleToolbar.isSingleLine = false
+            binding.subtitleToolbar.isSingleLine = false
+            binding.titleToolbar.isSelected = true
+            resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                delay(5000)
+                resetTollbar(layoutParams)
+            }
+        }
+    }
+
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
         val tv = TypedValue()
         if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
@@ -399,15 +388,6 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
-    }
-
-    private fun resetSubTollbar(layoutParams: ViewGroup.LayoutParams) {
-        val tv = TypedValue()
-        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
-            layoutParams.height = actionBarHeight
-        }
-        binding.subtitleToolbar.isSelected = false
         binding.subtitleToolbar.isSingleLine = true
     }
 

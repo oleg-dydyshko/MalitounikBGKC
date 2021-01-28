@@ -21,6 +21,7 @@ import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -962,6 +963,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private fun stopAutoScroll(delayDisplayOff: Boolean = true) {
         binding.actionMinus.visibility = View.GONE
         binding.actionPlus.visibility = View.GONE
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        binding.actionMinus.animation = animation
+        binding.actionPlus.animation = animation
         autoScrollJob?.cancel()
         cytannelist.forEach {
             it.setTextIsSelectable(true)
@@ -977,6 +981,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private fun startAutoScroll() {
         binding.actionMinus.visibility = View.VISIBLE
         binding.actionPlus.visibility = View.VISIBLE
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+        binding.actionMinus.animation = animation
+        binding.actionPlus.animation = animation
         stopAutoStartScroll()
         cytannelist.forEach {
             it.setTextIsSelectable(false)

@@ -95,6 +95,7 @@ class CaliandarMunTab1 : Fragment() {
                     val pagepos1 = binding.pager.currentItem
                     if (pagepos1 != son1) {
                         binding.pager.currentItem = son1
+                        (binding.spinner.adapter as CaliandarMunAdapter).notifyDataSetChanged()
                     }
                     munListener?.setDayAndMun1(day, posMun, yearG)
                 }
@@ -196,7 +197,7 @@ class CaliandarMunTab1 : Fragment() {
             if (dzenNoch) viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
             else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             if (arrayList == null) {
-                if (day[Calendar.MONTH] == position) {
+                if (day[Calendar.MONTH] == position && day[Calendar.YEAR] == binding.spinner2.selectedItemPosition + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
                     viewHolder.text.setTypeface(null, Typeface.BOLD)
                 } else {
                     viewHolder.text.setTypeface(null, Typeface.NORMAL)

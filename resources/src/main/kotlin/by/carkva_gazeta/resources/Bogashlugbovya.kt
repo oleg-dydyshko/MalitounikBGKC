@@ -16,6 +16,7 @@ import android.text.*
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.webkit.WebSettings
 import androidx.appcompat.app.AppCompatActivity
@@ -696,6 +697,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private fun stopAutoScroll(delayDisplayOff: Boolean = true) {
         binding.actionMinus.visibility = View.GONE
         binding.actionPlus.visibility = View.GONE
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        binding.actionMinus.animation = animation
+        binding.actionPlus.animation = animation
         autoScrollJob?.cancel()
         if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -708,6 +712,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private fun startAutoScroll() {
         binding.actionMinus.visibility = View.VISIBLE
         binding.actionPlus.visibility = View.VISIBLE
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+        binding.actionMinus.animation = animation
+        binding.actionPlus.animation = animation
         stopAutoStartScroll()
         autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
             while (isActive) {

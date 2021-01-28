@@ -1060,7 +1060,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     override fun onPause() {
         super.onPause()
         stopAutoScroll(false)
-        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         autoStartScrollJob?.cancel()
         procentJob?.cancel()
         resetTollbarJob?.cancel()

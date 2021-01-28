@@ -1102,7 +1102,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     override fun onPause() {
         super.onPause()
         stopAutoScroll(false)
-        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         clearEmptyPosition()
         val file: File = if (belarus) {
             File("$filesDir/MaranAtaBel/$cytanne.json")

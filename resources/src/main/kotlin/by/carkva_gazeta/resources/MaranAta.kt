@@ -1183,8 +1183,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
         if (autoscroll) {
             itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
+            itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
         } else {
             itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
+            itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
         }
 
         val spanString = SpannableString(itemAuto.title.toString())

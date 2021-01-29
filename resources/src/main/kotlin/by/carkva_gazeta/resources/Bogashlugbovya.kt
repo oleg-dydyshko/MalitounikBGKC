@@ -928,8 +928,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {
                 itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
+                itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
             } else {
                 itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
+                itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
             }
         } else {
             itemAuto.isVisible = false

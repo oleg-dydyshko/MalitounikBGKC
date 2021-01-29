@@ -17,6 +17,7 @@ class WebViewCustom : WebView {
 
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
         val diff = contentHeight - ((height + scrollY) / resources.displayMetrics.density).toInt()
+        mListener?.onScrollDiff(diff)
         if (diff == 0) {
             mListener?.onBottom()
         }
@@ -38,6 +39,7 @@ class WebViewCustom : WebView {
 
     interface OnBottomListener {
         fun onBottom()
+        fun onScrollDiff(diff: Int)
     }
 
     companion object {

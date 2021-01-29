@@ -202,6 +202,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         stopAutoScroll()
     }
 
+    override fun onScrollDiff(diff: Int) {
+    }
+
     override fun onDialogFontSize(fontSize: Float) {
         if (bindingcontent.scrollViewB.visibility == View.VISIBLE) {
             bindingcontent.textViewB.textSize = fontSize

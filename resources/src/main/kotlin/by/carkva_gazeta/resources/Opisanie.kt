@@ -189,7 +189,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id: Int = item.itemId
+        val id = item.itemId
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             change = true
             val prefEditor = chin.edit()

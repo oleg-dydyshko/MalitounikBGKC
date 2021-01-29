@@ -76,14 +76,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var mActionDown = false
     private var mAutoScroll = true
     private val orientation: Int
-        get() {
-            return MainActivity.getOrientation(this)
-        }
+        get() = MainActivity.getOrientation(this)
     private lateinit var binding: BogasluzbovyaBinding
     private var autoScrollJob: Job? = null
     private var autoStartScrollJob: Job? = null
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
+    private var diffScroll = -1
 
     companion object {
         private val resursMap = ArrayMap<String, Int>()
@@ -309,10 +308,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     override fun onBottom() {
         stopAutoScroll()
-        val prefEditors = k.edit()
-        prefEditors.putBoolean("autoscroll", false)
-        prefEditors.apply()
         invalidateOptionsMenu()
+    }
+
+    override fun onScrollDiff(diff: Int) {
+        diffScroll = diff
     }
 
     @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
@@ -340,7 +340,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         binding.WebView.webViewClient = client
         binding.scrollView2.setOnScrollChangedCallback(this)
         binding.constraint.setOnTouchListener(this)
-        autoscroll = k.getBoolean("autoscroll", false)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             editVybranoe = savedInstanceState.getBoolean("editVybranoe")
@@ -365,7 +364,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         webSettings.standardFontFamily = "sans-serif-condensed"
         webSettings.defaultFontSize = fontBiblia.toInt()
         webSettings.javaScriptEnabled = true
-        positionY = (k.getInt(resurs + "Scroll", 0) / resources.displayMetrics.density).toInt()
+        webSettings.domStorageEnabled = true
+        positionY = k.getInt(resurs + "Scroll", 0)
         binding.WebView.setOnScrollChangedCallback(this)
         binding.WebView.setOnBottomListener(this)
         if (k.getBoolean("help_str", true)) {
@@ -442,19 +442,19 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         binding.titleToolbar.isSingleLine = true
     }
 
-    private fun scrollWebView(): StringBuilder {
+    private fun scrollWebView(): String {
         val script = StringBuilder()
         script.append("<script language=\"javascript\" type=\"text/javascript\">")
         script.append("\n")
         script.append("    function toY(){")
         script.append("\n")
-        script.append("        window.scrollTo(0, ").append(positionY).append(")")
+        script.append("        window.scrollTo(0, ").append((positionY / resources.displayMetrics.density).toInt()).append(")")
         script.append("\n")
         script.append("    }")
         script.append("\n")
         script.append("</script>")
         script.append("\n")
-        return script
+        return script.toString()
     }
 
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
@@ -473,12 +473,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             reader.forEachLine {
                 var line = it
                 if (dzenNoch) line = line.replace("#d00505", "#f44336")
-                line = line.replace("<head>", "<head>" + scrollWebView())
-                line = line.replace("<body>", "<body onload='toY()'>")
                 line = if (dzenNoch) line.replace("<html><head>",
                     "<html><head><style type=\"text/css\">::selection {background: #eb9b9a} body{-webkit-tap-highlight-color: rgba(244,67,54,0.2); color: #fff; background-color: #303030; margin: 0; padding: 0}</style>")
                 else line.replace("<html><head>",
                     "<html><head><style type=\"text/css\">::selection {background: #eb9b9a} body{-webkit-tap-highlight-color: rgba(208,5,5,0.1); margin: 0; padding: 0}</style>")
+                line = line.replace("</style>", "</style>" + scrollWebView() + "</head><body onload='toY()'>")
                 if (resurs.contains("bogashlugbovya")) {
                     if (line.contains("<KANDAK></KANDAK>")) {
                         line = line.replace("<KANDAK></KANDAK>", "")
@@ -586,6 +585,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     builder.append(line)
                 }
             }
+            builder.append("</body></html>")
             inputStream.close()
             return@withContext builder.toString()
         }
@@ -670,9 +670,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(autoTime)
                 startAutoScroll()
-                val prefEditor: Editor = k.edit()
-                prefEditor.putBoolean("autoscroll", true)
-                prefEditor.apply()
                 invalidateOptionsMenu()
             }
         }
@@ -694,37 +691,52 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
     }
 
-    private fun stopAutoScroll(delayDisplayOff: Boolean = true) {
-        binding.actionMinus.visibility = View.GONE
-        binding.actionPlus.visibility = View.GONE
-        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        binding.actionMinus.animation = animation
-        binding.actionPlus.animation = animation
-        autoScrollJob?.cancel()
-        if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
-            CoroutineScope(Dispatchers.Main).launch {
-                delay(60000)
-                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
+        if (autoScrollJob?.isActive == true) {
+            if (saveAutoScroll) {
+                val prefEditors = k.edit()
+                prefEditors.putBoolean("autoscroll", false)
+                prefEditors.apply()
+            }
+            binding.actionMinus.visibility = View.GONE
+            binding.actionPlus.visibility = View.GONE
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+            binding.actionMinus.animation = animation
+            binding.actionPlus.animation = animation
+            autoScrollJob?.cancel()
+            if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(60000)
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                }
             }
         }
     }
 
     private fun startAutoScroll() {
-        binding.actionMinus.visibility = View.VISIBLE
-        binding.actionPlus.visibility = View.VISIBLE
-        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-        binding.actionMinus.animation = animation
-        binding.actionPlus.animation = animation
-        stopAutoStartScroll()
-        autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
-            while (isActive) {
-                delay(spid.toLong())
-                if (!mActionDown && !MainActivity.dialogVisable) {
-                    binding.WebView.scrollBy(0, 2)
+        if (diffScroll !in 0..1) {
+            val prefEditors = k.edit()
+            prefEditors.putBoolean("autoscroll", true)
+            prefEditors.apply()
+            binding.actionMinus.visibility = View.VISIBLE
+            binding.actionPlus.visibility = View.VISIBLE
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+            binding.actionMinus.animation = animation
+            binding.actionPlus.animation = animation
+            stopAutoStartScroll()
+            autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                while (isActive) {
+                    delay(spid.toLong())
+                    if (!mActionDown && !MainActivity.dialogVisable) {
+                        binding.WebView.scrollBy(0, 2)
+                    }
                 }
             }
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            binding.WebView.scrollTo(0, 0)
+            startAutoScroll()
         }
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -784,8 +796,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         autoscroll = k.getBoolean("autoscroll", false)
                         if (!autoscroll) {
                             startAutoScroll()
-                            prefEditor.putBoolean("autoscroll", true)
-                            prefEditor.apply()
                             invalidateOptionsMenu()
                         }
                     }
@@ -1016,10 +1026,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {
                 stopAutoScroll()
-                prefEditor.putBoolean("autoscroll", false)
             } else {
                 startAutoScroll()
-                prefEditor.putBoolean("autoscroll", true)
             }
             invalidateOptionsMenu()
         }
@@ -1083,7 +1091,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val prefEditor = k.edit()
         prefEditor.putInt(resurs + "Scroll", positionY)
         prefEditor.apply()
-        stopAutoScroll(false)
+        stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         autoStartScrollJob?.cancel()
         procentJob?.cancel()
         resetTollbarJob?.cancel()
@@ -1094,10 +1102,12 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         setTollbarTheme()
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
-            startAutoScroll()
+            binding.WebView.postDelayed({
+                startAutoScroll()
+            }, 1000)
         }
+        spid = k.getInt("autoscrollSpid", 60)
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }

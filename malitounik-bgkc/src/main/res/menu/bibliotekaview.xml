@@ -47,7 +47,6 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/action_fullscreen"
-        android:icon="@drawable/full_screen"
         android:orderInCategory="100"
         android:title="@string/fullscreen"
         app:showAsAction="never" />

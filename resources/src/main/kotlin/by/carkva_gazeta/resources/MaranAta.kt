@@ -88,6 +88,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var autoStartScrollJob: Job? = null
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
+    private var diffScroll = -1
+    private var scrolltosatrt = false
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -383,12 +385,15 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 if (list.adapter == null || list.getChildAt(0) == null) return
                 val position = list.firstVisiblePosition
                 maranAtaScrollPosition = position
+                if (position == 0 && scrolltosatrt) {
+                    startAutoScroll()
+                    scrolltosatrt = false
+                }
+                diffScroll = if (list.lastVisiblePosition == list.adapter.count - 1) list.getChildAt(list.childCount - 1).bottom - list.height
+                else -1
                 if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
                     autoscroll = false
                     stopAutoScroll()
-                    val prefEditors = k.edit()
-                    prefEditors.putBoolean("autoscroll", false)
-                    prefEditors.apply()
                     invalidateOptionsMenu()
                 }
                 setFont = false
@@ -396,8 +401,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 if (mPosition < position) {
                     mOffset = 0
                 }
-                val scroll: Int
-                scroll = if (mPosition == position && mOffset == offset) {
+                val scroll = if (mPosition == position && mOffset == offset) {
                     0
                 } else if (mPosition > position && mOffset > offset) {
                     1
@@ -541,8 +545,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         autoscroll = k.getBoolean("autoscroll", false)
                         if (!autoscroll) {
                             startAutoScroll()
-                            prefEditor.putBoolean("autoscroll", true)
-                            prefEditor.apply()
                             invalidateOptionsMenu()
                         }
                     }
@@ -942,7 +944,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         var i3: Int
                         for (i2 in splitline.indices) {
                             i3 = if (kniga.contains("Сир") && e == 1 && i2 >= 8) i2 - 7 else i2 + 1
-                            if (belarus) maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazvaBel + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n") else maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazva + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
+                            if (belarus) maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazvaBel + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n") else maranAta.add(
+                                "<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazva + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
                         }
                     }
                 }
@@ -957,14 +960,19 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     var i2 = 0
                     var i3 = stixn
                     while (i2 < res1.size) {
-                        if (belarus) maranAta.add("<!--$kniga.$nachalo.$i3--><!--nazva+++$nazvaBel " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n") else maranAta.add("<!--$kniga.$nachalo.$i3--><!--nazva+++$nazva " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n")
+                        if (belarus) maranAta.add("<!--$kniga.$nachalo.$i3--><!--nazva+++$nazvaBel " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n") else maranAta.add(
+                            "<!--$kniga.$nachalo.$i3--><!--nazva+++$nazva " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n")
                         i2++
                         i3++
                     }
                     if (konec - nachalo != 0) {
                         val res2 = r2.trim().split("\n")
                         for (i21 in res2.indices) {
-                            if (belarus) maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazvaBel + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n") else maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazva + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n")
+                            if (belarus) maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazvaBel + " " + konec + "-->" + res2[i21] + getParallel(nomer,
+                                konec,
+                                i21) + "\n") else maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazva + " " + konec + "-->" + res2[i21] + getParallel(nomer,
+                                konec,
+                                i21) + "\n")
                         }
                     }
                 }
@@ -981,44 +989,59 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         adapter.notifyDataSetChanged()
     }
 
-    private fun stopAutoScroll(delayDisplayOff: Boolean = true) {
-        binding.actionMinus.visibility = View.GONE
-        binding.actionPlus.visibility = View.GONE
-        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        binding.actionMinus.animation = animation
-        binding.actionPlus.animation = animation
-        autoScrollJob?.cancel()
-        if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
-            CoroutineScope(Dispatchers.Main).launch {
-                delay(60000)
-                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
+        if (autoScrollJob?.isActive == true) {
+            if (saveAutoScroll) {
+                val prefEditor: Editor = k.edit()
+                prefEditor.putBoolean("autoscroll", false)
+                prefEditor.apply()
+            }
+            binding.actionMinus.visibility = View.GONE
+            binding.actionPlus.visibility = View.GONE
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+            binding.actionMinus.animation = animation
+            binding.actionPlus.animation = animation
+            autoScrollJob?.cancel()
+            if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(60000)
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                }
             }
         }
     }
 
     private fun startAutoScroll() {
-        binding.actionMinus.visibility = View.VISIBLE
-        binding.actionPlus.visibility = View.VISIBLE
-        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-        binding.actionMinus.animation = animation
-        binding.actionPlus.animation = animation
-        stopAutoStartScroll()
-        autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
-            while (isActive) {
-                delay(spid.toLong())
-                forceScroll()
-                if (!mActionDown && !MainActivity.dialogVisable) {
-                    val firstPosition = binding.ListView.firstVisiblePosition
-                    if (firstPosition == INVALID_POSITION) {
-                        return@launch
+        if (diffScroll != 0) {
+            val prefEditor: Editor = k.edit()
+            prefEditor.putBoolean("autoscroll", true)
+            prefEditor.apply()
+            binding.actionMinus.visibility = View.VISIBLE
+            binding.actionPlus.visibility = View.VISIBLE
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+            binding.actionMinus.animation = animation
+            binding.actionPlus.animation = animation
+            stopAutoStartScroll()
+            autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                while (isActive) {
+                    delay(spid.toLong())
+                    forceScroll()
+                    if (!mActionDown && !MainActivity.dialogVisable) {
+                        val firstPosition = binding.ListView.firstVisiblePosition
+                        if (firstPosition == INVALID_POSITION) {
+                            return@launch
+                        }
+                        val firstView = binding.ListView.getChildAt(0) ?: return@launch
+                        val newTop = firstView.top - 2
+                        binding.ListView.setSelectionFromTop(firstPosition, newTop)
                     }
-                    val firstView = binding.ListView.getChildAt(0) ?: return@launch
-                    val newTop = firstView.top - 2
-                    binding.ListView.setSelectionFromTop(firstPosition, newTop)
                 }
             }
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            binding.ListView.smoothScrollToPosition(0)
+            scrolltosatrt = true
         }
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun autoStartScroll() {
@@ -1033,9 +1056,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(autoTime)
                 startAutoScroll()
-                val prefEditor: Editor = k.edit()
-                prefEditor.putBoolean("autoscroll", true)
-                prefEditor.apply()
                 invalidateOptionsMenu()
             }
         }
@@ -1101,7 +1121,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     override fun onPause() {
         super.onPause()
-        stopAutoScroll(false)
+        stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         clearEmptyPosition()
         val file: File = if (belarus) {
             File("$filesDir/MaranAtaBel/$cytanne.json")
@@ -1256,10 +1276,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {
                 stopAutoScroll()
-                prefEditor.putBoolean("autoscroll", false)
             } else {
                 startAutoScroll()
-                prefEditor.putBoolean("autoscroll", true)
             }
             invalidateOptionsMenu()
         }
@@ -1672,7 +1690,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 val pos = checkPosition(position)
                 if (pos != -1) {
                     if (vydelenie[pos][1] == 1) {
-                        if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)),
+                            0,
+                            t1,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorYelloy)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                     if (vydelenie[pos][2] == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -1685,7 +1706,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 val pos = checkPosition(position)
                 if (pos != -1) {
                     if (vydelenie[pos][1] == 1) {
-                        if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)),
+                            0,
+                            end,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorYelloy)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                     if (vydelenie[pos][2] == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

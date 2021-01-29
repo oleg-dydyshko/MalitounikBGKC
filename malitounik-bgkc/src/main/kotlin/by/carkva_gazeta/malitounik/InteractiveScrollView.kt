@@ -23,6 +23,7 @@ class InteractiveScrollView : ScrollView {
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
         val view = getChildAt(childCount - 1)
         val diff = view.bottom - (height + scrollY)
+        mListener?.onScrollDiff(diff)
         if (diff == 0) {
             mListener?.onBottomReached()
         }
@@ -57,6 +58,7 @@ class InteractiveScrollView : ScrollView {
 
     interface OnBottomReachedListener {
         fun onBottomReached()
+        fun onScrollDiff(diff: Int)
     }
 
     interface OnNestedTouchListener {

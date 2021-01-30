@@ -68,9 +68,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var yS = 0
     private var spid = 60
     private var belarus = false
-    private var levo = false
-    private var pravo = false
-    private var niz = false
+    //private var levo = false
+    //private var pravo = false
+    //private var niz = false
     private var mActionDown = false
     private var setFont = false
     private var paralel = false
@@ -90,6 +90,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var resetTollbarJob: Job? = null
     private var diffScroll = -1
     private var scrolltosatrt = false
+    private var brightnessJob: Job? = null
+    private var fontSizeJob: Job? = null
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -173,6 +175,64 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             if (k.getBoolean("autoscrollAutostart", false)) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 autoStartScroll()
+            }
+        }
+        binding.actionPlusFont.setOnClickListener {
+            setJobFont()
+            if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
+                fontBiblia += 4
+                var max = ""
+                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
+                binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
+                binding.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditor: Editor = k.edit()
+                prefEditor.putFloat("font_biblia", fontBiblia)
+                prefEditor.apply()
+                setFont = true
+                adapter.notifyDataSetChanged()
+            }
+        }
+        binding.actionMinusFont.setOnClickListener {
+            setJobFont()
+            if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
+                fontBiblia -= 4
+                var min = ""
+                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
+                binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
+                binding.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditor: Editor = k.edit()
+                prefEditor.putFloat("font_biblia", fontBiblia)
+                prefEditor.apply()
+                setFont = true
+                adapter.notifyDataSetChanged()
+            }
+        }
+        binding.actionPlusBrighess.setOnClickListener {
+            setJobBrightness()
+            if (MainActivity.brightness < 100) {
+                MainActivity.brightness = MainActivity.brightness + 1
+                val lp = window.attributes
+                lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+                window.attributes = lp
+                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                binding.progress.visibility = View.VISIBLE
+                startProcent()
+                MainActivity.checkBrightness = false
+            }
+        }
+        binding.actionMinusBrighess.setOnClickListener {
+            setJobBrightness()
+            if (MainActivity.brightness > 0) {
+                MainActivity.brightness = MainActivity.brightness - 1
+                val lp = window.attributes
+                lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+                window.attributes = lp
+                binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                binding.progress.visibility = View.VISIBLE
+                startProcent()
+                MainActivity.checkBrightness = false
             }
         }
         binding.actionPlus.setOnClickListener {
@@ -368,12 +428,12 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             vydelenie = gson.fromJson(reader.readText(), type)
             inputStream.close()
         }
-        if (k.getBoolean("help_str", true)) {
+        /*if (k.getBoolean("help_str", true)) {
             startActivity(Intent(this, HelpText::class.java))
             val prefEditor: Editor = k.edit()
             prefEditor.putBoolean("help_str", false)
             prefEditor.apply()
-        }
+        }*/
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -489,7 +549,24 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         binding.subtitleToolbar.isSingleLine = true
     }
 
+    private fun setJobFont() {
+        fontSizeJob?.cancel()
+        fontSizeJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(3000)
+            binding.fontSize.visibility = View.GONE
+        }
+    }
+
+    private fun setJobBrightness() {
+        brightnessJob?.cancel()
+        brightnessJob = CoroutineScope(Dispatchers.Main).launch {
+            delay(3000)
+            binding.brighess.visibility = View.GONE
+        }
+    }
+
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        v?.performClick()
         if (binding.linearLayout4.visibility == View.VISIBLE || binding.linearLayout5.visibility == View.VISIBLE) {
             return false
         }
@@ -498,7 +575,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         val otstup = (10 * resources.displayMetrics.density).toInt()
         val y = event?.y?.toInt() ?: 0
         val x = event?.x?.toInt() ?: 0
-        val prefEditor: Editor = k.edit()
+        //val prefEditor: Editor = k.edit()
         val id = v?.id ?: 0
         if (id == R.id.ListView) {
             stopAutoStartScroll()
@@ -518,14 +595,18 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     yS = event?.x?.toInt() ?: 0
                     val proc: Int
                     if (x < otstup) {
-                        levo = true
+                        binding.brighess.visibility = View.VISIBLE
+                        setJobBrightness()
+                        //levo = true
                         binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
                         binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         binding.progress.visibility = View.VISIBLE
                         startProcent()
                     }
                     if (x > widthConstraintLayout - otstup) {
-                        pravo = true
+                        binding.fontSize.visibility = View.VISIBLE
+                        setJobFont()
+                        //pravo = true
                         var minmax = ""
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
@@ -535,7 +616,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         startProcent()
                     }
                     if (y > heightConstraintLayout - otstup) {
-                        niz = true
+                        //niz = true
                         spid = k.getInt("autoscrollSpid", 60)
                         proc = 100 - (spid - 15) * 100 / 215
                         binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
@@ -549,7 +630,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         }
                     }
                 }
-                MotionEvent.ACTION_MOVE -> {
+                /*MotionEvent.ACTION_MOVE -> {
                     if (x < otstup && y > n && y % 15 == 0) {
                         if (MainActivity.brightness > 0) {
                             MainActivity.brightness = MainActivity.brightness - 1
@@ -649,7 +730,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         prefEditor.putInt("autoscrollSpid", spid)
                         prefEditor.apply()
                     }
-                }
+                }*/
             }
         }
         return true
@@ -1149,6 +1230,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         autoStartScrollJob?.cancel()
         procentJob?.cancel()
         resetTollbarJob?.cancel()
+        fontSizeJob?.cancel()
+        brightnessJob?.cancel()
     }
 
     override fun onResume() {

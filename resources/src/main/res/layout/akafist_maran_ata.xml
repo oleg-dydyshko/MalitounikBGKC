@@ -115,11 +115,11 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
+            android:contentDescription="@string/empty"
             android:gravity="center"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/yelloy" />
 
         <ImageView
@@ -127,10 +127,10 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
+            android:contentDescription="@string/empty"
             android:gravity="center"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
-            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/underline" />
 
         <ImageView
@@ -138,11 +138,11 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
+            android:contentDescription="@string/empty"
             android:gravity="center"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/bold" />
 
     </LinearLayout>
@@ -199,6 +199,82 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+    <LinearLayout
+        android:id="@+id/brighess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/action_plus_brighess"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/selector_red_maran_ata"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/plus"
+            android:textColor="@color/colorWhite"
+            android:textSize="30sp" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/action_minus_brighess"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_red_maran_ata"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/minus"
+            android:textColor="@color/colorWhite"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fontSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/action_plus_font"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/selector_red_maran_ata"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/plus"
+            android:textColor="@color/colorWhite"
+            android:textSize="30sp" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/action_minus_font"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_red_maran_ata"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/minus"
+            android:textColor="@color/colorWhite"
+            android:textSize="30sp" />
+    </LinearLayout>
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
         android:id="@+id/action_minus"

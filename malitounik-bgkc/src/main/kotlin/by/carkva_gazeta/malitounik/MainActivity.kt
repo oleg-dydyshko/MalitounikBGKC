@@ -33,10 +33,7 @@ import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -58,6 +55,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     private var tolbarTitle = ""
     private var shortcuts = false
     private var mLastClickTime: Long = 0
+    private var resetTollbarJob: Job? = null
 
     override fun setDataCalendar(day_of_year: Int, year: Int) {
         c = Calendar.getInstance() as GregorianCalendar
@@ -205,15 +203,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }
         }
         bindingappbar.titleToolbar.setOnClickListener {
-            bindingappbar.titleToolbar.setHorizontallyScrolling(true)
-            bindingappbar.titleToolbar.freezesText = true
-            bindingappbar.titleToolbar.marqueeRepeatLimit = -1
+            val layoutParams = bindingappbar.toolbar.layoutParams
             if (bindingappbar.titleToolbar.isSelected) {
-                bindingappbar.titleToolbar.ellipsize = TextUtils.TruncateAt.END
-                bindingappbar.titleToolbar.isSelected = false
+                resetTollbarJob?.cancel()
+                resetTollbar(layoutParams)
             } else {
-                bindingappbar.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                bindingappbar.titleToolbar.isSingleLine = false
                 bindingappbar.titleToolbar.isSelected = true
+                resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(5000)
+                    resetTollbar(layoutParams)
+                }
             }
         }
         bindingappbar.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
@@ -468,6 +469,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             setListPadzeia(this)
         }
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
+    }
+
+    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
+        val tv = TypedValue()
+        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            layoutParams.height = actionBarHeight
+        }
+        bindingappbar.titleToolbar.isSelected = false
+        bindingappbar.titleToolbar.isSingleLine = true
     }
 
     private fun mkDir() {

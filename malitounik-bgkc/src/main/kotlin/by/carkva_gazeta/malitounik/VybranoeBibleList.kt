@@ -136,19 +136,10 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
 
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
-            val layoutParams = binding.toolbar.layoutParams
-            if (binding.titleToolbar.isSelected) {
-                resetTollbarJob?.cancel()
-                resetTollbar(layoutParams)
-            } else {
-                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                binding.titleToolbar.isSingleLine = false
-                binding.titleToolbar.isSelected = true
-                resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
-                    delay(5000)
-                    resetTollbar(layoutParams)
-                }
-            }
+            fullTextTollbar()
+        }
+        binding.subtitleToolbar.setOnClickListener {
+            fullTextTollbar()
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         binding.titleToolbar.text = resources.getText(R.string.str_short_label1)
@@ -162,6 +153,23 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
         }
     }
 
+    private fun fullTextTollbar() {
+        val layoutParams = binding.toolbar.layoutParams
+        resetTollbarJob?.cancel()
+        if (binding.titleToolbar.isSelected) {
+            resetTollbar(layoutParams)
+        } else {
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            binding.titleToolbar.isSingleLine = false
+            binding.subtitleToolbar.isSingleLine = false
+            binding.titleToolbar.isSelected = true
+            resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                delay(5000)
+                resetTollbar(layoutParams)
+            }
+        }
+    }
+
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
         val tv = TypedValue()
         if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
@@ -170,6 +178,7 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
+        binding.subtitleToolbar.isSingleLine = true
     }
 
     override fun onBackPressed() {

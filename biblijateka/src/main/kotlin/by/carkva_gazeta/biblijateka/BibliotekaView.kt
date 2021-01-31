@@ -18,7 +18,6 @@ import android.os.*
 import android.provider.MediaStore
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.util.Base64.DEFAULT
 import android.util.Base64.decode
@@ -137,6 +136,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var mActionDown = false
     private val orientation: Int
         get() = MainActivity.getOrientation(this)
+    private var resetTollbarJob: Job? = null
     private val animationListenerOutRight: AnimationListener = object : AnimationListener {
         override fun onAnimationStart(animation: Animation) {}
         override fun onAnimationEnd(animation: Animation) {
@@ -1287,15 +1287,18 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     private fun setTollbarTheme() {
         bindingappbar.titleToolbar.setOnClickListener {
-            bindingappbar.titleToolbar.setHorizontallyScrolling(true)
-            bindingappbar.titleToolbar.freezesText = true
-            bindingappbar.titleToolbar.marqueeRepeatLimit = -1
+            val layoutParams = bindingappbar.toolbar.layoutParams
             if (bindingappbar.titleToolbar.isSelected) {
-                bindingappbar.titleToolbar.ellipsize = TextUtils.TruncateAt.END
-                bindingappbar.titleToolbar.isSelected = false
+                resetTollbarJob?.cancel()
+                resetTollbar(layoutParams)
             } else {
-                bindingappbar.titleToolbar.ellipsize = TextUtils.TruncateAt.MARQUEE
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                bindingappbar.titleToolbar.isSingleLine = false
                 bindingappbar.titleToolbar.isSelected = true
+                resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(5000)
+                    resetTollbar(layoutParams)
+                }
             }
         }
         bindingappbar.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
@@ -1310,6 +1313,16 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             by.carkva_gazeta.malitounik.R.string.navigation_drawer_close)
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+    }
+
+    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
+        val tv = TypedValue()
+        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            layoutParams.height = actionBarHeight
+        }
+        bindingappbar.titleToolbar.isSelected = false
+        bindingappbar.titleToolbar.isSingleLine = true
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {

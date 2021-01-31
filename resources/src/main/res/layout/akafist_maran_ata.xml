@@ -190,7 +190,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryMaranAta"
         android:textIsSelectable="false"
         android:textSize="50sp"
         android:textStyle="bold"
@@ -210,7 +210,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
             android:id="@+id/action_plus_brighess"
@@ -248,7 +248,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
             android:id="@+id/action_plus_font"

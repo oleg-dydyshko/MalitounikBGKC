@@ -25,7 +25,6 @@
     <color name="color_ten">#78000000</color>
     <color name="colorPrimaryMaranAta">#4DD00505</color>
     <color name="colorPrimary_blackMaranAta">#4Df44336</color>
-    <color name="colorprimary_material_darkMaranAta">#4D212121</color>
-    <color name="colorprimary_material_dark2MaranAta">#4D585858</color>
+    <color name="colorPrimary_blackMaranAta2">#4Df4776e</color>
     <!--<color name="colorIconsDialog">#FCFFFFFF</color>-->
 </resources>

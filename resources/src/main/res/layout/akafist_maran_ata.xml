@@ -185,20 +185,37 @@
             android:textSize="18sp" />
     </LinearLayout>
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <LinearLayout
         android:id="@+id/progress"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:textColor="@color/colorPrimaryMaranAta"
-        android:textIsSelectable="false"
-        android:textSize="50sp"
-        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/ListView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/progressTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textIsSelectable="false"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/progressText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textIsSelectable="false"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/brighess"
@@ -212,30 +229,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <ImageView
             android:id="@+id/action_plus_brighess"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/selector_red_maran_ata"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/empty"
             android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="@string/plus"
-            android:textColor="@color/colorWhite"
-            android:textSize="30sp" />
+            app:srcCompat="@drawable/plus_v_kruge" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <ImageView
             android:id="@+id/action_minus_brighess"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_red_maran_ata"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="@string/empty"
             android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="@string/minus"
-            android:textColor="@color/colorWhite"
-            android:textSize="30sp" />
+            app:srcCompat="@drawable/minus_v_kruge" />
     </LinearLayout>
 
     <LinearLayout
@@ -250,30 +259,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <ImageView
             android:id="@+id/action_plus_font"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/selector_red_maran_ata"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/empty"
             android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="@string/plus"
-            android:textColor="@color/colorWhite"
-            android:textSize="30sp" />
+            app:srcCompat="@drawable/plus_v_kruge" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <ImageView
             android:id="@+id/action_minus_font"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_red_maran_ata"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="@string/empty"
             android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="@string/minus"
-            android:textColor="@color/colorWhite"
-            android:textSize="30sp" />
+            app:srcCompat="@drawable/minus_v_kruge" />
     </LinearLayout>
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed

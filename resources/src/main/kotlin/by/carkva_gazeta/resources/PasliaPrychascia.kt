@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.content.pm.ActivityInfo
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -16,6 +17,7 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -25,6 +27,7 @@ import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.databinding.AkafistActivityPasliaPrichBinding
+import by.carkva_gazeta.resources.databinding.ProgressBinding
 import kotlinx.coroutines.*
 import java.lang.Runnable
 import java.util.*
@@ -57,15 +60,12 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     private var dzenNoch = false
     private var pasliaPrychascia = 0
     private var n = 0
-    private var levo = false
-    private var pravo = false
     private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
     private val uiAnimationDelay: Long = 300
     private val orientation: Int
-        get() {
-            return MainActivity.getOrientation(this)
-        }
+        get() = MainActivity.getOrientation(this)
     private lateinit var binding: AkafistActivityPasliaPrichBinding
+    private lateinit var bindingprogress: ProgressBinding
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
 
@@ -99,6 +99,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = AkafistActivityPasliaPrichBinding.inflate(layoutInflater)
+        bindingprogress = binding.progressView
         setContentView(binding.root)
         malitvy.add(Malitvy(R.raw.paslia_prychascia1, "paslia_prychascia1", "Малітва падзякі"))
         malitvy.add(Malitvy(R.raw.paslia_prychascia2, "paslia_prychascia2", "Малітва сьв. Васіля Вялікага"))
@@ -108,6 +109,17 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         pasliaPrychascia = intent.extras?.getInt("paslia_prychascia") ?: 0
         men = Bogashlugbovya.checkVybranoe(this, malitvy[pasliaPrychascia].resourse)
         binding.constraint.setOnTouchListener(this)
+        for (i in 0 until binding.pagerTabStrip.childCount) {
+            val nextChild = binding.pagerTabStrip.getChildAt(i)
+            if (nextChild is TextView) {
+                nextChild.typeface = TextViewRobotoCondensed.createFont(Typeface.BOLD)
+                if (dzenNoch)
+                    nextChild.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+                else
+                    nextChild.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+                nextChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            }
+        }
         val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
         binding.pager.adapter = adapterViewPager
         binding.pager.currentItem = pasliaPrychascia
@@ -128,18 +140,74 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-        if (dzenNoch) binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+        if (dzenNoch) {
+            bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            bindingprogress.actionPlusBrighess.setImageResource(by.carkva_gazeta.malitounik.R.drawable.plus_v_kruge_black)
+            bindingprogress.actionMinusBrighess.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
+            bindingprogress.actionPlusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.plus_v_kruge_black)
+            bindingprogress.actionMinusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
+        }
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
-        if (k.getBoolean("help_paslia_prichastia", true)) {
-            val dialogHelpListView = DialogHelpListView.getInstance(3)
-            dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
-            val prefEditor = k.edit()
-            prefEditor.putBoolean("help_paslia_prichastia", false)
-            prefEditor.apply()
+        bindingprogress.actionPlusFont.setOnClickListener {
+            if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
+                fontBiblia += 4
+                var max = ""
+                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
+                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
+                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
+                bindingprogress.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditor: Editor = k.edit()
+                prefEditor.putFloat("font_biblia", fontBiblia)
+                prefEditor.apply()
+                onDialogFontSize(fontBiblia)
+            }
+        }
+        bindingprogress.actionMinusFont.setOnClickListener {
+            if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
+                fontBiblia -= 4
+                var min = ""
+                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
+                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
+                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
+                bindingprogress.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditor: Editor = k.edit()
+                prefEditor.putFloat("font_biblia", fontBiblia)
+                prefEditor.apply()
+                onDialogFontSize(fontBiblia)
+            }
+        }
+        bindingprogress.actionPlusBrighess.setOnClickListener {
+            if (MainActivity.brightness < 100) {
+                MainActivity.brightness = MainActivity.brightness + 1
+                val lp = window.attributes
+                lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+                window.attributes = lp
+                bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
+                bindingprogress.progress.visibility = View.VISIBLE
+                startProcent()
+                MainActivity.checkBrightness = false
+            }
+        }
+        bindingprogress.actionMinusBrighess.setOnClickListener {
+            if (MainActivity.brightness > 0) {
+                MainActivity.brightness = MainActivity.brightness - 1
+                val lp = window.attributes
+                lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+                window.attributes = lp
+                bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
+                bindingprogress.progress.visibility = View.VISIBLE
+                startProcent()
+                MainActivity.checkBrightness = false
+            }
         }
     }
 
@@ -269,12 +337,12 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        v?.performClick()
         val widthConstraintLayout = binding.constraint.width
         val otstup = (10 * resources.displayMetrics.density).toInt()
-        val y = event?.y?.toInt() ?: 0
         val x = event?.x?.toInt() ?: 0
-        val prefEditor = k.edit()
-        if (v?.id ?: 0 == R.id.constraint) {
+        val id = v?.id ?: 0
+        if (id == R.id.constraint) {
             if (MainActivity.checkBrightness) {
                 MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
             }
@@ -282,90 +350,21 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
                     if (x < otstup) {
-                        levo = true
-                        binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                        binding.progress.visibility = View.VISIBLE
+                        bindingprogress.brighess.visibility = View.VISIBLE
+                        bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                        bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
+                        bindingprogress.progress.visibility = View.VISIBLE
                         startProcent()
                     }
                     if (x > widthConstraintLayout - otstup) {
-                        pravo = true
+                        bindingprogress.fontSize.visibility = View.VISIBLE
                         var minmax = ""
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
-                        binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        binding.progress.visibility = View.VISIBLE
+                        bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
+                        bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
+                        bindingprogress.progress.visibility = View.VISIBLE
                         startProcent()
-                    }
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    if (x < otstup && y > n && y % 15 == 0) {
-                        if (MainActivity.brightness > 0) {
-                            MainActivity.brightness = MainActivity.brightness - 1
-                            val lp = window.attributes
-                            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                            window.attributes = lp
-                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                            MainActivity.checkBrightness = false
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                        }
-                    }
-                    if (x < otstup && y < n && y % 15 == 0) {
-                        if (MainActivity.brightness < 100) {
-                            MainActivity.brightness = MainActivity.brightness + 1
-                            val lp = window.attributes
-                            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                            window.attributes = lp
-                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                            MainActivity.checkBrightness = false
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                        }
-                    }
-                    if (x > widthConstraintLayout - otstup && y > n && y % 26 == 0) {
-                        if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
-                            fontBiblia -= 4
-                            prefEditor.putFloat("font_biblia", fontBiblia)
-                            prefEditor.apply()
-                            binding.pager.adapter?.notifyDataSetChanged()
-                            var min = ""
-                            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                            binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                        }
-                    }
-                    if (x > widthConstraintLayout - otstup && y < n && y % 26 == 0) {
-                        if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
-                            fontBiblia += 4
-                            prefEditor.putFloat("font_biblia", fontBiblia)
-                            prefEditor.apply()
-                            binding.pager.adapter?.notifyDataSetChanged()
-                            var max = ""
-                            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                            binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                        }
-                    }
-                }
-                MotionEvent.ACTION_UP -> {
-                    v?.performClick()
-                    if (levo) {
-                        levo = false
-                    }
-                    if (pravo) {
-                        pravo = false
-                    }
-                }
-                MotionEvent.ACTION_CANCEL -> {
-                    if (levo) {
-                        levo = false
-                    }
-                    if (pravo) {
-                        pravo = false
                     }
                 }
             }
@@ -376,8 +375,10 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     private fun startProcent() {
         procentJob?.cancel()
         procentJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(1000)
-            binding.progress.visibility = View.GONE
+            delay(3000)
+            bindingprogress.progress.visibility = View.GONE
+            bindingprogress.fontSize.visibility = View.GONE
+            bindingprogress.brighess.visibility = View.GONE
         }
     }
 
@@ -429,6 +430,10 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
 
         override fun getItem(position: Int): Fragment {
             return PasliaPrychasciaFragment.newInstance(malitvy[position].resourseID)
+        }
+
+        override fun getPageTitle(position: Int): CharSequence {
+            return malitvy[position].title.toUpperCase(Locale.getDefault())
         }
 
         override fun getItemPosition(`object`: Any): Int {

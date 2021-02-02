@@ -67,16 +67,11 @@
         </LinearLayout>
     </by.carkva_gazeta.malitounik.InteractiveScrollView>
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-        android:id="@+id/progress"
+    <include
+        android:id="@+id/progressView"
+        layout="@layout/progress"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="center"
-        android:textColor="@color/colorPrimary"
-        android:textIsSelectable="false"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

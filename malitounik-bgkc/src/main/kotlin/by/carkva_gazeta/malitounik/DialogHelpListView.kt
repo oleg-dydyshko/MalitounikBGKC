@@ -43,7 +43,6 @@ class DialogHelpListView : DialogFragment() {
             when (arguments?.getInt("help") ?: 1) {
                 1 -> textView.text = getString(R.string.help_list_view)
                 2 -> textView.text = getString(R.string.help_list_sabytie)
-                3 -> textView.text = getString(R.string.help_paslia_prychastia)
             }
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))

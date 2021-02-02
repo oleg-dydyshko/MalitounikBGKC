@@ -1233,9 +1233,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 if (this.menu) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = true
             } else {
                 if (autoscroll) {
-                    itemAuto.title = getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
+                    menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
                 } else {
-                    itemAuto.title = getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
+                    menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
                 }
                 when {
                     fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
@@ -1991,7 +1991,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+            if (dzenNoch) {
+                viewHolder.text.setTextColor(ContextCompat.getColor(this@BibliotekaView, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
+            }
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolder.text.text = arrayList[position][0]
             return rootView

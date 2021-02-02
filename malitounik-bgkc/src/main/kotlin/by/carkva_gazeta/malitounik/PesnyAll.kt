@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.PesnyBinding
+import by.carkva_gazeta.malitounik.databinding.ProgressPesnyAllBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -57,16 +58,13 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     private var n = 0
     private var title = ""
     private var men = false
-    private var levo = false
-    private var pravo = false
     private var resurs = ""
     private var checkSetDzenNoch = false
     private val uiAnimationDelay: Long = 300
     private val orientation: Int
-        get() {
-            return MainActivity.getOrientation(this)
-        }
+        get() = MainActivity.getOrientation(this)
     private lateinit var binding: PesnyBinding
+    private lateinit var bindingprogress: ProgressPesnyAllBinding
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
 
@@ -309,6 +307,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = PesnyBinding.inflate(layoutInflater)
+        bindingprogress = binding.progressView
         setContentView(binding.root)
         binding.constraint.setOnTouchListener(this)
         if (savedInstanceState != null) {
@@ -316,7 +315,14 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        if (dzenNoch) binding.progress.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+        if (dzenNoch) {
+            bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            bindingprogress.actionPlusBrighess.setImageResource(R.drawable.plus_v_kruge_black)
+            bindingprogress.actionMinusBrighess.setImageResource(R.drawable.minus_v_kruge_black)
+            bindingprogress.actionPlusFont.setImageResource(R.drawable.plus_v_kruge_black)
+            bindingprogress.actionMinusFont.setImageResource(R.drawable.minus_v_kruge_black)
+        }
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         title = intent.extras?.getString("pesny", "") ?: ""
         resurs = intent.extras?.getString("type", "pesny_prasl_0") ?: "pesny_prasl_0"
@@ -339,16 +345,66 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         }
         binding.TextView.text = MainActivity.fromHtml(builder.toString())
         men = checkVybranoe(this, resurs)
-        if (k.getBoolean("help_str", true)) {
-            startActivity(Intent(this, HelpText::class.java))
-            val prefEditor: Editor = k.edit()
-            prefEditor.putBoolean("help_str", false)
-            prefEditor.apply()
-        }
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+        bindingprogress.actionPlusFont.setOnClickListener {
+            if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
+                fontBiblia += 4
+                var max = ""
+                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
+                bindingprogress.progressText.text = getString(R.string.font_sp, fontBiblia.toInt(), max)
+                bindingprogress.progressTitle.text = getString(R.string.font_size)
+                bindingprogress.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditor: Editor = k.edit()
+                prefEditor.putFloat("font_biblia", fontBiblia)
+                prefEditor.apply()
+                onDialogFontSize(fontBiblia)
+            }
+        }
+        bindingprogress.actionMinusFont.setOnClickListener {
+            if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
+                fontBiblia -= 4
+                var min = ""
+                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
+                bindingprogress.progressText.text = getString(R.string.font_sp, fontBiblia.toInt(), min)
+                bindingprogress.progressTitle.text = getString(R.string.font_size)
+                bindingprogress.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditor: Editor = k.edit()
+                prefEditor.putFloat("font_biblia", fontBiblia)
+                prefEditor.apply()
+                onDialogFontSize(fontBiblia)
+            }
+        }
+        bindingprogress.actionPlusBrighess.setOnClickListener {
+            if (MainActivity.brightness < 100) {
+                MainActivity.brightness = MainActivity.brightness + 1
+                val lp = window.attributes
+                lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+                window.attributes = lp
+                bindingprogress.progressText.text = resources.getString(R.string.procent, MainActivity.brightness)
+                bindingprogress.progressTitle.text = getString(R.string.Bright)
+                bindingprogress.progress.visibility = View.VISIBLE
+                startProcent()
+                MainActivity.checkBrightness = false
+            }
+        }
+        bindingprogress.actionMinusBrighess.setOnClickListener {
+            if (MainActivity.brightness > 0) {
+                MainActivity.brightness = MainActivity.brightness - 1
+                val lp = window.attributes
+                lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+                window.attributes = lp
+                bindingprogress.progressText.text = resources.getString(R.string.procent, MainActivity.brightness)
+                bindingprogress.progressTitle.text = getString(R.string.Bright)
+                bindingprogress.progress.visibility = View.VISIBLE
+                startProcent()
+                MainActivity.checkBrightness = false
+            }
         }
     }
 
@@ -390,18 +446,20 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     private fun startProcent() {
         procentJob?.cancel()
         procentJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(1000)
-            binding.progress.visibility = View.GONE
+            delay(3000)
+            bindingprogress.progress.visibility = View.GONE
+            bindingprogress.fontSize.visibility = View.GONE
+            bindingprogress.brighess.visibility = View.GONE
         }
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        v?.performClick()
         val widthConstraintLayout = binding.constraint.width
         val otstup = (10 * resources.displayMetrics.density).toInt()
-        val y = event?.y?.toInt() ?: 0
         val x = event?.x?.toInt() ?: 0
-        val prefEditor: Editor = k.edit()
-        if (v?.id ?: 0 == R.id.constraint) {
+        val id = v?.id ?: 0
+        if (id == R.id.constraint) {
             if (MainActivity.checkBrightness) {
                 MainActivity.brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
             }
@@ -409,90 +467,21 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
                     if (x < otstup) {
-                        levo = true
-                        binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        binding.progress.text = resources.getString(R.string.procent, MainActivity.brightness)
-                        binding.progress.visibility = View.VISIBLE
+                        bindingprogress.brighess.visibility = View.VISIBLE
+                        bindingprogress.progressText.text = resources.getString(R.string.procent, MainActivity.brightness)
+                        bindingprogress.progressTitle.text = getString(R.string.Bright)
+                        bindingprogress.progress.visibility = View.VISIBLE
                         startProcent()
                     }
                     if (x > widthConstraintLayout - otstup) {
-                        pravo = true
+                        bindingprogress.fontSize.visibility = View.VISIBLE
                         var minmax = ""
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        binding.progress.text = getString(R.string.font_sp, fontBiblia.toInt(), minmax)
-                        binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        binding.progress.visibility = View.VISIBLE
+                        bindingprogress.progressText.text = getString(R.string.font_sp, fontBiblia.toInt(), minmax)
+                        bindingprogress.progressTitle.text = getString(R.string.font_size)
+                        bindingprogress.progress.visibility = View.VISIBLE
                         startProcent()
-                    }
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    if (x < otstup && y > n && y % 15 == 0) {
-                        if (MainActivity.brightness > 0) {
-                            MainActivity.brightness = MainActivity.brightness - 1
-                            val lp = window.attributes
-                            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                            window.attributes = lp
-                            binding.progress.text = resources.getString(R.string.procent, MainActivity.brightness)
-                            MainActivity.checkBrightness = false
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                        }
-                    }
-                    if (x < otstup && y < n && y % 15 == 0) {
-                        if (MainActivity.brightness < 100) {
-                            MainActivity.brightness = MainActivity.brightness + 1
-                            val lp = window.attributes
-                            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                            window.attributes = lp
-                            binding.progress.text = resources.getString(R.string.procent, MainActivity.brightness)
-                            MainActivity.checkBrightness = false
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                        }
-                    }
-                    if (x > widthConstraintLayout - otstup && y > n && y % 26 == 0) {
-                        if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
-                            fontBiblia -= 4
-                            prefEditor.putFloat("font_biblia", fontBiblia)
-                            prefEditor.apply()
-                            binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                            var min = ""
-                            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                            binding.progress.text = getString(R.string.font_sp, fontBiblia.toInt(), min)
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                        }
-                    }
-                    if (x > widthConstraintLayout - otstup && y < n && y % 26 == 0) {
-                        if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
-                            fontBiblia += 4
-                            prefEditor.putFloat("font_biblia", fontBiblia)
-                            prefEditor.apply()
-                            binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                            var max = ""
-                            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                            binding.progress.text = getString(R.string.font_sp, fontBiblia.toInt(), max)
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                        }
-                    }
-                }
-                MotionEvent.ACTION_UP -> {
-                    v?.performClick()
-                    if (levo) {
-                        levo = false
-                    }
-                    if (pravo) {
-                        pravo = false
-                    }
-                }
-                MotionEvent.ACTION_CANCEL -> {
-                    if (levo) {
-                        levo = false
-                    }
-                    if (pravo) {
-                        pravo = false
                     }
                 }
             }
@@ -540,9 +529,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         val id = item.itemId
-        if (id == R.id.action_help) {
-            startActivity(Intent(this, HelpText::class.java))
-        }
         if (id == R.id.action_dzen_noch) {
             checkSetDzenNoch = true
             item.isChecked = !item.isChecked

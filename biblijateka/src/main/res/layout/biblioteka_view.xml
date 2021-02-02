@@ -28,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:orientation="vertical"
+                android:paddingLeft="5dp"
                 android:paddingEnd="5dp"
                 android:paddingRight="5dp">
 
@@ -39,6 +40,7 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
+                    android:paddingRight="10dp"
                     android:text="@string/bibliateka_carkvy"
                     android:textColor="@color/colorPrimary"
                     android:textSize="24sp"
@@ -60,12 +62,8 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:padding="10dp"
                     android:text="@string/bibliateka_niadaunia"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -74,12 +72,8 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:padding="10dp"
                     android:text="@string/bibliateka_gistoryia_carkvy"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -88,12 +82,9 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
+                    android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/bibliateka_malitouniki"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -102,12 +93,9 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
+                    android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/bibliateka_speuniki"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -116,12 +104,9 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
+                    android:padding="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/bibliateka_rel_litaratura"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
 
                 <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -130,12 +115,8 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
+                    android:padding="10dp"
                     android:text="@string/bibliateka_file"
-                    android:textColor="@color/colorPrimary_text"
                     android:textSize="16sp" />
             </LinearLayout>
         </ScrollView>

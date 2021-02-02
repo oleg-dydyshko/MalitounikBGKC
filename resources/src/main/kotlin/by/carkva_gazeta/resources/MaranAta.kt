@@ -30,6 +30,7 @@ import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
 import by.carkva_gazeta.resources.databinding.AkafistMaranAtaBinding
+import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -68,9 +69,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var yS = 0
     private var spid = 60
     private var belarus = false
-    //private var levo = false
-    //private var pravo = false
-    //private var niz = false
     private var mActionDown = false
     private var setFont = false
     private var paralel = false
@@ -84,6 +82,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private val orientation: Int
         get() = MainActivity.getOrientation(this)
     private lateinit var binding: AkafistMaranAtaBinding
+    private lateinit var bindingprogress: ProgressBinding
     private var autoScrollJob: Job? = null
     private var autoStartScrollJob: Job? = null
     private var procentJob: Job? = null
@@ -138,6 +137,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         binding = AkafistMaranAtaBinding.inflate(layoutInflater)
+        bindingprogress = binding.progressView
         setContentView(binding.root)
         setTollbarTheme()
         if (!MainActivity.checkBrightness) {
@@ -175,14 +175,14 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 autoStartScroll()
             }
         }
-        binding.actionPlusFont.setOnClickListener {
+        bindingprogress.actionPlusFont.setOnClickListener {
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
                 var max = ""
                 if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                binding.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
-                binding.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
-                binding.progress.visibility = View.VISIBLE
+                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
+                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
+                bindingprogress.progress.visibility = View.VISIBLE
                 startProcent(3000)
                 val prefEditor: Editor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
@@ -191,14 +191,14 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 adapter.notifyDataSetChanged()
             }
         }
-        binding.actionMinusFont.setOnClickListener {
+        bindingprogress.actionMinusFont.setOnClickListener {
             if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
                 fontBiblia -= 4
                 var min = ""
                 if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                binding.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
-                binding.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
-                binding.progress.visibility = View.VISIBLE
+                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
+                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
+                bindingprogress.progress.visibility = View.VISIBLE
                 startProcent(3000)
                 val prefEditor: Editor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
@@ -207,28 +207,28 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 adapter.notifyDataSetChanged()
             }
         }
-        binding.actionPlusBrighess.setOnClickListener {
+        bindingprogress.actionPlusBrighess.setOnClickListener {
             if (MainActivity.brightness < 100) {
                 MainActivity.brightness = MainActivity.brightness + 1
                 val lp = window.attributes
                 lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                 window.attributes = lp
-                binding.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                binding.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
-                binding.progress.visibility = View.VISIBLE
+                bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
+                bindingprogress.progress.visibility = View.VISIBLE
                 startProcent(3000)
                 MainActivity.checkBrightness = false
             }
         }
-        binding.actionMinusBrighess.setOnClickListener {
+        bindingprogress.actionMinusBrighess.setOnClickListener {
             if (MainActivity.brightness > 0) {
                 MainActivity.brightness = MainActivity.brightness - 1
                 val lp = window.attributes
                 lp.screenBrightness = MainActivity.brightness.toFloat() / 100
                 window.attributes = lp
-                binding.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                binding.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
-                binding.progress.visibility = View.VISIBLE
+                bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
+                bindingprogress.progress.visibility = View.VISIBLE
                 startProcent(3000)
                 MainActivity.checkBrightness = false
             }
@@ -237,10 +237,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             if (spid in 20..235) {
                 spid -= 5
                 val proc = 100 - (spid - 15) * 100 / 215
-                //binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                binding.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                binding.progressTitle.text = ""
-                binding.progress.visibility = View.VISIBLE
+                bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                bindingprogress.progressTitle.text = ""
+                bindingprogress.progress.visibility = View.VISIBLE
                 startProcent()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
@@ -251,10 +250,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             if (spid in 10..225) {
                 spid += 5
                 val proc = 100 - (spid - 15) * 100 / 215
-                //binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                binding.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                binding.progressTitle.text = ""
-                binding.progress.visibility = View.VISIBLE
+                bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                bindingprogress.progressTitle.text = ""
+                bindingprogress.progress.visibility = View.VISIBLE
                 startProcent()
                 val prefEditors = k.edit()
                 prefEditors.putInt("autoscrollSpid", spid)
@@ -263,12 +261,12 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         binding.constraint.setOnTouchListener(this)
         if (dzenNoch) {
-            binding.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            binding.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            binding.actionPlusBrighess.setImageResource(by.carkva_gazeta.malitounik.R.drawable.plus_v_kruge_black)
-            binding.actionMinusBrighess.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
-            binding.actionPlusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.plus_v_kruge_black)
-            binding.actionMinusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
+            bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            bindingprogress.actionPlusBrighess.setImageResource(by.carkva_gazeta.malitounik.R.drawable.plus_v_kruge_black)
+            bindingprogress.actionMinusBrighess.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
+            bindingprogress.actionPlusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.plus_v_kruge_black)
+            bindingprogress.actionMinusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
             binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
@@ -433,12 +431,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             vydelenie = gson.fromJson(reader.readText(), type)
             inputStream.close()
         }
-        /*if (k.getBoolean("help_str", true)) {
-            startActivity(Intent(this, HelpText::class.java))
-            val prefEditor: Editor = k.edit()
-            prefEditor.putBoolean("help_str", false)
-            prefEditor.apply()
-        }*/
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -564,7 +556,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         val otstup = (10 * resources.displayMetrics.density).toInt()
         val y = event?.y?.toInt() ?: 0
         val x = event?.x?.toInt() ?: 0
-        //val prefEditor: Editor = k.edit()
         val id = v?.id ?: 0
         if (id == R.id.ListView) {
             stopAutoStartScroll()
@@ -584,34 +575,28 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     yS = event?.x?.toInt() ?: 0
                     val proc: Int
                     if (x < otstup) {
-                        binding.brighess.visibility = View.VISIBLE
-                        //levo = true
-                        //binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        binding.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                        binding.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
-                        binding.progress.visibility = View.VISIBLE
+                        bindingprogress.brighess.visibility = View.VISIBLE
+                        bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
+                        bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
+                        bindingprogress.progress.visibility = View.VISIBLE
                         startProcent(3000)
                     }
                     if (x > widthConstraintLayout - otstup) {
-                        binding.fontSize.visibility = View.VISIBLE
-                        //pravo = true
+                        bindingprogress.fontSize.visibility = View.VISIBLE
                         var minmax = ""
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
                         if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        binding.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
-                        binding.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
-                        //binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        binding.progress.visibility = View.VISIBLE
+                        bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
+                        bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
+                        bindingprogress.progress.visibility = View.VISIBLE
                         startProcent(3000)
                     }
                     if (y > heightConstraintLayout - otstup) {
-                        //niz = true
                         spid = k.getInt("autoscrollSpid", 60)
                         proc = 100 - (spid - 15) * 100 / 215
-                        //binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                        binding.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                        binding.progressTitle.text = ""
-                        binding.progress.visibility = View.VISIBLE
+                        bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                        bindingprogress.progressTitle.text = ""
+                        bindingprogress.progress.visibility = View.VISIBLE
                         startProcent()
                         autoscroll = k.getBoolean("autoscroll", false)
                         if (!autoscroll) {
@@ -620,107 +605,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         }
                     }
                 }
-                /*MotionEvent.ACTION_MOVE -> {
-                    if (x < otstup && y > n && y % 15 == 0) {
-                        if (MainActivity.brightness > 0) {
-                            MainActivity.brightness = MainActivity.brightness - 1
-                            val lp = window.attributes
-                            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                            window.attributes = lp
-                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                            MainActivity.checkBrightness = false
-                        }
-                    }
-                    if (x < otstup && y < n && y % 15 == 0) {
-                        if (MainActivity.brightness < 100) {
-                            MainActivity.brightness = MainActivity.brightness + 1
-                            val lp = window.attributes
-                            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-                            window.attributes = lp
-                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                            MainActivity.checkBrightness = false
-                        }
-                    }
-                    if (x > widthConstraintLayout - otstup && y > n && y % 26 == 0) {
-                        if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
-                            fontBiblia -= 4
-                            var min = ""
-                            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                            binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                            prefEditor.putFloat("font_biblia", fontBiblia)
-                            prefEditor.apply()
-                            setFont = true
-                            adapter.notifyDataSetChanged()
-                        }
-                    }
-                    if (x > widthConstraintLayout - otstup && y < n && y % 26 == 0) {
-                        if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
-                            fontBiblia += 4
-                            var max = ""
-                            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                            binding.progress.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                            prefEditor.putFloat("font_biblia", fontBiblia)
-                            prefEditor.apply()
-                            setFont = true
-                            adapter.notifyDataSetChanged()
-                        }
-                    }
-                    if (y > heightConstraintLayout - otstup && x > yS && x % 25 == 0) {
-                        if (spid in 20..235) {
-                            spid -= 5
-                            val proc = 100 - (spid - 15) * 100 / 215
-                            binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                        }
-                    }
-                    if (y > heightConstraintLayout - otstup && x < yS && x % 25 == 0) {
-                        if (spid in 10..225) {
-                            spid += 5
-                            val proc = 100 - (spid - 15) * 100 / 215
-                            binding.progress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50f)
-                            binding.progress.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                            binding.progress.visibility = View.VISIBLE
-                            startProcent()
-                        }
-                    }
-                }
-                MotionEvent.ACTION_UP -> {
-                    v?.performClick()
-                    if (levo) {
-                        levo = false
-                    }
-                    if (pravo) {
-                        pravo = false
-                    }
-                    if (niz) {
-                        niz = false
-                        prefEditor.putInt("autoscrollSpid", spid)
-                        prefEditor.apply()
-                    }
-                }
-                MotionEvent.ACTION_CANCEL -> {
-                    if (levo) {
-                        levo = false
-                    }
-                    if (pravo) {
-                        pravo = false
-                    }
-                    if (niz) {
-                        niz = false
-                        prefEditor.putInt("autoscrollSpid", spid)
-                        prefEditor.apply()
-                    }
-                }*/
             }
         }
         return true
@@ -1137,12 +1021,18 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     private fun startProcent(delayTime: Long = 1000) {
+        var parallel = false
+        if (!autoscroll) {
+            autoscroll = true
+            parallel = true
+        }
         procentJob?.cancel()
         procentJob = CoroutineScope(Dispatchers.Main).launch {
             delay(delayTime)
-            binding.progress.visibility = View.GONE
-            binding.fontSize.visibility = View.GONE
-            binding.brighess.visibility = View.GONE
+            bindingprogress.progress.visibility = View.GONE
+            bindingprogress.fontSize.visibility = View.GONE
+            bindingprogress.brighess.visibility = View.GONE
+            if (parallel) autoscroll = false
         }
     }
 
@@ -1232,7 +1122,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         if (autoscroll) {
             startAutoScroll()
         }
-        binding.progress.visibility = View.GONE
+        bindingprogress.progress.visibility = View.GONE
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
@@ -1253,12 +1143,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
             mActionDown = false
         }
-
         if (autoscroll) {
-            itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrolloff)
             itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
         } else {
-            itemAuto.title = resources.getString(by.carkva_gazeta.malitounik.R.string.autoScrollon)
             itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
         }
 
@@ -1312,9 +1199,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
             prefEditor.apply()
             recreate()
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_help) {
-            startActivity(Intent(this, HelpText::class.java))
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             change = true

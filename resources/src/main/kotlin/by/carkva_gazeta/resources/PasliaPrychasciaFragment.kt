@@ -46,14 +46,11 @@ class PasliaPrychasciaFragment : Fragment() {
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             var line: String
-            val builder = StringBuilder()
-            reader.forEachLine {
-                line = it
-                if (dzenNoch) line = line.replace("#d00505", "#f44336")
-                builder.append(line)
+            reader.use {
+                line = it.readText()
             }
-            inputStream.close()
-            binding.TextView.text = MainActivity.fromHtml(builder.toString())
+            val t1 = line.indexOf("<br><br>")
+            binding.TextView.text = MainActivity.fromHtml(line.substring(t1 + 8))
             if (dzenNoch) {
                 binding.TextView.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
             }

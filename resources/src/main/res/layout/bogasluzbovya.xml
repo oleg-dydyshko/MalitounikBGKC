@@ -55,7 +55,6 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:textColor="@color/colorPrimary_text"
             android:textIsSelectable="true" />
     </by.carkva_gazeta.malitounik.InteractiveScrollView>
 
@@ -148,6 +147,16 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+    <include
+        android:id="@+id/progressView"
+        layout="@layout/progress"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

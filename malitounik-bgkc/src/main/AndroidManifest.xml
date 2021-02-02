@@ -258,10 +258,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="by.carkva_gazeta.malitounik.HelpText"
-            android:label="Даведка"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name="by.carkva_gazeta.malitounik.VybranoeBibleList"
             android:theme="@style/AppTheme">
             <meta-data

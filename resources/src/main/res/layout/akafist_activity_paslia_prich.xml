@@ -45,21 +45,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"/>
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-        android:id="@+id/progress"
+        <androidx.viewpager.widget.PagerTabStrip
+            android:id="@+id/pagerTabStrip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top" />
+    </androidx.viewpager.widget.ViewPager>
+
+    <include
+        android:id="@+id/progressView"
+        layout="@layout/progress"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="center"
-        android:textColor="@color/colorPrimary"
-        android:textIsSelectable="false"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/appBarLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

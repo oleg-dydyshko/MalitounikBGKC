@@ -54,8 +54,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
     private var dzenNoch = false
     private var n = 0
-    private var resurs = "ton1"
-    private var men = false
     private var title = ""
     private var checkSetDzenNoch = false
     private val uiAnimationDelay: Long = 300
@@ -167,79 +165,42 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         } else {
             if (tonNadzelny) {
                 inputStream = r.openRawResource(R.raw.ton1)
+                title = "Тон $ton"
                 when (ton) {
-                    1 -> {
-                        inputStream = r.openRawResource(R.raw.ton1)
-                        resurs = "ton1"
-                        title = "Тон 1"
-                    }
-                    2 -> {
-                        inputStream = r.openRawResource(R.raw.ton2)
-                        resurs = "ton2"
-                        title = "Тон 2"
-                    }
-                    3 -> {
-                        inputStream = r.openRawResource(R.raw.ton3)
-                        resurs = "ton3"
-                        title = "Тон 3"
-                    }
-                    4 -> {
-                        inputStream = r.openRawResource(R.raw.ton4)
-                        resurs = "ton4"
-                        title = "Тон 4"
-                    }
-                    5 -> {
-                        inputStream = r.openRawResource(R.raw.ton5)
-                        resurs = "ton5"
-                        title = "Тон 5"
-                    }
-                    6 -> {
-                        inputStream = r.openRawResource(R.raw.ton6)
-                        resurs = "ton6"
-                        title = "Тон 6"
-                    }
-                    7 -> {
-                        inputStream = r.openRawResource(R.raw.ton7)
-                        resurs = "ton7"
-                        title = "Тон 7"
-                    }
-                    8 -> {
-                        inputStream = r.openRawResource(R.raw.ton8)
-                        resurs = "ton8"
-                        title = "Тон 8"
-                    }
+                    1 -> inputStream = r.openRawResource(R.raw.ton1)
+                    2 -> inputStream = r.openRawResource(R.raw.ton2)
+                    3 -> inputStream = r.openRawResource(R.raw.ton3)
+                    4 -> inputStream = r.openRawResource(R.raw.ton4)
+                    5 -> inputStream = r.openRawResource(R.raw.ton5)
+                    6 -> inputStream = r.openRawResource(R.raw.ton6)
+                    7 -> inputStream = r.openRawResource(R.raw.ton7)
+                    8 -> inputStream = r.openRawResource(R.raw.ton8)
                 }
             } else {
                 inputStream = r.openRawResource(R.raw.ton1_budni)
                 when (ton) {
                     1 -> {
                         inputStream = r.openRawResource(R.raw.ton1_budni)
-                        resurs = "ton1_budni"
                         title = "ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам"
                     }
                     2 -> {
                         inputStream = r.openRawResource(R.raw.ton2_budni)
-                        resurs = "ton2_budni"
                         title = "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю"
                     }
                     3 -> {
                         inputStream = r.openRawResource(R.raw.ton3_budni)
-                        resurs = "ton3_budni"
                         title = "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу"
                     }
                     4 -> {
                         inputStream = r.openRawResource(R.raw.ton4_budni)
-                        resurs = "ton4_budni"
                         title = "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю"
                     }
                     5 -> {
                         inputStream = r.openRawResource(R.raw.ton5_budni)
-                        resurs = "ton5_budni"
                         title = "ПЯТНІЦА\nСлужба Крыжу Гасподняму"
                     }
                     6 -> {
                         inputStream = r.openRawResource(R.raw.ton6_budni)
-                        resurs = "ton6_budni"
                         title = "Субота\nСлужба ўсім сьвятым і памёрлым"
                     }
                 }
@@ -258,7 +219,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             val resursOut = builder.toString()
             binding.TextView.text = MainActivity.fromHtml(resursOut)
         }
-        men = Bogashlugbovya.checkVybranoe(this, resurs)
         requestedOrientation = if (chin.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -406,13 +366,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
-        if (men) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
-        } else {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
-        }
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = chin.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
         val item = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
@@ -466,13 +420,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                 prefEditor.putBoolean("orientation", false)
             }
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            men = Bogashlugbovya.setVybranoe(this, resurs, title)
-            if (men) {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
-            }
-            invalidateOptionsMenu()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
             val dialogFontSize = DialogFontSize()

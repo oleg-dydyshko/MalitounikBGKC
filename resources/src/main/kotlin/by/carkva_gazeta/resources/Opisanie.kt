@@ -106,9 +106,9 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                 it.readText()
             }
             val gson = Gson()
-            val type = object : TypeToken<ArrayList<String>>() {}.type
-            val arrayList: ArrayList<String> = gson.fromJson(builder, type)
-            val res = arrayList[day - 1]
+            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+            val arrayList: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
+            val res = arrayList[day - 1][0]
             binding.TextView.text = MainActivity.fromHtml(res)
         }
         setTollbarTheme()

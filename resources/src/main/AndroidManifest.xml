@@ -208,6 +208,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
+        <activity
+            android:name="by.carkva_gazeta.resources.TraparyAndKandaki"
+            android:label="@string/trapar_kandak"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
     </application>
 </manifest>
 

@@ -118,7 +118,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         super.onActivityCreated(savedInstanceState)
         CoroutineScope(Dispatchers.Main).launch {
             activity?.let {
-                val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
+                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
                 data.addAll(gson.fromJson(getData(getmun(position)), type))
                 val nedelName = it.resources.getStringArray(R.array.dni_nedeli)
                 val monthName = it.resources.getStringArray(R.array.meciac)
@@ -128,12 +128,10 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 if (dzenNoch) rColorColorprimary = R.drawable.selector_red_dark
                 val tileMe = BitmapDrawable(it.resources, BitmapFactory.decodeResource(resources, R.drawable.calendar_fon))
                 tileMe.tileModeX = Shader.TileMode.REPEAT
+                binding.textTitleChyt.setOnClickListener(this@CaliandarFull)
                 if (data[day][20] != "" && data[day][0].toInt() == 1) {
                     val ton = data[day][20]
-                    binding.textTitleChyt.text = getString(R.string.bible_natatki, ton, binding.textTitleChyt.text)
-                    binding.textTitleChyt.setOnClickListener(this@CaliandarFull)
-                } else {
-                    binding.textTitleChyt.isEnabled = false
+                    binding.textTitleChyt.text = getString(R.string.ton, ton, binding.textTitleChyt.text)
                 }
                 binding.kniga.setOnClickListener(this@CaliandarFull)
                 binding.textChytanne.setOnClickListener(this@CaliandarFull)
@@ -212,6 +210,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_bez_posta_black)
                             else binding.kniga.setImageResource(R.drawable.book_bez_posta)
                             binding.textTitleChyt.setBackgroundResource(R.drawable.selector_bez_posta)
+                            binding.chytanne.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textChytanne.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textChytanneSviatyia.setBackgroundResource(R.drawable.selector_bez_posta)
@@ -224,6 +223,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         }
                         2 -> {
                             binding.textTitleChyt.setBackgroundResource(R.drawable.selector_post)
+                            binding.chytanne.setBackgroundResource(R.drawable.selector_post)
                             binding.textChytanne.setBackgroundResource(R.drawable.selector_post)
                             binding.textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_post)
                             binding.textChytanneSviatyia.setBackgroundResource(R.drawable.selector_post)
@@ -256,6 +256,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             else binding.kniga.setImageResource(R.drawable.book_strogi_post)
                             binding.textTitleChyt.setBackgroundResource(R.drawable.selector_strogi_post)
                             binding.textTitleChyt.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                            binding.chytanne.setBackgroundResource(R.drawable.selector_strogi_post)
+                            binding.chytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             binding.textChytanne.setBackgroundResource(R.drawable.selector_strogi_post)
                             binding.textChytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             binding.textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_strogi_post)
@@ -297,6 +299,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     if (data[day][7].toInt() != 3) {
                         binding.textTitleChyt.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textTitleChyt.setBackgroundResource(rColorColorprimary)
+                        binding.chytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        binding.chytanne.setBackgroundResource(rColorColorprimary)
                         binding.textChytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textChytanne.setBackgroundResource(rColorColorprimary)
                         binding.textChytanneSviatyiaDop.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -375,10 +379,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.gosudarstvo.visibility = View.VISIBLE
                         binding.gosudarstvo.text = data[day][15]
                         it.let {
-                            if (dzenNoch)
-                                binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                            else
-                                binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary))
+                            if (dzenNoch) binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                            else binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary))
                         }
                     }
                 }
@@ -527,21 +529,49 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
             }
             R.id.textTitleChyt -> {
-                val ton = data[day][20]
                 if (MainActivity.checkmoduleResources(activity)) {
                     activity?.let {
-                        val intent = Intent()
-                        intent.setClassName(it, MainActivity.TON)
-                        if (ton.contains("Тон 1")) intent.putExtra("ton", 1)
-                        if (ton.contains("Тон 2")) intent.putExtra("ton", 2)
-                        if (ton.contains("Тон 3")) intent.putExtra("ton", 3)
-                        if (ton.contains("Тон 4")) intent.putExtra("ton", 4)
-                        if (ton.contains("Тон 5")) intent.putExtra("ton", 5)
-                        if (ton.contains("Тон 6")) intent.putExtra("ton", 6)
-                        if (ton.contains("Тон 7")) intent.putExtra("ton", 7)
-                        if (ton.contains("Тон 8")) intent.putExtra("ton", 8)
-                        intent.putExtra("ton_naidzelny", true)
-                        startActivity(intent)
+                        if (data[day][22].toInt() == 1) {
+                            val intent = Intent()
+                            intent.setClassName(it, MainActivity.TRAPARYANDKANDAKI)
+                            if (data[day][20] != "" && data[day][0].toInt() == 1) {
+                                val ton = data[day][20]
+                                if (ton.contains("Тон 1")) intent.putExtra("ton", 1)
+                                if (ton.contains("Тон 2")) intent.putExtra("ton", 2)
+                                if (ton.contains("Тон 3")) intent.putExtra("ton", 3)
+                                if (ton.contains("Тон 4")) intent.putExtra("ton", 4)
+                                if (ton.contains("Тон 5")) intent.putExtra("ton", 5)
+                                if (ton.contains("Тон 6")) intent.putExtra("ton", 6)
+                                if (ton.contains("Тон 7")) intent.putExtra("ton", 7)
+                                if (ton.contains("Тон 8")) intent.putExtra("ton", 8)
+                                intent.putExtra("ton_naidzelny", true)
+                            } else {
+                                intent.putExtra("ton", data[day][0].toInt() - 1)
+                                intent.putExtra("ton_naidzelny", false)
+                            }
+                            intent.putExtra("day", data[day][1].toInt())
+                            intent.putExtra("mun", data[day][2].toInt())
+                            startActivity(intent)
+                        } else {
+                            val intent = Intent()
+                            intent.setClassName(it, MainActivity.TON)
+                            if (data[day][20] != "" && data[day][0].toInt() == 1) {
+                                val ton = data[day][20]
+                                if (ton.contains("Тон 1")) intent.putExtra("ton", 1)
+                                if (ton.contains("Тон 2")) intent.putExtra("ton", 2)
+                                if (ton.contains("Тон 3")) intent.putExtra("ton", 3)
+                                if (ton.contains("Тон 4")) intent.putExtra("ton", 4)
+                                if (ton.contains("Тон 5")) intent.putExtra("ton", 5)
+                                if (ton.contains("Тон 6")) intent.putExtra("ton", 6)
+                                if (ton.contains("Тон 7")) intent.putExtra("ton", 7)
+                                if (ton.contains("Тон 8")) intent.putExtra("ton", 8)
+                                intent.putExtra("ton_naidzelny", true)
+                            } else {
+                                intent.putExtra("ton", data[day][0].toInt() - 1)
+                                intent.putExtra("ton_naidzelny", false)
+                            }
+                            startActivity(intent)
+                        }
                     }
                 } else {
                     val dadatak = DialogInstallDadatak()

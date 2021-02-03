@@ -445,6 +445,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 if (position == 0 && scrolltosatrt) {
                     startAutoScroll()
                     scrolltosatrt = false
+                    invalidateOptionsMenu()
                 }
                 diffScroll = if (list.lastVisiblePosition == list.adapter.count - 1) list.getChildAt(list.childCount - 1).bottom - list.height
                 else -1

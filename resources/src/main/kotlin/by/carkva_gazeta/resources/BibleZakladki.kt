@@ -96,8 +96,7 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
                     val adapterItem = item.tag as BibleZakladkiData
                     val position: Int = binding.dragListView.adapter.getPositionForItem(adapterItem)
                     val t1 = data[position].data.indexOf("\n\n")
-                    val t2: Int
-                    t2 = if (semuxa == 1) data[position].data.indexOf(". ", t1) else data[position].data.indexOf(" ", t1)
+                    val t2 = if (semuxa == 1) data[position].data.indexOf(". ", t1) else data[position].data.indexOf(" ", t1)
                     val delite = DialogZakladkaDelite.getInstance(position, data[position].data.substring(0, t1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + data[position].data.substring(t1 + 2, t2), semuxa, true)
                     delite.show(supportFragmentManager, "zakladka_delite")
                 }
@@ -311,6 +310,7 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
                 view.itemRight.setTextColor(ContextCompat.getColor(parent.context, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
                 view.itemLayout.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark_list)
                 view.root.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
+                view.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
             } else {
                 BibleArrayAdapterParallel.colors[0] = "#000000"
                 BibleArrayAdapterParallel.colors[1] = "#D00505"
@@ -537,8 +537,7 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
 
             override fun onItemLongClicked(view: View): Boolean {
                 val t1 = itemList[adapterPosition].data.indexOf("\n\n")
-                val t2: Int
-                t2 = if (semuxa == 1) itemList[adapterPosition].data.indexOf(". ", t1) else itemList[adapterPosition].data.indexOf(" ", t1)
+                val t2 = if (semuxa == 1) itemList[adapterPosition].data.indexOf(". ", t1) else itemList[adapterPosition].data.indexOf(" ", t1)
                 val delite = DialogZakladkaDelite.getInstance(adapterPosition, itemList[adapterPosition].data.substring(0, t1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + itemList[adapterPosition].data.substring(t1 + 2, t2), semuxa, true)
                 delite.show(supportFragmentManager, "zakladka_delite")
                 return true

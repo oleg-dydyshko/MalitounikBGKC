@@ -187,6 +187,7 @@ class MenuVybranoe : VybranoeFragment() {
                 view.itemRight.setTextColor(ContextCompat.getColor(parent.context, R.color.colorPrimary_black))
                 view.itemLayout.setBackgroundResource(R.drawable.selector_dark_list)
                 view.root.setBackgroundResource(R.color.colorprimary_material_dark)
+                view.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             } else {
                 view.itemLayout.setBackgroundResource(R.drawable.selector_default_list)
                 view.root.setBackgroundResource(R.color.colorDivider)

@@ -75,7 +75,15 @@ class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         val inputStream = resources.openRawResource(R.raw.pasxa)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
-        binding.pasxa.text = reader.readText()
+        val builder = StringBuilder()
+        reader.use { bufferedReader ->
+            bufferedReader.forEachLine {
+                var line = it
+                if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                builder.append(line)
+            }
+        }
+        binding.pasxa.text = MainActivity.fromHtml(builder.toString())
         binding.pasxa.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
     }
 

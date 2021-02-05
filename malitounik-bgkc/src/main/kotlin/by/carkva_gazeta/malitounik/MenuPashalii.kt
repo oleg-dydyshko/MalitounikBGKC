@@ -66,14 +66,13 @@ class MenuPashalii : PashaliiFragment() {
     }
 
     private fun setArrayPasha(year: Int = Calendar.getInstance()[Calendar.YEAR]) {
-        val c = Calendar.getInstance() as GregorianCalendar
         var yearG = year
         val yearG2: Int
-        if (c[Calendar.YEAR] == yearG) {
+        if (1586 <= yearG) {
             yearG -= 3
-            yearG2 = yearG + 13
+            yearG2 = yearG + 9
         } else {
-            yearG2 = yearG + 10
+            yearG2 = yearG + 9
         }
         var dataP: Int
         var monthP: Int

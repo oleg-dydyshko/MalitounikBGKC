@@ -88,7 +88,7 @@ class DialogPasxa : DialogFragment() {
                         error()
                     } else {
                         value = input.text.toString().toInt()
-                        if (value in 1583..2089) {
+                        if (value in 1583..2093) {
                             mListener.setPasxa(value)
                         } else {
                             error()
@@ -109,7 +109,7 @@ class DialogPasxa : DialogFragment() {
                     error()
                 } else {
                     value = input.text.toString().toInt()
-                    if (value in 1583..2089) {
+                    if (value in 1583..2093) {
                         mListener.setPasxa(value)
                     } else {
                         error()

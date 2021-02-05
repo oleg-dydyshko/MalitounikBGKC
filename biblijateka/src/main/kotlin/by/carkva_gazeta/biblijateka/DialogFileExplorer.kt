@@ -242,6 +242,11 @@ class DialogFileExplorer : DialogFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             viewHolder.text.text = fileList[position].name
+            activity?.let {
+                val dzenNoch = chin.getBoolean("dzen_noch", false)
+                if (dzenNoch)
+                    viewHolder.text.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
+            }
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val image = ContextCompat.getDrawable(mContext, fileList[position].resources)
             val density = resources.displayMetrics.density.toInt()

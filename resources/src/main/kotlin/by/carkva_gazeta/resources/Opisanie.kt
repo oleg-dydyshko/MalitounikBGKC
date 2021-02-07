@@ -81,7 +81,9 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             binding.TextView.text = getString(by.carkva_gazeta.malitounik.R.string.opisanie_error)
             arrayList.forEach {
                 if (day == it[0].toInt() && mun == it[1].toInt()) {
-                    binding.TextView.text = MainActivity.fromHtml(it[2])
+                    var res = it[2]
+                    if (dzenNoch) res = res.replace("#d00505", "#f44336")
+                    binding.TextView.text = MainActivity.fromHtml(res)
                 }
             }
         } else {
@@ -106,9 +108,10 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                 it.readText()
             }
             val gson = Gson()
-            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-            val arrayList: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
-            val res = arrayList[day - 1][0]
+            val type = object : TypeToken<ArrayList<String>>() {}.type
+            val arrayList: ArrayList<String> = gson.fromJson(builder, type)
+            var res = arrayList[day - 1]
+            if (dzenNoch) res = res.replace("#d00505", "#f44336")
             binding.TextView.text = MainActivity.fromHtml(res)
         }
         setTollbarTheme()

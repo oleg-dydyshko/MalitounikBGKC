@@ -81,6 +81,66 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
     }
 
+    private fun resourse(resurs: String): Int {
+        return when (resurs) {
+            "bogashlugbovya12_1" -> R.raw.bogashlugbovya12_1
+            "bogashlugbovya12_2" -> R.raw.bogashlugbovya12_2
+            "bogashlugbovya12_3" -> R.raw.bogashlugbovya12_3
+            "bogashlugbovya12_4" -> R.raw.bogashlugbovya12_4
+            "bogashlugbovya12_5" -> R.raw.bogashlugbovya12_5
+            "bogashlugbovya12_6" -> R.raw.bogashlugbovya12_6
+            "bogashlugbovya12_7" -> R.raw.bogashlugbovya12_7
+            "bogashlugbovya12_8" -> R.raw.bogashlugbovya12_8
+            "bogashlugbovya12_9" -> R.raw.bogashlugbovya12_9
+            "bogashlugbovya13_1" -> R.raw.bogashlugbovya13_1
+            "bogashlugbovya13_2" -> R.raw.bogashlugbovya13_2
+            "bogashlugbovya13_3" -> R.raw.bogashlugbovya13_3
+            "bogashlugbovya13_4" -> R.raw.bogashlugbovya13_4
+            "bogashlugbovya13_5" -> R.raw.bogashlugbovya13_5
+            "bogashlugbovya13_6" -> R.raw.bogashlugbovya13_6
+            "bogashlugbovya13_7" -> R.raw.bogashlugbovya13_7
+            "bogashlugbovya13_8" -> R.raw.bogashlugbovya13_8
+            "bogashlugbovya14_1" -> R.raw.bogashlugbovya14_1
+            "bogashlugbovya14_2" -> R.raw.bogashlugbovya14_2
+            "bogashlugbovya14_3" -> R.raw.bogashlugbovya14_3
+            "bogashlugbovya14_4" -> R.raw.bogashlugbovya14_4
+            "bogashlugbovya14_5" -> R.raw.bogashlugbovya14_5
+            "bogashlugbovya14_6" -> R.raw.bogashlugbovya14_6
+            "bogashlugbovya14_7" -> R.raw.bogashlugbovya14_7
+            "bogashlugbovya14_8" -> R.raw.bogashlugbovya14_8
+            "bogashlugbovya14_9" -> R.raw.bogashlugbovya14_9
+            "bogashlugbovya15_1" -> R.raw.bogashlugbovya15_1
+            "bogashlugbovya15_2" -> R.raw.bogashlugbovya15_2
+            "bogashlugbovya15_3" -> R.raw.bogashlugbovya15_3
+            "bogashlugbovya15_4" -> R.raw.bogashlugbovya15_4
+            "bogashlugbovya15_5" -> R.raw.bogashlugbovya15_5
+            "bogashlugbovya15_6" -> R.raw.bogashlugbovya15_6
+            "bogashlugbovya15_7" -> R.raw.bogashlugbovya15_7
+            "bogashlugbovya15_8" -> R.raw.bogashlugbovya15_8
+            "bogashlugbovya15_9" -> R.raw.bogashlugbovya15_9
+            "bogashlugbovya16_1" -> R.raw.bogashlugbovya16_1
+            "bogashlugbovya16_2" -> R.raw.bogashlugbovya16_2
+            "bogashlugbovya16_3" -> R.raw.bogashlugbovya16_3
+            "bogashlugbovya16_4" -> R.raw.bogashlugbovya16_4
+            "bogashlugbovya16_5" -> R.raw.bogashlugbovya16_5
+            "bogashlugbovya16_6" -> R.raw.bogashlugbovya16_6
+            "bogashlugbovya16_7" -> R.raw.bogashlugbovya16_7
+            "bogashlugbovya16_8" -> R.raw.bogashlugbovya16_8
+            "bogashlugbovya16_9" -> R.raw.bogashlugbovya16_9
+            "bogashlugbovya16_10" -> R.raw.bogashlugbovya16_10
+            "bogashlugbovya16_11" -> R.raw.bogashlugbovya16_11
+            "bogashlugbovya17_1" -> R.raw.bogashlugbovya17_1
+            "bogashlugbovya17_2" -> R.raw.bogashlugbovya17_2
+            "bogashlugbovya17_3" -> R.raw.bogashlugbovya17_3
+            "bogashlugbovya17_4" -> R.raw.bogashlugbovya17_4
+            "bogashlugbovya17_5" -> R.raw.bogashlugbovya17_5
+            "bogashlugbovya17_6" -> R.raw.bogashlugbovya17_6
+            "bogashlugbovya17_7" -> R.raw.bogashlugbovya17_7
+            "bogashlugbovya17_8" -> R.raw.bogashlugbovya17_8
+            else -> R.raw.bogashlugbovya12_1
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -111,16 +171,17 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
             bindingprogress.actionMinusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
         }
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        val id = intent.extras?.getInt("id", R.raw.bogashlugbovya12_1) ?: R.raw.bogashlugbovya12_1
         resurs = intent.extras?.getString("type", "bogashlugbovya12_1") ?: "bogashlugbovya12_1"
         title = intent.extras?.getString("title", "") ?: ""
+        var id = intent.extras?.getInt("id", R.raw.bogashlugbovya12_1) ?: R.raw.bogashlugbovya12_1
+        if (id == -1) id = resourse(resurs)
         val inputStream = resources.openRawResource(id)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         var line: String
         val builder = StringBuilder()
-        reader.use {
-            it.forEachLine {
+        reader.use { bufferedReader ->
+            bufferedReader.forEachLine {
                 line = it
                 if (dzenNoch) line = line.replace("#d00505", "#f44336")
                 builder.append(line)

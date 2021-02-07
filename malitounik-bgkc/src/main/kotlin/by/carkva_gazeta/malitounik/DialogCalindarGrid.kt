@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -18,17 +19,20 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DialogCalindarGrid : DialogFragment() {
 
     companion object {
-        fun getInstance(post: Int, ton: String, denNedzeli: Int, data: Int, mun: Int): DialogCalindarGrid {
+        fun getInstance(post: Int, ton: String, denNedzeli: Int, data: Int, mun: Int, year: Int): DialogCalindarGrid {
             val bundle = Bundle()
             bundle.putInt("post", post)
             bundle.putString("ton", ton)
             bundle.putInt("denNedzeli", denNedzeli)
             bundle.putInt("data", data)
             bundle.putInt("mun", mun)
+            bundle.putInt("year", year)
             val dialog = DialogCalindarGrid()
             dialog.arguments = bundle
             return dialog
@@ -43,7 +47,8 @@ class DialogCalindarGrid : DialogFragment() {
     private var ton = ""
     private var denNedzeli = 1
     private var data = 1
-    private var mun = 0
+    private var mun = 1
+    private var year = 2021
     private var mItemArray = ArrayList<CalindarGrigData>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -57,7 +62,8 @@ class DialogCalindarGrid : DialogFragment() {
             ton = arguments?.getString("ton") ?: ""
             denNedzeli = arguments?.getInt("denNedzeli") ?: 1
             data = arguments?.getInt("data") ?: 1
-            mun = arguments?.getInt("mun") ?: 0
+            mun = arguments?.getInt("mun") ?: 1
+            year = arguments?.getInt("year") ?: 2021
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (k.getString("caliandarGrid", "") != "") {
                 val gson = Gson()
@@ -105,7 +111,44 @@ class DialogCalindarGrid : DialogFragment() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    private inner class ItemAdapter(list: ArrayList<CalindarGrigData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<CalindarGrigData, ItemAdapter.ViewHolder>() {
+    private fun getDateOtnositelnoPasxi(activity: Activity) {
+        val a: Int = year % 19
+        val b: Int = year % 4
+        val cx: Int = year % 7
+        val k: Int = year / 100
+        val p = (13 + 8 * k) / 25
+        val q = k / 4
+        val m = (15 - p + k - q) % 30
+        val n = (4 + k - q) % 7
+        val d = (19 * a + m) % 30
+        val ex = (2 * b + 4 * cx + 6 * d + n) % 7
+        val monthP: Int
+        var dataP: Int
+        if (d + ex <= 9) {
+            dataP = d + ex + 22
+            monthP = 3
+        } else {
+            dataP = d + ex - 9
+            if (d == 29 && ex == 6) dataP = 19
+            if (d == 28 && ex == 6) dataP = 18
+            monthP = 4
+        }
+        val pasxa = GregorianCalendar(year, monthP - 1, dataP)
+        val tdate = GregorianCalendar(year, mun - 1, data)
+        when (tdate[Calendar.DAY_OF_YEAR] - pasxa[Calendar.DAY_OF_YEAR]) {
+            -49 -> {
+                val intent = Intent()
+                intent.setClassName(activity, MainActivity.SLUGBYVIALIKAGAPOSTU)
+                intent.putExtra("id", -1)
+                intent.putExtra("title", "Вячэрня ў нядзелю сырную вeчарам")
+                intent.putExtra("type", "bogashlugbovya12_1")
+                startActivity(intent)
+            }
+        }
+    }
+
+    private inner class ItemAdapter(list: ArrayList<CalindarGrigData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) :
+        DragItemAdapter<CalindarGrigData, ItemAdapter.ViewHolder>() {
         private var dzenNoch = false
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -156,6 +199,9 @@ class DialogCalindarGrid : DialogFragment() {
                 activity?.let { fragmentActivity ->
                     if (MainActivity.checkmoduleResources(activity)) {
                         when (itemList[adapterPosition].id.toInt()) {
+                            1 -> {
+                                getDateOtnositelnoPasxi(fragmentActivity)
+                            }
                             6 -> {
                                 val intent = Intent()
                                 intent.setClassName(fragmentActivity, MainActivity.TON)
@@ -174,7 +220,6 @@ class DialogCalindarGrid : DialogFragment() {
                                     intent.putExtra("ton_naidzelny", false)
                                 }
                                 startActivity(intent)
-                                dialog?.cancel()
                             }
                             7 -> {
                                 val i = Intent()
@@ -182,7 +227,6 @@ class DialogCalindarGrid : DialogFragment() {
                                 i.putExtra("mun", mun)
                                 i.putExtra("day", data)
                                 startActivity(i)
-                                dialog?.cancel()
                             }
                             4 -> {
                                 if (denNedzeli == 1) {
@@ -192,7 +236,6 @@ class DialogCalindarGrid : DialogFragment() {
                                     intent.putExtra("title", data[3])
                                     intent.putExtra("resurs", "bogashlugbovya6")
                                     startActivity(intent)
-                                    dialog?.cancel()
                                 } else {
                                     MainActivity.toastView(fragmentActivity, itemList[adapterPosition].title)
                                 }
@@ -205,6 +248,7 @@ class DialogCalindarGrid : DialogFragment() {
                         val dadatak = DialogInstallDadatak()
                         fragmentManager?.let { dadatak.show(it, "dadatak") }
                     }
+                    dialog?.cancel()
                 }
             }
         }

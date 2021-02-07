@@ -1237,6 +1237,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         const val BIBLEZAKLADKI = "by.carkva_gazeta.resources.BibleZakladki"
         const val BIBLENATATKI = "by.carkva_gazeta.resources.BibleNatatki"
         const val SLUGBYVIALIKAGAPOSTUSPIS = "by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"
+        const val SLUGBYVIALIKAGAPOSTU = "by.carkva_gazeta.resources.SlugbyVialikagaPostu"
         const val MALITVYPRYNAGODNYIA = "by.carkva_gazeta.resources.MalitvyPrynagodnyia"
         const val MYNATATKI = "by.carkva_gazeta.resources.MyNatatki"
         const val PARAFIIBGKC = "by.carkva_gazeta.resources.ParafiiBgkc"
@@ -1249,7 +1250,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         const val NOVYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.NovyZapavietSinaidal"
         const val STARYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.StaryZapavietSinaidal"
         const val BIBLIAVYBRANOE = "by.carkva_gazeta.resources.BibliaVybranoe"
-        const val TRAPARYANDKANDAKI = "by.carkva_gazeta.resources.TraparyAndKandaki"
         var back_pressed = 0L
         var padzeia: ArrayList<Padzeia> = ArrayList()
         var setDataCalendar = -1

@@ -128,10 +128,9 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 if (dzenNoch) rColorColorprimary = R.drawable.selector_red_dark
                 val tileMe = BitmapDrawable(it.resources, BitmapFactory.decodeResource(resources, R.drawable.calendar_fon))
                 tileMe.tileModeX = Shader.TileMode.REPEAT
-                binding.textTitleChyt.setOnClickListener(this@CaliandarFull)
                 if (data[day][20] != "" && data[day][0].toInt() == 1) {
-                    val ton = data[day][20]
-                    binding.textTitleChyt.text = getString(R.string.ton, ton, binding.textTitleChyt.text)
+                    binding.textPost.text = data[day][20]
+                    binding.textPost.visibility = View.VISIBLE
                 }
                 binding.kniga.setOnClickListener(this@CaliandarFull)
                 binding.textChytanne.setOnClickListener(this@CaliandarFull)
@@ -209,7 +208,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textMesiac.setBackgroundResource(R.drawable.selector_bez_posta)
                             if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_bez_posta_black)
                             else binding.kniga.setImageResource(R.drawable.book_bez_posta)
-                            binding.textTitleChyt.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.chytanne.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textChytanne.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_bez_posta)
@@ -222,7 +220,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             }
                         }
                         2 -> {
-                            binding.textTitleChyt.setBackgroundResource(R.drawable.selector_post)
                             binding.chytanne.setBackgroundResource(R.drawable.selector_post)
                             binding.textChytanne.setBackgroundResource(R.drawable.selector_post)
                             binding.textChytanneSviatyiaDop.setBackgroundResource(R.drawable.selector_post)
@@ -254,8 +251,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_strogi_post_black)
                             else binding.kniga.setImageResource(R.drawable.book_strogi_post)
-                            binding.textTitleChyt.setBackgroundResource(R.drawable.selector_strogi_post)
-                            binding.textTitleChyt.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             binding.chytanne.setBackgroundResource(R.drawable.selector_strogi_post)
                             binding.chytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             binding.textChytanne.setBackgroundResource(R.drawable.selector_strogi_post)
@@ -297,8 +292,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     }
                     if (data[day][7].toInt() != 3) {
-                        binding.textTitleChyt.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        binding.textTitleChyt.setBackgroundResource(rColorColorprimary)
                         binding.chytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.chytanne.setBackgroundResource(rColorColorprimary)
                         binding.textChytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -435,7 +428,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     } else {
                         data[day][7].toInt()
                     }
-                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20], data[day][0].toInt(), data[day][1].toInt(), data[day][2].toInt())
+                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20], data[day][0].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1, data[day][3].toInt())
                     dialogCalindarGrid.show(it, "grid")
                 }
             }
@@ -527,56 +520,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             } else {
                 val dadatak = DialogInstallDadatak()
                 fragmentManager?.let { dadatak.show(it, "dadatak") }
-            }
-            R.id.textTitleChyt -> {
-                if (MainActivity.checkmoduleResources(activity)) {
-                    activity?.let {
-                        if (data[day][22].toInt() == 1) {
-                            val intent = Intent()
-                            intent.setClassName(it, MainActivity.TRAPARYANDKANDAKI)
-                            if (data[day][20] != "" && data[day][0].toInt() == 1) {
-                                val ton = data[day][20]
-                                if (ton.contains("Тон 1")) intent.putExtra("ton", 1)
-                                if (ton.contains("Тон 2")) intent.putExtra("ton", 2)
-                                if (ton.contains("Тон 3")) intent.putExtra("ton", 3)
-                                if (ton.contains("Тон 4")) intent.putExtra("ton", 4)
-                                if (ton.contains("Тон 5")) intent.putExtra("ton", 5)
-                                if (ton.contains("Тон 6")) intent.putExtra("ton", 6)
-                                if (ton.contains("Тон 7")) intent.putExtra("ton", 7)
-                                if (ton.contains("Тон 8")) intent.putExtra("ton", 8)
-                                intent.putExtra("ton_naidzelny", true)
-                            } else {
-                                intent.putExtra("ton", data[day][0].toInt() - 1)
-                                intent.putExtra("ton_naidzelny", false)
-                            }
-                            intent.putExtra("day", data[day][1].toInt())
-                            intent.putExtra("mun", data[day][2].toInt())
-                            startActivity(intent)
-                        } else {
-                            val intent = Intent()
-                            intent.setClassName(it, MainActivity.TON)
-                            if (data[day][20] != "" && data[day][0].toInt() == 1) {
-                                val ton = data[day][20]
-                                if (ton.contains("Тон 1")) intent.putExtra("ton", 1)
-                                if (ton.contains("Тон 2")) intent.putExtra("ton", 2)
-                                if (ton.contains("Тон 3")) intent.putExtra("ton", 3)
-                                if (ton.contains("Тон 4")) intent.putExtra("ton", 4)
-                                if (ton.contains("Тон 5")) intent.putExtra("ton", 5)
-                                if (ton.contains("Тон 6")) intent.putExtra("ton", 6)
-                                if (ton.contains("Тон 7")) intent.putExtra("ton", 7)
-                                if (ton.contains("Тон 8")) intent.putExtra("ton", 8)
-                                intent.putExtra("ton_naidzelny", true)
-                            } else {
-                                intent.putExtra("ton", data[day][0].toInt() - 1)
-                                intent.putExtra("ton_naidzelny", false)
-                            }
-                            startActivity(intent)
-                        }
-                    }
-                } else {
-                    val dadatak = DialogInstallDadatak()
-                    fragmentManager?.let { dadatak.show(it, "dadatak") }
-                }
             }
             R.id.znakTipicona -> {
                 val tipiconNumber = data[day][12].toInt()

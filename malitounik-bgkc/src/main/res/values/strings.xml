@@ -539,8 +539,6 @@
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="font_size">Памер шрыфту</string>
-    <string name="trapar_kandak">Трапары і кандакі дня</string>
-    <string name="ton">%1$s %2$s</string>
     <string name="trsviata">Сьвяту</string>
     <string name="trsviatoy">Сьвятому</string>
     <string-array name="dni_nedeli">

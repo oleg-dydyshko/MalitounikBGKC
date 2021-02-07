@@ -22,8 +22,6 @@ import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.databinding.AkafistUnderBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStream
@@ -82,7 +80,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
     }
 
-    private fun loadTraparOrKandak(trapar: String): String {
+    /*private fun loadTraparOrKandak(trapar: String): String {
         var inputStream = resources.openRawResource(R.raw.opisanie_sviat)
         var isr = InputStreamReader(inputStream)
         var reader = BufferedReader(isr)
@@ -122,7 +120,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             }
         }
         return ""
-    }
+    }*/
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -158,67 +156,67 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         val ton = intent.extras?.getInt("ton", 1) ?: 1
         val tonNadzelny = intent.extras?.getBoolean("ton_naidzelny", true) ?: true
         var inputStream: InputStream
-        val under = intent.extras?.getString("under", "") ?: ""
+        /*val under = intent.extras?.getString("under", "") ?: ""
         if (under != "") {
             binding.TextView.text = MainActivity.fromHtml(loadTraparOrKandak(under))
             title = under
+        } else {*/
+        if (tonNadzelny) {
+            inputStream = r.openRawResource(R.raw.ton1)
+            title = "Тон $ton"
+            when (ton) {
+                1 -> inputStream = r.openRawResource(R.raw.ton1)
+                2 -> inputStream = r.openRawResource(R.raw.ton2)
+                3 -> inputStream = r.openRawResource(R.raw.ton3)
+                4 -> inputStream = r.openRawResource(R.raw.ton4)
+                5 -> inputStream = r.openRawResource(R.raw.ton5)
+                6 -> inputStream = r.openRawResource(R.raw.ton6)
+                7 -> inputStream = r.openRawResource(R.raw.ton7)
+                8 -> inputStream = r.openRawResource(R.raw.ton8)
+            }
         } else {
-            if (tonNadzelny) {
-                inputStream = r.openRawResource(R.raw.ton1)
-                title = "Тон $ton"
-                when (ton) {
-                    1 -> inputStream = r.openRawResource(R.raw.ton1)
-                    2 -> inputStream = r.openRawResource(R.raw.ton2)
-                    3 -> inputStream = r.openRawResource(R.raw.ton3)
-                    4 -> inputStream = r.openRawResource(R.raw.ton4)
-                    5 -> inputStream = r.openRawResource(R.raw.ton5)
-                    6 -> inputStream = r.openRawResource(R.raw.ton6)
-                    7 -> inputStream = r.openRawResource(R.raw.ton7)
-                    8 -> inputStream = r.openRawResource(R.raw.ton8)
+            inputStream = r.openRawResource(R.raw.ton1_budni)
+            when (ton) {
+                1 -> {
+                    inputStream = r.openRawResource(R.raw.ton1_budni)
+                    title = "ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам"
                 }
-            } else {
-                inputStream = r.openRawResource(R.raw.ton1_budni)
-                when (ton) {
-                    1 -> {
-                        inputStream = r.openRawResource(R.raw.ton1_budni)
-                        title = "ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам"
-                    }
-                    2 -> {
-                        inputStream = r.openRawResource(R.raw.ton2_budni)
-                        title = "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю"
-                    }
-                    3 -> {
-                        inputStream = r.openRawResource(R.raw.ton3_budni)
-                        title = "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу"
-                    }
-                    4 -> {
-                        inputStream = r.openRawResource(R.raw.ton4_budni)
-                        title = "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю"
-                    }
-                    5 -> {
-                        inputStream = r.openRawResource(R.raw.ton5_budni)
-                        title = "ПЯТНІЦА\nСлужба Крыжу Гасподняму"
-                    }
-                    6 -> {
-                        inputStream = r.openRawResource(R.raw.ton6_budni)
-                        title = "Субота\nСлужба ўсім сьвятым і памёрлым"
-                    }
+                2 -> {
+                    inputStream = r.openRawResource(R.raw.ton2_budni)
+                    title = "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю"
+                }
+                3 -> {
+                    inputStream = r.openRawResource(R.raw.ton3_budni)
+                    title = "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу"
+                }
+                4 -> {
+                    inputStream = r.openRawResource(R.raw.ton4_budni)
+                    title = "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю"
+                }
+                5 -> {
+                    inputStream = r.openRawResource(R.raw.ton5_budni)
+                    title = "ПЯТНІЦА\nСлужба Крыжу Гасподняму"
+                }
+                6 -> {
+                    inputStream = r.openRawResource(R.raw.ton6_budni)
+                    title = "Субота\nСлужба ўсім сьвятым і памёрлым"
                 }
             }
-            val isr = InputStreamReader(inputStream)
-            val reader = BufferedReader(isr)
-            var line: String
-            val builder = StringBuilder()
-            reader.use { bufferedReader ->
-                bufferedReader.forEachLine {
-                    line = it
-                    if (dzenNoch) line = line.replace("#d00505", "#f44336")
-                    builder.append(line)
-                }
-            }
-            val resursOut = builder.toString()
-            binding.TextView.text = MainActivity.fromHtml(resursOut)
         }
+        val isr = InputStreamReader(inputStream)
+        val reader = BufferedReader(isr)
+        var line: String
+        val builder = StringBuilder()
+        reader.use { bufferedReader ->
+            bufferedReader.forEachLine {
+                line = it
+                if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                builder.append(line)
+            }
+        }
+        val resursOut = builder.toString()
+        binding.TextView.text = MainActivity.fromHtml(resursOut)
+        //}
         requestedOrientation = if (chin.getBoolean("orientation", false)) {
             orientation
         } else {

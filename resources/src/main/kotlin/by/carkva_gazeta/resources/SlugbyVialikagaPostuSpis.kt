@@ -114,7 +114,7 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
                 data.add(Data(R.raw.bogashlugbovya16_5,"Чацьвер 5-га тыдня посту ўвечары", "bogashlugbovya16_5"))
                 data.add(Data(R.raw.bogashlugbovya16_6,"Пятніца 5-га тыдня посту ўвечары", "bogashlugbovya16_6"))
                 data.add(Data(R.raw.bogashlugbovya16_7,"Субота Акафісту Ютрань", "bogashlugbovya16_7"))
-                data.add(Data(R.raw.bogashlugbovya16_8,"Літургія ў суботу Акафісту ", "bogashlugbovya16_8"))
+                data.add(Data(R.raw.bogashlugbovya16_8,"Літургія ў суботу Акафісту", "bogashlugbovya16_8"))
                 data.add(Data(R.raw.bogashlugbovya16_9,"5-ая нядзеля Вялікага посту (Памяць сьвятое Маці нашае Марыі Ягіпецкай) Вячэрня", "bogashlugbovya16_9"))
                 data.add(Data(R.raw.bogashlugbovya16_10,"5-ая нядзеля Вялікага посту (Памяць сьвятое Маці нашае Марыі Ягіпецкай) Ютрань", "bogashlugbovya16_10"))
                 data.add(Data(R.raw.bogashlugbovya16_11,"5-ая нядзеля Вялікага посту (Памяць сьвятое Маці нашае Марыі Ягіпецкай) Літургія сьвятога Васіля Вялікага", "bogashlugbovya16_11"))

@@ -1,6 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Spannable
@@ -128,7 +129,7 @@ class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.action_edit).isVisible = false
-        menu.findItem(R.id.action_share).isVisible = false
+        menu.findItem(R.id.action_share).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         menu.findItem(R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
         return true
     }
@@ -154,6 +155,12 @@ class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             }
             prefEditor.apply()
             recreate()
+        }
+        if (id == R.id.action_share) {
+            val sendIntent = Intent(Intent.ACTION_SEND)
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=5")
+            sendIntent.type = "text/plain"
+            startActivity(Intent.createChooser(sendIntent, null))
         }
         return super.onOptionsItemSelected(item)
     }

@@ -93,9 +93,9 @@
                 android:layout_alignStart="@+id/znakTipicona"
                 android:layout_alignLeft="@+id/znakTipicona"
                 android:layout_alignParentTop="true"
+                android:contentDescription="@string/empty"
                 android:src="@drawable/fishe"
-                android:visibility="gone"
-                android:contentDescription="@string/empty" />
+                android:visibility="gone" />
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                 android:id="@+id/textMesiac"
@@ -117,14 +117,14 @@
                 android:id="@+id/textPost"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/textDenNedeli"
+                android:layout_below="@+id/PostFish"
                 android:layout_alignStart="@+id/PostFish"
                 android:layout_alignLeft="@+id/PostFish"
                 android:layout_gravity="start|bottom"
-                android:layout_marginTop="0dp"
+                android:layout_marginTop="5dp"
                 android:gravity="start"
                 android:text="@string/Post"
-                android:textSize="12sp"
+                android:textSize="18sp"
                 android:visibility="gone" />
         </RelativeLayout>
 

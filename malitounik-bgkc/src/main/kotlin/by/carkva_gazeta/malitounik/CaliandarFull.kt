@@ -130,6 +130,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 tileMe.tileModeX = Shader.TileMode.REPEAT
                 if (data[day][20] != "" && data[day][0].toInt() == 1) {
                     binding.textPost.text = data[day][20]
+                    if (dzenNoch) binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                    else binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary))
                     binding.textPost.visibility = View.VISIBLE
                 }
                 binding.kniga.setOnClickListener(this@CaliandarFull)
@@ -162,7 +164,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     it.let {
                         binding.textSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textSviatyia.setBackgroundResource(R.drawable.selector_dark)
-                        binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        if (!(data[day][20] != "" && data[day][0].toInt() == 1))
+                            binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                         binding.textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
                         binding.textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -428,7 +431,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     } else {
                         data[day][7].toInt()
                     }
-                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20], data[day][0].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1, data[day][3].toInt())
+                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20], data[day][0].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1, data[day][22])
                     dialogCalindarGrid.show(it, "grid")
                 }
             }

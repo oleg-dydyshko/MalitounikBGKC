@@ -372,6 +372,10 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         val id = item.itemId
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             traker = true
             item.isChecked = !item.isChecked
@@ -425,7 +429,8 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
             fullscreenPage = false
             show()
         } else {
-            if (traker) onSupportNavigateUp() else super.onBackPressed()
+            //if (traker) onSupportNavigateUp() else super.onBackPressed()
+            super.onBackPressed()
         }
     }
 

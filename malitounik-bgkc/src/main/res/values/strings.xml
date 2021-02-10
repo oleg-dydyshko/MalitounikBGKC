@@ -541,6 +541,7 @@
     <string name="font_size">Памер шрыфту</string>
     <string name="trsviata">Сьвяту</string>
     <string name="trsviatoy">Сьвятому</string>
+    <string name="ton">Тон %1$s</string>
     <string-array name="dni_nedeli">
         <item />
         <item>нядзеля</item>

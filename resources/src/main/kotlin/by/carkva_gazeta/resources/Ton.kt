@@ -80,48 +80,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
     }
 
-    /*private fun loadTraparOrKandak(trapar: String): String {
-        var inputStream = resources.openRawResource(R.raw.opisanie_sviat)
-        var isr = InputStreamReader(inputStream)
-        var reader = BufferedReader(isr)
-        var builder = reader.use {
-            it.readText()
-        }
-        val gson = Gson()
-        val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-        val arrayList: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
-        arrayList.forEach {
-            if (it[3].contains(trapar)) return it[3]
-        }
-        for (i in 1..12) {
-            inputStream = when (i) {
-                1 -> resources.openRawResource(R.raw.opisanie1)
-                2 -> resources.openRawResource(R.raw.opisanie2)
-                3 -> resources.openRawResource(R.raw.opisanie3)
-                4 -> resources.openRawResource(R.raw.opisanie4)
-                5 -> resources.openRawResource(R.raw.opisanie5)
-                6 -> resources.openRawResource(R.raw.opisanie6)
-                7 -> resources.openRawResource(R.raw.opisanie7)
-                8 -> resources.openRawResource(R.raw.opisanie8)
-                9 -> resources.openRawResource(R.raw.opisanie9)
-                10 -> resources.openRawResource(R.raw.opisanie10)
-                11 -> resources.openRawResource(R.raw.opisanie11)
-                12 -> resources.openRawResource(R.raw.opisanie12)
-                else -> resources.openRawResource(R.raw.opisanie1)
-            }
-            isr = InputStreamReader(inputStream)
-            reader = BufferedReader(isr)
-            builder = reader.use {
-                it.readText()
-            }
-            val res: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
-            res.forEach {
-                if (it[1].contains(trapar)) return it[1]
-            }
-        }
-        return ""
-    }*/
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -156,11 +114,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         val ton = intent.extras?.getInt("ton", 1) ?: 1
         val tonNadzelny = intent.extras?.getBoolean("ton_naidzelny", true) ?: true
         var inputStream: InputStream
-        /*val under = intent.extras?.getString("under", "") ?: ""
-        if (under != "") {
-            binding.TextView.text = MainActivity.fromHtml(loadTraparOrKandak(under))
-            title = under
-        } else {*/
         if (tonNadzelny) {
             inputStream = r.openRawResource(R.raw.ton1)
             title = "Тон $ton"
@@ -216,7 +169,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         }
         val resursOut = builder.toString()
         binding.TextView.text = MainActivity.fromHtml(resursOut)
-        //}
         requestedOrientation = if (chin.getBoolean("orientation", false)) {
             orientation
         } else {

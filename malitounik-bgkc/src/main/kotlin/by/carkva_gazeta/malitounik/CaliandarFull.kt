@@ -128,8 +128,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 if (dzenNoch) rColorColorprimary = R.drawable.selector_red_dark
                 val tileMe = BitmapDrawable(it.resources, BitmapFactory.decodeResource(resources, R.drawable.calendar_fon))
                 tileMe.tileModeX = Shader.TileMode.REPEAT
-                if (data[day][20] != "" && data[day][0].toInt() == 1) {
-                    binding.textPost.text = data[day][20]
+                if (data[day][20].toInt() != 0 && data[day][0].toInt() == 1) {
+                    binding.textPost.text = getString(R.string.ton, data[day][20])
                     if (dzenNoch) binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                     else binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary))
                     binding.textPost.visibility = View.VISIBLE
@@ -164,7 +164,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     it.let {
                         binding.textSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textSviatyia.setBackgroundResource(R.drawable.selector_dark)
-                        if (!(data[day][20] != "" && data[day][0].toInt() == 1))
+                        if (!(data[day][20].toInt() != 0 && data[day][0].toInt() == 1))
                             binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                         binding.textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
@@ -431,7 +431,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     } else {
                         data[day][7].toInt()
                     }
-                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20], data[day][0].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1, data[day][22])
+                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20].toInt(), data[day][0].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1, data[day][22].toInt())
                     dialogCalindarGrid.show(it, "grid")
                 }
             }

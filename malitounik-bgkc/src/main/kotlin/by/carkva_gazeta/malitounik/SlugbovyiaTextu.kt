@@ -1,0 +1,254 @@
+package by.carkva_gazeta.malitounik
+
+class SlugbovyiaTextu {
+    private val dat12 = ArrayList<SlugbovyiaTextuData>()
+    private val dat13 = ArrayList<SlugbovyiaTextuData>()
+    private val dat14 = ArrayList<SlugbovyiaTextuData>()
+    private val dat15 = ArrayList<SlugbovyiaTextuData>()
+    private val dat16 = ArrayList<SlugbovyiaTextuData>()
+    private val dat17 = ArrayList<SlugbovyiaTextuData>()
+
+    init {
+        dat12.add(SlugbovyiaTextuData(-49, "Вячэрня ў нядзелю сырную вeчарам", "bogashlugbovya12_1"))
+        dat12.add(SlugbovyiaTextuData(-48, "Панядзeлак 1-га тыдня посту ўвeчары", "bogashlugbovya12_2"))
+        dat12.add(SlugbovyiaTextuData(-47, "Аўтoрак 1-га тыдня посту ўвeчары", "bogashlugbovya12_3"))
+        dat12.add(SlugbovyiaTextuData(-46, "Сeрада 1-га тыдня посту ўвeчары", "bogashlugbovya12_4"))
+        dat12.add(SlugbovyiaTextuData(-45, "Чацьвeр 1-га тыдня посту ўвeчары", "bogashlugbovya12_5"))
+        dat12.add(SlugbovyiaTextuData(-44, "Пятнiца 1-га тыдня пoсту ўвeчары", "bogashlugbovya12_6"))
+        dat12.add(SlugbovyiaTextuData(-43, "1-ая Нядзeля пoсту (Нядзeля праваслаўя) Вячэрня", "bogashlugbovya12_7"))
+        dat12.add(SlugbovyiaTextuData(-42, "1-ая Нядзeля пoсту (Нядзeля праваслаўя) Ютрань", "bogashlugbovya12_8", utran = true))
+        dat12.add(SlugbovyiaTextuData(-42, "1-ая Нядзeля пoсту (Нядзeля праваслаўя) Літургія сьвятoга Васіля Вялiкага", "bogashlugbovya12_9", liturgia = true))
+
+        dat13.add(SlugbovyiaTextuData(-42, "1-ая нядзеля посту ўвечары", "bogashlugbovya13_1"))
+        dat13.add(SlugbovyiaTextuData(-41, "Панядзелак 2-га тыдня посту ўвечары", "bogashlugbovya13_2"))
+        dat13.add(SlugbovyiaTextuData(-40, "Аўторак 2-га тыдня посту ўвечары", "bogashlugbovya13_3"))
+        dat13.add(SlugbovyiaTextuData(-39, "Серада 2-га тыдня посту ўвечары", "bogashlugbovya13_4"))
+        dat13.add(SlugbovyiaTextuData(-38, "Чацьвер 2-га тыдня посту ўвечары", "bogashlugbovya13_5"))
+        dat13.add(SlugbovyiaTextuData(-37, "Пятніца 2-га тыдня посту ўвечары", "bogashlugbovya13_6"))
+        dat13.add(SlugbovyiaTextuData(-35, "2-ая нядзеля Вялікага посту Вячэрня Ютрань", "bogashlugbovya13_7", utran = true))
+        dat13.add(SlugbovyiaTextuData(-35, "2-ая нядзеля Вялікага посту Літургія сьвятога Васіля Вялікага", "bogashlugbovya13_8", liturgia = true))
+
+        dat14.add(SlugbovyiaTextuData(-35, "2-ая нядзеля посту ўвечары", "bogashlugbovya14_1"))
+        dat14.add(SlugbovyiaTextuData(-34, "Панядзелак 3-га тыдня посту ўвечары", "bogashlugbovya14_2"))
+        dat14.add(SlugbovyiaTextuData(-33, "Аўторак 3-га тыдня посту ўвечары", "bogashlugbovya14_3"))
+        dat14.add(SlugbovyiaTextuData(-32, "Серада 3-га тыдня посту ўвечары", "bogashlugbovya14_4"))
+        dat14.add(SlugbovyiaTextuData(-31, "Чацьвер 3-га тыдня посту ўвечары", "bogashlugbovya14_5"))
+        dat14.add(SlugbovyiaTextuData(-30, "Пятніца 3-га тыдня посту ўвечары", "bogashlugbovya14_6"))
+        dat14.add(SlugbovyiaTextuData(-29, "3-яя нядзеля посту (Нядзеля пакланеньня Сьвятому Крыжу Гасподняму) Вячэрня", "bogashlugbovya14_7"))
+        dat14.add(SlugbovyiaTextuData(-28, "3-яя нядзеля посту (Нядзеля пакланеньня Сьвятому Крыжу Гасподняму) Ютрань", "bogashlugbovya14_8", utran = true))
+        dat14.add(SlugbovyiaTextuData(-28, "3-яя нядзеля посту (Нядзеля пакланеньня Сьвятому Крыжу Гасподняму) Літургія сьвятога Васіля Вялікага", "bogashlugbovya14_9", liturgia = true))
+
+        dat15.add(SlugbovyiaTextuData(-28, "3-яя нядзеля посту ўвечары", "bogashlugbovya15_1"))
+        dat15.add(SlugbovyiaTextuData(-27, "Панядзелак 4-га тыдня посту ўвечары", "bogashlugbovya15_2"))
+        dat15.add(SlugbovyiaTextuData(-26, "Аўторак 4-га тыдня посту ўвечары", "bogashlugbovya15_3"))
+        dat15.add(SlugbovyiaTextuData(-25, "Серада 4-га тыдня посту ўвечары", "bogashlugbovya15_4"))
+        dat15.add(SlugbovyiaTextuData(-24, "Чацьвер 4-га тыдня посту ўвечары", "bogashlugbovya15_5"))
+        dat15.add(SlugbovyiaTextuData(-23, "Пятніца 4-га тыдня посту ўвечары", "bogashlugbovya15_6"))
+        dat15.add(SlugbovyiaTextuData(-22, "4-ая нядзеля Вялікага посту (Успамін сьвятога айца нашага Яна Лесьвічніка) Вячэрня", "bogashlugbovya15_7"))
+        dat15.add(SlugbovyiaTextuData(-21, "4-ая нядзеля Вялікага посту (Успамін сьвятога айца нашага Яна Лесьвічніка) Ютрань", "bogashlugbovya15_8", utran = true))
+        dat15.add(SlugbovyiaTextuData(-21, "4-ая нядзеля Вялікага посту (Успамін сьвятога айца нашага Яна Лесьвічніка) Літургія сьвятога Васіля Вялікага", "bogashlugbovya15_9", liturgia = true))
+
+        dat16.add(SlugbovyiaTextuData(-21, "4-ая нядзеля посту ўвечары", "bogashlugbovya16_1"))
+        dat16.add(SlugbovyiaTextuData(-20, "Панядзелак 5-га тыдня посту ўвечары", "bogashlugbovya16_2"))
+        dat16.add(SlugbovyiaTextuData(-19, "Аўторак 5-га тыдня посту ўвечары", "bogashlugbovya16_3"))
+        dat16.add(SlugbovyiaTextuData(-18, "Серада 5-га тыдня посту ўвечары", "bogashlugbovya16_4"))
+        dat16.add(SlugbovyiaTextuData(-17, "Чацьвер 5-га тыдня посту ўвечары", "bogashlugbovya16_5"))
+        dat16.add(SlugbovyiaTextuData(-16, "Пятніца 5-га тыдня посту ўвечары", "bogashlugbovya16_6"))
+        dat16.add(SlugbovyiaTextuData(-15, "Субота Акафісту Ютрань", "bogashlugbovya16_7", utran = true))
+        dat16.add(SlugbovyiaTextuData(-15, "Літургія ў суботу Акафісту", "bogashlugbovya16_8", liturgia = true))
+        dat16.add(SlugbovyiaTextuData(-15, "5-ая нядзеля Вялікага посту (Памяць сьвятое Маці нашае Марыі Ягіпецкай) Вячэрня", "bogashlugbovya16_9"))
+        dat16.add(SlugbovyiaTextuData(-14, "5-ая нядзеля Вялікага посту (Памяць сьвятое Маці нашае Марыі Ягіпецкай) Ютрань", "bogashlugbovya16_10", utran = true))
+        dat16.add(SlugbovyiaTextuData(-14, "5-ая нядзеля Вялікага посту (Памяць сьвятое Маці нашае Марыі Ягіпецкай) Літургія сьвятога Васіля Вялікага", "bogashlugbovya16_11", liturgia = true))
+
+        dat17.add(SlugbovyiaTextuData(-14, "5-ая нядзеля посту ўвечары", "bogashlugbovya17_1"))
+        dat17.add(SlugbovyiaTextuData(-13, "Панядзелак 6-га тыдня посту ўвечары", "bogashlugbovya17_2"))
+        dat17.add(SlugbovyiaTextuData(-12, "Аўторак 6-га тыдня посту ўвечары", "bogashlugbovya17_3"))
+        dat17.add(SlugbovyiaTextuData(-11, "Серада 6-га тыдня посту ўвечары", "bogashlugbovya17_4"))
+        dat17.add(SlugbovyiaTextuData(-10, "Чацьвер 6-га тыдня посту ўвечары", "bogashlugbovya17_5"))
+        dat17.add(SlugbovyiaTextuData(-9, "Пятніца 6-га тыдня посту ўвечары", "bogashlugbovya17_6"))
+        dat17.add(SlugbovyiaTextuData(-8, "Субота Лазара Ютрань", "bogashlugbovya17_7", utran = true))
+        dat17.add(SlugbovyiaTextuData(-7, "Літургія", "bogashlugbovya17_8", liturgia = true))
+    }
+
+    fun getTydzen1() = dat12
+
+    fun getTydzen2() = dat13
+
+    fun getTydzen3() = dat14
+
+    fun getTydzen4() = dat15
+
+    fun getTydzen5() = dat16
+
+    fun getTydzen6() = dat17
+
+    fun getResource(day: Int, utran: Boolean = false, liturgia: Boolean = false): String {
+        dat12.forEach {
+            if (day == it.day) {
+                if (utran && utran == it.utran) return it.resource
+                if (liturgia && liturgia == it.liturgia) return it.resource
+                return it.resource
+            }
+        }
+        dat13.forEach {
+            if (day == it.day) {
+                if (utran && utran == it.utran) return it.resource
+                if (liturgia && liturgia == it.liturgia) return it.resource
+                return it.resource
+            }
+        }
+        dat14.forEach {
+            if (day == it.day) {
+                if (utran && utran == it.utran) return it.resource
+                if (liturgia && liturgia == it.liturgia) return it.resource
+                return it.resource
+            }
+        }
+        dat15.forEach {
+            if (day == it.day) {
+                if (utran && utran == it.utran) return it.resource
+                if (liturgia && liturgia == it.liturgia) return it.resource
+                return it.resource
+            }
+        }
+        dat16.forEach {
+            if (day == it.day) {
+                if (utran && utran == it.utran) return it.resource
+                if (liturgia && liturgia == it.liturgia) return it.resource
+                return it.resource
+            }
+        }
+        dat17.forEach {
+            if (day == it.day) {
+                if (utran && utran == it.utran) return it.resource
+                if (liturgia && liturgia == it.liturgia) return it.resource
+                return it.resource
+            }
+        }
+        return "0"
+    }
+
+    fun getTitle(resource: String): String {
+        dat12.forEach {
+            if (resource == it.resource) return it.title
+        }
+        dat13.forEach {
+            if (resource == it.resource) return it.title
+        }
+        dat14.forEach {
+            if (resource == it.resource) return it.title
+        }
+        dat15.forEach {
+            if (resource == it.resource) return it.title
+        }
+        dat16.forEach {
+            if (resource == it.resource) return it.title
+        }
+        dat17.forEach {
+            if (resource == it.resource) return it.title
+        }
+        return ""
+    }
+
+    fun checkUtran(day: Int): Boolean {
+        dat12.forEach {
+            if (day == it.day) {
+                if (it.utran) return true
+            }
+        }
+        dat13.forEach {
+            if (day == it.day) {
+                if (it.utran) return true
+            }
+        }
+        dat14.forEach {
+            if (day == it.day) {
+                if (it.utran) return true
+            }
+        }
+        dat15.forEach {
+            if (day == it.day) {
+                if (it.utran) return true
+            }
+        }
+        dat16.forEach {
+            if (day == it.day) {
+                if (it.utran) return true
+            }
+        }
+        dat17.forEach {
+            if (day == it.day) {
+                if (it.utran) return true
+            }
+        }
+        return false
+    }
+
+    fun checkLiturgia(day: Int): Boolean {
+        dat12.forEach {
+            if (day == it.day) {
+                if (it.liturgia) return true
+            }
+        }
+        dat13.forEach {
+            if (day == it.day) {
+                if (it.liturgia) return true
+            }
+        }
+        dat14.forEach {
+            if (day == it.day) {
+                if (it.liturgia) return true
+            }
+        }
+        dat15.forEach {
+            if (day == it.day) {
+                if (it.liturgia) return true
+            }
+        }
+        dat16.forEach {
+            if (day == it.day) {
+                if (it.liturgia) return true
+            }
+        }
+        dat17.forEach {
+            if (day == it.day) {
+                if (it.liturgia) return true
+            }
+        }
+        return false
+    }
+
+    fun checkViachernia(day: Int): Boolean {
+        dat12.forEach {
+            if (day == it.day) {
+                if (!it.utran && !it.liturgia) return true
+            }
+        }
+        dat13.forEach {
+            if (day == it.day) {
+                if (!it.utran && !it.liturgia) return true
+            }
+        }
+        dat14.forEach {
+            if (day == it.day) {
+                if (!it.utran && !it.liturgia) return true
+            }
+        }
+        dat15.forEach {
+            if (day == it.day) {
+                if (!it.utran && !it.liturgia) return true
+            }
+        }
+        dat16.forEach {
+            if (day == it.day) {
+                if (!it.utran && !it.liturgia) return true
+            }
+        }
+        dat17.forEach {
+            if (day == it.day) {
+                if (!it.utran && !it.liturgia) return true
+            }
+        }
+        return false
+    }
+}

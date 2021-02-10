@@ -171,11 +171,10 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
             bindingprogress.actionMinusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
         }
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        resurs = intent.extras?.getString("type", "bogashlugbovya12_1") ?: "bogashlugbovya12_1"
-        title = intent.extras?.getString("title", "") ?: ""
-        var id = intent.extras?.getInt("id", R.raw.bogashlugbovya12_1) ?: R.raw.bogashlugbovya12_1
-        if (id == -1) id = resourse(resurs)
-        val inputStream = resources.openRawResource(id)
+        resurs = intent.extras?.getString("resource", "bogashlugbovya12_1") ?: "bogashlugbovya12_1"
+        val slugba = SlugbovyiaTextu()
+        title = slugba.getTitle(resurs)
+        val inputStream = resources.openRawResource(resourse(resurs))
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         var line: String

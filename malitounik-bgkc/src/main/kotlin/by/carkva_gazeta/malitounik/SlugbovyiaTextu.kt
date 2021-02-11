@@ -1,5 +1,11 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.BufferedReader
+import java.io.InputStreamReader
+
 class SlugbovyiaTextu {
     private val dat12 = ArrayList<SlugbovyiaTextuData>()
     private val dat13 = ArrayList<SlugbovyiaTextuData>()
@@ -7,6 +13,7 @@ class SlugbovyiaTextu {
     private val dat15 = ArrayList<SlugbovyiaTextuData>()
     private val dat16 = ArrayList<SlugbovyiaTextuData>()
     private val dat17 = ArrayList<SlugbovyiaTextuData>()
+    private val opisanieSviat = ArrayList<ArrayList<String>>()
 
     init {
         dat12.add(SlugbovyiaTextuData(-49, "Вячэрня ў нядзелю сырную вeчарам", "bogashlugbovya12_1"))
@@ -150,6 +157,31 @@ class SlugbovyiaTextu {
         return ""
     }
 
+    private fun loadOpisanieSviat(activity: Activity) {
+        if (opisanieSviat.size == 0) {
+            val inputStream = activity.resources.openRawResource(R.raw.opisanie_sviat)
+            val isr = InputStreamReader(inputStream)
+            val reader = BufferedReader(isr)
+            val builder = reader.use {
+                it.readText()
+            }
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+            opisanieSviat.addAll(gson.fromJson(builder, type))
+        }
+    }
+
+    fun checkUtran(activity: Activity, day: Int, mun: Int): Boolean {
+        loadOpisanieSviat(activity)
+        opisanieSviat.forEach {
+            if (day == it[0].toInt() && mun == it[1].toInt()) {
+                if (it[3] != "")
+                    return true
+            }
+        }
+        return false
+    }
+
     fun checkUtran(day: Int): Boolean {
         dat12.forEach {
             if (day == it.day) {
@@ -184,6 +216,17 @@ class SlugbovyiaTextu {
         return false
     }
 
+    fun checkLiturgia(activity: Activity, day: Int, mun: Int): Boolean {
+        loadOpisanieSviat(activity)
+        opisanieSviat.forEach {
+            if (day == it[0].toInt() && mun == it[1].toInt()) {
+                if (it[4] != "")
+                    return true
+            }
+        }
+        return false
+    }
+
     fun checkLiturgia(day: Int): Boolean {
         dat12.forEach {
             if (day == it.day) {
@@ -213,6 +256,17 @@ class SlugbovyiaTextu {
         dat17.forEach {
             if (day == it.day) {
                 if (it.liturgia) return true
+            }
+        }
+        return false
+    }
+
+    fun checkViachernia(activity: Activity, day: Int, mun: Int): Boolean {
+        loadOpisanieSviat(activity)
+        opisanieSviat.forEach {
+            if (day == it[0].toInt() && mun == it[1].toInt()) {
+                if (it[5] != "")
+                    return true
             }
         }
         return false

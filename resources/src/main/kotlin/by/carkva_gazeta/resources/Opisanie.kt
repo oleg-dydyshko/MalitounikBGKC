@@ -69,7 +69,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         val inputStream: InputStream
         if (svity) {
-            inputStream = resources.openRawResource(R.raw.opisanie_sviat)
+            inputStream = resources.openRawResource(by.carkva_gazeta.malitounik.R.raw.opisanie_sviat)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             val builder = reader.use {

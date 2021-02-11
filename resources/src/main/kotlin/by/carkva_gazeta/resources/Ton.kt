@@ -22,11 +22,14 @@ import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.databinding.AkafistUnderBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.lang.Runnable
+import java.util.*
 
 class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private val mHideHandler = Handler(Looper.getMainLooper())
@@ -114,61 +117,108 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         val ton = intent.extras?.getInt("ton", 1) ?: 1
         val tonNadzelny = intent.extras?.getBoolean("ton_naidzelny", true) ?: true
         var inputStream: InputStream
-        if (tonNadzelny) {
-            inputStream = r.openRawResource(R.raw.ton1)
-            title = "Тон $ton"
-            when (ton) {
-                1 -> inputStream = r.openRawResource(R.raw.ton1)
-                2 -> inputStream = r.openRawResource(R.raw.ton2)
-                3 -> inputStream = r.openRawResource(R.raw.ton3)
-                4 -> inputStream = r.openRawResource(R.raw.ton4)
-                5 -> inputStream = r.openRawResource(R.raw.ton5)
-                6 -> inputStream = r.openRawResource(R.raw.ton6)
-                7 -> inputStream = r.openRawResource(R.raw.ton7)
-                8 -> inputStream = r.openRawResource(R.raw.ton8)
+        when {
+            intent.extras?.getBoolean("ton_na_sviaty", false) == true -> {
+                val c = Calendar.getInstance()
+                val mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: c[Calendar.MONTH] + 1
+                val day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
+                inputStream = resources.openRawResource(by.carkva_gazeta.malitounik.R.raw.opisanie_sviat)
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                val builder = reader.use {
+                    it.readText()
+                }
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                val arrayList: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
+                arrayList.forEach {
+                    if (day == it[0].toInt() && mun == it[1].toInt()) {
+                        var res = it[2]
+                        val t1 = res.indexOf("<strong>")
+                        val t2 = res.indexOf("</strong>")
+                        if (t1 != -1 && t2 != -1) {
+                            title = res.substring(t1 + 8, t2)
+                        }
+                        when (intent.extras?.getInt("lityrgia", 4) ?: 4) {
+                            3 -> res = it[3]
+                            4 -> res = it[4]
+                            5 -> res = it[5]
+                        }
+                        if (dzenNoch) res = res.replace("#d00505", "#f44336")
+                        binding.TextView.text = MainActivity.fromHtml(res)
+                    }
+                }
             }
-        } else {
-            inputStream = r.openRawResource(R.raw.ton1_budni)
-            when (ton) {
-                1 -> {
-                    inputStream = r.openRawResource(R.raw.ton1_budni)
-                    title = "ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам"
+            tonNadzelny -> {
+                inputStream = r.openRawResource(R.raw.ton1)
+                title = "Тон $ton"
+                when (ton) {
+                    1 -> inputStream = r.openRawResource(R.raw.ton1)
+                    2 -> inputStream = r.openRawResource(R.raw.ton2)
+                    3 -> inputStream = r.openRawResource(R.raw.ton3)
+                    4 -> inputStream = r.openRawResource(R.raw.ton4)
+                    5 -> inputStream = r.openRawResource(R.raw.ton5)
+                    6 -> inputStream = r.openRawResource(R.raw.ton6)
+                    7 -> inputStream = r.openRawResource(R.raw.ton7)
+                    8 -> inputStream = r.openRawResource(R.raw.ton8)
                 }
-                2 -> {
-                    inputStream = r.openRawResource(R.raw.ton2_budni)
-                    title = "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю"
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                var line: String
+                val builder = StringBuilder()
+                reader.use { bufferedReader ->
+                    bufferedReader.forEachLine {
+                        line = it
+                        if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                        builder.append(line)
+                    }
                 }
-                3 -> {
-                    inputStream = r.openRawResource(R.raw.ton3_budni)
-                    title = "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу"
+                val resursOut = builder.toString()
+                binding.TextView.text = MainActivity.fromHtml(resursOut)
+            }
+            else -> {
+                inputStream = r.openRawResource(R.raw.ton1_budni)
+                when (ton) {
+                    1 -> {
+                        inputStream = r.openRawResource(R.raw.ton1_budni)
+                        title = "ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам"
+                    }
+                    2 -> {
+                        inputStream = r.openRawResource(R.raw.ton2_budni)
+                        title = "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю"
+                    }
+                    3 -> {
+                        inputStream = r.openRawResource(R.raw.ton3_budni)
+                        title = "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу"
+                    }
+                    4 -> {
+                        inputStream = r.openRawResource(R.raw.ton4_budni)
+                        title = "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю"
+                    }
+                    5 -> {
+                        inputStream = r.openRawResource(R.raw.ton5_budni)
+                        title = "ПЯТНІЦА\nСлужба Крыжу Гасподняму"
+                    }
+                    6 -> {
+                        inputStream = r.openRawResource(R.raw.ton6_budni)
+                        title = "Субота\nСлужба ўсім сьвятым і памёрлым"
+                    }
                 }
-                4 -> {
-                    inputStream = r.openRawResource(R.raw.ton4_budni)
-                    title = "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю"
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                var line: String
+                val builder = StringBuilder()
+                reader.use { bufferedReader ->
+                    bufferedReader.forEachLine {
+                        line = it
+                        if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                        builder.append(line)
+                    }
                 }
-                5 -> {
-                    inputStream = r.openRawResource(R.raw.ton5_budni)
-                    title = "ПЯТНІЦА\nСлужба Крыжу Гасподняму"
-                }
-                6 -> {
-                    inputStream = r.openRawResource(R.raw.ton6_budni)
-                    title = "Субота\nСлужба ўсім сьвятым і памёрлым"
-                }
+                val resursOut = builder.toString()
+                binding.TextView.text = MainActivity.fromHtml(resursOut)
             }
         }
-        val isr = InputStreamReader(inputStream)
-        val reader = BufferedReader(isr)
-        var line: String
-        val builder = StringBuilder()
-        reader.use { bufferedReader ->
-            bufferedReader.forEachLine {
-                line = it
-                if (dzenNoch) line = line.replace("#d00505", "#f44336")
-                builder.append(line)
-            }
-        }
-        val resursOut = builder.toString()
-        binding.TextView.text = MainActivity.fromHtml(resursOut)
         requestedOrientation = if (chin.getBoolean("orientation", false)) {
             orientation
         } else {

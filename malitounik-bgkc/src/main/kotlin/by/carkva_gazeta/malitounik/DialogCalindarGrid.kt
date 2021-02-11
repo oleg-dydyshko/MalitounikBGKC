@@ -202,10 +202,10 @@ class DialogCalindarGrid : DialogFragment() {
             holder.mText.text = text
             holder.itemView.tag = mItemList[position]
             activity?.let {
-                if ((!slugba.checkUtran(raznicia) && denNedzeli != 1) && mItemList[position] == 4) {
+                if (!(slugba.checkUtran(it, data, mun) || slugba.checkUtran(raznicia) || denNedzeli == 1) && mItemList[position] == 4) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                } else if (!slugba.checkViachernia(raznicia) && mItemList[position] == 1) {
+                } else if (!(slugba.checkViachernia(it, data, mun) || slugba.checkViachernia(raznicia)) && mItemList[position] == 1) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                 } else if (mItemList[position] == 2 || mItemList[position] == 3 || mItemList[position] == 5 || mItemList[position] == 8 || mItemList[position] == 9) {
@@ -243,41 +243,66 @@ class DialogCalindarGrid : DialogFragment() {
                 when (itemList[adapterPosition].toInt()) {
                     1 -> {
                         activity?.let {
-                            if (slugba.checkViachernia(raznicia)) {
-                                val intent = Intent()
-                                val resours = slugba.getResource(raznicia)
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("resurs", resours)
-                                intent.putExtra("title", slugba.getTitle(resours))
-                                startActivity(intent)
-                                dialog?.cancel()
+                            when {
+                                slugba.checkViachernia(it, data, mun) -> {
+                                    val intent = Intent()
+                                    intent.setClassName(it, MainActivity.TON)
+                                    intent.putExtra("ton_na_sviaty", true)
+                                    intent.putExtra("lityrgia", 5)
+                                    intent.putExtra("day", data)
+                                    intent.putExtra("mun", mun)
+                                    startActivity(intent)
+                                    dialog?.cancel()
+                                }
+                                slugba.checkViachernia(raznicia) -> {
+                                    val intent = Intent()
+                                    val resours = slugba.getResource(raznicia)
+                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                    intent.putExtra("resurs", resours)
+                                    intent.putExtra("title", slugba.getTitle(resours))
+                                    startActivity(intent)
+                                    dialog?.cancel()
+                                }
+                                else -> {
+                                }
                             }
                         }
                     }
                     6 -> {
-                        if (slugba.checkLiturgia(raznicia)) {
-                            activity?.let {
-                                val intent = Intent()
-                                val resours = slugba.getResource(raznicia, liturgia = true)
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("resurs", resours)
-                                intent.putExtra("title", slugba.getTitle(resours))
-                                startActivity(intent)
-                                dialog?.cancel()
-                            }
-                        } else {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.TON)
-                                if (ton != 0) {
-                                    intent.putExtra("ton", ton)
-                                    intent.putExtra("ton_naidzelny", true)
-                                } else {
-                                    intent.putExtra("ton", denNedzeli - 1)
-                                    intent.putExtra("ton_naidzelny", false)
+                        activity?.let {
+                            when {
+                                slugba.checkLiturgia(it, data, mun) -> {
+                                    val intent = Intent()
+                                    intent.setClassName(it, MainActivity.TON)
+                                    intent.putExtra("ton_na_sviaty", true)
+                                    intent.putExtra("lityrgia", 4)
+                                    intent.putExtra("day", data)
+                                    intent.putExtra("mun", mun)
+                                    startActivity(intent)
+                                    dialog?.cancel()
                                 }
-                                startActivity(intent)
-                                dialog?.cancel()
+                                slugba.checkLiturgia(raznicia) -> {
+                                    val intent = Intent()
+                                    val resours = slugba.getResource(raznicia, liturgia = true)
+                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                    intent.putExtra("resurs", resours)
+                                    intent.putExtra("title", slugba.getTitle(resours))
+                                    startActivity(intent)
+                                    dialog?.cancel()
+                                }
+                                else -> {
+                                    val intent = Intent()
+                                    intent.setClassName(it, MainActivity.TON)
+                                    if (ton != 0) {
+                                        intent.putExtra("ton", ton)
+                                        intent.putExtra("ton_naidzelny", true)
+                                    } else {
+                                        intent.putExtra("ton", denNedzeli - 1)
+                                        intent.putExtra("ton_naidzelny", false)
+                                    }
+                                    startActivity(intent)
+                                    dialog?.cancel()
+                                }
                             }
                         }
                     }
@@ -292,25 +317,38 @@ class DialogCalindarGrid : DialogFragment() {
                         }
                     }
                     4 -> {
-                        if (slugba.checkUtran(raznicia)) {
-                            activity?.let {
-                                val intent = Intent()
-                                val resours = slugba.getResource(raznicia, utran = true)
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("resurs", resours)
-                                intent.putExtra("title", slugba.getTitle(resours))
-                                startActivity(intent)
-                                dialog?.cancel()
-                            }
-                        } else if (denNedzeli == 1) {
-                            activity?.let {
-                                val data = resources.getStringArray(R.array.bogaslugbovuia)
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[3])
-                                intent.putExtra("resurs", "bogashlugbovya6")
-                                startActivity(intent)
-                                dialog?.cancel()
+                        activity?.let {
+                            when {
+                                slugba.checkUtran(it, data, mun) -> {
+                                    val intent = Intent()
+                                    intent.setClassName(it, MainActivity.TON)
+                                    intent.putExtra("ton_na_sviaty", true)
+                                    intent.putExtra("lityrgia", 3)
+                                    intent.putExtra("day", data)
+                                    intent.putExtra("mun", mun)
+                                    startActivity(intent)
+                                    dialog?.cancel()
+                                }
+                                slugba.checkUtran(raznicia) -> {
+                                    val intent = Intent()
+                                    val resours = slugba.getResource(raznicia, utran = true)
+                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                    intent.putExtra("resurs", resours)
+                                    intent.putExtra("title", slugba.getTitle(resours))
+                                    startActivity(intent)
+                                    dialog?.cancel()
+                                }
+                                denNedzeli == 1 -> {
+                                    val data = resources.getStringArray(R.array.bogaslugbovuia)
+                                    val intent = Intent()
+                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                    intent.putExtra("title", data[3])
+                                    intent.putExtra("resurs", "bogashlugbovya6")
+                                    startActivity(intent)
+                                    dialog?.cancel()
+                                }
+                                else -> {
+                                }
                             }
                         }
                     }

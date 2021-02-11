@@ -264,10 +264,6 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         val id = item.itemId
-        if (id == by.carkva_gazeta.malitounik.R.id.action_help) {
-            val dialogHelpListView = DialogHelpListView.getInstance(3)
-            dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
-        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             checkSetDzenNoch = true
             item.isChecked = !item.isChecked

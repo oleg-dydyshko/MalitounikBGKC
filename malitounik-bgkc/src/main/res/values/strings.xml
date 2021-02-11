@@ -445,16 +445,6 @@
         <item>ПЯТНІЦА\nСлужба Крыжу Гасподняму</item>
         <item>СУБОТА\nСлужба ўсім сьвятым і памёрлым</item>
     </string-array>
-    <string-array name="ton_niadzeli">
-        <item>Тон 1</item>
-        <item>Тон 2</item>
-        <item>Тон 3</item>
-        <item>Тон 4</item>
-        <item>Тон 5</item>
-        <item>Тон 6</item>
-        <item>Тон 7</item>
-        <item>Тон 8</item>
-    </string-array>
     <string-array name="parafii_bgkc_1">
         <item>Цэнтральны дэканат</item>
         <item>Барысаў</item>

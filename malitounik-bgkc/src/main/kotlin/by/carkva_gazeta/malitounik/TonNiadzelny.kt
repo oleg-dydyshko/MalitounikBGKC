@@ -19,8 +19,12 @@ import kotlinx.coroutines.*
 
 class TonNiadzelny : AppCompatActivity() {
     private var mLastClickTime: Long = 0
-    private val data: Array<out String>
-        get() = resources.getStringArray(R.array.ton_niadzeli)
+    private val data: ArrayList<String>
+        get() {
+            val t = ArrayList<String>()
+            for (i in 1..8) t.add(getString(R.string.ton, i.toString()))
+            return t
+        }
     private lateinit var binding: AkafistListBinding
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
@@ -59,10 +63,8 @@ class TonNiadzelny : AppCompatActivity() {
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
-        if (dzenNoch)
-            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
-        else
-            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
+        if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        else binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         val adapter = MenuListAdaprer(this, data)
         binding.ListView.adapter = adapter
         binding.ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->

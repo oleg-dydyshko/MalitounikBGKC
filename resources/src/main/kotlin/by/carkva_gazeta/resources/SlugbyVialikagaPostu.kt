@@ -2,6 +2,7 @@ package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.content.pm.ActivityInfo
@@ -16,7 +17,9 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
@@ -47,11 +50,15 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         actionBar?.show()
     }
     private var fullscreenPage = false
+    private var autoscroll = false
     private var traker = false
     private lateinit var k: SharedPreferences
     private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
     private var dzenNoch = false
     private var n = 0
+    private var spid = 60
+    private var mActionDown = false
+    private var mAutoScroll = true
     private var resurs = ""
     private var men = false
     private var title = ""
@@ -62,16 +69,28 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
     private lateinit var bindingprogress: ProgressBinding
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
+    private var autoScrollJob: Job? = null
+    private var autoStartScrollJob: Job? = null
+    private var diffScroll = -1
 
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
+        autoStartScrollJob?.cancel()
+        procentJob?.cancel()
     }
 
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
         if (fullscreenPage) hide()
+        autoscroll = k.getBoolean("autoscroll", false)
+        if (autoscroll) {
+            binding.TextView.postDelayed({
+                startAutoScroll()
+            }, 1000)
+        }
+        spid = k.getInt("autoscrollSpid", 60)
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
@@ -79,66 +98,6 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-    }
-
-    private fun resourse(resurs: String): Int {
-        return when (resurs) {
-            "bogashlugbovya12_1" -> R.raw.bogashlugbovya12_1
-            "bogashlugbovya12_2" -> R.raw.bogashlugbovya12_2
-            "bogashlugbovya12_3" -> R.raw.bogashlugbovya12_3
-            "bogashlugbovya12_4" -> R.raw.bogashlugbovya12_4
-            "bogashlugbovya12_5" -> R.raw.bogashlugbovya12_5
-            "bogashlugbovya12_6" -> R.raw.bogashlugbovya12_6
-            "bogashlugbovya12_7" -> R.raw.bogashlugbovya12_7
-            "bogashlugbovya12_8" -> R.raw.bogashlugbovya12_8
-            "bogashlugbovya12_9" -> R.raw.bogashlugbovya12_9
-            "bogashlugbovya13_1" -> R.raw.bogashlugbovya13_1
-            "bogashlugbovya13_2" -> R.raw.bogashlugbovya13_2
-            "bogashlugbovya13_3" -> R.raw.bogashlugbovya13_3
-            "bogashlugbovya13_4" -> R.raw.bogashlugbovya13_4
-            "bogashlugbovya13_5" -> R.raw.bogashlugbovya13_5
-            "bogashlugbovya13_6" -> R.raw.bogashlugbovya13_6
-            "bogashlugbovya13_7" -> R.raw.bogashlugbovya13_7
-            "bogashlugbovya13_8" -> R.raw.bogashlugbovya13_8
-            "bogashlugbovya14_1" -> R.raw.bogashlugbovya14_1
-            "bogashlugbovya14_2" -> R.raw.bogashlugbovya14_2
-            "bogashlugbovya14_3" -> R.raw.bogashlugbovya14_3
-            "bogashlugbovya14_4" -> R.raw.bogashlugbovya14_4
-            "bogashlugbovya14_5" -> R.raw.bogashlugbovya14_5
-            "bogashlugbovya14_6" -> R.raw.bogashlugbovya14_6
-            "bogashlugbovya14_7" -> R.raw.bogashlugbovya14_7
-            "bogashlugbovya14_8" -> R.raw.bogashlugbovya14_8
-            "bogashlugbovya14_9" -> R.raw.bogashlugbovya14_9
-            "bogashlugbovya15_1" -> R.raw.bogashlugbovya15_1
-            "bogashlugbovya15_2" -> R.raw.bogashlugbovya15_2
-            "bogashlugbovya15_3" -> R.raw.bogashlugbovya15_3
-            "bogashlugbovya15_4" -> R.raw.bogashlugbovya15_4
-            "bogashlugbovya15_5" -> R.raw.bogashlugbovya15_5
-            "bogashlugbovya15_6" -> R.raw.bogashlugbovya15_6
-            "bogashlugbovya15_7" -> R.raw.bogashlugbovya15_7
-            "bogashlugbovya15_8" -> R.raw.bogashlugbovya15_8
-            "bogashlugbovya15_9" -> R.raw.bogashlugbovya15_9
-            "bogashlugbovya16_1" -> R.raw.bogashlugbovya16_1
-            "bogashlugbovya16_2" -> R.raw.bogashlugbovya16_2
-            "bogashlugbovya16_3" -> R.raw.bogashlugbovya16_3
-            "bogashlugbovya16_4" -> R.raw.bogashlugbovya16_4
-            "bogashlugbovya16_5" -> R.raw.bogashlugbovya16_5
-            "bogashlugbovya16_6" -> R.raw.bogashlugbovya16_6
-            "bogashlugbovya16_7" -> R.raw.bogashlugbovya16_7
-            "bogashlugbovya16_8" -> R.raw.bogashlugbovya16_8
-            "bogashlugbovya16_9" -> R.raw.bogashlugbovya16_9
-            "bogashlugbovya16_10" -> R.raw.bogashlugbovya16_10
-            "bogashlugbovya16_11" -> R.raw.bogashlugbovya16_11
-            "bogashlugbovya17_1" -> R.raw.bogashlugbovya17_1
-            "bogashlugbovya17_2" -> R.raw.bogashlugbovya17_2
-            "bogashlugbovya17_3" -> R.raw.bogashlugbovya17_3
-            "bogashlugbovya17_4" -> R.raw.bogashlugbovya17_4
-            "bogashlugbovya17_5" -> R.raw.bogashlugbovya17_5
-            "bogashlugbovya17_6" -> R.raw.bogashlugbovya17_6
-            "bogashlugbovya17_7" -> R.raw.bogashlugbovya17_7
-            "bogashlugbovya17_8" -> R.raw.bogashlugbovya17_8
-            else -> R.raw.bogashlugbovya12_1
-        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -160,8 +119,14 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             traker = savedInstanceState.getBoolean("traker")
+        } else {
+            if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                autoStartScroll()
+            }
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        autoscroll = k.getBoolean("autoscroll", false)
         if (dzenNoch) {
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
@@ -174,7 +139,7 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         resurs = intent.extras?.getString("resource", "bogashlugbovya12_1") ?: "bogashlugbovya12_1"
         val slugba = SlugbovyiaTextu()
         title = slugba.getTitle(resurs)
-        val inputStream = resources.openRawResource(resourse(resurs))
+        val inputStream = resources.openRawResource(Bogashlugbovya.getResourse(resurs))
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         var line: String
@@ -193,6 +158,23 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         } else {
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
+        binding.scrollView2.setOnBottomReachedListener(object : InteractiveScrollView.OnBottomReachedListener {
+            override fun onBottomReached() {
+                autoscroll = false
+                stopAutoScroll()
+                invalidateOptionsMenu()
+            }
+
+            override fun onScrollDiff(diff: Int) {
+                diffScroll = diff
+            }
+        })
+        binding.scrollView2.setOnNestedTouchListener(object : InteractiveScrollView.OnNestedTouchListener {
+            override fun onTouch(action: Boolean) {
+                stopAutoStartScroll()
+                mActionDown = action
+            }
+        })
         bindingprogress.actionPlusFont.setOnClickListener {
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
@@ -249,6 +231,32 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
                 MainActivity.checkBrightness = false
             }
         }
+        binding.actionPlus.setOnClickListener {
+            if (spid in 20..235) {
+                spid -= 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                bindingprogress.progressTitle.text = ""
+                bindingprogress.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
+        binding.actionMinus.setOnClickListener {
+            if (spid in 10..225) {
+                spid += 5
+                val proc = 100 - (spid - 15) * 100 / 215
+                bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                bindingprogress.progressTitle.text = ""
+                bindingprogress.progress.visibility = View.VISIBLE
+                startProcent()
+                val prefEditors = k.edit()
+                prefEditors.putInt("autoscrollSpid", spid)
+                prefEditors.apply()
+            }
+        }
     }
 
     private fun setTollbarTheme() {
@@ -286,20 +294,93 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         binding.titleToolbar.isSingleLine = true
     }
 
-    private fun startProcent() {
+    private fun autoStartScroll() {
+        if (autoScrollJob?.isActive != true) {
+            var autoTime: Long = 10000
+            for (i in 0..15) {
+                if (i == k.getInt("autoscrollAutostartTime", 5)) {
+                    autoTime = (i + 5) * 1000L
+                    break
+                }
+            }
+            autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                delay(autoTime)
+                startAutoScroll()
+                invalidateOptionsMenu()
+            }
+        }
+    }
+
+    private fun stopAutoStartScroll() {
+        autoStartScrollJob?.cancel()
+    }
+
+    private fun startProcent(delayTime: Long = 1000) {
         procentJob?.cancel()
         procentJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(3000)
+            delay(delayTime)
             bindingprogress.progress.visibility = View.GONE
             bindingprogress.fontSize.visibility = View.GONE
             bindingprogress.brighess.visibility = View.GONE
         }
     }
 
+    private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
+        if (autoScrollJob?.isActive == true) {
+            if (saveAutoScroll) {
+                val prefEditors = k.edit()
+                prefEditors.putBoolean("autoscroll", false)
+                prefEditors.apply()
+            }
+            binding.actionMinus.visibility = View.GONE
+            binding.actionPlus.visibility = View.GONE
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+            binding.actionMinus.animation = animation
+            binding.actionPlus.animation = animation
+            autoScrollJob?.cancel()
+            binding.TextView.setTextIsSelectable(true)
+            if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(60000)
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                }
+            }
+        }
+    }
+
+    private fun startAutoScroll() {
+        if (diffScroll != 0) {
+            val prefEditors = k.edit()
+            prefEditors.putBoolean("autoscroll", true)
+            prefEditors.apply()
+            binding.actionMinus.visibility = View.VISIBLE
+            binding.actionPlus.visibility = View.VISIBLE
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+            binding.actionMinus.animation = animation
+            binding.actionPlus.animation = animation
+            stopAutoStartScroll()
+            binding.TextView.setTextIsSelectable(false)
+            autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                while (isActive) {
+                    delay(spid.toLong())
+                    if (!mActionDown && !MainActivity.dialogVisable) {
+                        binding.scrollView2.scrollBy(0, 2)
+                    }
+                }
+            }
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            binding.scrollView2.scrollTo(0, 0)
+            startAutoScroll()
+        }
+    }
+
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         v?.performClick()
+        val heightConstraintLayout = binding.constraint.height
         val widthConstraintLayout = binding.constraint.width
         val otstup = (10 * resources.displayMetrics.density).toInt()
+        val y = event?.y?.toInt() ?: 0
         val x = event?.x?.toInt() ?: 0
         val id = v?.id ?: 0
         if (id == R.id.constraint) {
@@ -309,12 +390,13 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
+                    val proc: Int
                     if (x < otstup) {
                         bindingprogress.brighess.visibility = View.VISIBLE
                         bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
                         bindingprogress.progress.visibility = View.VISIBLE
-                        startProcent()
+                        startProcent(3000)
                     }
                     if (x > widthConstraintLayout - otstup) {
                         bindingprogress.fontSize.visibility = View.VISIBLE
@@ -324,7 +406,20 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
                         bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
                         bindingprogress.progress.visibility = View.VISIBLE
+                        startProcent(3000)
+                    }
+                    if (y > heightConstraintLayout - otstup) {
+                        spid = k.getInt("autoscrollSpid", 60)
+                        proc = 100 - (spid - 15) * 100 / 215
+                        bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                        bindingprogress.progressTitle.text = ""
+                        bindingprogress.progress.visibility = View.VISIBLE
                         startProcent()
+                        autoscroll = k.getBoolean("autoscroll", false)
+                        if (!autoscroll) {
+                            startAutoScroll()
+                            invalidateOptionsMenu()
+                        }
                     }
                 }
             }
@@ -334,7 +429,19 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
+        val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
+        if (mAutoScroll) {
+            autoscroll = k.getBoolean("autoscroll", false)
+            if (autoscroll) {
+                itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
+            } else {
+                itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
+            }
+        } else {
+            itemAuto.isVisible = false
+            stopAutoScroll()
+        }
         if (men) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
@@ -374,6 +481,22 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         if (item.itemId == android.R.id.home) {
             onBackPressed()
             return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
+            val sendIntent = Intent()
+            sendIntent.action = Intent.ACTION_SEND
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=2&file=$resurs")
+            sendIntent.type = "text/plain"
+            startActivity(Intent.createChooser(sendIntent, null))
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
+            autoscroll = k.getBoolean("autoscroll", false)
+            if (autoscroll) {
+                stopAutoScroll()
+            } else {
+                startAutoScroll()
+            }
+            invalidateOptionsMenu()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             traker = true
@@ -423,13 +546,26 @@ class SlugbyVialikagaPostu : AppCompatActivity(), OnTouchListener, DialogFontSiz
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
+        stopAutoStartScroll()
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = true
+        }
+        return super.onMenuOpened(featureId, menu)
+    }
+
+    override fun onPanelClosed(featureId: Int, menu: Menu) {
+        if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
+            MainActivity.dialogVisable = false
+        }
+    }
+
     override fun onBackPressed() {
         if (fullscreenPage) {
             fullscreenPage = false
             show()
         } else {
-            //if (traker) onSupportNavigateUp() else super.onBackPressed()
-            super.onBackPressed()
+            if (traker) onSupportNavigateUp() else super.onBackPressed()
         }
     }
 

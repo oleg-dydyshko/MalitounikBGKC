@@ -59,7 +59,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
     private var dzenNoch = false
     private var autoscroll = false
     private var n = 0
-    private var yS = 0
     private var spid = 60
     private var mActionDown = false
     private var change = false
@@ -294,7 +293,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
-                    yS = event?.x?.toInt() ?: 0
                     val proc: Int
                     if (x < otstup) {
                         bindingprogress.brighess.visibility = View.VISIBLE

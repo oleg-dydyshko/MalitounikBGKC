@@ -66,7 +66,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private lateinit var adapter: MaranAtaListAdaprer
     private val maranAta = ArrayList<String>()
     private var n = 0
-    private var yS = 0
     private var spid = 60
     private var belarus = false
     private var mActionDown = false
@@ -573,7 +572,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
-                    yS = event?.x?.toInt() ?: 0
                     val proc: Int
                     if (x < otstup) {
                         bindingprogress.brighess.visibility = View.VISIBLE

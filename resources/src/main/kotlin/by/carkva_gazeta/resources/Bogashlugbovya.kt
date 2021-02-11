@@ -64,7 +64,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var dzenNoch = false
     private var autoscroll = false
     private var n = 0
-    private var yS = 0
     private var spid = 60
     private var resurs = ""
     private var men = true
@@ -284,6 +283,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
             return false
         }
+
+        fun getResourse(resurs: String) = resursMap[resurs] ?: 0
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -645,12 +646,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             inputStream.close()
             return@withContext builder.toString()
         }
-        var bogashlugbovya = true
-        if (resurs.contains("bogashlugbovya")) {
-            val t1 = resurs.indexOf("_")
-            if (t1 != -1) bogashlugbovya = false
-        }
-        if ((resurs.contains("bogashlugbovya") && bogashlugbovya) || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("ton")) {
+        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("ton")) {
             binding.scrollView2.visibility = View.GONE
             if (resurs.contains("ton")) mAutoScroll = false
             binding.WebView.visibility = View.VISIBLE
@@ -820,7 +816,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
-                    yS = event?.x?.toInt() ?: 0
                     val proc: Int
                     if (x < otstup) {
                         bindingprogress.brighess.visibility = View.VISIBLE

@@ -60,7 +60,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var dzenNoch = false
     private var autoscroll = false
     private var n = 0
-    private var yS = 0
     private var spid = 60
     private var mActionDown = false
     private var change = false
@@ -281,7 +280,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
-                    yS = event?.x?.toInt() ?: 0
                     val proc: Int
                     if (x < otstup) {
                         bindingprogress.brighess.visibility = View.VISIBLE
@@ -340,8 +338,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         val zag1 = zaglav.indexOf(".")
                         val zag2 = zaglav.indexOf("-")
                         val zag3 = zaglav.indexOf(".", zag1 + 1)
-                        var zagS: String
-                        zagS = if (zag2 != -1) {
+                        val zagS = if (zag2 != -1) {
                             zaglav.substring(0, zag2)
                         } else {
                             zaglav

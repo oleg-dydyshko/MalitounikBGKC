@@ -151,9 +151,8 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
             if (MainActivity.checkmoduleResources(activity)) {
                 activity?.let {
                     val intent = Intent()
-                    intent.setClassName(it, MainActivity.NADSANMALITVYIPESNI)
+                    intent.setClassName(it, MainActivity.NADSANMALITVYIPESNILIST)
                     intent.putExtra("malitva", 2)
-                    intent.putExtra("malitva_title", binding.pesni.text.toString())
                     startActivity(intent)
                 }
             } else {

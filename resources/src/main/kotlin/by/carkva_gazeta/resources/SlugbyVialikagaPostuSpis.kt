@@ -78,8 +78,9 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val intent = Intent(this, SlugbyVialikagaPostu::class.java)
-            intent.putExtra("resource", data[position].resource)
+            val intent = Intent(this, Bogashlugbovya::class.java)
+            intent.putExtra("resurs", data[position].resource)
+            intent.putExtra("title", data[position].title)
             startActivity(intent)
         }
     }

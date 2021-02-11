@@ -245,8 +245,10 @@ class DialogCalindarGrid : DialogFragment() {
                         activity?.let {
                             if (slugba.checkViachernia(raznicia)) {
                                 val intent = Intent()
-                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTU)
-                                intent.putExtra("resource", slugba.getResource(raznicia))
+                                val resours = slugba.getResource(raznicia)
+                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("resurs", resours)
+                                intent.putExtra("title", slugba.getTitle(resours))
                                 startActivity(intent)
                                 dialog?.cancel()
                             }
@@ -256,8 +258,10 @@ class DialogCalindarGrid : DialogFragment() {
                         if (slugba.checkLiturgia(raznicia)) {
                             activity?.let {
                                 val intent = Intent()
-                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTU)
-                                intent.putExtra("resource", slugba.getResource(raznicia, liturgia = true))
+                                val resours = slugba.getResource(raznicia, liturgia = true)
+                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("resurs", resours)
+                                intent.putExtra("title", slugba.getTitle(resours))
                                 startActivity(intent)
                                 dialog?.cancel()
                             }
@@ -291,8 +295,10 @@ class DialogCalindarGrid : DialogFragment() {
                         if (slugba.checkUtran(raznicia)) {
                             activity?.let {
                                 val intent = Intent()
-                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTU)
-                                intent.putExtra("resource", slugba.getResource(raznicia, utran = true))
+                                val resours = slugba.getResource(raznicia, utran = true)
+                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("resurs", resours)
+                                intent.putExtra("title", slugba.getTitle(resours))
                                 startActivity(intent)
                                 dialog?.cancel()
                             }

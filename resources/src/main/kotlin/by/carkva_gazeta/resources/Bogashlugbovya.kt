@@ -283,8 +283,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
             return false
         }
-
-        fun getResourse(resurs: String) = resursMap[resurs] ?: 0
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -329,9 +327,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         binding = BogasluzbovyaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
-        resurs = intent?.getStringExtra("resurs") ?: ""
+        resurs = intent?.extras?.getString("resurs") ?: ""
         if (resurs.contains("pesny")) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        title = intent?.getStringExtra("title") ?: ""
+        title = intent?.extras?.getString("title") ?: ""
         loadData(savedInstanceState)
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
@@ -926,6 +924,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         val id: Int = item.itemId
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             editVybranoe = true
             item.isChecked = !item.isChecked

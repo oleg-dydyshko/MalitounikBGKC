@@ -186,7 +186,7 @@
         </activity>
         <activity
             android:name="by.carkva_gazeta.resources.NadsanMalitvyIPesni"
-            android:label="@string/title_psalter"
+            android:label="@string/pesni"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -201,8 +201,8 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.SlugbyVialikagaPostu"
-            android:label="@string/slugby_vialikaga_postu"
+            android:name="by.carkva_gazeta.resources.NadsanMalitvyIPesniList"
+            android:label="@string/pesni"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

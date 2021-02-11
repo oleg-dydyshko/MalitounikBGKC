@@ -49,9 +49,7 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
     private var dzenNoch = false
     private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
     private val orientation: Int
-        get() {
-            return MainActivity.getOrientation(this)
-        }
+        get() = MainActivity.getOrientation(this)
     private lateinit var binding: NadsanMalitvyIPesnyBinding
     private var resetTollbarJob: Job? = null
 
@@ -74,7 +72,8 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         setContentView(binding.root)
         if (intent.extras != null) {
             var pedsny = R.raw.nadsan_pered
-            when (intent.extras?.getInt("malitva", 0)) {
+            val malitva = intent.extras?.getInt("malitva", 0)
+            when (malitva) {
                 0 -> pedsny = R.raw.nadsan_pered
                 1 -> pedsny = R.raw.nadsan_posle
                 2 -> pedsny = R.raw.nadsan_pesni
@@ -84,13 +83,25 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
             val reader = BufferedReader(isr)
             var line: String
             val builder = StringBuilder()
-            reader.forEachLine {
-                line = it
-                if (dzenNoch) line = line.replace("#d00505", "#f44336")
-                builder.append(line)
+            reader.use { bufferedReader ->
+                bufferedReader.forEachLine {
+                    line = it
+                    if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                    builder.append(line)
+                }
             }
-            inputStream.close()
-            binding.malitvyIPesny.text = MainActivity.fromHtml(builder.toString())
+            var result = builder.toString()
+            if (malitva == 2) {
+                val pesnyList = result.split("===")
+                val pesnia = intent.extras?.getInt("pesnia", 1)?: 1
+                result = pesnyList[pesnia]
+                binding.subtitleToolbar.visibility = View.VISIBLE
+                binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.pesnia, pesnia)
+                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.pesni)
+            } else {
+                binding.titleToolbar.text = intent.extras?.getString("malitva_title")
+            }
+            binding.malitvyIPesny.text = MainActivity.fromHtml(result)
         }
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
@@ -107,6 +118,49 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
     }
 
     private fun setTollbarTheme() {
+        binding.titleToolbar.setOnClickListener {
+            fullTextTollbar()
+        }
+        binding.subtitleToolbar.setOnClickListener {
+            fullTextTollbar()
+        }
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        if (dzenNoch) {
+            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
+        }
+    }
+
+    private fun fullTextTollbar() {
+        val layoutParams = binding.toolbar.layoutParams
+        resetTollbarJob?.cancel()
+        if (binding.titleToolbar.isSelected) {
+            resetTollbar(layoutParams)
+        } else {
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            binding.titleToolbar.isSingleLine = false
+            binding.subtitleToolbar.isSingleLine = false
+            binding.titleToolbar.isSelected = true
+            resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                delay(5000)
+                resetTollbar(layoutParams)
+            }
+        }
+    }
+
+    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
+        val tv = TypedValue()
+        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            layoutParams.height = actionBarHeight
+        }
+        binding.titleToolbar.isSelected = false
+        binding.titleToolbar.isSingleLine = true
+        binding.subtitleToolbar.isSingleLine = true
+    }
+
+    /*private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams
             if (binding.titleToolbar.isSelected) {
@@ -139,7 +193,7 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
-    }
+    }*/
 
     override fun onPause() {
         super.onPause()

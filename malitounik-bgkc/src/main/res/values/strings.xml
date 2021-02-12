@@ -373,6 +373,7 @@
     <string name="help_set_font">Рэгуляваньне\nшрыфту</string>
     <string name="help_set_bridnes">Рэгуляваньне\nяркасьці</string>
     <string name="help_on_auto_scroll">Уключэньне\nі рэгуляваньне аўтапрагорткі</string>
+    <string name="trapar_kandak">Трапары і кандакі</string>
     <string-array name="malitvy_pasli_prychastia">
         <item>Малітва падзякі</item>
         <item>Малітва сьв. Васіля Вялікага</item>

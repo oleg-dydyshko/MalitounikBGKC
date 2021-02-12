@@ -219,6 +219,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textPamerlyia.setBackgroundResource(R.drawable.selector_bez_posta)
                             if (data[day][0].contains("6")) {
                                 binding.textPost.visibility = View.VISIBLE
+                                binding.textPost.textSize = SettingsActivity.GET_FONT_SIZE_MIN
                                 binding.textPost.text = resources.getString(R.string.No_post)
                             }
                         }
@@ -240,6 +241,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             if (data[day][0].contains("6")) {
                                 binding.PostFish.visibility = View.VISIBLE
                                 binding.textPost.visibility = View.VISIBLE
+                                binding.textPost.textSize = SettingsActivity.GET_FONT_SIZE_MIN
                                 if (dzenNoch) {
                                     binding.PostFish.setImageResource(R.drawable.fishe_whate)
                                 }
@@ -264,8 +266,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textChytanneSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             binding.textBlaslavenne.setBackgroundResource(R.drawable.selector_strogi_post)
                             binding.textBlaslavenne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                            binding.textPost.textSize = SettingsActivity.GET_FONT_SIZE_MIN
                             binding.textPost.text = resources.getString(R.string.Strogi_post)
-                            binding.textPamerlyia.text = resources.getString(R.string.Strogi_post)
                             binding.textPamerlyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             binding.textPost.visibility = View.VISIBLE
                             binding.PostFish.visibility = View.VISIBLE

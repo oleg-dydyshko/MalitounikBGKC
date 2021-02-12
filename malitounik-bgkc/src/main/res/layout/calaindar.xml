@@ -62,21 +62,21 @@
 
             <ImageView
                 android:id="@+id/znakTipicona"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
+                android:contentDescription="@string/empty"
                 android:src="@drawable/znaki_krest"
-                android:visibility="invisible"
-                android:contentDescription="@string/empty" />
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/kniga"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
@@ -88,8 +88,8 @@
 
             <ImageView
                 android:id="@+id/PostFish"
-                android:layout_width="25dp"
-                android:layout_height="12dp"
+                android:layout_width="27dp"
+                android:layout_height="13dp"
                 android:layout_alignStart="@+id/znakTipicona"
                 android:layout_alignLeft="@+id/znakTipicona"
                 android:layout_alignParentTop="true"

@@ -90,49 +90,50 @@ class SlugbovyiaTextu {
     fun getTydzen6() = dat17
 
     fun getResource(day: Int, utran: Boolean = false, liturgia: Boolean = false): String {
+        var resource = "0"
         dat12.forEach {
             if (day == it.day) {
-                if (utran && utran == it.utran) return it.resource
-                if (liturgia && liturgia == it.liturgia) return it.resource
-                return it.resource
+                if (!utran && !liturgia) resource = it.resource
+                if (utran && utran == it.utran) resource = it.resource
+                if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat13.forEach {
             if (day == it.day) {
-                if (utran && utran == it.utran) return it.resource
-                if (liturgia && liturgia == it.liturgia) return it.resource
-                return it.resource
+                if (!utran && !liturgia) resource = it.resource
+                if (utran && utran == it.utran) resource = it.resource
+                if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat14.forEach {
             if (day == it.day) {
-                if (utran && utran == it.utran) return it.resource
-                if (liturgia && liturgia == it.liturgia) return it.resource
-                return it.resource
+                if (!utran && !liturgia) resource = it.resource
+                if (utran && utran == it.utran) resource = it.resource
+                if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat15.forEach {
             if (day == it.day) {
-                if (utran && utran == it.utran) return it.resource
-                if (liturgia && liturgia == it.liturgia) return it.resource
-                return it.resource
+                if (!utran && !liturgia) resource = it.resource
+                if (utran && utran == it.utran) resource = it.resource
+                if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat16.forEach {
             if (day == it.day) {
-                if (utran && utran == it.utran) return it.resource
-                if (liturgia && liturgia == it.liturgia) return it.resource
-                return it.resource
+                if (!utran && !liturgia) resource = it.resource
+                if (utran && utran == it.utran) resource = it.resource
+                if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat17.forEach {
             if (day == it.day) {
-                if (utran && utran == it.utran) return it.resource
-                if (liturgia && liturgia == it.liturgia) return it.resource
-                return it.resource
+                if (!utran && !liturgia) resource = it.resource
+                if (utran && utran == it.utran) resource = it.resource
+                if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
-        return "0"
+        return resource
     }
 
     fun getTitle(resource: String): String {

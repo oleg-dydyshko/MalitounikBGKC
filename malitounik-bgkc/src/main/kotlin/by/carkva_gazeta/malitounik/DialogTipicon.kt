@@ -46,6 +46,8 @@ class DialogTipicon : DialogFragment() {
             binding.textView4.visibility = View.GONE
             binding.textView5.visibility = View.GONE
             binding.textView6.visibility = View.GONE
+            binding.textView3.text = getString(R.string.Strogi_post).replace("\n", " ")
+            binding.textView4.text = getString(R.string.No_post).replace("\n", " ")
             if (tipicon == 0) {
                 binding.line1.visibility = View.VISIBLE
                 binding.t5.visibility = View.VISIBLE

@@ -160,41 +160,6 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         binding.subtitleToolbar.isSingleLine = true
     }
 
-    /*private fun setTollbarTheme() {
-        binding.titleToolbar.setOnClickListener {
-            val layoutParams = binding.toolbar.layoutParams
-            if (binding.titleToolbar.isSelected) {
-                resetTollbarJob?.cancel()
-                resetTollbar(layoutParams)
-            } else {
-                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                binding.titleToolbar.isSingleLine = false
-                binding.titleToolbar.isSelected = true
-                resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
-                    delay(5000)
-                    resetTollbar(layoutParams)
-                }
-            }
-        }
-        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.text = intent.extras?.getString("malitva_title")
-        if (dzenNoch) {
-            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
-        }
-    }
-
-    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
-        val tv = TypedValue()
-        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
-            layoutParams.height = actionBarHeight
-        }
-        binding.titleToolbar.isSelected = false
-        binding.titleToolbar.isSingleLine = true
-    }*/
-
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()

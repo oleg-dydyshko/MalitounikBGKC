@@ -61,14 +61,14 @@ class DialogCalindarGrid : DialogFragment() {
             return R.drawable.moon_black
         }
         if (id == 3) {
-            if (imageWhite) return R.drawable.sun_white
-            if (imageSecondary) return R.drawable.sun_secondary
-            return R.drawable.sun_black
-        }
-        if (id == 4) {
             if (imageWhite) return R.drawable.sun2_white
             if (imageSecondary) return R.drawable.sun2_secondary
             return R.drawable.sun2_black
+        }
+        if (id == 4) {
+            if (imageWhite) return R.drawable.sun_white
+            if (imageSecondary) return R.drawable.sun_secondary
+            return R.drawable.sun_black
         }
         if (id == 5) {
             if (imageWhite) return R.drawable.clock_white
@@ -252,7 +252,6 @@ class DialogCalindarGrid : DialogFragment() {
                                     intent.putExtra("day", data)
                                     intent.putExtra("mun", mun)
                                     startActivity(intent)
-                                    dialog?.cancel()
                                 }
                                 slugba.checkViachernia(raznicia) -> {
                                     val intent = Intent()
@@ -261,9 +260,6 @@ class DialogCalindarGrid : DialogFragment() {
                                     intent.putExtra("resurs", resours)
                                     intent.putExtra("title", slugba.getTitle(resours))
                                     startActivity(intent)
-                                    dialog?.cancel()
-                                }
-                                else -> {
                                 }
                             }
                         }
@@ -279,7 +275,6 @@ class DialogCalindarGrid : DialogFragment() {
                                     intent.putExtra("day", data)
                                     intent.putExtra("mun", mun)
                                     startActivity(intent)
-                                    dialog?.cancel()
                                 }
                                 slugba.checkLiturgia(raznicia) -> {
                                     val intent = Intent()
@@ -288,7 +283,6 @@ class DialogCalindarGrid : DialogFragment() {
                                     intent.putExtra("resurs", resours)
                                     intent.putExtra("title", slugba.getTitle(resours))
                                     startActivity(intent)
-                                    dialog?.cancel()
                                 }
                                 else -> {
                                     val intent = Intent()
@@ -301,7 +295,6 @@ class DialogCalindarGrid : DialogFragment() {
                                         intent.putExtra("ton_naidzelny", false)
                                     }
                                     startActivity(intent)
-                                    dialog?.cancel()
                                 }
                             }
                         }
@@ -313,7 +306,6 @@ class DialogCalindarGrid : DialogFragment() {
                             i.putExtra("mun", mun)
                             i.putExtra("day", data)
                             startActivity(i)
-                            dialog?.cancel()
                         }
                     }
                     4 -> {
@@ -327,7 +319,6 @@ class DialogCalindarGrid : DialogFragment() {
                                     intent.putExtra("day", data)
                                     intent.putExtra("mun", mun)
                                     startActivity(intent)
-                                    dialog?.cancel()
                                 }
                                 slugba.checkUtran(raznicia) -> {
                                     val intent = Intent()
@@ -336,7 +327,6 @@ class DialogCalindarGrid : DialogFragment() {
                                     intent.putExtra("resurs", resours)
                                     intent.putExtra("title", slugba.getTitle(resours))
                                     startActivity(intent)
-                                    dialog?.cancel()
                                 }
                                 denNedzeli == 1 -> {
                                     val data = resources.getStringArray(R.array.bogaslugbovuia)
@@ -345,9 +335,6 @@ class DialogCalindarGrid : DialogFragment() {
                                     intent.putExtra("title", data[3])
                                     intent.putExtra("resurs", "bogashlugbovya6")
                                     startActivity(intent)
-                                    dialog?.cancel()
-                                }
-                                else -> {
                                 }
                             }
                         }

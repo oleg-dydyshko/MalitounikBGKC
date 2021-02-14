@@ -130,9 +130,15 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 tileMe.tileModeX = Shader.TileMode.REPEAT
                 if (data[day][20].toInt() != 0 && data[day][0].toInt() == 1) {
                     binding.textPost.text = getString(R.string.ton, data[day][20])
-                    if (dzenNoch) binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                    else binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary))
+                    if (dzenNoch) {
+                        binding.textPost.setBackgroundResource(R.drawable.selector_dark)
+                        binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                    } else {
+                        binding.textPost.setBackgroundResource(R.drawable.selector_default)
+                        binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary))
+                    }
                     binding.textPost.visibility = View.VISIBLE
+                    binding.textPost.setOnClickListener(this@CaliandarFull)
                 }
                 binding.kniga.setOnClickListener(this@CaliandarFull)
                 binding.textChytanne.setOnClickListener(this@CaliandarFull)
@@ -164,8 +170,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     it.let {
                         binding.textSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textSviatyia.setBackgroundResource(R.drawable.selector_dark)
-                        if (!(data[day][20].toInt() != 0 && data[day][0].toInt() == 1))
-                            binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        if (!(data[day][20].toInt() != 0 && data[day][0].toInt() == 1)) binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                         binding.textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
                         binding.textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -426,6 +431,15 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         }
         MainActivity.setDataCalendar = dayyear + dayYear
         when (v?.id ?: 0) {
+            R.id.textPost -> {
+                activity?.let {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.TON)
+                    intent.putExtra("ton", data[day][20].toInt())
+                    intent.putExtra("ton_naidzelny", true)
+                    startActivity(intent)
+                }
+            }
             R.id.kniga -> {
                 fragmentManager?.let {
                     val colorDialog = if (data[day][5].contains("1") || data[day][5].contains("2") || data[day][5].contains("3")) {
@@ -433,7 +447,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     } else {
                         data[day][7].toInt()
                     }
-                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20].toInt(), data[day][0].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1, data[day][22].toInt())
+                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog,
+                        data[day][20].toInt(),
+                        data[day][0].toInt(),
+                        data[day][1].toInt(),
+                        data[day][2].toInt() + 1,
+                        data[day][22].toInt())
                     dialogCalindarGrid.show(it, "grid")
                 }
             }

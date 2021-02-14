@@ -1344,6 +1344,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         if (!autoscroll) {
             if (!maranAta[position].contains("<!--no-->") && maranAta[position].trim() != "") {
                 mPedakVisable = true
+                binding.linearLayout4.animation = AnimationUtils.loadAnimation(this, by.carkva_gazeta.malitounik.R.anim.slide_in_top)
                 binding.linearLayout4.visibility = View.VISIBLE
                 var find = false
                 bibleCopyList.forEach {

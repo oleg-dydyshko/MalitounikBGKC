@@ -76,8 +76,7 @@ internal class ZmenyiaChastki(context: Context) {
             val zag1 = zaglav.indexOf(".")
             val zag2 = zaglav.indexOf("-")
             val zag3 = zaglav.indexOf(".", zag1 + 1)
-            var zagS: String
-            zagS = if (zag2 != -1) {
+            val zagS = if (zag2 != -1) {
                 zaglav.substring(0, zag2)
             } else {
                 zaglav
@@ -251,7 +250,7 @@ internal class ZmenyiaChastki(context: Context) {
         if (arrayData[kal[Calendar.DATE] - 1][20] != "") {
             val w = arrayData[kal[Calendar.DATE] - 1][20]
             var result = ""
-            if (w.contains("Тон 1")) {
+            if (w.contains("1")) {
                 val res = readFile(R.raw.ton1)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
@@ -269,7 +268,7 @@ internal class ZmenyiaChastki(context: Context) {
                     result = res.substring(tfn, tfk)
                 }
             }
-            if (w.contains("Тон 2")) {
+            if (w.contains("2")) {
                 val res = readFile(R.raw.ton2)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
@@ -287,7 +286,7 @@ internal class ZmenyiaChastki(context: Context) {
                     result = res.substring(tfn, tfk)
                 }
             }
-            if (w.contains("Тон 3")) {
+            if (w.contains("3")) {
                 val res = readFile(R.raw.ton3)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
@@ -305,7 +304,7 @@ internal class ZmenyiaChastki(context: Context) {
                     result = res.substring(tfn, tfk)
                 }
             }
-            if (w.contains("Тон 4")) {
+            if (w.contains("4")) {
                 val res = readFile(R.raw.ton4)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
@@ -323,7 +322,7 @@ internal class ZmenyiaChastki(context: Context) {
                     result = res.substring(tfn, tfk)
                 }
             }
-            if (w.contains("Тон 5")) {
+            if (w.contains("5")) {
                 val res = readFile(R.raw.ton5)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
@@ -341,7 +340,7 @@ internal class ZmenyiaChastki(context: Context) {
                     result = res.substring(tfn, tfk)
                 }
             }
-            if (w.contains("Тон 6")) {
+            if (w.contains("6")) {
                 val res = readFile(R.raw.ton6)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
@@ -359,7 +358,7 @@ internal class ZmenyiaChastki(context: Context) {
                     result = res.substring(tfn, tfk)
                 }
             }
-            if (w.contains("Тон 7")) {
+            if (w.contains("7")) {
                 val res = readFile(R.raw.ton7)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")
@@ -377,7 +376,7 @@ internal class ZmenyiaChastki(context: Context) {
                     result = res.substring(tfn, tfk)
                 }
             }
-            if (w.contains("Тон 8")) {
+            if (w.contains("8")) {
                 val res = readFile(R.raw.ton8)
                 if (chast == 1) {
                     val tfn = res.indexOf("<!--traparn-->")

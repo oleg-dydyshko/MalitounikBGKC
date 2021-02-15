@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.databinding.MyNatatkiBinding
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -163,6 +164,7 @@ class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                 val mun = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
                 nazva = gc[Calendar.DATE].toString() + " " + mun[gc[Calendar.MONTH]] + " " + gc[Calendar.YEAR] + " " + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
             }
+            val fileName = File("$filesDir/Natatki.json")
             val file = if (redak == 2) {
                 MenuNatatki.myNatatkiFiles.forEach {
                     val t1 = filename.lastIndexOf("_")
@@ -174,13 +176,13 @@ class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                 }
                 File("$filesDir/Malitva/$filename")
             } else {
+                MenuNatatki.myNatatkiFiles.clear()
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
+                MenuNatatki.myNatatkiFiles.addAll(gson.fromJson(fileName.readText(), type))
                 MenuNatatki.myNatatkiFiles.add(0, MyNatatkiFiles(i, gc.timeInMillis, nazva))
                 File("$filesDir/Malitva/$imiafile")
             }
-            val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            MenuNatatki.myNatatkiFilesSort = k.getInt("natatki_sort", 0)
-            MenuNatatki.myNatatkiFiles.sort()
-            val fileName = File("$filesDir/Natatki.json")
             fileName.writer().use {
                 val gson = Gson()
                 it.write(gson.toJson(MenuNatatki.myNatatkiFiles))
@@ -277,8 +279,7 @@ class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
                 edit = false
-                if (redak == 3)
-                    redak = 2
+                if (redak == 3) redak = 2
             } else {
                 write()
                 prepareSave()

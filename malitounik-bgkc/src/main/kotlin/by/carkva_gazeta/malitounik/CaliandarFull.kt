@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.CalaindarBinding
@@ -140,6 +141,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     binding.textPost.visibility = View.VISIBLE
                     binding.textPost.setOnClickListener(this@CaliandarFull)
                 }
+                TooltipCompat.setTooltipText(binding.kniga, getString(R.string.liturgikon2))
                 binding.kniga.setOnClickListener(this@CaliandarFull)
                 binding.textChytanne.setOnClickListener(this@CaliandarFull)
                 binding.textChytanneSviatyia.setOnClickListener(this@CaliandarFull)

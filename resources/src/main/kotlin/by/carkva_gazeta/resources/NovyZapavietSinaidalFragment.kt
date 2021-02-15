@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils
 import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemLongClickListener
+import androidx.appcompat.widget.TooltipCompat
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.BibleZakladkiData
 import by.carkva_gazeta.malitounik.MainActivity
@@ -414,6 +415,14 @@ class NovyZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickListe
             if (k.getBoolean("dzen_noch", false)) {
                 binding.linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta)
             }
+            TooltipCompat.setTooltipText(binding.copyBigFull, getString(by.carkva_gazeta.malitounik.R.string.copy_big_full))
+            TooltipCompat.setTooltipText(binding.copyBig, getString(by.carkva_gazeta.malitounik.R.string.copy_big))
+            TooltipCompat.setTooltipText(binding.adpravit, getString(by.carkva_gazeta.malitounik.R.string.share))
+            TooltipCompat.setTooltipText(binding.yelloy, getString(by.carkva_gazeta.malitounik.R.string.set_yelloy))
+            TooltipCompat.setTooltipText(binding.underline, getString(by.carkva_gazeta.malitounik.R.string.set_underline))
+            TooltipCompat.setTooltipText(binding.bold, getString(by.carkva_gazeta.malitounik.R.string.set_bold))
+            TooltipCompat.setTooltipText(binding.zakladka, getString(by.carkva_gazeta.malitounik.R.string.set_bookmark))
+            TooltipCompat.setTooltipText(binding.zametka, getString(by.carkva_gazeta.malitounik.R.string.natatka_add))
             binding.copyBigFull.setOnClickListener {
                 BibleGlobalList.bibleCopyList.clear()
                 bible.forEachIndexed { index, _ ->

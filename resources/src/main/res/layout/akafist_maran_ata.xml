@@ -116,7 +116,7 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginBottom="20dp"
-                android:contentDescription="@string/empty"
+                android:contentDescription="@string/set_yelloy"
                 app:srcCompat="@drawable/yelloy" />
 
             <ImageView
@@ -124,14 +124,14 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginBottom="20dp"
-                android:contentDescription="@string/empty"
+                android:contentDescription="@string/set_underline"
                 app:srcCompat="@drawable/underline" />
 
             <ImageView
                 android:id="@+id/bold"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:contentDescription="@string/empty"
+                android:contentDescription="@string/set_bold"
                 app:srcCompat="@drawable/bold" />
         </LinearLayout>
     </by.carkva_gazeta.malitounik.InteractiveScrollView>

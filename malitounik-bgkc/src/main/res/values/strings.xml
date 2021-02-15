@@ -22,6 +22,7 @@
     <string name="psalom">Псальма</string>
     <string name="sajt">ГАЛОЎНАЯ - сайт</string>
     <string name="liturgikon">БОГАСЛУЖБОВЫЯ ТЭКСТЫ</string>
+    <string name="liturgikon2">Богаслужбовыя тэксты</string>
     <string name="malitvy">МАЛІТВЫ</string>
     <string name="akafisty">АКАФІСТЫ</string>
     <string name="akafist0">Пра Акафіст</string>
@@ -531,6 +532,10 @@
     <string name="trsviatoy">Сьвятому</string>
     <string name="ton">Тон %1$s</string>
     <string name="pesnia">Песьня %1$d</string>
+    <string name="set_yelloy">Вылучыць жоўтым</string>
+    <string name="set_underline">Вылучыць падкрэсьліваньнем</string>
+    <string name="set_bold">Вылучыць тоўстым</string>
+    <string name="set_bookmark">Дадаць у закладкі</string>
     <string-array name="dni_nedeli">
         <item />
         <item>нядзеля</item>

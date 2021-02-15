@@ -12,6 +12,7 @@ import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ArrayAdapter
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.BibleGlobalList
 import by.carkva_gazeta.malitounik.MainActivity
@@ -159,6 +160,9 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
             if (dzenNoch) {
                 binding.linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta)
             }
+            TooltipCompat.setTooltipText(binding.copyBigFull, getString(by.carkva_gazeta.malitounik.R.string.copy_big_full))
+            TooltipCompat.setTooltipText(binding.copyBig, getString(by.carkva_gazeta.malitounik.R.string.copy_big))
+            TooltipCompat.setTooltipText(binding.adpravit, getString(by.carkva_gazeta.malitounik.R.string.share))
             binding.copyBigFull.setOnClickListener {
                 BibleGlobalList.bibleCopyList.clear()
                 bible.forEachIndexed { index, _ ->

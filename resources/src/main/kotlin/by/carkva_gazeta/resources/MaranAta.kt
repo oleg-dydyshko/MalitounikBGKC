@@ -25,6 +25,7 @@ import android.widget.AdapterView.*
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
@@ -268,6 +269,11 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
+        TooltipCompat.setTooltipText(binding.copyBig, getString(by.carkva_gazeta.malitounik.R.string.copy_big))
+        TooltipCompat.setTooltipText(binding.adpravit, getString(by.carkva_gazeta.malitounik.R.string.share))
+        TooltipCompat.setTooltipText(binding.yelloy, getString(by.carkva_gazeta.malitounik.R.string.set_yelloy))
+        TooltipCompat.setTooltipText(binding.underline, getString(by.carkva_gazeta.malitounik.R.string.set_underline))
+        TooltipCompat.setTooltipText(binding.bold, getString(by.carkva_gazeta.malitounik.R.string.set_bold))
         binding.copyBig.setOnClickListener {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val copyString = StringBuilder()

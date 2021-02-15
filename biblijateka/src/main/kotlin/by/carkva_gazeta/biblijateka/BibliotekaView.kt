@@ -65,7 +65,6 @@ import java.lang.Runnable
 import java.lang.reflect.Type
 import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLConnection
 import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
@@ -796,30 +795,36 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 filePath = filePath.substring(t1 + 4)
             }
             val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-            if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
-            } else {
-                when {
-                    fileName.toLowerCase(Locale.getDefault()).contains(".pdf") -> {
-                        loadFilePDF()
-                    }
-                    fileName.toLowerCase(Locale.getDefault()).contains(".fb2.zip") -> {
-                        loadFileFB2ZIP()
-                    }
-                    fileName.toLowerCase(Locale.getDefault()).contains(".fb2") -> {
-                        loadFileFB2()
-                    }
-                    fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
-                        loadFileTXT()
-                    }
-                    fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
-                        loadFileHTML()
-                    }
-                    else -> {
-                        loadFileEPUB()
-                    }
+            when {
+                filePath.contains(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString()) -> {
+                    loadFilePDF()
                 }
-                bindingcontent.listView.visibility = View.GONE
+                PackageManager.PERMISSION_DENIED == permissionCheck -> {
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                }
+                else -> {
+                    when {
+                        fileName.toLowerCase(Locale.getDefault()).contains(".pdf") -> {
+                            loadFilePDF()
+                        }
+                        fileName.toLowerCase(Locale.getDefault()).contains(".fb2.zip") -> {
+                            loadFileFB2ZIP()
+                        }
+                        fileName.toLowerCase(Locale.getDefault()).contains(".fb2") -> {
+                            loadFileFB2()
+                        }
+                        fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
+                            loadFileTXT()
+                        }
+                        fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
+                            loadFileHTML()
+                        }
+                        else -> {
+                            loadFileEPUB()
+                        }
+                    }
+                    bindingcontent.listView.visibility = View.GONE
+                }
             }
         }
     }
@@ -831,67 +836,73 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     private fun loadFilePDF() {
-        bindingcontent.progressBar2.visibility = View.GONE
-        pdfView.visibility = View.VISIBLE
-        val allEntries: Map<String, *> = k.all
-        for ((key) in allEntries) {
-            if (key.contains(fileName)) {
-                defaultPage = k.getInt(fileName, 0)
-                break
-            }
-        }
         val file = File(filePath)
-        pdfView.fromFile(file).enableAntialiasing(true).enableSwipe(true).swipeHorizontal(false).enableDoubletap(true).defaultPage(defaultPage).onLoad(this).onPageChange(this).onError(this)
-            .enableAnnotationRendering(false).password(null).scrollHandle(null).enableAntialiasing(true).spacing(2).autoSpacing(false).pageFitPolicy(FitPolicy.WIDTH).pageSnap(false).pageFling(false)
-            .nightMode(k.getBoolean("inversion", false)).load()
+        if (file.exists()) {
+            bindingcontent.progressBar2.visibility = View.GONE
+            pdfView.visibility = View.VISIBLE
+            val allEntries: Map<String, *> = k.all
+            for ((key) in allEntries) {
+                if (key.contains(fileName)) {
+                    defaultPage = k.getInt(fileName, 0)
+                    break
+                }
+            }
+            pdfView.fromFile(file).enableAntialiasing(true).enableSwipe(true).swipeHorizontal(false).enableDoubletap(true).defaultPage(defaultPage).onLoad(this).onPageChange(this).onError(this)
+                .enableAnnotationRendering(false).password(null).scrollHandle(null).enableAntialiasing(true).spacing(2).autoSpacing(false).pageFitPolicy(FitPolicy.WIDTH).pageSnap(false)
+                .pageFling(false).nightMode(k.getBoolean("inversion", false)).load()
+        }
     }
 
     private fun loadFileTXT() {
-        bindingcontent.progressBar2.visibility = View.GONE
-        bindingcontent.scrollViewB.visibility = View.VISIBLE
         val file = File(filePath)
-        bindingcontent.textViewB.text = file.readText()
-        val t1 = file.name.lastIndexOf(".")
-        bindingappbar.titleToolbar.text = file.name.substring(0, t1)
-        for (i in 0 until naidaunia.size) {
-            if (naidaunia[i][1].contains(filePath)) {
-                naidaunia.removeAt(i)
-                break
+        if (file.exists()) {
+            bindingcontent.progressBar2.visibility = View.GONE
+            bindingcontent.scrollViewB.visibility = View.VISIBLE
+            bindingcontent.textViewB.text = file.readText()
+            val t1 = file.name.lastIndexOf(".")
+            bindingappbar.titleToolbar.text = file.name.substring(0, t1)
+            for (i in 0 until naidaunia.size) {
+                if (naidaunia[i][1].contains(filePath)) {
+                    naidaunia.removeAt(i)
+                    break
+                }
             }
+            val gson = Gson()
+            val temp: ArrayList<String> = ArrayList()
+            temp.add(file.name.substring(0, t1))
+            temp.add(filePath)
+            temp.add("")
+            naidaunia.add(temp)
+            val prefEditor: SharedPreferences.Editor = k.edit()
+            prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+            prefEditor.apply()
         }
-        val gson = Gson()
-        val temp: ArrayList<String> = ArrayList()
-        temp.add(file.name.substring(0, t1))
-        temp.add(filePath)
-        temp.add("")
-        naidaunia.add(temp)
-        val prefEditor: SharedPreferences.Editor = k.edit()
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
-        prefEditor.apply()
     }
 
     private fun loadFileHTML() {
-        bindingcontent.progressBar2.visibility = View.GONE
-        bindingcontent.webView.visibility = View.VISIBLE
         val file = File(filePath)
-        bindingcontent.webView.loadUrl("file://" + file.absolutePath)
-        val t1 = file.name.lastIndexOf(".")
-        bindingappbar.titleToolbar.text = file.name.substring(0, t1)
-        for (i in 0 until naidaunia.size) {
-            if (naidaunia[i][1].contains(filePath)) {
-                naidaunia.removeAt(i)
-                break
+        if (file.exists()) {
+            bindingcontent.progressBar2.visibility = View.GONE
+            bindingcontent.webView.visibility = View.VISIBLE
+            bindingcontent.webView.loadUrl("file://" + file.absolutePath)
+            val t1 = file.name.lastIndexOf(".")
+            bindingappbar.titleToolbar.text = file.name.substring(0, t1)
+            for (i in 0 until naidaunia.size) {
+                if (naidaunia[i][1].contains(filePath)) {
+                    naidaunia.removeAt(i)
+                    break
+                }
             }
+            val gson = Gson()
+            val temp: ArrayList<String> = ArrayList()
+            temp.add(file.name.substring(0, t1))
+            temp.add(filePath)
+            temp.add("")
+            naidaunia.add(temp)
+            val prefEditor: SharedPreferences.Editor = k.edit()
+            prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+            prefEditor.apply()
         }
-        val gson = Gson()
-        val temp: ArrayList<String> = ArrayList()
-        temp.add(file.name.substring(0, t1))
-        temp.add(filePath)
-        temp.add("")
-        naidaunia.add(temp)
-        val prefEditor: SharedPreferences.Editor = k.edit()
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
-        prefEditor.apply()
     }
 
     private fun loadFileEPUB() {
@@ -1694,8 +1705,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         mySqlList.add(pdf)
                         val url = URL("https://carkva-gazeta.by/data/bibliateka/$pdf")
                         var filesize: String
-                        var conn: URLConnection?
-                        conn = url.openConnection()
+                        val conn = url.openConnection()
                         if (conn is HttpURLConnection) {
                             (conn as HttpURLConnection?)?.requestMethod = "HEAD"
                         }

@@ -62,7 +62,7 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginBottom="20dp"
-                android:contentDescription="@string/empty"
+                android:contentDescription="@string/set_yelloy"
                 app:srcCompat="@drawable/yelloy" />
 
             <ImageView
@@ -70,7 +70,7 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginBottom="20dp"
-                android:contentDescription="@string/empty"
+                android:contentDescription="@string/set_underline"
                 app:srcCompat="@drawable/underline" />
 
             <ImageView
@@ -78,7 +78,7 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginBottom="20dp"
-                android:contentDescription="@string/empty"
+                android:contentDescription="@string/set_bold"
                 app:srcCompat="@drawable/bold" />
 
             <ImageView
@@ -86,14 +86,14 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginBottom="20dp"
-                android:contentDescription="@string/empty"
+                android:contentDescription="@string/set_bookmark"
                 app:srcCompat="@drawable/bookmark" />
 
             <ImageView
                 android:id="@+id/zametka"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:contentDescription="@string/empty"
+                android:contentDescription="@string/natatka_add"
                 app:srcCompat="@drawable/sketch" />
         </LinearLayout>
     </by.carkva_gazeta.malitounik.InteractiveScrollView>

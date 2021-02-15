@@ -157,17 +157,25 @@ class MenuVybranoe : VybranoeFragment() {
                 val edit = k.edit()
                 if (item.isChecked) {
                     edit.putInt("vybranoe_sort", 0)
+                    edit.apply()
+                    val gson = Gson()
+                    val file = File(fragmentActivity.filesDir.toString() + "/Vybranoe.json")
+                    if (file.exists()) {
+                        try {
+                            vybranoe.clear()
+                            val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
+                            vybranoe.addAll(gson.fromJson(file.readText(), type))
+                            vybranoeSort = 0
+                        } catch (t: Throwable) {
+                            file.delete()
+                        }
+                    }
                 } else {
                     edit.putInt("vybranoe_sort", 1)
+                    edit.apply()
+                    vybranoeSort = 1
                 }
-                edit.apply()
-                vybranoeSort = k.getInt("vybranoe_sort", 1)
-                adapter.itemList.sort()
-                val gson = Gson()
-                val file = File(fragmentActivity.filesDir.toString() + "/Vybranoe.json")
-                file.writer().use {
-                    it.write(gson.toJson(adapter.itemList))
-                }
+                vybranoe.sort()
                 adapter.notifyDataSetChanged()
             }
         }

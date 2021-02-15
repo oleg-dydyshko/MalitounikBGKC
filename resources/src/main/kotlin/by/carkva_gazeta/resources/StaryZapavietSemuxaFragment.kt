@@ -634,12 +634,17 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
                 bible.forEachIndexed { index, _ ->
                     BibleGlobalList.bibleCopyList.add(index)
                 }
+                binding.yelloy.visibility = View.GONE
+                binding.underline.visibility = View.GONE
+                binding.bold.visibility = View.GONE
+                binding.zakladka.visibility = View.GONE
+                binding.zametka.visibility = View.GONE
                 adapter.notifyDataSetChanged()
             }
             binding.copyBig.setOnClickListener {
                 if (BibleGlobalList.bibleCopyList.size > 0) {
                     val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val copyString = java.lang.StringBuilder()
+                    val copyString = StringBuilder()
                     BibleGlobalList.bibleCopyList.sort()
                     BibleGlobalList.bibleCopyList.forEach {
                         copyString.append("${bible[it]}<br>")
@@ -659,7 +664,7 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
             binding.adpravit.setOnClickListener {
                 if (BibleGlobalList.bibleCopyList.size > 0) {
                     val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val copyString = java.lang.StringBuilder()
+                    val copyString = StringBuilder()
                     BibleGlobalList.bibleCopyList.sort()
                     BibleGlobalList.bibleCopyList.forEach {
                         copyString.append("${bible[it]}<br>")

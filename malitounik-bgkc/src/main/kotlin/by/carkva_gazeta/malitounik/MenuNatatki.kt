@@ -186,17 +186,20 @@ class MenuNatatki : NatatkiFragment() {
                 val prefEditors = k.edit()
                 if (item.isChecked) {
                     prefEditors.putInt("natatki_sort", -1)
+                    prefEditors.apply()
+                    myNatatkiFilesSort = -1
+                    myNatatkiFiles.clear()
+                    val file = File(activity.filesDir.toString() + "/Natatki.json")
+                    val gson = Gson()
+                    val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
+                    myNatatkiFiles.addAll(gson.fromJson(file.readText(), type))
                 } else {
                     prefEditors.putInt("natatki_sort", 1)
+                    prefEditors.apply()
+                    myNatatkiFilesSort = 1
                 }
-                prefEditors.apply()
-                myNatatkiFilesSort = k.getInt("natatki_sort", 0)
-                adapter.itemList.sort()
-                val file = File(activity.filesDir.toString().plus("/Natatki.json"))
-                file.writer().use {
-                    val gson = Gson()
-                    it.write(gson.toJson(adapter.itemList))
-                }
+                activity.invalidateOptionsMenu()
+                myNatatkiFiles.sort()
                 adapter.notifyDataSetChanged()
             }
         }
@@ -206,17 +209,20 @@ class MenuNatatki : NatatkiFragment() {
                 val prefEditors = k.edit()
                 if (item.isChecked) {
                     prefEditors.putInt("natatki_sort", -1)
+                    prefEditors.apply()
+                    myNatatkiFilesSort = -1
+                    myNatatkiFiles.clear()
+                    val file = File(activity.filesDir.toString() + "/Natatki.json")
+                    val gson = Gson()
+                    val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
+                    myNatatkiFiles.addAll(gson.fromJson(file.readText(), type))
                 } else {
                     prefEditors.putInt("natatki_sort", 0)
+                    prefEditors.apply()
+                    myNatatkiFilesSort = 0
                 }
-                prefEditors.apply()
-                myNatatkiFilesSort = k.getInt("natatki_sort", 0)
-                adapter.itemList.sort()
-                val file = File(activity.filesDir.toString().plus("/Natatki.json"))
-                file.writer().use {
-                    val gson = Gson()
-                    it.write(gson.toJson(adapter.itemList))
-                }
+                activity.invalidateOptionsMenu()
+                myNatatkiFiles.sort()
                 adapter.notifyDataSetChanged()
             }
         }
@@ -238,7 +244,8 @@ class MenuNatatki : NatatkiFragment() {
         }
     }
 
-    private inner class ItemAdapter(list: ArrayList<MyNatatkiFiles>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<MyNatatkiFiles, ItemAdapter.ViewHolder>() {
+    private inner class ItemAdapter(list: ArrayList<MyNatatkiFiles>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) :
+        DragItemAdapter<MyNatatkiFiles, ItemAdapter.ViewHolder>() {
         private var dzenNoch = false
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

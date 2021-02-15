@@ -35,7 +35,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.*
-import java.lang.Runnable
 
 class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener {
     private val mHideHandler = Handler(Looper.getMainLooper())
@@ -269,39 +268,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
-        binding.share.setOnClickListener {
-            if (bibleCopyList.size > 0) {
-                val sendIntent = Intent()
-                sendIntent.action = Intent.ACTION_SEND
-                sendIntent.putExtra(Intent.EXTRA_TEXT, MainActivity.fromHtml(maranAta[bibleCopyList[0]]).toString())
-                sendIntent.type = "text/plain"
-                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("", MainActivity.fromHtml(maranAta[bibleCopyList[0]]).toString())
-                clipboard.setPrimaryClip(clip)
-                startActivity(Intent.createChooser(sendIntent, null))
-            } else {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
-            }
-        }
-        binding.copy.setOnClickListener {
-            if (bibleCopyList.size > 0) {
-                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("", MainActivity.fromHtml(maranAta[bibleCopyList[0]]).toString())
-                clipboard.setPrimaryClip(clip)
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.copy))
-                binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                binding.linearLayout4.visibility = View.GONE
-                bibleCopyList.clear()
-                mPedakVisable = false
-                binding.linearLayout5.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                binding.linearLayout5.visibility = View.GONE
-            } else {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
-            }
-        }
         binding.copyBig.setOnClickListener {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val copyString = java.lang.StringBuilder()
+            val copyString = StringBuilder()
             bibleCopyList.sort()
             bibleCopyList.forEach {
                 var textView = maranAta[it]
@@ -314,8 +283,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             clipboard.setPrimaryClip(clip)
             MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.copy))
             binding.linearLayout4.visibility = View.GONE
-            binding.linearLayout5.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-            binding.linearLayout5.visibility = View.GONE
+            binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
             mPedakVisable = false
             bibleCopyList.clear()
             adapter.notifyDataSetChanged()
@@ -323,7 +291,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         binding.adpravit.setOnClickListener {
             if (bibleCopyList.size > 0) {
                 val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val copyString = java.lang.StringBuilder()
+                val copyString = StringBuilder()
                 bibleCopyList.sort()
                 bibleCopyList.forEach {
                     copyString.append("${maranAta[it]}<br>")
@@ -336,11 +304,12 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 sendIntent.putExtra(Intent.EXTRA_TEXT, share)
                 sendIntent.type = "text/plain"
                 startActivity(Intent.createChooser(sendIntent, null))
+                adapter.notifyDataSetChanged()
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
-        binding.imageView2.setOnClickListener {
+        binding.underline.setOnClickListener {
             if (bibleCopyList.size > 0) {
                 val i = checkPosition(bibleCopyList[0])
                 if (i != -1) {
@@ -361,11 +330,12 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 binding.linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
+                adapter.notifyDataSetChanged()
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
-        binding.imageView3.setOnClickListener {
+        binding.bold.setOnClickListener {
             if (bibleCopyList.size > 0) {
                 val i = checkPosition(bibleCopyList[0])
                 if (i != -1) {
@@ -386,11 +356,12 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 binding.linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
+                adapter.notifyDataSetChanged()
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
-        binding.imageView4.setOnClickListener {
+        binding.yelloy.setOnClickListener {
             if (bibleCopyList.size > 0) {
                 val i = checkPosition(bibleCopyList[0])
                 if (i != -1) {
@@ -411,15 +382,13 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 binding.linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
+                adapter.notifyDataSetChanged()
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.set_versh))
             }
         }
         if (dzenNoch) {
-            binding.linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-            binding.linearLayout5.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorprimary_material_dark)
-            binding.copyBig.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
-            binding.adpravit.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.knopka_black)
+            binding.linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta)
         }
         val file: File = if (belarus) File("$filesDir/MaranAtaBel/$cytanne.json") else File("$filesDir/MaranAta/$cytanne.json")
         if (file.exists()) {
@@ -548,7 +517,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         v?.performClick()
-        if (binding.linearLayout4.visibility == View.VISIBLE || binding.linearLayout5.visibility == View.VISIBLE) {
+        if (binding.linearLayout4.visibility == View.VISIBLE) {
             return false
         }
         val heightConstraintLayout = binding.constraint.height
@@ -1063,11 +1032,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             mPedakVisable = false
             bibleCopyList.clear()
             adapter.notifyDataSetChanged()
-            if (binding.linearLayout5.visibility == View.VISIBLE) {
-                binding.linearLayout4.visibility = View.GONE
-                binding.linearLayout5.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                binding.linearLayout5.visibility = View.GONE
-            } else {
+            if (binding.linearLayout4.visibility == View.VISIBLE) {
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                 binding.linearLayout4.visibility = View.GONE
             }
@@ -1103,7 +1068,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         mPedakVisable = false
         bibleCopyList.clear()
         binding.linearLayout4.visibility = View.GONE
-        binding.linearLayout5.visibility = View.GONE
         val prefEditors = k.edit()
         maranAtaScrollPosition = binding.ListView.firstVisiblePosition
         prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
@@ -1130,7 +1094,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         super.onPrepareOptionsMenu(menu)
         autoscroll = k.getBoolean("autoscroll", false)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
-        if (binding.linearLayout4.visibility == View.VISIBLE || binding.linearLayout5.visibility == View.VISIBLE) {
+        if (binding.linearLayout4.visibility == View.VISIBLE) {
             itemAuto.isVisible = false
         } else {
             if (paralel) {
@@ -1308,9 +1272,13 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         if (mPedakVisable) {
             if (bibleCopyList.size > 1) {
-                binding.linearLayout5.visibility = View.VISIBLE
+                binding.yelloy.visibility = View.GONE
+                binding.underline.visibility = View.GONE
+                binding.bold.visibility = View.GONE
             } else {
-                binding.linearLayout5.visibility = View.GONE
+                binding.yelloy.visibility = View.VISIBLE
+                binding.underline.visibility = View.VISIBLE
+                binding.bold.visibility = View.VISIBLE
             }
         }
     }

@@ -18,11 +18,12 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
+import java.util.*
 
 class DialogCalindarGrid : DialogFragment() {
 
     companion object {
-        fun getInstance(post: Int, ton: Int, denNedzeli: Int, data: Int, mun: Int, raznicia: Int): DialogCalindarGrid {
+        fun getInstance(post: Int, ton: Int, denNedzeli: Int, data: Int, mun: Int, raznicia: Int, issetSvityia: Boolean): DialogCalindarGrid {
             val bundle = Bundle()
             bundle.putInt("post", post)
             bundle.putInt("ton", ton)
@@ -30,6 +31,7 @@ class DialogCalindarGrid : DialogFragment() {
             bundle.putInt("data", data)
             bundle.putInt("mun", mun)
             bundle.putInt("raznicia", raznicia)
+            bundle.putBoolean("issetSvityia", issetSvityia)
             val dialog = DialogCalindarGrid()
             dialog.arguments = bundle
             return dialog
@@ -42,10 +44,11 @@ class DialogCalindarGrid : DialogFragment() {
     private var mLastClickTime: Long = 0
     private var post = 0
     private var ton = 0
-    private var denNedzeli = 1
+    private var denNedzeli = Calendar.SUNDAY
     private var data = 1
     private var mun = 1
     private var raznicia = 400
+    private var issetSvityia = true
     private var mItemArray = ArrayList<Int>()
     private val slugba = SlugbovyiaTextu()
 
@@ -82,7 +85,7 @@ class DialogCalindarGrid : DialogFragment() {
         }
         if (id == 7) {
             if (imageWhite) return R.drawable.man_white
-            if (imageSecondary) return 0
+            if (imageSecondary) return R.drawable.man_secondary
             return R.drawable.man_black
         }
         if (id == 8) {
@@ -100,15 +103,15 @@ class DialogCalindarGrid : DialogFragment() {
 
     private fun getTitle(id: Int): String {
         when (id) {
-            1 -> return "Вячэрня"
-            2 -> return "Павячэрніца"
-            3 -> return "Паўночніца"
-            4 -> return "Ютрань"
-            5 -> return "Гадзіны"
-            6 -> return "Літургія"
-            7 -> return "Жыцьці"
-            8 -> return "Пярліны"
-            9 -> return "Устаў"
+            1 -> return getString(R.string.viachernia)
+            2 -> return getString(R.string.raviachernica)
+            3 -> return getString(R.string.paunochnica)
+            4 -> return getString(R.string.utran)
+            5 -> return getString(R.string.gadziny)
+            6 -> return getString(R.string.liturgia)
+            7 -> return getString(R.string.jyci)
+            8 -> return getString(R.string.piarliny)
+            9 -> return getString(R.string.ustau)
         }
         return ""
     }
@@ -126,6 +129,7 @@ class DialogCalindarGrid : DialogFragment() {
             data = arguments?.getInt("data") ?: 1
             mun = arguments?.getInt("mun") ?: 1
             raznicia = arguments?.getInt("raznicia", 400) ?: 400
+            issetSvityia = arguments?.getBoolean("issetSvityia", true) ?: true
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (k.getString("caliandarGrid", "") != "") {
                 try {
@@ -208,6 +212,9 @@ class DialogCalindarGrid : DialogFragment() {
                 } else if (!(slugba.checkViachernia(it, data, mun) || slugba.checkViachernia(raznicia)) && mItemList[position] == 1) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                } else if (issetSvityia && mItemList[position] == 7) {
+                    holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
+                    holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                 } else if (mItemList[position] == 2 || mItemList[position] == 3 || mItemList[position] == 5 || mItemList[position] == 8 || mItemList[position] == 9) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
@@ -265,28 +272,43 @@ class DialogCalindarGrid : DialogFragment() {
                         }
                     }
                     6 -> {
-                        activity?.let {
+                        activity?.let { fragmentActivity ->
                             when {
-                                slugba.checkLiturgia(it, data, mun) -> {
-                                    val intent = Intent()
-                                    intent.setClassName(it, MainActivity.TON)
-                                    intent.putExtra("ton_na_sviaty", true)
-                                    intent.putExtra("lityrgia", 4)
-                                    intent.putExtra("day", data)
-                                    intent.putExtra("mun", mun)
-                                    startActivity(intent)
+                                slugba.checkLiturgia(fragmentActivity, data, mun) -> {
+                                    var ton1 = denNedzeli - 1
+                                    var tonNaidzelny = false
+                                    if (ton != 0) {
+                                        ton1 = ton
+                                        tonNaidzelny = true
+                                    }
+                                    fragmentManager?.let {
+                                        val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitleOpisanieSviat(data, mun), mun, data, ton1, tonNaidzelny, true,
+                                            ton_na_viliki_post = false,
+                                            resurs = "")
+                                        traparyAndKandaki.show(it, "traparyAndKandaki")
+                                    }
                                 }
                                 slugba.checkLiturgia(raznicia) -> {
-                                    val intent = Intent()
-                                    val resours = slugba.getResource(raznicia, liturgia = true)
-                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                    intent.putExtra("resurs", resours)
-                                    intent.putExtra("title", slugba.getTitle(resours))
-                                    startActivity(intent)
+                                    if (denNedzeli == Calendar.SUNDAY && ton != 0) {
+                                        val resours = slugba.getResource(raznicia, liturgia = true)
+                                        fragmentManager?.let {
+                                            val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton, true, ton_na_sviaty = false,
+                                                ton_na_viliki_post = true,
+                                                resurs = resours)
+                                            traparyAndKandaki.show(it, "traparyAndKandaki")
+                                        }
+                                    } else {
+                                        val intent = Intent()
+                                        val resours = slugba.getResource(raznicia, liturgia = true)
+                                        intent.setClassName(fragmentActivity, MainActivity.BOGASHLUGBOVYA)
+                                        intent.putExtra("resurs", resours)
+                                        intent.putExtra("title", slugba.getTitle(resours))
+                                        startActivity(intent)
+                                    }
                                 }
                                 else -> {
                                     val intent = Intent()
-                                    intent.setClassName(it, MainActivity.TON)
+                                    intent.setClassName(fragmentActivity, MainActivity.TON)
                                     if (ton != 0) {
                                         intent.putExtra("ton", ton)
                                         intent.putExtra("ton_naidzelny", true)
@@ -301,11 +323,13 @@ class DialogCalindarGrid : DialogFragment() {
                     }
                     7 -> {
                         activity?.let {
-                            val i = Intent()
-                            i.setClassName(it, MainActivity.OPISANIE)
-                            i.putExtra("mun", mun)
-                            i.putExtra("day", data)
-                            startActivity(i)
+                            if (!issetSvityia) {
+                                val i = Intent()
+                                i.setClassName(it, MainActivity.OPISANIE)
+                                i.putExtra("mun", mun)
+                                i.putExtra("day", data)
+                                startActivity(i)
+                            }
                         }
                     }
                     4 -> {

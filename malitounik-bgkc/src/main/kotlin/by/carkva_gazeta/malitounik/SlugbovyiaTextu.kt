@@ -172,12 +172,26 @@ class SlugbovyiaTextu {
         }
     }
 
+    fun getTitleOpisanieSviat(day: Int, mun: Int): String {
+        var title = ""
+        opisanieSviat.forEach {
+            if (day == it[0].toInt() && mun == it[1].toInt()) {
+                if (it[2] != "") {
+                    val trapar = it[2]
+                    val t1 = trapar.indexOf("<strong>")
+                    val t2 = trapar.indexOf("</strong>")
+                    if (t1 != -1 && t2 != -1) title = trapar.substring(t1 + 8, t2)
+                }
+            }
+        }
+        return title
+    }
+
     fun checkUtran(activity: Activity, day: Int, mun: Int): Boolean {
         loadOpisanieSviat(activity)
         opisanieSviat.forEach {
             if (day == it[0].toInt() && mun == it[1].toInt()) {
-                if (it[3] != "")
-                    return true
+                if (it[3] != "") return true
             }
         }
         return false
@@ -221,8 +235,7 @@ class SlugbovyiaTextu {
         loadOpisanieSviat(activity)
         opisanieSviat.forEach {
             if (day == it[0].toInt() && mun == it[1].toInt()) {
-                if (it[4] != "")
-                    return true
+                if (it[4] != "") return true
             }
         }
         return false
@@ -266,8 +279,7 @@ class SlugbovyiaTextu {
         loadOpisanieSviat(activity)
         opisanieSviat.forEach {
             if (day == it[0].toInt() && mun == it[1].toInt()) {
-                if (it[5] != "")
-                    return true
+                if (it[5] != "") return true
             }
         }
         return false

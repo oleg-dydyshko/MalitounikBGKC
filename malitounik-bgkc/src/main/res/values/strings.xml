@@ -371,7 +371,7 @@
     <string name="help_set_font">Рэгуляваньне\nшрыфту</string>
     <string name="help_set_bridnes">Рэгуляваньне\nяркасьці</string>
     <string name="help_on_auto_scroll">Уключэньне\nі рэгуляваньне аўтапрагорткі</string>
-    <string name="trapar_kandak">Трапары і кандакі</string>
+    <string name="trapar_kandak">ТРАПАРЫ І КАНДАКІ</string>
     <string-array name="malitvy_pasli_prychastia">
         <item>Малітва падзякі</item>
         <item>Малітва сьв. Васіля Вялікага</item>
@@ -536,6 +536,15 @@
     <string name="set_underline">Вылучыць падкрэсьліваньнем</string>
     <string name="set_bold">Вылучыць тоўстым</string>
     <string name="set_bookmark">Дадаць у закладкі</string>
+    <string name="viachernia">Вячэрня</string>
+    <string name="raviachernica">Павячэрніца</string>
+    <string name="paunochnica">Паўночніца</string>
+    <string name="utran">Ютрань</string>
+    <string name="gadziny">Гадзіны</string>
+    <string name="liturgia">Літургія</string>
+    <string name="jyci">Жыцьці</string>
+    <string name="piarliny">Пярліны</string>
+    <string name="ustau">Устаў</string>
     <string-array name="dni_nedeli">
         <item />
         <item>нядзеля</item>

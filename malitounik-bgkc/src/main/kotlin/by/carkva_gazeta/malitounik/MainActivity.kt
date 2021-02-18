@@ -41,7 +41,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToLong
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener,
+    MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener,
+    DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
 
     private lateinit var c: GregorianCalendar
     private lateinit var k: SharedPreferences
@@ -457,16 +459,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
         if (k.getBoolean("setAlarm", true)) {
             CoroutineScope(Dispatchers.IO).launch {
+                setListPadzeia(this@MainActivity)
                 val notify = k.getInt("notification", 2)
                 SettingsActivity.setNotifications(this@MainActivity, notify)
                 val edit = k.edit()
                 edit.putBoolean("setAlarm", false)
                 edit.apply()
             }
-        }
-        if (setPadzeia) {
-            setPadzeia = false
-            setListPadzeia(this)
         }
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
     }
@@ -546,7 +545,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 prefEditors.putBoolean("autoscroll", false)
                 prefEditors.putBoolean("setAlarm", true)
                 prefEditors.apply()
-                setPadzeia = true
                 setDataCalendar = -1
                 checkBrightness = true
                 super.onBackPressed()
@@ -1254,7 +1252,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         var padzeia: ArrayList<Padzeia> = ArrayList()
         var setDataCalendar = -1
         var checkBrightness = true
-        var setPadzeia = true
         private var SessionId = 0
         var onStart = true
         var brightness = 15
@@ -1276,45 +1273,42 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
 
         fun setListPadzeia(activity: Activity) {
-            CoroutineScope(Dispatchers.IO).launch {
-                padzeia.clear()
-                val gson = Gson()
-                val dir = File(activity.filesDir.toString() + "/Sabytie")
-                if (dir.exists()) {
-                    dir.walk().forEach { file ->
-                        if (file.isFile && file.exists()) {
-                            val inputStream = FileReader(file)
-                            val reader = BufferedReader(inputStream)
-                            reader.forEachLine {
-                                val line = it.trim()
-                                if (line != "") {
-                                    val t1 = line.split(" ")
-                                    try {
-                                        if (t1.size == 11) padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], 0, false)) else padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], t1[11].toInt(), false))
-                                    } catch (e: Throwable) {
-                                        file.delete()
-                                    }
+            padzeia.clear()
+            val gson = Gson()
+            val dir = File(activity.filesDir.toString() + "/Sabytie")
+            if (dir.exists()) {
+                dir.walk().forEach { file ->
+                    if (file.isFile && file.exists()) {
+                        val inputStream = FileReader(file)
+                        val reader = BufferedReader(inputStream)
+                        reader.forEachLine {
+                            val line = it.trim()
+                            if (line != "") {
+                                val t1 = line.split(" ")
+                                try {
+                                    if (t1.size == 11) padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], 0, false)) else padzeia.add(
+                                        Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], t1[11].toInt(), false))
+                                } catch (e: Throwable) {
+                                    file.delete()
                                 }
                             }
-                            inputStream.close()
                         }
+                        inputStream.close()
                     }
-                    val file = File(activity.filesDir.toString() + "/Sabytie.json")
-                    file.writer().use {
-                        withContext(Dispatchers.IO) {
-                            it.write(gson.toJson(padzeia))
-                        }
-                    }
-                    dir.deleteRecursively()
-                } else {
-                    val file = File(activity.filesDir.toString() + "/Sabytie.json")
-                    if (file.exists()) {
-                        try {
-                            val type = object : TypeToken<ArrayList<Padzeia>>() {}.type
-                            padzeia = gson.fromJson(file.readText(), type)
-                        } catch (t: Throwable) {
-                            file.delete()
-                        }
+                }
+                val file = File(activity.filesDir.toString() + "/Sabytie.json")
+                file.writer().use {
+                    it.write(gson.toJson(padzeia))
+                }
+                dir.deleteRecursively()
+            } else {
+                val file = File(activity.filesDir.toString() + "/Sabytie.json")
+                if (file.exists()) {
+                    try {
+                        val type = object : TypeToken<ArrayList<Padzeia>>() {}.type
+                        padzeia = gson.fromJson(file.readText(), type)
+                    } catch (t: Throwable) {
+                        file.delete()
                     }
                 }
             }

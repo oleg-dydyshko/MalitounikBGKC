@@ -29,9 +29,9 @@ class TraparyAndKandaki : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
-    
+
     companion object {
-        fun getInstance(lityrgia: Int, title: String, mun: Int, day: Int, ton: Int, ton_naidzelny: Boolean, ton_na_sviaty: Boolean, ton_na_viliki_post: Boolean, resurs: String): TraparyAndKandaki {
+        fun getInstance(lityrgia: Int, title: String, mun: Int, day: Int, ton: Int, ton_naidzelny: Boolean, ton_na_sviaty: Boolean, ton_na_viliki_post: Boolean, resurs: String, sviatyiaName: String): TraparyAndKandaki {
             val bundle = Bundle()
             bundle.putInt("lityrgia", lityrgia)
             bundle.putString("title", title)
@@ -42,6 +42,7 @@ class TraparyAndKandaki : DialogFragment() {
             bundle.putBoolean("ton_na_sviaty", ton_na_sviaty)
             bundle.putBoolean("ton_na_viliki_post", ton_na_viliki_post)
             bundle.putString("resurs", resurs)
+            bundle.putString("sviatyiaName", sviatyiaName)
             val trapary = TraparyAndKandaki()
             trapary.arguments = bundle
             return trapary
@@ -72,62 +73,75 @@ class TraparyAndKandaki : DialogFragment() {
             val tonNadzelny = arguments?.getBoolean("ton_naidzelny", true) ?: true
             val tonNaSviaty = arguments?.getBoolean("ton_na_sviaty", false) ?: false
             val tonNaVilikiPost = arguments?.getBoolean("ton_na_viliki_post", false) ?: false
-            val titlePost = arguments?.getString("title") ?: ""
             val resurs = arguments?.getString("resurs") ?: ""
+            val sviatyiaName = arguments?.getString("sviatyiaName", "no_sviatyia") ?: "no_sviatyia"
             binding.listView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@OnItemClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (data[position].post) {
-                    val intent = Intent()
-                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                    intent.putExtra("resurs", resurs)
-                    intent.putExtra("title", titlePost)
-                    startActivity(intent)
-                } else {
-                    val intent = Intent()
-                    intent.setClassName(it, MainActivity.TON)
-                    intent.putExtra("lityrgia", lityrgia)
-                    intent.putExtra("mun", mun)
-                    intent.putExtra("day", day)
-                    intent.putExtra("ton_na_sviaty", data[position].sviata)
-                    intent.putExtra("ton", ton)
-                    intent.putExtra("ton_naidzelny", tonNadzelny)
-                    startActivity(intent)
+                when {
+                    data[position].sviatyia -> {
+                        val i = Intent()
+                        i.setClassName(it, MainActivity.OPISANIE)
+                        i.putExtra("mun", mun)
+                        i.putExtra("day", day)
+                        startActivity(i)
+                    }
+                    data[position].post -> {
+                        val intent = Intent()
+                        intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                        intent.putExtra("resurs", resurs)
+                        intent.putExtra("title", title)
+                        startActivity(intent)
+                    }
+                    else -> {
+                        val intent = Intent()
+                        intent.setClassName(it, MainActivity.TON)
+                        intent.putExtra("lityrgia", lityrgia)
+                        intent.putExtra("mun", mun)
+                        intent.putExtra("day", day)
+                        intent.putExtra("ton_na_sviaty", data[position].sviata)
+                        intent.putExtra("ton", ton)
+                        intent.putExtra("ton_naidzelny", tonNadzelny)
+                        startActivity(intent)
+                    }
                 }
                 dialog?.cancel()
             }
             if (tonNaSviaty) {
-                if (title == "") data.add(Bogaslujbovyia(getString(R.string.trsviata), lityrgia, true, post = false))
-                else data.add(Bogaslujbovyia(title, lityrgia, true, post = false))
+                if (title == "") data.add(Bogaslujbovyia(getString(R.string.trsviata), lityrgia, sviata = true))
+                else data.add(Bogaslujbovyia(title, lityrgia, sviata = true))
             }
             if (tonNaVilikiPost) {
-                data.add(Bogaslujbovyia(titlePost, lityrgia, false, post = true))
+                data.add(Bogaslujbovyia(title, lityrgia, post = true))
             }
             if (tonNadzelny) {
-                data.add(Bogaslujbovyia("Тон $ton", lityrgia, false, post = false))
+                data.add(Bogaslujbovyia("Тон $ton", lityrgia))
             } else {
                 when (ton) {
                     1 -> {
-                        data.add(Bogaslujbovyia("ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам", lityrgia, false, post = false))
+                        data.add(Bogaslujbovyia("ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам", lityrgia))
                     }
                     2 -> {
-                        data.add(Bogaslujbovyia("АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю", lityrgia, false, post = false))
+                        data.add(Bogaslujbovyia("АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю", lityrgia))
                     }
                     3 -> {
-                        data.add(Bogaslujbovyia("СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу", lityrgia, false, post = false))
+                        data.add(Bogaslujbovyia("СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу", lityrgia))
                     }
                     4 -> {
-                        data.add(Bogaslujbovyia("ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю", lityrgia, false, post = false))
+                        data.add(Bogaslujbovyia("ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю", lityrgia))
                     }
                     5 -> {
-                        data.add(Bogaslujbovyia("ПЯТНІЦА\nСлужба Крыжу Гасподняму", lityrgia, false, post = false))
+                        data.add(Bogaslujbovyia("ПЯТНІЦА\nСлужба Крыжу Гасподняму", lityrgia))
                     }
                     6 -> {
-                        data.add(Bogaslujbovyia("Субота\nСлужба ўсім сьвятым і памёрлым", lityrgia, false, post = false))
+                        data.add(Bogaslujbovyia("Субота\nСлужба ўсім сьвятым і памёрлым", lityrgia))
                     }
                 }
+            }
+            if (!sviatyiaName.contains("no_sviatyia")) {
+                data.add(Bogaslujbovyia(sviatyiaName, lityrgia, sviatyia = true))
             }
             val adapter = TraparyAndKandakiAdaprer(it, data)
             binding.listView.adapter = adapter
@@ -162,5 +176,5 @@ class TraparyAndKandaki : DialogFragment() {
 
     private class ViewHolder(var text: TextViewRobotoCondensed)
 
-    private data class Bogaslujbovyia(val title: String, val lityrgia: Int, val sviata: Boolean, val post: Boolean)
+    private data class Bogaslujbovyia(val title: String, val lityrgia: Int, val sviata: Boolean = false, val post: Boolean = false, val sviatyia: Boolean = false)
 }

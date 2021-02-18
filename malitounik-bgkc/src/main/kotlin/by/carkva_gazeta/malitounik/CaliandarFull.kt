@@ -455,7 +455,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         data[day][1].toInt(),
                         data[day][2].toInt() + 1,
                         data[day][22].toInt(),
-                        data[day][4].contains("no_sviatyia"))
+                        data[day][4],
+                        data[day][23] == "1")
                     dialogCalindarGrid.show(it, "grid")
                 }
             }

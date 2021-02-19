@@ -57,7 +57,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         return if (MenuCaliandar.munKal == mun && MenuCaliandar.dataJson != "") {
             MenuCaliandar.dataJson
         } else {
-            val inputStream = resources.openRawResource(MainActivity.caliandar(context, mun))
+            val inputStream = resources.openRawResource(MainActivity.caliandar(mun))
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             val builder = reader.use {

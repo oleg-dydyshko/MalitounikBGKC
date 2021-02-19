@@ -1438,9 +1438,71 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             return false
         }
 
-        fun caliandar(context: Context?, mun: Int): Int {
-            val filename = "caliandar".plus(mun)
-            return context?.resources?.getIdentifier(filename, "raw", context.packageName) ?: return 0
+        fun caliandar(mun: Int): Int {
+            var resource = R.raw.caliandar0
+            when (mun) {
+                0 -> resource = R.raw.caliandar0
+                1 -> resource = R.raw.caliandar1
+                2 -> resource = R.raw.caliandar2
+                3 -> resource = R.raw.caliandar3
+                4 -> resource = R.raw.caliandar4
+                5 -> resource = R.raw.caliandar5
+                6 -> resource = R.raw.caliandar6
+                7 -> resource = R.raw.caliandar7
+                8 -> resource = R.raw.caliandar8
+                9 -> resource = R.raw.caliandar9
+                10 -> resource = R.raw.caliandar10
+                11 -> resource = R.raw.caliandar11
+                12 -> resource = R.raw.caliandar12
+                13 -> resource = R.raw.caliandar13
+                14 -> resource = R.raw.caliandar14
+                15 -> resource = R.raw.caliandar15
+                16 -> resource = R.raw.caliandar16
+                17 -> resource = R.raw.caliandar17
+                18 -> resource = R.raw.caliandar18
+                19 -> resource = R.raw.caliandar19
+                20 -> resource = R.raw.caliandar20
+                21 -> resource = R.raw.caliandar21
+                22 -> resource = R.raw.caliandar22
+                23 -> resource = R.raw.caliandar23
+                24 -> resource = R.raw.caliandar24
+                25 -> resource = R.raw.caliandar25
+                26 -> resource = R.raw.caliandar26
+                27 -> resource = R.raw.caliandar27
+                28 -> resource = R.raw.caliandar28
+                29 -> resource = R.raw.caliandar29
+                30 -> resource = R.raw.caliandar30
+                31 -> resource = R.raw.caliandar31
+                32 -> resource = R.raw.caliandar32
+                33 -> resource = R.raw.caliandar33
+                34 -> resource = R.raw.caliandar34
+                35 -> resource = R.raw.caliandar35
+                36 -> resource = R.raw.caliandar36
+                37 -> resource = R.raw.caliandar37
+                38 -> resource = R.raw.caliandar38
+                39 -> resource = R.raw.caliandar39
+                40 -> resource = R.raw.caliandar40
+                41 -> resource = R.raw.caliandar41
+                42 -> resource = R.raw.caliandar42
+                43 -> resource = R.raw.caliandar43
+                44 -> resource = R.raw.caliandar44
+                45 -> resource = R.raw.caliandar45
+                46 -> resource = R.raw.caliandar46
+                47 -> resource = R.raw.caliandar47
+                48 -> resource = R.raw.caliandar48
+                49 -> resource = R.raw.caliandar49
+                50 -> resource = R.raw.caliandar50
+                51 -> resource = R.raw.caliandar51
+                52 -> resource = R.raw.caliandar52
+                53 -> resource = R.raw.caliandar53
+                54 -> resource = R.raw.caliandar54
+                55 -> resource = R.raw.caliandar55
+                56 -> resource = R.raw.caliandar56
+                57 -> resource = R.raw.caliandar57
+                58 -> resource = R.raw.caliandar58
+                59 -> resource = R.raw.caliandar59
+            }
+            return resource
         }
 
         fun removeZnakiAndSlovy(ctenie: String): String {

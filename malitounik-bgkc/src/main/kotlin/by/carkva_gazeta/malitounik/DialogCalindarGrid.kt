@@ -326,7 +326,7 @@ class DialogCalindarGrid : DialogFragment() {
                                     }
                                 }
                                 else -> {
-                                    if (!sviatyaName.contains("no_sviatyia")) {
+                                    if (checkSviatyia) {
                                         val resours = slugba.getResource(raznicia, liturgia = true)
                                         fragmentManager?.let {
                                             val traparyAndKandaki = TraparyAndKandaki.getInstance(4,

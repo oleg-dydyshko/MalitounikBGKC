@@ -28,7 +28,7 @@ internal class ZmenyiaChastki(context: Context) {
 
     private val date: ArrayList<ArrayList<String>>
         get() {
-            val inputStream = context.resources.openRawResource(MainActivity.caliandar(context, getmun()))
+            val inputStream = context.resources.openRawResource(MainActivity.caliandar(getmun()))
             val inputStreamReader = InputStreamReader(inputStream)
             val reader = BufferedReader(inputStreamReader)
             val gson = Gson()

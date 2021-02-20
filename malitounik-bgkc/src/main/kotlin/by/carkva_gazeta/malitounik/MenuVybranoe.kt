@@ -180,13 +180,16 @@ class MenuVybranoe : VybranoeFragment() {
                 try {
                     val type = object : TypeToken<ArrayList<VybranoeData>>() {}.type
                     vybranoe = gson.fromJson(file.readText(), type)
-                    vybranoeSort = k.getInt("vybranoe_sort", 1)
-                    vybranoe.sort()
                 } catch (t: Throwable) {
-                    file.delete()
+                    vybranoe = ArrayList()
+                    file.writer().use {
+                        it.write(gson.toJson(vybranoe))
+                    }
                 }
             }
             checkBibleVybranoe()
+            vybranoeSort = k.getInt("vybranoe_sort", 1)
+            vybranoe.sort()
             adapter = ItemAdapter(vybranoe, R.id.image, false)
             binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
             binding.dragListView.setLayoutManager(LinearLayoutManager(fragmentActivity))

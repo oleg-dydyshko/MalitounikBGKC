@@ -23,6 +23,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentTransaction
 import by.carkva_gazeta.malitounik.databinding.ActivityMainBinding
@@ -1438,7 +1439,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             return false
         }
 
-        fun caliandar(mun: Int): Int {
+        fun getCaliandarResource(mun: Int): Int {
             var resource = R.raw.caliandar0
             when (mun) {
                 0 -> resource = R.raw.caliandar0
@@ -1665,23 +1666,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             mes.show()
         }
 
-        @Suppress("DEPRECATION")
-        fun fromHtml(html: String): Spanned {
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-            } else {
-                Html.fromHtml(html)
-            }
-        }
+        fun fromHtml(html: String) = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-        @Suppress("DEPRECATION")
-        fun toHtml(html: Spannable): String {
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Html.toHtml(html, Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL)
-            } else {
-                Html.toHtml(html)
-            }
-        }
+        fun toHtml(html: Spannable) = HtmlCompat.toHtml(html, HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL)
 
         @Suppress("DEPRECATION")
         fun isNetworkAvailable(context: Context): Boolean {

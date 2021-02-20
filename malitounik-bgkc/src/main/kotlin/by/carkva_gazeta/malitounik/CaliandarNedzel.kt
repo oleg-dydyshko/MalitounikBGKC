@@ -67,7 +67,7 @@ class CaliandarNedzel : ListFragment() {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 val builder = StringBuilder()
-                var inputStream = resources.openRawResource(MainActivity.caliandar(date))
+                var inputStream = resources.openRawResource(MainActivity.getCaliandarResource(date))
                 var isr = InputStreamReader(inputStream)
                 var reader = BufferedReader(isr)
                 reader.forEachLine {
@@ -83,7 +83,7 @@ class CaliandarNedzel : ListFragment() {
                         if (26 >= strings[i][1].toInt()) {
                             val t1 = builder.toString().lastIndexOf("]")
                             val builderN = StringBuilder()
-                            inputStream = resources.openRawResource(MainActivity.caliandar(date + 1))
+                            inputStream = resources.openRawResource(MainActivity.getCaliandarResource(date + 1))
                             isr = InputStreamReader(inputStream)
                             reader = BufferedReader(isr)
                             reader.forEachLine {

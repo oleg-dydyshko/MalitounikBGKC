@@ -260,7 +260,7 @@ class WidgetMun : AppWidgetProvider() {
         var calendarPost: GregorianCalendar
         val month = chin.getInt("WIDGET$widgetID", c[Calendar.MONTH])
         val year = chin.getInt("WIDGETYEAR$widgetID", c[Calendar.YEAR])
-        val inputStream = context.resources.openRawResource(MainActivity.caliandar(getmun(month, year)))
+        val inputStream = context.resources.openRawResource(MainActivity.getCaliandarResource(getmun(month, year)))
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         val gson = Gson()

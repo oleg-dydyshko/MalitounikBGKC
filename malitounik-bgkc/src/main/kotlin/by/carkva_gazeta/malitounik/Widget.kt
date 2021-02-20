@@ -135,7 +135,7 @@ class Widget : AppWidgetProvider() {
 
         fun kaliandar(context: Context, appWidgetManager: AppWidgetManager, widgetID: Int) {
             val updateViews = RemoteViews(context.packageName, R.layout.widget)
-            val inputStream = context.resources.openRawResource(MainActivity.caliandar(getmun()))
+            val inputStream = context.resources.openRawResource(MainActivity.getCaliandarResource(getmun()))
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             val gson = Gson()

@@ -61,6 +61,97 @@ class MenuVybranoe : VybranoeFragment() {
         }
     }
 
+    private fun checkBibleVybranoe() {
+        val gson = Gson()
+        val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type
+        var bibleVybranoe = k.getString("bibleVybranoeSemuxa", "") ?: ""
+        var indexVybranoe = 0
+        var remove = false
+        if (bibleVybranoe != "") {
+            val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
+            if (arrayListVybranoe.isEmpty()) {
+                vybranoe.forEachIndexed { index, vybranoeData ->
+                    if (vybranoeData.resurs == "1") {
+                        indexVybranoe = index
+                        remove = true
+                        return@forEachIndexed
+                    }
+                }
+            }
+        } else {
+            vybranoe.forEachIndexed { index, vybranoeData ->
+                if (vybranoeData.resurs == "1") {
+                    indexVybranoe = index
+                    remove = true
+                    return@forEachIndexed
+                }
+            }
+        }
+        if (remove) {
+            val edit = k.edit()
+            edit.remove("bibleVybranoeSemuxa")
+            edit.apply()
+            vybranoe.removeAt(indexVybranoe)
+            remove = false
+        }
+        bibleVybranoe = k.getString("bibleVybranoeSinoidal", "") ?: ""
+        if (bibleVybranoe != "") {
+            val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
+            if (arrayListVybranoe.isEmpty()) {
+                vybranoe.forEachIndexed { index, vybranoeData ->
+                    if (vybranoeData.resurs == "2") {
+                        indexVybranoe = index
+                        remove = true
+                        return@forEachIndexed
+                    }
+                }
+            }
+        } else {
+            vybranoe.forEachIndexed { index, vybranoeData ->
+                if (vybranoeData.resurs == "2") {
+                    indexVybranoe = index
+                    remove = true
+                    return@forEachIndexed
+                }
+            }
+        }
+        if (remove) {
+            val edit = k.edit()
+            edit.remove("bibleVybranoeSinoidal")
+            edit.apply()
+            vybranoe.removeAt(indexVybranoe)
+            remove = false
+        }
+        bibleVybranoe = k.getString("bibleVybranoeNadsan", "") ?: ""
+        if (bibleVybranoe != "") {
+            val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
+            if (arrayListVybranoe.isEmpty()) {
+                vybranoe.forEachIndexed { index, vybranoeData ->
+                    if (vybranoeData.resurs == "3") {
+                        indexVybranoe = index
+                        remove = true
+                        return@forEachIndexed
+                    }
+                }
+            }
+        } else {
+            vybranoe.forEachIndexed { index, vybranoeData ->
+                if (vybranoeData.resurs == "3") {
+                    indexVybranoe = index
+                    remove = true
+                    return@forEachIndexed
+                }
+            }
+        }
+        if (remove) {
+            val edit = k.edit()
+            edit.remove("bibleVybranoeNadsan")
+            edit.apply()
+            vybranoe.removeAt(indexVybranoe)
+            remove = false
+        }
+    }
+
     override fun deliteAllVybranoe() {
         activity?.let { activity ->
             val edit = k.edit()
@@ -95,6 +186,7 @@ class MenuVybranoe : VybranoeFragment() {
                     file.delete()
                 }
             }
+            checkBibleVybranoe()
             adapter = ItemAdapter(vybranoe, R.id.image, false)
             binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
             binding.dragListView.setLayoutManager(LinearLayoutManager(fragmentActivity))

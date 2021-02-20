@@ -186,12 +186,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     var dataSviatyia = data[day][4]
                     if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
                     binding.textSviatyia.text = MainActivity.fromHtml(dataSviatyia)
+                    if (!dataSviatyia.contains("<!--no_apisanne-->")) binding.textSviatyia.setOnClickListener(this@CaliandarFull)
                 } else {
                     binding.polosa1.visibility = View.GONE
                     binding.polosa2.visibility = View.GONE
                     binding.textSviatyia.visibility = View.GONE
                 }
-                binding.textSviatyia.setOnClickListener(this@CaliandarFull)
                 if (!data[day][6].contains("no_sviaty")) {
                     binding.textCviatyGlavnyia.text = data[day][6]
                     binding.textCviatyGlavnyia.visibility = View.VISIBLE
@@ -449,14 +449,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     } else {
                         data[day][7].toInt()
                     }
-                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog,
-                        data[day][20].toInt(),
-                        data[day][0].toInt(),
-                        data[day][1].toInt(),
-                        data[day][2].toInt() + 1,
-                        data[day][22].toInt(),
-                        data[day][4],
-                        data[day][23] == "1")
+                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20].toInt(), data[day][0].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1, data[day][22].toInt(), data[day][4], data[day][23] == "1")
                     dialogCalindarGrid.show(it, "grid")
                 }
             }

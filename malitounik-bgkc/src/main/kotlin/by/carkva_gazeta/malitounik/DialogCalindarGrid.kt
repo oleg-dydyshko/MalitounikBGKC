@@ -133,7 +133,7 @@ class DialogCalindarGrid : DialogFragment() {
             mun = arguments?.getInt("mun") ?: 1
             raznicia = arguments?.getInt("raznicia", 400) ?: 400
             sviatyaName = arguments?.getString("svityiaName", "no_sviatyia") ?: "no_sviatyia"
-            issetSvityia = sviatyaName.contains("no_sviatyia")
+            issetSvityia = sviatyaName.contains("no_sviatyia") || sviatyaName.contains("<!--no_apisanne-->")
             checkSviatyia = arguments?.getBoolean("checkSviatyia", false) ?: false
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (k.getString("caliandarGrid", "") != "") {
@@ -287,16 +287,7 @@ class DialogCalindarGrid : DialogFragment() {
                             when {
                                 slugba.checkLiturgia(fragmentActivity, data, mun) -> {
                                     fragmentManager?.let {
-                                        val traparyAndKandaki = TraparyAndKandaki.getInstance(4,
-                                            slugba.getTitleOpisanieSviat(data, mun),
-                                            mun,
-                                            data,
-                                            ton1,
-                                            tonNaidzelny,
-                                            true,
-                                            ton_na_viliki_post = false,
-                                            resurs = "",
-                                            sviatyaName)
+                                        val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitleOpisanieSviat(data, mun), mun, data, ton1, tonNaidzelny, true, ton_na_viliki_post = false, resurs = "", sviatyaName, checkSviatyia)
                                         traparyAndKandaki.show(it, "traparyAndKandaki")
                                     }
                                 }
@@ -304,16 +295,7 @@ class DialogCalindarGrid : DialogFragment() {
                                     if (denNedzeli == Calendar.SUNDAY && ton != 0) {
                                         val resours = slugba.getResource(raznicia, liturgia = true)
                                         fragmentManager?.let {
-                                            val traparyAndKandaki = TraparyAndKandaki.getInstance(4,
-                                                slugba.getTitle(resours),
-                                                mun,
-                                                data,
-                                                ton,
-                                                true,
-                                                ton_na_sviaty = false,
-                                                ton_na_viliki_post = true,
-                                                resurs = resours,
-                                                sviatyaName)
+                                            val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton, true, ton_na_sviaty = false, ton_na_viliki_post = true, resurs = resours, sviatyaName, checkSviatyia)
                                             traparyAndKandaki.show(it, "traparyAndKandaki")
                                         }
                                     } else {
@@ -329,16 +311,7 @@ class DialogCalindarGrid : DialogFragment() {
                                     if (checkSviatyia) {
                                         val resours = slugba.getResource(raznicia, liturgia = true)
                                         fragmentManager?.let {
-                                            val traparyAndKandaki = TraparyAndKandaki.getInstance(4,
-                                                slugba.getTitle(resours),
-                                                mun,
-                                                data,
-                                                ton1,
-                                                tonNaidzelny,
-                                                ton_na_sviaty = false,
-                                                ton_na_viliki_post = false,
-                                                resurs = resours,
-                                                sviatyaName)
+                                            val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton1, tonNaidzelny, ton_na_sviaty = false, ton_na_viliki_post = false, resurs = resours, sviatyaName, checkSviatyia)
                                             traparyAndKandaki.show(it, "traparyAndKandaki")
                                         }
                                     } else {

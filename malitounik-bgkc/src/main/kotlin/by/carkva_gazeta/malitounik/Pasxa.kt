@@ -3,10 +3,7 @@ package by.carkva_gazeta.malitounik
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.LevelListDrawable
 import android.os.Bundle
-import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
@@ -17,14 +14,13 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.webkit.WebSettings
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.PasxaBinding
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 
-class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Html.ImageGetter {
+class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     private lateinit var binding: PasxaBinding
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
@@ -100,19 +96,7 @@ class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Html.I
         webSettings.standardFontFamily = "sans-serif-condensed"
         webSettings.defaultFontSize = fontBiblia.toInt()
         webSettings.domStorageEnabled = true
-        binding.pasxa.loadDataWithBaseURL("file:///android_res/drawable/", builder.toString(), "text/html", "utf-8", null)
-    }
-
-    override fun getDrawable(arg0: String): Drawable {
-        var id = 0
-        if (arg0 == "uvaskras.jpg") {
-            id = R.drawable.uvaskras
-        }
-        val d = LevelListDrawable()
-        val empty = ContextCompat.getDrawable(this, id)
-        d.addLevel(0, 0, empty)
-        d.setBounds(0, 0, empty?.intrinsicWidth ?: 0, empty?.intrinsicHeight ?: 0)
-        return d
+        binding.pasxa.loadDataWithBaseURL("malitounikApp-app//carkva-gazeta.by/", builder.toString(), "text/html", "utf-8", null)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

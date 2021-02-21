@@ -88,9 +88,6 @@ class MenuVybranoe : VybranoeFragment() {
             }
         }
         if (remove) {
-            val edit = k.edit()
-            edit.remove("bibleVybranoeSemuxa")
-            edit.apply()
             vybranoe.removeAt(indexVybranoe)
             remove = false
         }
@@ -116,9 +113,6 @@ class MenuVybranoe : VybranoeFragment() {
             }
         }
         if (remove) {
-            val edit = k.edit()
-            edit.remove("bibleVybranoeSinoidal")
-            edit.apply()
             vybranoe.removeAt(indexVybranoe)
             remove = false
         }
@@ -144,9 +138,6 @@ class MenuVybranoe : VybranoeFragment() {
             }
         }
         if (remove) {
-            val edit = k.edit()
-            edit.remove("bibleVybranoeNadsan")
-            edit.apply()
             vybranoe.removeAt(indexVybranoe)
             remove = false
         }

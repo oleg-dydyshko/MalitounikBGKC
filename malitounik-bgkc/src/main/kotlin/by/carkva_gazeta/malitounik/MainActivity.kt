@@ -709,6 +709,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
             menu.findItem(R.id.action_add).isVisible = false
             menu.findItem(R.id.action_mun).isVisible = false
+            menu.findItem(R.id.action_glava).isVisible = false
             menu.findItem(R.id.tipicon).isVisible = false
             menu.findItem(R.id.pasxa_opis).isVisible = false
             menu.findItem(R.id.pasxa).isVisible = false

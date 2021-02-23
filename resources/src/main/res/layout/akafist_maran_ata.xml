@@ -107,9 +107,14 @@
                 android:id="@+id/adpravit"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_marginBottom="20dp"
                 android:contentDescription="@string/share"
                 app:srcCompat="@drawable/share_bible" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" />
 
             <ImageView
                 android:id="@+id/yelloy"

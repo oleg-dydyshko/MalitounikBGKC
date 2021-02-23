@@ -1057,7 +1057,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 }
                 R.id.label7 -> {
                     prefEditors.putInt("id", idSelect)
-                    val menuNatatki = MenuNatatki.getInstance(shortcuts)
+                    val menuNatatki = MenuNatatki()
                     ftrans.replace(R.id.conteiner, menuNatatki, "MenuNatatki")
                     shortcuts = false
                 }

@@ -128,7 +128,6 @@ class MenuNatatki : NatatkiFragment() {
                 }
             })
         }
-        if (arguments?.getBoolean("shortcuts") == true) addNatatka()
     }
 
     override fun fileDeliteCancel() {
@@ -178,7 +177,18 @@ class MenuNatatki : NatatkiFragment() {
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_add) {
-            addNatatka()
+            if (MainActivity.checkmoduleResources(activity)) {
+                activity?.let {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.MYNATATKI)
+                    intent.putExtra("redak", 1)
+                    intent.putExtra("filename", "")
+                    startActivity(intent)
+                }
+            } else {
+                val dadatak = DialogInstallDadatak()
+                fragmentManager?.let { dadatak.show(it, "dadatak") }
+            }
         }
         if (id == R.id.sortdate) {
             activity?.let { activity ->
@@ -227,21 +237,6 @@ class MenuNatatki : NatatkiFragment() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun addNatatka() {
-        if (MainActivity.checkmoduleResources(activity)) {
-            activity?.let {
-                val intent = Intent()
-                intent.setClassName(it, MainActivity.MYNATATKI)
-                intent.putExtra("redak", 1)
-                intent.putExtra("filename", "")
-                startActivity(intent)
-            }
-        } else {
-            val dadatak = DialogInstallDadatak()
-            fragmentManager?.let { dadatak.show(it, "dadatak") }
-        }
     }
 
     private inner class ItemAdapter(list: ArrayList<MyNatatkiFiles>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) :
@@ -313,13 +308,5 @@ class MenuNatatki : NatatkiFragment() {
     companion object {
         var myNatatkiFiles = ArrayList<MyNatatkiFiles>()
         var myNatatkiFilesSort = 0
-
-        fun getInstance(shortcuts: Boolean): MenuNatatki {
-            val menuNatatki = MenuNatatki()
-            val bundl = Bundle()
-            bundl.putBoolean("shortcuts", shortcuts)
-            menuNatatki.arguments = bundl
-            return menuNatatki
-        }
     }
 }

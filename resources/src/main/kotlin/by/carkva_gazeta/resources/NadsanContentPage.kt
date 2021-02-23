@@ -146,6 +146,7 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
         }
         activity?.let { activity ->
             adapter = ListAdaprer(activity)
+            binding.view.visibility = View.GONE
             binding.yelloy.visibility = View.GONE
             binding.underline.visibility = View.GONE
             binding.bold.visibility = View.GONE

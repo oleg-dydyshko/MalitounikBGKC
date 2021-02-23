@@ -175,12 +175,14 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
             }
             adapter.notifyDataSetChanged()
             if (BibleGlobalList.bibleCopyList.size > 1) {
+                binding.view.visibility = View.GONE
                 binding.yelloy.visibility = View.GONE
                 binding.underline.visibility = View.GONE
                 binding.bold.visibility = View.GONE
                 binding.zakladka.visibility = View.GONE
                 binding.zametka.visibility = View.GONE
             } else {
+                binding.view.visibility = View.VISIBLE
                 binding.yelloy.visibility = View.VISIBLE
                 binding.underline.visibility = View.VISIBLE
                 binding.bold.visibility = View.VISIBLE
@@ -467,12 +469,14 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
         }
         activity?.let {
             if (BibleGlobalList.bibleCopyList.size > 1) {
+                binding.view.visibility = View.GONE
                 binding.yelloy.visibility = View.GONE
                 binding.underline.visibility = View.GONE
                 binding.bold.visibility = View.GONE
                 binding.zakladka.visibility = View.GONE
                 binding.zametka.visibility = View.GONE
             } else {
+                binding.view.visibility = View.VISIBLE
                 binding.yelloy.visibility = View.VISIBLE
                 binding.underline.visibility = View.VISIBLE
                 binding.bold.visibility = View.VISIBLE
@@ -592,6 +596,7 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
                 bible.forEachIndexed { index, _ ->
                     BibleGlobalList.bibleCopyList.add(index)
                 }
+                binding.view.visibility = View.GONE
                 binding.yelloy.visibility = View.GONE
                 binding.underline.visibility = View.GONE
                 binding.bold.visibility = View.GONE

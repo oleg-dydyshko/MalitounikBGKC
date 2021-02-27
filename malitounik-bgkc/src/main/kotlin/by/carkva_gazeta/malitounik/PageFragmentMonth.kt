@@ -74,7 +74,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
 
     private fun getData(mun: Int): String {
         var builder = ""
-        activity?.let { it ->
+        activity?.let {
             val inputStream = resources.openRawResource(MainActivity.getCaliandarResource(mun))
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)

@@ -1225,6 +1225,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }
 
     companion object {
+        const val ADMINMAIN = "by.carkva_gazeta.admin.AdminMain"
+        const val ADMINNOVYZAPAVIETSEMUXA = "by.carkva_gazeta.admin.NovyZapavietSemuxa"
+        const val ADMINSTARYZAPAVIETSEMUXA = "by.carkva_gazeta.admin.StaryZapavietSemuxa"
         const val BIBLIOTEKAVIEW = "by.carkva_gazeta.biblijateka.BibliotekaView"
         const val OPISANIE = "by.carkva_gazeta.resources.Opisanie"
         const val CHYTANNE = "by.carkva_gazeta.resources.Chytanne"
@@ -1315,7 +1318,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }
         }
 
-        fun downloadDynamicModule(context: Activity) {
+        fun downloadDynamicModule(context: Activity, moduleName: String = "biblijateka") {
             val progressBarModule = context.findViewById<ProgressBar>(R.id.progressBarModule)
             val layoutDialod = context.findViewById<LinearLayout>(R.id.linear)
             val layoutDialod2 = context.findViewById<LinearLayout>(R.id.linear2)
@@ -1329,7 +1332,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }
             val splitInstallManager = SplitInstallManagerFactory.create(context)
 
-            val request = SplitInstallRequest.newBuilder().addModule("biblijateka").build()
+            val request = SplitInstallRequest.newBuilder().addModule(moduleName).build()
 
             val listener = SplitInstallStateUpdatedListener {
                 val state = it
@@ -1362,11 +1365,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                         }
                         SplitInstallSessionStatus.INSTALLED -> {
                             layoutDialod.visibility = View.GONE
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                SplitInstallHelper.updateAppInfo(context)
-                                Handler(Looper.getMainLooper()).post {
+                            if (moduleName == "biblijateka") {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    SplitInstallHelper.updateAppInfo(context)
+                                    Handler(Looper.getMainLooper()).post {
+                                        val intent = Intent()
+                                        intent.setClassName(context, BIBLIOTEKAVIEW)
+                                        intent.data = context.intent.data
+                                        if (intent.extras?.containsKey("filePath") == true) {
+                                            intent.putExtra("filePath", intent.extras?.getString("filePath"))
+                                        }
+                                        if (intent.extras?.containsKey("site") == true) intent.putExtra("site", true)
+                                        context.startActivity(intent)
+                                    }
+                                } else {
+                                    val newContext = context.createPackageContext(context.packageName, 0)
                                     val intent = Intent()
-                                    intent.setClassName(context, BIBLIOTEKAVIEW)
+                                    intent.setClassName(newContext, BIBLIOTEKAVIEW)
                                     intent.data = context.intent.data
                                     if (intent.extras?.containsKey("filePath") == true) {
                                         intent.putExtra("filePath", intent.extras?.getString("filePath"))
@@ -1374,16 +1389,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                                     if (intent.extras?.containsKey("site") == true) intent.putExtra("site", true)
                                     context.startActivity(intent)
                                 }
-                            } else {
-                                val newContext = context.createPackageContext(context.packageName, 0)
-                                val intent = Intent()
-                                intent.setClassName(newContext, BIBLIOTEKAVIEW)
-                                intent.data = context.intent.data
-                                if (intent.extras?.containsKey("filePath") == true) {
-                                    intent.putExtra("filePath", intent.extras?.getString("filePath"))
-                                }
-                                if (intent.extras?.containsKey("site") == true) intent.putExtra("site", true)
-                                context.startActivity(intent)
                             }
                         }
                         SplitInstallSessionStatus.CANCELED -> {
@@ -1411,6 +1416,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }.addOnSuccessListener {
                 SessionId = it
             }
+        }
+
+        fun checkmodulesAdmin(context: Context?): Boolean {
+            context?.let {
+                val muduls = SplitInstallManagerFactory.create(it).installedModules
+                for (mod in muduls) {
+                    if (mod == "admin") {
+                        return true
+                    }
+                }
+            }
+            return false
         }
 
         fun checkmodulesBiblijateka(context: Context?): Boolean {

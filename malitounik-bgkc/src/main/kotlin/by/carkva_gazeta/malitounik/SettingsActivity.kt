@@ -28,7 +28,7 @@ import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
     private lateinit var k: SharedPreferences
     private lateinit var prefEditor: Editor
     private var dzenNoch = false
@@ -36,6 +36,8 @@ class SettingsActivity : AppCompatActivity() {
     private var itemDefault = 0
     private lateinit var binding: SettingsActivityBinding
     private var resetTollbarJob: Job? = null
+    private var adminClickTime: Long = 0
+    private var adminItemCount = 0
 
     companion object {
         private const val UPDATE_ALL_WIDGETS = "update_all_widgets"
@@ -1190,6 +1192,29 @@ class SettingsActivity : AppCompatActivity() {
             binding.line3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
         }
+        binding.textView16.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - adminClickTime < 1000) {
+                adminItemCount++
+            } else {
+                adminItemCount = 1
+            }
+            adminClickTime = SystemClock.elapsedRealtime()
+            if (adminItemCount == 7) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    val checkLogin = CheckLogin()
+                    checkLogin.show(supportFragmentManager, "checkLogin")
+                }
+            }
+        }
+        if (k.getBoolean("admin", false)) {
+            binding.admin.visibility = View.VISIBLE
+        }
+        binding.admin.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.admin.setOnClickListener {
+            val intent = Intent()
+            intent.setClassName(this, MainActivity.ADMINMAIN)
+            startActivity(intent)
+        }
         if (dzenNoch) binding.prav.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.prav.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.secret.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
@@ -1328,6 +1353,7 @@ class SettingsActivity : AppCompatActivity() {
             prefEditor.putBoolean("pegistrbukv", true)
             prefEditor.putInt("slovocalkam", 0)
             prefEditor.putInt("trafic", 0)
+            prefEditor.putBoolean("admin", false)
             prefEditor.apply()
             binding.vibro.isClickable = true
             binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
@@ -1569,6 +1595,15 @@ class SettingsActivity : AppCompatActivity() {
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
+    }
+
+    override fun onLogin() {
+        prefEditor.putBoolean("admin", true)
+        prefEditor.apply()
+        binding.admin.visibility = View.VISIBLE
+        if (!MainActivity.checkmodulesAdmin(this)) {
+            MainActivity.downloadDynamicModule(this, "admin")
+        }
     }
 
     private class TimeAdapter(activity: Activity, private val dataTimes: ArrayList<DataTime>) : ArrayAdapter<DataTime>(activity, R.layout.simple_list_item_1, dataTimes) {

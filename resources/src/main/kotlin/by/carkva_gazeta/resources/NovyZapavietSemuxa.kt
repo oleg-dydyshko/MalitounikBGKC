@@ -2,6 +2,7 @@ package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Typeface
@@ -441,6 +442,7 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
             itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
         }
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         return true
     }
 
@@ -509,6 +511,13 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             }
             fullscreenPage = true
             hide()
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
+            val intent = Intent()
+            intent.setClassName(this, MainActivity.ADMINNOVYZAPAVIETSEMUXA)
+            intent.putExtra("kniga", kniga)
+            intent.putExtra("glava", BibleGlobalList.mListGlava)
+            startActivity(intent)
         }
         prefEditors.apply()
         return super.onOptionsItemSelected(item)

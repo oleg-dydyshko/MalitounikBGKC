@@ -282,6 +282,7 @@
     <string name="sort_time">Сартаваць паводле часу</string>
     <string name="title_biblijateka">Бібліятэка Царквы</string>
     <string name="title_download_module">СПАМПОЎВАЕМ \"БІБЛІЯТЭКУ ЦАРКВЫ\"</string>
+    <string name="title_download_module2">СПАМПОЎВАЕМ \"КІРАВАНЬНЕ\"</string>
     <string name="title_resources">Рэсурсы Дадатка</string>
     <string name="settings_notifi_sviata">Налады апавяшчэньня сьвятаў</string>
     <string name="filter">Фільтар</string>
@@ -569,5 +570,10 @@
         <item>ЛІСТАПАДА</item>
         <item>СЬНЕЖНЯ</item>
     </string-array>
+    <string name="title_admin">Кіраваньне</string>
+    <string name="site_admin">Кіраваньне сайтам</string>
+    <string name="admin_panel">ПАНЭЛЬ КІРАВАНЬНЯ</string>
+    <string name="login">Логін</string>
+    <string name="password">Пароль</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

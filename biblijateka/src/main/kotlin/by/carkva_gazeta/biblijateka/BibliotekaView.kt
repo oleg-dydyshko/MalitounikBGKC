@@ -311,7 +311,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 } catch (t: Throwable) {
                     error = true
                 }
-                return@withContext
             }
             if (!error) {
                 adapter.notifyDataSetChanged()
@@ -1675,7 +1674,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         arrayList.clear()
         adapter.notifyDataSetChanged()
         bindingcontent.progressBar2.visibility = View.VISIBLE
-        val requestQueue = Volley.newRequestQueue(applicationContext)
+        val requestQueue = Volley.newRequestQueue(this)
         val showUrl = "https://carkva-gazeta.by/biblioteka.php"
         val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, showUrl, null, { response: JSONObject ->
             CoroutineScope(Dispatchers.Main).launch {

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    package="by.carkva_gazeta.admin">
+
+    <dist:module
+        dist:instant="false"
+        dist:title="@string/title_admin">
+        <dist:delivery>
+            <dist:on-demand />
+        </dist:delivery>
+        <dist:fusing dist:include="false" />
+    </dist:module>
+
+    <application>
+        <activity
+            android:name="by.carkva_gazeta.admin.AdminMain"
+            android:label="Кіраваньне"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name="by.carkva_gazeta.admin.NovyZapavietSemuxaList"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
+            android:name="by.carkva_gazeta.admin.StaryZapavietSemuxaList"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
+            android:name="by.carkva_gazeta.admin.StaryZapavietSemuxa"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:label="@string/title_activity_stary_zapaviet2"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.admin.StaryZapavietSemuxaList" />
+        </activity>
+        <activity
+            android:name="by.carkva_gazeta.admin.NovyZapavietSemuxa"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:label="@string/novy_zapaviet"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.admin.NovyZapavietSemuxaList" />
+        </activity>
+    </application>
+</manifest>

@@ -11,8 +11,8 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 43753
-        versionName "3.9.2.11"
+        versionCode 43754
+        versionName "3.9.2.12"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -33,11 +33,6 @@ android {
         abi.enableSplit = true
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -50,7 +45,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    dynamicFeatures = [':resources', ':biblijateka']
+    dynamicFeatures = [':resources', ':biblijateka', ':admin']
 }
 
 dependencies {

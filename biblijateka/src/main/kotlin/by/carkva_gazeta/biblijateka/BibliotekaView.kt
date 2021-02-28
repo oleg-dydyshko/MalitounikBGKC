@@ -19,6 +19,7 @@ import android.provider.MediaStore
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
+import android.util.ArrayMap
 import android.util.Base64.DEFAULT
 import android.util.Base64.decode
 import android.util.TypedValue
@@ -44,9 +45,6 @@ import by.carkva_gazeta.biblijateka.databinding.BibliotekaViewBinding
 import by.carkva_gazeta.biblijateka.databinding.BibliotekaViewContentBinding
 import by.carkva_gazeta.biblijateka.databinding.SimpleListItemBibliotekaBinding
 import by.carkva_gazeta.malitounik.*
-import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.github.barteksc.pdfviewer.PDFView
 import com.github.barteksc.pdfviewer.listener.OnErrorListener
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener
@@ -58,7 +56,6 @@ import com.google.gson.reflect.TypeToken
 import com.kursx.parser.fb2.*
 import com.shockwave.pdfium.PdfDocument
 import kotlinx.coroutines.*
-import org.json.JSONObject
 import org.xml.sax.SAXException
 import java.io.*
 import java.lang.Runnable
@@ -71,9 +68,7 @@ import java.util.zip.ZipInputStream
 import javax.xml.parsers.ParserConfigurationException
 import kotlin.collections.ArrayList
 
-class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener,
-    OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener,
-    DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
+class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
 
     private val uiAnimationDelaY: Long = 300
     private val mHideHandler: Handler = Handler(Looper.getMainLooper())
@@ -845,9 +840,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 break
             }
         }
-        pdfView.fromFile(file).enableAntialiasing(true).enableSwipe(true).swipeHorizontal(false).enableDoubletap(true).defaultPage(defaultPage).onLoad(this).onPageChange(this).onError(this)
-            .enableAnnotationRendering(false).password(null).scrollHandle(null).enableAntialiasing(true).spacing(2).autoSpacing(false).pageFitPolicy(FitPolicy.WIDTH).pageSnap(false).pageFling(false)
-            .nightMode(k.getBoolean("inversion", false)).load()
+        pdfView.fromFile(file).enableAntialiasing(true).enableSwipe(true).swipeHorizontal(false).enableDoubletap(true).defaultPage(defaultPage).onLoad(this).onPageChange(this).onError(this).enableAnnotationRendering(false).password(null).scrollHandle(null).enableAntialiasing(true).spacing(2).autoSpacing(false).pageFitPolicy(FitPolicy.WIDTH).pageSnap(false).pageFling(false).nightMode(k.getBoolean("inversion", false)).load()
     }
 
     private fun loadFileTXT() {
@@ -1130,8 +1123,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                                         if (t1 != -1) {
                                             val t2 = text.indexOf("]", t1 + 1)
                                             notes.add(text.substring(t1 + 1, t2))
-                                            text = text.substring(0, t1) + "<sup><a id=\"s_" + text.substring(t1 + 1, t2) + "\" href=\"#n_" + text.substring(t1 + 1, t2) + "\">" + text.substring(t1,
-                                                t2 + 1) + "</a></sup>" + text.substring(t2 + 1)
+                                            text = text.substring(0, t1) + "<sup><a id=\"s_" + text.substring(t1 + 1, t2) + "\" href=\"#n_" + text.substring(t1 + 1, t2) + "\">" + text.substring(t1, t2 + 1) + "</a></sup>" + text.substring(t2 + 1)
                                         }
                                         sb.append(text).append("<p>").append("\n")
                                     }
@@ -1145,8 +1137,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                                 for (r in 0 until notesK.size) {
                                     for (w in 0 until notes.size) {
                                         if (notesK[r].titles[0].paragraphs[0].text.contains(notes[w])) {
-                                            sb.append("[").append(notes[w]).append("] ").append(notesK[r].elements[0].text).append("<p>").append("\n").append(" <a id=\"n_").append(notes[w])
-                                                .append("\" href=\"#s_").append(notes[w]).append("\">Назад</a>").append("<p>").append("\n")
+                                            sb.append("[").append(notes[w]).append("] ").append(notesK[r].elements[0].text).append("<p>").append("\n").append(" <a id=\"n_").append(notes[w]).append("\" href=\"#s_").append(notes[w]).append("\">Назад</a>").append("<p>").append("\n")
                                         }
                                     }
                                 }
@@ -1189,8 +1180,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                                     if (t3 != -1) {
                                         val t2 = text.indexOf("]", t3 + 1)
                                         notes.add(text.substring(t3 + 1, t2))
-                                        text = text.substring(0, t3) + "<sup><a id=\"s_" + text.substring(t3 + 1, t2) + "\" href=\"#n_" + text.substring(t3 + 1, t2) + "\">" + text.substring(t3,
-                                            t2 + 1) + "</a></sup>" + text.substring(t2 + 1)
+                                        text = text.substring(0, t3) + "<sup><a id=\"s_" + text.substring(t3 + 1, t2) + "\" href=\"#n_" + text.substring(t3 + 1, t2) + "\">" + text.substring(t3, t2 + 1) + "</a></sup>" + text.substring(t2 + 1)
                                     }
                                     sb.append(text).append("<p>").append("\n")
                                 }
@@ -1204,8 +1194,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                             for (r in 0 until notesK.size) {
                                 for (w in 0 until notes.size) {
                                     if (notesK[r].titles[0].paragraphs[0].text.contains(notes[w])) {
-                                        sb.append("[").append(notes[w]).append("] ").append(notesK[r].elements[0].text).append("<p>").append("\n").append(" <a id=\"n_").append(notes[w])
-                                            .append("\" href=\"#s_").append(notes[w]).append("\">Назад</a>").append("<p>").append("\n")
+                                        sb.append("[").append(notes[w]).append("] ").append(notesK[r].elements[0].text).append("<p>").append("\n").append(" <a id=\"n_").append(notes[w]).append("\" href=\"#s_").append(notes[w]).append("\">Назад</a>").append("<p>").append("\n")
                                     }
                                 }
                             }
@@ -1310,11 +1299,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         if (dzenNoch) {
             bindingappbar.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
-        val toggle = ActionBarDrawerToggle(this,
-            binding.drawerLayout,
-            bindingappbar.toolbar,
-            by.carkva_gazeta.malitounik.R.string.navigation_drawer_open,
-            by.carkva_gazeta.malitounik.R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, bindingappbar.toolbar, by.carkva_gazeta.malitounik.R.string.navigation_drawer_open, by.carkva_gazeta.malitounik.R.string.navigation_drawer_close)
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
     }
@@ -1674,76 +1659,74 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         arrayList.clear()
         adapter.notifyDataSetChanged()
         bindingcontent.progressBar2.visibility = View.VISIBLE
-        val requestQueue = Volley.newRequestQueue(this)
-        val showUrl = "https://carkva-gazeta.by/biblioteka.php"
-        val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, showUrl, null, { response: JSONObject ->
-            CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    val temp: ArrayList<ArrayList<String>> = ArrayList()
-                    val biblioteka = response.getJSONArray("biblioteka")
-                    val gson = Gson()
-                    for (i in 0 until biblioteka.length()) {
-                        val mySqlList: ArrayList<String> = ArrayList()
-                        val kniga = biblioteka.getJSONObject(i)
-                        val id = kniga.getString("bib")
-                        val rubrika = kniga.getString("rubryka")
-                        val link = kniga.getString("link")
-                        var str = kniga.getString("str")
-                        val pdf = kniga.getString("pdf")
-                        var image = kniga.getString("image")
-                        mySqlList.add(link)
-                        val pos = str.indexOf("</span><br>")
-                        str = str.substring(pos + 11)
-                        mySqlList.add(str)
-                        mySqlList.add(pdf)
-                        val url = URL("https://carkva-gazeta.by/data/bibliateka/$pdf")
-                        var filesize: String
-                        val conn = url.openConnection()
-                        if (conn is HttpURLConnection) {
-                            (conn as HttpURLConnection?)?.requestMethod = "HEAD"
-                        }
-                        filesize = java.lang.String.valueOf(conn.contentLength)
-                        if (conn is HttpURLConnection) {
-                            (conn as HttpURLConnection?)?.disconnect()
-                        }
-                        mySqlList.add(filesize)
-                        mySqlList.add(rubrika)
-                        val im1 = image.indexOf("src=\"")
-                        val im2 = image.indexOf("\"", im1 + 5)
-                        image = "https://carkva-gazeta.by" + image.substring(im1 + 5, im2)
-                        val t1 = pdf.lastIndexOf(".") //image.lastIndexOf("/")
-                        val imageLocal: String = "$filesDir/image_temp/" + pdf.substring(0, t1) + ".png" //image.substring(t1 + 1)
-                        mySqlList.add(imageLocal)
-                        mySqlList.add(id)
-                        if (MainActivity.isIntNetworkAvailable(this@BibliotekaView) == 1 || MainActivity.isIntNetworkAvailable(this@BibliotekaView) == 2) {
-                            val dir = File("$filesDir/image_temp")
-                            if (!dir.exists()) dir.mkdir()
-                            var mIcon11: Bitmap
-                            val file = File(imageLocal)
-                            if (!file.exists()) {
-                                FileOutputStream("$filesDir/image_temp/" + pdf.substring(0, t1) + ".png").use { out ->
-                                    val inputStream: InputStream = URL(image).openStream()
-                                    mIcon11 = BitmapFactory.decodeStream(inputStream)
-                                    mIcon11.compress(Bitmap.CompressFormat.PNG, 90, out)
-                                }
+        val showUrl = "https://carkva-gazeta.by/bibliotekaNew.php"
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                val temp: ArrayList<ArrayList<String>> = ArrayList()
+                val sb = URL(showUrl).readText()
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<ArrayMap<String, String>>>() {}.type
+                val biblioteka: ArrayList<ArrayMap<String, String>> = gson.fromJson(sb, type)
+                for (i in 0 until biblioteka.size) {
+                    val mySqlList: ArrayList<String> = ArrayList()
+                    val kniga = biblioteka[i]
+                    val id = kniga["bib"] ?: ""
+                    val rubrika = kniga["rubryka"] ?: ""
+                    val link = kniga["link"] ?: ""
+                    var str = kniga["str"] ?: ""
+                    val pdf = kniga["pdf"] ?: ""
+                    var image = kniga["image"] ?: ""
+                    mySqlList.add(link)
+                    val pos = str.indexOf("</span><br>")
+                    str = str.substring(pos + 11)
+                    mySqlList.add(str)
+                    mySqlList.add(pdf)
+                    val url = URL("https://carkva-gazeta.by/data/bibliateka/$pdf")
+                    var filesize: String
+                    val conn = url.openConnection()
+                    if (conn is HttpURLConnection) {
+                        (conn as HttpURLConnection?)?.requestMethod = "HEAD"
+                    }
+                    filesize = java.lang.String.valueOf(conn.contentLength)
+                    if (conn is HttpURLConnection) {
+                        (conn as HttpURLConnection?)?.disconnect()
+                    }
+                    mySqlList.add(filesize)
+                    mySqlList.add(rubrika)
+                    val im1 = image.indexOf("src=\"")
+                    val im2 = image.indexOf("\"", im1 + 5)
+                    image = "https://carkva-gazeta.by" + image.substring(im1 + 5, im2)
+                    val t1 = pdf.lastIndexOf(".") //image.lastIndexOf("/")
+                    val imageLocal: String = "$filesDir/image_temp/" + pdf.substring(0, t1) + ".png" //image.substring(t1 + 1)
+                    mySqlList.add(imageLocal)
+                    mySqlList.add(id)
+                    if (MainActivity.isIntNetworkAvailable(this@BibliotekaView) == 1 || MainActivity.isIntNetworkAvailable(this@BibliotekaView) == 2) {
+                        val dir = File("$filesDir/image_temp")
+                        if (!dir.exists()) dir.mkdir()
+                        var mIcon11: Bitmap
+                        val file = File(imageLocal)
+                        if (!file.exists()) {
+                            FileOutputStream("$filesDir/image_temp/" + pdf.substring(0, t1) + ".png").use { out ->
+                                val inputStream: InputStream = URL(image).openStream()
+                                mIcon11 = BitmapFactory.decodeStream(inputStream)
+                                mIcon11.compress(Bitmap.CompressFormat.PNG, 90, out)
                             }
                         }
-                        if (rubrika.toInt() == rub) {
-                            arrayList.add(mySqlList)
-                        }
-                        temp.add(mySqlList)
                     }
-                    val json: String = gson.toJson(temp)
-                    val prefEditors: SharedPreferences.Editor = k.edit()
-                    prefEditors.putString("Biblioteka", json)
-                    prefEditors.apply()
-                    runSql = false
+                    if (rubrika.toInt() == rub) {
+                        arrayList.add(mySqlList)
+                    }
+                    temp.add(mySqlList)
                 }
-                adapter.notifyDataSetChanged()
-                bindingcontent.progressBar2.visibility = View.GONE
+                val json: String = gson.toJson(temp)
+                val prefEditors: SharedPreferences.Editor = k.edit()
+                prefEditors.putString("Biblioteka", json)
+                prefEditors.apply()
+                runSql = false
             }
-        }, { })
-        requestQueue.add(jsonObjectRequest)
+            adapter.notifyDataSetChanged()
+            bindingcontent.progressBar2.visibility = View.GONE
+        }
     }
 
     override fun onResume() {

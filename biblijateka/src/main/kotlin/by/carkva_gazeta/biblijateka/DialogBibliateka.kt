@@ -76,9 +76,9 @@ class DialogBibliateka : DialogFragment() {
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             val file = File(it.filesDir.toString() + "/Biblijateka/" + listPosition)
             if (file.exists()) {
-                textViewZaglavie.text = getString(R.string.opisanie).toUpperCase(Locale.getDefault()) //"АПІСАНЬНЕ"
+                textViewZaglavie.text = getString(R.string.opisanie).toUpperCase(Locale.getDefault())
             } else {
-                textViewZaglavie.text = getString(R.string.download_file)
+                textViewZaglavie.text = getString(R.string.download_file, "")
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     CoroutineScope(Dispatchers.Main).launch {
                         val format = withContext(Dispatchers.IO) {
@@ -109,8 +109,7 @@ class DialogBibliateka : DialogFragment() {
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             isv.addView(textView)
             val dirCount = size.toInt()
-            val izm: String
-            izm = if (dirCount / 1024 > 1000) {
+            val izm = if (dirCount / 1024 > 1000) {
                 formatFigureTwoPlaces(BigDecimal.valueOf(dirCount.toFloat() / 1024 / 1024.toDouble()).setScale(2, RoundingMode.HALF_UP).toFloat()) + " Мб"
             } else {
                 formatFigureTwoPlaces(BigDecimal.valueOf(dirCount.toFloat() / 1024.toDouble()).setScale(2, RoundingMode.HALF_UP).toFloat()) + " Кб"

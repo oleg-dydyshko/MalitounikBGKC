@@ -33,7 +33,6 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
     private var kniga = 0
     private var glava = 0
     private lateinit var k: SharedPreferences
-    private var dzenNoch = false
     private var setedit = false
     private var checkSetDzenNoch = false
     private var title = ""
@@ -66,8 +65,6 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
             setedit = savedInstanceState.getBoolean("setedit")
         }
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = AdminBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -235,9 +232,6 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.novy_zapaviet)
         binding.subtitleToolbar.text = title
-        if (dzenNoch) {
-            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
-        }
     }
 
     private fun fullTextTollbar() {

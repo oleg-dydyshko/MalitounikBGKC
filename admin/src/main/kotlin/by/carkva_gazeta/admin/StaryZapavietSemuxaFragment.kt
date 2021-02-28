@@ -8,10 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import by.carkva_gazeta.admin.databinding.AdminBiblePageFragmentBinding
 import by.carkva_gazeta.malitounik.MainActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -25,9 +22,11 @@ class StaryZapavietSemuxaFragment : Fragment() {
     private var pazicia = 0
     private var _binding: AdminBiblePageFragmentBinding? = null
     private val binding get() = _binding!!
+    private var urlJob: Job? = null
 
     override fun onDestroyView() {
         super.onDestroyView()
+        urlJob?.cancel()
         _binding = null
     }
 
@@ -54,11 +53,12 @@ class StaryZapavietSemuxaFragment : Fragment() {
 
     private fun sendPostRequest(id: Int, spaw: String, sv: Int) {
         CoroutineScope(Dispatchers.Main).launch {
+            binding.progressBar2.visibility = View.VISIBLE
             val response = StringBuffer()
             var responseCodeS = 500
             withContext(Dispatchers.IO) {
                 var zag = "Разьдзел"
-                if(id == 19) zag="Псальма"
+                if (id == 19) zag = "Псальма"
                 var reqParam = URLEncoder.encode("z", "UTF-8") + "=" + URLEncoder.encode("s", "UTF-8")
                 reqParam += "&" + URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode(id.toString(), "UTF-8")
                 reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
@@ -88,6 +88,7 @@ class StaryZapavietSemuxaFragment : Fragment() {
                 } else {
                     MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
+                binding.progressBar2.visibility = View.GONE
             }
         }
     }
@@ -97,6 +98,7 @@ class StaryZapavietSemuxaFragment : Fragment() {
         if (savedInstanceState != null) {
             binding.textView.setText(savedInstanceState.getString("spaw"))
         } else {
+            binding.progressBar2.visibility = View.VISIBLE
             var url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblias1.txt"
             when (kniga) {
                 0 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblias1.txt"
@@ -139,7 +141,7 @@ class StaryZapavietSemuxaFragment : Fragment() {
                 37 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblias38.txt"
                 38 -> url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblias39.txt"
             }
-            CoroutineScope(Dispatchers.Main).launch {
+            urlJob = CoroutineScope(Dispatchers.Main).launch {
                 val sb = StringBuilder()
                 withContext(Dispatchers.IO) {
                     val inputStream = URL(url)
@@ -157,6 +159,7 @@ class StaryZapavietSemuxaFragment : Fragment() {
                     }
                 }
                 binding.textView.setText(sb.toString().trim())
+                binding.progressBar2.visibility = View.GONE
             }
         }
     }

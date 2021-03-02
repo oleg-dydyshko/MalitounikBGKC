@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+                android:id="@+id/sviaty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/sviatyia"
+                android:singleLine="true" />
+
+            <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+                android:id="@+id/chytanne"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/czytanne"
+                android:singleLine="true" />
+
+            <Spinner
+                android:id="@+id/spinnerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+
+            <Spinner
+                android:id="@+id/spinnerZnak"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+
+            <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+                android:id="@+id/apisanne"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/opisanie" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

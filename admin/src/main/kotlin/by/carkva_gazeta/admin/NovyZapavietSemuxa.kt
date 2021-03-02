@@ -20,14 +20,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.admin.databinding.AdminBibleBinding
-import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.SmartFragmentStatePagerAdapter
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import kotlinx.coroutines.*
 
-class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdel.DialogBibleRazdelListener {
+class NovyZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRazdelListener {
     private var trak = false
     private var fullglav = 0
     private var kniga = 0
@@ -44,10 +43,6 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
-    }
-
-    override fun onDialogFontSize(fontSize: Float) {
-        binding.pager.adapter?.notifyDataSetChanged()
     }
 
     override fun onComplete(glava: Int) {
@@ -94,6 +89,7 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
+        requestedOrientation = MainActivity.getOrientation(this)
         when (kniga) {
             0 -> {
                 title = "Паводле Мацьвея"

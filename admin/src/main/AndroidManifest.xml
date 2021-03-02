@@ -50,5 +50,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.admin.NovyZapavietSemuxaList" />
         </activity>
+        <activity
+            android:name="by.carkva_gazeta.admin.Sviatyia"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:label="@string/sviatyia"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.admin.AdminMain" />
+        </activity>
     </application>
 </manifest>

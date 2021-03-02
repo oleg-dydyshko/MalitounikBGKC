@@ -42,9 +42,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToLong
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener,
-    MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener,
-    DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
 
     private lateinit var c: GregorianCalendar
     private lateinit var k: SharedPreferences
@@ -724,6 +722,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             menu.findItem(R.id.action_bright).isVisible = false
             menu.findItem(R.id.action_dzen_noch).isVisible = false
             menu.findItem(R.id.action_help).isVisible = false
+            menu.findItem(R.id.action_carkva).isVisible = false
             when (idSelect) {
                 R.id.label101 -> {
                     menu.findItem(R.id.action_font).isVisible = true
@@ -1228,6 +1227,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         const val ADMINMAIN = "by.carkva_gazeta.admin.AdminMain"
         const val ADMINNOVYZAPAVIETSEMUXA = "by.carkva_gazeta.admin.NovyZapavietSemuxa"
         const val ADMINSTARYZAPAVIETSEMUXA = "by.carkva_gazeta.admin.StaryZapavietSemuxa"
+        const val ADMINSVIATYIA = "by.carkva_gazeta.admin.Sviatyia"
         const val BIBLIOTEKAVIEW = "by.carkva_gazeta.biblijateka.BibliotekaView"
         const val OPISANIE = "by.carkva_gazeta.resources.Opisanie"
         const val CHYTANNE = "by.carkva_gazeta.resources.Chytanne"
@@ -1290,8 +1290,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                             if (line != "") {
                                 val t1 = line.split(" ")
                                 try {
-                                    if (t1.size == 11) padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], 0, false)) else padzeia.add(
-                                        Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], t1[11].toInt(), false))
+                                    if (t1.size == 11) padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], 0, false)) else padzeia.add(Padzeia(t1[0].replace("_", " "), t1[1], t1[2], t1[3].toLong(), t1[4].toInt(), t1[5], t1[6], t1[7], t1[8].toInt(), t1[9], t1[11].toInt(), false))
                                 } catch (e: Throwable) {
                                     file.delete()
                                 }

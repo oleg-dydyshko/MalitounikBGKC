@@ -92,7 +92,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-                android:id="@+id/jyci"
+                android:id="@+id/sviatyia"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -106,7 +106,7 @@
                 android:paddingTop="5dp"
                 android:paddingRight="10dp"
                 android:paddingBottom="5dp"
-                android:text="@string/jyci"
+                android:text="@string/sviatyia"
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -130,9 +130,10 @@
                 android:paddingBottom="5dp"
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="14sp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/jyci" />
+                app:layout_constraintTop_toBottomOf="@+id/sviatyia" />
 
             <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                 android:id="@+id/zakladki"
@@ -151,6 +152,7 @@
                 android:paddingBottom="5dp"
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="14sp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/myBible" />
@@ -172,6 +174,7 @@
                 android:paddingBottom="5dp"
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="14sp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/zakladki" />
@@ -193,6 +196,7 @@
                 android:paddingBottom="5dp"
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="14sp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/natatki" />
@@ -214,6 +218,7 @@
                 android:paddingBottom="5dp"
                 android:textColor="@color/colorPrimary_text"
                 android:textSize="14sp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/saeche" />

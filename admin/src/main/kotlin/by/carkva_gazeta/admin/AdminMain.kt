@@ -28,7 +28,6 @@ class AdminMain : AppCompatActivity() {
             window.attributes = lp
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        //val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
@@ -50,6 +49,10 @@ class AdminMain : AppCompatActivity() {
         }
         binding.staryZavet.setOnClickListener {
             val intent = Intent(this, StaryZapavietSemuxaList::class.java)
+            startActivity(intent)
+        }
+        binding.sviatyia.setOnClickListener {
+            val intent = Intent(this, Sviatyia::class.java)
             startActivity(intent)
         }
     }

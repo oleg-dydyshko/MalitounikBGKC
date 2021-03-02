@@ -6,10 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
@@ -148,6 +145,10 @@ class MenuCaliandar : MenuCaliandarFragment() {
         menu.findItem(R.id.tipicon).isVisible = true
         menu.findItem(R.id.sabytie).isVisible = true
         menu.findItem(R.id.search_sviatyia).isVisible = true
+        activity?.let {
+            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
+        }
     }
 
     private fun createIntent(action: String, extra: String, data: String, time: String): Intent {
@@ -164,6 +165,19 @@ class MenuCaliandar : MenuCaliandarFragment() {
             i.putExtra("year", g[Calendar.YEAR])
         }
         return i
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.action_carkva) {
+            activity?.let {
+                val intent = Intent()
+                intent.setClassName(it, MainActivity.ADMINSVIATYIA)
+                intent.putExtra("dayOfYear", (adapter.getFragment(binding.pager.currentItem) as CaliandarFull).getDayOfYear())
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private class MyCalendarAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {

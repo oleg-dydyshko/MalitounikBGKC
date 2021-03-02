@@ -101,6 +101,11 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         _binding = null
     }
 
+    fun getDayOfYear(): Int {
+        val cal = GregorianCalendar(data[day][3].toInt(), data[day][2].toInt(), data[day][1].toInt())
+        return cal[Calendar.DAY_OF_YEAR]
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

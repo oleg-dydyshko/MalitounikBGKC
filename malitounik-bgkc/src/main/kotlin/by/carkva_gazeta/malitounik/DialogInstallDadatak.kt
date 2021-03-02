@@ -51,14 +51,7 @@ class DialogInstallDadatak : DialogFragment() {
                     startActivity(intent)
                 } catch (ex: ActivityNotFoundException) {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    intent.setPackage("com.android.chrome")
-                    try {
-                        startActivity(intent)
-                    } catch (ex: ActivityNotFoundException) {
-                        intent.setPackage(null)
-                        startActivity(intent)
-                    }
+                    startActivity(intent)
                 }
             }
             ad.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }

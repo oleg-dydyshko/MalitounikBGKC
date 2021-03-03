@@ -36,6 +36,8 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
     private var title = ""
     private lateinit var binding: AdminBibleBinding
     private var resetTollbarJob: Job? = null
+    private val orientation: Int
+        get() = MainActivity.getOrientation(this)
 
     override fun onPause() {
         super.onPause()
@@ -86,7 +88,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-        requestedOrientation = MainActivity.getOrientation(this)
+        requestedOrientation = orientation
         when (kniga) {
             0 -> {
                 title = "Быцьцё"
@@ -245,20 +247,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
                 fullglav = 4
             }
         }
-        //men = VybranoeBibleList.checkVybranoe(this, kniga, glava)
-        /*if (savedInstanceState != null) {
-            dialog = savedInstanceState.getBoolean("dialog")
-            paralel = savedInstanceState.getBoolean("paralel")
-            cytanneSours = savedInstanceState.getString("cytanneSours") ?: ""
-            cytanneParalelnye = savedInstanceState.getString("cytanneParalelnye") ?: ""
-            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-        }*/
         binding.pager.currentItem = glava
-        /*requestedOrientation = if (k.getBoolean("orientation", false)) {
-            orientation
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }*/
     }
 
     private fun setTollbarTheme() {

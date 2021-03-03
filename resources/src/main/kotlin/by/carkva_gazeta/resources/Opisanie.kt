@@ -3,34 +3,34 @@ package by.carkva_gazeta.resources
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.Menu
-import android.view.MenuItem
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.resources.databinding.AkafistUnderBinding
+import by.carkva_gazeta.resources.databinding.OpisanieBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
+import java.io.*
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
+
 
 class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     private var dzenNoch = false
     private var mun = Calendar.getInstance()[Calendar.MONTH] + 1
     private var day = Calendar.getInstance()[Calendar.DATE]
     private var svity = false
-    private lateinit var binding: AkafistUnderBinding
+    private lateinit var binding: OpisanieBinding
     private var change = false
     private lateinit var chin: SharedPreferences
     private var resetTollbarJob: Job? = null
@@ -56,7 +56,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         dzenNoch = chin.getBoolean("dzen_noch", false)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
-        binding = AkafistUnderBinding.inflate(layoutInflater)
+        binding = OpisanieBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val c = Calendar.getInstance()
         mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: c[Calendar.MONTH] + 1
@@ -113,6 +113,39 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             var res = arrayList[day - 1]
             if (dzenNoch) res = res.replace("#d00505", "#f44336")
             binding.TextView.text = MainActivity.fromHtml(res)
+        }
+        CoroutineScope(Dispatchers.Main).launch {
+            binding.progressBar2.visibility = View.VISIBLE
+            var checkLoad = false
+            val conf = Bitmap.Config.ARGB_8888 // see other conf types
+            var bmp = Bitmap.createBitmap(1, 1, conf)
+            withContext(Dispatchers.IO) {
+                val mURL = URL("https://carkva-gazeta.by/chytanne/icons/s_4_2.jpg")
+                val conections = mURL.openConnection() as HttpURLConnection
+                if (conections.responseCode != 404) {
+                    val bufferedInputStream = BufferedInputStream(conections.inputStream)
+                    val byteArrayOut = ByteArrayOutputStream()
+                    var c2: Int
+                    while (bufferedInputStream.read().also { c2 = it } != -1) {
+                        byteArrayOut.write(c2)
+                    }
+                    val byteArray = byteArrayOut.toByteArray()
+                    bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                    checkLoad = true
+                }
+            }
+            if (checkLoad) {
+                binding.imageView.visibility = View.VISIBLE
+                var newHeight = bmp.height.toFloat()
+                var newWidth = bmp.width.toFloat()
+                if (newWidth > 500) {
+                    val resoluton = newWidth / newHeight
+                    newWidth = 500F
+                    newHeight = 500 / resoluton
+                }
+                binding.imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, newWidth.toInt(), newHeight.toInt(), false))
+            }
+            binding.progressBar2.visibility = View.GONE
         }
         setTollbarTheme()
     }

@@ -3,7 +3,6 @@ package by.carkva_gazeta.admin
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.ActivityInfo
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -75,7 +74,7 @@ class Sviatyia : AppCompatActivity() {
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-        requestedOrientation = MainActivity.getOrientation(this)
+        requestedOrientation = orientation
         //men = VybranoeBibleList.checkVybranoe(this, kniga, glava)
         /*if (savedInstanceState != null) {
             dialog = savedInstanceState.getBoolean("dialog")
@@ -87,11 +86,6 @@ class Sviatyia : AppCompatActivity() {
         caliandar.set(Calendar.YEAR, 2020)
         dayOfYear = intent.extras?.getInt("dayOfYear", caliandar[Calendar.DAY_OF_YEAR] - 1) ?: caliandar[Calendar.DAY_OF_YEAR] - 1
         binding.pager.currentItem = dayOfYear
-        requestedOrientation = if (k.getBoolean("orientation", false)) {
-            orientation
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
     }
 
     private fun setTollbarTheme() {

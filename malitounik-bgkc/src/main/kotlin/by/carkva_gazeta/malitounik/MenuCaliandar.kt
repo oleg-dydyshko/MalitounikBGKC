@@ -62,7 +62,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
                 }
             }
             MainActivity.padzeia.removeAll(del)
-            val  am = it.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val am = it.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val filesDir = it.filesDir
             val outputStream = FileWriter("$filesDir/Sabytie.json")
             val gson = Gson()
@@ -173,7 +173,14 @@ class MenuCaliandar : MenuCaliandarFragment() {
             activity?.let {
                 val intent = Intent()
                 intent.setClassName(it, MainActivity.ADMINSVIATYIA)
-                intent.putExtra("dayOfYear", (adapter.getFragment(binding.pager.currentItem) as CaliandarFull).getDayOfYear())
+                val caliandarFull = adapter.getFragment(binding.pager.currentItem) as CaliandarFull
+                val year = caliandarFull.getYear()
+                val cal = GregorianCalendar(year, 0, 1)
+                var dayofyear = caliandarFull.getDayOfYear() - 1
+                if (!cal.isLeapYear(year) && dayofyear >= 59) {
+                    dayofyear++
+                }
+                intent.putExtra("dayOfYear", dayofyear)
                 startActivity(intent)
             }
         }

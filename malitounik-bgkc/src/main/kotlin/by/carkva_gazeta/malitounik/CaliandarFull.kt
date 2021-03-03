@@ -106,6 +106,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         return cal[Calendar.DAY_OF_YEAR]
     }
 
+    fun getYear(): Int = data[day][3].toInt()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

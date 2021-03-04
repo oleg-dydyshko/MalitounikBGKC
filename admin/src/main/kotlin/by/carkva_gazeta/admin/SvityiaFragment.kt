@@ -56,6 +56,51 @@ class SvityiaFragment : Fragment() {
         if (id == R.id.action_save) {
             sendPostRequest(cal[Calendar.DAY_OF_MONTH], cal[Calendar.MONTH], dayOfYear - 1, binding.sviaty.text.toString(), binding.chytanne.text.toString(), binding.spinnerStyle.selectedItemPosition, binding.spinnerZnak.selectedItemPosition.toString(), binding.apisanne.text.toString())
         }
+        if (id == R.id.action_bold) {
+            val startSelect = binding.apisanne.selectionStart
+            val endSelect = binding.apisanne.selectionEnd
+            val text = binding.apisanne.text.toString()
+            val build = with(StringBuilder()) {
+                append(text.substring(0, startSelect))
+                append("<strong>")
+                append(text.substring(startSelect, endSelect))
+                append("</strong>")
+                append(text.substring(endSelect))
+                toString()
+            }
+            binding.apisanne.setText(build)
+            binding.apisanne.setSelection(endSelect + 17)
+        }
+        if (id == R.id.action_em) {
+            val startSelect = binding.apisanne.selectionStart
+            val endSelect = binding.apisanne.selectionEnd
+            val text = binding.apisanne.text.toString()
+            val build = with(StringBuilder()) {
+                append(text.substring(0, startSelect))
+                append("<em>")
+                append(text.substring(startSelect, endSelect))
+                append("</em>")
+                append(text.substring(endSelect))
+                toString()
+            }
+            binding.apisanne.setText(build)
+            binding.apisanne.setSelection(endSelect + 9)
+        }
+        if (id == R.id.action_red) {
+            val startSelect = binding.apisanne.selectionStart
+            val endSelect = binding.apisanne.selectionEnd
+            val text = binding.apisanne.text.toString()
+            val build = with(StringBuilder()) {
+                append(text.substring(0, startSelect))
+                append("<font color=\"#d00505\">")
+                append(text.substring(startSelect, endSelect))
+                append("</font>")
+                append(text.substring(endSelect))
+                toString()
+            }
+            binding.apisanne.setText(build)
+            binding.apisanne.setSelection(endSelect + 29)
+        }
         return super.onOptionsItemSelected(item)
     }
 

@@ -12,6 +12,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -34,10 +35,14 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     private var change = false
     private lateinit var chin: SharedPreferences
     private var resetTollbarJob: Job? = null
+    private var loadIconsJob: Job? = null
+    private var bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+    private var checkLoad = false
 
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
+        loadIconsJob?.cancel()
     }
 
     override fun onResume() {
@@ -114,38 +119,55 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             if (dzenNoch) res = res.replace("#d00505", "#f44336")
             binding.TextView.text = MainActivity.fromHtml(res)
         }
-        CoroutineScope(Dispatchers.Main).launch {
-            binding.progressBar2.visibility = View.VISIBLE
-            var checkLoad = false
-            val conf = Bitmap.Config.ARGB_8888 // see other conf types
-            var bmp = Bitmap.createBitmap(1, 1, conf)
-            withContext(Dispatchers.IO) {
-                val mURL = URL("https://carkva-gazeta.by/chytanne/icons/s_4_2.jpg")
-                val conections = mURL.openConnection() as HttpURLConnection
-                if (conections.responseCode != 404) {
-                    val bufferedInputStream = BufferedInputStream(conections.inputStream)
-                    val byteArrayOut = ByteArrayOutputStream()
-                    var c2: Int
-                    while (bufferedInputStream.read().also { c2 = it } != -1) {
-                        byteArrayOut.write(c2)
-                    }
-                    val byteArray = byteArrayOut.toByteArray()
-                    bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-                    checkLoad = true
-                }
-            }
-            if (checkLoad) {
+        binding.imageView.setOnClickListener {
+            binding.imageViewFull.visibility = View.VISIBLE
+        }
+        if (dzenNoch)
+            binding.imageViewFull.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
+        if (MainActivity.isNetworkAvailable(this)) {
+            if (savedInstanceState != null) {
+                bmp = savedInstanceState.getParcelable("bitmap")
                 binding.imageView.visibility = View.VISIBLE
+                if (savedInstanceState.getBoolean("imageViewFullVisable"))
+                    binding.imageViewFull.visibility = View.VISIBLE
                 var newHeight = bmp.height.toFloat()
                 var newWidth = bmp.width.toFloat()
-                if (newWidth > 500) {
-                    val resoluton = newWidth / newHeight
-                    newWidth = 500F
-                    newHeight = 500 / resoluton
-                }
+                binding.imageViewFull.setImageBitmap(Bitmap.createScaledBitmap(bmp, newWidth.toInt(), newHeight.toInt(), false))
+                val resoluton = newWidth / newHeight
+                newWidth = 300 * resoluton
+                newHeight = 300F
                 binding.imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, newWidth.toInt(), newHeight.toInt(), false))
+            } else {
+                loadIconsJob = CoroutineScope(Dispatchers.Main).launch {
+                    binding.progressBar2.visibility = View.VISIBLE
+                    withContext(Dispatchers.IO) {
+                        val mURL = URL("https://carkva-gazeta.by/chytanne/icons/s_${day}_${mun}.jpg")
+                        val conections = mURL.openConnection() as HttpURLConnection
+                        if (conections.responseCode == 200) {
+                            val bufferedInputStream = BufferedInputStream(conections.inputStream)
+                            val byteArrayOut = ByteArrayOutputStream()
+                            var c2: Int
+                            while (bufferedInputStream.read().also { c2 = it } != -1) {
+                                byteArrayOut.write(c2)
+                            }
+                            val byteArray = byteArrayOut.toByteArray()
+                            bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                            checkLoad = true
+                        }
+                    }
+                    if (checkLoad) {
+                        binding.imageView.visibility = View.VISIBLE
+                        var newHeight = bmp.height.toFloat()
+                        var newWidth = bmp.width.toFloat()
+                        binding.imageViewFull.setImageBitmap(Bitmap.createScaledBitmap(bmp, newWidth.toInt(), newHeight.toInt(), false))
+                        val resoluton = newWidth / newHeight
+                        newWidth = 300 * resoluton
+                        newHeight = 300F
+                        binding.imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, newWidth.toInt(), newHeight.toInt(), false))
+                    }
+                    binding.progressBar2.visibility = View.GONE
+                }
             }
-            binding.progressBar2.visibility = View.GONE
         }
         setTollbarTheme()
     }
@@ -190,10 +212,14 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     }
 
     override fun onBackPressed() {
-        if (change) {
-            onSupportNavigateUp()
+        if (binding.imageViewFull.visibility == View.VISIBLE) {
+            binding.imageViewFull.visibility = View.GONE
         } else {
-            super.onBackPressed()
+            if (change) {
+                onSupportNavigateUp()
+            } else {
+                super.onBackPressed()
+            }
         }
     }
 
@@ -222,6 +248,8 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("change", change)
+        outState.putParcelable("bitmap", bmp)
+        outState.putBoolean("imageViewFullVisable", binding.imageViewFull.visibility == View.VISIBLE)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

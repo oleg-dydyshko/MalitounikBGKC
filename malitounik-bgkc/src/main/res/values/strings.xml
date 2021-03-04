@@ -537,6 +537,8 @@
     <string name="set_yelloy">Вылучыць жоўтым</string>
     <string name="set_underline">Вылучыць падкрэсьліваньнем</string>
     <string name="set_bold">Вылучыць тоўстым</string>
+    <string name="set_italic">Вылучыць курсівам</string>
+    <string name="set_red">Вылучыць чырвоным</string>
     <string name="set_bookmark">Дадаць у закладкі</string>
     <string name="viachernia">Вячэрня</string>
     <string name="raviachernica">Павячэрніца</string>

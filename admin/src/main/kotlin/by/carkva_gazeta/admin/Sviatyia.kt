@@ -34,6 +34,7 @@ class Sviatyia : AppCompatActivity() {
     private var resetTollbarJob: Job? = null
     private var caliandar = Calendar.getInstance()
     private var dayOfYear = 0
+    private lateinit var adapterViewPager: MyPagerAdapter
     private val munName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
 
     override fun onPause() {
@@ -62,7 +63,7 @@ class Sviatyia : AppCompatActivity() {
                 nextChild.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
             }
         }
-        val adapterViewPager = MyPagerAdapter(supportFragmentManager)
+        adapterViewPager = MyPagerAdapter(supportFragmentManager)
         binding.pager.adapter = adapterViewPager
         binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -128,9 +129,11 @@ class Sviatyia : AppCompatActivity() {
         super.onSaveInstanceState(outState)
     }*/
 
-    /*override fun onBackPressed() {
-        super.onBackPressed()
-    }*/
+    override fun onBackPressed() {
+        val fragment = adapterViewPager.getFragment(binding.pager.currentItem) as BackPressedFragment
+        if (fragment.onBackPressedFragment())
+            super.onBackPressed()
+    }
 
     /*override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)

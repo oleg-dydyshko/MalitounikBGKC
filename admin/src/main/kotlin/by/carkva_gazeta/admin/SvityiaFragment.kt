@@ -3,12 +3,8 @@ package by.carkva_gazeta.admin
 import android.app.Activity
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaPageFragmentBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -24,7 +20,7 @@ import java.net.URLEncoder
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SvityiaFragment : Fragment() {
+class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     private var dayOfYear = 1
     private var _binding: AdminSviatyiaPageFragmentBinding? = null
     private val binding get() = _binding!!
@@ -51,11 +47,8 @@ class SvityiaFragment : Fragment() {
         return binding.root
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.action_save) {
-            sendPostRequest(cal[Calendar.DAY_OF_MONTH], cal[Calendar.MONTH], dayOfYear - 1, binding.sviaty.text.toString(), binding.chytanne.text.toString(), binding.spinnerStyle.selectedItemPosition, binding.spinnerZnak.selectedItemPosition.toString(), binding.apisanne.text.toString())
-        }
+    override fun onClick(v: View?) {
+        val id = v?.id ?: 0
         if (id == R.id.action_bold) {
             val startSelect = binding.apisanne.selectionStart
             val endSelect = binding.apisanne.selectionEnd
@@ -101,7 +94,47 @@ class SvityiaFragment : Fragment() {
             binding.apisanne.setText(build)
             binding.apisanne.setSelection(endSelect + 29)
         }
+        if (id == R.id.action_p) {
+            val endSelect = binding.apisanne.selectionEnd
+            val text = binding.apisanne.text.toString()
+            val build = with(StringBuilder()) {
+                append(text.substring(0, endSelect))
+                append("<p>")
+                append(text.substring(endSelect))
+                toString()
+            }
+            binding.apisanne.setText(build)
+            binding.apisanne.setSelection(endSelect + 3)
+        }
+    }
+
+    override fun onBackPressedFragment(): Boolean {
+        if (binding.preView.visibility == View.VISIBLE) {
+            binding.preView.visibility = View.GONE
+            return false
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.action_save) {
+            sendPostRequest(cal[Calendar.DAY_OF_MONTH], cal[Calendar.MONTH], dayOfYear - 1, binding.sviaty.text.toString(), binding.chytanne.text.toString(), binding.spinnerStyle.selectedItemPosition, binding.spinnerZnak.selectedItemPosition.toString(), binding.apisanne.text.toString())
+        }
+        if (id == R.id.action_preview) {
+            if (binding.preView.visibility == View.VISIBLE) {
+                binding.preView.visibility = View.GONE
+            } else {
+                binding.preView.text = MainActivity.fromHtml(binding.apisanne.text.toString())
+                binding.preView.visibility = View.VISIBLE
+            }
+        }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(R.id.action_preview).isVisible = binding.linearLayout2.visibility == View.VISIBLE
     }
 
     private fun sendPostRequest(data: Int, mun: Int, dayOfYear: Int, name: String, chtenie: String, bold: Int, tipicon: String, spaw: String) {
@@ -150,7 +183,18 @@ class SvityiaFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         cal.set(Calendar.YEAR, 2020)
         cal.set(Calendar.DAY_OF_YEAR, dayOfYear)
+        binding.actionBold.setOnClickListener(this)
+        binding.actionEm.setOnClickListener(this)
+        binding.actionRed.setOnClickListener(this)
+        binding.actionP.setOnClickListener(this)
         binding.progressBar2.visibility = View.VISIBLE
+        binding.apisanne.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus)
+                binding.linearLayout2.visibility = View.VISIBLE
+            else
+                binding.linearLayout2.visibility = View.GONE
+            activity?.invalidateOptionsMenu()
+        }
         urlJob = CoroutineScope(Dispatchers.Main).launch {
             var res = ""
             withContext(Dispatchers.IO) {

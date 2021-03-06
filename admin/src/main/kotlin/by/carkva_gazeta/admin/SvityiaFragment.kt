@@ -1,9 +1,14 @@
 package by.carkva_gazeta.admin
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaPageFragmentBinding
 import by.carkva_gazeta.malitounik.MainActivity
@@ -111,6 +116,11 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     override fun onBackPressedFragment(): Boolean {
         if (binding.preView.visibility == View.VISIBLE) {
             binding.preView.visibility = View.GONE
+            binding.scrollView.visibility = View.VISIBLE
+            activity?.let {
+                val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+            }
             return false
         }
         return true
@@ -124,17 +134,22 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         if (id == R.id.action_preview) {
             if (binding.preView.visibility == View.VISIBLE) {
                 binding.preView.visibility = View.GONE
+                binding.scrollView.visibility = View.VISIBLE
+                activity?.let {
+                    val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+                }
             } else {
                 binding.preView.text = MainActivity.fromHtml(binding.apisanne.text.toString())
                 binding.preView.visibility = View.VISIBLE
+                binding.scrollView.visibility = View.GONE
+                activity?.let {
+                    val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(binding.apisanne.windowToken, 0)
+                }
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.action_preview).isVisible = binding.linearLayout2.visibility == View.VISIBLE
     }
 
     private fun sendPostRequest(data: Int, mun: Int, dayOfYear: Int, name: String, chtenie: String, bold: Int, tipicon: String, spaw: String) {
@@ -189,11 +204,8 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         binding.actionP.setOnClickListener(this)
         binding.progressBar2.visibility = View.VISIBLE
         binding.apisanne.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus)
-                binding.linearLayout2.visibility = View.VISIBLE
-            else
-                binding.linearLayout2.visibility = View.GONE
-            activity?.invalidateOptionsMenu()
+            if (hasFocus) binding.linearLayout2.visibility = View.VISIBLE
+            else binding.linearLayout2.visibility = View.GONE
         }
         urlJob = CoroutineScope(Dispatchers.Main).launch {
             var res = ""

@@ -160,9 +160,14 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                         var newHeight = bmp.height.toFloat()
                         var newWidth = bmp.width.toFloat()
                         binding.imageViewFull.setImageBitmap(Bitmap.createScaledBitmap(bmp, newWidth.toInt(), newHeight.toInt(), false))
+                        val widthLinear = binding.linearLayout.width.toFloat()
                         val resoluton = newWidth / newHeight
-                        newWidth = 300 * resoluton
-                        newHeight = 300F
+                        newWidth = 500 * resoluton
+                        newHeight = 500F
+                        if (newWidth > widthLinear) {
+                            newWidth = widthLinear
+                            newHeight = newWidth / resoluton
+                        }
                         binding.imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, newWidth.toInt(), newHeight.toInt(), false))
                     }
                     binding.progressBar2.visibility = View.GONE

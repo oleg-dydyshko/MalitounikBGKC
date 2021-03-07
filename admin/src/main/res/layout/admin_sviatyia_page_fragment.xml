@@ -87,7 +87,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:contentDescription="@string/copy_big_full"
+            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/bold_menu" />
 
         <ImageView
@@ -98,7 +98,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:contentDescription="@string/copy_big"
+            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/italic" />
 
         <ImageView
@@ -109,7 +109,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:contentDescription="@string/share"
+            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/red_menu" />
 
         <ImageView
@@ -122,8 +122,19 @@
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
-            android:contentDescription="@string/share"
+            android:contentDescription="@string/empty"
             app:srcCompat="@drawable/p_menu" />
+
+        <ImageView
+            android:id="@+id/action_img"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:contentDescription="@string/empty"
+            app:srcCompat="@drawable/img_menu" />
 
     </LinearLayout>
 

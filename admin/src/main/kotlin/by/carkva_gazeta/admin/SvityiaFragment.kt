@@ -38,6 +38,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         urlJob?.cancel()
+        binding.apisanne.onFocusChangeListener = null
         _binding = null
     }
 
@@ -110,6 +111,18 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
             }
             binding.apisanne.setText(build)
             binding.apisanne.setSelection(endSelect + 3)
+        }
+        if (id == R.id.action_img) {
+            val endSelect = binding.apisanne.selectionEnd
+            val text = binding.apisanne.text.toString()
+            val build = with(StringBuilder()) {
+                append(text.substring(0, endSelect))
+                append("<!--image-->")
+                append(text.substring(endSelect))
+                toString()
+            }
+            binding.apisanne.setText(build)
+            binding.apisanne.setSelection(endSelect + 12)
         }
     }
 
@@ -202,6 +215,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         binding.actionEm.setOnClickListener(this)
         binding.actionRed.setOnClickListener(this)
         binding.actionP.setOnClickListener(this)
+        binding.actionImg.setOnClickListener(this)
         binding.progressBar2.visibility = View.VISIBLE
         binding.apisanne.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) binding.linearLayout2.visibility = View.VISIBLE

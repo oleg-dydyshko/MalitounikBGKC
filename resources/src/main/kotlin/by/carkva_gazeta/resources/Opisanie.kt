@@ -11,11 +11,15 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import by.carkva_gazeta.resources.databinding.OpisanieBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -24,6 +28,7 @@ import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
@@ -36,8 +41,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     private lateinit var chin: SharedPreferences
     private var resetTollbarJob: Job? = null
     private var loadIconsJob: Job? = null
-    private var bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-    private var checkLoad = false
+    private var opisanieDataLink = ArrayList<OpisanieData>()
 
     override fun onPause() {
         super.onPause()
@@ -49,6 +53,29 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    private fun grateImageView(): ImageView {
+        val density = resources.displayMetrics.density
+        val padding = 10 * density
+        val imageView = ImageView(this)
+        val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        llp.setMargins(0, padding.toInt(), 0, padding.toInt())
+        llp.gravity = Gravity.CENTER
+        imageView.layoutParams = llp
+        imageView.visibility = View.GONE
+        return imageView
+    }
+
+    private fun grateTextView(text: String): TextViewRobotoCondensed {
+        val textView = TextViewRobotoCondensed(this)
+        val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        textView.layoutParams = llp
+        textView.setTextIsSelectable(true)
+        val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        textView.textSize = fontBiblia
+        textView.text = MainActivity.fromHtml(text)
+        return textView
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,9 +96,14 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         svity = intent.extras?.getBoolean("glavnyia", false) ?: false
         if (savedInstanceState != null) {
             change = savedInstanceState.getBoolean("change")
+            if (savedInstanceState.getBoolean("imageViewFullVisable")) {
+                val bmp: Bitmap? = savedInstanceState.getParcelable("bitmap")
+                bmp?.let {
+                    binding.imageViewFull.setImageBitmap(Bitmap.createScaledBitmap(it, it.width, it.height, false))
+                    binding.imageViewFull.visibility = View.VISIBLE
+                }
+            }
         }
-        val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         val inputStream: InputStream
         if (svity) {
             inputStream = resources.openRawResource(by.carkva_gazeta.malitounik.R.raw.opisanie_sviat)
@@ -83,102 +115,156 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             val gson = Gson()
             val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
             val arrayList: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
-            binding.TextView.text = getString(by.carkva_gazeta.malitounik.R.string.opisanie_error)
             arrayList.forEach {
                 if (day == it[0].toInt() && mun == it[1].toInt()) {
                     var res = it[2]
                     if (dzenNoch) res = res.replace("#d00505", "#f44336")
-                    binding.TextView.text = MainActivity.fromHtml(res)
+                    val imageView = grateImageView()
+                    val textView = grateTextView(res)
+                    binding.linearLayout.addView(imageView)
+                    binding.linearLayout.addView(textView)
+                    opisanieDataLink.add(OpisanieData(imageView, textView))
                 }
             }
         } else {
-            inputStream = when (mun) {
-                1 -> resources.openRawResource(R.raw.opisanie1)
-                2 -> resources.openRawResource(R.raw.opisanie2)
-                3 -> resources.openRawResource(R.raw.opisanie3)
-                4 -> resources.openRawResource(R.raw.opisanie4)
-                5 -> resources.openRawResource(R.raw.opisanie5)
-                6 -> resources.openRawResource(R.raw.opisanie6)
-                7 -> resources.openRawResource(R.raw.opisanie7)
-                8 -> resources.openRawResource(R.raw.opisanie8)
-                9 -> resources.openRawResource(R.raw.opisanie9)
-                10 -> resources.openRawResource(R.raw.opisanie10)
-                11 -> resources.openRawResource(R.raw.opisanie11)
-                12 -> resources.openRawResource(R.raw.opisanie12)
-                else -> resources.openRawResource(R.raw.opisanie1)
-            }
-            val isr = InputStreamReader(inputStream)
-            val reader = BufferedReader(isr)
-            val builder = reader.use {
-                it.readText()
-            }
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<String>>() {}.type
-            val arrayList: ArrayList<String> = gson.fromJson(builder, type)
-            var res = arrayList[day - 1]
-            if (dzenNoch) res = res.replace("#d00505", "#f44336")
-            binding.TextView.text = MainActivity.fromHtml(res)
-        }
-        binding.imageView.setOnClickListener {
-            binding.imageViewFull.visibility = View.VISIBLE
-        }
-        if (dzenNoch)
-            binding.imageViewFull.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
-        if (MainActivity.isNetworkAvailable(this)) {
-            if (savedInstanceState != null) {
-                bmp = savedInstanceState.getParcelable("bitmap")
-                binding.imageView.visibility = View.VISIBLE
-                if (savedInstanceState.getBoolean("imageViewFullVisable"))
-                    binding.imageViewFull.visibility = View.VISIBLE
-                var newHeight = bmp.height.toFloat()
-                var newWidth = bmp.width.toFloat()
-                binding.imageViewFull.setImageBitmap(Bitmap.createScaledBitmap(bmp, newWidth.toInt(), newHeight.toInt(), false))
-                val resoluton = newWidth / newHeight
-                newWidth = 300 * resoluton
-                newHeight = 300F
-                binding.imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, newWidth.toInt(), newHeight.toInt(), false))
-            } else {
-                loadIconsJob = CoroutineScope(Dispatchers.Main).launch {
-                    binding.progressBar2.visibility = View.VISIBLE
+            loadIconsJob = CoroutineScope(Dispatchers.Main).launch {
+                binding.progressBar2.visibility = View.VISIBLE
+                var builder = ""
+                val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
+                if (!MainActivity.isNetworkAvailable(this@Opisanie)) {
+                    if (fileOpisanie.exists()) builder = fileOpisanie.readText()
+                } else {
                     withContext(Dispatchers.IO) {
-                        val mURL = URL("https://carkva-gazeta.by/chytanne/icons/s_${day}_${mun}.jpg")
+                        val mURL = URL("https://carkva-gazeta.by/chytanne/sviatyja/opisanie$mun.json")
                         val conections = mURL.openConnection() as HttpURLConnection
                         if (conections.responseCode == 200) {
-                            val bufferedInputStream = BufferedInputStream(conections.inputStream)
-                            val byteArrayOut = ByteArrayOutputStream()
-                            var c2: Int
-                            while (bufferedInputStream.read().also { c2 = it } != -1) {
-                                byteArrayOut.write(c2)
+                            val dir = File("$filesDir/sviatyja/")
+                            if (!dir.exists()) dir.mkdir()
+                            builder = mURL.readText()
+                            fileOpisanie.writer().use {
+                                it.write(builder)
                             }
-                            val byteArray = byteArrayOut.toByteArray()
-                            bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-                            checkLoad = true
                         }
                     }
-                    if (checkLoad) {
-                        binding.imageView.visibility = View.VISIBLE
-                        var newHeight = bmp.height.toFloat()
-                        var newWidth = bmp.width.toFloat()
-                        binding.imageViewFull.setImageBitmap(Bitmap.createScaledBitmap(bmp, newWidth.toInt(), newHeight.toInt(), false))
-                        val widthLinear = binding.linearLayout.width.toFloat()
-                        val resoluton = newWidth / newHeight
-                        newWidth = 500 * resoluton
-                        newHeight = 500F
-                        if (newWidth > widthLinear) {
-                            newWidth = widthLinear
-                            newHeight = newWidth / resoluton
-                        }
-                        binding.imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, newWidth.toInt(), newHeight.toInt(), false))
-                    }
-                    binding.progressBar2.visibility = View.GONE
                 }
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<String>>() {}.type
+                val arrayList: ArrayList<String> = if (builder != "") gson.fromJson(builder, type)
+                else ArrayList(31)
+                var res = arrayList[day - 1]
+                if (dzenNoch) res = res.replace("#d00505", "#f44336")
+                if (res.contains("<!--image-->")) {
+                    res.split("<!--image-->").forEach {
+                        val imageView = grateImageView()
+                        val textView = grateTextView(it)
+                        binding.linearLayout.addView(imageView)
+                        binding.linearLayout.addView(textView)
+                        opisanieDataLink.add(OpisanieData(imageView, textView))
+                    }
+                } else {
+                    val imageView = grateImageView()
+                    val textView = grateTextView(res)
+                    binding.linearLayout.addView(imageView)
+                    binding.linearLayout.addView(textView)
+                    opisanieDataLink.add(OpisanieData(imageView, textView))
+                }
+                if (dzenNoch) binding.imageViewFull.background = ContextCompat.getDrawable(this@Opisanie, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
+                val dir = File("$filesDir/icons/")
+                if (!dir.exists()) dir.mkdir()
+                opisanieDataLink.forEachIndexed { i, opisanieData ->
+                    var schet = ""
+                    if (i > 0) schet = "_${i + 1}"
+                    val file = File("$filesDir/icons/s_${day}_${mun}$schet.jpg")
+                    if (file.exists()) {
+                        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                        opisanieData.imageView.setImageBitmap(bitmap)
+                        opisanieData.imageView.visibility = View.VISIBLE
+                        opisanieData.imageName = "s_${day}_${mun}$schet.jpg"
+                    } else {
+                        if (MainActivity.isNetworkAvailable(this@Opisanie)) {
+                            var bmp: Bitmap
+                            withContext(Dispatchers.IO) {
+                                val mURL = URL("https://carkva-gazeta.by/chytanne/icons/s_${day}_${mun}$schet.jpg")
+                                val conections = mURL.openConnection() as HttpURLConnection
+                                if (conections.responseCode == 200) {
+                                    val bufferedInputStream = BufferedInputStream(conections.inputStream)
+                                    val byteArrayOut = ByteArrayOutputStream()
+                                    var c2: Int
+                                    while (bufferedInputStream.read().also { c2 = it } != -1) {
+                                        byteArrayOut.write(c2)
+                                    }
+                                    val byteArray = byteArrayOut.toByteArray()
+                                    bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                                    val file2 = File(dir, "s_${day}_${mun}$schet.jpg")
+                                    val out = FileOutputStream(file2)
+                                    bmp.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                                    out.flush()
+                                    out.close()
+                                    withContext(Dispatchers.Main) {
+                                        var newHeight = bmp.height.toFloat()
+                                        var newWidth = bmp.width.toFloat()
+                                        val widthLinear = binding.linearLayout.width.toFloat()
+                                        val resoluton = newWidth / newHeight
+                                        newWidth = 500 * resoluton
+                                        newHeight = 500F
+                                        if (newWidth > widthLinear) {
+                                            newWidth = widthLinear
+                                            newHeight = newWidth / resoluton
+                                        }
+                                        opisanieData.imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, newWidth.toInt(), newHeight.toInt(), false))
+                                        opisanieData.imageView.visibility = View.VISIBLE
+                                        opisanieData.imageName = "s_${day}_${mun}$schet.jpg"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                opisanieDataLink.forEach { opisanieData ->
+                    if (opisanieData.imageName != "noImage") {
+                        opisanieData.imageView.setOnClickListener {
+                            val file = File("$filesDir/icons/${opisanieData.imageName}")
+                            if (file.exists()) {
+                                val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                                binding.imageViewFull.setImageBitmap(bitmap)
+                                binding.imageViewFull.visibility = View.VISIBLE
+                            }
+                        }
+                    }
+                }
+                binding.progressBar2.visibility = View.GONE
             }
+            /*else {
+               inputStream = when (mun) {
+                   1 -> resources.openRawResource(R.raw.opisanie1)
+                   2 -> resources.openRawResource(R.raw.opisanie2)
+                   3 -> resources.openRawResource(R.raw.opisanie3)
+                   4 -> resources.openRawResource(R.raw.opisanie4)
+                   5 -> resources.openRawResource(R.raw.opisanie5)
+                   6 -> resources.openRawResource(R.raw.opisanie6)
+                   7 -> resources.openRawResource(R.raw.opisanie7)
+                   8 -> resources.openRawResource(R.raw.opisanie8)
+                   9 -> resources.openRawResource(R.raw.opisanie9)
+                   10 -> resources.openRawResource(R.raw.opisanie10)
+                   11 -> resources.openRawResource(R.raw.opisanie11)
+                   12 -> resources.openRawResource(R.raw.opisanie12)
+                   else -> resources.openRawResource(R.raw.opisanie1)
+               }
+               val isr = InputStreamReader(inputStream)
+               val reader = BufferedReader(isr)
+               builder = reader.use {
+                   it.readText()
+               }
+           }*/
+
         }
         setTollbarTheme()
     }
 
     override fun onDialogFontSize(fontSize: Float) {
-        binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
+        opisanieDataLink.forEach {
+            it.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
+        }
     }
 
     private fun setTollbarTheme() {
@@ -253,7 +339,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("change", change)
-        outState.putParcelable("bitmap", bmp)
+        outState.putParcelable("bitmap", binding.imageViewFull.drawable.toBitmap())
         outState.putBoolean("imageViewFullVisable", binding.imageViewFull.visibility == View.VISIBLE)
     }
 
@@ -285,4 +371,6 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private data class OpisanieData(val imageView: ImageView, val textView: TextViewRobotoCondensed, var imageName: String = "noImage")
 }

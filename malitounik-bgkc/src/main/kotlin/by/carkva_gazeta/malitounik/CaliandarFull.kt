@@ -456,7 +456,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     } else {
                         data[day][7].toInt()
                     }
-                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20].toInt(), data[day][0].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1, data[day][22].toInt(), data[day][4], data[day][23] == "1")
+                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20].toInt(), data[day][0].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1, data[day][22].toInt(), data[day][4], data[day][23] == "1", data[day][3].toInt())
                     dialogCalindarGrid.show(it, "grid")
                 }
             }
@@ -486,6 +486,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     i.putExtra("glavnyia", true)
                     i.putExtra("mun", munsv)
                     i.putExtra("day", daysv)
+                    i.putExtra("year", data[day][3].toInt())
                     startActivity(i)
                 }
             } else {
@@ -498,6 +499,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     i.setClassName(it, MainActivity.OPISANIE)
                     i.putExtra("mun", data[day][2].toInt() + 1)
                     i.putExtra("day", data[day][1].toInt())
+                    i.putExtra("year", data[day][3].toInt())
                     startActivity(i)
                 }
             } else {

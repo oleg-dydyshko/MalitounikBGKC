@@ -33,12 +33,13 @@ class TraparyAndKandaki : DialogFragment() {
     private lateinit var chin: SharedPreferences
 
     companion object {
-        fun getInstance(lityrgia: Int, title: String, mun: Int, day: Int, ton: Int, ton_naidzelny: Boolean, ton_na_sviaty: Boolean, ton_na_viliki_post: Boolean, resurs: String, sviatyiaName: String, checkSviatyia: Boolean): TraparyAndKandaki {
+        fun getInstance(lityrgia: Int, title: String, mun: Int, day: Int, ton: Int, ton_naidzelny: Boolean, ton_na_sviaty: Boolean, ton_na_viliki_post: Boolean, resurs: String, sviatyiaName: String, checkSviatyia: Boolean, year: Int): TraparyAndKandaki {
             val bundle = Bundle()
             bundle.putInt("lityrgia", lityrgia)
             bundle.putString("title", title)
             bundle.putInt("mun", mun)
             bundle.putInt("day", day)
+            bundle.putInt("year", year)
             bundle.putInt("ton", ton)
             bundle.putBoolean("ton_naidzelny", ton_naidzelny)
             bundle.putBoolean("ton_na_sviaty", ton_na_sviaty)
@@ -72,6 +73,7 @@ class TraparyAndKandaki : DialogFragment() {
             val title = arguments?.getString("title", "") ?: ""
             val mun = arguments?.getInt("mun", c[Calendar.MONTH] + 1) ?: c[Calendar.MONTH] + 1
             val day = arguments?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
+            val year = arguments?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
             val ton = arguments?.getInt("ton", 1) ?: 1
             val tonNadzelny = arguments?.getBoolean("ton_naidzelny", true) ?: true
             val tonNaSviaty = arguments?.getBoolean("ton_na_sviaty", false) ?: false
@@ -90,6 +92,7 @@ class TraparyAndKandaki : DialogFragment() {
                         i.setClassName(it, MainActivity.OPISANIE)
                         i.putExtra("mun", mun)
                         i.putExtra("day", day)
+                        i.putExtra("day", year)
                         startActivity(i)
                     }
                     data[position].post -> {

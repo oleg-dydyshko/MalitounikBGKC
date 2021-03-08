@@ -581,5 +581,6 @@
     <string name="install_dadatak">УСТАЛЮЙЦЕ ДАДАТАК</string>
     <string name="install_dadatak_opis">Дадзеная функція не даступна, для яе працы усталюйце Дадатак.</string>
     <string name="pre_view">Прадпрагляд</string>
+    <string name="remove_cashe">Выдаліць кэш (%1$s %2$s)</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

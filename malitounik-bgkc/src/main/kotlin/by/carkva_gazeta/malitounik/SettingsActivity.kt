@@ -25,6 +25,7 @@ import by.carkva_gazeta.malitounik.databinding.SettingsActivityBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import kotlinx.coroutines.*
 import java.io.File
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -1081,6 +1082,11 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         onSupportNavigateUp()
     }
 
+    private fun formatFigureTwoPlaces(value: Float): String {
+        val myFormatter = DecimalFormat("##0.00")
+        return myFormatter.format(value.toDouble())
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
@@ -1206,6 +1212,28 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                 }
             }
         }
+        binding.cheshe.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        val dir = File("$filesDir/icons/")
+        var sizeFiles = 0F
+        if (dir.exists()) {
+            val list = dir.listFiles()
+            list?.forEach {
+                sizeFiles += it.length()
+            }
+        }
+        if (sizeFiles / 1024 > 1000) {
+            val size = formatFigureTwoPlaces(sizeFiles / 1024 / 1024)
+            binding.cheshe.text = getString(R.string.remove_cashe, size, "Мб")
+        } else {
+            val size = formatFigureTwoPlaces(sizeFiles / 1024)
+            binding.cheshe.text = getString(R.string.remove_cashe, size, "Кб")
+        }
+        binding.cheshe.setOnClickListener {
+            if (dir.exists())
+                dir.deleteRecursively()
+            binding.cheshe.text = getString(R.string.remove_cashe, "0,00", "Кб")
+        }
+
         if (k.getBoolean("admin", false)) {
             binding.admin.visibility = View.VISIBLE
         }

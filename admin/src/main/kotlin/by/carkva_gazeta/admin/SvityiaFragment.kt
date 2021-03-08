@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaPageFragmentBinding
+import by.carkva_gazeta.malitounik.DialogNoInternet
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -34,6 +35,34 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     private val cal = GregorianCalendar()
     private val array = arrayOf("Чырвоны", "Чырвоны тоўсты", "Нармальны")
     private val array2 = arrayOf("Няма", "З вялікай вячэрняй і вялікім услаўленьнем на ютрані", "Двунадзясятыя і вялікія сьвяты", "З ліцьцёй на вячэрні", "З штодзённай вячэрняй і вялікім услаўленьнем на ютрані", "З штодзённай вячэрняй і малым услаўленьнем на ютрані")
+    private var timerCount = 0
+    private val timer = Timer()
+    private var timerTask: TimerTask? = null
+
+    private fun startTimer() {
+        timerTask = object : TimerTask() {
+            override fun run() {
+                if (urlJob?.isActive == true && timerCount == 3) {
+                    urlJob?.cancel()
+                    stopTimer()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        fragmentManager?.let {
+                            val dialoNoIntent = DialogNoInternet()
+                            dialoNoIntent.show(it, "dialoNoIntent")
+                        }
+                        binding.progressBar2.visibility = View.GONE
+                    }
+                }
+                timerCount++
+            }
+        }
+        timer.schedule(timerTask, 0, 5000)
+    }
+
+    private fun stopTimer() {
+        timer.cancel()
+        timerTask = null
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -166,43 +195,45 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     }
 
     private fun sendPostRequest(data: Int, mun: Int, dayOfYear: Int, name: String, chtenie: String, bold: Int, tipicon: String, spaw: String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            var style = 8
-            when (bold) {
-                0 -> style = 6
-                1 -> style = 7
-                2 -> style = 8
-            }
-            binding.progressBar2.visibility = View.VISIBLE
-            var responseCodeS = 500
-            withContext(Dispatchers.IO) {
-                var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("0", "UTF-8")
-                reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(data.toString(), "UTF-8") //День месяца
-                reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode(mun.toString(), "UTF-8")
-                reqParam += "&" + URLEncoder.encode("nomerdny", "UTF-8") + "=" + URLEncoder.encode(dayOfYear.toString(), "UTF-8")
-                reqParam += "&" + URLEncoder.encode("addksave", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                reqParam += "&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8")
-                reqParam += "&" + URLEncoder.encode("chtenie", "UTF-8") + "=" + URLEncoder.encode(chtenie, "UTF-8")
-                reqParam += "&" + URLEncoder.encode("bold", "UTF-8") + "=" + URLEncoder.encode(style.toString(), "UTF-8")
-                reqParam += "&" + URLEncoder.encode("tipicon", "UTF-8") + "=" + URLEncoder.encode(tipicon, "UTF-8")
-                reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(spaw, "UTF-8")
-                val mURL = URL("https://carkva-gazeta.by/admin/android.php")
-                with(mURL.openConnection() as HttpURLConnection) {
-                    requestMethod = "POST"
-                    val wr = OutputStreamWriter(outputStream)
-                    wr.write(reqParam)
-                    wr.flush()
-                    responseCodeS = responseCode
+        activity?.let { actyvity ->
+            if (MainActivity.isNetworkAvailable(actyvity)) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    var style = 8
+                    when (bold) {
+                        0 -> style = 6
+                        1 -> style = 7
+                        2 -> style = 8
+                    }
+                    binding.progressBar2.visibility = View.VISIBLE
+                    var responseCodeS = 500
+                    withContext(Dispatchers.IO) {
+                        var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("0", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(data.toString(), "UTF-8") //День месяца
+                        reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode(mun.toString(), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("nomerdny", "UTF-8") + "=" + URLEncoder.encode(dayOfYear.toString(), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("addksave", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("chtenie", "UTF-8") + "=" + URLEncoder.encode(chtenie, "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("bold", "UTF-8") + "=" + URLEncoder.encode(style.toString(), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("tipicon", "UTF-8") + "=" + URLEncoder.encode(tipicon, "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(spaw, "UTF-8")
+                        val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                        with(mURL.openConnection() as HttpURLConnection) {
+                            requestMethod = "POST"
+                            val wr = OutputStreamWriter(outputStream)
+                            wr.write(reqParam)
+                            wr.flush()
+                            responseCodeS = responseCode
+                        }
+                    }
+                    if (responseCodeS == 200) {
+                        MainActivity.toastView(actyvity, getString(by.carkva_gazeta.malitounik.R.string.save))
+                    } else {
+                        MainActivity.toastView(actyvity, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }
+                    binding.progressBar2.visibility = View.GONE
                 }
-            }
-            activity?.let {
-                if (responseCodeS == 200) {
-                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.save))
-                } else {
-                    MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
-                }
-                binding.progressBar2.visibility = View.GONE
             }
         }
     }
@@ -211,56 +242,62 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         super.onActivityCreated(savedInstanceState)
         cal.set(Calendar.YEAR, 2020)
         cal.set(Calendar.DAY_OF_YEAR, dayOfYear)
-        binding.actionBold.setOnClickListener(this)
-        binding.actionEm.setOnClickListener(this)
-        binding.actionRed.setOnClickListener(this)
-        binding.actionP.setOnClickListener(this)
-        binding.actionImg.setOnClickListener(this)
-        binding.progressBar2.visibility = View.VISIBLE
-        binding.apisanne.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) binding.linearLayout2.visibility = View.VISIBLE
-            else binding.linearLayout2.visibility = View.GONE
-        }
-        urlJob = CoroutineScope(Dispatchers.Main).launch {
-            var res = ""
-            withContext(Dispatchers.IO) {
-                var url = "https://carkva-gazeta.by/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json"
-                val builder = URL(url).readText()
-                val gson = Gson()
-                val type = object : TypeToken<ArrayList<String>>() {}.type
-                val arrayList: ArrayList<String> = gson.fromJson(builder, type)
-                res = arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
-                url = "https://carkva-gazeta.by/calendarsviatyia.txt"
-                val textfile = URL(url).readText().trim()
-                val line = textfile.split("\n")
-                for (element in line) {
-                    val reg = element.split("<>")
-                    val list = ArrayList<String>()
-                    for (element2 in reg) {
-                        list.add(element2)
+        activity?.let { actyvity ->
+            if (MainActivity.isNetworkAvailable(actyvity)) {
+                binding.actionBold.setOnClickListener(this)
+                binding.actionEm.setOnClickListener(this)
+                binding.actionRed.setOnClickListener(this)
+                binding.actionP.setOnClickListener(this)
+                binding.actionImg.setOnClickListener(this)
+                binding.progressBar2.visibility = View.VISIBLE
+                binding.apisanne.setOnFocusChangeListener { _, hasFocus ->
+                    if (hasFocus) binding.linearLayout2.visibility = View.VISIBLE
+                    else binding.linearLayout2.visibility = View.GONE
+                }
+                urlJob = CoroutineScope(Dispatchers.Main).launch {
+                    startTimer()
+                    var res = ""
+                    withContext(Dispatchers.IO) {
+                        var url = "https://carkva-gazeta.by/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json"
+                        val builder = URL(url).readText()
+                        val gson = Gson()
+                        val type = object : TypeToken<ArrayList<String>>() {}.type
+                        val arrayList: ArrayList<String> = gson.fromJson(builder, type)
+                        res = arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
+                        url = "https://carkva-gazeta.by/calendarsviatyia.txt"
+                        val textfile = URL(url).readText().trim()
+                        val line = textfile.split("\n")
+                        for (element in line) {
+                            val reg = element.split("<>")
+                            val list = ArrayList<String>()
+                            for (element2 in reg) {
+                                list.add(element2)
+                            }
+                            sviatyiaNew1.add(list)
+                        }
                     }
-                    sviatyiaNew1.add(list)
+                    binding.sviaty.setText(sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][0])
+                    binding.chytanne.setText(sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][1])
+                    activity?.let {
+                        binding.spinnerStyle.adapter = SpinnerAdapter(it, array)
+                        var position = 0
+                        when (sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][2].toInt()) {
+                            6 -> position = 0
+                            7 -> position = 1
+                            8 -> position = 2
+                        }
+                        binding.spinnerStyle.setSelection(position)
+                        binding.spinnerZnak.adapter = SpinnerAdapter(it, array2)
+                        val znaki = sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][3]
+                        val position2 = if (znaki == "") 0
+                        else znaki.toInt()
+                        binding.spinnerZnak.setSelection(position2)
+                    }
+                    binding.apisanne.setText(res)
+                    binding.progressBar2.visibility = View.GONE
+                    stopTimer()
                 }
             }
-            binding.sviaty.setText(sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][0])
-            binding.chytanne.setText(sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][1])
-            activity?.let {
-                binding.spinnerStyle.adapter = SpinnerAdapter(it, array)
-                var position = 0
-                when (sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][2].toInt()) {
-                    6 -> position = 0
-                    7 -> position = 1
-                    8 -> position = 2
-                }
-                binding.spinnerStyle.setSelection(position)
-                binding.spinnerZnak.adapter = SpinnerAdapter(it, array2)
-                val znaki = sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][3]
-                val position2 = if (znaki == "") 0
-                else znaki.toInt()
-                binding.spinnerZnak.setSelection(position2)
-            }
-            binding.apisanne.setText(res)
-            binding.progressBar2.visibility = View.GONE
         }
     }
 

@@ -156,8 +156,8 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     }
 
     override fun onBackPressedFragment(): Boolean {
-        if (binding.preView.visibility == View.VISIBLE) {
-            binding.preView.visibility = View.GONE
+        if (binding.scrollpreView.visibility == View.VISIBLE) {
+            binding.scrollpreView.visibility = View.GONE
             binding.scrollView.visibility = View.VISIBLE
             activity?.let {
                 val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -174,16 +174,20 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
             sendPostRequest(cal[Calendar.DAY_OF_MONTH], cal[Calendar.MONTH], dayOfYear - 1, binding.sviaty.text.toString(), binding.chytanne.text.toString(), binding.spinnerStyle.selectedItemPosition, binding.spinnerZnak.selectedItemPosition.toString(), binding.apisanne.text.toString())
         }
         if (id == R.id.action_preview) {
-            if (binding.preView.visibility == View.VISIBLE) {
-                binding.preView.visibility = View.GONE
+            if (binding.scrollpreView.visibility == View.VISIBLE) {
+                binding.scrollpreView.visibility = View.GONE
                 binding.scrollView.visibility = View.VISIBLE
                 activity?.let {
                     val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
                 }
             } else {
-                binding.preView.text = MainActivity.fromHtml(binding.apisanne.text.toString())
-                binding.preView.visibility = View.VISIBLE
+                var textApisanne = binding.apisanne.text.toString()
+                if (textApisanne.contains("<!--image-->")) {
+                    textApisanne = textApisanne.replace("<!--image-->", "<p>")
+                }
+                binding.preView.text = MainActivity.fromHtml(textApisanne).trim()
+                binding.scrollpreView.visibility = View.VISIBLE
                 binding.scrollView.visibility = View.GONE
                 activity?.let {
                     val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

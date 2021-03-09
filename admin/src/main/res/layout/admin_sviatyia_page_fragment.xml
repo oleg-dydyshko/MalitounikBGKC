@@ -138,16 +138,22 @@
 
     </LinearLayout>
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-        android:id="@+id/preView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ScrollView
+        android:id="@+id/scrollpreView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@color/colorWhite"
-        android:padding="10dp"
-        android:textSize="18sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            android:id="@+id/preView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textSize="18sp" />
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,13 +14,6 @@
         android:title="@string/share"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_update"
-        android:icon="@drawable/update"
-        android:orderInCategory="100"
-        android:title="@string/update_bibliateka"
-        android:visible="false"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/action_font"
         android:orderInCategory="100"
         android:title="@string/menu_font_size_app"

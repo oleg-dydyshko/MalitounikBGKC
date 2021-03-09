@@ -3,8 +3,13 @@ package by.carkva_gazeta.malitounik
 import android.app.Activity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.net.HttpURLConnection
+import java.net.URL
 
 class SlugbovyiaTextu {
     private val dat12 = ArrayList<SlugbovyiaTextuData>()
@@ -160,15 +165,31 @@ class SlugbovyiaTextu {
 
     private fun loadOpisanieSviat(activity: Activity) {
         if (opisanieSviat.size == 0) {
-            val inputStream = activity.resources.openRawResource(R.raw.opisanie_sviat)
-            val isr = InputStreamReader(inputStream)
-            val reader = BufferedReader(isr)
-            val builder = reader.use {
-                it.readText()
+            val fileOpisanieSviat = File("${activity.filesDir}/opisanie_sviat.json")
+            if (!fileOpisanieSviat.exists()) {
+                if (MainActivity.isNetworkAvailable(activity)) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        withContext(Dispatchers.IO) {
+                            val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
+                            val conections = mURL.openConnection() as HttpURLConnection
+                            if (conections.responseCode == 200) {
+                                try {
+                                    fileOpisanieSviat.writer().use {
+                                        it.write(mURL.readText())
+                                    }
+                                } catch (e: Throwable) {
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-            opisanieSviat.addAll(gson.fromJson(builder, type))
+            if (fileOpisanieSviat.exists()) {
+                val builder = fileOpisanieSviat.readText()
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                opisanieSviat.addAll(gson.fromJson(builder, type))
+            }
         }
     }
 

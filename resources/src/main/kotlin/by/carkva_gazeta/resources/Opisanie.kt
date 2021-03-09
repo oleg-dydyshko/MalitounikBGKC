@@ -172,6 +172,25 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         }
     }
 
+    private fun loadOpisanieSviat() {
+        val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
+        val builder = fileOpisanieSviat.readText()
+        val gson = Gson()
+        val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+        val arrayList: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
+        arrayList.forEach {
+            if (day == it[0].toInt() && mun == it[1].toInt()) {
+                var res = it[2]
+                if (dzenNoch) res = res.replace("#d00505", "#f44336")
+                val imageView = grateImageView()
+                val textView = grateTextView(res)
+                binding.linearLayout.addView(imageView)
+                binding.linearLayout.addView(textView)
+                opisanieDataLink.add(OpisanieData(imageView, textView))
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
@@ -199,31 +218,13 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                 }
             }
         }
-        val inputStream: InputStream
-        if (svity) {
-            inputStream = resources.openRawResource(by.carkva_gazeta.malitounik.R.raw.opisanie_sviat)
-            val isr = InputStreamReader(inputStream)
-            val reader = BufferedReader(isr)
-            val builder = reader.use {
-                it.readText()
-            }
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-            val arrayList: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
-            arrayList.forEach {
-                if (day == it[0].toInt() && mun == it[1].toInt()) {
-                    var res = it[2]
-                    if (dzenNoch) res = res.replace("#d00505", "#f44336")
-                    val imageView = grateImageView()
-                    val textView = grateTextView(res)
-                    binding.linearLayout.addView(imageView)
-                    binding.linearLayout.addView(textView)
-                    opisanieDataLink.add(OpisanieData(imageView, textView))
-                }
-            }
-        } else {
-            startLoadIconsJob()
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            startLoadIconsJob(true)
+            binding.swipeRefreshLayout.isRefreshing = false
         }
+        if (dzenNoch) binding.swipeRefreshLayout.setColorSchemeResources(by.carkva_gazeta.malitounik.R.color.colorPrimary_black)
+        else binding.swipeRefreshLayout.setColorSchemeResources(by.carkva_gazeta.malitounik.R.color.colorPrimary)
+        startLoadIconsJob()
         setTollbarTheme()
     }
 
@@ -233,12 +234,29 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             startTimer()
             var builder = ""
             val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
+            val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
             if (!MainActivity.isNetworkAvailable(this@Opisanie)) {
-                if (fileOpisanie.exists()) builder = fileOpisanie.readText()
+                if (svity) {
+                    if (fileOpisanie.exists()) builder = fileOpisanieSviat.readText()
+                } else {
+                    if (fileOpisanie.exists()) builder = fileOpisanie.readText()
+                }
             } else {
                 withContext(Dispatchers.IO) {
                     val dir = File("$filesDir/sviatyja/")
                     if (!dir.exists()) dir.mkdir()
+                    if (!fileOpisanieSviat.exists() || update) {
+                        val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
+                        val conections = mURL.openConnection() as HttpURLConnection
+                        if (conections.responseCode == 200) {
+                            try {
+                                fileOpisanieSviat.writer().use {
+                                    it.write(mURL.readText())
+                                }
+                            } catch (e: Throwable) {
+                            }
+                        }
+                    }
                     for (i in 1..12) {
                         val fileS = File("$filesDir/sviatyja/opisanie$i.json")
                         if (!fileS.exists() || (update && mun == i)) {
@@ -257,19 +275,22 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                     builder = fileOpisanie.readText()
                 }
             }
-            loadOpisanieSviatyia(builder)
+            if (svity) loadOpisanieSviat()
+            else loadOpisanieSviatyia(builder)
             if (dzenNoch) binding.imageViewFull.background = ContextCompat.getDrawable(this@Opisanie, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             val dir = File("$filesDir/icons/")
             if (!dir.exists()) dir.mkdir()
             opisanieDataLink.forEachIndexed { i, opisanieData ->
                 var schet = ""
                 if (i > 0) schet = "_${i + 1}"
-                val file = File("$filesDir/icons/s_${day}_${mun}$schet.jpg")
+                val file = if (svity) File("$filesDir/icons/v_${day}_${mun}.jpg")
+                else File("$filesDir/icons/s_${day}_${mun}$schet.jpg")
                 if (file.exists() && !update) {
                     opisanieData.imageView.post {
                         opisanieData.imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file.absolutePath)))
                         opisanieData.imageView.visibility = View.VISIBLE
-                        opisanieData.imageName = "s_${day}_${mun}$schet.jpg"
+                        if (svity) opisanieData.imageName = "v_${day}_${mun}.jpg"
+                        else opisanieData.imageName = "s_${day}_${mun}$schet.jpg"
                         opisanieData.imageView.setOnClickListener {
                             if (file.exists()) {
                                 val bitmap = BitmapFactory.decodeFile(file.absolutePath)
@@ -282,7 +303,8 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                     if (MainActivity.isNetworkAvailable(this@Opisanie)) {
                         var bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                         withContext(Dispatchers.IO) {
-                            val mURL = URL("https://carkva-gazeta.by/chytanne/icons/s_${day}_${mun}$schet.jpg")
+                            val mURL = if (svity) URL("https://carkva-gazeta.by/chytanne/icons/v_${day}_${mun}.jpg")
+                            else URL("https://carkva-gazeta.by/chytanne/icons/s_${day}_${mun}$schet.jpg")
                             val conections = mURL.openConnection() as HttpURLConnection
                             if (conections.responseCode == 200) {
                                 try {
@@ -294,7 +316,8 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                                     }
                                     val byteArray = byteArrayOut.toByteArray()
                                     bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-                                    val file2 = File(dir, "s_${day}_${mun}$schet.jpg")
+                                    val file2 = if (svity) File(dir, "v_${day}_${mun}.jpg")
+                                    else File(dir, "s_${day}_${mun}$schet.jpg")
                                     val out = FileOutputStream(file2)
                                     bmp.compress(Bitmap.CompressFormat.JPEG, 90, out)
                                     out.flush()
@@ -305,7 +328,8 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                                     opisanieData.imageView.post {
                                         opisanieData.imageView.setImageBitmap(resizeImage(bmp))
                                         opisanieData.imageView.visibility = View.VISIBLE
-                                        opisanieData.imageName = "s_${day}_${mun}$schet.jpg"
+                                        if (svity) opisanieData.imageName = "v_${day}_${mun}.jpg"
+                                        else opisanieData.imageName = "s_${day}_${mun}$schet.jpg"
                                         opisanieData.imageView.setOnClickListener {
                                             if (file.exists()) {
                                                 val bitmap = BitmapFactory.decodeFile(file.absolutePath)
@@ -395,7 +419,6 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_edit).isVisible = false
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_update).isVisible = true
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
@@ -411,9 +434,6 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == by.carkva_gazeta.malitounik.R.id.action_update) {
-            startLoadIconsJob(true)
-        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
             val intent = Intent()
             intent.setClassName(this, MainActivity.ADMINSVIATYIA)

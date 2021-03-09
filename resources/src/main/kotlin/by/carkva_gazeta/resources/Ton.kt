@@ -26,9 +26,12 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.lang.Runnable
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 
 class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
@@ -122,30 +125,46 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 val c = Calendar.getInstance()
                 val mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: c[Calendar.MONTH] + 1
                 val day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
-                inputStream = resources.openRawResource(by.carkva_gazeta.malitounik.R.raw.opisanie_sviat)
-                val isr = InputStreamReader(inputStream)
-                val reader = BufferedReader(isr)
-                val builder = reader.use {
-                    it.readText()
+                val fileOpisanieSviat = File("${filesDir}/opisanie_sviat.json")
+                if (!fileOpisanieSviat.exists()) {
+                    if (MainActivity.isNetworkAvailable(this)) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            withContext(Dispatchers.IO) {
+                                val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
+                                val conections = mURL.openConnection() as HttpURLConnection
+                                if (conections.responseCode == 200) {
+                                    try {
+                                        fileOpisanieSviat.writer().use {
+                                            it.write(mURL.readText())
+                                        }
+                                    } catch (e: Throwable) {
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-                val gson = Gson()
-                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                val arrayList: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
-                arrayList.forEach {
-                    if (day == it[0].toInt() && mun == it[1].toInt()) {
-                        var res = it[2]
-                        val t1 = res.indexOf("<strong>")
-                        val t2 = res.indexOf("</strong>")
-                        if (t1 != -1 && t2 != -1) {
-                            title = res.substring(t1 + 8, t2)
+                if (fileOpisanieSviat.exists()) {
+                    val builder = fileOpisanieSviat.readText()
+                    val gson = Gson()
+                    val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                    val arrayList: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
+                    arrayList.forEach {
+                        if (day == it[0].toInt() && mun == it[1].toInt()) {
+                            var res = it[2]
+                            val t1 = res.indexOf("<strong>")
+                            val t2 = res.indexOf("</strong>")
+                            if (t1 != -1 && t2 != -1) {
+                                title = res.substring(t1 + 8, t2)
+                            }
+                            when (intent.extras?.getInt("lityrgia", 4) ?: 4) {
+                                3 -> res = it[3]
+                                4 -> res = it[4]
+                                5 -> res = it[5]
+                            }
+                            if (dzenNoch) res = res.replace("#d00505", "#f44336")
+                            binding.TextView.text = MainActivity.fromHtml(res)
                         }
-                        when (intent.extras?.getInt("lityrgia", 4) ?: 4) {
-                            3 -> res = it[3]
-                            4 -> res = it[4]
-                            5 -> res = it[5]
-                        }
-                        if (dzenNoch) res = res.replace("#d00505", "#f44336")
-                        binding.TextView.text = MainActivity.fromHtml(res)
                     }
                 }
             }

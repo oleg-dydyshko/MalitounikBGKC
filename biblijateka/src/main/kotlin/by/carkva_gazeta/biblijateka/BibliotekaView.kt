@@ -265,7 +265,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             filePath = file.path
             fileName = title
             loadFilePDF()
-            bindingcontent.listView.visibility = View.GONE
+            bindingcontent.swipeRefreshLayout.visibility = View.GONE
             bindingcontent.webView.visibility = View.GONE
             bindingcontent.scrollViewB.visibility = View.GONE
             invalidateOptionsMenu()
@@ -311,7 +311,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 adapter.notifyDataSetChanged()
                 bindingcontent.progressBar2.visibility = View.GONE
                 loadFilePDF()
-                bindingcontent.listView.visibility = View.GONE
+                bindingcontent.swipeRefreshLayout.visibility = View.GONE
                 bindingcontent.webView.visibility = View.GONE
                 bindingcontent.scrollViewB.visibility = View.GONE
                 invalidateOptionsMenu()
@@ -350,7 +350,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 loadFileEPUB()
             }
         }
-        bindingcontent.listView.visibility = View.GONE
+        bindingcontent.swipeRefreshLayout.visibility = View.GONE
         invalidateOptionsMenu()
     }
 
@@ -483,8 +483,30 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         autoscroll = k.getBoolean("autoscroll", false)
         adapter = BibliotekaAdapter(this)
         bindingcontent.listView.adapter = adapter
-        if (dzenNoch) bindingcontent.listView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-        else bindingcontent.listView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+        if (dzenNoch) {
+            bindingcontent.listView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+            bindingcontent.swipeRefreshLayout.setColorSchemeResources(by.carkva_gazeta.malitounik.R.color.colorPrimary_black)
+        } else {
+            bindingcontent.listView.selector = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            bindingcontent.swipeRefreshLayout.setColorSchemeResources(by.carkva_gazeta.malitounik.R.color.colorPrimary)
+        }
+        bindingcontent.swipeRefreshLayout.setOnRefreshListener {
+            if (runSql) return@setOnRefreshListener
+            if (MainActivity.isIntNetworkAvailable(this) == 0) {
+                val dialogNoInternet = DialogNoInternet()
+                dialogNoInternet.show(supportFragmentManager, "no_internet")
+            } else {
+                var rub = 1
+                when (idSelect) {
+                    R.id.label2 -> rub = 1
+                    R.id.label3 -> rub = 2
+                    R.id.label4 -> rub = 3
+                    R.id.label5 -> rub = 4
+                }
+                getSql(rub)
+            }
+            bindingcontent.swipeRefreshLayout.isRefreshing = false
+        }
         bindingcontent.listView.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnItemClickListener
@@ -530,7 +552,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                             startAutoScroll()
                         }
                     }
-                    bindingcontent.listView.visibility = View.GONE
+                    bindingcontent.swipeRefreshLayout.visibility = View.GONE
                     invalidateOptionsMenu()
                 } else {
                     if (arrayList[position][1].contains(".epub")) {
@@ -559,7 +581,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     filePath = file.absolutePath
                     fileName = file.name
                     loadFilePDF()
-                    bindingcontent.listView.visibility = View.GONE
+                    bindingcontent.swipeRefreshLayout.visibility = View.GONE
                     bindingcontent.webView.visibility = View.GONE
                     bindingcontent.scrollViewB.visibility = View.GONE
                     pdfView.visibility = View.VISIBLE
@@ -704,20 +726,20 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             nameRubrika = savedInstanceState.getString("nameRubrika") ?: ""
             when {
                 savedInstanceState.getInt("pdfView", 0) == 1 -> {
-                    bindingcontent.listView.visibility = View.GONE
+                    bindingcontent.swipeRefreshLayout.visibility = View.GONE
                     pdfView.visibility = View.VISIBLE
                     bindingcontent.webView.visibility = View.GONE
                     bindingcontent.scrollViewB.visibility = View.GONE
                     savedInstance = 1
                 }
                 savedInstanceState.getInt("pdfView", 0) == 2 -> {
-                    bindingcontent.listView.visibility = View.GONE
+                    bindingcontent.swipeRefreshLayout.visibility = View.GONE
                     bindingcontent.webView.visibility = View.VISIBLE
                     pdfView.visibility = View.GONE
                     savedInstance = 2
                 }
                 else -> {
-                    bindingcontent.listView.visibility = View.VISIBLE
+                    bindingcontent.swipeRefreshLayout.visibility = View.VISIBLE
                     pdfView.visibility = View.GONE
                     bindingcontent.webView.visibility = View.GONE
                     bindingcontent.scrollViewB.visibility = View.GONE
@@ -757,7 +779,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             if (filePath != "") {
                 val t1 = filePath.lastIndexOf("/")
                 fileName = filePath.substring(t1 + 1)
-                bindingcontent.listView.visibility = View.GONE
+                bindingcontent.swipeRefreshLayout.visibility = View.GONE
                 if (fileName.toLowerCase(Locale.getDefault()).contains(".pdf")) {
                     pdfView.visibility = View.VISIBLE
                 } else {
@@ -773,11 +795,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     naidaunia.addAll(gson.fromJson(json, type))
                     if (naidaunia.size == 0) {
                         binding.drawerLayout.openDrawer(GravityCompat.START)
-                        bindingcontent.listView.visibility = View.VISIBLE
+                        bindingcontent.swipeRefreshLayout.visibility = View.VISIBLE
                     } else onClick(binding.label1)
                 } else {
                     binding.drawerLayout.openDrawer(GravityCompat.START)
-                    bindingcontent.listView.visibility = View.VISIBLE
+                    bindingcontent.swipeRefreshLayout.visibility = View.VISIBLE
                 }
             }
             site = intent.getBooleanExtra("site", false)
@@ -817,7 +839,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                             loadFileEPUB()
                         }
                     }
-                    bindingcontent.listView.visibility = View.GONE
+                    bindingcontent.swipeRefreshLayout.visibility = View.GONE
                 }
             }
         }
@@ -1211,10 +1233,10 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         super.onPrepareOptionsMenu(menu)
         autoscroll = k.getBoolean("autoscroll", false)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_trash).isVisible = bindingcontent.listView.visibility == View.VISIBLE && idSelect == R.id.label1
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_update).isVisible = bindingcontent.listView.visibility == View.VISIBLE && (idSelect == R.id.label2 || idSelect == R.id.label3 || idSelect == R.id.label4 || idSelect == R.id.label5)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_trash).isVisible = bindingcontent.swipeRefreshLayout.visibility == View.VISIBLE && idSelect == R.id.label1
+        bindingcontent.swipeRefreshLayout.isEnabled = bindingcontent.swipeRefreshLayout.visibility == View.VISIBLE && (idSelect == R.id.label2 || idSelect == R.id.label3 || idSelect == R.id.label4 || idSelect == R.id.label5)
         itemAuto.isVisible = false
-        if (bindingcontent.listView.visibility == View.GONE) {
+        if (bindingcontent.swipeRefreshLayout.visibility == View.GONE) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).isVisible = true
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_set_page).isVisible = true
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_bright).isVisible = true
@@ -1350,7 +1372,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                             startAutoScroll()
                         }
                     }
-                    bindingcontent.listView.visibility = View.GONE
+                    bindingcontent.swipeRefreshLayout.visibility = View.GONE
                     invalidateOptionsMenu()
                 }
             }
@@ -1360,22 +1382,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val prefEditor: SharedPreferences.Editor = k.edit()
         val id: Int = item.itemId
-        if (id == by.carkva_gazeta.malitounik.R.id.action_update) {
-            if (runSql) return false
-            if (MainActivity.isIntNetworkAvailable(this) == 0) {
-                val dialogNoInternet = DialogNoInternet()
-                dialogNoInternet.show(supportFragmentManager, "no_internet")
-            } else {
-                var rub = 1
-                when (idSelect) {
-                    R.id.label2 -> rub = 1
-                    R.id.label3 -> rub = 2
-                    R.id.label4 -> rub = 3
-                    R.id.label5 -> rub = 4
-                }
-                getSql(rub)
-            }
-        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
             val dialogFontSize = DialogFontSize()
             dialogFontSize.show(supportFragmentManager, "font")
@@ -1483,7 +1489,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             show()
         } else if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             super.onBackPressed()
-        } else if (bindingcontent.listView.visibility == View.GONE) {
+        } else if (bindingcontent.swipeRefreshLayout.visibility == View.GONE) {
             invalidateOptionsMenu()
             if (arrayList.size == 0) {
                 if (idSelect != R.id.label6) {
@@ -1507,7 +1513,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
                 bindingappbar.titleToolbar.text = nameRubrika
                 bindingappbar.pageToolbar.text = ""
-                bindingcontent.listView.visibility = View.VISIBLE
+                bindingcontent.swipeRefreshLayout.visibility = View.VISIBLE
                 pdfView.visibility = View.GONE
                 bindingcontent.webView.visibility = View.GONE
                 bindingcontent.scrollViewB.visibility = View.GONE
@@ -1600,12 +1606,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
         }
         if (saveindep) {
-            bindingcontent.listView.visibility = View.VISIBLE
+            bindingcontent.swipeRefreshLayout.visibility = View.VISIBLE
             pdfView.visibility = View.GONE
             bindingcontent.webView.visibility = View.GONE
             bindingcontent.scrollViewB.visibility = View.GONE
         }
-        if (rub != -1 && bindingcontent.listView.visibility == View.VISIBLE) {
+        if (rub != -1 && bindingcontent.swipeRefreshLayout.visibility == View.VISIBLE) {
             val gson = Gson()
             val json: String = k.getString("Biblioteka", "") ?: ""
             val timeUpdate = Calendar.getInstance().timeInMillis

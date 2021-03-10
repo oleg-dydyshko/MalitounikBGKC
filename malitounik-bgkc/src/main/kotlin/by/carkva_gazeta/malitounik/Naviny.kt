@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -21,16 +22,46 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.webkit.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.NavinyBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.*
 
 class Naviny : AppCompatActivity() {
 
     private lateinit var kq: SharedPreferences
     private var dzenNoch = false
     private lateinit var binding: NavinyBinding
+    private var timerCount = 0
+    private var timer = Timer()
+    private var timerTask: TimerTask? = null
+
+    private fun startTimer() {
+        timer = Timer()
+        timerCount = 0
+        timerTask = object : TimerTask() {
+            override fun run() {
+                if (timerCount == 3) {
+                    stopTimer()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        MainActivity.toastView(this@Naviny, getString(R.string.bad_internet), Toast.LENGTH_LONG)
+                    }
+                }
+                timerCount++
+            }
+        }
+        timer.schedule(timerTask, 0, 5000)
+    }
+
+    private fun stopTimer() {
+        timer.cancel()
+        timerTask = null
+    }
 
     @SuppressLint("SetTextI18n", "SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -332,6 +363,16 @@ class Naviny : AppCompatActivity() {
     }
 
     private inner class MyWebViewClient : WebViewClient() {
+
+        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+            super.onPageStarted(view, url, favicon)
+            startTimer()
+        }
+
+        override fun onPageFinished(view: WebView?, url: String?) {
+            super.onPageFinished(view, url)
+            stopTimer()
+        }
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             if (url.contains("https://malitounik.page.link/caliandar")) {

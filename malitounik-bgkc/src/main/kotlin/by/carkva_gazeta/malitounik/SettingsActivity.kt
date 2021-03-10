@@ -1208,6 +1208,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             if (adminItemCount == 7) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     val checkLogin = CheckLogin()
+                    checkLogin.isCancelable = false
                     checkLogin.show(supportFragmentManager, "checkLogin")
                 }
             }
@@ -1239,9 +1240,14 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         }
         binding.admin.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.admin.setOnClickListener {
-            val intent = Intent()
-            intent.setClassName(this, MainActivity.ADMINMAIN)
-            startActivity(intent)
+            if (MainActivity.checkmodulesAdmin(this)) {
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.ADMINMAIN)
+                startActivity(intent)
+            } else {
+                MainActivity.moduleName = "admin"
+                MainActivity.downloadDynamicModule(this)
+            }
         }
         if (dzenNoch) binding.prav.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.prav.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
@@ -1630,7 +1636,8 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         prefEditor.apply()
         binding.admin.visibility = View.VISIBLE
         if (!MainActivity.checkmodulesAdmin(this)) {
-            MainActivity.downloadDynamicModule(this, "admin")
+            MainActivity.moduleName = "admin"
+            MainActivity.downloadDynamicModule(this)
         }
     }
 

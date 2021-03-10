@@ -30,10 +30,7 @@ import android.view.animation.AnimationUtils
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.PopupMenu
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -186,6 +183,33 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
 
         override fun onAnimationRepeat(animation: Animation) {}
+    }
+    private var sqlJob: Job? = null
+    private var timerCount = 0
+    private var timer = Timer()
+    private var timerTask: TimerTask? = null
+
+    private fun startTimer() {
+        timer = Timer()
+        timerCount = 0
+        timerTask = object : TimerTask() {
+            override fun run() {
+                if (sqlJob?.isActive == true && timerCount == 3) {
+                    sqlJob?.cancel()
+                    stopTimer()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        MainActivity.toastView(this@BibliotekaView, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
+                    }
+                }
+                timerCount++
+            }
+        }
+        timer.schedule(timerTask, 0, 5000)
+    }
+
+    private fun stopTimer() {
+        timer.cancel()
+        timerTask = null
     }
 
     override fun onScroll(t: Int) {
@@ -1473,6 +1497,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         autoScrollJob?.cancel()
         autoStartScrollJob?.cancel()
         procentJob?.cancel()
+        sqlJob?.cancel()
     }
 
     override fun onBackPressed() {
@@ -1661,12 +1686,13 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     private fun getSql(rub: Int) {
+        startTimer()
         runSql = true
         arrayList.clear()
         adapter.notifyDataSetChanged()
         bindingcontent.progressBar2.visibility = View.VISIBLE
         val showUrl = "https://carkva-gazeta.by/bibliotekaNew.php"
-        CoroutineScope(Dispatchers.Main).launch {
+        sqlJob = CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 val temp: ArrayList<ArrayList<String>> = ArrayList()
                 val sb = URL(showUrl).readText()
@@ -1730,6 +1756,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 prefEditors.apply()
                 runSql = false
             }
+            stopTimer()
             adapter.notifyDataSetChanged()
             bindingcontent.progressBar2.visibility = View.GONE
         }

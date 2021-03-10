@@ -282,7 +282,7 @@
     <string name="sort_time">Сартаваць паводле часу</string>
     <string name="title_biblijateka">Бібліятэка Царквы</string>
     <string name="title_download_module">СПАМПОЎВАЕМ \"БІБЛІЯТЭКУ ЦАРКВЫ\"</string>
-    <string name="title_download_module2">СПАМПОЎВАЕМ \"КІРАВАНЬНЕ\"</string>
+    <string name="title_download_module2">СПАМПОЎВАЕМ \"КІРАВАНЬНЕ САЙТАМ\"</string>
     <string name="title_resources">Рэсурсы Дадатка</string>
     <string name="settings_notifi_sviata">Налады апавяшчэньня сьвятаў</string>
     <string name="filter">Фільтар</string>
@@ -310,7 +310,7 @@
     <string name="del_all_vybranoe">Вы сапраўды жадаеце выдаліць усё Выбранае?</string>
     <string name="share">Падзяліцца&#8230;</string>
     <string name="slugby_vialikaga_postu">Службы Вялікага посту</string>
-    <string name="bad_internet">ДРЭННАЕ ІНТЭРНЭТ ЗЛУЧЭНЬНЕ/nПраверце якасьць сігналу</string>
+    <string name="bad_internet">ДРЭННАЕ ІНТЭРНЭТ ЗЛУЧЭНЬНЕ\nПраверце якасьць сігналу</string>
     <string name="copy_big">Cкапіяваць</string>
     <string name="copy_big_full">Вылучыць усё</string>
     <string name="set_versh">Выберыце верш</string>
@@ -572,7 +572,6 @@
         <item>ЛІСТАПАДА</item>
         <item>СЬНЕЖНЯ</item>
     </string-array>
-    <string name="title_admin">Кіраваньне</string>
     <string name="site_admin">Кіраваньне сайтам</string>
     <string name="admin_panel">ПАНЭЛЬ КІРАВАНЬНЯ</string>
     <string name="login">Логін</string>

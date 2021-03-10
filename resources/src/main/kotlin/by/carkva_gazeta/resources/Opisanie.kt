@@ -13,6 +13,7 @@ import android.util.TypedValue
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -45,6 +46,8 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     private var timerTask: TimerTask? = null
 
     private fun startTimer() {
+        timer = Timer()
+        timerCount = 0
         timerTask = object : TimerTask() {
             override fun run() {
                 if (loadIconsJob?.isActive == true && timerCount == 3) {
@@ -73,12 +76,12 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                             }
                         }
                         binding.progressBar2.visibility = View.GONE
+                        MainActivity.toastView(this@Opisanie, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
                     }
                 }
                 timerCount++
             }
         }
-        timer = Timer()
         timer.schedule(timerTask, 0, 5000)
     }
 
@@ -232,6 +235,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         loadIconsJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
             startTimer()
+            delay(20000)
             var builder = ""
             val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
             val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
@@ -435,18 +439,22 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
-            val intent = Intent()
-            intent.setClassName(this, MainActivity.ADMINSVIATYIA)
-            val cal = Calendar.getInstance() as GregorianCalendar
-            cal.set(Calendar.YEAR, year)
-            cal.set(Calendar.MONTH, mun - 1)
-            cal.set(Calendar.DAY_OF_MONTH, day)
-            var dayofyear = cal[Calendar.DAY_OF_YEAR] - 1
-            if (!cal.isLeapYear(cal[Calendar.YEAR]) && dayofyear >= 59) {
-                dayofyear++
+            if (MainActivity.checkmodulesAdmin(this)) {
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.ADMINSVIATYIA)
+                val cal = Calendar.getInstance() as GregorianCalendar
+                cal.set(Calendar.YEAR, year)
+                cal.set(Calendar.MONTH, mun - 1)
+                cal.set(Calendar.DAY_OF_MONTH, day)
+                var dayofyear = cal[Calendar.DAY_OF_YEAR] - 1
+                if (!cal.isLeapYear(cal[Calendar.YEAR]) && dayofyear >= 59) {
+                    dayofyear++
+                }
+                intent.putExtra("dayOfYear", dayofyear)
+                startActivity(intent)
+            } else {
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
             }
-            intent.putExtra("dayOfYear", dayofyear)
-            startActivity(intent)
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             change = true

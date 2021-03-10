@@ -42,7 +42,10 @@ class MenuGlavnoe : ListFragment() {
                         startActivity(intent)
                     }
                 } else {
-                    activity?.let { MainActivity.downloadDynamicModule(it) }
+                    activity?.let {
+                        MainActivity.moduleName = "biblijateka"
+                        MainActivity.downloadDynamicModule(it)
+                    }
                 }
             } else {
                 val dadatak = DialogInstallDadatak()

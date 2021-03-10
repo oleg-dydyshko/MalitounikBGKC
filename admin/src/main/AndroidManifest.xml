@@ -5,7 +5,7 @@
 
     <dist:module
         dist:instant="false"
-        dist:title="@string/title_admin">
+        dist:title="@string/site_admin">
         <dist:delivery>
             <dist:on-demand />
         </dist:delivery>
@@ -15,7 +15,7 @@
     <application>
         <activity
             android:name="by.carkva_gazeta.admin.AdminMain"
-            android:label="Кіраваньне"
+            android:label="@string/site_admin"
             android:theme="@style/AppTheme">
         </activity>
         <activity

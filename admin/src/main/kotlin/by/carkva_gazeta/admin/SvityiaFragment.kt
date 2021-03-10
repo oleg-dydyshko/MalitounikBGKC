@@ -10,12 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
+import android.widget.ImageView
+import android.widget.Toast
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaPageFragmentBinding
-import by.carkva_gazeta.malitounik.DialogNoInternet
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItemTipiconBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -34,7 +37,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     private val sviatyiaNew1 = ArrayList<ArrayList<String>>()
     private val cal = GregorianCalendar()
     private val array = arrayOf("Чырвоны", "Чырвоны тоўсты", "Нармальны")
-    private val array2 = arrayOf("Няма", "З вялікай вячэрняй і вялікім услаўленьнем на ютрані", "Двунадзясятыя і вялікія сьвяты", "З ліцьцёй на вячэрні", "З штодзённай вячэрняй і вялікім услаўленьнем на ютрані", "З штодзённай вячэрняй і малым услаўленьнем на ютрані")
+    private val arrayList = ArrayList<Tipicon>()
     private var timerCount = 0
     private val timer = Timer()
     private var timerTask: TimerTask? = null
@@ -46,9 +49,8 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                     urlJob?.cancel()
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {
-                        fragmentManager?.let {
-                            val dialoNoIntent = DialogNoInternet()
-                            dialoNoIntent.show(it, "dialoNoIntent")
+                        activity?.let {
+                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
                         }
                         binding.progressBar2.visibility = View.GONE
                     }
@@ -246,6 +248,12 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         super.onActivityCreated(savedInstanceState)
         cal.set(Calendar.YEAR, 2020)
         cal.set(Calendar.DAY_OF_YEAR, dayOfYear)
+        arrayList.add(Tipicon(0, "Няма"))
+        arrayList.add(Tipicon(by.carkva_gazeta.malitounik.R.drawable.znaki_krest, "З вялікай вячэрняй і вялікім услаўленьнем на ютрані"))
+        arrayList.add(Tipicon(by.carkva_gazeta.malitounik.R.drawable.znaki_krest_v_kruge, "Двунадзясятыя і вялікія сьвяты"))
+        arrayList.add(Tipicon(by.carkva_gazeta.malitounik.R.drawable.znaki_krest_v_polukruge, "З ліцьцёй на вячэрні"))
+        arrayList.add(Tipicon(by.carkva_gazeta.malitounik.R.drawable.znaki_ttk, "З штодзённай вячэрняй і вялікім услаўленьнем на ютрані"))
+        arrayList.add(Tipicon(by.carkva_gazeta.malitounik.R.drawable.znaki_ttk_black, "З штодзённай вячэрняй і малым услаўленьнем на ютрані"))
         activity?.let { actyvity ->
             if (MainActivity.isNetworkAvailable(actyvity)) {
                 binding.actionBold.setOnClickListener(this)
@@ -291,7 +299,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                             8 -> position = 2
                         }
                         binding.spinnerStyle.setSelection(position)
-                        binding.spinnerZnak.adapter = SpinnerAdapter(it, array2)
+                        binding.spinnerZnak.adapter = SpinnerAdapterTipicon(it, arrayList)
                         val znaki = sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][3]
                         val position2 = if (znaki == "") 0
                         else znaki.toInt()
@@ -337,10 +345,52 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
             viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             return rootView
         }
-
     }
 
     private class ViewHolder(var text: TextViewRobotoCondensed)
+
+    private class SpinnerAdapterTipicon(activity: Activity, private val data: ArrayList<Tipicon>) : BaseAdapter() {
+        private val context = activity
+
+        override fun getItem(position: Int): Any {
+            return position
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getCount(): Int {
+            return data.size
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolderImage: ViewHolderImage
+            if (convertView == null) {
+                val binding = SimpleListItemTipiconBinding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolderImage = ViewHolderImage(binding.image, binding.text1)
+                rootView.tag = viewHolderImage
+            } else {
+                rootView = convertView
+                viewHolderImage = rootView.tag as ViewHolderImage
+            }
+            if (data[position].imageResource == 0) {
+                viewHolderImage.image.visibility = View.GONE
+            } else {
+                viewHolderImage.image.setImageResource(data[position].imageResource)
+            }
+            viewHolderImage.text.text = data[position].title
+            viewHolderImage.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            viewHolderImage.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            return rootView
+        }
+    }
+
+    private class ViewHolderImage(var image: ImageView, var text: TextViewRobotoCondensed)
+
+    private data class Tipicon(val imageResource: Int, val title: String)
 
     companion object {
         fun newInstance(day_of_year: Int): SvityiaFragment {

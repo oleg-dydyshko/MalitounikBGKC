@@ -171,17 +171,21 @@ class MenuCaliandar : MenuCaliandarFragment() {
         val id = item.itemId
         if (id == R.id.action_carkva) {
             activity?.let {
-                val intent = Intent()
-                intent.setClassName(it, MainActivity.ADMINSVIATYIA)
-                val caliandarFull = adapter.getFragment(binding.pager.currentItem) as CaliandarFull
-                val year = caliandarFull.getYear()
-                val cal = GregorianCalendar(year, 0, 1)
-                var dayofyear = caliandarFull.getDayOfYear() - 1
-                if (!cal.isLeapYear(year) && dayofyear >= 59) {
-                    dayofyear++
+                if (MainActivity.checkmodulesAdmin(it)) {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.ADMINSVIATYIA)
+                    val caliandarFull = adapter.getFragment(binding.pager.currentItem) as CaliandarFull
+                    val year = caliandarFull.getYear()
+                    val cal = GregorianCalendar(year, 0, 1)
+                    var dayofyear = caliandarFull.getDayOfYear() - 1
+                    if (!cal.isLeapYear(year) && dayofyear >= 59) {
+                        dayofyear++
+                    }
+                    intent.putExtra("dayOfYear", dayofyear)
+                    startActivity(intent)
+                } else {
+                    MainActivity.toastView(it, getString(R.string.error))
                 }
-                intent.putExtra("dayOfYear", dayofyear)
-                startActivity(intent)
             }
         }
         return super.onOptionsItemSelected(item)

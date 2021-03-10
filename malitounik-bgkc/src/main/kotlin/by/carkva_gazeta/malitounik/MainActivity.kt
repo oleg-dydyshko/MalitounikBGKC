@@ -1023,6 +1023,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                                 if (intent.extras?.containsKey("site") == true) intentBib.putExtra("site", true)
                                 startActivity(intentBib)
                             } else {
+                                moduleName = "biblijateka"
                                 downloadDynamicModule(this)
                             }
                         } else {
@@ -1260,6 +1261,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         var onStart = true
         var brightness = 15
         var dialogVisable = false
+        var moduleName = "biblijateka"
 
         @Suppress("DEPRECATION")
         fun getOrientation(context: Activity): Int {
@@ -1317,7 +1319,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }
         }
 
-        fun downloadDynamicModule(context: Activity, moduleName: String = "biblijateka") {
+        fun downloadDynamicModule(context: Activity) {
             val progressBarModule = context.findViewById<ProgressBar>(R.id.progressBarModule)
             val layoutDialod = context.findViewById<LinearLayout>(R.id.linear)
             val layoutDialod2 = context.findViewById<LinearLayout>(R.id.linear2)
@@ -1662,7 +1664,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
 
         @Suppress("DEPRECATION")
-        fun toastView(context: Context, message: String) {
+        fun toastView(context: Context, message: String, ToastLength: Int = Toast.LENGTH_SHORT) {
             val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
             val density = context.resources.displayMetrics.density
@@ -1677,7 +1679,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             layout.addView(toast)
             val mes = Toast(context)
-            mes.duration = Toast.LENGTH_SHORT
+            mes.duration = ToastLength
             mes.view = layout
             mes.show()
         }

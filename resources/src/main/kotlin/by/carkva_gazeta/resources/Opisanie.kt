@@ -235,7 +235,6 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         loadIconsJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
             startTimer()
-            delay(20000)
             var builder = ""
             val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
             val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")

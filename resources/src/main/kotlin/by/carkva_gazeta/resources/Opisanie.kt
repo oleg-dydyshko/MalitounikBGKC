@@ -240,7 +240,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
             if (!MainActivity.isNetworkAvailable(this@Opisanie)) {
                 if (svity) {
-                    if (fileOpisanie.exists()) builder = fileOpisanieSviat.readText()
+                    if (fileOpisanieSviat.exists()) builder = fileOpisanieSviat.readText()
                 } else {
                     if (fileOpisanie.exists()) builder = fileOpisanie.readText()
                 }
@@ -275,7 +275,8 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                             }
                         }
                     }
-                    builder = fileOpisanie.readText()
+                    builder = if (svity) fileOpisanieSviat.readText()
+                    else fileOpisanie.readText()
                 }
             }
             if (svity) loadOpisanieSviat()

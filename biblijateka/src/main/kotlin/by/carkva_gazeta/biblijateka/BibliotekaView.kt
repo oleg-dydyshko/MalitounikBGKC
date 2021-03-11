@@ -189,7 +189,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var timer = Timer()
     private var timerTask: TimerTask? = null
 
-    private fun startTimer() {
+    private fun startTimer(rub: Int) {
         timer = Timer()
         timerCount = 0
         timerTask = object : TimerTask() {
@@ -198,6 +198,19 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     sqlJob?.cancel()
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {
+                        val gson = Gson()
+                        val json: String = k.getString("Biblioteka", "") ?: ""
+                        arrayList.clear()
+                        val type: Type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
+                        arrayList.addAll(gson.fromJson(json, type))
+                        val temp: ArrayList<ArrayList<String>> = ArrayList()
+                        for (i in 0 until arrayList.size) {
+                            val rtemp2: Int = arrayList[i][4].toInt()
+                            if (rtemp2 != rub) temp.add(arrayList[i])
+                        }
+                        arrayList.removeAll(temp)
+                        adapter.notifyDataSetChanged()
+                        bindingcontent.progressBar2.visibility = View.GONE
                         MainActivity.toastView(this@BibliotekaView, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
                     }
                 }
@@ -1686,7 +1699,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     private fun getSql(rub: Int) {
-        startTimer()
+        startTimer(rub)
         runSql = true
         arrayList.clear()
         adapter.notifyDataSetChanged()

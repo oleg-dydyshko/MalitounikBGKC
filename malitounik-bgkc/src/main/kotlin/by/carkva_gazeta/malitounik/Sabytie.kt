@@ -400,9 +400,15 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
         MainActivity.padzeia.sort()
+        val c2 = Calendar.getInstance()
+        nol1 = ""
+        nol2 = ""
+        if (c2[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
+        if (c2[Calendar.MONTH] < 9) nol2 = "0"
+        val daInit = nol1 + c2[Calendar.DAY_OF_MONTH] + "." + nol2 + (c2[Calendar.MONTH] + 1) + "." + c2[Calendar.YEAR]
         var initPosition = -1
         for (i in 0 until MainActivity.padzeia.size) {
-            if (initPosition == -1 && da == MainActivity.padzeia[i].dat) {
+            if (initPosition == -1 && daInit == MainActivity.padzeia[i].dat) {
                 initPosition = i
             }
             sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))

@@ -36,6 +36,7 @@ class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     private lateinit var binding: MyNatatkiBinding
     private var editDrawer: Drawable? = null
     private lateinit var k: SharedPreferences
+    private var editSettings = false
 
     override fun onPause() {
         super.onPause()
@@ -43,7 +44,11 @@ class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     }
 
     override fun onBackPressed() {
-        onSupportNavigateUp()
+        if (editSettings) {
+            onSupportNavigateUp()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +70,7 @@ class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             filename = savedInstanceState.getString("filename") ?: ""
             redak = savedInstanceState.getInt("redak", 2)
             edit = savedInstanceState.getBoolean("edit", true)
+            editSettings = savedInstanceState.getBoolean("editSettings", false)
         } else {
             filename = intent.getStringExtra("filename") ?: ""
             redak = intent.getIntExtra("redak", 2)
@@ -216,6 +222,7 @@ class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         outState.putString("filename", filename)
         outState.putInt("redak", redak)
         outState.putBoolean("edit", edit)
+        outState.putBoolean("editSettings", editSettings)
     }
 
     override fun onResume() {
@@ -251,8 +258,13 @@ class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id: Int = item.itemId
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             item.isChecked = !item.isChecked
+            editSettings = true
             val prefEditor = k.edit()
             if (item.isChecked) {
                 prefEditor.putBoolean("dzen_noch", true)

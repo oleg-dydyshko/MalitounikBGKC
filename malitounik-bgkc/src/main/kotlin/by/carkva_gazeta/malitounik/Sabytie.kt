@@ -152,7 +152,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
     }
 
-    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
@@ -401,9 +400,14 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
         MainActivity.padzeia.sort()
+        var initPosition = -1
         for (i in 0 until MainActivity.padzeia.size) {
+            if (initPosition == -1 && da == MainActivity.padzeia[i].dat) {
+                initPosition = i
+            }
             sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
         }
+        if (initPosition == -1) initPosition = 0
         adapter = SabytieAdapter(sabytie2, R.id.image, false)
         binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
         binding.dragListView.setLayoutManager(LinearLayoutManager(this))
@@ -411,6 +415,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         binding.dragListView.setCanDragHorizontally(false)
         binding.dragListView.setCanDragVertically(true)
         binding.dragListView.setCanDragVertically(false)
+        binding.dragListView.recyclerView.scrollToPosition(initPosition)
         binding.dragListView.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
             override fun onItemSwipeStarted(item: ListSwipeItem) {
             }

@@ -1507,6 +1507,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         prefEditor.apply()
         stopAutoScroll(false)
+        stopTimer()
         autoScrollJob?.cancel()
         autoStartScrollJob?.cancel()
         procentJob?.cancel()

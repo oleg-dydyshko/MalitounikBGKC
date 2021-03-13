@@ -92,6 +92,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
 
     override fun onPause() {
         super.onPause()
+        stopTimer()
         resetTollbarJob?.cancel()
         loadIconsJob?.cancel()
     }

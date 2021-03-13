@@ -76,14 +76,6 @@ class Sviatyia : AppCompatActivity() {
             override fun onPageScrollStateChanged(state: Int) {}
         })
         requestedOrientation = orientation
-        //men = VybranoeBibleList.checkVybranoe(this, kniga, glava)
-        /*if (savedInstanceState != null) {
-            dialog = savedInstanceState.getBoolean("dialog")
-            paralel = savedInstanceState.getBoolean("paralel")
-            cytanneSours = savedInstanceState.getString("cytanneSours") ?: ""
-            cytanneParalelnye = savedInstanceState.getString("cytanneParalelnye") ?: ""
-            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-        }*/
         caliandar.set(Calendar.YEAR, 2020)
         dayOfYear = intent.extras?.getInt("dayOfYear", caliandar[Calendar.DAY_OF_YEAR] - 1) ?: caliandar[Calendar.DAY_OF_YEAR] - 1
         binding.pager.currentItem = dayOfYear
@@ -125,20 +117,11 @@ class Sviatyia : AppCompatActivity() {
         binding.titleToolbar.isSingleLine = true
     }
 
-    /*override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-    }*/
-
     override fun onBackPressed() {
         val fragment = adapterViewPager.getFragment(binding.pager.currentItem) as BackPressedFragment
         if (fragment.onBackPressedFragment())
             super.onBackPressed()
     }
-
-    /*override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
-        return true
-    }*/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId

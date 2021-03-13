@@ -39,6 +39,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
     private var resetTollbarJob: Job? = null
     private var adminClickTime: Long = 0
     private var adminItemCount = 0
+    private var edit = false
 
     companion object {
         private const val UPDATE_ALL_WIDGETS = "update_all_widgets"
@@ -1079,12 +1080,20 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
     }
 
     override fun onBackPressed() {
-        onSupportNavigateUp()
+        if (edit)
+            onSupportNavigateUp()
+        else
+            super.onBackPressed()
     }
 
     private fun formatFigureTwoPlaces(value: Float): String {
         val myFormatter = DecimalFormat("##0.00")
         return myFormatter.format(value.toDouble())
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("edit", edit)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -1110,6 +1119,9 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         binding.guk.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (guk == 0) binding.guk.isChecked = false
         if (k.getInt("notification", 2) == 0) binding.spinnerTime.visibility = View.GONE
+        if (savedInstanceState != null) {
+            edit = savedInstanceState.getBoolean("edit", false)
+        }
         val dataTimes = ArrayList<DataTime>()
         for (i in 6..17) {
             dataTimes.add(DataTime(getString(R.string.pavedamic, i), i))
@@ -1253,6 +1265,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         binding.prav.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.secret.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.prav.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            edit = true
             if (isChecked) {
                 prefEditor.putInt("pravas", 1)
             } else {
@@ -1263,6 +1276,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         if (dzenNoch) binding.pkc.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.pkc.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.pkc.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            edit = true
             if (isChecked) {
                 prefEditor.putInt("pkc", 1)
             } else {
@@ -1273,6 +1287,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         if (dzenNoch) binding.dzair.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.dzair.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.dzair.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            edit = true
             if (isChecked) {
                 prefEditor.putInt("gosud", 1)
             } else {
@@ -1283,6 +1298,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         if (dzenNoch) binding.praf.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.praf.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.praf.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            edit = true
             if (isChecked) {
                 prefEditor.putInt("pafesii", 1)
             } else {
@@ -1525,6 +1541,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             prefEditor.apply()
         }
         binding.sinoidal.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            edit = true
             if (isChecked) {
                 prefEditor.putInt("sinoidal", 1)
             } else {
@@ -1533,6 +1550,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             prefEditor.apply()
         }
         binding.maranata.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            edit = true
             if (isChecked) {
                 prefEditor.putInt("maranata", 1)
                 if (dzenNoch) {
@@ -1554,6 +1572,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             prefEditor.apply()
         }
         binding.checkBox5.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            edit = true
             prefEditor.putBoolean("dzen_noch", isChecked)
             prefEditor.apply()
             recreate()
@@ -1568,6 +1587,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             prefEditor.apply()
         }
         binding.checkBox7.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            edit = true
             prefEditor.putBoolean("scrinOn", isChecked)
             if (isChecked) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

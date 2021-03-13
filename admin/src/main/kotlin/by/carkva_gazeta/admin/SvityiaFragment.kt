@@ -68,6 +68,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        stopTimer()
         urlJob?.cancel()
         binding.apisanne.onFocusChangeListener = null
         _binding = null

@@ -174,6 +174,7 @@ class Naviny : AppCompatActivity() {
 
     override fun onPause() {
         binding.viewWeb.onPause()
+        stopTimer()
         super.onPause()
     }
 

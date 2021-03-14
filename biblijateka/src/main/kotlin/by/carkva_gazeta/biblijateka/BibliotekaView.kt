@@ -212,6 +212,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         adapter.notifyDataSetChanged()
                         bindingcontent.progressBar2.visibility = View.GONE
                         MainActivity.toastView(this@BibliotekaView, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
+                        runSql = false
                     }
                 }
                 timerCount++

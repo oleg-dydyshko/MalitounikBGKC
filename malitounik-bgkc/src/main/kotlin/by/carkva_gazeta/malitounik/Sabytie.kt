@@ -2388,6 +2388,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
             }
             adapter.notifyDataSetChanged()
+            binding.dragListView.recyclerView.scrollToPosition(0)
         }
     }
 

@@ -1366,28 +1366,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                         }
                         SplitInstallSessionStatus.INSTALLED -> {
                             layoutDialod.visibility = View.GONE
+                            SplitInstallHelper.updateAppInfo(context)
                             if (moduleName == "biblijateka") {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    SplitInstallHelper.updateAppInfo(context)
-                                    Handler(Looper.getMainLooper()).post {
-                                        val intent = Intent()
-                                        intent.setClassName(context, BIBLIOTEKAVIEW)
-                                        intent.data = context.intent.data
-                                        if (intent.extras?.containsKey("filePath") == true) {
-                                            intent.putExtra("filePath", intent.extras?.getString("filePath"))
-                                        }
-                                        if (intent.extras?.containsKey("site") == true) intent.putExtra("site", true)
-                                        context.startActivity(intent)
-                                    }
-                                } else {
-                                    val newContext = context.createPackageContext(context.packageName, 0)
+                                CoroutineScope(Dispatchers.Main).launch {
                                     val intent = Intent()
-                                    intent.setClassName(newContext, BIBLIOTEKAVIEW)
+                                    intent.setClassName(context, BIBLIOTEKAVIEW)
                                     intent.data = context.intent.data
                                     if (intent.extras?.containsKey("filePath") == true) {
                                         intent.putExtra("filePath", intent.extras?.getString("filePath"))
                                     }
                                     if (intent.extras?.containsKey("site") == true) intent.putExtra("site", true)
+                                    context.startActivity(intent)
+                                }
+                            }
+                            if (moduleName == "admin") {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    val intent = Intent()
+                                    intent.setClassName(context, ADMINMAIN)
                                     context.startActivity(intent)
                                 }
                             }

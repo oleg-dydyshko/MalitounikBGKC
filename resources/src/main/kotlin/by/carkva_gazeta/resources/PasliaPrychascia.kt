@@ -9,8 +9,6 @@ import android.content.pm.ActivityInfo
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
@@ -29,16 +27,14 @@ import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.databinding.AkafistActivityPasliaPrichBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import kotlinx.coroutines.*
-import java.lang.Runnable
 import java.util.*
 import kotlin.collections.ArrayList
 
 class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSizeListener {
-    private val mHideHandler = Handler(Looper.getMainLooper())
 
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")
-    private val mHidePart2Runnable = Runnable {
+    private fun mHidePart2Runnable() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
             val controller = window.insetsController
@@ -48,7 +44,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
-    private val mShowPart2Runnable = Runnable {
+    private fun mShowPart2Runnable() {
         val actionBar = supportActionBar
         actionBar?.show()
     }
@@ -61,7 +57,6 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     private var pasliaPrychascia = 0
     private var n = 0
     private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
-    private val uiAnimationDelay: Long = 300
     private val orientation: Int
         get() = MainActivity.getOrientation(this)
     private lateinit var binding: AkafistActivityPasliaPrichBinding
@@ -395,8 +390,9 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     private fun hide() {
         val actionBar = supportActionBar
         actionBar?.hide()
-        mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelay)
+        CoroutineScope(Dispatchers.Main).launch {
+            mHidePart2Runnable()
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -408,8 +404,9 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
-        mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
+        CoroutineScope(Dispatchers.Main).launch {
+            mShowPart2Runnable()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

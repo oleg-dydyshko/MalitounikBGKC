@@ -8,8 +8,6 @@ import android.content.pm.ActivityInfo
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
@@ -32,14 +30,12 @@ import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
-import java.lang.Runnable
 
 class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NovyZapavietSemuxaFragment.ClicParalelListiner, NovyZapavietSemuxaFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
-    private val mHideHandler = Handler(Looper.getMainLooper())
 
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")
-    private val mHidePart2Runnable = Runnable {
+    private fun mHidePart2Runnable() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
             val controller = window.insetsController
@@ -49,7 +45,7 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
-    private val mShowPart2Runnable = Runnable {
+    private fun mShowPart2Runnable() {
         val actionBar = supportActionBar
         actionBar?.show()
     }
@@ -68,7 +64,6 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
     private var checkSetDzenNoch = false
     private var title = ""
     private var men = true
-    private val uiAnimationDelay: Long = 300
     private val orientation: Int
         get() = MainActivity.getOrientation(this)
     private lateinit var binding: ActivityBibleBinding
@@ -548,8 +543,9 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
     private fun hide() {
         val actionBar = supportActionBar
         actionBar?.hide()
-        mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelay)
+        CoroutineScope(Dispatchers.Main).launch {
+            mHidePart2Runnable()
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -561,8 +557,9 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
-        mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
+        CoroutineScope(Dispatchers.Main).launch {
+            mShowPart2Runnable()
+        }
     }
 
     override fun setOnClic(cytanneParalelnye: String, cytanneSours: String) {

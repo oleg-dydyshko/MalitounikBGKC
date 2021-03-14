@@ -7,8 +7,6 @@ import android.content.pm.ActivityInfo
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
@@ -31,14 +29,12 @@ import by.carkva_gazeta.resources.databinding.ActivityBibleBinding
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 import java.io.File
-import java.lang.Runnable
 
 class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NadsanContentPage.ListPosition {
-    private val mHideHandler = Handler(Looper.getMainLooper())
 
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")
-    private val mHidePart2Runnable = Runnable {
+    private fun mHidePart2Runnable() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
             val controller = window.insetsController
@@ -48,7 +44,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
-    private val mShowPart2Runnable = Runnable {
+    private fun mShowPart2Runnable() {
         val actionBar = supportActionBar
         actionBar?.show()
     }
@@ -60,7 +56,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     private var dzenNoch = false
     private var dialog = true
     private var checkSetDzenNoch = false
-    private val uiAnimationDelay: Long = 300
     private var men = true
     private val orientation: Int
         get() = MainActivity.getOrientation(this)
@@ -389,8 +384,9 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     private fun hide() {
         val actionBar = supportActionBar
         actionBar?.hide()
-        mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelay)
+        CoroutineScope(Dispatchers.Main).launch {
+            mHidePart2Runnable()
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -402,8 +398,9 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
-        mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelay)
+        CoroutineScope(Dispatchers.Main).launch {
+            mShowPart2Runnable()
+        }
     }
 
     private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {

@@ -1211,7 +1211,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             binding.line4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
         }
         binding.textView16.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - adminClickTime < 1000) {
+            if (SystemClock.elapsedRealtime() - adminClickTime < 2000) {
                 adminItemCount++
             } else {
                 adminItemCount = 1

@@ -9,8 +9,6 @@ import android.content.SharedPreferences.Editor
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
@@ -33,18 +31,14 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.lang.Runnable
 import java.util.*
 
 class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener,
     InteractiveScrollView.OnScrollChangedCallback, MyWebViewClient.OnLinkListenner {
 
-    private val ulAnimationDelay = 300
-    private val mHideHandler: Handler = Handler(Looper.getMainLooper())
-
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")
-    private val mHidePart2Runnable = Runnable {
+    private fun mHidePart2Runnable() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
             val controller = window.insetsController
@@ -54,7 +48,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
-    private val mShowPart2Runnable = Runnable {
+    private fun mShowPart2Runnable() {
         supportActionBar?.show()
     }
 
@@ -1050,8 +1044,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     private fun hide() {
         supportActionBar?.hide()
-        mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, ulAnimationDelay.toLong())
+        CoroutineScope(Dispatchers.Main).launch {
+            mHidePart2Runnable()
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -1063,8 +1058,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
-        mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, ulAnimationDelay.toLong())
+        CoroutineScope(Dispatchers.Main).launch {
+            mShowPart2Runnable()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

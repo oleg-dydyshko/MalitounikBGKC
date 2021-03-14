@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.admin.databinding.AdminMainBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
+import com.google.android.play.core.splitcompat.SplitCompat
 import kotlinx.coroutines.*
 
 class AdminMain : AppCompatActivity() {
@@ -22,6 +23,7 @@ class AdminMain : AppCompatActivity() {
     private var resetTollbarJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        SplitCompat.install(this)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100

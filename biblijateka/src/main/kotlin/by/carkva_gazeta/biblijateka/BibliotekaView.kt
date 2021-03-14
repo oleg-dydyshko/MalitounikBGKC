@@ -55,7 +55,6 @@ import com.shockwave.pdfium.PdfDocument
 import kotlinx.coroutines.*
 import org.xml.sax.SAXException
 import java.io.*
-import java.lang.Runnable
 import java.lang.reflect.Type
 import java.net.HttpURLConnection
 import java.net.URL
@@ -67,12 +66,9 @@ import kotlin.collections.ArrayList
 
 class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
 
-    private val uiAnimationDelaY: Long = 300
-    private val mHideHandler: Handler = Handler(Looper.getMainLooper())
-
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")
-    private val mHidePart2Runnable = Runnable {
+    private fun mHidePart2Runnable() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
             val controller = window.insetsController
@@ -82,7 +78,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
-    private val mShowPart2Runnable = Runnable {
+    private fun mShowPart2Runnable() {
         supportActionBar?.show()
     }
 
@@ -1785,8 +1781,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     private fun hide() {
         supportActionBar?.hide()
-        mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, uiAnimationDelaY)
+        CoroutineScope(Dispatchers.Main).launch {
+            mHidePart2Runnable()
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -1798,8 +1795,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
-        mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, uiAnimationDelaY)
+        CoroutineScope(Dispatchers.Main).launch {
+            mShowPart2Runnable()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

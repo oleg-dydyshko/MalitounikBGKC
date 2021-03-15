@@ -1427,6 +1427,17 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             binding.praf.isChecked = false
             recreate()
         }
+        binding.cheshe.setOnLongClickListener {
+            val dataDir = applicationInfo.dataDir
+            var dir1 = File("$dataDir/app_webview")
+            if (dir1.exists())
+                dir1.deleteRecursively()
+            dir1 = File("$dataDir/cache")
+            if (dir1.exists())
+                dir1.deleteRecursively()
+            MainActivity.toastView(this, getString(R.string.remive_cashe))
+            return@setOnLongClickListener true
+        }
         binding.notificationGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             when (checkedId) {
                 R.id.notificationOnly -> {

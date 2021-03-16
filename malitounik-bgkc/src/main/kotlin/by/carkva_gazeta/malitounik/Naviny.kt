@@ -85,7 +85,7 @@ class Naviny : AppCompatActivity() {
             }
             binding.toolbarprogress.setBackgroundResource(R.drawable.progress_bar_black)
         }
-        val naviny = kq.getInt("naviny", 0)
+        val naviny = intent.extras?.getInt("naviny", 0) ?: 0
         binding.viewWeb.apply {
             settings.apply {
                 javaScriptEnabled = true

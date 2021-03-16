@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -29,10 +28,6 @@ class MenuGlavnoe : ListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val kq = activity?.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val prefEditor = kq?.edit()
-        prefEditor?.putInt("naviny", position)
-        prefEditor?.apply()
         if (position == 7) {
             if (MainActivity.checkmoduleResources(activity)) {
                 if (MainActivity.checkmodulesBiblijateka(activity)) {
@@ -53,6 +48,7 @@ class MenuGlavnoe : ListFragment() {
             }
         } else {
             val intent = Intent(activity, Naviny::class.java)
+            intent.putExtra("naviny", position)
             startActivity(intent)
         }
     }

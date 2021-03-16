@@ -1,14 +1,20 @@
 package by.carkva_gazeta.malitounik
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.SystemClock
+import android.text.Spannable
 import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.TypedValue
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.toSpannable
 import by.carkva_gazeta.malitounik.databinding.OnasBinding
 import kotlinx.coroutines.*
 import java.io.BufferedReader
@@ -18,6 +24,7 @@ class Onas : AppCompatActivity() {
     private lateinit var binding: OnasBinding
     private var resetTollbarJob: Job? = null
     private lateinit var k: SharedPreferences
+    private var mLastClickTime: Long = 0
 
     override fun onPause() {
         super.onPause()
@@ -74,7 +81,24 @@ class Onas : AppCompatActivity() {
                 builder.append(line)
             }
         }
-        binding.onas.text = MainActivity.fromHtml(builder.toString())
+        val text = MainActivity.fromHtml(builder.toString())
+        val t1 = text.indexOf("carkva-gazeta.by")
+        val spannable = text.toSpannable()
+        spannable.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+                val prefEditors = k.edit()
+                prefEditors.putInt("id", R.id.label2)
+                prefEditors.apply()
+                val intent = Intent(this@Onas, Naviny::class.java)
+                intent.putExtra("naviny", 0)
+                startActivity(intent)
+            }
+        }, t1, t1 + 16, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        binding.onas.text = spannable
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

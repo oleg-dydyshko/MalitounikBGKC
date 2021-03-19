@@ -14,11 +14,6 @@
         android:title="@string/sort_alf"
         app:showAsAction="never" />
     <item
-        android:id="@+id/search_nadsan"
-        android:orderInCategory="100"
-        android:title="@string/poshuk_nadsan"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_glava"
         android:icon="@drawable/calendar"
         android:orderInCategory="100"

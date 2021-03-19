@@ -44,32 +44,19 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:scrollbars="none"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-            android:id="@+id/TextView"
+            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:textIsSelectable="true" />
     </by.carkva_gazeta.malitounik.InteractiveScrollView>
-
-    <by.carkva_gazeta.malitounik.WebViewCustom
-        android:id="@+id/WebView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:scrollbars="none"
-        app:layout_constraintBottom_toTopOf="@+id/textSearch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
         android:id="@+id/progress"
@@ -88,16 +75,17 @@
 
     <ImageView
         android:id="@+id/imageView6"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         android:contentDescription="@string/empty"
+        android:padding="4dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView5"
         app:layout_constraintTop_toTopOf="@+id/textSearch"
-        app:srcCompat="@drawable/up" />
+        app:srcCompat="@drawable/find_up" />
 
     <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
         android:id="@+id/textSearch"
@@ -105,62 +93,36 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:hint="@string/seashmin"
         android:imeOptions="actionDone|flagNoEnterAction"
         android:inputType="text"
         android:singleLine="true"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textCount"
+        app:layout_constraintEnd_toStartOf="@+id/imageView6"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         android:contentDescription="@string/empty"
+        android:padding="4dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textSearch"
-        app:srcCompat="@drawable/niz" />
-
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-        android:id="@+id/textCount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
-        android:text="@string/niama"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="@+id/textSearch" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+        app:srcCompat="@drawable/find_niz" />
 
     <include
         android:id="@+id/progressView"
         layout="@layout/progress"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+        android:layout_height="0dp" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
         android:id="@+id/action_minus"
@@ -177,7 +139,7 @@
         android:textColor="@color/colorWhite"
         android:textSize="30sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/WebView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/action_plus" />
 
     <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
@@ -195,7 +157,7 @@
         android:textColor="@color/colorWhite"
         android:textSize="30sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/WebView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package by.carkva_gazeta.resources
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -11,16 +12,19 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.*
+import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.BackgroundColorSpan
+import android.text.style.ClickableSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
-import android.webkit.WebSettings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
+import androidx.core.text.toSpannable
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.databinding.BogasluzbovyaBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
@@ -33,8 +37,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.*
 
-class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener,
-    InteractiveScrollView.OnScrollChangedCallback, MyWebViewClient.OnLinkListenner {
+class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnScrollChangedCallback {
 
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")
@@ -48,6 +51,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
+
     private fun mShowPart2Runnable() {
         supportActionBar?.show()
     }
@@ -75,6 +79,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
     private var diffScroll = -1
+    private var aliert8 = ""
+    private var aliert9 = ""
+    private var findPosition = 0
 
     companion object {
         private val resursMap = ArrayMap<String, Int>()
@@ -279,35 +286,69 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
     }
 
+    private fun findRemoveSpan() {
+        val text = binding.textView.text as SpannableString
+        val spans = text.getSpans(0, text.length, BackgroundColorSpan::class.java)
+        spans.forEach {
+            text.removeSpan(it)
+        }
+    }
+
+    private fun findNext(next: Boolean = true, previous: Boolean = false) {
+        val text = binding.textView.text as SpannableString
+        val search = binding.textSearch.text.toString()
+        val searchLig = search.length
+        val startSearch: Int
+        if (previous) {
+            startSearch = binding.textView.layout.getLineStart(binding.textView.layout.getLineForVertical(positionY + binding.scrollView2.height))
+            if (startSearch < findPosition) findPosition = startSearch
+        } else {
+            if (!next) {
+                startSearch = binding.textView.layout.getLineStart(binding.textView.layout.getLineForVertical(0))
+                findPosition = 0
+            } else {
+                startSearch = binding.textView.layout.getLineStart(binding.textView.layout.getLineForVertical(positionY))
+            }
+            if (startSearch > findPosition) findPosition = startSearch
+        }
+        if (searchLig >= 3) {
+            var position = if (previous) text.lastIndexOf(search, findPosition, true)
+            else text.indexOf(search, findPosition, true)
+            if (next && position == findPosition) {
+                position = if (previous) text.lastIndexOf(search, findPosition - searchLig, true)
+                else text.indexOf(search, findPosition + searchLig, true)
+            }
+            if (position == -1) {
+                position = if (previous) text.lastIndexOf(search, text.length, true)
+                else text.indexOf(search, 0, true)
+                when {
+                    position == -1 -> MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.search_no_found))
+                    previous -> MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.search_to_buttom))
+                    else -> MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.search_to_top))
+                }
+            }
+            if (position != -1) {
+                findPosition = position
+                findRemoveSpan()
+                text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), position, position + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                val line = binding.textView.layout.getLineForOffset(position)
+                val y = binding.textView.layout.getLineTop(line)
+                val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                anim.setDuration(1000).start()
+            }
+        }
+    }
+
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
-        if (binding.scrollView2.visibility == View.VISIBLE) {
-            binding.TextView.textSize = fontBiblia
-        } else {
-            val webSettings = binding.WebView.settings
-            webSettings.cacheMode = WebSettings.LOAD_NO_CACHE
-            webSettings.blockNetworkImage = true
-            webSettings.loadsImagesAutomatically = true
-            webSettings.setGeolocationEnabled(false)
-            webSettings.setNeedInitialFocus(false)
-            webSettings.defaultFontSize = fontBiblia.toInt()
-        }
+        binding.textView.textSize = fontBiblia
     }
 
     override fun onScroll(t: Int) {
         positionY = t
     }
 
-    override fun onBottom() {
-        stopAutoScroll()
-        invalidateOptionsMenu()
-    }
-
-    override fun onScrollDiff(diff: Int) {
-        diffScroll = diff
-    }
-
-    @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (!MainActivity.checkBrightness) {
@@ -327,10 +368,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         loadData(savedInstanceState)
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
-        binding.WebView.setOnTouchListener(this)
-        val client = MyWebViewClient()
-        client.setOnLinkListenner(this)
-        binding.WebView.webViewClient = client
         binding.scrollView2.setOnScrollChangedCallback(this)
         binding.constraint.setOnTouchListener(this)
         if (savedInstanceState != null) {
@@ -339,13 +376,12 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             MainActivity.dialogVisable = false
             if (savedInstanceState.getBoolean("seach")) {
                 binding.textSearch.visibility = View.VISIBLE
-                binding.textCount.visibility = View.VISIBLE
                 binding.imageView6.visibility = View.VISIBLE
                 binding.imageView5.visibility = View.VISIBLE
             }
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        binding.TextView.textSize = fontBiblia
+        binding.textView.textSize = fontBiblia
         if (dzenNoch) {
             binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
@@ -354,19 +390,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             bindingprogress.actionMinusBrighess.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
             bindingprogress.actionPlusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.plus_v_kruge_black)
             bindingprogress.actionMinusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
-            binding.WebView.setBackgroundColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
             binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
         men = checkVybranoe(this, resurs)
-        val webSettings = binding.WebView.settings
-        webSettings.standardFontFamily = "sans-serif-condensed"
-        webSettings.defaultFontSize = fontBiblia.toInt()
-        webSettings.javaScriptEnabled = true
-        webSettings.domStorageEnabled = true
         positionY = k.getInt(resurs + "Scroll", 0)
-        binding.WebView.setOnScrollChangedCallback(this)
-        binding.WebView.setOnBottomListener(this)
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -454,6 +482,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 prefEditors.apply()
             }
         }
+        binding.textView.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun setTollbarTheme() {
@@ -491,23 +520,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         binding.titleToolbar.isSingleLine = true
     }
 
-    private fun scrollWebView(): String {
-        val script = StringBuilder()
-        script.append("<script language=\"javascript\" type=\"text/javascript\">")
-        script.append("\n")
-        script.append("    function toY(){")
-        script.append("\n")
-        script.append("        window.scrollTo(0, ").append((positionY / resources.displayMetrics.density).toInt()).append(")")
-        script.append("\n")
-        script.append("    }")
-        script.append("\n")
-        script.append("</script>")
-        script.append("\n")
-        return script.toString()
-    }
-
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
-        binding.progressBar.visibility = View.VISIBLE
         val res = withContext(Dispatchers.IO) {
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: R.raw.bogashlugbovya1
@@ -522,11 +535,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             reader.forEachLine {
                 var line = it
                 if (dzenNoch) line = line.replace("#d00505", "#f44336")
-                line = if (dzenNoch) line.replace("<html><head>",
-                    "<html><head><style type=\"text/css\">::selection {background: #eb9b9a} body{-webkit-tap-highlight-color: rgba(244,67,54,0.2); color: #fff; background-color: #303030; margin: 0; padding: 0}</style>")
-                else line.replace("<html><head>",
-                    "<html><head><style type=\"text/css\">::selection {background: #eb9b9a} body{-webkit-tap-highlight-color: rgba(208,5,5,0.1); margin: 0; padding: 0}</style>")
-                line = line.replace("</style>", "</style>" + scrollWebView() + "</head><body onload='toY()'>")
                 if (resurs.contains("bogashlugbovya")) {
                     if (line.contains("<KANDAK></KANDAK>")) {
                         line = line.replace("<KANDAK></KANDAK>", "")
@@ -589,14 +597,16 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                                 val s1 = sv.split(":")
                                 val s2 = s1[1].split(";")
                                 sv = s1[0] + ":" + s2[0]
-                                builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=8\">").append(color).append(sv).append("</font></a>").append("<br><br>\n")
+                                aliert8 = sv
+                                builder.append(color).append(sv).append("</font>").append("<br><br>\n")
                             } else builder.append(line)
                             var svDop = zmenyiaChastki.sviatyiaDop()
                             if (svDop != "") {
                                 val s1 = svDop.split(":")
                                 val s2 = s1[1].split(";")
                                 svDop = s1[0] + ":" + s2[0]
-                                builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=8\">").append(color).append(svDop).append("</font></a>").append("<br><br>\n")
+                                aliert8 = svDop
+                                builder.append(color).append(svDop).append("</font>").append("<br><br>\n")
                             } else builder.append(line)
                             try {
                                 builder.append(zmenyiaChastki.zmenya(1))
@@ -611,14 +621,16 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                                 val s1 = sv.split(":")
                                 val s2 = s1[1].split(";")
                                 sv = s1[0] + ":" + s2[1]
-                                builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=9\">").append(color).append(sv).append("</font></a>").append("<br><br>\n")
+                                aliert9 = sv
+                                builder.append(color).append(sv).append("</font>").append("<br><br>\n")
                             } else builder.append(line)
                             var svDop = zmenyiaChastki.sviatyiaDop()
                             if (svDop != "") {
                                 val s1 = svDop.split(":")
                                 val s2 = s1[1].split(";")
                                 svDop = s1[0] + ":" + s2[1]
-                                builder.append("<a href=\"https://m.carkva-gazeta.by/index.php?Alert=9\">").append(color).append(svDop).append("</font></a>").append("<br><br>\n")
+                                aliert9 = svDop
+                                builder.append(color).append(svDop).append("</font>").append("<br><br>\n")
                             } else builder.append(line)
                             try {
                                 builder.append(zmenyiaChastki.zmenya(0))
@@ -634,15 +646,136 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     builder.append(line)
                 }
             }
-            builder.append("</body></html>")
             inputStream.close()
             return@withContext builder.toString()
         }
+        val text = MainActivity.fromHtml(res).toSpannable()
+        var string = aliert8
+        var strLig = string.length
+        var t1 = text.indexOf(string)
+        if (t1 != -1) {
+            text.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(8)
+                    dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                }
+            }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        string = aliert9
+        strLig = string.length
+        t1 = text.indexOf(string)
+        if (t1 != -1) {
+            text.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(9)
+                    dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                }
+            }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        string = "Пасьля чытаецца ікас 1 і кандак 1."
+        strLig = string.length
+        t1 = text.indexOf(string)
+        if (t1 != -1) {
+            text.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, 0)
+                    anim.setDuration(1500).start()
+                }
+            }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        if (resurs == "bogashlugbovya1") {
+            string = "Дзе ёсьць звычай, у нядзелю, а таксама ў суботу і на вялікія сьвяты (апрача сьвятаў Гасподніх) сьпяваюцца наступныя радкі з Пс 102:"
+            strLig = string.length
+            t1 = text.indexOf(string)
+            if (t1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(1)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            string = "У буднія дні сьпяваецца наступны антыфон (Пс 91):"
+            strLig = string.length
+            t1 = text.indexOf(string)
+            if (t1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(2)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            string = "Іншы антыфон нядзельны і сьвяточны (Пс 145):"
+            strLig = string.length
+            t1 = text.indexOf(string)
+            if (t1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(3)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            string = "Антыфон у буднія дні (Пс 92):"
+            strLig = string.length
+            t1 = text.indexOf(string)
+            if (t1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(4)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            string = "Іншы антыфон сьвяточны і нядзельны (Мц 5:3-12):"
+            strLig = string.length
+            t1 = text.indexOf(string)
+            if (t1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(5)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            string = "Малітва за памерлых"
+            strLig = string.length
+            t1 = text.indexOf(string)
+            if (t1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(6)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            string = "Малітва за пакліканых"
+            strLig = string.length
+            t1 = text.indexOf(string)
+            if (t1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(7)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            string = "Малітвы пасьля сьвятога прычасьця"
+            strLig = string.length
+            t1 = text.indexOf(string)
+            if (t1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val intent = Intent(this@Bogashlugbovya, MalitvyPasliaPrychascia::class.java)
+                        startActivity(intent)
+                        positionY = 0
+                    }
+                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
         if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("ton")) {
-            binding.scrollView2.visibility = View.GONE
             if (resurs.contains("ton")) mAutoScroll = false
-            binding.WebView.visibility = View.VISIBLE
-            binding.WebView.loadDataWithBaseURL("malitounikApp-app//carkva-gazeta.by/", res, "text/html", "utf-8", null)
             if (savedInstanceState == null) {
                 if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
                     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -650,19 +783,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }
             }
         } else {
-            binding.WebView.visibility = View.GONE
-            binding.scrollView2.visibility = View.VISIBLE
-            binding.TextView.text = MainActivity.fromHtml(res)
-            positionY = k.getInt(resurs + "Scroll", 0)
-            binding.scrollView2.post { binding.scrollView2.scrollBy(0, positionY) }
             mAutoScroll = false
         }
-        binding.WebView.setFindListener { activeMatchOrdinal, numberOfMatches, _ ->
-            if (numberOfMatches == 0) binding.textCount.setText(by.carkva_gazeta.malitounik.R.string.niama)
-            else binding.textCount.text = (activeMatchOrdinal + 1).toString().plus(" ($numberOfMatches)")
-        }
-        if (dzenNoch) binding.imageView6.setImageResource(by.carkva_gazeta.malitounik.R.drawable.up_black)
-        binding.imageView6.setOnClickListener { binding.WebView.findNext(false) }
+        binding.textView.text = text
+        positionY = k.getInt(resurs + "Scroll", 0)
+        binding.scrollView2.post { binding.scrollView2.smoothScrollBy(0, positionY) }
+        if (dzenNoch) binding.imageView6.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_up_black)
+        binding.imageView6.setOnClickListener { findNext(previous = true) }
         binding.textSearch.addTextChangedListener(object : TextWatcher {
             var editPosition = 0
             var check = 0
@@ -670,21 +797,23 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
             override fun afterTextChanged(s: Editable?) {
                 var edit = s.toString()
-                if (editch) {
-                    edit = edit.replace("и", "і")
-                    edit = edit.replace("щ", "ў")
-                    edit = edit.replace("ъ", "'")
-                    edit = edit.replace("И", "І")
-                    edit = edit.replace("Щ", "Ў")
-                    edit = edit.replace("Ъ", "'")
-                    if (check != 0) {
-                        binding.textSearch.removeTextChangedListener(this)
-                        binding.textSearch.setText(edit)
-                        binding.textSearch.setSelection(editPosition)
-                        binding.textSearch.addTextChangedListener(this)
+                edit = edit.replace("и", "і")
+                edit = edit.replace("щ", "ў")
+                edit = edit.replace("ъ", "'")
+                edit = edit.replace("И", "І")
+                edit = edit.replace("Щ", "Ў")
+                edit = edit.replace("Ъ", "'")
+                if (edit.length >= 3) {
+                    if (editch) {
+                        if (check != 0) {
+                            binding.textSearch.removeTextChangedListener(this)
+                            binding.textSearch.setText(edit)
+                            binding.textSearch.setSelection(editPosition)
+                            binding.textSearch.addTextChangedListener(this)
+                        }
                     }
+                    findNext(false)
                 }
-                binding.WebView.findAllAsync(edit)
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -696,10 +825,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 editPosition = start + count
             }
         })
-        if (dzenNoch) binding.imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.niz_back)
-        binding.imageView5.setOnClickListener { binding.WebView.findNext(true) }
+        if (dzenNoch) binding.imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_niz_back)
+        binding.imageView5.setOnClickListener { findNext() }
         invalidateOptionsMenu()
-        binding.progressBar.visibility = View.GONE
     }
 
     private fun autoStartScroll() {
@@ -770,13 +898,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 while (isActive) {
                     delay(spid.toLong())
                     if (!mActionDown && !MainActivity.dialogVisable) {
-                        binding.WebView.scrollBy(0, 2)
+                        binding.scrollView2.smoothScrollBy(0, 2)
                     }
                 }
             }
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
-            binding.WebView.scrollTo(0, 0)
+            binding.scrollView2.smoothScrollBy(0, 0)
             startAutoScroll()
         }
     }
@@ -851,7 +979,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val itemVybranoe: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec")) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = true
         }
         if (mAutoScroll) {
             autoscroll = k.getBoolean("autoscroll", false)
@@ -935,7 +1062,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_find) {
             binding.textSearch.visibility = View.VISIBLE
-            binding.textCount.visibility = View.VISIBLE
             binding.imageView6.visibility = View.VISIBLE
             binding.imageView5.visibility = View.VISIBLE
             binding.textSearch.requestFocus()
@@ -1002,12 +1128,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             show()
         } else if (binding.textSearch.visibility == View.VISIBLE) {
             binding.textSearch.visibility = View.GONE
-            binding.textCount.visibility = View.GONE
             binding.imageView6.visibility = View.GONE
             binding.imageView5.visibility = View.GONE
-            binding.WebView.findAllAsync("")
             binding.textSearch.setText("")
-            binding.textCount.setText(by.carkva_gazeta.malitounik.R.string.niama)
+            findRemoveSpan()
             val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
         } else {
@@ -1033,9 +1157,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
         if (autoscroll) {
-            binding.WebView.postDelayed({
-                startAutoScroll()
-            }, 1000)
+            startAutoScroll()
         }
         spid = k.getInt("autoscrollSpid", 60)
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -1071,7 +1193,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         else outState.putBoolean("seach", false)
     }
 
-    override fun onActivityStart() {
+    /*override fun onActivityStart() {
         val intent = Intent(this, MalitvyPasliaPrychascia::class.java)
         startActivity(intent)
         positionY = 0
@@ -1080,5 +1202,5 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     override fun onDialogStart(message: String?) {
         val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(message)
         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
-    }
+    }*/
 }

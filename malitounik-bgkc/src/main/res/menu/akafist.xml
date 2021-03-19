@@ -11,7 +11,6 @@
         android:id="@+id/action_find"
         android:orderInCategory="100"
         android:title="@string/searche_text"
-        android:visible="false"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_orientation"

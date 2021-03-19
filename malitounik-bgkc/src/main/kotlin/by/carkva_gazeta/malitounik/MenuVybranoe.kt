@@ -307,33 +307,42 @@ class MenuVybranoe : VybranoeFragment() {
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources(activity)) {
-                    when (itemList[adapterPosition].resurs) {
-                        "1" -> {
-                            VybranoeBibleList.biblia = 1
-                            startActivity(Intent(activity, VybranoeBibleList::class.java))
-                        }
-                        "2" -> {
-                            VybranoeBibleList.biblia = 2
-                            startActivity(Intent(activity, VybranoeBibleList::class.java))
-                        }
-                        "3" -> {
-                            VybranoeBibleList.biblia = 3
-                            startActivity(Intent(activity, VybranoeBibleList::class.java))
-                        }
-                        else -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("resurs", itemList[adapterPosition].resurs)
-                                intent.putExtra("title", itemList[adapterPosition].data)
-                                startActivity(intent)
-                            }
-                        }
+                if (itemList[adapterPosition].resurs.contains("pesny")) {
+                    activity?.let {
+                        val intent = Intent(it, PesnyAll::class.java)
+                        intent.putExtra("type", itemList[adapterPosition].resurs)
+                        intent.putExtra("pesny", itemList[adapterPosition].data)
+                        startActivity(intent)
                     }
                 } else {
-                    val dadatak = DialogInstallDadatak()
-                    fragmentManager?.let { dadatak.show(it, "dadatak") }
+                    if (MainActivity.checkmoduleResources(activity)) {
+                        when (itemList[adapterPosition].resurs) {
+                            "1" -> {
+                                VybranoeBibleList.biblia = 1
+                                startActivity(Intent(activity, VybranoeBibleList::class.java))
+                            }
+                            "2" -> {
+                                VybranoeBibleList.biblia = 2
+                                startActivity(Intent(activity, VybranoeBibleList::class.java))
+                            }
+                            "3" -> {
+                                VybranoeBibleList.biblia = 3
+                                startActivity(Intent(activity, VybranoeBibleList::class.java))
+                            }
+                            else -> {
+                                activity?.let {
+                                    val intent = Intent()
+                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                    intent.putExtra("resurs", itemList[adapterPosition].resurs)
+                                    intent.putExtra("title", itemList[adapterPosition].data)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+                    } else {
+                        val dadatak = DialogInstallDadatak()
+                        fragmentManager?.let { dadatak.show(it, "dadatak") }
+                    }
                 }
             }
 

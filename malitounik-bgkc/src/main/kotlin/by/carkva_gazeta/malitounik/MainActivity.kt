@@ -634,17 +634,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 onStart = false
             }
         }
-        if (id == R.id.search_nadsan) {
-            if (checkmoduleResources(this)) {
-                val intent = Intent()
-                intent.setClassName(this, SEARCHBIBLIA)
-                intent.putExtra("zavet", 3)
-                startActivity(intent)
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(supportFragmentManager, "dadatak")
-            }
-        }
         if (id == R.id.action_help) {
             val dialogHelpListView = DialogHelpListView.getInstance(1)
             dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
@@ -715,7 +704,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             menu.findItem(R.id.sabytie).isVisible = false
             menu.findItem(R.id.prazdnik).isVisible = false
             menu.findItem(R.id.search_sviatyia).isVisible = false
-            menu.findItem(R.id.search_nadsan).isVisible = false
             menu.findItem(R.id.sortdate).isVisible = false
             menu.findItem(R.id.sorttime).isVisible = false
             menu.findItem(R.id.action_font).isVisible = false
@@ -765,7 +753,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     menu.findItem(R.id.action_help).isVisible = true
                     menu.findItem(R.id.sortdate).isChecked = k.getInt("vybranoe_sort", 1) == 1
                 }
-                R.id.label13 -> menu.findItem(R.id.search_nadsan).isVisible = true
             }
             if (dzenNoch) {
                 menu.findItem(R.id.action_mun).setIcon(R.drawable.calendar_black_full)

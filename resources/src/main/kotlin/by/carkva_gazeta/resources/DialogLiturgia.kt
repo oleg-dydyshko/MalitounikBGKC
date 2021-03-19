@@ -20,7 +20,7 @@ import java.io.InputStreamReader
 import java.util.*
 
 class DialogLiturgia : DialogFragment() {
-    private var chast: String = "1"
+    private var chast = 1
     private lateinit var ab: AlertDialog.Builder
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -30,7 +30,7 @@ class DialogLiturgia : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        chast = arguments?.getString("chast") ?: "1"
+        chast = arguments?.getInt("chast") ?: 1
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -54,9 +54,8 @@ class DialogLiturgia : DialogFragment() {
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
             val r = it.resources
-            val bogashlugbovya = chast.toInt()
             var inputStream: InputStream = r.openRawResource(R.raw.bogashlugbovya1_1)
-            when (bogashlugbovya) {
+            when (chast) {
                 1 -> {
                     inputStream = r.openRawResource(R.raw.bogashlugbovya1_1)
                     textViewZaglavie.setText(by.carkva_gazeta.malitounik.R.string.ps_102)
@@ -96,7 +95,7 @@ class DialogLiturgia : DialogFragment() {
                     builder.append(zch.sviatyiaView(0))
                 }
             }
-            if (!(bogashlugbovya == 8 || bogashlugbovya == 9)) {
+            if (!(chast == 8 || chast == 9)) {
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
                 var line: String
@@ -123,10 +122,10 @@ class DialogLiturgia : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(chast: String?): DialogLiturgia {
+        fun getInstance(chast: Int): DialogLiturgia {
             val instance = DialogLiturgia()
             val args = Bundle()
-            args.putString("chast", chast)
+            args.putInt("chast", chast)
             instance.arguments = args
             return instance
         }

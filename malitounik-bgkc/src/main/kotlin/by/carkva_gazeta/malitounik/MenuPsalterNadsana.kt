@@ -50,6 +50,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                 val arrayListVybranoe: ArrayList<VybranoeBibliaData> = gson.fromJson(bibleVybranoe, type)
                 if (arrayListVybranoe.isEmpty()) binding.myBible.visibility = View.GONE
             }
+            binding.saeche.setOnClickListener(this)
             binding.myBible.setOnClickListener(this)
             binding.psalter.setOnClickListener(this)
             binding.prodolzych.setOnClickListener(this)
@@ -93,6 +94,21 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = v?.id ?: 0
+        if (id == R.id.saeche) {
+            activity?.let { activity ->
+                if (MainActivity.checkmoduleResources(activity)) {
+                    val intent = Intent()
+                    intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
+                    intent.putExtra("zavet", 3)
+                    startActivity(intent)
+                } else {
+                    fragmentManager?.let {
+                        val dadatak = DialogInstallDadatak()
+                        dadatak.show(it, "dadatak")
+                    }
+                }
+            }
+        }
         if (id == R.id.myBible) {
             VybranoeBibleList.biblia = 3
             startActivity(Intent(activity, VybranoeBibleList::class.java))

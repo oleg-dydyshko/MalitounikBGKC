@@ -322,7 +322,8 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             if (position != -1) {
                 findPosition = position
                 findRemoveSpan()
-                text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), position, position + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (dzenNoch) text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorPost2)), position, position + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                else text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorPost)), position, position + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 val line = binding.textView.layout.getLineForOffset(position)
                 CoroutineScope(Dispatchers.Main).launch {
                     val y = binding.textView.layout.getLineTop(line)
@@ -490,6 +491,8 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                         }
                     }
                     findNext(false)
+                } else {
+                    findRemoveSpan()
                 }
             }
 

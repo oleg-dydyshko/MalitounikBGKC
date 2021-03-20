@@ -330,7 +330,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (position != -1) {
                 findPosition = position
                 findRemoveSpan()
-                text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), position, position + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (dzenNoch) text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost2)), position, position + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                else text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost)), position, position + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 val line = binding.textView.layout.getLineForOffset(position)
                 val y = binding.textView.layout.getLineTop(line)
                 val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
@@ -813,6 +814,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         }
                     }
                     findNext(false)
+                } else {
+                    findRemoveSpan()
                 }
             }
 

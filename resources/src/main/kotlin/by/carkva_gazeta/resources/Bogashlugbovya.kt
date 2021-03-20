@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.text.toSpannable
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.resources.databinding.BogasluzbovyaBinding
@@ -383,7 +384,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         binding.textView.textSize = fontBiblia
+         DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
         if (dzenNoch) {
+            DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
@@ -1195,15 +1198,4 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (binding.textSearch.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)
     }
-
-    /*override fun onActivityStart() {
-        val intent = Intent(this, MalitvyPasliaPrychascia::class.java)
-        startActivity(intent)
-        positionY = 0
-    }
-
-    override fun onDialogStart(message: String?) {
-        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(message)
-        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
-    }*/
 }

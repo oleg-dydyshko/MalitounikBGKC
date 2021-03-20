@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
@@ -232,7 +233,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         setContentView(binding.rootView)
         binding.filterGrup.visibility = View.VISIBLE
         binding.buttonx2.setOnClickListener(this)
+        DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
         if (dzenNoch) {
+            DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.buttonx2.setImageResource(by.carkva_gazeta.malitounik.R.drawable.cancel)
         }
         binding.editText2.addTextChangedListener(MyTextWatcher(binding.editText2, true))

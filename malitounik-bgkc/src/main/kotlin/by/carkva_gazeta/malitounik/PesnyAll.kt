@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -23,6 +24,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import by.carkva_gazeta.malitounik.databinding.PesnyBinding
 import by.carkva_gazeta.malitounik.databinding.ProgressPesnyAllBinding
 import com.google.gson.Gson
@@ -47,10 +49,12 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
+
     private fun mShowPart2Runnable() {
         val actionBar = supportActionBar
         actionBar?.show()
     }
+
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
     private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
@@ -325,14 +329,13 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 if (dzenNoch) text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorPost2)), position, position + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 else text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorPost)), position, position + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 val line = binding.textView.layout.getLineForOffset(position)
-                CoroutineScope(Dispatchers.Main).launch {
-                    val y = binding.textView.layout.getLineTop(line)
-                    binding.scrollView2.scrollTo(0, y)
-                }
+                val y = binding.textView.layout.getLineTop(line)
+                val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                anim.setDuration(1000).start()
             }
         }
     }
-    
+
     override fun onScroll(t: Int) {
         positionY = t
     }
@@ -375,7 +378,9 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, R.color.colorPrimary))
         if (dzenNoch) {
+            DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, R.color.colorPrimary_black))
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             bindingprogress.actionPlusBrighess.setImageResource(R.drawable.plus_v_kruge_black)

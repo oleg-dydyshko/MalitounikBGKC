@@ -16,6 +16,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
 import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -37,6 +38,7 @@ import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.*
+import kotlin.collections.ArrayList
 
 class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnScrollChangedCallback {
 
@@ -83,6 +85,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var aliert8 = ""
     private var aliert9 = ""
     private var findPosition = 0
+    private val findListSpans = ArrayList<SpanStr>()
 
     companion object {
         private val resursMap = ArrayMap<String, Int>()
@@ -287,58 +290,72 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
     }
 
+    private fun findAllAsanc() {
+        CoroutineScope(Dispatchers.Main).launch {
+            findRemoveSpan()
+            findAll()
+            findNext(false)
+        }
+    }
+
+    private fun findAll(position: Int = 0) {
+        val text = binding.textView.text as SpannableString
+        val search = binding.textSearch.text.toString()
+        val searchLig = search.length
+        val strPosition = text.indexOf(search, position, true)
+        if (strPosition != -1) {
+            findListSpans.add(SpanStr(getColorSpans(text.getSpans(strPosition, strPosition + searchLig, ForegroundColorSpan::class.java)), strPosition, strPosition + searchLig))
+            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            findAll(strPosition + 1)
+        }
+    }
+
     private fun findRemoveSpan() {
         val text = binding.textView.text as SpannableString
+        if (findListSpans.isNotEmpty()) {
+            findListSpans.forEach {
+                text.setSpan(ForegroundColorSpan(it.color), it.start, it.size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            findListSpans.clear()
+        }
         val spans = text.getSpans(0, text.length, BackgroundColorSpan::class.java)
         spans.forEach {
             text.removeSpan(it)
         }
+        binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.niama)
     }
 
     private fun findNext(next: Boolean = true, previous: Boolean = false) {
         val text = binding.textView.text as SpannableString
-        val search = binding.textSearch.text.toString()
-        val searchLig = search.length
-        val startSearch: Int
-        if (previous) {
-            startSearch = binding.textView.layout.getLineStart(binding.textView.layout.getLineForVertical(positionY + binding.scrollView2.height))
-            if (startSearch < findPosition) findPosition = startSearch
-        } else {
-            if (!next) {
-                startSearch = binding.textView.layout.getLineStart(binding.textView.layout.getLineForVertical(0))
-                findPosition = 0
-            } else {
-                startSearch = binding.textView.layout.getLineStart(binding.textView.layout.getLineForVertical(positionY))
-            }
-            if (startSearch > findPosition) findPosition = startSearch
+        text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPosition].start, findListSpans[findPosition].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        if (next) {
+            if (previous) findPosition--
+            else findPosition++
         }
-        if (searchLig >= 3) {
-            var position = if (previous) text.lastIndexOf(search, findPosition, true)
-            else text.indexOf(search, findPosition, true)
-            if (next && position == findPosition) {
-                position = if (previous) text.lastIndexOf(search, findPosition - searchLig, true)
-                else text.indexOf(search, findPosition + searchLig, true)
-            }
-            if (position == -1) {
-                position = if (previous) text.lastIndexOf(search, text.length, true)
-                else text.indexOf(search, 0, true)
-                when {
-                    position == -1 -> MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.search_no_found))
-                    previous -> MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.search_to_buttom))
-                    else -> MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.search_to_top))
-                }
-            }
-            if (position != -1) {
-                findPosition = position
-                findRemoveSpan()
-                if (dzenNoch) text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost2)), position, position + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                else text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPost)), position, position + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                val line = binding.textView.layout.getLineForOffset(position)
-                val y = binding.textView.layout.getLineTop(line)
-                val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
-                anim.setDuration(1000).start()
-            }
+        if (findPosition == -1) {
+            findPosition = findListSpans.size - 1
         }
+        if (findPosition == findListSpans.size) {
+            findPosition = 0
+        }
+        if (findListSpans.isNotEmpty()) {
+            binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, findPosition + 1, findListSpans.size)
+            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta2)), findListSpans[findPosition].start, findListSpans[findPosition].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            val line = binding.textView.layout.getLineForOffset(findListSpans[findPosition].start)
+            val y = binding.textView.layout.getLineTop(line)
+            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+            anim.setDuration(1000).start()
+        }
+    }
+
+    private fun getColorSpans(colorSpan: Array<out ForegroundColorSpan>): Int {
+        var color = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)
+        if (dzenNoch) color = ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorWhite)
+        if (colorSpan.isNotEmpty()) {
+            color = colorSpan[colorSpan.size - 1].foregroundColor
+        }
+        return color
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -378,13 +395,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             MainActivity.dialogVisable = false
             if (savedInstanceState.getBoolean("seach")) {
                 binding.textSearch.visibility = View.VISIBLE
+                binding.textCount.visibility = View.VISIBLE
                 binding.imageView6.visibility = View.VISIBLE
                 binding.imageView5.visibility = View.VISIBLE
             }
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         binding.textView.textSize = fontBiblia
-         DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+        DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
         if (dzenNoch) {
             DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
@@ -790,6 +808,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             mAutoScroll = false
         }
         binding.textView.text = text
+        if (savedInstanceState?.getBoolean("seach") == true) {
+            findAllAsanc()
+        }
         positionY = k.getInt(resurs + "Scroll", 0)
         binding.scrollView2.post { binding.scrollView2.smoothScrollBy(0, positionY) }
         if (dzenNoch) binding.imageView6.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_up_black)
@@ -816,7 +837,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             binding.textSearch.addTextChangedListener(this)
                         }
                     }
-                    findNext(false)
+                    findAllAsanc()
                 } else {
                     findRemoveSpan()
                 }
@@ -1068,6 +1089,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_find) {
             binding.textSearch.visibility = View.VISIBLE
+            binding.textCount.visibility = View.VISIBLE
             binding.imageView6.visibility = View.VISIBLE
             binding.imageView5.visibility = View.VISIBLE
             binding.textSearch.requestFocus()
@@ -1134,6 +1156,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             show()
         } else if (binding.textSearch.visibility == View.VISIBLE) {
             binding.textSearch.visibility = View.GONE
+            binding.textCount.visibility = View.GONE
             binding.imageView6.visibility = View.GONE
             binding.imageView5.visibility = View.GONE
             binding.textSearch.setText("")
@@ -1198,4 +1221,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (binding.textSearch.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)
     }
+
+    private data class SpanStr(val color: Int, val start: Int, val size: Int)
 }

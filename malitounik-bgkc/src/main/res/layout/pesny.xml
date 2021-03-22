@@ -108,6 +108,18 @@
         app:layout_constraintTop_toTopOf="@+id/textSearch"
         app:srcCompat="@drawable/find_niz" />
 
+    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        android:id="@+id/textCount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:text="@string/niama"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView6"
+        app:layout_constraintTop_toTopOf="@+id/textSearch" />
+
     <include
         android:id="@+id/progressView"
         layout="@layout/progress_pesny_all"

@@ -84,6 +84,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var resetTollbarJob: Job? = null
     private var diffScroll = -1
     private var scrolltosatrt = false
+    private var vydelenie = ArrayList<ArrayList<Int>>()
+    private var bibleCopyList = ArrayList<Int>()
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -140,7 +142,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        bibleCopyList.clear()
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         binding.ListView.onItemClickListener = this
         binding.ListView.onItemLongClickListener = this
@@ -394,12 +395,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         val file: File = if (belarus) File("$filesDir/MaranAtaBel/$cytanne.json") else File("$filesDir/MaranAta/$cytanne.json")
         if (file.exists()) {
-            val inputStream = FileReader(file)
-            val reader = BufferedReader(inputStream)
             val gson = Gson()
             val type = object : TypeToken<ArrayList<ArrayList<Int?>?>?>() {}.type
-            vydelenie = gson.fromJson(reader.readText(), type)
-            inputStream.close()
+            vydelenie = gson.fromJson(file.readText(), type)
         }
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
@@ -1026,7 +1024,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             show()
         } else if (mPedakVisable) {
             mPedakVisable = false
-            bibleCopyList.clear()
             adapter.notifyDataSetChanged()
             if (binding.linearLayout4.visibility == View.VISIBLE) {
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
@@ -1062,7 +1059,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             outputStream.close()
         }
         mPedakVisable = false
-        bibleCopyList.clear()
         binding.linearLayout4.visibility = View.GONE
         val prefEditors = k.edit()
         maranAtaScrollPosition = binding.ListView.firstVisiblePosition
@@ -1632,8 +1628,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 val pos = checkPosition(position)
                 if (pos != -1) {
                     if (vydelenie[pos][1] == 1) {
-                        if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), 0, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorYelloy)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                     if (vydelenie[pos][2] == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     if (vydelenie[pos][3] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -1645,8 +1641,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 val pos = checkPosition(position)
                 if (pos != -1) {
                     if (vydelenie[pos][1] == 1) {
-                        if (dzenNoch) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorYelloy)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                     if (vydelenie[pos][2] == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     if (vydelenie[pos][3] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -1677,7 +1673,5 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     companion object {
         private var mPedakVisable = false
-        private var vydelenie = ArrayList<ArrayList<Int>>()
-        private var bibleCopyList = ArrayList<Int>()
     }
 }

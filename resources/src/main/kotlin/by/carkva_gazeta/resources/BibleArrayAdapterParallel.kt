@@ -299,8 +299,8 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             val pos = BibleGlobalList.checkPosition(glava, position)
             if (pos != -1) {
                 if (BibleGlobalList.vydelenie[pos][2] == 1) {
-                    if (k.getBoolean("dzen_noch", false)) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(context, R.color.colorYelloy)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(context, R.color.colorBezPosta)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
                 if (BibleGlobalList.vydelenie[pos][3] == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 if (BibleGlobalList.vydelenie[pos][4] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -319,8 +319,8 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             val pos = BibleGlobalList.checkPosition(glava, position)
             if (pos != -1) {
                 if (BibleGlobalList.vydelenie[pos][2] == 1) {
-                    if (k.getBoolean("dzen_noch", false)) ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(context, R.color.colorYelloy)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    ssb.setSpan(BackgroundColorSpan(ContextCompat.getColor(context, R.color.colorBezPosta)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
                 if (BibleGlobalList.vydelenie[pos][3] == 1) ssb.setSpan(UnderlineSpan(), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 if (BibleGlobalList.vydelenie[pos][4] == 1) ssb.setSpan(StyleSpan(Typeface.BOLD), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

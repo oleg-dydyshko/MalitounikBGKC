@@ -116,13 +116,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp" />
 
-            <ImageView
+            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
                 android:id="@+id/yelloy"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginBottom="20dp"
-                android:contentDescription="@string/set_yelloy"
-                app:srcCompat="@drawable/yelloy" />
+                android:background="@color/colorBezPosta"
+                android:contentDescription="@string/set_yelloy" />
 
             <ImageView
                 android:id="@+id/underline"

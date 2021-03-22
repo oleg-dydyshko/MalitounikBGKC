@@ -44,7 +44,7 @@ class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     }
 
     override fun onBackPressed() {
-        if (editSettings) {
+        if (editSettings || redak != 3) {
             onSupportNavigateUp()
         } else {
             super.onBackPressed()

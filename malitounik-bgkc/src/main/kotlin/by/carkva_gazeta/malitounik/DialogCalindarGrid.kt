@@ -121,12 +121,19 @@ class DialogCalindarGrid : DialogFragment() {
         return ""
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        slugba.onDestroy()
+        _binding = null
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
         activity?.let {
             _binding = CalindarGridBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it)
             builder.setView(binding.root)
+            slugba.loadOpisanieSviat(it)
             alert = builder.create()
             post = arguments?.getInt("post") ?: 0
             ton = arguments?.getInt("ton") ?: 0
@@ -214,10 +221,10 @@ class DialogCalindarGrid : DialogFragment() {
             holder.mText.text = text
             holder.itemView.tag = mItemList[position]
             activity?.let {
-                if (!(slugba.checkUtran(it, data, mun) || slugba.checkUtran(raznicia) || denNedzeli == 1) && mItemList[position] == 4) {
+                if (!(slugba.checkUtran(data, mun) || slugba.checkUtran(raznicia) || denNedzeli == 1) && mItemList[position] == 4) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                } else if (!(slugba.checkViachernia(it, data, mun) || slugba.checkViachernia(raznicia)) && mItemList[position] == 1) {
+                } else if (!(slugba.checkViachernia(data, mun) || slugba.checkViachernia(raznicia)) && mItemList[position] == 1) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                 } else if (issetSvityia && mItemList[position] == 7) {
@@ -259,7 +266,7 @@ class DialogCalindarGrid : DialogFragment() {
                     1 -> {
                         activity?.let {
                             when {
-                                slugba.checkViachernia(it, data, mun) -> {
+                                slugba.checkViachernia(data, mun) -> {
                                     val intent = Intent()
                                     intent.setClassName(it, MainActivity.TON)
                                     intent.putExtra("ton_na_sviaty", true)
@@ -288,7 +295,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 tonNaidzelny = true
                             }
                             when {
-                                slugba.checkLiturgia(fragmentActivity, data, mun) -> {
+                                slugba.checkLiturgia(data, mun) -> {
                                     fragmentManager?.let {
                                         val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitleOpisanieSviat(data, mun), mun, data, ton1, tonNaidzelny, true, ton_na_viliki_post = false, resurs = "", sviatyaName, checkSviatyia, year)
                                         traparyAndKandaki.show(it, "traparyAndKandaki")
@@ -348,7 +355,7 @@ class DialogCalindarGrid : DialogFragment() {
                     4 -> {
                         activity?.let {
                             when {
-                                slugba.checkUtran(it, data, mun) -> {
+                                slugba.checkUtran(data, mun) -> {
                                     val intent = Intent()
                                     intent.setClassName(it, MainActivity.TON)
                                     intent.putExtra("ton_na_sviaty", true)

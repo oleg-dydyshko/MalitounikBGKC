@@ -38,6 +38,8 @@ import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToLong
@@ -158,6 +160,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mkDir()
+        loadOpisanieSviat()
         k = getSharedPreferences("biblia", MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
@@ -1209,6 +1212,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }
         }
         idOld = idSelect
+    }
+
+    private fun loadOpisanieSviat() {
+        val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
+        if (!fileOpisanieSviat.exists()) {
+            if (isNetworkAvailable(this)) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    withContext(Dispatchers.IO) {
+                        val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
+                        val conections = mURL.openConnection() as HttpURLConnection
+                        if (conections.responseCode == 200) {
+                            try {
+                                fileOpisanieSviat.writer().use {
+                                    it.write(mURL.readText())
+                                }
+                            } catch (e: Throwable) {
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     companion object {

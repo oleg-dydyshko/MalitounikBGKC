@@ -3,10 +3,7 @@ package by.carkva_gazeta.malitounik
 import android.app.Activity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
@@ -19,6 +16,7 @@ class SlugbovyiaTextu {
     private val dat16 = ArrayList<SlugbovyiaTextuData>()
     private val dat17 = ArrayList<SlugbovyiaTextuData>()
     private val opisanieSviat = ArrayList<ArrayList<String>>()
+    private var loadOpisanieSviatJob: Job? = null
 
     init {
         dat12.add(SlugbovyiaTextuData(-49, "Вячэрня ў нядзелю сырную вeчарам", "bogashlugbovya12_1"))
@@ -163,12 +161,12 @@ class SlugbovyiaTextu {
         return ""
     }
 
-    private fun loadOpisanieSviat(activity: Activity) {
-        if (opisanieSviat.size == 0) {
+    fun loadOpisanieSviat(activity: Activity) {
+        if (opisanieSviat.size == 0 && loadOpisanieSviatJob?.isActive != true) {
             val fileOpisanieSviat = File("${activity.filesDir}/opisanie_sviat.json")
             if (!fileOpisanieSviat.exists()) {
                 if (MainActivity.isNetworkAvailable(activity)) {
-                    CoroutineScope(Dispatchers.Main).launch {
+                    loadOpisanieSviatJob = CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
                             val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
                             val conections = mURL.openConnection() as HttpURLConnection
@@ -181,14 +179,25 @@ class SlugbovyiaTextu {
                                 }
                             }
                         }
+                        try {
+                            val builder = fileOpisanieSviat.readText()
+                            val gson = Gson()
+                            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                            opisanieSviat.addAll(gson.fromJson(builder, type))
+                        } catch (t: Throwable) {
+                            fileOpisanieSviat.delete()
+                        }
                     }
                 }
-            }
-            if (fileOpisanieSviat.exists()) {
-                val builder = fileOpisanieSviat.readText()
-                val gson = Gson()
-                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                opisanieSviat.addAll(gson.fromJson(builder, type))
+            } else {
+                try {
+                    val builder = fileOpisanieSviat.readText()
+                    val gson = Gson()
+                    val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                    opisanieSviat.addAll(gson.fromJson(builder, type))
+                } catch (t: Throwable) {
+                    fileOpisanieSviat.delete()
+                }
             }
         }
     }
@@ -208,8 +217,7 @@ class SlugbovyiaTextu {
         return title
     }
 
-    fun checkUtran(activity: Activity, day: Int, mun: Int): Boolean {
-        loadOpisanieSviat(activity)
+    fun checkUtran(day: Int, mun: Int): Boolean {
         opisanieSviat.forEach {
             if (day == it[0].toInt() && mun == it[1].toInt()) {
                 if (it[3] != "") return true
@@ -252,8 +260,7 @@ class SlugbovyiaTextu {
         return false
     }
 
-    fun checkLiturgia(activity: Activity, day: Int, mun: Int): Boolean {
-        loadOpisanieSviat(activity)
+    fun checkLiturgia(day: Int, mun: Int): Boolean {
         opisanieSviat.forEach {
             if (day == it[0].toInt() && mun == it[1].toInt()) {
                 if (it[4] != "") return true
@@ -296,8 +303,7 @@ class SlugbovyiaTextu {
         return false
     }
 
-    fun checkViachernia(activity: Activity, day: Int, mun: Int): Boolean {
-        loadOpisanieSviat(activity)
+    fun checkViachernia(day: Int, mun: Int): Boolean {
         opisanieSviat.forEach {
             if (day == it[0].toInt() && mun == it[1].toInt()) {
                 if (it[5] != "") return true
@@ -338,5 +344,9 @@ class SlugbovyiaTextu {
             }
         }
         return false
+    }
+
+    fun onDestroy() {
+        loadOpisanieSviatJob?.cancel()
     }
 }

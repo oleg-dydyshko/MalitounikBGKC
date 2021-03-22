@@ -317,11 +317,12 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         spans.forEach {
             text.removeSpan(it)
         }
+        binding.textCount.text = getString(R.string.niama)
+        findPosition = 0
     }
 
     private fun findNext(next: Boolean = true, previous: Boolean = false) {
-        val text = binding.textView.text as SpannableString
-        text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), findListSpans[findPosition].start, findListSpans[findPosition].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val findPositionOld = findPosition
         if (next) {
             if (previous) findPosition--
             else findPosition++
@@ -333,6 +334,8 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             findPosition = 0
         }
         if (findListSpans.isNotEmpty()) {
+            val text = binding.textView.text as SpannableString
+            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), findListSpans[findPositionOld].start, findListSpans[findPositionOld].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.textCount.text = getString(R.string.fing_count, findPosition + 1, findListSpans.size)
             text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta2)), findListSpans[findPosition].start, findListSpans[findPosition].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             val line = binding.textView.layout.getLineForOffset(findListSpans[findPosition].start)

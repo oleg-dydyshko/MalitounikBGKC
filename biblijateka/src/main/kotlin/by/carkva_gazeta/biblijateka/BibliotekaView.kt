@@ -365,19 +365,19 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         filePath = file.absolutePath
         fileName = file.name
         when {
-            fileName.toLowerCase(Locale.getDefault()).contains(".fb2.zip") -> {
+            fileName.contains(".fb2.zip", true) -> {
                 loadFileFB2ZIP()
             }
-            fileName.toLowerCase(Locale.getDefault()).contains(".fb2") -> {
+            fileName.contains(".fb2", true) -> {
                 loadFileFB2()
             }
-            fileName.toLowerCase(Locale.getDefault()).contains(".pdf") -> {
+            fileName.contains(".pdf", true) -> {
                 loadFilePDF()
             }
-            fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
+            fileName.contains(".txt", true) -> {
                 loadFileTXT()
             }
-            fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
+            fileName.contains(".htm", true) -> {
                 loadFileHTML()
             }
             else -> {
@@ -560,26 +560,26 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         }
                     }
                     when {
-                        fileName.toLowerCase(Locale.getDefault()).contains(".pdf") -> {
+                        fileName.contains(".pdf", true) -> {
                             loadFilePDF()
                         }
-                        fileName.toLowerCase(Locale.getDefault()).contains(".fb2.zip") -> {
+                        fileName.contains(".fb2.zip", true) -> {
                             loadFileFB2ZIP()
                         }
-                        fileName.toLowerCase(Locale.getDefault()).contains(".fb2") -> {
+                        fileName.contains(".fb2", true) -> {
                             loadFileFB2()
                         }
-                        fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
+                        fileName.contains(".txt", true) -> {
                             loadFileTXT()
                         }
-                        fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
+                        fileName.contains(".htm", true) -> {
                             loadFileHTML()
                         }
                         else -> {
                             loadFileEPUB()
                         }
                     }
-                    if (!fileName.toLowerCase(Locale.getDefault()).contains(".pdf")) {
+                    if (!fileName.contains(".pdf", true)) {
                         autoscroll = k.getBoolean("autoscroll", false)
                         spid = k.getInt("autoscrollSpid", 60)
                         if (autoscroll) {
@@ -814,7 +814,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 val t1 = filePath.lastIndexOf("/")
                 fileName = filePath.substring(t1 + 1)
                 bindingcontent.swipeRefreshLayout.visibility = View.GONE
-                if (fileName.toLowerCase(Locale.getDefault()).contains(".pdf")) {
+                if (fileName.contains(".pdf", true)) {
                     pdfView.visibility = View.VISIBLE
                 } else {
                     bindingcontent.webView.visibility = View.VISIBLE
@@ -854,19 +854,19 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 }
                 else -> {
                     when {
-                        fileName.toLowerCase(Locale.getDefault()).contains(".pdf") -> {
+                        fileName.contains(".pdf", true) -> {
                             loadFilePDF()
                         }
-                        fileName.toLowerCase(Locale.getDefault()).contains(".fb2.zip") -> {
+                        fileName.contains(".fb2.zip", true) -> {
                             loadFileFB2ZIP()
                         }
-                        fileName.toLowerCase(Locale.getDefault()).contains(".fb2") -> {
+                        fileName.contains(".fb2", true) -> {
                             loadFileFB2()
                         }
-                        fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
+                        fileName.contains(".txt", true) -> {
                             loadFileTXT()
                         }
-                        fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
+                        fileName.contains(".htm", true) -> {
                             loadFileHTML()
                         }
                         else -> {
@@ -1082,7 +1082,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         fb2?.let {
             val map: Map<String, Binary> = it.binaries
             for ((key, value) in map) {
-                if (key.toLowerCase(Locale.getDefault()).contains("cover")) {
+                if (key.contains("cover", true)) {
                     file = File("$filesDir/Book", File(filePath).name.toString() + key)
                     val buffer = value.binary
                     FileOutputStream(file).use { fout -> fout.write(decode(buffer, DEFAULT)) }
@@ -1287,11 +1287,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
                 }
                 when {
-                    fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
+                    fileName.contains(".txt", true) -> {
                         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = false
                         itemAuto.isVisible = false
                     }
-                    fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
+                    fileName.contains(".htm", true) -> {
                         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = false
                         itemAuto.isVisible = true
                     }
@@ -1380,26 +1380,26 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     fileExplorer.show(supportFragmentManager, "file_explorer")
                 } else {
                     when {
-                        fileName.toLowerCase(Locale.getDefault()).contains(".pdf") -> {
+                        fileName.contains(".pdf", true) -> {
                             loadFilePDF()
                         }
-                        fileName.toLowerCase(Locale.getDefault()).contains(".fb2.zip") -> {
+                        fileName.contains(".fb2.zip", true) -> {
                             loadFileFB2ZIP()
                         }
-                        fileName.toLowerCase(Locale.getDefault()).contains(".fb2") -> {
+                        fileName.contains(".fb2", true) -> {
                             loadFileFB2()
                         }
-                        fileName.toLowerCase(Locale.getDefault()).contains(".txt") -> {
+                        fileName.contains(".txt", true) -> {
                             loadFileTXT()
                         }
-                        fileName.toLowerCase(Locale.getDefault()).contains(".htm") -> {
+                        fileName.contains(".htm", true) -> {
                             loadFileHTML()
                         }
                         else -> {
                             loadFileEPUB()
                         }
                     }
-                    if (!fileName.toLowerCase(Locale.getDefault()).contains(".pdf")) {
+                    if (!fileName.contains(".pdf", true)) {
                         autoscroll = k.getBoolean("autoscroll", false)
                         spid = k.getInt("autoscrollSpid", 60)
                         if (autoscroll) {

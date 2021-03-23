@@ -1,8 +1,6 @@
 package by.carkva_gazeta.malitounik
 
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,21 +9,17 @@ import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import by.carkva_gazeta.malitounik.databinding.PesnyBinding
 import by.carkva_gazeta.malitounik.databinding.ProgressPesnyAllBinding
 import com.google.gson.Gson
@@ -36,7 +30,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.util.*
 
-class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnScrollChangedCallback {
+class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener {
 
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")
@@ -71,9 +65,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     private lateinit var bindingprogress: ProgressPesnyAllBinding
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
-    private var positionY = 0
-    private var findPosition = 0
-    private val findListSpans = ArrayList<SpanStr>()
 
     companion object {
         val resursMap = ArrayMap<String, Int>()
@@ -284,78 +275,21 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         }
     }
 
-    private fun findAllAsanc() {
+    private fun findAllAsanc(search: String) {
         CoroutineScope(Dispatchers.Main).launch {
-            findRemoveSpan()
-            findAll()
-            findNext(false)
+            findAll(search)
         }
     }
 
-    private fun findAll(position: Int = 0) {
+    private fun findAll(search: String, position: Int = 0) {
         val text = binding.textView.text as SpannableString
-        val search = binding.textSearch.text.toString()
         val searchLig = search.length
         val strPosition = text.indexOf(search, position, true)
         if (strPosition != -1) {
-            findListSpans.add(SpanStr(getColorSpans(text.getSpans(strPosition, strPosition + searchLig, ForegroundColorSpan::class.java)), strPosition, strPosition + searchLig))
             text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            findAll(strPosition + 1)
+            findAll(search,strPosition + 1)
         }
-    }
-
-    private fun findRemoveSpan() {
-        val text = binding.textView.text as SpannableString
-        if (findListSpans.isNotEmpty()) {
-            findListSpans.forEach {
-                text.setSpan(ForegroundColorSpan(it.color), it.start, it.size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            }
-            findListSpans.clear()
-        }
-        val spans = text.getSpans(0, text.length, BackgroundColorSpan::class.java)
-        spans.forEach {
-            text.removeSpan(it)
-        }
-        binding.textCount.text = getString(R.string.niama)
-        findPosition = 0
-    }
-
-    private fun findNext(next: Boolean = true, previous: Boolean = false) {
-        val findPositionOld = findPosition
-        if (next) {
-            if (previous) findPosition--
-            else findPosition++
-        }
-        if (findPosition == -1) {
-            findPosition = findListSpans.size - 1
-        }
-        if (findPosition == findListSpans.size) {
-            findPosition = 0
-        }
-        if (findListSpans.isNotEmpty()) {
-            val text = binding.textView.text as SpannableString
-            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), findListSpans[findPositionOld].start, findListSpans[findPositionOld].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            binding.textCount.text = getString(R.string.fing_count, findPosition + 1, findListSpans.size)
-            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta2)), findListSpans[findPosition].start, findListSpans[findPosition].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            val line = binding.textView.layout.getLineForOffset(findListSpans[findPosition].start)
-            val y = binding.textView.layout.getLineTop(line)
-            val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
-            anim.setDuration(1000).start()
-        }
-    }
-
-    private fun getColorSpans(colorSpan: Array<out ForegroundColorSpan>): Int {
-        var color = ContextCompat.getColor(this, R.color.colorPrimary_text)
-        if (dzenNoch) color = ContextCompat.getColor(this, R.color.colorWhite)
-        if (colorSpan.isNotEmpty()) {
-            color = colorSpan[colorSpan.size - 1].foregroundColor
-        }
-        return color
-    }
-
-    override fun onScroll(t: Int) {
-        positionY = t
     }
 
     override fun onPause() {
@@ -396,9 +330,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, R.color.colorPrimary))
         if (dzenNoch) {
-            DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, R.color.colorPrimary_black))
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             bindingprogress.actionPlusBrighess.setImageResource(R.drawable.plus_v_kruge_black)
@@ -427,13 +359,9 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             builder.append(getString(R.string.error_ch))
         }
         binding.textView.text = MainActivity.fromHtml(builder.toString())
-        if (savedInstanceState?.getBoolean("seach") == true) {
-            binding.textSearch.visibility = View.VISIBLE
-            binding.textCount.visibility = View.VISIBLE
-            binding.imageView6.visibility = View.VISIBLE
-            binding.imageView5.visibility = View.VISIBLE
-            findAllAsanc()
-        }
+        val search = intent.extras?.getString("search", "") ?: ""
+        if (search != "")
+            findAllAsanc(search)
         men = checkVybranoe(this, resurs)
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
@@ -496,47 +424,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 MainActivity.checkBrightness = false
             }
         }
-        if (dzenNoch) binding.imageView6.setImageResource(R.drawable.find_up_black)
-        binding.imageView6.setOnClickListener { findNext(previous = true) }
-        binding.textSearch.addTextChangedListener(object : TextWatcher {
-            var editPosition = 0
-            var check = 0
-            var editch = true
-
-            override fun afterTextChanged(s: Editable?) {
-                var edit = s.toString()
-                edit = edit.replace("и", "і")
-                edit = edit.replace("щ", "ў")
-                edit = edit.replace("ъ", "'")
-                edit = edit.replace("И", "І")
-                edit = edit.replace("Щ", "Ў")
-                edit = edit.replace("Ъ", "'")
-                if (edit.length >= 3) {
-                    if (editch) {
-                        if (check != 0) {
-                            binding.textSearch.removeTextChangedListener(this)
-                            binding.textSearch.setText(edit)
-                            binding.textSearch.setSelection(editPosition)
-                            binding.textSearch.addTextChangedListener(this)
-                        }
-                    }
-                    findNext(false)
-                } else {
-                    findRemoveSpan()
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                editch = count != after
-                check = after
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                editPosition = start + count
-            }
-        })
-        if (dzenNoch) binding.imageView5.setImageResource(R.drawable.find_niz_back)
-        binding.imageView5.setOnClickListener { findNext() }
     }
 
     private fun setTollbarTheme() {
@@ -624,6 +511,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         super.onPrepareOptionsMenu(menu)
         menu.findItem(R.id.action_share).isVisible = true
         menu.findItem(R.id.action_auto).isVisible = false
+        menu.findItem(R.id.action_find).isVisible = false
         if (men) {
             menu.findItem(R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, R.drawable.star_big_on)
             menu.findItem(R.id.action_vybranoe).title = resources.getString(R.string.vybranoe_del)
@@ -660,15 +548,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         val id = item.itemId
-        if (id == R.id.action_find) {
-            binding.textSearch.visibility = View.VISIBLE
-            binding.textCount.visibility = View.VISIBLE
-            binding.imageView6.visibility = View.VISIBLE
-            binding.imageView5.visibility = View.VISIBLE
-            binding.textSearch.requestFocus()
-            val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-        }
         if (id == R.id.action_dzen_noch) {
             checkSetDzenNoch = true
             item.isChecked = !item.isChecked
@@ -732,15 +611,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         if (fullscreenPage) {
             fullscreenPage = false
             show()
-        } else if (binding.textSearch.visibility == View.VISIBLE) {
-            binding.textSearch.visibility = View.GONE
-            binding.textCount.visibility = View.GONE
-            binding.imageView6.visibility = View.GONE
-            binding.imageView5.visibility = View.GONE
-            binding.textSearch.setText("")
-            findRemoveSpan()
-            val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
         } else {
             if (checkSetDzenNoch) onSupportNavigateUp() else super.onBackPressed()
         }
@@ -772,9 +642,5 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
-        if (binding.textSearch.visibility == View.VISIBLE) outState.putBoolean("seach", true)
-        else outState.putBoolean("seach", false)
     }
-
-    private data class SpanStr(val color: Int, val start: Int, val size: Int)
 }

@@ -422,12 +422,12 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             return object : Filter() {
                 override fun performFiltering(constraint: CharSequence): FilterResults {
                     var constraint1 = constraint
-                    constraint1 = constraint1.toString().toLowerCase(Locale.getDefault())
+                    constraint1 = constraint1.toString()
                     val result = FilterResults()
-                    if (constraint1.toString().isNotEmpty()) {
+                    if (constraint1.isNotEmpty()) {
                         val founded: ArrayList<MenuListData> = ArrayList()
                         for (item in origData) {
-                            if (item.data.toLowerCase(Locale.getDefault()).contains(constraint1)) {
+                            if (item.data.contains(constraint1, true)) {
                                 founded.add(item)
                             }
                         }

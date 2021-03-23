@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
@@ -912,7 +913,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
 
     private fun semuxa(poshuk: String): ArrayList<Spannable> {
         var poshuk1 = poshuk
-        val dzenNoch = chin.getBoolean("dzen_noch", false)
         val seashpost = ArrayList<Spannable>()
         if (poshuk1 != "") {
             poshuk1 = zamena(poshuk1)
@@ -930,8 +930,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
             } else {
                 poshuk1 = " $poshuk1 "
             }
-            var color = by.carkva_gazeta.malitounik.R.color.colorPrimary
-            if (dzenNoch) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black
             for (i in 0 until semuxaBible.size) {
                 val biblia = chin.getInt("biblia_seash", 0)
                 var nazva = ""
@@ -1050,7 +1048,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                                     val t1 = span.indexOf(poshuk1, ignoreCase = registr)
                                     val t2 = poshuk1.length
                                     span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    if (t1 != -1) {
+                                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    }
                                     seashpost.add(span)
                                 }
                             } else {
@@ -1062,7 +1063,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                                     val t3 = span.indexOf("-->")
                                     val t1 = span.indexOf(poshuk1, ignoreCase = registr)
                                     span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    if (t1 != -1) {
+                                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    }
                                     seashpost.add(span)
                                 }
                             }
@@ -1076,7 +1080,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
 
     private fun sinoidal(poshuk: String): ArrayList<Spannable> {
         var poshuk1 = poshuk
-        val dzenNoch = chin.getBoolean("dzen_noch", false)
         val seashpost = ArrayList<Spannable>()
         if (poshuk1 != "") {
             val registr = chin.getBoolean("pegistrbukv", true)
@@ -1092,8 +1095,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
             } else {
                 poshuk1 = " $poshuk1 "
             }
-            var color = by.carkva_gazeta.malitounik.R.color.colorPrimary
-            if (dzenNoch) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black
             for (i in 0 until sinodalBible.size) {
                 val biblia = chin.getInt("biblia_seash", 0)
                 var nazva = ""
@@ -1217,7 +1218,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                                     val t3 = span.indexOf("-->")
                                     val t1 = span.indexOf(poshuk1, ignoreCase = registr)
                                     span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    if (t1 != -1) {
+                                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    }
                                     seashpost.add(span)
                                 }
                             } else {
@@ -1230,7 +1234,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                                     val t3 = span.indexOf("-->")
                                     val t1 = span.indexOf(poshuk1, ignoreCase = registr)
                                     span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    if (t1 != -1) {
+                                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    }
                                     seashpost.add(span)
                                 }
                             }
@@ -1244,7 +1251,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
 
     private fun nadsan(poshuk: String): ArrayList<Spannable> {
         var poshuk1 = poshuk
-        val dzenNoch = chin.getBoolean("dzen_noch", false)
         val seashpost = ArrayList<Spannable>()
         if (poshuk1 != "") {
             poshuk1 = zamena(poshuk1)
@@ -1262,8 +1268,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
             } else {
                 poshuk1 = " $poshuk1 "
             }
-            var color = by.carkva_gazeta.malitounik.R.color.colorPrimary
-            if (dzenNoch) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black
             val nazva = getString(by.carkva_gazeta.malitounik.R.string.psalter)
             val inputStream = resources.openRawResource(R.raw.nadsan_psaltyr)
             val isr = InputStreamReader(inputStream)
@@ -1298,7 +1302,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                             val t3 = span.indexOf("-->")
                             val t1 = span.indexOf(poshuk1, ignoreCase = registr)
                             span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (t1 != -1) {
+                                span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            }
                             seashpost.add(span)
                         }
                     } else {
@@ -1310,7 +1317,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                             val t3 = span.indexOf("-->")
                             val t1 = span.indexOf(poshuk1, ignoreCase = registr)
                             span.setSpan(StyleSpan(Typeface.BOLD), t3 + 3, t3 + 3 + title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            if (t1 != -1) span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, color)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (t1 != -1) {
+                                span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            }
                             seashpost.add(span)
                         }
                     }
@@ -1425,8 +1435,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
 
                 override fun publishResults(constraint: CharSequence, results: FilterResults) {
                     clear()
-                    var color = by.carkva_gazeta.malitounik.R.color.colorPrimary
-                    if (dzenNoch) color = by.carkva_gazeta.malitounik.R.color.colorPrimary_black
                     for (item in results.values as ArrayList<*>) {
                         var t1 = (item as Spannable).indexOf("-->")
                         if (t1 == -1) t1 = 0
@@ -1435,7 +1443,8 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                         val itmcount = constraint.toString().length
                         if (itm != -1) {
                             val span = SpannableString(item)
-                            span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, color)), itm, itm + itmcount, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            span.setSpan(BackgroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), itm, itm + itmcount, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            span.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), itm, itm + itmcount, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             add(span)
                         } else {
                             add(item)

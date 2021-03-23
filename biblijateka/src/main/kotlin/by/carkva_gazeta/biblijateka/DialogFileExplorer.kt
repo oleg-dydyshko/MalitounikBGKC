@@ -25,8 +25,6 @@ import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import com.google.android.play.core.splitcompat.SplitCompat
 import java.io.File
 import java.io.FilenameFilter
-import java.util.*
-import kotlin.collections.ArrayList
 
 class DialogFileExplorer : DialogFragment() {
     private val str = ArrayList<String>()
@@ -65,7 +63,7 @@ class DialogFileExplorer : DialogFragment() {
             }
             val filterFile = FilenameFilter { dir: File, filename: String ->
                 val sel = File(dir, filename)
-                sel.isFile && !sel.isHidden && (sel.name.toLowerCase(Locale.getDefault()).contains(".pdf") || sel.name.toLowerCase(Locale.getDefault()).contains(".epub") || sel.name.toLowerCase(Locale.getDefault()).contains(".fb2") || sel.name.toLowerCase(Locale.getDefault()).contains(".txt") || sel.name.toLowerCase(Locale.getDefault()).contains(".htm"))
+                sel.isFile && !sel.isHidden && (sel.name.contains(".pdf", true) || sel.name.contains(".epub", true) || sel.name.contains(".fb2", true) || sel.name.contains(".txt", true) || sel.name.contains(".htm", true))
             }
             if (!firstLvl) {
                 if (dzenNoch) {
@@ -94,25 +92,25 @@ class DialogFileExplorer : DialogFragment() {
             val fList = path?.list(filterFile) ?: Array(0) { "" }
             dList.sort()
             for (aFList in fList) {
-                if (aFList.toLowerCase(Locale.getDefault()).contains(".pdf")) {
+                if (aFList.contains(".pdf", true)) {
                     if (dzenNoch) {
                         fileList.add(MyFile(aFList, R.drawable.file_icon_black))
                     } else {
                         fileList.add(MyFile(aFList, R.drawable.file_icon))
                     }
-                } else if (aFList.toLowerCase(Locale.getDefault()).contains(".fb2")) {
+                } else if (aFList.contains(".fb2", true)) {
                     if (dzenNoch) {
                         fileList.add(MyFile(aFList, R.drawable.file_fb2_icon_black))
                     } else {
                         fileList.add(MyFile(aFList, R.drawable.file_fb2_icon))
                     }
-                } else if (aFList.toLowerCase(Locale.getDefault()).contains(".txt")) {
+                } else if (aFList.contains(".txt", true)) {
                     if (dzenNoch) {
                         fileList.add(MyFile(aFList, R.drawable.file_txt_icon_black))
                     } else {
                         fileList.add(MyFile(aFList, R.drawable.file_txt_icon))
                     }
-                } else if (aFList.toLowerCase(Locale.getDefault()).contains(".htm")) {
+                } else if (aFList.contains(".htm", true)) {
                     if (dzenNoch) {
                         fileList.add(MyFile(aFList, R.drawable.file_html_icon_black))
                     } else {

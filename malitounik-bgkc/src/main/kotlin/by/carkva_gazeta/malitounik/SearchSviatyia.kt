@@ -4,11 +4,15 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.util.SparseIntArray
 import android.util.TypedValue
 import android.view.*
@@ -36,7 +40,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
     private var searchView: SearchView? = null
     private var searchViewQwery = ""
     private var arrayLists: ArrayList<ArrayList<String>> = ArrayList()
-    private var arrayRes: ArrayList<String> = ArrayList()
+    private var arrayRes: ArrayList<Searche> = ArrayList()
     private lateinit var chin: SharedPreferences
     private lateinit var c: GregorianCalendar
     private var mLastClickTime: Long = 0
@@ -154,14 +158,12 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         setContentView(binding.root)
         val searchSvityxString = chin.getString("search_svityx_string", "") ?: ""
         if (searchSvityxString != "") {
-            if (savedInstanceState == null) {
-                val gson = Gson()
-                val json = chin.getString("search_svityx_array", "")
-                val type = object : TypeToken<ArrayList<String?>?>() {}.type
-                arrayRes.addAll(gson.fromJson(json, type))
-                for (i in arrayRes.indices) {
-                    if (dzenNoch) arrayRes[i] = arrayRes[i].replace("#d00505", "#f44336") else arrayRes[i] = arrayRes[i].replace("#f44336", "#d00505")
-                }
+            if (searchSvityxString.length >= 3) {
+                stopPosukSviatyx()
+                startPosukSviatyx(searchSvityxString)
+            } else {
+                binding.History.visibility = View.VISIBLE
+                binding.ListView.visibility = View.GONE
             }
         } else {
             binding.History.visibility = View.VISIBLE
@@ -201,18 +203,6 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             val type = object : TypeToken<ArrayList<String>>() {}.type
             history.addAll(gson.fromJson(json, type))
         }
-        if (savedInstanceState != null) {
-            if (searchSvityxString.length >= 3) {
-                stopPosukSviatyx()
-                startPosukSviatyx(searchSvityxString)
-            } else {
-                binding.History.visibility = View.VISIBLE
-                binding.ListView.visibility = View.GONE
-            }
-        } else if (searchSvityxString.length < 3) {
-            binding.History.visibility = View.VISIBLE
-            binding.ListView.visibility = View.GONE
-        }
         adapter = SearchListAdapter(this, arrayRes)
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         else binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
@@ -232,12 +222,16 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val result = arrayRes[position]
+            val result = arrayRes[position].data
             val t1 = result.indexOf("<!--")
-            val t2 = result.indexOf(":")
-            val t3 = result.indexOf("-->")
-            val g = GregorianCalendar(c[Calendar.YEAR], result.substring(t2 + 1, t3).toInt(), result.substring(t1 + 4, t2).toInt())
-            val intent = Intent()
+            if (t1 != -1) {
+                val t2 = result.indexOf(":")
+                val t3 = result.indexOf("-->")
+                val g = GregorianCalendar(c[Calendar.YEAR], result.substring(t2 + 1, t3).toInt(), result.substring(t1 + 4, t2).toInt())
+                val intent = Intent()
+                intent.putExtra("data", g[Calendar.DAY_OF_YEAR] - 1)
+            }
+            val g = Calendar.getInstance()
             intent.putExtra("data", g[Calendar.DAY_OF_YEAR] - 1)
             setResult(140, intent)
             addHistory(result)
@@ -285,7 +279,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                 inputStream.close()
             }
             val gson = Gson()
-            val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
+            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
             arrayLists = gson.fromJson(builder.toString(), type)
         }
 
@@ -344,11 +338,9 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         history.add(st)
         for (i in 0 until temp.size) {
             history.add(temp[i])
-            if (history.size == 10)
-                break
+            if (history.size == 10) break
         }
-        if (history.size == 1)
-            invalidateOptionsMenu()
+        if (history.size == 1) invalidateOptionsMenu()
     }
 
     private fun saveHistopy() {
@@ -368,8 +360,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
     override fun cleanHistory(position: Int) {
         history.removeAt(position)
         saveHistopy()
-        if (history.size == 0)
-            invalidateOptionsMenu()
+        if (history.size == 0) invalidateOptionsMenu()
         historyAdapter.notifyDataSetChanged()
     }
 
@@ -389,85 +380,86 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         arrayRes.clear()
         adapter.notifyDataSetChanged()
         if (poshuk != "") {
-            poshuk = poshuk.toLowerCase(Locale.getDefault())
-            poshuk = poshuk.replace("ё", "е")
-            poshuk = poshuk.replace("сві", "сьві")
-            poshuk = poshuk.replace("свя", "сьвя")
-            poshuk = poshuk.replace("зме", "зьме")
-            poshuk = poshuk.replace("змі", "зьмі")
-            poshuk = poshuk.replace("змя", "зьмя")
-            poshuk = poshuk.replace("зня", "зьня")
-            poshuk = poshuk.replace("сле", "сьле")
-            poshuk = poshuk.replace("слі", "сьлі")
-            poshuk = poshuk.replace("сль", "сьль")
-            poshuk = poshuk.replace("слю", "сьлю")
-            poshuk = poshuk.replace("сля", "сьля")
-            poshuk = poshuk.replace("сне", "сьне")
-            poshuk = poshuk.replace("сні", "сьні")
-            poshuk = poshuk.replace("сню", "сьню")
-            poshuk = poshuk.replace("сня", "сьня")
-            poshuk = poshuk.replace("спе", "сьпе")
-            poshuk = poshuk.replace("спі", "сьпі")
-            poshuk = poshuk.replace("спя", "сьпя")
-            poshuk = poshuk.replace("сце", "сьце")
-            poshuk = poshuk.replace("сці", "сьці")
-            poshuk = poshuk.replace("сць", "сьць")
-            poshuk = poshuk.replace("сцю", "сьцю")
-            poshuk = poshuk.replace("сця", "сьця")
-            poshuk = poshuk.replace("цце", "цьце")
-            poshuk = poshuk.replace("цці", "цьці")
-            poshuk = poshuk.replace("ццю", "цьцю")
-            poshuk = poshuk.replace("ззе", "зьзе")
-            poshuk = poshuk.replace("ззі", "зьзі")
-            poshuk = poshuk.replace("ззю", "зьзю")
-            poshuk = poshuk.replace("ззя", "зьзя")
-            poshuk = poshuk.replace("зле", "зьле")
-            poshuk = poshuk.replace("злі", "зьлі")
-            poshuk = poshuk.replace("злю", "зьлю")
-            poshuk = poshuk.replace("зля", "зьля")
-            poshuk = poshuk.replace("збе", "зьбе")
-            poshuk = poshuk.replace("збі", "зьбі")
-            poshuk = poshuk.replace("збя", "зьбя")
-            poshuk = poshuk.replace("нне", "ньне")
-            poshuk = poshuk.replace("нні", "ньні")
-            poshuk = poshuk.replace("нню", "ньню")
-            poshuk = poshuk.replace("ння", "ньня")
-            poshuk = poshuk.replace("лле", "льле")
-            poshuk = poshuk.replace("ллі", "льлі")
-            poshuk = poshuk.replace("ллю", "льлю")
-            poshuk = poshuk.replace("лля", "льля")
-            poshuk = poshuk.replace("дск", "дзк")
+            poshuk = poshuk.replace("ё", "е", true)
+            poshuk = poshuk.replace("сві", "сьві", true)
+            poshuk = poshuk.replace("свя", "сьвя", true)
+            poshuk = poshuk.replace("зме", "зьме", true)
+            poshuk = poshuk.replace("змі", "зьмі", true)
+            poshuk = poshuk.replace("змя", "зьмя", true)
+            poshuk = poshuk.replace("зня", "зьня", true)
+            poshuk = poshuk.replace("сле", "сьле", true)
+            poshuk = poshuk.replace("слі", "сьлі", true)
+            poshuk = poshuk.replace("сль", "сьль", true)
+            poshuk = poshuk.replace("слю", "сьлю", true)
+            poshuk = poshuk.replace("сля", "сьля", true)
+            poshuk = poshuk.replace("сне", "сьне", true)
+            poshuk = poshuk.replace("сні", "сьні", true)
+            poshuk = poshuk.replace("сню", "сьню", true)
+            poshuk = poshuk.replace("сня", "сьня", true)
+            poshuk = poshuk.replace("спе", "сьпе", true)
+            poshuk = poshuk.replace("спі", "сьпі", true)
+            poshuk = poshuk.replace("спя", "сьпя", true)
+            poshuk = poshuk.replace("сце", "сьце", true)
+            poshuk = poshuk.replace("сці", "сьці", true)
+            poshuk = poshuk.replace("сць", "сьць", true)
+            poshuk = poshuk.replace("сцю", "сьцю", true)
+            poshuk = poshuk.replace("сця", "сьця", true)
+            poshuk = poshuk.replace("цце", "цьце", true)
+            poshuk = poshuk.replace("цці", "цьці", true)
+            poshuk = poshuk.replace("ццю", "цьцю", true)
+            poshuk = poshuk.replace("ззе", "зьзе", true)
+            poshuk = poshuk.replace("ззі", "зьзі", true)
+            poshuk = poshuk.replace("ззю", "зьзю", true)
+            poshuk = poshuk.replace("ззя", "зьзя", true)
+            poshuk = poshuk.replace("зле", "зьле", true)
+            poshuk = poshuk.replace("злі", "зьлі", true)
+            poshuk = poshuk.replace("злю", "зьлю", true)
+            poshuk = poshuk.replace("зля", "зьля", true)
+            poshuk = poshuk.replace("збе", "зьбе", true)
+            poshuk = poshuk.replace("збі", "зьбі", true)
+            poshuk = poshuk.replace("збя", "зьбя", true)
+            poshuk = poshuk.replace("нне", "ньне", true)
+            poshuk = poshuk.replace("нні", "ньні", true)
+            poshuk = poshuk.replace("нню", "ньню", true)
+            poshuk = poshuk.replace("ння", "ньня", true)
+            poshuk = poshuk.replace("лле", "льле", true)
+            poshuk = poshuk.replace("ллі", "льлі", true)
+            poshuk = poshuk.replace("ллю", "льлю", true)
+            poshuk = poshuk.replace("лля", "льля", true)
+            poshuk = poshuk.replace("дск", "дзк", true)
             val m = charArrayOf('у', 'е', 'а', 'о', 'э', 'я', 'і', 'ю', 'ў', 'ь', 'ы')
             for (aM in m) {
                 val r = poshuk.length - 1
                 if (r >= 3) {
                     if (poshuk[r] == aM) {
-                        poshuk = poshuk.replace(poshuk, poshuk.substring(0, r))
+                        poshuk = poshuk.replace(poshuk, poshuk.substring(0, r), true)
                     }
                 }
             }
-            var color = "<font color=#d00505>"
-            if (dzenNoch) color = "<font color=#f44336>"
             for (e in arrayLists.indices) {
                 val sviatyia = arrayLists[e][4].split("<br>")
                 for (aSviatyia in sviatyia) {
-                    if (aSviatyia.toLowerCase(Locale.getDefault()).replace("ё", "е").contains(poshuk.toLowerCase(Locale.getDefault()))) {
+                    if (aSviatyia.replace("ё", "е", true).contains(poshuk, true)) {
                         var bSviatyia = aSviatyia
                         bSviatyia = bSviatyia.replace("<font color=#d00505>", "")
                         bSviatyia = bSviatyia.replace("</font>", "")
                         bSviatyia = bSviatyia.replace("<strong>", "")
                         bSviatyia = bSviatyia.replace("</strong>", "")
-                        val t1 = bSviatyia.toLowerCase(Locale.getDefault()).replace("ё", "е").indexOf(poshuk.toLowerCase(Locale.getDefault()))
-                        val t2 = poshuk.toLowerCase(Locale.getDefault()).length
-                        bSviatyia = bSviatyia.substring(0, t1) + color + bSviatyia.substring(t1, t1 + t2) + "</font>" + bSviatyia.substring(t1 + t2)
+                        val t1 = bSviatyia.replace("ё", "е", true).indexOf(poshuk, ignoreCase = true)
+                        val t2 = poshuk.length
+                        val span = SpannableString(bSviatyia.substring(0, t1) + bSviatyia.substring(t1, t1 + t2) + bSviatyia.substring(t1 + t2))
+                        span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         val g = GregorianCalendar(arrayLists[e][3].toInt(), arrayLists[e][2].toInt(), arrayLists[e][1].toInt())
-                        val res = "<!--" + g[Calendar.DAY_OF_MONTH] + ":" + g[Calendar.MONTH] + "--><em>" + arrayLists[e][1] + " " + munName[arrayLists[e][2].toInt()] + "</em><br>" + bSviatyia
-                        arrayRes.add(res)
+                        val str1 = SpannableStringBuilder(arrayLists[e][1] + " " + munName[arrayLists[e][2].toInt()])
+                        str1.setSpan(StyleSpan(Typeface.ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        val result = Searche("<!--" + g[Calendar.DAY_OF_MONTH] + ":" + g[Calendar.MONTH] + "-->", str1.append("\n").append(span))
+                        arrayRes.add(result)
                     }
                 }
             }
             for (e in MenuCviaty.opisanie.indices) {
-                if (MenuCviaty.opisanie[e].toLowerCase(Locale.getDefault()).replace("ё", "е").contains(poshuk.toLowerCase(Locale.getDefault()))) {
+                if (MenuCviaty.opisanie[e].replace("ё", "е", true).contains(poshuk, true)) {
                     var result = MenuCviaty.opisanie[e]
                     if (result.contains("<font color=")) {
                         val t1 = result.indexOf("<font")
@@ -478,42 +470,48 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                     val t1 = result.indexOf("<!--")
                     val t2 = result.indexOf(":")
                     val t3 = result.indexOf("-->")
-                    var bold = ""
-                    var boldEnd = ""
-                    var em = ""
-                    var emEnd = ""
+                    var res1 = "0"
+                    var t7 = t3
                     val t6 = result.indexOf("<!--", t3)
                     if (t6 != -1) {
-                        val t7 = result.indexOf("-->", t6)
-                        val res1 = result.substring(t6 + 4, t7)
-                        if (res1.contains("1")) {
-                            bold = "$color<strong>"
-                            boldEnd = "</strong></font>"
-                        }
-                        if (res1.contains("2")) {
-                            bold = color
-                            boldEnd = "</font>"
-                        }
-                        if (res1.contains("3")) {
-                            em = "<em>"
-                            emEnd = "</em>"
-                        }
+                        t7 = result.indexOf("-->", t6)
+                        res1 = result.substring(t6 + 4, t7)
                     }
                     val g = GregorianCalendar(c[Calendar.YEAR], result.substring(t2 + 1, t3).toInt(), result.substring(t1 + 4, t2).toInt())
-                    var aSviatyia = result.substring(t3 + 3)
-                    val t4 = aSviatyia.toLowerCase(Locale.getDefault()).replace("ё", "е").indexOf(poshuk.toLowerCase(Locale.getDefault()))
-                    val t5 = poshuk.toLowerCase(Locale.getDefault()).length
-                    aSviatyia = aSviatyia.substring(0, t4) + color + aSviatyia.substring(t4, t4 + t5) + "</font>" + aSviatyia.substring(t4 + t5)
-                    val res = result.substring(t1, t3 + 3) + "<em>" + bold + g[Calendar.DATE] + " " + munName[g[Calendar.MONTH]] + "</em>" + boldEnd + "<br>" + em + aSviatyia + emEnd
-                    arrayRes.add(res)
+                    val aSviatyia = result.substring(t7 + 3)
+                    val t4 = aSviatyia.replace("ё", "е", true).indexOf(poshuk, ignoreCase = true)
+                    val t5 = poshuk.length
+                    val span = SpannableString(aSviatyia.substring(0, t4) + aSviatyia.substring(t4, t4 + t5) + aSviatyia.substring(t4 + t5))
+                    span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), t4, t4 + t5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_text)), t4, t4 + t5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    result = result.substring(t1, t3 + 3)
+                    val str1 = SpannableString(g[Calendar.DATE].toString() + " " + munName[g[Calendar.MONTH]])
+                    when {
+                        res1.contains("1") -> {
+                            str1.setSpan(StyleSpan(Typeface.BOLD_ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (dzenNoch) str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_black)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            else str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
+                        res1.contains("2") -> {
+                            str1.setSpan(StyleSpan(Typeface.ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (dzenNoch) str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_black)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            else str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
+                        else -> {
+                            str1.setSpan(StyleSpan(Typeface.ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
+                    }
+                    if (res1.contains("3")) {
+                        span.setSpan(StyleSpan(Typeface.ITALIC), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
+                    val resultSpan = SpannableStringBuilder()
+                    resultSpan.append(str1).append("\n").append(span)
+                    arrayRes.add(Searche(result, resultSpan))
                 }
             }
         }
         textViewCount?.text = resources.getString(R.string.seash, arrayRes.size)
-        val gson = Gson()
-        val json = gson.toJson(arrayRes)
         val prefEditors = chin.edit()
-        prefEditors.putString("search_svityx_array", json)
         prefEditors.putString("search_svityx_string", posukOrig)
         prefEditors.apply()
         adapter.notifyDataSetChanged()
@@ -521,10 +519,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val gson = Gson()
-        val json = gson.toJson(arrayRes)
         val prefEditors = chin.edit()
-        prefEditors.putString("search_svityx_array", json)
         prefEditors.putString("search_svityx_string", editText?.text.toString())
         prefEditors.apply()
     }
@@ -558,10 +553,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                         arrayRes.clear()
                         adapter.notifyDataSetChanged()
                         textViewCount?.text = resources.getString(R.string.seash, 0)
-                        val gson = Gson()
-                        val json = gson.toJson(arrayRes)
                         val prefEditors = chin.edit()
-                        prefEditors.putString("search_svityx_array", json)
                         prefEditors.putString("search_svityx_string", edit)
                         prefEditors.apply()
                         binding.History.visibility = View.VISIBLE
@@ -578,7 +570,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         }
     }
 
-    private class SearchListAdapter(mContext: Activity, private val adapterList: ArrayList<String>) : ArrayAdapter<String>(mContext, R.layout.simple_list_item_2, R.id.label, adapterList) {
+    private class SearchListAdapter(mContext: Activity, private val adapterList: ArrayList<Searche>) : ArrayAdapter<Searche>(mContext, R.layout.simple_list_item_2, R.id.label, adapterList) {
         private val k: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
@@ -594,13 +586,14 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            viewHolder.text.text = MainActivity.fromHtml(adapterList[position])
+            viewHolder.text.text = adapterList[position].text
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch)
-                viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }
     }
 
     private class ViewHolder(var text: TextViewRobotoCondensed)
+
+    private data class Searche(val data: String, val text: Spannable)
 }

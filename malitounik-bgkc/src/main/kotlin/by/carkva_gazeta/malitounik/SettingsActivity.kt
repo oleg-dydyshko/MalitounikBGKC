@@ -1314,7 +1314,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         binding.notificationOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.notificationFull.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.notificationNon.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        if (Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
+        if (Build.MANUFACTURER.contains("huawei", true)) {
             binding.helpNotifi.visibility = View.VISIBLE
             binding.helpNotifi.textSize = GET_FONT_SIZE_MIN
             binding.helpNotifi.setOnClickListener {
@@ -1432,7 +1432,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                 R.id.notificationOnly -> {
                     binding.notifiSvizta.visibility = View.VISIBLE
                     binding.spinnerTime.visibility = View.VISIBLE
-                    if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
+                    if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true)) {
                         val notifi = DialogHelpNotification()
                         notifi.show(supportFragmentManager, "help_notification")
                     }
@@ -1469,7 +1469,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                 R.id.notificationFull -> {
                     binding.notifiSvizta.visibility = View.VISIBLE
                     binding.spinnerTime.visibility = View.VISIBLE
-                    if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
+                    if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true)) {
                         val notifi = DialogHelpNotification()
                         notifi.show(supportFragmentManager, "help_notification")
                     }
@@ -1608,7 +1608,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         binding.checkBox6.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         binding.checkBox7.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
         if (savedInstanceState == null && (notification == 1 || notification == 2)) {
-            if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")) {
+            if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true)) {
                 val notifi = DialogHelpNotification()
                 notifi.show(supportFragmentManager, "help_notification")
             }

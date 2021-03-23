@@ -67,7 +67,7 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginBottom="20dp"
-                android:background="@color/colorBezPosta"
+                android:background="@color/colorBezPosta2"
                 android:contentDescription="@string/set_yelloy" />
 
             <ImageView

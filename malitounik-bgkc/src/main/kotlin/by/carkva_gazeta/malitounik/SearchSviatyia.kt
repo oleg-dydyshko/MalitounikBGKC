@@ -178,6 +178,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                 return@setOnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
+            actionExpandOn = false
             val result = history[position]
             val t1 = result.indexOf("<!--")
             val t2 = result.indexOf(":")
@@ -222,17 +223,12 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val result = arrayRes[position].data
-            val t1 = result.indexOf("<!--")
-            if (t1 != -1) {
-                val t2 = result.indexOf(":")
-                val t3 = result.indexOf("-->")
-                val g = GregorianCalendar(c[Calendar.YEAR], result.substring(t2 + 1, t3).toInt(), result.substring(t1 + 4, t2).toInt())
-                val intent = Intent()
-                intent.putExtra("data", g[Calendar.DAY_OF_YEAR] - 1)
-            }
-            val g = Calendar.getInstance()
-            intent.putExtra("data", g[Calendar.DAY_OF_YEAR] - 1)
+            actionExpandOn = false
+            val g = GregorianCalendar()
+            g.set(Calendar.DAY_OF_YEAR, arrayRes[position].dayOfYear + 1)
+            val date = "<!--" + g[Calendar.DAY_OF_MONTH] + ":" + g[Calendar.MONTH] + "-->"
+            val result = date + arrayRes[position].text.toString()
+            intent.putExtra("data", arrayRes[position].dayOfYear)
             setResult(140, intent)
             addHistory(result)
             saveHistopy()
@@ -326,8 +322,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
     }
 
     private fun addHistory(item: String) {
-        var st = item.replace("<font color=#d00505>", "")
-        st = st.replace("</font>", "")
+        val st = item.replace("\n", "<br>")
         val temp = ArrayList<String>()
         for (i in 0 until history.size) {
             if (history[i] != st) {
@@ -354,6 +349,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
     override fun cleanFullHistory() {
         history.clear()
         saveHistopy()
+        historyAdapter.notifyDataSetChanged()
         invalidateOptionsMenu()
     }
 
@@ -453,7 +449,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                         val g = GregorianCalendar(arrayLists[e][3].toInt(), arrayLists[e][2].toInt(), arrayLists[e][1].toInt())
                         val str1 = SpannableStringBuilder(arrayLists[e][1] + " " + munName[arrayLists[e][2].toInt()])
                         str1.setSpan(StyleSpan(Typeface.ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        val result = Searche("<!--" + g[Calendar.DAY_OF_MONTH] + ":" + g[Calendar.MONTH] + "-->", str1.append("\n").append(span))
+                        val result = Searche(g[Calendar.DAY_OF_YEAR] - 1, str1.append("\n").append(span))
                         arrayRes.add(result)
                     }
                 }
@@ -484,7 +480,6 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                     val span = SpannableString(aSviatyia.substring(0, t4) + aSviatyia.substring(t4, t4 + t5) + aSviatyia.substring(t4 + t5))
                     span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), t4, t4 + t5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_text)), t4, t4 + t5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    result = result.substring(t1, t3 + 3)
                     val str1 = SpannableString(g[Calendar.DATE].toString() + " " + munName[g[Calendar.MONTH]])
                     when {
                         res1.contains("1") -> {
@@ -506,7 +501,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                     }
                     val resultSpan = SpannableStringBuilder()
                     resultSpan.append(str1).append("\n").append(span)
-                    arrayRes.add(Searche(result, resultSpan))
+                    arrayRes.add(Searche(g[Calendar.DAY_OF_YEAR] - 1, resultSpan))
                 }
             }
         }
@@ -595,5 +590,5 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
 
     private class ViewHolder(var text: TextViewRobotoCondensed)
 
-    private data class Searche(val data: String, val text: Spannable)
+    private data class Searche(val dayOfYear: Int, val text: Spannable)
 }

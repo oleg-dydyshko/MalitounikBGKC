@@ -418,7 +418,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
         men = checkVybranoe(this, resurs)
-        positionY = k.getInt(resurs + "Scroll", 0)
         requestedOrientation = if (k.getBoolean("orientation", false)) {
             orientation
         } else {
@@ -830,15 +829,15 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 edit = edit.replace("И", "І")
                 edit = edit.replace("Щ", "Ў")
                 edit = edit.replace("Ъ", "'")
-                if (edit.length >= 3) {
-                    if (editch) {
-                        if (check != 0) {
-                            binding.textSearch.removeTextChangedListener(this)
-                            binding.textSearch.setText(edit)
-                            binding.textSearch.setSelection(editPosition)
-                            binding.textSearch.addTextChangedListener(this)
-                        }
+                if (editch) {
+                    if (check != 0) {
+                        binding.textSearch.removeTextChangedListener(this)
+                        binding.textSearch.setText(edit)
+                        binding.textSearch.setSelection(editPosition)
+                        binding.textSearch.addTextChangedListener(this)
                     }
+                }
+                if (edit.length >= 3) {
                     findAllAsanc()
                 } else {
                     findRemoveSpan()

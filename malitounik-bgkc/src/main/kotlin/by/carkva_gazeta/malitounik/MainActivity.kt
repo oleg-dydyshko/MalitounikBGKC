@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -160,7 +159,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mkDir()
-        loadOpisanieSviat()
+        loadOpisanieSviatyiaISxiaty()
         k = getSharedPreferences("biblia", MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
@@ -1214,12 +1213,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         idOld = idSelect
     }
 
-    private fun loadOpisanieSviat() {
-        val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
-        if (!fileOpisanieSviat.exists()) {
-            if (isNetworkAvailable(this)) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    withContext(Dispatchers.IO) {
+    private fun loadOpisanieSviatyiaISxiaty() {
+        if (isNetworkAvailable(this)) {
+            CoroutineScope(Dispatchers.IO).launch {
+                withContext(Dispatchers.IO) {
+                    val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
+                    if (!fileOpisanieSviat.exists()) {
                         val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
                         val conections = mURL.openConnection() as HttpURLConnection
                         if (conections.responseCode == 200) {
@@ -1228,6 +1227,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                                     it.write(mURL.readText())
                                 }
                             } catch (e: Throwable) {
+                            }
+                        }
+                    }
+                    val dir = File("$filesDir/sviatyja/")
+                    if (!dir.exists()) dir.mkdir()
+                    for (i in 1..12) {
+                        val fileS = File("$filesDir/sviatyja/opisanie$i.json")
+                        if (!fileS.exists()) {
+                            val mURL = URL("https://carkva-gazeta.by/chytanne/sviatyja/opisanie$i.json")
+                            val conections = mURL.openConnection() as HttpURLConnection
+                            if (conections.responseCode == 200) {
+                                try {
+                                    fileS.writer().use {
+                                        it.write(mURL.readText())
+                                    }
+                                } catch (e: Throwable) {
+                                }
                             }
                         }
                     }
@@ -1274,21 +1290,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         var brightness = 15
         var dialogVisable = false
         var moduleName = "biblijateka"
-
-        @Suppress("DEPRECATION")
-        fun getOrientation(context: Activity): Int {
-            val rotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) context.display?.rotation ?: Surface.ROTATION_0
-            else context.windowManager.defaultDisplay.rotation
-            val displayOrientation = context.resources.configuration.orientation
-
-            if (displayOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-                if (rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_180) return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-
-                return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            } else if (rotation == Surface.ROTATION_180 || rotation == Surface.ROTATION_90) return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-
-            return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
 
         fun setListPadzeia(activity: Activity) {
             padzeia.clear()
@@ -1361,7 +1362,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     val total = (state.totalBytesToDownload() / 1024.0 / 1024.0 * 100.0).roundToLong() / 100.0
                     when (state.status()) {
                         SplitInstallSessionStatus.PENDING -> {
-                            context.requestedOrientation = getOrientation(context)
                             layoutDialod.visibility = View.VISIBLE
                             text.text = bytesDownload.toString().plus("Мб з ").plus(total).plus("Мб")
                         }
@@ -1370,7 +1370,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                             context.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                         }
                         SplitInstallSessionStatus.DOWNLOADING -> {
-                            context.requestedOrientation = getOrientation(context)
                             layoutDialod.visibility = View.VISIBLE
                             progressBarModule.max = state.totalBytesToDownload().toInt()
                             progressBarModule.progress = state.bytesDownloaded().toInt()

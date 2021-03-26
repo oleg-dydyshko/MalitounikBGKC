@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
-import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -59,8 +58,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     private var men = false
     private var resurs = ""
     private var checkSetDzenNoch = false
-    private val orientation: Int
-        get() = MainActivity.getOrientation(this)
     private lateinit var binding: PesnyBinding
     private lateinit var bindingprogress: ProgressPesnyAllBinding
     private var procentJob: Job? = null
@@ -363,11 +360,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         if (search != "")
             findAllAsanc(search)
         men = checkVybranoe(this, resurs)
-        requestedOrientation = if (k.getBoolean("orientation", false)) {
-            orientation
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
         bindingprogress.actionPlusFont.setOnClickListener {
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
@@ -519,7 +511,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             menu.findItem(R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, R.drawable.star_big_off)
             menu.findItem(R.id.action_vybranoe).title = resources.getString(R.string.vybranoe)
         }
-        menu.findItem(R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         val item = menu.findItem(R.id.action_vybranoe)
         val spanString = SpannableString(menu.findItem(R.id.action_vybranoe).title.toString())
@@ -558,16 +549,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             }
             prefEditor.apply()
             recreate()
-        }
-        if (id == R.id.action_orientation) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                requestedOrientation = orientation
-                prefEditor.putBoolean("orientation", true)
-            } else {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                prefEditor.putBoolean("orientation", false)
-            }
         }
         if (id == android.R.id.home) {
             onBackPressed()

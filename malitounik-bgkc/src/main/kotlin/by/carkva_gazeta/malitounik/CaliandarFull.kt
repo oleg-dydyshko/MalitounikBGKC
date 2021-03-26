@@ -522,7 +522,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
                     intent.putExtra("cytanne", data[day][9])
-                    intent.putExtra("nedelia", data[day][5].toInt())
                     startActivity(intent)
                 }
             } else {

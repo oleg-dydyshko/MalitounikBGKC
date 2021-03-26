@@ -256,8 +256,8 @@ class VybranoeBibleList : AppCompatActivity(), DialogDeliteBibliaVybranoe.Dialog
                 if (MainActivity.checkmoduleResources(this@VybranoeBibleList)) {
                     val intent = Intent()
                     intent.setClassName(this@VybranoeBibleList, MainActivity.BIBLIAVYBRANOE)
-                    intent.putExtra("position", adapterPosition * 2)
                     intent.putExtra("biblia", biblia)
+                    intent.putExtra("title", mItemList[adapterPosition].title)
                     startActivity(intent)
                 } else {
                     val dadatak = DialogInstallDadatak()

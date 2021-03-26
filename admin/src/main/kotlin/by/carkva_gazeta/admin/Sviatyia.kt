@@ -28,8 +28,6 @@ class Sviatyia : AppCompatActivity() {
     private lateinit var k: SharedPreferences
     private var setedit = false
     private var checkSetDzenNoch = false
-    private val orientation: Int
-        get() = MainActivity.getOrientation(this)
     private lateinit var binding: AdminSviatyiaBinding
     private var resetTollbarJob: Job? = null
     private var caliandar = Calendar.getInstance()
@@ -75,7 +73,6 @@ class Sviatyia : AppCompatActivity() {
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-        requestedOrientation = orientation
         caliandar.set(Calendar.YEAR, 2020)
         dayOfYear = intent.extras?.getInt("dayOfYear", caliandar[Calendar.DAY_OF_YEAR] - 1) ?: caliandar[Calendar.DAY_OF_YEAR] - 1
         binding.pager.currentItem = dayOfYear

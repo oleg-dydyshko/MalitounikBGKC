@@ -36,8 +36,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
     private var title = ""
     private lateinit var binding: AdminBibleBinding
     private var resetTollbarJob: Job? = null
-    private val orientation: Int
-        get() = MainActivity.getOrientation(this)
 
     override fun onPause() {
         super.onPause()
@@ -88,7 +86,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-        requestedOrientation = orientation
         when (kniga) {
             0 -> {
                 title = "Быцьцё"

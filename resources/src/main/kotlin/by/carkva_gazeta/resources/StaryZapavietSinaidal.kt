@@ -3,7 +3,6 @@ package by.carkva_gazeta.resources
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.pm.ActivityInfo
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -64,8 +63,6 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
     private var checkSetDzenNoch = false
     private var title = ""
     private var men = true
-    private val orientation: Int
-        get() = MainActivity.getOrientation(this)
     private lateinit var binding: ActivityBibleBinding
     private var resetTollbarJob: Job? = null
 
@@ -419,11 +416,6 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
             }
         }
         binding.pager.currentItem = glava
-        requestedOrientation = if (k.getBoolean("orientation", false)) {
-            orientation
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
         val file = File("$filesDir/BibliaSinodalStaryZavet/$kniga.json")
         if (file.exists()) {
             val inputStream = FileReader(file)
@@ -519,7 +511,6 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_glava).isVisible = !paralel
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         val itemVybranoe: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         if (men) {
@@ -563,16 +554,6 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
             }
             prefEditor.apply()
             recreate()
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_orientation) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                requestedOrientation = orientation
-                prefEditors.putBoolean("orientation", true)
-            } else {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                prefEditors.putBoolean("orientation", false)
-            }
         }
         if (id == android.R.id.home) {
             onBackPressed()
@@ -651,11 +632,7 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
         this.cytanneParalelnye = cytanneParalelnye ?: ""
         this.cytanneSours = cytanneSours ?: ""
         val pm = ParalelnyeMesta()
-        binding.conteiner.removeAllViewsInLayout()
-        val arrayList = pm.paralel(this@StaryZapavietSinaidal, this.cytanneSours, this.cytanneParalelnye, false)
-        for (textView in arrayList) {
-            binding.conteiner.addView(textView)
-        }
+        binding.conteiner.text = pm.paralel(this@StaryZapavietSinaidal, this.cytanneSours, this.cytanneParalelnye, false).trim()
         binding.scroll.visibility = View.VISIBLE
         binding.pager.visibility = View.GONE
         binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)

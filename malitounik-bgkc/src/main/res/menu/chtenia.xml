@@ -13,12 +13,6 @@
         android:title="@string/fullscreen"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_orientation"
-        android:checkable="true"
-        android:orderInCategory="100"
-        android:title="@string/blok_orientation"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_utran"
         android:checkable="true"
         android:checked="true"

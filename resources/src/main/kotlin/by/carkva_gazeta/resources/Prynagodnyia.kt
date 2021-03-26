@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
-import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -52,8 +51,6 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
     private var resurs = ""
     private var men = false
     private var title = ""
-    private val orientation: Int
-        get() = MainActivity.getOrientation(this)
     private lateinit var binding: AkafistUnderBinding
     private lateinit var bindingprogress: ProgressBinding
     private var procentJob: Job? = null
@@ -123,11 +120,6 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         inputStream.close()
         binding.TextView.text = MainActivity.fromHtml(builder.toString())
         men = Bogashlugbovya.checkVybranoe(this, resurs)
-        requestedOrientation = if (k.getBoolean("orientation", false)) {
-            orientation
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
         bindingprogress.actionPlusFont.setOnClickListener {
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
@@ -278,7 +270,6 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
         }
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         val item = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         val spanString = SpannableString(menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title.toString())
@@ -316,16 +307,6 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
             }
             prefEditor.apply()
             recreate()
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_orientation) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                requestedOrientation = orientation
-                prefEditor.putBoolean("orientation", true)
-            } else {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                prefEditor.putBoolean("orientation", false)
-            }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             men = Bogashlugbovya.setVybranoe(this, resurs, title)

@@ -2,21 +2,18 @@ package by.carkva_gazeta.resources
 
 import android.content.Context
 import android.graphics.Typeface
-import android.util.TypedValue
-import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
+import androidx.core.text.toSpannable
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
 class ParalelnyeMesta {
-    fun paralel(context: Context, cytanneSours: String, cytanneParalelnye: String, semuxa: Boolean): ArrayList<TextViewRobotoCondensed> {
+    fun paralel(context: Context, cytanneSours: String, cytanneParalelnye: String, semuxa: Boolean): Spannable {
         var cytanneSours1 = cytanneSours
-        val arrayList = ArrayList<TextViewRobotoCondensed>()
-        var textViewZag: TextViewRobotoCondensed
-        var textViewOpis: TextViewRobotoCondensed
+        val stringBuilder = SpannableStringBuilder()
         if (semuxa) {
             if (cytanneSours1 == "Быт") {
                 cytanneSours1 = cytanneSours1.replace("Быт", "Быц")
@@ -170,21 +167,9 @@ class ParalelnyeMesta {
             }
         }
         val chten = cytanneParalelnye.split(";")
-        val textViewSours = TextViewRobotoCondensed(context)
-        textViewSours.setTextIsSelectable(true)
-        textViewSours.setTypeface(null, Typeface.BOLD_ITALIC)
-        textViewSours.setPadding(0, 0, 0, 10)
-        val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        var dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) {
-            textViewSours.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorWhite))
-        } else {
-            textViewSours.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-        }
-        textViewSours.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        textViewSours.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours1)
-        arrayList.add(textViewSours)
+        var src = context.resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours1).toSpannable()
+        src.setSpan(StyleSpan(Typeface.BOLD_ITALIC), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        stringBuilder.append(src).append("\n\n")
         var knigaName = "Быт"
         for (aChten in chten) {
             var nomerglavy = 1
@@ -242,6 +227,7 @@ class ParalelnyeMesta {
                     }
                 }
                 try {
+                    var noKnigaSemuxi = false
                     val r = context.resources
                     var inputStream: InputStream? = null
                     if (semuxa) {
@@ -314,7 +300,9 @@ class ParalelnyeMesta {
                             77 -> r.openRawResource(R.raw.biblian27)
                             else -> null
                         }
-                    } else {
+                    }
+                    if (!semuxa || inputStream == null) {
+                        if (semuxa && inputStream == null) noKnigaSemuxi = true
                         if (nomer == 1) inputStream = r.openRawResource(R.raw.sinaidals1)
                         if (nomer == 2) inputStream = r.openRawResource(R.raw.sinaidals2)
                         if (nomer == 3) inputStream = r.openRawResource(R.raw.sinaidals3)
@@ -394,21 +382,21 @@ class ParalelnyeMesta {
                         if (nomer == 77) inputStream = r.openRawResource(R.raw.sinaidaln27)
                     }
                     if (inputStream != null) {
-                        val isr = InputStreamReader(inputStream)
-                        val reader = BufferedReader(isr)
-                        var line: String
                         val builder = StringBuilder()
-                        reader.forEachLine {
-                            line = it
-                            if (line.contains("//")) {
-                                val t1 = line.indexOf("//")
-                                line = line.substring(0, t1).trim()
-                                if (line != "") builder.append(line).append("\n")
-                            } else {
-                                builder.append(line).append("\n")
+                        InputStreamReader(inputStream).use { inputStreamReader ->
+                            val reader = BufferedReader(inputStreamReader)
+                            var line: String
+                            reader.forEachLine {
+                                line = it
+                                if (line.contains("//")) {
+                                    val t1 = line.indexOf("//")
+                                    line = line.substring(0, t1).trim()
+                                    if (line != "") builder.append(line).append("\n")
+                                } else {
+                                    builder.append(line).append("\n")
+                                }
                             }
                         }
-                        inputStream.close()
                         val split2 = builder.toString().split("===")
                         var r1 = split2[nomerglavy].trim()
                         var r2: String
@@ -434,22 +422,8 @@ class ParalelnyeMesta {
                                 r1
                             }
                         }
-                        textViewZag = TextViewRobotoCondensed(context)
-                        textViewOpis = TextViewRobotoCondensed(context)
-                        textViewZag.setTextIsSelectable(true)
-                        textViewOpis.setTextIsSelectable(true)
-                        dzenNoch = k.getBoolean("dzen_noch", false)
-                        if (dzenNoch) {
-                            textViewZag.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorWhite))
-                            textViewOpis.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorWhite))
-                        } else {
-                            textViewZag.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-                            textViewOpis.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-                        }
-                        textViewZag.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                        textViewZag.setTypeface(null, Typeface.BOLD)
                         if (semuxa) nazva = nazvaBel
-                        val kon: String = when {
+                        val kon = when {
                             nachalo == konec -> {
                                 "$nazva $nomerglavy.$nachalo"
                             }
@@ -460,65 +434,29 @@ class ParalelnyeMesta {
                                 "$nazva $nomerglavy.$nachalo-$konec"
                             }
                         }
-                        textViewZag.text = kon
-                        arrayList.add(textViewZag)
-                        textViewOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
                         if (semuxa && nomer == 22) {
-                            textViewOpis.text = MainActivity.fromHtml(context.resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_opis, r2))
-                        } else textViewOpis.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_opis, r2)
-                    } else {
-                        textViewZag = TextViewRobotoCondensed(context)
-                        textViewOpis = TextViewRobotoCondensed(context)
-                        textViewZag.setTextIsSelectable(true)
-                        textViewOpis.setTextIsSelectable(true)
-                        dzenNoch = k.getBoolean("dzen_noch", false)
-                        if (dzenNoch) {
-                            textViewZag.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorWhite))
-                            textViewOpis.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorWhite))
-                        } else {
-                            textViewZag.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-                            textViewOpis.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-                        }
-                        textViewOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                        textViewOpis.setTypeface(null, Typeface.ITALIC)
-                        textViewZag.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                        textViewZag.setTypeface(null, Typeface.BOLD)
-                        if (semuxa) nazva = nazvaBel
-                        val kon: String = when {
-                            nachalo == konec -> {
-                                "$nazva $nomerglavy.$nachalo"
-                            }
-                            konec.contains("+-+") -> {
-                                "$nazva $nomerglavy"
-                            }
-                            else -> {
-                                "$nazva $nomerglavy.$nachalo-$konec"
+                            r2 = r2.replace("<br>", "")
+                            r2 = r2.replace("<strong>", "")
+                            r2 = r2.replace("</strong>", "")
+                            val t1 = r2.indexOf("</em>")
+                            if (t1 != -1) {
+                                r2 = r2.substring(t1 + 5)
                             }
                         }
-                        textViewZag.text = kon
-                        arrayList.add(textViewZag)
-                        textViewOpis.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error)
+                        if (noKnigaSemuxi) {
+                            src = context.resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error).toSpannable()
+                            src.setSpan(StyleSpan(Typeface.ITALIC), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            stringBuilder.append(src).append("\n")
+                        }
+
+                        src = kon.toSpannable()
+                        src.setSpan(StyleSpan(Typeface.BOLD), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        stringBuilder.append(src).append("\n")
+                        stringBuilder.append(context.resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_opis, r2)).append("\n")
                     }
-                    arrayList.add(textViewOpis)
                 } catch (t: Throwable) {
-                    textViewZag = TextViewRobotoCondensed(context)
-                    textViewOpis = TextViewRobotoCondensed(context)
-                    textViewZag.setTextIsSelectable(true)
-                    textViewOpis.setTextIsSelectable(true)
-                    dzenNoch = k.getBoolean("dzen_noch", false)
-                    if (dzenNoch) {
-                        textViewZag.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorWhite))
-                        textViewOpis.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorWhite))
-                    } else {
-                        textViewZag.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-                        textViewOpis.setTextColor(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-                    }
-                    textViewOpis.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                    textViewOpis.setTypeface(null, Typeface.ITALIC)
-                    textViewZag.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-                    textViewZag.setTypeface(null, Typeface.BOLD)
                     if (semuxa) nazva = nazvaBel
-                    val kon: String = when {
+                    val kon = when {
                         nachalo == konec -> {
                             "$nazva $nomerglavy.$nachalo"
                         }
@@ -529,14 +467,16 @@ class ParalelnyeMesta {
                             "$nazva $nomerglavy.$nachalo-$konec"
                         }
                     }
-                    textViewZag.text = kon
-                    arrayList.add(textViewZag)
-                    textViewOpis.text = context.resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)
-                    arrayList.add(textViewOpis)
+                    src = kon.toSpannable()
+                    src.setSpan(StyleSpan(Typeface.BOLD), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    stringBuilder.append(src).append("\n\n")
+                    src = context.resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch).toSpannable()
+                    src.setSpan(StyleSpan(Typeface.ITALIC), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    stringBuilder.append(src)
                 }
             }
         }
-        return arrayList
+        return stringBuilder.toSpannable()
     }
 
     fun biblia(chtenie: String): Array<String> {

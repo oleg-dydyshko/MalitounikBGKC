@@ -10,7 +10,6 @@ import android.widget.ScrollView
 class InteractiveScrollView : ScrollView {
     private var mOnScrollChangedCallback: OnScrollChangedCallback? = null
     private var mListener: OnBottomReachedListener? = null
-    private var mTouch: OnNestedTouchListener? = null
 
     constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -28,14 +27,14 @@ class InteractiveScrollView : ScrollView {
             mListener?.onBottomReached()
         }
         super.onScrollChanged(l, t, oldl, oldt)
-        mOnScrollChangedCallback?.onScroll(t)
+        mOnScrollChangedCallback?.onScroll(t, oldt)
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         when (event?.action ?: MotionEvent.ACTION_CANCEL) {
-            MotionEvent.ACTION_DOWN -> mTouch?.onTouch(true)
-            MotionEvent.ACTION_UP -> mTouch?.onTouch(false)
+            MotionEvent.ACTION_DOWN -> mListener?.onTouch(true)
+            MotionEvent.ACTION_UP -> mListener?.onTouch(false)
         }
         return super.onTouchEvent(event)
     }
@@ -48,20 +47,13 @@ class InteractiveScrollView : ScrollView {
         mListener = onBottomReachedListener
     }
 
-    fun setOnNestedTouchListener(mTouch: OnNestedTouchListener?) {
-        this.mTouch = mTouch
-    }
-
     interface OnScrollChangedCallback {
-        fun onScroll(t: Int)
+        fun onScroll(t: Int, oldt: Int)
     }
 
     interface OnBottomReachedListener {
         fun onBottomReached()
         fun onScrollDiff(diff: Int)
-    }
-
-    interface OnNestedTouchListener {
         fun onTouch(action: Boolean)
     }
 }

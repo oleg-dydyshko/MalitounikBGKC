@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
-import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -56,8 +55,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var n = 0
     private var title = ""
     private var checkSetDzenNoch = false
-    private val orientation: Int
-        get() = MainActivity.getOrientation(this)
     private lateinit var binding: AkafistUnderBinding
     private lateinit var bindingprogress: ProgressBinding
     private var procentJob: Job? = null
@@ -233,11 +230,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 binding.TextView.text = MainActivity.fromHtml(resursOut)
             }
         }
-        requestedOrientation = if (chin.getBoolean("orientation", false)) {
-            orientation
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
         bindingprogress.actionPlusFont.setOnClickListener {
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
@@ -381,7 +373,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).isVisible = false
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = chin.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
         val item = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         val spanString = SpannableString(menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title.toString())
@@ -424,16 +415,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         if (id == android.R.id.home) {
             onBackPressed()
             return true
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_orientation) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                requestedOrientation = orientation
-                prefEditor.putBoolean("orientation", true)
-            } else {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                prefEditor.putBoolean("orientation", false)
-            }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
             val dialogFontSize = DialogFontSize()

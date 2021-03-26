@@ -5,11 +5,13 @@ import java.io.File
 import java.io.FileReader
 
 internal class BibliotekaEpub(dirPatch: String) {
-    private var navigation: String? = null
+    private val navigation: String
+        get() = File(patch + "toc.ncx").readText()
     private var rootDir = "/"
     private val navig: ArrayList<ArrayList<String>>
     private val patch: String
     private var contentOpf = "content.opf"
+
     private fun getFullPatch(dirPatch: String): String {
         val file = File("$dirPatch/META-INF/container.xml")
         val inputStream = FileReader(file)
@@ -27,27 +29,18 @@ internal class BibliotekaEpub(dirPatch: String) {
         return dirPatch + rootDir
     }
 
-    private val bookNavigation: Unit
-        get() {
-            val file = File(patch + "toc.ncx")
-            val inputStream = FileReader(file)
-            val reader = BufferedReader(inputStream)
-            navigation = reader.readText()
-            reader.close()
-        }
-
     val bookTitle: String
         get() {
-            val t1 = navigation?.indexOf("<docTitle>") ?: 0
-            val t2 = navigation?.indexOf("<text>", t1) ?: 0
-            val t3 = navigation?.indexOf("</text>", t2) ?: 0
-            return navigation?.substring(t2 + 6, t3) ?: ""
+            val t1 = navigation.indexOf("<docTitle>")
+            val t2 = navigation.indexOf("<text>", t1)
+            val t3 = navigation.indexOf("</text>", t2)
+            return navigation.substring(t2 + 6, t3)
         }
 
     val content: ArrayList<ArrayList<String>>
         get() {
             if (navig.size == 0) {
-                val rew = navigation?.split("<navPoint") ?: ArrayList()
+                val rew = navigation.split("<navPoint")
                 for (i in 1 until rew.size) {
                     val temp = ArrayList<String>()
                     val t1 = rew[i].indexOf("<navLabel>")
@@ -136,7 +129,7 @@ internal class BibliotekaEpub(dirPatch: String) {
 
     init {
         patch = getFullPatch(dirPatch)
-        bookNavigation
+        navigation
         navig = ArrayList()
     }
 }

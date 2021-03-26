@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
-import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
@@ -43,8 +42,6 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
-    private val orientation: Int
-        get() = MainActivity.getOrientation(this)
     private lateinit var binding: NadsanMalitvyIPesnyBinding
     private var resetTollbarJob: Job? = null
 
@@ -104,11 +101,6 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         binding.malitvyIPesny.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        requestedOrientation = if (k.getBoolean("orientation", false)) {
-            orientation
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
         setTollbarTheme()
     }
 
@@ -177,7 +169,6 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         return true
     }
@@ -185,17 +176,6 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val prefEditor: Editor = k.edit()
         val id = item.itemId
-        if (id == by.carkva_gazeta.malitounik.R.id.action_orientation) {
-            checkSetDzenNoch = true
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                requestedOrientation = orientation
-                prefEditor.putBoolean("orientation", true)
-            } else {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                prefEditor.putBoolean("orientation", false)
-            }
-        }
         if (id == android.R.id.home) {
             onBackPressed()
             return true

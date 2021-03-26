@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.*
 import android.content.SharedPreferences.Editor
-import android.content.pm.ActivityInfo
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -74,8 +73,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var mPosition = 0
     private var maranAtaScrollPosition = 0
     private var mOffset = 0
-    private val orientation: Int
-        get() = MainActivity.getOrientation(this)
     private lateinit var binding: AkafistMaranAtaBinding
     private lateinit var bindingprogress: ProgressBinding
     private var autoScrollJob: Job? = null
@@ -398,11 +395,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             val gson = Gson()
             val type = object : TypeToken<ArrayList<ArrayList<Int?>?>?>() {}.type
             vydelenie = gson.fromJson(file.readText(), type)
-        }
-        requestedOrientation = if (k.getBoolean("orientation", false)) {
-            orientation
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {}
@@ -1109,7 +1101,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         itemAuto.title = spanString
 
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isChecked = k.getBoolean("paralel_maranata", true)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isVisible = true
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
@@ -1165,16 +1156,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
             prefEditor.apply()
             recreate()
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_orientation) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                requestedOrientation = orientation
-                prefEditor.putBoolean("orientation", true)
-            } else {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                prefEditor.putBoolean("orientation", false)
-            }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_paralel) {
             item.isChecked = !item.isChecked
@@ -1290,11 +1271,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     val t3 = maranAta[position].indexOf("<!--")
                     val ch = maranAta[position].substring(t3 + 4, t2)
                     val biblia = ch.split(".")
-                    binding.conteiner.removeAllViewsInLayout()
-                    val arrayList = pm.paralel(this, biblia[0] + " " + biblia[1] + "." + biblia[2], maranAta[position].substring(t1 + 1).trim(), belarus)
-                    for (i in arrayList.indices) {
-                        binding.conteiner.addView(arrayList[i])
-                    }
+                    binding.conteiner.text = pm.paralel(this, biblia[0] + " " + biblia[1] + "." + biblia[2], maranAta[position].substring(t1 + 1).trim(), belarus).trim()
                     binding.scroll.visibility = View.VISIBLE
                     binding.ListView.visibility = View.GONE
                     binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, biblia[0] + " " + biblia[1] + "." + biblia[2])

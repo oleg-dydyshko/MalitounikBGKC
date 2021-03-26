@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
-import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -73,8 +72,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var editVybranoe = false
     private var mActionDown = false
     private var mAutoScroll = true
-    private val orientation: Int
-        get() = MainActivity.getOrientation(this)
     private lateinit var binding: BogasluzbovyaBinding
     private lateinit var bindingprogress: ProgressBinding
     private var autoScrollJob: Job? = null
@@ -365,8 +362,29 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         binding.textView.textSize = fontBiblia
     }
 
-    override fun onScroll(t: Int) {
+    override fun onScroll(t: Int, oldt: Int) {
         positionY = t
+        if (binding.textSearch.visibility == View.VISIBLE) {
+            if (findListSpans.isNotEmpty()) {
+                val text = binding.textView.text as SpannableString
+                val lineForVertical = binding.textView.layout.getLineForVertical(positionY)
+                for (i in 0 until findListSpans.size) {
+                    if (binding.textView.layout.getLineForOffset(findListSpans[i].start) == lineForVertical) {
+                        var ii = i + 1
+                        if (i == 0) ii = 1
+                        findPosition = i
+                        var findPositionOld = if (t >= oldt) i - 1
+                        else i + 1
+                        if (findPositionOld == -1) findPositionOld = findListSpans.size - 1
+                        if (findPositionOld == findListSpans.size) findPositionOld = 0
+                        text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld].start, findListSpans[findPositionOld].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, ii, findListSpans.size)
+                        text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta2)), findListSpans[i].start, findListSpans[i].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        break
+                    }
+                }
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -418,11 +436,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
         men = checkVybranoe(this, resurs)
-        requestedOrientation = if (k.getBoolean("orientation", false)) {
-            orientation
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
         bindingprogress.actionPlusFont.setOnClickListener {
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
@@ -809,11 +822,25 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             mAutoScroll = false
         }
         binding.textView.text = text
-        if (savedInstanceState?.getBoolean("seach") == true) {
-            findAllAsanc()
+        if (savedInstanceState != null) {
+            binding.textView.post {
+                val textline = savedInstanceState.getString("textLine", "")
+                if (textline != "") {
+                    val index = binding.textView.text.indexOf(textline)
+                    val line = binding.textView.layout.getLineForOffset(index)
+                    val y = binding.textView.layout.getLineTop(line)
+                    binding.scrollView2.scrollY = y
+                } else {
+                    binding.scrollView2.post { binding.scrollView2.smoothScrollBy(0, positionY) }
+                }
+                if (savedInstanceState.getBoolean("seach")) {
+                    findAllAsanc()
+                }
+            }
+        } else {
+            binding.scrollView2.post { binding.scrollView2.smoothScrollBy(0, positionY) }
         }
         positionY = k.getInt(resurs + "Scroll", 0)
-        binding.scrollView2.post { binding.scrollView2.smoothScrollBy(0, positionY) }
         if (dzenNoch) binding.imageView6.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_up_black)
         binding.imageView6.setOnClickListener { findNext(previous = true) }
         binding.textSearch.addTextChangedListener(object : TextWatcher {
@@ -1031,7 +1058,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
             itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
         }
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
 
         spanString = SpannableString(itemVybranoe.title.toString())
@@ -1096,16 +1122,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             binding.textSearch.requestFocus()
             val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_orientation) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                requestedOrientation = orientation
-                prefEditor.putBoolean("orientation", true)
-            } else {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                prefEditor.putBoolean("orientation", false)
-            }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
@@ -1221,6 +1237,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         outState.putBoolean("editVybranoe", editVybranoe)
         if (binding.textSearch.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)
+        val line = binding.textView.layout?.getLineForVertical(binding.scrollView2.scrollY)
+        line?.let {
+            val string = binding.textView.text.substring(binding.textView.layout.getLineStart(it), binding.textView.layout.getLineEnd(it))
+            outState.putString("textLine", string)
+        }
     }
 
     private data class SpanStr(val color: Int, val start: Int, val size: Int)

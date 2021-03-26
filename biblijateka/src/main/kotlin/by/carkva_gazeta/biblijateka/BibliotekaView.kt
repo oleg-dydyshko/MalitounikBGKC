@@ -6,7 +6,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.database.Cursor
@@ -121,8 +120,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var animationStoronaLeft = true
     private var site = false
     private var mActionDown = false
-    private val orientation: Int
-        get() = MainActivity.getOrientation(this)
     private var resetTollbarJob: Job? = null
     private val animationListenerOutRight: AnimationListener = object : AnimationListener {
         override fun onAnimationStart(animation: Animation) {}
@@ -740,12 +737,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 prefEditors.apply()
             }
         }
-
-        requestedOrientation = if (k.getBoolean("orientation", false)) {
-            orientation
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
         setTollbarTheme()
 
         val gson = Gson()
@@ -1315,7 +1306,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_bright).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isVisible = false
         }
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isChecked = k.getBoolean("inversion", false)
         return true
     }
@@ -1463,16 +1453,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
             fullscreenPage = true
             hide()
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_orientation) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                requestedOrientation = orientation
-                prefEditor.putBoolean("orientation", true)
-            } else {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                prefEditor.putBoolean("orientation", false)
-            }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_bright) {
             val dialogBrightness = DialogBrightness()
@@ -1649,11 +1629,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         if (rub != -1 && bindingcontent.swipeRefreshLayout.visibility == View.VISIBLE) {
             val gson = Gson()
-            val json: String = k.getString("Biblioteka", "") ?: ""
+            val json = k.getString("Biblioteka", "") ?: ""
             val timeUpdate = Calendar.getInstance().timeInMillis
             val timeUpdateSave = k.getLong("BibliotekaTimeUpdate", timeUpdate)
             if (!(json == "" || timeUpdate - timeUpdateSave == 0L)) {
-                if (timeUpdate - timeUpdateSave > (30 * 24 * 60 * 60 * 1000L)) {
+                if (timeUpdate - timeUpdateSave > (24 * 60 * 60 * 1000L)) {
                     if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(this) == 2) {
                         val prefEditors: SharedPreferences.Editor = k.edit()
                         prefEditors.putLong("BibliotekaTimeUpdate", timeUpdate)
@@ -1667,7 +1647,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     }
                 } else {
                     arrayList.clear()
-                    val type: Type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
+                    val type: Type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
                     arrayList.addAll(gson.fromJson(json, type))
                     val temp: ArrayList<ArrayList<String>> = ArrayList()
                     for (i in 0 until arrayList.size) {

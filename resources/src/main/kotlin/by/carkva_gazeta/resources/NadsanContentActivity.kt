@@ -3,7 +3,6 @@ package by.carkva_gazeta.resources
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.pm.ActivityInfo
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -57,8 +56,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     private var dialog = true
     private var checkSetDzenNoch = false
     private var men = true
-    private val orientation: Int
-        get() = MainActivity.getOrientation(this)
     private lateinit var binding: ActivityBibleBinding
     private var resetTollbarJob: Job? = null
 
@@ -139,11 +136,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         binding.pager.currentItem = glava
-        requestedOrientation = if (k.getBoolean("orientation", false)) {
-            orientation
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
     }
 
     private fun setTollbarTheme() {
@@ -276,7 +268,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_glava).isVisible = true
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_orientation).isChecked = k.getBoolean("orientation", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         val itemVybranoe: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         if (men) {
@@ -320,16 +311,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             }
             prefEditor.apply()
             recreate()
-        }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_orientation) {
-            item.isChecked = !item.isChecked
-            if (item.isChecked) {
-                requestedOrientation = orientation
-                prefEditors.putBoolean("orientation", true)
-            } else {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                prefEditors.putBoolean("orientation", false)
-            }
         }
         if (id == android.R.id.home) {
             onBackPressed()

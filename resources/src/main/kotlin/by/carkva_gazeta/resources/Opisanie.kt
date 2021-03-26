@@ -362,7 +362,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
 
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {
-            val layoutParams = binding.toolbar.layoutParams
+            val layoutParams = binding.collapsingToolbarLayout.layoutParams
             if (binding.titleToolbar.isSelected) {
                 resetTollbarJob?.cancel()
                 resetTollbar(layoutParams)

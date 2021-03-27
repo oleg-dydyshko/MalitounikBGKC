@@ -1,5 +1,6 @@
 package by.carkva_gazeta.resources
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -82,7 +83,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var aliert8 = ""
     private var aliert9 = ""
     private var findPosition = 0
+    private var firstTextPosition = ""
     private val findListSpans = ArrayList<SpanStr>()
+    private var animatopRun = false
 
     companion object {
         private val resursMap = ArrayMap<String, Int>()
@@ -291,6 +294,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         CoroutineScope(Dispatchers.Main).launch {
             findRemoveSpan()
             findAll()
+            findCheckPosition()
             findNext(false)
         }
     }
@@ -308,6 +312,21 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
     }
 
+    private fun findCheckPosition() {
+        if (findListSpans.isNotEmpty()) {
+            val lineForVertical = binding.textView.layout.getLineForVertical(positionY)
+            for (i in 0 until findListSpans.size) {
+                if (lineForVertical <= binding.textView.layout.getLineForOffset(findListSpans[i].start)) {
+                    findPosition = i
+                    break
+                }
+            }
+        } else {
+            findPosition = 0
+            binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.niama)
+        }
+    }
+
     private fun findRemoveSpan() {
         val text = binding.textView.text as SpannableString
         if (findListSpans.isNotEmpty()) {
@@ -320,8 +339,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         spans.forEach {
             text.removeSpan(it)
         }
-        binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.niama)
-        findPosition = 0
     }
 
     private fun findNext(next: Boolean = true, previous: Boolean = false) {
@@ -344,6 +361,21 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             val line = binding.textView.layout.getLineForOffset(findListSpans[findPosition].start)
             val y = binding.textView.layout.getLineTop(line)
             val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+            anim.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator?) {
+                    animatopRun = true
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    animatopRun = false
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+            })
             anim.setDuration(1000).start()
         }
     }
@@ -364,7 +396,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     override fun onScroll(t: Int, oldt: Int) {
         positionY = t
-        if (binding.textSearch.visibility == View.VISIBLE) {
+        if (binding.textSearch.visibility == View.VISIBLE && !animatopRun) {
             if (findListSpans.isNotEmpty()) {
                 val text = binding.textView.text as SpannableString
                 val lineForVertical = binding.textView.layout.getLineForVertical(positionY)
@@ -378,7 +410,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         if (findPositionOld == -1) findPositionOld = findListSpans.size - 1
                         if (findPositionOld == findListSpans.size) findPositionOld = 0
                         text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld].start, findListSpans[findPositionOld].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, ii, findListSpans.size)
+                        if (findPosition != ii)
+                            binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, ii, findListSpans.size)
                         text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta2)), findListSpans[i].start, findListSpans[i].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         break
                     }
@@ -1195,6 +1228,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         autoStartScrollJob?.cancel()
         procentJob?.cancel()
         resetTollbarJob?.cancel()
+        val line = binding.textView.layout?.getLineForVertical(binding.scrollView2.scrollY)
+        line?.let {
+            val string = binding.textView.text.substring(binding.textView.layout.getLineStart(it), binding.textView.layout.getLineEnd(it))
+            firstTextPosition = string
+        }
     }
 
     override fun onResume() {
@@ -1237,11 +1275,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         outState.putBoolean("editVybranoe", editVybranoe)
         if (binding.textSearch.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)
-        val line = binding.textView.layout?.getLineForVertical(binding.scrollView2.scrollY)
-        line?.let {
-            val string = binding.textView.text.substring(binding.textView.layout.getLineStart(it), binding.textView.layout.getLineEnd(it))
-            outState.putString("textLine", string)
-        }
+        outState.putString("textLine", firstTextPosition)
     }
 
     private data class SpanStr(val color: Int, val start: Int, val size: Int)

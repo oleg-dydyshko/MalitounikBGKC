@@ -69,6 +69,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var resetTollbarJob: Job? = null
     private var diffScroll = -1
     private var titleTwo = ""
+    private var firstTextPosition = ""
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -994,6 +995,11 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         autoStartScrollJob?.cancel()
         procentJob?.cancel()
         resetTollbarJob?.cancel()
+        val line = binding.textView.layout?.getLineForVertical(binding.InteractiveScroll.scrollY)
+        line?.let {
+            val string = binding.textView.text.substring(binding.textView.layout.getLineStart(it), binding.textView.layout.getLineEnd(it))
+            firstTextPosition = string
+        }
     }
 
     override fun onResume() {
@@ -1087,10 +1093,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("change", change)
-        val line = binding.textView.layout?.getLineForVertical(binding.InteractiveScroll.scrollY)
-        line?.let {
-            val string = binding.textView.text.substring(binding.textView.layout.getLineStart(it), binding.textView.layout.getLineEnd(it))
-            outState.putString("textLine", string)
-        }
+        outState.putString("textLine", firstTextPosition)
     }
 }

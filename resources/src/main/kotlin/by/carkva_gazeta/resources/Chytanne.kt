@@ -32,7 +32,7 @@ import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
+class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnScrollChangedCallback {
 
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")
@@ -70,6 +70,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var diffScroll = -1
     private var titleTwo = ""
     private var firstTextPosition = ""
+    private var onRestore = false
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -213,6 +214,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 prefEditors.apply()
             }
         }
+        binding.InteractiveScroll.setOnScrollChangedCallback(this)
     }
 
     private fun setTollbarTheme() {
@@ -832,6 +834,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 }
             }
             if (savedInstanceState != null) {
+                onRestore = true
                 binding.textView.post {
                     val textline = savedInstanceState.getString("textLine", "")
                     if (textline != "") {
@@ -840,6 +843,13 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                         val y = binding.textView.layout.getLineTop(line)
                         binding.InteractiveScroll.scrollY = y
                     }
+                    if (autoscroll) {
+                        startAutoScroll()
+                    }
+                }
+            } else {
+                if (autoscroll) {
+                    startAutoScroll()
                 }
             }
         } catch (t: Throwable) {
@@ -919,11 +929,13 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             binding.actionPlus.animation = animation
             stopAutoStartScroll()
             binding.textView.setTextIsSelectable(false)
-            autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                while (isActive) {
-                    delay(spid.toLong())
-                    if (!mActionDown && !MainActivity.dialogVisable) {
-                        binding.InteractiveScroll.smoothScrollBy(0, 2)
+            if (autoScrollJob?.isActive != true) {
+                autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                    while (isActive) {
+                        delay(spid.toLong())
+                        if (!mActionDown && !MainActivity.dialogVisable) {
+                            binding.InteractiveScroll.smoothScrollBy(0, 2)
+                        }
                     }
                 }
             }
@@ -995,11 +1007,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         autoStartScrollJob?.cancel()
         procentJob?.cancel()
         resetTollbarJob?.cancel()
-        val line = binding.textView.layout?.getLineForVertical(binding.InteractiveScroll.scrollY)
-        line?.let {
-            val string = binding.textView.text.substring(binding.textView.layout.getLineStart(it), binding.textView.layout.getLineEnd(it))
-            firstTextPosition = string
-        }
     }
 
     override fun onResume() {
@@ -1007,10 +1014,10 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         setTollbarTheme()
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getInt("autoscrollSpid", 60)
-        if (autoscroll) {
+        if (autoscroll && !onRestore) {
             startAutoScroll()
         }
+        spid = k.getInt("autoscrollSpid", 60)
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
@@ -1087,6 +1094,13 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         CoroutineScope(Dispatchers.Main).launch {
             mShowPart2Runnable()
         }
+    }
+
+    override fun onScroll(t: Int, oldt: Int) {
+        val lineForVertical = binding.textView.layout.getLineForVertical(t)
+        val textForVertical = binding.textView.text.substring(binding.textView.layout.getLineStart(lineForVertical), binding.textView.layout.getLineEnd(lineForVertical)).trim()
+        if (textForVertical != "")
+            firstTextPosition = textForVertical
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -48,10 +48,12 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
+
     private fun mShowPart2Runnable() {
         val actionBar = supportActionBar
         actionBar?.show()
     }
+
     private var fullscreenPage = false
     private var change = false
     private var cytanne = ""
@@ -397,7 +399,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             vydelenie = gson.fromJson(file.readText(), type)
         }
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
-            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {}
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+            }
+
             override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
                 if (list.adapter == null || list.getChildAt(0) == null) return
                 val position = list.firstVisiblePosition

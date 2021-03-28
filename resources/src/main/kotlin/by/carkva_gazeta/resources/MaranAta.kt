@@ -1580,7 +1580,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text.tag = position
             var textView = maranAta[position]
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             textView = textView.replace("+-+", "")

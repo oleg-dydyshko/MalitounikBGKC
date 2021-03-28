@@ -397,26 +397,27 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     override fun onScroll(t: Int, oldt: Int) {
         positionY = t
-        val lineForVertical = binding.textView.layout.getLineForVertical(positionY)
-        val textForVertical = binding.textView.text.substring(binding.textView.layout.getLineStart(lineForVertical), binding.textView.layout.getLineEnd(lineForVertical)).trim()
-        if (textForVertical != "")
-            firstTextPosition = textForVertical
-        if (binding.textSearch.visibility == View.VISIBLE && !animatopRun) {
-            if (findListSpans.isNotEmpty()) {
-                val text = binding.textView.text as SpannableString
-                for (i in 0 until findListSpans.size) {
-                    if (binding.textView.layout.getLineForOffset(findListSpans[i].start) == lineForVertical) {
-                        var ii = i + 1
-                        if (i == 0) ii = 1
-                        findPosition = i
-                        var findPositionOld = if (t >= oldt) i - 1
-                        else i + 1
-                        if (findPositionOld == -1) findPositionOld = findListSpans.size - 1
-                        if (findPositionOld == findListSpans.size) findPositionOld = 0
-                        text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld].start, findListSpans[findPositionOld].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        if (findPosition != ii) binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, ii, findListSpans.size)
-                        text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta2)), findListSpans[i].start, findListSpans[i].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        break
+        val laneLayout = binding.textView.layout
+        laneLayout?.let {
+            val textForVertical = binding.textView.text.substring(binding.textView.layout.getLineStart(it.getLineForVertical(positionY)), binding.textView.layout.getLineEnd(it.getLineForVertical(positionY))).trim()
+            if (textForVertical != "") firstTextPosition = textForVertical
+            if (binding.textSearch.visibility == View.VISIBLE && !animatopRun) {
+                if (findListSpans.isNotEmpty()) {
+                    val text = binding.textView.text as SpannableString
+                    for (i in 0 until findListSpans.size) {
+                        if (binding.textView.layout.getLineForOffset(findListSpans[i].start) == it.getLineForVertical(positionY)) {
+                            var ii = i + 1
+                            if (i == 0) ii = 1
+                            findPosition = i
+                            var findPositionOld = if (t >= oldt) i - 1
+                            else i + 1
+                            if (findPositionOld == -1) findPositionOld = findListSpans.size - 1
+                            if (findPositionOld == findListSpans.size) findPositionOld = 0
+                            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld].start, findListSpans[findPositionOld].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            if (findPosition != ii) binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, ii, findListSpans.size)
+                            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta2)), findListSpans[i].start, findListSpans[i].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            break
+                        }
                     }
                 }
             }

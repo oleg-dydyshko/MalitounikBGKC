@@ -1097,10 +1097,11 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
     }
 
     override fun onScroll(t: Int, oldt: Int) {
-        val lineForVertical = binding.textView.layout.getLineForVertical(t)
-        val textForVertical = binding.textView.text.substring(binding.textView.layout.getLineStart(lineForVertical), binding.textView.layout.getLineEnd(lineForVertical)).trim()
-        if (textForVertical != "")
-            firstTextPosition = textForVertical
+        val lineLayout = binding.textView.layout
+        lineLayout?.let {
+            val textForVertical = binding.textView.text.substring(binding.textView.layout.getLineStart(it.getLineForVertical(t)), binding.textView.layout.getLineEnd(it.getLineForVertical(t))).trim()
+            if (textForVertical != "") firstTextPosition = textForVertical
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -18,7 +18,8 @@ import android.view.View.OnTouchListener
 import android.view.animation.AnimationUtils
 import android.widget.AbsListView
 import android.widget.AdapterView
-import android.widget.AdapterView.*
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -32,7 +33,10 @@ import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
-import java.io.*
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileWriter
+import java.io.InputStreamReader
 
 class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener {
 
@@ -940,13 +944,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     delay(spid.toLong())
                     forceScroll()
                     if (!mActionDown && !MainActivity.dialogVisable) {
-                        val firstPosition = binding.ListView.firstVisiblePosition
-                        if (firstPosition == INVALID_POSITION) {
-                            return@launch
-                        }
-                        val firstView = binding.ListView.getChildAt(0) ?: return@launch
-                        val newTop = firstView.top - 2
-                        binding.ListView.setSelectionFromTop(firstPosition, newTop)
+                        binding.ListView.smoothScrollBy(2, 0)
                     }
                 }
             }

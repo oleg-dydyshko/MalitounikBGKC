@@ -158,9 +158,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        k = getSharedPreferences("biblia", MODE_PRIVATE)
         mkDir()
         loadOpisanieSviatyiaISxiaty()
-        k = getSharedPreferences("biblia", MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
@@ -1215,10 +1215,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
     private fun loadOpisanieSviatyiaISxiaty() {
         if (isNetworkAvailable(this)) {
+            val timeUpdate = Calendar.getInstance().timeInMillis
+            val timeUpdateSave = k.getLong("OpisanieTimeUpdate", timeUpdate)
+            val update = timeUpdate - timeUpdateSave > (7 * 24 * 60 * 60 * 1000L)
+            if (update) {
+                prefEditors = k.edit()
+                prefEditors.putLong("OpisanieTimeUpdate", timeUpdate)
+                prefEditors.apply()
+            }
             CoroutineScope(Dispatchers.IO).launch {
                 withContext(Dispatchers.IO) {
                     val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
-                    if (!fileOpisanieSviat.exists()) {
+                    if (!fileOpisanieSviat.exists() || update) {
                         val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
                         val conections = mURL.openConnection() as HttpURLConnection
                         if (conections.responseCode == 200) {
@@ -1234,7 +1242,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     if (!dir.exists()) dir.mkdir()
                     for (i in 1..12) {
                         val fileS = File("$filesDir/sviatyja/opisanie$i.json")
-                        if (!fileS.exists()) {
+                        if (!fileS.exists() || update) {
                             val mURL = URL("https://carkva-gazeta.by/chytanne/sviatyja/opisanie$i.json")
                             val conections = mURL.openConnection() as HttpURLConnection
                             if (conections.responseCode == 200) {

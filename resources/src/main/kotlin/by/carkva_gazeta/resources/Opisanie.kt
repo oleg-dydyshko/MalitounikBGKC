@@ -246,6 +246,12 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                     if (fileOpisanie.exists()) builder = fileOpisanie.readText()
                 }
             } else {
+                if (update) {
+                    val timeUpdate = Calendar.getInstance().timeInMillis
+                    val prefEditors = chin.edit()
+                    prefEditors.putLong("OpisanieTimeUpdate", timeUpdate)
+                    prefEditors.apply()
+                }
                 withContext(Dispatchers.IO) {
                     val dir = File("$filesDir/sviatyja/")
                     if (!dir.exists()) dir.mkdir()

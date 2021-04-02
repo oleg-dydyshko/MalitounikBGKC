@@ -87,12 +87,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private val findListSpans = ArrayList<SpanStr>()
     private var animatopRun = false
     private var onRestore = false
+    private var onFind = false
 
     companion object {
         private val resursMap = ArrayMap<String, Int>()
 
         init {
             resursMap["bogashlugbovya1"] = R.raw.bogashlugbovya1
+            resursMap["bogashlugbovya2"] = R.raw.bogashlugbovya2
             resursMap["bogashlugbovya4"] = R.raw.bogashlugbovya4
             resursMap["bogashlugbovya6"] = R.raw.bogashlugbovya6
             resursMap["bogashlugbovya8"] = R.raw.bogashlugbovya8
@@ -398,14 +400,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     override fun onScroll(t: Int, oldt: Int) {
         positionY = t
         val laneLayout = binding.textView.layout
-        laneLayout?.let {
-            val textForVertical = binding.textView.text.substring(binding.textView.layout.getLineStart(it.getLineForVertical(positionY)), binding.textView.layout.getLineEnd(it.getLineForVertical(positionY))).trim()
+        laneLayout?.let { layout ->
+            val textForVertical = binding.textView.text.substring(binding.textView.layout.getLineStart(layout.getLineForVertical(positionY)), binding.textView.layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
             if (textForVertical != "") firstTextPosition = textForVertical
             if (binding.textSearch.visibility == View.VISIBLE && !animatopRun) {
                 if (findListSpans.isNotEmpty()) {
                     val text = binding.textView.text as SpannableString
                     for (i in 0 until findListSpans.size) {
-                        if (binding.textView.layout.getLineForOffset(findListSpans[i].start) == it.getLineForVertical(positionY)) {
+                        if (binding.textView.layout.getLineForOffset(findListSpans[i].start) == layout.getLineForVertical(positionY)) {
                             var ii = i + 1
                             if (i == 0) ii = 1
                             findPosition = i
@@ -773,7 +775,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }
             }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
-        if (resurs == "bogashlugbovya1") {
+        if (resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") {
             string = "Дзе ёсьць звычай, у нядзелю, а таксама ў суботу і на вялікія сьвяты (апрача сьвятаў Гасподніх) сьпяваюцца наступныя радкі з Пс 102:"
             strLig = string.length
             t1 = text.indexOf(string)
@@ -887,7 +889,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 } else {
                     binding.scrollView2.smoothScrollBy(0, positionY)
                 }
-                if (savedInstanceState.getBoolean("seach")) {
+                if (!autoscroll && savedInstanceState.getBoolean("seach")) {
                     findAllAsanc()
                 }
                 if (autoscroll) {
@@ -991,7 +993,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
             binding.textView.setTextIsSelectable(true)
+            binding.textView.movementMethod = LinkMovementMethod.getInstance()
             autoScrollJob?.cancel()
+            if (onFind) {
+                onFind = false
+                findAll()
+                findCheckPosition()
+                binding.textSearch.visibility = View.VISIBLE
+            }
             if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
@@ -1006,6 +1015,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             val prefEditors = k.edit()
             prefEditors.putBoolean("autoscroll", true)
             prefEditors.apply()
+            if (binding.textSearch.visibility == View.VISIBLE) {
+                findRemoveSpan()
+                onFind = true
+                binding.textSearch.visibility = View.GONE
+            }
             binding.actionMinus.visibility = View.VISIBLE
             binding.actionPlus.visibility = View.VISIBLE
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
@@ -1025,7 +1039,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
-            binding.scrollView2.smoothScrollBy(0, 0)
+            binding.scrollView2.smoothScrollTo(0, 0)
             startAutoScroll()
         }
     }
@@ -1085,15 +1099,18 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
-        val itemVybranoe: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
+        val itemVybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
+        val find = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find)
         if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec")) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
         }
         if (mAutoScroll) {
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {
+                find.isVisible = false
                 itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
             } else {
+                find.isVisible = true
                 itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
             }
         } else {

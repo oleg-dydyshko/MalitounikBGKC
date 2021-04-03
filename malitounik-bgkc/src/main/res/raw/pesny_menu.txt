@@ -118,6 +118,7 @@ pesny_prasl_68<>Як гэта хораша й міла
 pesny_prasl_69<>Яму за ўсё слава
 pesny_prasl_70<>Цябе, Бога, хвалім
 pesny_prasl_71<>Мой Госпад, мой Збаўца
+pesny_prasl_72<>Крыжовы шлях
 pesny_taize_0<>Magnifikat
 pesny_taize_1<>Ostende nobis
 pesny_taize_2<>Ubi caritas

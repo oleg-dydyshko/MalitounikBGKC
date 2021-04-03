@@ -62,6 +62,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             chin = fraragment.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             pesny = arguments?.getString("pesny") ?: "prasl"
             menuList = getMenuListData(pesny)
+            menuList.sort()
             adapter = MenuPesnyListAdapter(fraragment)
             binding.ListView.adapter = adapter
             binding.ListView.isVerticalScrollBarEnabled = false
@@ -247,6 +248,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                 activity?.let {
                     menuList.clear()
                     menuList.addAll(getMenuListData(pesny))
+                    menuList.sort()
                     adapter.notifyDataSetChanged()
                     menu.findItem(R.id.count).isVisible = search
                 }

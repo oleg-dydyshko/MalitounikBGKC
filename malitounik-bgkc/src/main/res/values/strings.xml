@@ -199,9 +199,10 @@
     <string name="malitva_za_pamerlyx">МАЛІТВА ЗА ПАМЕРЛЫХ</string>
     <string name="malitva_za_paclicanyx">МАЛІТВА ЗА ПАКЛІКАНЫХ</string>
     <string name="ps_102">СЬПЯВАЮЦЦА НАСТУПНЫЯ РАДКІ З Пс 102:</string>
-    <string name="ps_91">У БУДНІЯ ДНІ СЬПЯВАЕЦЦА НАСТУПНЫ АНТЫФОН (Пс 91):</string>
+    <string name="ps_91">СЬПЯВАЕЦЦА АНТЫФОН (Пс 91)</string>
     <string name="ps_145">ІНШЫ АНТЫФОН НЯДЗЕЛЬНЫ І СЬВЯТОЧНЫ (Пс 145):</string>
-    <string name="ps_92">АНТЫФОН У БУДНІЯ ДНІ (Пс 92):</string>
+    <string name="ps_92">АНТЫФОН У БУДНІЯ ДНІ - З Пс 92</string>
+    <string name="ps_94">ШТОДЗЁННЫ І НЯДЗЕЛЬНЫ АНТЫФОН - З Пс 94</string>
     <string name="mc_5_3_12">ІНШЫ АНТЫФОН СЬВЯТОЧНЫ І НЯДЗЕЛЬНЫ (Мц 5:3&#8211;12):</string>
     <string name="wifi_error">АДСУТНІЧАЕ ЗЛУЧЭНЬНЕ ПРАЗ WI-FI</string>
     <string name="sviaty_notifi">АПАВЯШЧЭНЬНЕ ПРА ЦАРКОЎНЫЯ СЬВЯТЫ:</string>
@@ -581,5 +582,7 @@
     <string name="pre_view">Прадпрагляд</string>
     <string name="remove_cashe">Выдаліць кэш (%1$s %2$s)</string>
     <string name="fing_count">%1$d/%2$d</string>
+    <string name="pasochnica">Пясочніца</string>
+    <string name="set_file_name">ВЫБЯРЫЦЕ ІМЯ ФАЙЛА</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

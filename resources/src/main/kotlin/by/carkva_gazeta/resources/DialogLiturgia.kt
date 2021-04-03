@@ -94,6 +94,10 @@ class DialogLiturgia : DialogFragment() {
                     val zch = ZmenyiaChastki(it)
                     builder.append(zch.sviatyiaView(0))
                 }
+                10 -> {
+                    inputStream = r.openRawResource(R.raw.bogashlugbovya1_8)
+                    textViewZaglavie.setText(by.carkva_gazeta.malitounik.R.string.ps_94)
+                }
             }
             if (!(chast == 8 || chast == 9)) {
                 val isr = InputStreamReader(inputStream)

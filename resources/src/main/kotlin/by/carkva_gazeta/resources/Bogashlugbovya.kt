@@ -787,7 +787,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            string = "У буднія дні сьпяваецца наступны антыфон (Пс 91):"
+            string = "сьпяваецца антыфон (Пс 91)."
             strLig = string.length
             t1 = text.indexOf(string)
             if (t1 != -1) {
@@ -809,13 +809,24 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            string = "Антыфон у буднія дні (Пс 92):"
+            string = "Антыфон у буднія дні - з Пс 92."
             strLig = string.length
             t1 = text.indexOf(string)
             if (t1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(4)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            string = "Штодзённы і нядзельны Антыфон - з Пс 94."
+            strLig = string.length
+            t1 = text.indexOf(string)
+            if (t1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(10)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -1019,6 +1030,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 findRemoveSpan()
                 onFind = true
                 binding.textSearch.visibility = View.GONE
+                val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
             }
             binding.actionMinus.visibility = View.VISIBLE
             binding.actionPlus.visibility = View.VISIBLE

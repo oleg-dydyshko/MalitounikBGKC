@@ -58,7 +58,7 @@ class AdminMain : AppCompatActivity() {
             startActivity(intent)
         }
         binding.pesochnicha.setOnClickListener {
-            val intent = Intent(this, Pasochnica::class.java)
+            val intent = Intent(this, PasochnicaList::class.java)
             startActivity(intent)
         }
     }

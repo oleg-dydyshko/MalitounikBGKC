@@ -14,7 +14,10 @@ import by.carkva_gazeta.admin.databinding.AdminPasochnicaBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -25,6 +28,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
     private var resetTollbarJob: Job? = null
+    private var fileName = ""
 
     override fun onPause() {
         super.onPause()
@@ -46,7 +50,16 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         binding.actionRed.setOnClickListener(this)
         binding.actionP.setOnClickListener(this)
         binding.actionImg.setOnClickListener(this)
+        fileName = intent.extras?.getString("fileName", "") ?: ""
+        if (savedInstanceState != null) fileName = savedInstanceState.getString("fileName", "")
+        if (fileName != "")
+            getFilePostRequest(fileName)
         setTollbarTheme()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("fileName", fileName)
     }
 
     private fun setTollbarTheme() {
@@ -92,9 +105,47 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    override fun setFileName(fileName: String) {
+    override fun onBackPressed() {
+        onSupportNavigateUp()
+    }
+
+    override fun setFileName(oldFileName: String, fileName: String) {
         val gson = Gson()
+        this.fileName = fileName
         sendPostRequest(fileName, gson.toJson(binding.apisanne.text.toString()))
+    }
+
+    private fun getFilePostRequest(fileName: String) {
+        if (MainActivity.isNetworkAvailable(this)) {
+            CoroutineScope(Dispatchers.Main).launch {
+                var result = ""
+                binding.progressBar2.visibility = View.VISIBLE
+                withContext(Dispatchers.IO) {
+                    var reqParam = URLEncoder.encode("get", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName, "UTF-8")
+                    val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                    with(mURL.openConnection() as HttpURLConnection) {
+                        requestMethod = "POST"
+                        val wr = OutputStreamWriter(outputStream)
+                        wr.write(reqParam)
+                        wr.flush()
+                        val sb = StringBuilder()
+                        BufferedReader(InputStreamReader(inputStream)).use {
+                            var inputLine = it.readLine()
+                            while (inputLine != null) {
+                                sb.append(inputLine)
+                                inputLine = it.readLine()
+                            }
+                        }
+                        val gson = Gson()
+                        val type = object : TypeToken<String>() {}.type
+                        result = gson.fromJson(sb.toString(), type)
+                    }
+                }
+                binding.apisanne.setText(result)
+                binding.progressBar2.visibility = View.GONE
+            }
+        }
     }
 
     private fun sendPostRequest(fileName: String, content: String) {
@@ -128,8 +179,13 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_save) {
-            val dialogPasochnicaFileName = DialogPasochnicaFileName()
-            dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
+            if (fileName == "") {
+                val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance("")
+                dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
+            } else {
+                val gson = Gson()
+                sendPostRequest(fileName, gson.toJson(binding.apisanne.text.toString()))
+            }
         }
         if (id == R.id.action_preview) {
             if (binding.scrollpreView.visibility == View.VISIBLE) {

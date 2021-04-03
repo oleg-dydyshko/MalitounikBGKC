@@ -60,13 +60,22 @@
                 android:value="by.carkva_gazeta.admin.AdminMain" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.admin.Pasochnica"
+            android:name="by.carkva_gazeta.admin.PasochnicaList"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:label="@string/pasochnica"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.admin.AdminMain" />
+        </activity>
+        <activity
+            android:name="by.carkva_gazeta.admin.Pasochnica"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:label="@string/pasochnica"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.admin.PasochnicaList" />
         </activity>
     </application>
 </manifest>

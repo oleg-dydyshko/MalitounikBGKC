@@ -9,22 +9,22 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.EditTextRobotoCondensed
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import java.util.*
 
 class DialogPasochnicaFileName : DialogFragment() {
-    private lateinit var input: EditTextRobotoCondensed
+    private lateinit var input: EditText
     private var mListener: DialogPasochnicaFileNameListener? = null
     private lateinit var builder: AlertDialog.Builder
 
     internal interface DialogPasochnicaFileNameListener {
-        fun setFileName(fileName: String)
+        fun setFileName(oldFileName: String, fileName: String)
     }
 
     override fun onAttach(context: Context) {
@@ -62,12 +62,17 @@ class DialogPasochnicaFileName : DialogFragment() {
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
-            input = EditTextRobotoCondensed(it)
+            input = EditText(it)
             input.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (savedInstanceState != null) {
                 input.setText(savedInstanceState.getString("fileName"))
             } else {
-                input.setText("")
+                var oldFileName = arguments?.getString("oldFileName") ?: ""
+                if (oldFileName != "") {
+                    val t1 = oldFileName.split(".")
+                    oldFileName = t1[0]
+                }
+                input.setText(oldFileName)
             }
             input.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             input.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorWhite)
@@ -103,6 +108,17 @@ class DialogPasochnicaFileName : DialogFragment() {
             val mun = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
             fileName = gc[Calendar.DATE].toString() + "_" + mun[gc[Calendar.MONTH]] + "_" + gc[Calendar.YEAR] + "_" + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
         }
-        mListener?.setFileName("$fileName.html")
+        val oldFileName = arguments?.getString("oldFileName") ?: ""
+        mListener?.setFileName(oldFileName,"$fileName.html")
+    }
+
+    companion object {
+        fun getInstance(oldFileName: String): DialogPasochnicaFileName {
+            val instance = DialogPasochnicaFileName()
+            val args = Bundle()
+            args.putString("oldFileName", oldFileName)
+            instance.arguments = args
+            return instance
+        }
     }
 }

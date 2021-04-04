@@ -54,6 +54,19 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         if (savedInstanceState != null) fileName = savedInstanceState.getString("fileName", "")
         if (fileName != "")
             getFilePostRequest(fileName)
+        val text = intent.extras?.getString("text", "") ?: ""
+        if (text != "") {
+            val gson = Gson()
+            val resours = intent.extras?.getString("resours", "") ?: ""
+            val title = intent.extras?.getString("title", "") ?: ""
+            fileName = "$title($resours).html"
+            if (intent.extras?.getBoolean("exits", false) == false) {
+                sendPostRequest(fileName, gson.toJson(text))
+                binding.apisanne.setText(text)
+            } else {
+                getFilePostRequest(fileName)
+            }
+        }
         setTollbarTheme()
     }
 

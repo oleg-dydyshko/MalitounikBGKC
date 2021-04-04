@@ -65,7 +65,7 @@ internal class ZmenyiaChastki(context: Context) {
         var knigaK = "0"
         var zaglnum = 0
         var chtenie: Int = if (apostal == 1) 0 else 1
-        if (split.size == 3) chtenie++
+        if (w.contains("На ютрані")) chtenie++
         val zaglavie = split[chtenie].split(",")
         var zagl = ""
         var zaglavieName = ""
@@ -221,12 +221,9 @@ internal class ZmenyiaChastki(context: Context) {
                 val t2 = result.indexOf("$knigaK.")
                 val t3 = result.indexOf(".", t2)
                 var t1 = result.indexOf(":", t2)
-                if (t1 == -1)
-                    t1 = result.indexOf(";", t3 + 1)
-                if (t1 == -1)
-                    t1 = result.indexOf(".", t3 + 1)
-                if (t1 != -1)
-                    result = result.substring(0, t1 + 1) + "<strike>" + result.substring(t1 + 1, result.length) + "</strike>"
+                if (t1 == -1) t1 = result.indexOf(";", t3 + 1)
+                if (t1 == -1) t1 = result.indexOf(".", t3 + 1)
+                if (t1 != -1) result = result.substring(0, t1 + 1) + "<strike>" + result.substring(t1 + 1, result.length) + "</strike>"
             }
             if (polstixaB) {
                 val t2 = result.indexOf("\n")
@@ -234,12 +231,9 @@ internal class ZmenyiaChastki(context: Context) {
                 val t4 = textPol.indexOf("</strong><br>")
                 val t3 = textPol.indexOf(".", t4 + 13)
                 var t1 = textPol.indexOf(":")
-                if (t1 == -1)
-                    t1 = textPol.indexOf(";", t3 + 1)
-                if (t1 == -1)
-                    t1 = textPol.indexOf(".", t3 + 1)
-                if (t1 != -1)
-                    result = result.substring(0, t3 + 1) + "<strike>" + result.substring(t3 + 1, t1 + 1) + "</strike>" + result.substring(t1 + 1, result.length)
+                if (t1 == -1) t1 = textPol.indexOf(";", t3 + 1)
+                if (t1 == -1) t1 = textPol.indexOf(".", t3 + 1)
+                if (t1 != -1) result = result.substring(0, t3 + 1) + "<strike>" + result.substring(t3 + 1, t1 + 1) + "</strike>" + result.substring(t1 + 1, result.length)
             }
         }
         return result

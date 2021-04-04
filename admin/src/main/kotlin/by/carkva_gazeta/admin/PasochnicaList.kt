@@ -52,7 +52,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
         binding = AdminPasochnicaListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setTollbarTheme()
-        getDirPostRequest()
+
         binding.listView.setOnItemClickListener { _, _, position, _ ->
             val intent = Intent(this, Pasochnica::class.java)
             intent.putExtra("fileName", fileList[position])
@@ -63,6 +63,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
             dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
             return@setOnItemLongClickListener true
         }
+        getDirPostRequest()
     }
 
     override fun setFileName(oldFileName: String, fileName: String) {
@@ -166,6 +167,22 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                             fileList.sort()
                         }
                     }
+                }
+                if (intent.extras != null) {
+                    val title = intent.extras?.getString("title", "") ?: ""
+                    var exits = false
+                    for (i in 0 until fileList.size) {
+                        if (fileList[i].contains(title)) {
+                            exits = true
+                            break
+                        }
+                    }
+                    val intent = Intent(this@PasochnicaList, Pasochnica::class.java)
+                    intent.putExtra("text", this@PasochnicaList.intent.extras?.getString("text", "") ?: "")
+                    intent.putExtra("resours", this@PasochnicaList.intent.extras?.getString("resours", "") ?: "")
+                    intent.putExtra("exits", exits)
+                    intent.putExtra("title", title)
+                    startActivity(intent)
                 }
                 adapter.notifyDataSetChanged()
                 binding.progressBar2.visibility = View.GONE

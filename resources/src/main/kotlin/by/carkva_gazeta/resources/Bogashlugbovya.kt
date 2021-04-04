@@ -35,7 +35,6 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
@@ -293,12 +292,12 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
     }
 
-    private fun findAllAsanc() {
+    private fun findAllAsanc(noNext: Boolean = true) {
         CoroutineScope(Dispatchers.Main).launch {
             findRemoveSpan()
             findAll()
             findCheckPosition()
-            findNext(false)
+            if (noNext) findNext(false)
         }
     }
 
@@ -405,7 +404,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         laneLayout?.let { layout ->
             val textForVertical = binding.textView.text.substring(binding.textView.layout.getLineStart(layout.getLineForVertical(positionY)), binding.textView.layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
             if (textForVertical != "") firstTextPosition = textForVertical
-            if (binding.textSearch.visibility == View.VISIBLE && !animatopRun) {
+            if (binding.find.visibility == View.VISIBLE && !animatopRun) {
                 if (findListSpans.isNotEmpty()) {
                     val text = binding.textView.text as SpannableString
                     for (i in 0 until findListSpans.size) {
@@ -456,10 +455,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             editVybranoe = savedInstanceState.getBoolean("editVybranoe")
             MainActivity.dialogVisable = false
             if (savedInstanceState.getBoolean("seach")) {
-                binding.textSearch.visibility = View.VISIBLE
-                binding.textCount.visibility = View.VISIBLE
-                binding.imageView6.visibility = View.VISIBLE
-                binding.imageView5.visibility = View.VISIBLE
+                binding.find.visibility = View.VISIBLE
             }
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
@@ -618,7 +614,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val res = withContext(Dispatchers.IO) {
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: R.raw.bogashlugbovya1
-            val inputStream: InputStream = resources.openRawResource(id)
+            val inputStream = resources.openRawResource(id)
             val zmenyiaChastki = ZmenyiaChastki(this@Bogashlugbovya)
             val gregorian = Calendar.getInstance() as GregorianCalendar
             val dayOfWeek = gregorian.get(Calendar.DAY_OF_WEEK)
@@ -1010,9 +1006,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             autoScrollJob?.cancel()
             if (onFind) {
                 onFind = false
-                findAll()
-                findCheckPosition()
-                binding.textSearch.visibility = View.VISIBLE
+                findAllAsanc(false)
+                binding.find.visibility = View.VISIBLE
             }
             if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
                 CoroutineScope(Dispatchers.Main).launch {
@@ -1028,10 +1023,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             val prefEditors = k.edit()
             prefEditors.putBoolean("autoscroll", true)
             prefEditors.apply()
-            if (binding.textSearch.visibility == View.VISIBLE) {
+            if (binding.find.visibility == View.VISIBLE) {
                 findRemoveSpan()
                 onFind = true
-                binding.textSearch.visibility = View.GONE
+                binding.find.visibility = View.GONE
                 val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
             }
@@ -1093,16 +1088,18 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         startProcent(3000)
                     }
                     if (y > heightConstraintLayout - otstup) {
-                        spid = k.getInt("autoscrollSpid", 60)
-                        proc = 100 - (spid - 15) * 100 / 215
-                        bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                        bindingprogress.progressTitle.text = ""
-                        bindingprogress.progress.visibility = View.VISIBLE
-                        startProcent()
-                        autoscroll = k.getBoolean("autoscroll", false)
-                        if (!autoscroll) {
-                            startAutoScroll()
-                            invalidateOptionsMenu()
+                        if (binding.find.visibility == View.GONE) {
+                            spid = k.getInt("autoscrollSpid", 60)
+                            proc = 100 - (spid - 15) * 100 / 215
+                            bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
+                            bindingprogress.progressTitle.text = ""
+                            bindingprogress.progress.visibility = View.VISIBLE
+                            startProcent()
+                            autoscroll = k.getBoolean("autoscroll", false)
+                            if (!autoscroll) {
+                                startAutoScroll()
+                                invalidateOptionsMenu()
+                            }
                         }
                     }
                 }
@@ -1150,6 +1147,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         end = spanString.length
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         itemVybranoe.title = spanString
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         return true
     }
 
@@ -1201,10 +1199,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             recreate()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_find) {
-            binding.textSearch.visibility = View.VISIBLE
-            binding.textCount.visibility = View.VISIBLE
-            binding.imageView6.visibility = View.VISIBLE
-            binding.imageView5.visibility = View.VISIBLE
+            binding.find.visibility = View.VISIBLE
             binding.textSearch.requestFocus()
             val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
@@ -1250,6 +1245,23 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             startActivity(Intent.createChooser(sendIntent, null))
         }
         prefEditor.apply()
+        if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
+            if (MainActivity.checkmodulesAdmin(this)) {
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.PASOCHNICALIST)
+                val idres = resursMap[resurs] ?: R.raw.bogashlugbovya1
+                val inputStream = resources.openRawResource(idres)
+                val text = inputStream.use {
+                    it.reader().readText()
+                }
+                intent.putExtra("resours", resurs)
+                intent.putExtra("title", title)
+                intent.putExtra("text", text)
+                startActivity(intent)
+            } else {
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -1257,11 +1269,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (fullscreenPage) {
             fullscreenPage = false
             show()
-        } else if (binding.textSearch.visibility == View.VISIBLE) {
-            binding.textSearch.visibility = View.GONE
-            binding.textCount.visibility = View.GONE
-            binding.imageView6.visibility = View.GONE
-            binding.imageView5.visibility = View.GONE
+        } else if (binding.find.visibility == View.VISIBLE) {
+            binding.find.visibility = View.GONE
             binding.textSearch.setText("")
             findRemoveSpan()
             val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -1321,7 +1330,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("editVybranoe", editVybranoe)
-        if (binding.textSearch.visibility == View.VISIBLE) outState.putBoolean("seach", true)
+        if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)
         outState.putString("textLine", firstTextPosition)
     }

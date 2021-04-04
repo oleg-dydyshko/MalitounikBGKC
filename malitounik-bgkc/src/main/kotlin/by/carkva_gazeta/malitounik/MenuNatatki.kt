@@ -236,23 +236,7 @@ class MenuNatatki : NatatkiFragment() {
                 adapter.notifyDataSetChanged()
             }
         }
-        if (id == R.id.action_carkva) {
-            activity?.let {
-                if (MainActivity.checkmodulesAdmin(it)) {
-                    val intent = Intent()
-                    intent.setClassName(it, MainActivity.PASOCHNICALIST)
-                    startActivity(intent)
-                } else {
-                    MainActivity.toastView(it, getString(R.string.error))
-                }
-            }
-        }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
     }
 
     private inner class ItemAdapter(list: ArrayList<MyNatatkiFiles>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) :

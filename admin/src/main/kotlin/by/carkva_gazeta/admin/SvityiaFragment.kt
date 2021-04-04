@@ -45,7 +45,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     private fun startTimer() {
         timerTask = object : TimerTask() {
             override fun run() {
-                if (urlJob?.isActive == true && timerCount == 3) {
+                if (urlJob?.isActive == true && timerCount == 6) {
                     urlJob?.cancel()
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {

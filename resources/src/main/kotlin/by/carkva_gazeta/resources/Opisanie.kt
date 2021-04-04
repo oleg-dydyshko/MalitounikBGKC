@@ -50,7 +50,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         timerCount = 0
         timerTask = object : TimerTask() {
             override fun run() {
-                if (loadIconsJob?.isActive == true && timerCount == 3) {
+                if (loadIconsJob?.isActive == true && timerCount == 6) {
                     loadIconsJob?.cancel()
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {

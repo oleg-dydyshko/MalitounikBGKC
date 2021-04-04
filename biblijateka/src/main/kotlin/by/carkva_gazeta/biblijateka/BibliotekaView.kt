@@ -187,7 +187,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         timerCount = 0
         timerTask = object : TimerTask() {
             override fun run() {
-                if (sqlJob?.isActive == true && timerCount == 3) {
+                if (sqlJob?.isActive == true && timerCount == 6) {
                     sqlJob?.cancel()
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {

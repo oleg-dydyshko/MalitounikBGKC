@@ -55,6 +55,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
     private lateinit var bindingprogress: ProgressBinding
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
+    private var id = R.raw.prynagodnyia_0
 
     override fun onPause() {
         super.onPause()
@@ -104,7 +105,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
             bindingprogress.actionMinusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
         }
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        val id = intent.extras?.getInt("prynagodnyiaID", R.raw.prynagodnyia_0) ?: R.raw.prynagodnyia_0
+        id = intent.extras?.getInt("prynagodnyiaID", R.raw.prynagodnyia_0) ?: R.raw.prynagodnyia_0
         resurs = intent.extras?.getString("prynagodnyiaType", "prynagodnyia_0") ?: "prynagodnyia_0"
         title = intent.extras?.getString("prynagodnyia", "") ?: ""
         val inputStream = resources.openRawResource(id)
@@ -276,6 +277,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         val end = spanString.length
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         item.title = spanString
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         return true
     }
 
@@ -339,6 +341,22 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
             startActivity(Intent.createChooser(sendIntent, null))
         }
         prefEditor.apply()
+        if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
+            if (MainActivity.checkmodulesAdmin(this)) {
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.PASOCHNICALIST)
+                val inputStream = resources.openRawResource(this.id)
+                val text = inputStream.use {
+                    it.reader().readText()
+                }
+                intent.putExtra("resours", resurs)
+                intent.putExtra("title", title)
+                intent.putExtra("text", text)
+                startActivity(intent)
+            } else {
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 

@@ -46,7 +46,7 @@ class Naviny : AppCompatActivity() {
         timerCount = 0
         timerTask = object : TimerTask() {
             override fun run() {
-                if (timerCount == 3) {
+                if (timerCount == 6) {
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {
                         MainActivity.toastView(this@Naviny, getString(R.string.bad_internet), Toast.LENGTH_LONG)

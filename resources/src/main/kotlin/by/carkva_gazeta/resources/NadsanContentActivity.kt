@@ -2,6 +2,7 @@ package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Build
@@ -277,6 +278,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
             itemVybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
         }
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         return true
     }
 
@@ -335,6 +337,22 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             }
             fullscreenPage = true
             hide()
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
+            if (MainActivity.checkmodulesAdmin(this)) {
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.PASOCHNICALIST)
+                val inputStream = resources.openRawResource(R.raw.nadsan_psaltyr)
+                val text = inputStream.use {
+                    it.reader().readText()
+                }
+                intent.putExtra("resours", "nadsan_psaltyr")
+                intent.putExtra("title", getString(by.carkva_gazeta.malitounik.R.string.title_psalter))
+                intent.putExtra("text", text)
+                startActivity(intent)
+            } else {
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+            }
         }
         prefEditors.apply()
         return super.onOptionsItemSelected(item)

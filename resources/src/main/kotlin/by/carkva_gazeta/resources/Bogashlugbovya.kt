@@ -303,15 +303,17 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun findAll(position: Int = 0) {
-        val text = binding.textView.text as SpannableString
         val search = binding.textSearch.text.toString()
-        val searchLig = search.length
-        val strPosition = text.indexOf(search, position, true)
-        if (strPosition != -1) {
-            findListSpans.add(SpanStr(getColorSpans(text.getSpans(strPosition, strPosition + searchLig, ForegroundColorSpan::class.java)), strPosition, strPosition + searchLig))
-            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            findAll(strPosition + 1)
+        if (search.length >= 3) {
+            val text = binding.textView.text as SpannableString
+            val searchLig = search.length
+            val strPosition = text.indexOf(search, position, true)
+            if (strPosition != -1) {
+                findListSpans.add(SpanStr(getColorSpans(text.getSpans(strPosition, strPosition + searchLig, ForegroundColorSpan::class.java)), strPosition, strPosition + searchLig))
+                text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                findAll(strPosition + 1)
+            }
         }
     }
 

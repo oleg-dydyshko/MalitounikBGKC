@@ -339,7 +339,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         title = intent.extras?.getString("pesny", "") ?: ""
         resurs = intent.extras?.getString("type", "pesny_prasl_0") ?: "pesny_prasl_0"
-        val pesny = resursMap[resurs] ?: -1
+        val pesny = resursMap[resurs] ?: R.raw.pesny_prasl_0
         val builder = StringBuilder()
         if (pesny != -1) {
             val inputStream = resources.openRawResource(pesny)
@@ -518,6 +518,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         val end = spanString.length
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         item.title = spanString
+        menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         return true
     }
 
@@ -586,6 +587,22 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             startActivity(Intent.createChooser(sendIntent, null))
         }
         prefEditor.apply()
+        if (id == R.id.action_carkva) {
+            if (MainActivity.checkmodulesAdmin(this)) {
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.PASOCHNICALIST)
+                val inputStream = resources.openRawResource(resursMap[resurs] ?: R.raw.pesny_prasl_0)
+                val text = inputStream.use {
+                    it.reader().readText()
+                }
+                intent.putExtra("resours", resurs)
+                intent.putExtra("title", title)
+                intent.putExtra("text", text)
+                startActivity(intent)
+            } else {
+                MainActivity.toastView(this, getString(R.string.error))
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 

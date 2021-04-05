@@ -585,5 +585,6 @@
     <string name="pasochnica">Пясочніца</string>
     <string name="set_file_name">ВЫБЯРЫЦЕ ІМЯ ФАЙЛА</string>
     <string name="add_file">Дадаць файл</string>
+    <string name="rename_file">Перайменаваць</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

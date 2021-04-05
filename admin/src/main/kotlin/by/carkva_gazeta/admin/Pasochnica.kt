@@ -11,6 +11,7 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaBinding
+import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.gson.Gson
@@ -23,15 +24,19 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener {
+class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, InteractiveScrollView.OnScrollChangedCallback {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
     private var resetTollbarJob: Job? = null
     private var fileName = ""
+    private var firstTextPosition = ""
 
     override fun onPause() {
         super.onPause()
+        val edit = k.edit()
+        edit.putString(fileName, firstTextPosition)
+        edit.apply()
         resetTollbarJob?.cancel()
     }
 
@@ -49,30 +54,43 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         binding.actionEm.setOnClickListener(this)
         binding.actionRed.setOnClickListener(this)
         binding.actionP.setOnClickListener(this)
-        binding.actionImg.setOnClickListener(this)
+        binding.actionBr.setOnClickListener(this)
         fileName = intent.extras?.getString("fileName", "") ?: ""
-        if (savedInstanceState != null) fileName = savedInstanceState.getString("fileName", "")
-        if (fileName != "")
-            getFilePostRequest(fileName)
-        val text = intent.extras?.getString("text", "") ?: ""
-        if (text != "") {
-            val gson = Gson()
-            val resours = intent.extras?.getString("resours", "") ?: ""
-            val title = intent.extras?.getString("title", "") ?: ""
-            fileName = "$title($resours).html"
-            if (intent.extras?.getBoolean("exits", false) == false) {
-                sendPostRequest(fileName, gson.toJson(text))
-                binding.apisanne.setText(text)
-            } else {
-                getFilePostRequest(fileName)
+        if (savedInstanceState != null) {
+            fileName = savedInstanceState.getString("fileName", "")
+            binding.apisanne.post {
+                val textline = savedInstanceState.getString("textLine", "")
+                if (textline != "") {
+                    val index = binding.apisanne.text.toString().indexOf(textline)
+                    val line = binding.apisanne.layout.getLineForOffset(index)
+                    val y = binding.apisanne.layout.getLineTop(line)
+                    binding.scrollView.scrollY = y
+                }
+            }
+        } else {
+            if (fileName != "") getFilePostRequest(fileName)
+            val text = intent.extras?.getString("text", "") ?: ""
+            if (text != "") {
+                val gson = Gson()
+                val resours = intent.extras?.getString("resours", "") ?: ""
+                val title = intent.extras?.getString("title", "") ?: ""
+                fileName = "$title($resours).html"
+                if (intent.extras?.getBoolean("exits", false) == false) {
+                    sendPostRequest(fileName, gson.toJson(text))
+                    binding.apisanne.setText(text)
+                } else {
+                    getFilePostRequest(fileName)
+                }
             }
         }
         setTollbarTheme()
+        binding.scrollView.setOnScrollChangedCallback(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("fileName", fileName)
+        outState.putString("textLine", firstTextPosition)
     }
 
     private fun setTollbarTheme() {
@@ -128,6 +146,14 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         sendPostRequest(fileName, gson.toJson(binding.apisanne.text.toString()))
     }
 
+    override fun onScroll(t: Int, oldt: Int) {
+        val lineLayout = binding.apisanne.layout
+        lineLayout?.let {
+            val textForVertical = binding.apisanne.text.toString().substring(binding.apisanne.layout.getLineStart(it.getLineForVertical(t)), binding.apisanne.layout.getLineEnd(it.getLineForVertical(t))).trim()
+            if (textForVertical != "") firstTextPosition = textForVertical
+        }
+    }
+
     private fun getFilePostRequest(fileName: String) {
         if (MainActivity.isNetworkAvailable(this)) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -156,6 +182,17 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     }
                 }
                 binding.apisanne.setText(result)
+                if (k.contains(this@Pasochnica.fileName)) {
+                    binding.apisanne.post {
+                        val textline = k.getString(this@Pasochnica.fileName, "") ?: ""
+                        if (textline != "") {
+                            val index = binding.apisanne.text.toString().indexOf(textline)
+                            val line = binding.apisanne.layout.getLineForOffset(index)
+                            val y = binding.apisanne.layout.getLineTop(line)
+                            binding.scrollView.scrollY = y
+                        }
+                    }
+                }
                 binding.progressBar2.visibility = View.GONE
             }
         }
@@ -207,11 +244,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             } else {
-                var textApisanne = binding.apisanne.text.toString()
-                if (textApisanne.contains("<!--image-->")) {
-                    textApisanne = textApisanne.replace("<!--image-->", "<p>")
-                }
-                binding.preView.text = MainActivity.fromHtml(textApisanne).trim()
+                binding.preView.text = MainActivity.fromHtml(binding.apisanne.text.toString()).trim()
                 binding.scrollpreView.visibility = View.VISIBLE
                 binding.scrollView.visibility = View.GONE
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -268,6 +301,18 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             binding.apisanne.setText(build)
             binding.apisanne.setSelection(endSelect + 29)
         }
+        if (id == R.id.action_br) {
+            val endSelect = binding.apisanne.selectionEnd
+            val text = binding.apisanne.text.toString()
+            val build = with(StringBuilder()) {
+                append(text.substring(0, endSelect))
+                append("<br>")
+                append(text.substring(endSelect))
+                toString()
+            }
+            binding.apisanne.setText(build)
+            binding.apisanne.setSelection(endSelect + 4)
+        }
         if (id == R.id.action_p) {
             val endSelect = binding.apisanne.selectionEnd
             val text = binding.apisanne.text.toString()
@@ -279,18 +324,6 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             }
             binding.apisanne.setText(build)
             binding.apisanne.setSelection(endSelect + 3)
-        }
-        if (id == R.id.action_img) {
-            val endSelect = binding.apisanne.selectionEnd
-            val text = binding.apisanne.text.toString()
-            val build = with(StringBuilder()) {
-                append(text.substring(0, endSelect))
-                append("<!--image-->")
-                append(text.substring(endSelect))
-                toString()
-            }
-            binding.apisanne.setText(build)
-            binding.apisanne.setSelection(endSelect + 12)
         }
     }
 

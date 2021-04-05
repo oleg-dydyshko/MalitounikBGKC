@@ -3,6 +3,7 @@ package by.carkva_gazeta.resources
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.graphics.Typeface
@@ -286,6 +287,22 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             hide()
         }
         prefEditor.apply()
+        if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
+            if (MainActivity.checkmodulesAdmin(this)) {
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.PASOCHNICALIST)
+                val inputStream = resources.openRawResource(malitvy[pasliaPrychascia].resourseID)
+                val text = inputStream.use {
+                    it.reader().readText()
+                }
+                intent.putExtra("resours", malitvy[pasliaPrychascia].resourse)
+                intent.putExtra("title", malitvy[pasliaPrychascia].title)
+                intent.putExtra("text", text)
+                startActivity(intent)
+            } else {
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -305,6 +322,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         val end = spanString.length
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         item.title = spanString
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
         return true
     }
 

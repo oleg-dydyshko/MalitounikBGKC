@@ -170,6 +170,13 @@ class MenuNatatki : NatatkiFragment() {
         fragmentManager?.let { dd.show(it, "dialog_delite") }
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        activity?.let {
+            menu.findItem(R.id.action_carkva).isVisible = k.getBoolean("admin", false)
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return true
@@ -234,6 +241,17 @@ class MenuNatatki : NatatkiFragment() {
                 activity.invalidateOptionsMenu()
                 myNatatkiFiles.sort()
                 adapter.notifyDataSetChanged()
+            }
+        }
+        if (id == R.id.action_carkva) {
+            activity?.let {
+                if (MainActivity.checkmodulesAdmin(it)) {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.PASOCHNICALIST)
+                    startActivity(intent)
+                } else {
+                    MainActivity.toastView(it, getString(R.string.error))
+                }
             }
         }
         return super.onOptionsItemSelected(item)

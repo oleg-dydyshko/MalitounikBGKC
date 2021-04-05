@@ -2,6 +2,7 @@ package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.os.Build
@@ -59,6 +60,8 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private lateinit var bindingprogress: ProgressBinding
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
+    private var id = R.raw.ton1
+    private var resurs = "ton1"
 
     override fun onPause() {
         super.onPause()
@@ -164,14 +167,46 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 inputStream = r.openRawResource(R.raw.ton1)
                 title = "Тон $ton"
                 when (ton) {
-                    1 -> inputStream = r.openRawResource(R.raw.ton1)
-                    2 -> inputStream = r.openRawResource(R.raw.ton2)
-                    3 -> inputStream = r.openRawResource(R.raw.ton3)
-                    4 -> inputStream = r.openRawResource(R.raw.ton4)
-                    5 -> inputStream = r.openRawResource(R.raw.ton5)
-                    6 -> inputStream = r.openRawResource(R.raw.ton6)
-                    7 -> inputStream = r.openRawResource(R.raw.ton7)
-                    8 -> inputStream = r.openRawResource(R.raw.ton8)
+                    1 -> {
+                        resurs = "ton1"
+                        id = R.raw.ton1
+                        inputStream = r.openRawResource(id)
+                    }
+                    2 -> {
+                        resurs = "ton2"
+                        id = R.raw.ton2
+                        inputStream = r.openRawResource(id)
+                    }
+                    3 -> {
+                        resurs = "ton3"
+                        id = R.raw.ton3
+                        inputStream = r.openRawResource(id)
+                    }
+                    4 -> {
+                        resurs = "ton4"
+                        id = R.raw.ton4
+                        inputStream = r.openRawResource(id)
+                    }
+                    5 -> {
+                        resurs = "ton5"
+                        id = R.raw.ton5
+                        inputStream = r.openRawResource(id)
+                    }
+                    6 -> {
+                        resurs = "ton6"
+                        id = R.raw.ton6
+                        inputStream = r.openRawResource(id)
+                    }
+                    7 -> {
+                        resurs = "ton7"
+                        id = R.raw.ton7
+                        inputStream = r.openRawResource(id)
+                    }
+                    8 -> {
+                        resurs = "ton8"
+                        id = R.raw.ton8
+                        inputStream = r.openRawResource(id)
+                    }
                 }
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
@@ -191,27 +226,39 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 inputStream = r.openRawResource(R.raw.ton1_budni)
                 when (ton) {
                     1 -> {
-                        inputStream = r.openRawResource(R.raw.ton1_budni)
+                        resurs = "ton1_budni"
+                        id = R.raw.ton1_budni
+                        inputStream = r.openRawResource(id)
                         title = "ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам"
                     }
                     2 -> {
-                        inputStream = r.openRawResource(R.raw.ton2_budni)
+                        resurs = "ton2_budni"
+                        id = R.raw.ton2_budni
+                        inputStream = r.openRawResource(id)
                         title = "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю"
                     }
                     3 -> {
-                        inputStream = r.openRawResource(R.raw.ton3_budni)
+                        resurs = "ton3_budni"
+                        id = R.raw.ton3_budni
+                        inputStream = r.openRawResource(id)
                         title = "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу"
                     }
                     4 -> {
-                        inputStream = r.openRawResource(R.raw.ton4_budni)
+                        resurs = "ton4_budni"
+                        id = R.raw.ton4_budni
+                        inputStream = r.openRawResource(id)
                         title = "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю"
                     }
                     5 -> {
-                        inputStream = r.openRawResource(R.raw.ton5_budni)
+                        resurs = "ton5_budni"
+                        id = R.raw.ton5_budni
+                        inputStream = r.openRawResource(id)
                         title = "ПЯТНІЦА\nСлужба Крыжу Гасподняму"
                     }
                     6 -> {
-                        inputStream = r.openRawResource(R.raw.ton6_budni)
+                        resurs = "ton6_budni"
+                        id = R.raw.ton6_budni
+                        inputStream = r.openRawResource(id)
                         title = "Субота\nСлужба ўсім сьвятым і памёрлым"
                     }
                 }
@@ -379,6 +426,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         val end = spanString.length
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         item.title = spanString
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
         return true
     }
 
@@ -433,6 +481,22 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
             hide()
         }
         prefEditor.apply()
+        if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
+            if (MainActivity.checkmodulesAdmin(this)) {
+                val intent = Intent()
+                intent.setClassName(this, MainActivity.PASOCHNICALIST)
+                val inputStream = resources.openRawResource(this.id)
+                val text = inputStream.use {
+                    it.reader().readText()
+                }
+                intent.putExtra("resours", resurs)
+                intent.putExtra("title", title)
+                intent.putExtra("text", text)
+                startActivity(intent)
+            } else {
+                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 

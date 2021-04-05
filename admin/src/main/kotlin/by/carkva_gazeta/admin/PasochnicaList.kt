@@ -28,7 +28,7 @@ import java.net.URL
 import java.net.URLEncoder
 
 
-class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener {
+class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaListBinding
@@ -59,11 +59,25 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
             startActivity(intent)
         }
         binding.listView.setOnItemLongClickListener { _, _, position, _ ->
-            val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance(fileList[position])
-            dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
+            val contextMenu = DialogContextMenu.getInstance(position, fileList[position])
+            contextMenu.show(supportFragmentManager, "contextMenu")
             return@setOnItemLongClickListener true
         }
         getDirPostRequest()
+    }
+
+    override fun onDialogRenameClick(position: Int) {
+        val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance(fileList[position])
+        dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
+    }
+
+    override fun onDialogDeliteClick(position: Int, title: String) {
+        val dialogDelite = DialogDelite.getInstance(position, title)
+        dialogDelite.show(supportFragmentManager, "dialogDelite")
+    }
+
+    override fun fileDelite(position: Int) {
+        getFileUnlinkPostRequest(fileList[position])
     }
 
     override fun setFileName(oldFileName: String, fileName: String) {
@@ -115,6 +129,28 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
+    private fun getFileUnlinkPostRequest(fileName: String) {
+        if (MainActivity.isNetworkAvailable(this)) {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.progressBar2.visibility = View.VISIBLE
+                withContext(Dispatchers.IO) {
+                    var reqParam = URLEncoder.encode("unlink", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName, "UTF-8")
+                    val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                    with(mURL.openConnection() as HttpURLConnection) {
+                        requestMethod = "POST"
+                        val wr = OutputStreamWriter(outputStream)
+                        wr.write(reqParam)
+                        wr.flush()
+                        inputStream
+                    }
+                }
+                binding.progressBar2.visibility = View.GONE
+                getDirPostRequest()
+            }
+        }
+    }
+
     private fun getFileRenamePostRequest(oldFileName: String, fileName: String) {
         if (MainActivity.isNetworkAvailable(this)) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -143,8 +179,8 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 withContext(Dispatchers.IO) {
-                    val reqParam = URLEncoder.encode("get", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    val mURL = URL("https://carkva-gazeta.by/admin/piasochnica_file_explorer.php")
+                    val reqParam = URLEncoder.encode("file", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
                     with(mURL.openConnection() as HttpURLConnection) {
                         requestMethod = "POST"
                         val wr = OutputStreamWriter(outputStream)
@@ -159,10 +195,10 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                             }
                         }
                         val result = sb.toString()
+                        fileList.clear()
                         if (result != "null") {
                             val gson = Gson()
                             val type = object : TypeToken<ArrayList<String>>() {}.type
-                            fileList.clear()
                             fileList.addAll(gson.fromJson(result, type))
                             fileList.sort()
                         }

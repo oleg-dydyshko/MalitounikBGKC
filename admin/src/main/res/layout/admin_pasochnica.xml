@@ -49,7 +49,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
+    <by.carkva_gazeta.malitounik.InteractiveScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp" />
-    </ScrollView>
+    </by.carkva_gazeta.malitounik.InteractiveScrollView>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -110,6 +110,17 @@
             app:srcCompat="@drawable/red_menu" />
 
         <ImageView
+            android:id="@+id/action_br"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:contentDescription="@string/empty"
+            app:srcCompat="@drawable/br_menu" />
+
+        <ImageView
             android:id="@+id/action_p"
             android:layout_width="28dp"
             android:layout_height="28dp"
@@ -121,18 +132,6 @@
             android:layout_marginBottom="5dp"
             android:contentDescription="@string/empty"
             app:srcCompat="@drawable/p_menu" />
-
-        <ImageView
-            android:id="@+id/action_img"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
-            android:contentDescription="@string/empty"
-            app:srcCompat="@drawable/img_menu" />
-
     </LinearLayout>
 
     <ScrollView

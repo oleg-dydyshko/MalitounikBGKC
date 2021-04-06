@@ -626,8 +626,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 var line = it
                 if (dzenNoch) line = line.replace("#d00505", "#f44336")
                 if (resurs.contains("bogashlugbovya")) {
-                    if (line.contains("<KANDAK></KANDAK>")) {
-                        line = line.replace("<KANDAK></KANDAK>", "")
+                    if (line.contains("<!--<KANDAK>-->")) {
+                        line = line.replace("<!--<KANDAK>-->", "")
                         builder.append(line)
                         try {
                             if (dayOfWeek == 1) {
@@ -639,8 +639,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                         }
                     }
-                    if (line.contains("<PRAKIMEN></PRAKIMEN>")) {
-                        line = line.replace("<PRAKIMEN></PRAKIMEN>", "")
+                    if (line.contains("<!--<PRAKIMEN>-->")) {
+                        line = line.replace("<!--<PRAKIMEN>-->", "")
                         builder.append(line)
                         try {
                             if (dayOfWeek == 1) {
@@ -652,8 +652,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                         }
                     }
-                    if (line.contains("<ALILUIA></ALILUIA>")) {
-                        line = line.replace("<ALILUIA></ALILUIA>", "")
+                    if (line.contains("<!--<ALILUIA>-->")) {
+                        line = line.replace("<!--<ALILUIA>-->", "")
                         builder.append(line)
                         try {
                             if (dayOfWeek == 1) {
@@ -665,8 +665,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                         }
                     }
-                    if (line.contains("<PRICHASNIK></PRICHASNIK>")) {
-                        line = line.replace("<PRICHASNIK></PRICHASNIK>", "")
+                    if (line.contains("<!--<PRICHASNIK>-->")) {
+                        line = line.replace("<!--<PRICHASNIK>-->", "")
                         builder.append(line)
                         try {
                             if (dayOfWeek == 1) {
@@ -680,8 +680,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         }
                     }
                     when {
-                        line.contains("<APCH></APCH>") -> {
-                            line = line.replace("<APCH></APCH>", "")
+                        line.contains("<!--<APCH>-->") -> {
+                            line = line.replace("<!--<APCH>-->", "")
                             var sv = zmenyiaChastki.sviatyia()
                             if (sv != "") {
                                 val s1 = sv.split(":")
@@ -704,8 +704,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                                 builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                             }
                         }
-                        line.contains("<EVCH></EVCH>") -> {
-                            line = line.replace("<EVCH></EVCH>", "")
+                        line.contains("<!--<EVCH>-->") -> {
+                            line = line.replace("<!--<EVCH>-->", "")
                             var sv = zmenyiaChastki.sviatyia()
                             if (sv != "") {
                                 val s1 = sv.split(":")

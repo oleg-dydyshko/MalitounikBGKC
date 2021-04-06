@@ -1,9 +1,11 @@
 package by.carkva_gazeta.admin
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -12,6 +14,8 @@ import android.util.TypedValue
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaListBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -21,6 +25,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -28,17 +33,46 @@ import java.net.URL
 import java.net.URLEncoder
 
 
-class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener {
+class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogFileExplorer.DialogFileExplorerListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaListBinding
     private var resetTollbarJob: Job? = null
     private var fileList = ArrayList<String>()
     private lateinit var adapter: PasochnicaListAdaprer
+    private val myPermissionsWriteExternalStorage = 40
 
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == myPermissionsWriteExternalStorage) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                val fileExplorer = DialogFileExplorer()
+                fileExplorer.show(supportFragmentManager, "file_explorer")
+            }
+        }
+    }
+
+    override fun onDialogFile(file: File) {
+        val title = file.name
+        var exits = false
+        for (i in 0 until fileList.size) {
+            if (fileList[i].contains(title)) {
+                exits = true
+                break
+            }
+        }
+        val text = file.readText()
+        val intent = Intent(this, Pasochnica::class.java)
+        intent.putExtra("text", text)
+        intent.putExtra("resours","")
+        intent.putExtra("exits", exits)
+        intent.putExtra("title", title)
+        startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -232,6 +266,15 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
             val intent = Intent(this, Pasochnica::class.java)
             intent.putExtra("fileName", "")
             startActivity(intent)
+        }
+        if (id == R.id.action_open_file) {
+            val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+            if (PackageManager.PERMISSION_DENIED == permissionCheck) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+            } else {
+                val fileExplorer = DialogFileExplorer()
+                fileExplorer.show(supportFragmentManager, "file_explorer")
+            }
         }
         return super.onOptionsItemSelected(item)
     }

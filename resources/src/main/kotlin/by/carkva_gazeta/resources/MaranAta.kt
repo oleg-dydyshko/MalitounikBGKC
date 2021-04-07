@@ -439,7 +439,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 if (!onsave) {
                     var nazva = ""
                     if (scroll == 1) {
-                        nazva = if (list.lastVisiblePosition - 4 >= 0) maranAta[list.lastVisiblePosition - 4] else maranAta[list.lastVisiblePosition]
+                        nazva = maranAta[list.firstVisiblePosition]
                     }
                     val oldtollBarText = binding.titleToolbar.text.toString()
                     if (oldtollBarText == "") {

@@ -785,7 +785,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            string = "сьпяваецца антыфон (Пс 91)."
+            string = "Пс 91. (Гл. тут)."
             strLig = string.length
             t1 = text.indexOf(string)
             if (t1 != -1) {
@@ -807,7 +807,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            string = "Антыфон у буднія дні - з Пс 92."
+            string = "з Пс 92. (Гл. тут)."
             strLig = string.length
             t1 = text.indexOf(string)
             if (t1 != -1) {
@@ -818,7 +818,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            string = "Штодзённы і нядзельны Антыфон - з Пс 94."
+            string = "Пс 94. (Гл. тут)."
             strLig = string.length
             t1 = text.indexOf(string)
             if (t1 != -1) {

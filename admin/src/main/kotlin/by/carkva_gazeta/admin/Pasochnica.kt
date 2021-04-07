@@ -10,6 +10,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaBinding
 import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
@@ -250,6 +251,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.apisanne.windowToken, 0)
             }
+            invalidateOptionsMenu()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -325,6 +327,17 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             binding.apisanne.setText(build)
             binding.apisanne.setSelection(endSelect + 3)
         }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        val editItem = menu.findItem(R.id.action_preview)
+        if (binding.scrollpreView.visibility == View.GONE) {
+            editItem.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.natatka_edit)
+        } else {
+            editItem.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.natatka)
+        }
+        return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

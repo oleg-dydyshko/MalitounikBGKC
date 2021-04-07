@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
@@ -33,7 +32,6 @@ class DialogFileExplorer : DialogFragment() {
     private var path: File? = null
     private var chosenFile = ""
     private var mListener: DialogFileExplorerListener? = null
-    private lateinit var chin: SharedPreferences
     private var sdCard = true
     private var sdCard2 = false
     private lateinit var alert: AlertDialog
@@ -90,20 +88,16 @@ class DialogFileExplorer : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = chin.getBoolean("dzen_noch", false)
             val files = ContextCompat.getExternalFilesDirs(it, null)
             fileList.add(MyFile("Унутраная памяць", R.drawable.directory_icon))
             if (files.size > 1) {
                 fileList.add(MyFile("Карта SD", R.drawable.directory_icon))
             }
-            var style = by.carkva_gazeta.malitounik.R.style.AlertDialogTheme
-            if (dzenNoch) style = by.carkva_gazeta.malitounik.R.style.AlertDialogThemeBlack
-            val builder = AlertDialog.Builder(it, style)
+            val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             val linear = LinearLayout(it)
             linear.orientation = LinearLayout.VERTICAL
             val textViewZaglavie = TextViewRobotoCondensed(it)
-            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+            textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
@@ -113,10 +107,7 @@ class DialogFileExplorer : DialogFragment() {
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
             linear.addView(textViewZaglavie)
             val listViewCompat = ListView(it)
-            if (dzenNoch)
-                listViewCompat.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
-            else
-                listViewCompat.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            listViewCompat.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_default)
             val listAdaprer = TitleListAdaprer(it)
             listViewCompat.adapter = listAdaprer
             linear.addView(listViewCompat)

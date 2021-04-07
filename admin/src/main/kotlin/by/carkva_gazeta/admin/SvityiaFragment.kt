@@ -4,15 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaPageFragmentBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -171,6 +169,18 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         return true
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        val editItem = menu.findItem(R.id.action_preview)
+        activity?.let {
+            if (binding.scrollpreView.visibility == View.GONE) {
+                editItem.icon = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.natatka_edit)
+            } else {
+                editItem.icon = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.natatka)
+            }
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_save) {
@@ -183,6 +193,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                 activity?.let {
                     val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+                    it.invalidateOptionsMenu()
                 }
             } else {
                 var textApisanne = binding.apisanne.text.toString()
@@ -195,6 +206,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                 activity?.let {
                     val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(binding.apisanne.windowToken, 0)
+                    it.invalidateOptionsMenu()
                 }
             }
         }

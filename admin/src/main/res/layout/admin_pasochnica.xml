@@ -108,30 +108,6 @@
             android:layout_marginBottom="5dp"
             android:contentDescription="@string/empty"
             app:srcCompat="@drawable/red_menu" />
-
-        <ImageView
-            android:id="@+id/action_br"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:contentDescription="@string/empty"
-            app:srcCompat="@drawable/br_menu" />
-
-        <ImageView
-            android:id="@+id/action_p"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
-            android:contentDescription="@string/empty"
-            app:srcCompat="@drawable/p_menu" />
     </LinearLayout>
 
     <ScrollView

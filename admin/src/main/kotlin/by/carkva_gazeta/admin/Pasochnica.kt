@@ -2,22 +2,24 @@ package by.carkva_gazeta.admin
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaBinding
-import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
+import org.apache.commons.text.StringEscapeUtils
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -25,19 +27,15 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, InteractiveScrollView.OnScrollChangedCallback {
+class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
     private var resetTollbarJob: Job? = null
     private var fileName = ""
-    private var firstTextPosition = ""
 
     override fun onPause() {
         super.onPause()
-        val edit = k.edit()
-        edit.putString(fileName, firstTextPosition)
-        edit.apply()
         resetTollbarJob?.cancel()
     }
 
@@ -54,44 +52,28 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         binding.actionBold.setOnClickListener(this)
         binding.actionEm.setOnClickListener(this)
         binding.actionRed.setOnClickListener(this)
-        binding.actionP.setOnClickListener(this)
-        binding.actionBr.setOnClickListener(this)
         fileName = intent.extras?.getString("fileName", "") ?: ""
-        if (savedInstanceState != null) {
-            fileName = savedInstanceState.getString("fileName", "")
-            binding.apisanne.post {
-                val textline = savedInstanceState.getString("textLine", "")
-                if (textline != "") {
-                    val index = binding.apisanne.text.toString().indexOf(textline)
-                    val line = binding.apisanne.layout.getLineForOffset(index)
-                    val y = binding.apisanne.layout.getLineTop(line)
-                    binding.scrollView.scrollY = y
-                }
-            }
-        } else {
-            if (fileName != "") getFilePostRequest(fileName)
-            val text = intent.extras?.getString("text", "") ?: ""
-            if (text != "") {
-                val gson = Gson()
-                val resours = intent.extras?.getString("resours", "") ?: ""
-                val title = intent.extras?.getString("title", "") ?: ""
-                fileName = "$title($resours).html"
-                if (intent.extras?.getBoolean("exits", false) == false) {
-                    sendPostRequest(fileName, gson.toJson(text))
-                    binding.apisanne.setText(text)
-                } else {
-                    getFilePostRequest(fileName)
-                }
+        if (savedInstanceState != null) fileName = savedInstanceState.getString("fileName", "")
+        if (fileName != "") getFilePostRequest(fileName)
+        val text = intent.extras?.getString("text", "") ?: ""
+        if (text != "") {
+            val gson = Gson()
+            val resours = intent.extras?.getString("resours", "") ?: ""
+            val title = intent.extras?.getString("title", "") ?: ""
+            fileName = "$title($resours).html"
+            if (intent.extras?.getBoolean("exits", false) == false) {
+                sendPostRequest(fileName, gson.toJson(text))
+                binding.apisanne.setText(MainActivity.fromHtml(text))
+            } else {
+                getFilePostRequest(fileName)
             }
         }
         setTollbarTheme()
-        binding.scrollView.setOnScrollChangedCallback(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("fileName", fileName)
-        outState.putString("textLine", firstTextPosition)
     }
 
     private fun setTollbarTheme() {
@@ -142,17 +124,8 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     }
 
     override fun setFileName(oldFileName: String, fileName: String) {
-        val gson = Gson()
         this.fileName = fileName
-        sendPostRequest(fileName, gson.toJson(binding.apisanne.text.toString()))
-    }
-
-    override fun onScroll(t: Int, oldt: Int) {
-        val lineLayout = binding.apisanne.layout
-        lineLayout?.let {
-            val textForVertical = binding.apisanne.text.toString().substring(binding.apisanne.layout.getLineStart(it.getLineForVertical(t)), binding.apisanne.layout.getLineEnd(it.getLineForVertical(t))).trim()
-            if (textForVertical != "") firstTextPosition = textForVertical
-        }
+        saveResult(fileName)
     }
 
     private fun getFilePostRequest(fileName: String) {
@@ -182,18 +155,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                         result = gson.fromJson(sb.toString(), type)
                     }
                 }
-                binding.apisanne.setText(result)
-                if (k.contains(this@Pasochnica.fileName)) {
-                    binding.apisanne.post {
-                        val textline = k.getString(this@Pasochnica.fileName, "") ?: ""
-                        if (textline != "") {
-                            val index = binding.apisanne.text.toString().indexOf(textline)
-                            val line = binding.apisanne.layout.getLineForOffset(index)
-                            val y = binding.apisanne.layout.getLineTop(line)
-                            binding.scrollView.scrollY = y
-                        }
-                    }
-                }
+                binding.apisanne.setText(MainActivity.fromHtml(result))
                 binding.progressBar2.visibility = View.GONE
             }
         }
@@ -227,6 +189,170 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         }
     }
 
+    private fun clearColor(text: String): String {
+        var result = text
+        var run = true
+        var position = 0
+        while (run) {
+            val t1 = result.indexOf("<font color=\"#d00505\">", position)
+            val t2 = result.indexOf("</font>", t1)
+            if (t1 != -1 && t2 != -1) {
+                var subText = result.substring(t1 + 22, t2)
+                val oldSubText = result.substring(t1, t2 + 7)
+                subText = subText.replace("\n", "")
+                subText = subText.replace("<br>", "")
+                subText = subText.replace("<p>", "").trim()
+                if (subText.isEmpty()) {
+                    var oldSubText2 = oldSubText.replace("<font color=\"#d00505\">", "")
+                    oldSubText2 = oldSubText2.replace("</font>", "")
+                    result = result.replace(oldSubText, oldSubText2)
+                }
+            } else {
+                run = false
+            }
+            position = t1 + 1
+        }
+        run = true
+        position = 0
+        while (run) {
+            val t1 = result.indexOf("</font>", position)
+            val t2 = result.indexOf("<font color=\"#d00505\">", t1)
+            if (t1 != -1 && t2 != -1) {
+                var subText = result.substring(t1 + 7, t2)
+                val oldSubText = result.substring(t1, t2 + 22)
+                subText = subText.replace("\n", "")
+                subText = subText.replace("<br>", "")
+                subText = subText.replace("<p>", "").trim()
+                if (subText.isEmpty()) {
+                    var oldSubText2 = oldSubText.replace("<font color=\"#d00505\">", "")
+                    oldSubText2 = oldSubText2.replace("</font>", "")
+                    result = result.replace(oldSubText, oldSubText2)
+                }
+            } else {
+                run = false
+            }
+            position = t1 + 1
+        }
+        return result
+    }
+
+    private fun clearBold(text: String): String {
+        var result = text
+        var run = true
+        var position = 0
+        while (run) {
+            val t1 = result.indexOf("<strong>", position)
+            val t2 = result.indexOf("</strong>", t1)
+            if (t1 != -1 && t2 != -1) {
+                var subText = result.substring(t1 + 8, t2)
+                val oldSubText = result.substring(t1, t2 + 9)
+                subText = subText.replace("\n", "")
+                subText = subText.replace("<br>", "")
+                subText = subText.replace("<p>", "").trim()
+                if (subText.isEmpty()) {
+                    var oldSubText2 = oldSubText.replace("<strong>", "")
+                    oldSubText2 = oldSubText2.replace("</strong>", "")
+                    result = result.replace(oldSubText, oldSubText2)
+                }
+            } else {
+                run = false
+            }
+            position = t1 + 1
+        }
+        run = true
+        position = 0
+        while (run) {
+            val t1 = result.indexOf("</strong>", position)
+            val t2 = result.indexOf("<strong>", t1)
+            if (t1 != -1 && t2 != -1) {
+                var subText = result.substring(t1 + 9, t2)
+                val oldSubText = result.substring(t1, t2 + 8)
+                subText = subText.replace("\n", "")
+                subText = subText.replace("<br>", "")
+                subText = subText.replace("<p>", "").trim()
+                if (subText.isEmpty()) {
+                    var oldSubText2 = oldSubText.replace("<strong>", "")
+                    oldSubText2 = oldSubText2.replace("</strong>", "")
+                    result = result.replace(oldSubText, oldSubText2)
+                }
+            } else {
+                run = false
+            }
+            position = t1 + 1
+        }
+        return result
+    }
+
+    private fun clearEm(text: String): String {
+        var result = text
+        var run = true
+        var position = 0
+        while (run) {
+            val t1 = result.indexOf("<em>", position)
+            val t2 = result.indexOf("</em>", t1)
+            if (t1 != -1 && t2 != -1) {
+                var subText = result.substring(t1 + 4, t2)
+                val oldSubText = result.substring(t1, t2 + 5)
+                subText = subText.replace("\n", "")
+                subText = subText.replace("<br>", "")
+                subText = subText.replace("<p>", "").trim()
+                if (subText.isEmpty()) {
+                    var oldSubText2 = oldSubText.replace("<em>", "")
+                    oldSubText2 = oldSubText2.replace("</em>", "")
+                    result = result.replace(oldSubText, oldSubText2)
+                }
+            } else {
+                run = false
+            }
+            position = t1 + 1
+        }
+        run = true
+        position = 0
+        while (run) {
+            val t1 = result.indexOf("</em>", position)
+            val t2 = result.indexOf("<em>", t1)
+            if (t1 != -1 && t2 != -1) {
+                var subText = result.substring(t1 + 5, t2)
+                val oldSubText = result.substring(t1, t2 + 4)
+                subText = subText.replace("\n", "")
+                subText = subText.replace("<br>", "")
+                subText = subText.replace("<p>", "").trim()
+                if (subText.isEmpty()) {
+                    var oldSubText2 = oldSubText.replace("<em>", "")
+                    oldSubText2 = oldSubText2.replace("</em>", "")
+                    result = result.replace(oldSubText, oldSubText2)
+                }
+            } else {
+                run = false
+            }
+            position = t1 + 1
+        }
+        return result
+    }
+
+    private fun clearHtml(text: String): String {
+        var result = text
+        val t1 = result.indexOf("<p")
+        if (t1 != -1) {
+            val t2 = result.indexOf(">")
+            val subString = result.substring(t1, t2 + 1)
+            var stringres = result.replace(subString, "")
+            stringres = stringres.replace("</p>", "<br>")
+            stringres = stringres.replace("<span", "<font")
+            stringres = stringres.replace("</span>", "</font>")
+            stringres = stringres.replace("style=\"color:#D00505;\"", "color=\"#d00505\"")
+            stringres = stringres.replace("<i>", "<em>")
+            stringres = stringres.replace("</i>", "</em>")
+            stringres = stringres.replace("<b>", "<strong>")
+            stringres = stringres.replace("</b>", "</strong>")
+            stringres = stringres.replace("<u>", "")
+            stringres = stringres.replace("</u>", "")
+            val t3 = stringres.lastIndexOf("<br>")
+            result = stringres.substring(0, t3)
+        }
+        return result
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_save) {
@@ -234,26 +360,29 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance("")
                 dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
             } else {
-                val gson = Gson()
-                sendPostRequest(fileName, gson.toJson(binding.apisanne.text.toString()))
+                saveResult(fileName)
             }
-        }
-        if (id == R.id.action_preview) {
-            if (binding.scrollpreView.visibility == View.VISIBLE) {
-                binding.scrollpreView.visibility = View.GONE
-                binding.scrollView.visibility = View.VISIBLE
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-            } else {
-                binding.preView.text = MainActivity.fromHtml(binding.apisanne.text.toString()).trim()
-                binding.scrollpreView.visibility = View.VISIBLE
-                binding.scrollView.visibility = View.GONE
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(binding.apisanne.windowToken, 0)
-            }
-            invalidateOptionsMenu()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun saveResult(fileName: String) {
+        val text = binding.apisanne.text
+        text?.let {
+            var result = MainActivity.toHtml(it)
+            result = StringEscapeUtils.unescapeHtml4(result)
+            result = clearHtml(result)
+            result = clearColor(result)
+            result = clearEm(result)
+            result = clearBold(result)
+            result = clearEm(result)
+            result = clearColor(result)
+            result = clearBold(result)
+            result = clearEm(result)
+            if (!result.contains("<!DOCTYPE HTML>")) result = "<!DOCTYPE HTML>$result"
+            val gson = Gson()
+            sendPostRequest(fileName, gson.toJson(result))
+        }
     }
 
     override fun onClick(v: View?) {
@@ -261,83 +390,51 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         if (id == R.id.action_bold) {
             val startSelect = binding.apisanne.selectionStart
             val endSelect = binding.apisanne.selectionEnd
-            val text = binding.apisanne.text.toString()
-            val build = with(StringBuilder()) {
-                append(text.substring(0, startSelect))
-                append("<strong>")
-                append(text.substring(startSelect, endSelect))
-                append("</strong>")
-                append(text.substring(endSelect))
-                toString()
+            val text = binding.apisanne.text
+            text?.let { editable ->
+                val subtext = editable.getSpans(startSelect, endSelect, StyleSpan(Typeface.BOLD)::class.java)
+                var check = false
+                subtext.forEach {
+                    if (it.style == Typeface.BOLD) {
+                        check = true
+                        editable.removeSpan(it)
+                    }
+                }
+                if (!check) editable.setSpan(StyleSpan(Typeface.BOLD), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            binding.apisanne.setText(build)
-            binding.apisanne.setSelection(endSelect + 17)
         }
         if (id == R.id.action_em) {
             val startSelect = binding.apisanne.selectionStart
             val endSelect = binding.apisanne.selectionEnd
-            val text = binding.apisanne.text.toString()
-            val build = with(StringBuilder()) {
-                append(text.substring(0, startSelect))
-                append("<em>")
-                append(text.substring(startSelect, endSelect))
-                append("</em>")
-                append(text.substring(endSelect))
-                toString()
+            val text = binding.apisanne.text
+            text?.let { editable ->
+                val subtext = editable.getSpans(startSelect, endSelect, StyleSpan(Typeface.ITALIC)::class.java)
+                var check = false
+                subtext.forEach {
+                    if (it.style == Typeface.ITALIC) {
+                        check = true
+                        editable.removeSpan(it)
+                    }
+                }
+                if (!check) editable.setSpan(StyleSpan(Typeface.ITALIC), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            binding.apisanne.setText(build)
-            binding.apisanne.setSelection(endSelect + 9)
         }
         if (id == R.id.action_red) {
             val startSelect = binding.apisanne.selectionStart
             val endSelect = binding.apisanne.selectionEnd
-            val text = binding.apisanne.text.toString()
-            val build = with(StringBuilder()) {
-                append(text.substring(0, startSelect))
-                append("<font color=\"#d00505\">")
-                append(text.substring(startSelect, endSelect))
-                append("</font>")
-                append(text.substring(endSelect))
-                toString()
+            val text = binding.apisanne.text
+            text?.let { editable ->
+                val subtext = editable.getSpans(startSelect, endSelect, ForegroundColorSpan::class.java)
+                var check = false
+                subtext.forEach {
+                    if (it.foregroundColor == ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)) {
+                        check = true
+                        editable.removeSpan(it)
+                    }
+                }
+                if (!check) editable.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            binding.apisanne.setText(build)
-            binding.apisanne.setSelection(endSelect + 29)
         }
-        if (id == R.id.action_br) {
-            val endSelect = binding.apisanne.selectionEnd
-            val text = binding.apisanne.text.toString()
-            val build = with(StringBuilder()) {
-                append(text.substring(0, endSelect))
-                append("<br>")
-                append(text.substring(endSelect))
-                toString()
-            }
-            binding.apisanne.setText(build)
-            binding.apisanne.setSelection(endSelect + 4)
-        }
-        if (id == R.id.action_p) {
-            val endSelect = binding.apisanne.selectionEnd
-            val text = binding.apisanne.text.toString()
-            val build = with(StringBuilder()) {
-                append(text.substring(0, endSelect))
-                append("<p>")
-                append(text.substring(endSelect))
-                toString()
-            }
-            binding.apisanne.setText(build)
-            binding.apisanne.setSelection(endSelect + 3)
-        }
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
-        val editItem = menu.findItem(R.id.action_preview)
-        if (binding.scrollpreView.visibility == View.GONE) {
-            editItem.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.natatka_edit)
-        } else {
-            editItem.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.natatka)
-        }
-        return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

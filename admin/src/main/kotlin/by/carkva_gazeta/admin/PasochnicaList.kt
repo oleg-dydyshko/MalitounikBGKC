@@ -33,7 +33,7 @@ import java.net.URL
 import java.net.URLEncoder
 
 
-class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogFileExplorer.DialogFileExplorerListener {
+class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogFileExplorer.DialogFileExplorerListener, DialogNetFileExplorer.DialogNetFileExplorerListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaListBinding
@@ -69,10 +69,14 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
         val text = file.readText()
         val intent = Intent(this, Pasochnica::class.java)
         intent.putExtra("text", text)
-        intent.putExtra("resours","")
+        intent.putExtra("resours", "")
         intent.putExtra("exits", exits)
         intent.putExtra("title", title)
         startActivity(intent)
+    }
+
+    override fun onDialogNetFile(dirToFile: String, fileName: String) {
+        getFileCopyPostRequest(dirToFile, fileName)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -161,6 +165,31 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
         setTollbarTheme()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    private fun getFileCopyPostRequest(dirToFile: String, fileName: String) {
+        if (MainActivity.isNetworkAvailable(this)) {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.progressBar2.visibility = View.VISIBLE
+                withContext(Dispatchers.IO) {
+                    var reqParam = URLEncoder.encode("copy", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("dirToFile", "UTF-8") + "=" + URLEncoder.encode(dirToFile, "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName, "UTF-8")
+                    val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                    with(mURL.openConnection() as HttpURLConnection) {
+                        requestMethod = "POST"
+                        val wr = OutputStreamWriter(outputStream)
+                        wr.write(reqParam)
+                        wr.flush()
+                        inputStream
+                    }
+                }
+                binding.progressBar2.visibility = View.GONE
+                val intent = Intent(this@PasochnicaList, Pasochnica::class.java)
+                intent.putExtra("fileName", fileName)
+                startActivity(intent)
+            }
+        }
     }
 
     private fun getFileUnlinkPostRequest(fileName: String) {
@@ -255,6 +284,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                     startActivity(intent)
                 }
                 adapter.notifyDataSetChanged()
+                binding.listView.invalidate()
                 binding.progressBar2.visibility = View.GONE
             }
         }
@@ -266,6 +296,10 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
             val intent = Intent(this, Pasochnica::class.java)
             intent.putExtra("fileName", "")
             startActivity(intent)
+        }
+        if (id == R.id.action_open_net_file) {
+            val dialogNetFileExplorer = DialogNetFileExplorer()
+            dialogNetFileExplorer.show(supportFragmentManager, "dialogNetFileExplorer")
         }
         if (id == R.id.action_open_file) {
             val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)

@@ -2,12 +2,6 @@
 <menu  xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_preview"
-        android:icon="@drawable/natatka"
-        android:orderInCategory="100"
-        android:title="@string/pre_view"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/action_save"
         android:icon="@drawable/save"
         android:orderInCategory="100"

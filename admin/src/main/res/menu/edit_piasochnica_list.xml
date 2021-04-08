@@ -8,6 +8,12 @@
         android:title="@string/bibliateka_file"
         app:showAsAction="always" />
     <item
+        android:id="@+id/action_open_net_file"
+        android:icon="@drawable/www_icon"
+        android:orderInCategory="100"
+        android:title="@string/bibliateka_file"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_plus"
         android:icon="@drawable/plus"
         android:orderInCategory="100"

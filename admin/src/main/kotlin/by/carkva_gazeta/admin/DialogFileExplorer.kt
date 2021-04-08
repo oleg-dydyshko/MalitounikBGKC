@@ -21,7 +21,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.AdminSimpleListItemBinding
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-import com.google.android.play.core.splitcompat.SplitCompat
 import java.io.File
 import java.io.FilenameFilter
 
@@ -161,9 +160,6 @@ class DialogFileExplorer : DialogFragment() {
 
     private inner class TitleListAdaprer(private val mContext: Activity) : ArrayAdapter<MyFile>(mContext, R.layout.admin_simple_list_item, fileList) {
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
-            activity?.let {
-                SplitCompat.install(it)
-            }
             val rootView: View
             val viewHolder: ViewHolder
             if (mView == null) {

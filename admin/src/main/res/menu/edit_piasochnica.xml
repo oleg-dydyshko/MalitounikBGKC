@@ -7,4 +7,10 @@
         android:orderInCategory="100"
         android:title="@string/save_sabytie"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_save_as"
+        android:icon="@drawable/save_as"
+        android:orderInCategory="100"
+        android:title="@string/save_as"
+        app:showAsAction="always" />
 </menu>

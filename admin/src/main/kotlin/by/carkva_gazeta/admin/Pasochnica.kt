@@ -27,7 +27,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener {
+class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
@@ -123,9 +123,84 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         onSupportNavigateUp()
     }
 
+    override fun onDialogSaveAsFile(dir: String, oldFileName: String, fileName: String) {
+        getFileIssetPostRequest(dir, oldFileName, fileName)
+    }
+
     override fun setFileName(oldFileName: String, fileName: String) {
         this.fileName = fileName
         saveResult(fileName)
+    }
+
+    override fun fileExists(dir: String, oldFileName: String, fileName: String) {
+        sendSaveAsPostRequest("$dir/$fileName", oldFileName)
+    }
+
+    private fun getFileIssetPostRequest(dir: String, oldFileName: String, fileName: String) {
+        if (MainActivity.isNetworkAvailable(this)) {
+            CoroutineScope(Dispatchers.Main).launch {
+                var result = ""
+                binding.progressBar2.visibility = View.VISIBLE
+                withContext(Dispatchers.IO) {
+                    var reqParam = URLEncoder.encode("isset", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("dir", "UTF-8") + "=" + URLEncoder.encode(dir, "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName, "UTF-8")
+                    val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                    with(mURL.openConnection() as HttpURLConnection) {
+                        requestMethod = "POST"
+                        val wr = OutputStreamWriter(outputStream)
+                        wr.write(reqParam)
+                        wr.flush()
+                        val sb = StringBuilder()
+                        BufferedReader(InputStreamReader(inputStream)).use {
+                            var inputLine = it.readLine()
+                            while (inputLine != null) {
+                                sb.append(inputLine)
+                                inputLine = it.readLine()
+                            }
+                        }
+                        val gson = Gson()
+                        val type = object : TypeToken<String>() {}.type
+                        result = gson.fromJson(sb.toString(), type)
+                    }
+                }
+                if (result.contains("true")) {
+                    val dialogFileExists = DialogFileExists.getInstance(dir, oldFileName, fileName)
+                    dialogFileExists.show(supportFragmentManager, "dialogFileExists")
+                } else {
+                    sendSaveAsPostRequest("$dir/$fileName", oldFileName)
+                }
+                binding.progressBar2.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun sendSaveAsPostRequest(dirToFile: String, fileName: String) {
+        if (MainActivity.isNetworkAvailable(this)) {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.progressBar2.visibility = View.VISIBLE
+                var responseCodeS = 500
+                withContext(Dispatchers.IO) {
+                    var reqParam = URLEncoder.encode("saveas", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("dirToFile", "UTF-8") + "=" + URLEncoder.encode(dirToFile, "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName, "UTF-8")
+                    val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                    with(mURL.openConnection() as HttpURLConnection) {
+                        requestMethod = "POST"
+                        val wr = OutputStreamWriter(outputStream)
+                        wr.write(reqParam)
+                        wr.flush()
+                        responseCodeS = responseCode
+                    }
+                }
+                if (responseCodeS == 200) {
+                    MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.save))
+                } else {
+                    MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
+                }
+                binding.progressBar2.visibility = View.GONE
+            }
+        }
     }
 
     private fun getFilePostRequest(fileName: String) {
@@ -362,6 +437,10 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             } else {
                 saveResult(fileName)
             }
+        }
+        if (id == R.id.action_save_as) {
+            val dialogSaveAsFileExplorer = DialogSaveAsFileExplorer.getInstance(fileName)
+            dialogSaveAsFileExplorer.show(supportFragmentManager, "dialogSaveAsFileExplorer")
         }
         return super.onOptionsItemSelected(item)
     }

@@ -59,7 +59,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
     private var spid = 60
     private var mActionDown = false
     private var change = false
-    private var cytannelist = ArrayList<TextViewRobotoCondensed>()
     private lateinit var binding: AkafistChytanneBinding
     private lateinit var bindingprogress: ProgressBinding
     private var autoScrollJob: Job? = null
@@ -73,9 +72,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
-        cytannelist.forEach {
-            it.textSize = fontBiblia
-        }
+        binding.textView.textSize = fontBiblia
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -583,9 +580,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
             autoScrollJob?.cancel()
-            cytannelist.forEach {
-                it.setTextIsSelectable(true)
-            }
+            binding.textView.setTextIsSelectable(true)
             if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
@@ -606,9 +601,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
             stopAutoStartScroll()
-            cytannelist.forEach {
-                it.setTextIsSelectable(false)
-            }
+            binding.textView.setTextIsSelectable(false)
             autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
                 while (isActive) {
                     delay(spid.toLong())

@@ -301,17 +301,23 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
     }
 
-    private fun findAll(position: Int = 0) {
+    private fun findAll() {
+        var position = 0
         val search = binding.textSearch.text.toString()
         if (search.length >= 3) {
             val text = binding.textView.text as SpannableString
             val searchLig = search.length
-            val strPosition = text.indexOf(search, position, true)
-            if (strPosition != -1) {
-                findListSpans.add(SpanStr(getColorSpans(text.getSpans(strPosition, strPosition + searchLig, ForegroundColorSpan::class.java)), strPosition, strPosition + searchLig))
-                text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                findAll(strPosition + 1)
+            var run = true
+            while (run) {
+                val strPosition = text.indexOf(search, position, true)
+                if (strPosition != -1) {
+                    findListSpans.add(SpanStr(getColorSpans(text.getSpans(strPosition, strPosition + searchLig, ForegroundColorSpan::class.java)), strPosition, strPosition + searchLig))
+                    text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    position = strPosition + 1
+                } else {
+                    run = false
+                }
             }
         }
     }
@@ -351,13 +357,18 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (previous) findPosition--
             else findPosition++
         }
-        if (findPosition == -1) {
-            findPosition = findListSpans.size - 1
-        }
-        if (findPosition == findListSpans.size) {
-            findPosition = 0
-        }
         if (findListSpans.isNotEmpty()) {
+            val lineOld = binding.textView.layout.getLineForOffset(findListSpans[findPositionOld].start)
+            val yOld = binding.textView.layout.getLineTop(lineOld)
+            if (yOld > positionY) {
+                 findPosition--
+            }
+            if (findPosition == -1) {
+                findPosition = findListSpans.size - 1
+            }
+            if (findPosition == findListSpans.size) {
+                findPosition = 0
+            }
             val text = binding.textView.text as SpannableString
             text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorBezPosta)), findListSpans[findPositionOld].start, findListSpans[findPositionOld].size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.textCount.text = getString(by.carkva_gazeta.malitounik.R.string.fing_count, findPosition + 1, findListSpans.size)

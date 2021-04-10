@@ -52,6 +52,8 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         binding.actionBold.setOnClickListener(this)
         binding.actionEm.setOnClickListener(this)
         binding.actionRed.setOnClickListener(this)
+        binding.actionP.setOnClickListener(this)
+        binding.actionBr.setOnClickListener(this)
         fileName = intent.extras?.getString("fileName", "") ?: ""
         if (savedInstanceState != null) fileName = savedInstanceState.getString("fileName", "")
         if (fileName != "") getFilePostRequest(fileName)
@@ -60,10 +62,20 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             val gson = Gson()
             val resours = intent.extras?.getString("resours", "") ?: ""
             val title = intent.extras?.getString("title", "") ?: ""
-            fileName = "$title($resours).html"
+            fileName = if (resours == "") {
+                title
+            } else {
+                "($resours) $title.html"
+            }
             if (intent.extras?.getBoolean("exits", false) == false) {
                 sendPostRequest(fileName, gson.toJson(text))
-                binding.apisanne.setText(MainActivity.fromHtml(text))
+                if (fileName.contains(".htm")) {
+                    binding.apisanne.setText(MainActivity.fromHtml(text))
+                    binding.actionP.visibility = View.GONE
+                    binding.actionBr.visibility = View.GONE
+                } else {
+                    binding.apisanne.setText(text)
+                }
             } else {
                 getFilePostRequest(fileName)
             }
@@ -235,7 +247,14 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                         result = gson.fromJson(sb.toString(), type)
                     }
                 }
-                binding.apisanne.setText(MainActivity.fromHtml(result))
+
+                if (fileName.contains(".htm")) {
+                    binding.apisanne.setText(MainActivity.fromHtml(result))
+                    binding.actionP.visibility = View.GONE
+                    binding.actionBr.visibility = View.GONE
+                } else {
+                    binding.apisanne.setText(result)
+                }
                 binding.progressBar2.visibility = View.GONE
             }
         }
@@ -452,20 +471,24 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
 
     private fun saveResult(fileName: String) {
         val text = binding.apisanne.text
-        text?.let {
-            var result = MainActivity.toHtml(it)
-            result = StringEscapeUtils.unescapeHtml4(result)
-            result = clearHtml(result)
-            result = clearColor(result)
-            result = clearEm(result)
-            result = clearBold(result)
-            result = clearEm(result)
-            result = clearColor(result)
-            result = clearBold(result)
-            result = clearEm(result)
-            if (!result.contains("<!DOCTYPE HTML>")) result = "<!DOCTYPE HTML>$result"
-            val gson = Gson()
-            sendPostRequest(fileName, gson.toJson(result))
+        val gson = Gson()
+        if (fileName.contains(".htm")) {
+            text?.let {
+                var result = MainActivity.toHtml(it)
+                result = StringEscapeUtils.unescapeHtml4(result)
+                result = clearHtml(result)
+                result = clearColor(result)
+                result = clearEm(result)
+                result = clearBold(result)
+                result = clearEm(result)
+                result = clearColor(result)
+                result = clearBold(result)
+                result = clearEm(result)
+                if (!result.contains("<!DOCTYPE HTML>")) result = "<!DOCTYPE HTML>$result"
+                sendPostRequest(fileName, gson.toJson(result))
+            }
+        } else {
+            sendPostRequest(fileName, gson.toJson(text.toString()))
         }
     }
 
@@ -474,50 +497,116 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         if (id == R.id.action_bold) {
             val startSelect = binding.apisanne.selectionStart
             val endSelect = binding.apisanne.selectionEnd
-            val text = binding.apisanne.text
-            text?.let { editable ->
-                val subtext = editable.getSpans(startSelect, endSelect, StyleSpan(Typeface.BOLD)::class.java)
-                var check = false
-                subtext.forEach {
-                    if (it.style == Typeface.BOLD) {
-                        check = true
-                        editable.removeSpan(it)
+            if (fileName.contains(".htm")) {
+                val text = binding.apisanne.text
+                text?.let { editable ->
+                    val subtext = editable.getSpans(startSelect, endSelect, StyleSpan(Typeface.BOLD)::class.java)
+                    var check = false
+                    subtext.forEach {
+                        if (it.style == Typeface.BOLD) {
+                            check = true
+                            editable.removeSpan(it)
+                        }
                     }
+                    if (!check) editable.setSpan(StyleSpan(Typeface.BOLD), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
-                if (!check) editable.setSpan(StyleSpan(Typeface.BOLD), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            } else {
+                val text = binding.apisanne.text.toString()
+                val build = with(StringBuilder()) {
+                    append(text.substring(0, startSelect))
+                    append("<strong>")
+                    append(text.substring(startSelect, endSelect))
+                    append("</strong>")
+                    append(text.substring(endSelect))
+                    toString()
+                }
+                binding.apisanne.setText(build)
+                binding.apisanne.setSelection(endSelect + 17)
             }
         }
         if (id == R.id.action_em) {
             val startSelect = binding.apisanne.selectionStart
             val endSelect = binding.apisanne.selectionEnd
-            val text = binding.apisanne.text
-            text?.let { editable ->
-                val subtext = editable.getSpans(startSelect, endSelect, StyleSpan(Typeface.ITALIC)::class.java)
-                var check = false
-                subtext.forEach {
-                    if (it.style == Typeface.ITALIC) {
-                        check = true
-                        editable.removeSpan(it)
+            if (fileName.contains(".htm")) {
+                val text = binding.apisanne.text
+                text?.let { editable ->
+                    val subtext = editable.getSpans(startSelect, endSelect, StyleSpan(Typeface.ITALIC)::class.java)
+                    var check = false
+                    subtext.forEach {
+                        if (it.style == Typeface.ITALIC) {
+                            check = true
+                            editable.removeSpan(it)
+                        }
                     }
+                    if (!check) editable.setSpan(StyleSpan(Typeface.ITALIC), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
-                if (!check) editable.setSpan(StyleSpan(Typeface.ITALIC), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            } else {
+                val text = binding.apisanne.text.toString()
+                val build = with(StringBuilder()) {
+                    append(text.substring(0, startSelect))
+                    append("<em>")
+                    append(text.substring(startSelect, endSelect))
+                    append("</em>")
+                    append(text.substring(endSelect))
+                    toString()
+                }
+                binding.apisanne.setText(build)
+                binding.apisanne.setSelection(endSelect + 9)
             }
         }
         if (id == R.id.action_red) {
             val startSelect = binding.apisanne.selectionStart
             val endSelect = binding.apisanne.selectionEnd
-            val text = binding.apisanne.text
-            text?.let { editable ->
-                val subtext = editable.getSpans(startSelect, endSelect, ForegroundColorSpan::class.java)
-                var check = false
-                subtext.forEach {
-                    if (it.foregroundColor == ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)) {
-                        check = true
-                        editable.removeSpan(it)
+            if (fileName.contains(".htm")) {
+                val text = binding.apisanne.text
+                text?.let { editable ->
+                    val subtext = editable.getSpans(startSelect, endSelect, ForegroundColorSpan::class.java)
+                    var check = false
+                    subtext.forEach {
+                        if (it.foregroundColor == ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)) {
+                            check = true
+                            editable.removeSpan(it)
+                        }
                     }
+                    if (!check) editable.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
-                if (!check) editable.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            } else {
+                val text = binding.apisanne.text.toString()
+                val build = with(StringBuilder()) {
+                    append(text.substring(0, startSelect))
+                    append("<font color=\"#d00505\">")
+                    append(text.substring(startSelect, endSelect))
+                    append("</font>")
+                    append(text.substring(endSelect))
+                    toString()
+                }
+                binding.apisanne.setText(build)
+                binding.apisanne.setSelection(endSelect + 29)
             }
+        }
+        if (id == R.id.action_br) {
+            val endSelect = binding.apisanne.selectionEnd
+            val text = binding.apisanne.text.toString()
+            val build = with(StringBuilder()) {
+                append(text.substring(0, endSelect))
+                append("<br>")
+                append(text.substring(endSelect))
+                toString()
+            }
+            binding.apisanne.setText(build)
+            binding.apisanne.setSelection(endSelect + 4)
+        }
+        if (id == R.id.action_p) {
+            val endSelect = binding.apisanne.selectionEnd
+            val text = binding.apisanne.text.toString()
+            val build = with(StringBuilder()) {
+                append(text.substring(0, endSelect))
+                append("<p>")
+                append(text.substring(endSelect))
+                toString()
+            }
+            binding.apisanne.setText(build)
+            binding.apisanne.setSelection(endSelect + 3)
         }
     }
 

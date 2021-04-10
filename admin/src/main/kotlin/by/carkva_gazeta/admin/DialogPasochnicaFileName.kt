@@ -68,12 +68,7 @@ class DialogPasochnicaFileName : DialogFragment() {
             if (savedInstanceState != null) {
                 input.setText(savedInstanceState.getString("fileName"))
             } else {
-                var oldFileName = arguments?.getString("oldFileName") ?: ""
-                if (oldFileName != "") {
-                    val t1 = oldFileName.split(".")
-                    oldFileName = t1[0]
-                }
-                input.setText(oldFileName)
+                input.setText(arguments?.getString("oldFileName") ?: "")
             }
             input.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             input.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorWhite)
@@ -110,7 +105,7 @@ class DialogPasochnicaFileName : DialogFragment() {
             fileName = gc[Calendar.DATE].toString() + "_" + mun[gc[Calendar.MONTH]] + "_" + gc[Calendar.YEAR] + "_" + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
         }
         val oldFileName = arguments?.getString("oldFileName") ?: ""
-        mListener?.setFileName(oldFileName,"$fileName.html")
+        mListener?.setFileName(oldFileName, fileName)
     }
 
     companion object {

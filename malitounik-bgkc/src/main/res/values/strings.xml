@@ -595,5 +595,7 @@
     <string name="file_exists_opis">Перазапісаць існуючы файл \"%1$s\"?</string>
     <string name="mk_dir">СТВАРЫЦЬ КАТАЛОГ</string>
     <string name="set_file_dir">ВЫБЯРЫЦЕ ІМЯ КАТАЛОГА</string>
+    <string name="set_file_txt">Як тэкст</string>
+    <string name="set_file_html">Як HTML</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

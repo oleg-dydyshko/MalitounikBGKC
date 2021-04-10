@@ -59,61 +59,78 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        activity?.let {
-            MainActivity.dialogVisable = true
-            val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            val linear = LinearLayout(it)
+        activity?.let { fragmentActivity ->
+            val builder = AlertDialog.Builder(fragmentActivity, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
+            val linear = LinearLayout(fragmentActivity)
             linear.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextViewRobotoCondensed(it)
-            textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+            val textViewZaglavie = TextViewRobotoCondensed(fragmentActivity)
+            textViewZaglavie.setBackgroundColor(ContextCompat.getColor(fragmentActivity, by.carkva_gazeta.malitounik.R.color.colorPrimary))
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.text = getString(by.carkva_gazeta.malitounik.R.string.save_as_up)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
+            textViewZaglavie.setTextColor(ContextCompat.getColor(fragmentActivity, by.carkva_gazeta.malitounik.R.color.colorWhite))
             linear.addView(textViewZaglavie)
-            val textView = TextViewRobotoCondensed(it)
-            textView.setPadding(realpadding, realpadding, realpadding, 0)
-            textView.text = getString(by.carkva_gazeta.malitounik.R.string.file_name)
-            textView.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+            val textView = TextViewRobotoCondensed(fragmentActivity)
+            val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            textView.layoutParams = layoutParams
+            textView.setPadding(realpadding, realpadding, realpadding, realpadding)
+            textView.text = getString(by.carkva_gazeta.malitounik.R.string.mk_dir)
+            textView.setTextColor(ContextCompat.getColor(fragmentActivity, by.carkva_gazeta.malitounik.R.color.colorPrimary))
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView.background = ContextCompat.getDrawable(fragmentActivity, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            textView.setOnClickListener {
+                fragmentManager?.let {
+                    val dialogPasochnicaMkDir = DialogPasochnicaMkDir.getInstance(dir)
+                    dialogPasochnicaMkDir.show(it, "dialogPasochnicaMkDir")
+                }
+            }
             linear.addView(textView)
-            editView = EditTextRobotoCondensed(it)
-            editView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            editView.setText(arguments?.getString("oldName", "")?: "")
+            editView = EditTextRobotoCondensed(fragmentActivity)
+            editView.setPadding(realpadding, 0, realpadding, realpadding)
+            editView.setText(arguments?.getString("oldName", "") ?: "")
             editView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            editView.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+            editView.setTextColor(ContextCompat.getColor(fragmentActivity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             linear.addView(editView)
-            val listViewCompat = ListView(it)
-            listViewCompat.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_default)
-            adapter = TitleListAdaprer(it)
+            val listViewCompat = ListView(fragmentActivity)
+            listViewCompat.selector = ContextCompat.getDrawable(fragmentActivity, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            adapter = TitleListAdaprer(fragmentActivity)
             listViewCompat.adapter = adapter
             linear.addView(listViewCompat)
+
             builder.setView(linear)
             getDirListRequest("")
             listViewCompat.setOnItemClickListener { _, _, position, _ ->
-                if (fileList[position].resources == R.drawable.directory_icon) {
-                    dir = if (fileList[position].title == "..") {
+                when (fileList[position].resources) {
+                    R.drawable.directory_up -> {
                         val t1 = dir.lastIndexOf("/")
-                        dir.substring(0, t1)
-                    } else {
-                        dir + "/" + fileList[position].title
+                        dir = dir.substring(0, t1)
+                        getDirListRequest(dir)
                     }
-                    getDirListRequest(dir)
-                } else {
-                    editView.setText(fileList[position].title)
+                    R.drawable.directory_icon -> {
+                        dir = dir + "/" + fileList[position].title
+                        getDirListRequest(dir)
+                    }
+                    else -> {
+                        editView.setText(fileList[position].title)
+                    }
                 }
             }
             builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.save_sabytie)) { dialog: DialogInterface, _: Int ->
-                mListener?.onDialogSaveAsFile(dir, arguments?.getString("oldName", "")?: "", editView.text.toString())
+                mListener?.onDialogSaveAsFile(dir, arguments?.getString("oldName", "") ?: "", editView.text.toString())
                 dialog.cancel()
             }
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
         }
         return alert
+    }
+
+    fun mkDir(oldDir: String) {
+        getDirListRequest(oldDir)
+        this.dir = oldDir
     }
 
     private fun getDirListRequest(dir: String) {
@@ -146,8 +163,16 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                                 val arrayList = ArrayList<ArrayList<String>>()
                                 arrayList.addAll(gson.fromJson(result, type))
                                 arrayList.forEach {
-                                    if (it[0].contains("dir")) temp.add(MyNetFile(R.drawable.directory_icon, it[1]))
-                                    else temp.add(MyNetFile(R.drawable.file_html_icon, it[1]))
+                                    if (it[0].contains("dir")) {
+                                        if (it[1] == "..") temp.add(MyNetFile(R.drawable.directory_up, it[1].replace("..", "Верх")))
+                                        else temp.add(MyNetFile(R.drawable.directory_icon, it[1]))
+                                    } else {
+                                        if (it[1].contains(".htm")) {
+                                            temp.add(MyNetFile(R.drawable.file_html_icon, it[1]))
+                                        } else {
+                                            temp.add(MyNetFile(R.drawable.file_txt_icon, it[1]))
+                                        }
+                                    }
                                 }
                                 fileList.addAll(temp)
                             }

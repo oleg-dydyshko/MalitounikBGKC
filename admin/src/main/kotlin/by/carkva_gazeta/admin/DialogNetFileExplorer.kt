@@ -80,17 +80,20 @@ class DialogNetFileExplorer : DialogFragment() {
             builder.setView(linear)
             getDirListRequest("")
             listViewCompat.setOnItemClickListener { _, _, position, _ ->
-                if (fileList[position].resources == R.drawable.directory_icon) {
-                    dir = if (fileList[position].title == "..") {
+                when (fileList[position].resources) {
+                    R.drawable.directory_up -> {
                         val t1 = dir.lastIndexOf("/")
-                        dir.substring(0, t1)
-                    } else {
-                        dir + "/" + fileList[position].title
+                        dir = dir.substring(0, t1)
+                        getDirListRequest(dir)
                     }
-                    getDirListRequest(dir)
-                } else {
-                    mListener?.onDialogNetFile(dir + "/" + fileList[position].title, fileList[position].title)
-                    dialog?.cancel()
+                    R.drawable.directory_icon -> {
+                        dir = dir + "/" + fileList[position].title
+                        getDirListRequest(dir)
+                    }
+                    else -> {
+                        mListener?.onDialogNetFile(dir + "/" + fileList[position].title, fileList[position].title)
+                        dialog?.cancel()
+                    }
                 }
             }
             builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
@@ -129,8 +132,16 @@ class DialogNetFileExplorer : DialogFragment() {
                                 val arrayList = ArrayList<ArrayList<String>>()
                                 arrayList.addAll(gson.fromJson(result, type))
                                 arrayList.forEach {
-                                    if (it[0].contains("dir")) temp.add(MyNetFile(R.drawable.directory_icon, it[1]))
-                                    else temp.add(MyNetFile(R.drawable.file_html_icon, it[1]))
+                                    if (it[0].contains("dir")) {
+                                        if (it[1] == "..") temp.add(MyNetFile(R.drawable.directory_up, it[1].replace("..", "Верх")))
+                                        else temp.add(MyNetFile(R.drawable.directory_icon, it[1]))
+                                    } else {
+                                        if (it[1].contains(".htm")) {
+                                            temp.add(MyNetFile(R.drawable.file_html_icon, it[1]))
+                                        } else {
+                                            temp.add(MyNetFile(R.drawable.file_txt_icon, it[1]))
+                                        }
+                                    }
                                 }
                                 fileList.addAll(temp)
                             }

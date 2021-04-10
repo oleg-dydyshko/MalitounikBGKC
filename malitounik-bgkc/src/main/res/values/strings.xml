@@ -341,6 +341,7 @@
     <string name="add_sabytie">Дадаць падзею</string>
     <string name="del_sabytie">Выдаліць падзеі</string>
     <string name="save_sabytie">Захаваць</string>
+    <string name="save_sabytie_up">ЗАХАВАЦЬ</string>
     <string name="download_file">СПАМПАВАЦЬ ФАЙЛ? %1$s</string>
     <string name="dastupna_bat">: ДАСТУПНА %1$s КБ</string>
     <string name="dastupna_bates">: ДАСТУПНА %1$d БАЙТ</string>
@@ -592,5 +593,7 @@
     <string name="file_perazapisac">Перазапісаць</string>
     <string name="file_exists">ФАЙЛ ІСНУЕ</string>
     <string name="file_exists_opis">Перазапісаць існуючы файл \"%1$s\"?</string>
+    <string name="mk_dir">СТВАРЫЦЬ КАТАЛОГ</string>
+    <string name="set_file_dir">ВЫБЯРЫЦЕ ІМЯ КАТАЛОГА</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

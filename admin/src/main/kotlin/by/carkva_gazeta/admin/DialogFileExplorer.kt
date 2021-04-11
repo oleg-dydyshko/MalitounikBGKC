@@ -34,9 +34,15 @@ class DialogFileExplorer : DialogFragment() {
     private var sdCard = true
     private var sdCard2 = false
     private lateinit var alert: AlertDialog
+    private var image = false
 
     internal interface DialogFileExplorerListener {
         fun onDialogFile(file: File)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        image = arguments?.getBoolean("image", false) ?: false
     }
 
     override fun onAttach(context: Context) {
@@ -59,7 +65,8 @@ class DialogFileExplorer : DialogFragment() {
             }
             val filterFile = FilenameFilter { dir: File, filename: String ->
                 val sel = File(dir, filename)
-                sel.isFile && !sel.isHidden && (sel.name.contains(".txt", true) || sel.name.contains(".htm", true))
+                if (image) sel.isFile && !sel.isHidden && (sel.name.contains(".png", true) || sel.name.contains(".jp", true))
+                else sel.isFile && !sel.isHidden && (sel.name.contains(".txt", true) || sel.name.contains(".htm", true))
             }
             if (!firstLvl) {
                 fileList.add(MyFile("Верх", R.drawable.directory_up))
@@ -76,10 +83,19 @@ class DialogFileExplorer : DialogFragment() {
             val fList = path?.list(filterFile) ?: Array(0) { "" }
             dList.sort()
             for (aFList in fList) {
-                if (aFList.contains(".htm", true)) {
-                    fileList.add(MyFile(aFList, R.drawable.file_html_icon))
-                } else if (aFList.contains(".txt", true)) {
-                    fileList.add(MyFile(aFList, R.drawable.file_txt_icon))
+                when {
+                    aFList.contains(".htm", true) -> {
+                        fileList.add(MyFile(aFList, R.drawable.file_html_icon))
+                    }
+                    aFList.contains(".txt", true) -> {
+                        fileList.add(MyFile(aFList, R.drawable.file_txt_icon))
+                    }
+                    aFList.contains(".png", true) -> {
+                        fileList.add(MyFile(aFList, R.drawable.image_icon_file))
+                    }
+                    aFList.contains(".jp", true) -> {
+                        fileList.add(MyFile(aFList, R.drawable.image_icon_file))
+                    }
                 }
             }
         }
@@ -183,6 +199,16 @@ class DialogFileExplorer : DialogFragment() {
     }
 
     private class ViewHolder(var text: TextViewRobotoCondensed)
-    
+
     private class MyFile(val name: String, val resources: Int)
+
+    companion object {
+        fun getInstance(image: Boolean): DialogFileExplorer {
+            val dialogFileExplorer = DialogFileExplorer()
+            val bundle = Bundle()
+            bundle.putBoolean("image", image)
+            dialogFileExplorer.arguments = bundle
+            return dialogFileExplorer
+        }
+    }
 }

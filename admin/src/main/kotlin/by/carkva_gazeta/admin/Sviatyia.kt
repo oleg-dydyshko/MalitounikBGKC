@@ -22,9 +22,10 @@ import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaBinding
 import by.carkva_gazeta.malitounik.*
 import kotlinx.coroutines.*
+import java.io.File
 import java.util.*
 
-class Sviatyia : AppCompatActivity() {
+class Sviatyia : AppCompatActivity(), DialogFileExplorer.DialogFileExplorerListener {
     private lateinit var k: SharedPreferences
     private var setedit = false
     private var checkSetDzenNoch = false
@@ -112,6 +113,11 @@ class Sviatyia : AppCompatActivity() {
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
+    }
+
+    override fun onDialogFile(file: File) {
+        val sviatyiaFragment = adapterViewPager.getFragment(binding.pager.currentItem) as SvityiaFragment
+        sviatyiaFragment.onDialogFile(file)
     }
 
     override fun onBackPressed() {

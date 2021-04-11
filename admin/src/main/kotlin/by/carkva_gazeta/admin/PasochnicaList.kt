@@ -51,7 +51,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == myPermissionsWriteExternalStorage) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                val fileExplorer = DialogFileExplorer()
+                val fileExplorer = DialogFileExplorer.getInstance(false)
                 fileExplorer.show(supportFragmentManager, "file_explorer")
             }
         }
@@ -306,7 +306,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
             if (PackageManager.PERMISSION_DENIED == permissionCheck) {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
             } else {
-                val fileExplorer = DialogFileExplorer()
+                val fileExplorer = DialogFileExplorer.getInstance(false)
                 fileExplorer.show(supportFragmentManager, "file_explorer")
             }
         }

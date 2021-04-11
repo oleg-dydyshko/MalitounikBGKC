@@ -1,8 +1,13 @@
 package by.carkva_gazeta.admin
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -10,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaPageFragmentBinding
 import by.carkva_gazeta.malitounik.MainActivity
@@ -20,12 +26,15 @@ import by.carkva_gazeta.malitounik.databinding.SimpleListItemTipiconBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
+import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     private var dayOfYear = 1
@@ -39,6 +48,19 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     private var timerCount = 0
     private val timer = Timer()
     private var timerTask: TimerTask? = null
+    private val myPermissionsWriteExternalStorage = 41
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == myPermissionsWriteExternalStorage) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                fragmentManager?.let {
+                    val fileExplorer = DialogFileExplorer.getInstance(true)
+                    fileExplorer.show(it, "file_explorer")
+                }
+            }
+        }
+    }
 
     private fun startTimer() {
         timerTask = object : TimerTask() {
@@ -181,8 +203,61 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         }
     }
 
+    private fun fileUpload(bitmap: Bitmap) {
+        activity?.let { actyvity ->
+            if (MainActivity.isNetworkAvailable(actyvity)) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    binding.progressBar2.visibility = View.VISIBLE
+                    val bao = ByteArrayOutputStream()
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, bao)
+                    val ba = bao.toByteArray()
+                    val base64 = Base64.encodeToString(ba, Base64.DEFAULT)
+                    var responseCodeS = 500
+                    withContext(Dispatchers.IO) {
+                        var reqParam = URLEncoder.encode("image", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("base64", "UTF-8") + "=" + URLEncoder.encode(base64, "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(cal[Calendar.DATE].toString(), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode((cal[Calendar.MONTH] + 1).toString(), "UTF-8")
+                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                        with(mURL.openConnection() as HttpURLConnection) {
+                            requestMethod = "POST"
+                            val wr = OutputStreamWriter(outputStream)
+                            wr.write(reqParam)
+                            wr.flush()
+                            responseCodeS = responseCode
+                        }
+                    }
+                    if (responseCodeS == 200) {
+                        MainActivity.toastView(actyvity, getString(by.carkva_gazeta.malitounik.R.string.save))
+                    } else {
+                        MainActivity.toastView(actyvity, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    }
+                    binding.progressBar2.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    fun onDialogFile(file: File) {
+        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+        fileUpload(bitmap)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (id == R.id.action_upload_image) {
+            activity?.let { activity ->
+                val permissionCheck = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+                if (PackageManager.PERMISSION_DENIED == permissionCheck) {
+                    ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                } else {
+                    fragmentManager?.let {
+                        val dialogFileExplorer = DialogFileExplorer.getInstance(true)
+                        dialogFileExplorer.show(it, "dialogFileExplorer")
+                    }
+                }
+            }
+        }
         if (id == R.id.action_save) {
             sendPostRequest(cal[Calendar.DAY_OF_MONTH], cal[Calendar.MONTH], dayOfYear - 1, binding.sviaty.text.toString(), binding.chytanne.text.toString(), binding.spinnerStyle.selectedItemPosition, binding.spinnerZnak.selectedItemPosition.toString(), binding.apisanne.text.toString())
         }

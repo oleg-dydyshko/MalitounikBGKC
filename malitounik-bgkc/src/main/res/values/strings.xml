@@ -597,5 +597,6 @@
     <string name="set_file_dir">ВЫБЯРЫЦЕ ІМЯ КАТАЛОГА</string>
     <string name="set_file_txt">Як тэкст</string>
     <string name="set_file_html">Як HTML</string>
+    <string name="image_upload">Загрузіць Ікону</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

@@ -294,7 +294,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
         val id = item.itemId
         if (id == R.id.action_plus) {
             val intent = Intent(this, Pasochnica::class.java)
-            intent.putExtra("fileName", "")
+            intent.putExtra("fileName", "newFile.html")
             startActivity(intent)
         }
         if (id == R.id.action_open_net_file) {

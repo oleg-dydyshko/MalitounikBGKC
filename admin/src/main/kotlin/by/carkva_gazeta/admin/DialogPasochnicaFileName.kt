@@ -90,36 +90,34 @@ class DialogPasochnicaFileName : DialogFragment() {
                 imm12.hideSoftInputFromWindow(input.windowToken, 0)
                 dialog.cancel()
             }
-            val oldFileName = arguments?.getString("oldFileName") ?: ""
-            if (oldFileName != "") {
-                val textNetral = if (oldFileName.contains(".htm")) {
-                    resources.getString(by.carkva_gazeta.malitounik.R.string.set_file_txt)
-                } else {
-                    resources.getString(by.carkva_gazeta.malitounik.R.string.set_file_html)
+            val oldFileName = arguments?.getString("oldFileName") ?: "newFile.html"
+            val textNetral = if (oldFileName.contains(".htm")) {
+                resources.getString(by.carkva_gazeta.malitounik.R.string.set_file_txt)
+            } else {
+                resources.getString(by.carkva_gazeta.malitounik.R.string.set_file_html)
+            }
+            builder.setNeutralButton(textNetral) { _: DialogInterface?, _: Int ->
+                var fileName = input.text.toString()
+                val t1 = fileName.lastIndexOf(".")
+                if (fileName == "") {
+                    val gc = Calendar.getInstance()
+                    val mun = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
+                    fileName = gc[Calendar.DATE].toString() + "_" + mun[gc[Calendar.MONTH]] + "_" + gc[Calendar.YEAR] + "_" + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
                 }
-                builder.setNeutralButton(textNetral) { _: DialogInterface?, _: Int ->
-                    var fileName = input.text.toString()
-                    val t1 = fileName.lastIndexOf(".")
-                    if (fileName == "") {
-                        val gc = Calendar.getInstance()
-                        val mun = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
-                        fileName = gc[Calendar.DATE].toString() + "_" + mun[gc[Calendar.MONTH]] + "_" + gc[Calendar.YEAR] + "_" + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
-                    }
-                    fileName = if (oldFileName.contains(".htm")) {
-                        if (t1 != -1) {
-                            fileName.substring(0, t1) + ".txt"
-                        } else {
-                            "$fileName.txt"
-                        }
+                fileName = if (oldFileName.contains(".htm")) {
+                    if (t1 != -1) {
+                        fileName.substring(0, t1) + ".txt"
                     } else {
-                        if (t1 != -1) {
-                            fileName.substring(0, t1) + ".html"
-                        } else {
-                            "$fileName.html"
-                        }
+                        "$fileName.txt"
                     }
-                    mListener?.setFileName(oldFileName, fileName)
+                } else {
+                    if (t1 != -1) {
+                        fileName.substring(0, t1) + ".html"
+                    } else {
+                        "$fileName.html"
+                    }
                 }
+                mListener?.setFileName(oldFileName, fileName)
             }
             builder.setPositiveButton(resources.getString(by.carkva_gazeta.malitounik.R.string.ok)) { _: DialogInterface?, _: Int ->
                 setFileName()
@@ -135,8 +133,7 @@ class DialogPasochnicaFileName : DialogFragment() {
             val mun = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
             fileName = gc[Calendar.DATE].toString() + "_" + mun[gc[Calendar.MONTH]] + "_" + gc[Calendar.YEAR] + "_" + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
         }
-        val oldFileName = arguments?.getString("oldFileName") ?: ""
-        if (oldFileName == "") fileName = "$fileName.html"
+        val oldFileName = arguments?.getString("oldFileName") ?: "newFile.html"
         mListener?.setFileName(oldFileName, fileName)
     }
 

@@ -32,7 +32,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
     private var resetTollbarJob: Job? = null
-    private var fileName = ""
+    private var fileName = "newFile.html"
 
     override fun onPause() {
         super.onPause()
@@ -54,9 +54,9 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         binding.actionRed.setOnClickListener(this)
         binding.actionP.setOnClickListener(this)
         binding.actionBr.setOnClickListener(this)
-        fileName = intent.extras?.getString("fileName", "") ?: ""
+        fileName = intent.extras?.getString("fileName", "newFile.html") ?: "newFile.html"
         if (savedInstanceState != null) fileName = savedInstanceState.getString("fileName", "")
-        if (fileName != "") getFilePostRequest(fileName)
+        if (fileName != "newFile.html") getFilePostRequest(fileName)
         val text = intent.extras?.getString("text", "") ?: ""
         if (text != "") {
             val gson = Gson()
@@ -69,16 +69,16 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             }
             if (intent.extras?.getBoolean("exits", false) == false) {
                 sendPostRequest(fileName, gson.toJson(text))
-                if (fileName.contains(".htm")) {
-                    binding.apisanne.setText(MainActivity.fromHtml(text))
-                    binding.actionP.visibility = View.GONE
-                    binding.actionBr.visibility = View.GONE
-                } else {
-                    binding.apisanne.setText(text)
-                }
             } else {
                 getFilePostRequest(fileName)
             }
+        }
+        if (fileName.contains(".htm")) {
+            binding.apisanne.setText(MainActivity.fromHtml(text))
+            binding.actionP.visibility = View.GONE
+            binding.actionBr.visibility = View.GONE
+        } else {
+            binding.apisanne.setText(text)
         }
         setTollbarTheme()
     }
@@ -455,8 +455,8 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_save) {
-            if (fileName == "") {
-                val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance("")
+            if (fileName == "newFile.html") {
+                val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance("newFile.html")
                 dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
             } else {
                 saveResult(fileName)

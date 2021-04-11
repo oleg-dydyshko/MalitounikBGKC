@@ -425,8 +425,6 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         textViewCount?.text = resources.getString(R.string.seash, menuList.size)
     }
 
-    private fun listRaw(filename: String) = PesnyAll.resursMap[filename] ?: -1
-
     private fun getMenuListData(pesny: String = "no_filter"): ArrayList<MenuListData> {
         var menuListData = ArrayList<MenuListData>()
         val inputStream = resources.openRawResource(R.raw.pesny_menu)
@@ -436,9 +434,8 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         reader.forEachLine {
             line = it
             val split = line.split("<>")
-            val id = listRaw(split[0])
-            if (id != -1)
-                menuListData.add(MenuListData(id, split[1], split[0]))
+            val id = PesnyAll.listRaw(activity, split[0])
+            menuListData.add(MenuListData(id, split[1], split[0]))
         }
         if (pesny != "no_filter") {
             menuListData = menuListData.filter {

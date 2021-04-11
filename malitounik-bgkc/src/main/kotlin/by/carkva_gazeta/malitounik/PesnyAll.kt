@@ -1,6 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -207,6 +208,31 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             resursMap["pesny_taize_16"] = R.raw.pesny_taize_16
         }
 
+        fun listRaw(activity: Activity?, filename: String): Int {
+            var id = resursMap[filename] ?: -1
+            activity?.let {
+                if (id == -1) {
+                    val inputStream = it.resources.openRawResource(R.raw.pesny_menu)
+                    val isr = InputStreamReader(inputStream)
+                    val reader = BufferedReader(isr)
+                    var line: String
+                    reader.forEachLine { s ->
+                        line = s
+                        val split = line.split("<>")
+                        if (resursMap[split[0]] == null) {
+                            val idResourse = it.resources.getIdentifier(split[0], "raw", it.packageName)
+                            if (idResourse != 0) {
+                                id = idResourse
+                                resursMap[split[0]] = id
+                            }
+                        }
+                    }
+                }
+            }
+            if (id < 0) id = R.raw.pesny_prasl_0
+            return id
+        }
+
         private fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
             var check = true
             val file = File(context.filesDir.toString() + "/Vybranoe.json")
@@ -279,14 +305,20 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         }
     }
 
-    private fun findAll(search: String, position: Int = 0) {
+    private fun findAll(search: String) {
         val text = binding.textView.text as SpannableString
         val searchLig = search.length
-        val strPosition = text.indexOf(search, position, true)
-        if (strPosition != -1) {
-            text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            findAll(search,strPosition + 1)
+        var position = 0
+        var run = true
+        while (run) {
+            val strPosition = text.indexOf(search, position, true)
+            if (strPosition != -1) {
+                text.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_text)), strPosition, strPosition + searchLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                position = strPosition + 1
+            } else {
+                run = false
+            }
         }
     }
 
@@ -339,7 +371,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         title = intent.extras?.getString("pesny", "") ?: ""
         resurs = intent.extras?.getString("type", "pesny_prasl_0") ?: "pesny_prasl_0"
-        val pesny = resursMap[resurs] ?: R.raw.pesny_prasl_0
+        val pesny = listRaw(this, resurs)
         val builder = StringBuilder()
         if (pesny != -1) {
             val inputStream = resources.openRawResource(pesny)
@@ -358,8 +390,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         }
         binding.textView.text = MainActivity.fromHtml(builder.toString())
         val search = intent.extras?.getString("search", "") ?: ""
-        if (search != "")
-            findAllAsanc(search)
+        if (search != "") findAllAsanc(search)
         men = checkVybranoe(this, resurs)
         bindingprogress.actionPlusFont.setOnClickListener {
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {

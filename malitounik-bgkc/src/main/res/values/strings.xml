@@ -597,6 +597,10 @@
     <string name="set_file_dir">ВЫБЯРЫЦЕ ІМЯ КАТАЛОГА</string>
     <string name="set_file_txt">Як тэкст</string>
     <string name="set_file_html">Як HTML</string>
-    <string name="image_upload">Загрузіць Ікону</string>
+    <string name="image_upload">Загрузіць ікону</string>
+    <string name="image_help_title">ДАВЕДКА ПА IMG</string>
+    <string name="image_help_text">Кнопка выкарыстоўваецца для абазначэньня палажэньня другой, трэцяй і г.д. іконы Сьвятога. Абраз павінен існаваць.
+Ставіцца перад іменем Сьвятога, папярэдні тэг &lt;p> трэба выдаліць.\nДля першага Сьвятога гэты тэг непатрэбны.</string>
+    <string name="image_help_ok">Уставіць</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

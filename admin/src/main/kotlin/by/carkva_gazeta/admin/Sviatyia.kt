@@ -25,7 +25,7 @@ import kotlinx.coroutines.*
 import java.io.File
 import java.util.*
 
-class Sviatyia : AppCompatActivity(), DialogFileExplorer.DialogFileExplorerListener {
+class Sviatyia : AppCompatActivity(), DialogFileExplorer.DialogFileExplorerListener, DialogSviatyiaImageHelp.DialodSviatyiaImageHelpListener {
     private lateinit var k: SharedPreferences
     private var setedit = false
     private var checkSetDzenNoch = false
@@ -118,6 +118,11 @@ class Sviatyia : AppCompatActivity(), DialogFileExplorer.DialogFileExplorerListe
     override fun onDialogFile(file: File) {
         val sviatyiaFragment = adapterViewPager.getFragment(binding.pager.currentItem) as SvityiaFragment
         sviatyiaFragment.onDialogFile(file)
+    }
+
+    override fun insertIMG() {
+        val sviatyiaFragment = adapterViewPager.getFragment(binding.pager.currentItem) as SvityiaFragment
+        sviatyiaFragment.insertIMG()
     }
 
     override fun onBackPressed() {

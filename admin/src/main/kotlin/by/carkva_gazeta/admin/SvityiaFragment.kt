@@ -165,17 +165,24 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
             binding.apisanne.setSelection(endSelect + 3)
         }
         if (id == R.id.action_img) {
-            val endSelect = binding.apisanne.selectionEnd
-            val text = binding.apisanne.text.toString()
-            val build = with(StringBuilder()) {
-                append(text.substring(0, endSelect))
-                append("<!--image-->")
-                append(text.substring(endSelect))
-                toString()
+            fragmentManager?.let {
+                val dialogSviatyiaImageHelp = DialogSviatyiaImageHelp()
+                dialogSviatyiaImageHelp.show(it, "dialogSviatyiaImageHelp")
             }
-            binding.apisanne.setText(build)
-            binding.apisanne.setSelection(endSelect + 12)
         }
+    }
+
+    fun insertIMG() {
+        val endSelect = binding.apisanne.selectionEnd
+        val text = binding.apisanne.text.toString()
+        val build = with(StringBuilder()) {
+            append(text.substring(0, endSelect))
+            append("<!--image-->")
+            append(text.substring(endSelect))
+            toString()
+        }
+        binding.apisanne.setText(build)
+        binding.apisanne.setSelection(endSelect + 12)
     }
 
     override fun onBackPressedFragment(): Boolean {
@@ -252,8 +259,8 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                     ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
                 } else {
                     fragmentManager?.let {
-                        val dialogFileExplorer = DialogFileExplorer.getInstance(true)
-                        dialogFileExplorer.show(it, "dialogFileExplorer")
+                        val dialogImageFileExplorer = DialogImageFileExplorer()
+                        dialogImageFileExplorer.show(it, "dialogImageFileExplorer")
                     }
                 }
             }

@@ -3,7 +3,6 @@ package by.carkva_gazeta.admin
 import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
-import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
@@ -80,13 +79,11 @@ class DialogImageFileExplorer : DialogFragment() {
                 when {
                     aFList.contains(".png", true) -> {
                         val file = File(path.toString() + "/" + aFList)
-                        val with = BitmapFactory.decodeFile(file.absolutePath).width
-                        fileList.add(MyImageFile(aFList, Uri.fromFile(file), with))
+                        fileList.add(MyImageFile(aFList, Uri.fromFile(file)))
                     }
                     aFList.contains(".jp", true) -> {
                         val file = File(path.toString() + "/" + aFList)
-                        val with = BitmapFactory.decodeFile(file.absolutePath).width
-                        fileList.add(MyImageFile(aFList, Uri.fromFile(file), with))
+                        fileList.add(MyImageFile(aFList, Uri.fromFile(file)))
                     }
                 }
             }
@@ -182,10 +179,7 @@ class DialogImageFileExplorer : DialogFragment() {
             }
             viewHolder.text.text = fileList[position].name
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (fileList[position].with != 0)
-                Picasso.with(mContext).load(fileList[position].file).resize(500, 1000).centerInside().into(viewHolder.image)
-            else
-                Picasso.with(mContext).load(fileList[position].file).resize(150, 150).centerInside().into(viewHolder.image)
+            Picasso.with(mContext).load(fileList[position].file).resize(500, 1000).onlyScaleDown().into(viewHolder.image)
             return rootView
         }
 
@@ -193,5 +187,5 @@ class DialogImageFileExplorer : DialogFragment() {
 
     private class ViewHolder(var text: TextViewRobotoCondensed, var image: ImageView)
 
-    private class MyImageFile(val name: String, val file: Uri, var with: Int = 0)
+    private class MyImageFile(val name: String, val file: Uri)
 }

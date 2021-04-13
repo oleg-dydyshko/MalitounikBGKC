@@ -2,6 +2,7 @@ package by.carkva_gazeta.admin
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.net.Uri
@@ -37,7 +38,7 @@ class DialogImageFileExplorer : DialogFragment() {
         fun onDialogFile(file: File)
     }
 
-    /*override fun onAttach(context: Context) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is Activity) {
             mListener = try {
@@ -46,7 +47,7 @@ class DialogImageFileExplorer : DialogFragment() {
                 throw ClassCastException("$context must implement DialogFileExplorerListener")
             }
         }
-    }*/
+    }
 
     private fun loadFileList() {
         fileList.clear()
@@ -179,7 +180,7 @@ class DialogImageFileExplorer : DialogFragment() {
             }
             viewHolder.text.text = fileList[position].name
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            Picasso.with(mContext).load(fileList[position].file).resize(500, 1000).onlyScaleDown().into(viewHolder.image)
+            Picasso.with(mContext).load(fileList[position].file).resize(600, 1000).onlyScaleDown().centerInside().into(viewHolder.image)
             return rootView
         }
 

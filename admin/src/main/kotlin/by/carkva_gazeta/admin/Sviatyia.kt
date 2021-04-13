@@ -25,7 +25,7 @@ import kotlinx.coroutines.*
 import java.io.File
 import java.util.*
 
-class Sviatyia : AppCompatActivity(), DialogFileExplorer.DialogFileExplorerListener, DialogSviatyiaImageHelp.DialodSviatyiaImageHelpListener {
+class Sviatyia : AppCompatActivity(), DialogImageFileExplorer.DialogFileExplorerListener, DialogSviatyiaImageHelp.DialodSviatyiaImageHelpListener {
     private lateinit var k: SharedPreferences
     private var setedit = false
     private var checkSetDzenNoch = false

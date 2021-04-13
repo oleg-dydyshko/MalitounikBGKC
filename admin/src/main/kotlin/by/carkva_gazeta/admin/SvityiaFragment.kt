@@ -55,7 +55,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         if (requestCode == myPermissionsWriteExternalStorage) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 fragmentManager?.let {
-                    val fileExplorer = DialogFileExplorer.getInstance(true)
+                    val fileExplorer = DialogImageFileExplorer()
                     fileExplorer.show(it, "file_explorer")
                 }
             }
@@ -216,7 +216,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                 CoroutineScope(Dispatchers.Main).launch {
                     binding.progressBar2.visibility = View.VISIBLE
                     val bao = ByteArrayOutputStream()
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, bao)
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bao)
                     val ba = bao.toByteArray()
                     val base64 = Base64.encodeToString(ba, Base64.DEFAULT)
                     var responseCodeS = 500

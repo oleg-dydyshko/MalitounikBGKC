@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -20,7 +19,7 @@ import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import java.util.*
 
 class DialogPasochnicaFileName : DialogFragment() {
-    private lateinit var input: EditText
+    private lateinit var input: EditTextRobotoCondensed
     private var mListener: DialogPasochnicaFileNameListener? = null
     private lateinit var builder: AlertDialog.Builder
 

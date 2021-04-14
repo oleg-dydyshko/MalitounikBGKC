@@ -602,5 +602,8 @@
     <string name="image_help_text">Кнопка выкарыстоўваецца для абазначэньня палажэньня другой, трэцяй і г.д. іконы Сьвятога. Абраз павінен існаваць.
 Ставіцца перад іменем Сьвятога, папярэдні тэг &lt;p> трэба выдаліць.\nДля першага Сьвятога гэты тэг непатрэбны.</string>
     <string name="image_help_ok">Уставіць</string>
+    <string name="add_pesny">Дадаць песьню</string>
+    <string name="add_pesny_title">ДАДАЦЬ НОВУЮ ПЕСЬНЮ</string>
+    <string name="hint_pesny_title">Імя песьні як у сказах</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

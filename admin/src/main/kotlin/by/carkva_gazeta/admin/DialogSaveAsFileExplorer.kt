@@ -122,6 +122,12 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 mListener?.onDialogSaveAsFile(dir, arguments?.getString("oldName", "") ?: "", editView.text.toString())
                 dialog.cancel()
             }
+            builder.setNeutralButton(getString(by.carkva_gazeta.malitounik.R.string.add_pesny)) { _: DialogInterface, _: Int ->
+                fragmentManager?.let {
+                    val dialogAddPesny = DialogAddPesny.getInstance(arguments?.getString("oldName", "") ?: "")
+                    dialogAddPesny.show(it, "dialogAddPesny")
+                }
+            }
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
         }

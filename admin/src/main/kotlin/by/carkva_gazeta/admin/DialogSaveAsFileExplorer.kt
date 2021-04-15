@@ -42,6 +42,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     private val fileList = ArrayList<MyNetFile>()
     private var dir = ""
     private lateinit var editView: EditTextRobotoCondensed
+    private var fileName = ""
 
     internal interface DialogSaveAsFileExplorerListener {
         fun onDialogSaveAsFile(dir: String, oldFileName: String, fileName: String)
@@ -88,9 +89,10 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 }
             }
             linear.addView(textView)
+            fileName = arguments?.getString("oldName", "") ?: ""
             editView = EditTextRobotoCondensed(fragmentActivity)
             editView.setPadding(realpadding, 0, realpadding, realpadding)
-            editView.setText(arguments?.getString("oldName", "") ?: "")
+            editView.setText(fileName)
             editView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             editView.setTextColor(ContextCompat.getColor(fragmentActivity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             linear.addView(editView)
@@ -204,6 +206,13 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             viewHolder.text.text = fileList[position].title
+            val t1 = fileName.indexOf("(")
+            val t2 = fileName.indexOf(")")
+            if (t1 != -1 && t2 != -1 && fileList[position].title.contains(fileName.substring(t1 + 1, t2))) {
+                viewHolder.text.background = ContextCompat.getDrawable(mContext, by.carkva_gazeta.malitounik.R.color.colorBezPosta)
+            } else {
+                viewHolder.text.background = ContextCompat.getDrawable(mContext, by.carkva_gazeta.malitounik.R.color.colorWhite)
+            }
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val image = ContextCompat.getDrawable(mContext, fileList[position].resources)
             val density = resources.displayMetrics.density.toInt()

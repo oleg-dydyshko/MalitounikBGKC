@@ -1225,35 +1225,35 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }
             CoroutineScope(Dispatchers.IO).launch {
                 withContext(Dispatchers.IO) {
-                    val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
-                    if (!fileOpisanieSviat.exists() || update) {
-                        val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
-                        val conections = mURL.openConnection() as HttpURLConnection
-                        if (conections.responseCode == 200) {
-                            try {
-                                fileOpisanieSviat.writer().use {
-                                    it.write(mURL.readText())
-                                }
-                            } catch (e: Throwable) {
-                            }
-                        }
-                    }
-                    val dir = File("$filesDir/sviatyja/")
-                    if (!dir.exists()) dir.mkdir()
-                    for (i in 1..12) {
-                        val fileS = File("$filesDir/sviatyja/opisanie$i.json")
-                        if (!fileS.exists() || update) {
-                            val mURL = URL("https://carkva-gazeta.by/chytanne/sviatyja/opisanie$i.json")
+                    try {
+                        val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
+                        if (!fileOpisanieSviat.exists() || update) {
+                            val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
                             val conections = mURL.openConnection() as HttpURLConnection
                             if (conections.responseCode == 200) {
                                 try {
-                                    fileS.writer().use {
+                                    fileOpisanieSviat.writer().use {
                                         it.write(mURL.readText())
                                     }
                                 } catch (e: Throwable) {
                                 }
                             }
                         }
+                        val dir = File("$filesDir/sviatyja/")
+                        if (!dir.exists()) dir.mkdir()
+                        for (i in 1..12) {
+                            val fileS = File("$filesDir/sviatyja/opisanie$i.json")
+                            if (!fileS.exists() || update) {
+                                val mURL = URL("https://carkva-gazeta.by/chytanne/sviatyja/opisanie$i.json")
+                                val conections = mURL.openConnection() as HttpURLConnection
+                                if (conections.responseCode == 200) {
+                                    fileS.writer().use {
+                                        it.write(mURL.readText())
+                                    }
+                                }
+                            }
+                        }
+                    } catch (e: Throwable) {
                     }
                 }
             }

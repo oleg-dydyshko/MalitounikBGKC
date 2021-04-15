@@ -253,34 +253,31 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                     prefEditors.apply()
                 }
                 withContext(Dispatchers.IO) {
-                    val dir = File("$filesDir/sviatyja/")
-                    if (!dir.exists()) dir.mkdir()
-                    if (!fileOpisanieSviat.exists() || update) {
-                        val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
-                        val conections = mURL.openConnection() as HttpURLConnection
-                        if (conections.responseCode == 200) {
-                            try {
+                    try {
+                        val dir = File("$filesDir/sviatyja/")
+                        if (!dir.exists()) dir.mkdir()
+                        if (!fileOpisanieSviat.exists() || update) {
+                            val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
+                            val conections = mURL.openConnection() as HttpURLConnection
+                            if (conections.responseCode == 200) {
                                 fileOpisanieSviat.writer().use {
                                     it.write(mURL.readText())
                                 }
-                            } catch (e: Throwable) {
                             }
                         }
-                    }
-                    for (i in 1..12) {
-                        val fileS = File("$filesDir/sviatyja/opisanie$i.json")
-                        if (!fileS.exists() || (update && mun == i)) {
-                            val mURL = URL("https://carkva-gazeta.by/chytanne/sviatyja/opisanie$i.json")
-                            val conections = mURL.openConnection() as HttpURLConnection
-                            if (conections.responseCode == 200) {
-                                try {
+                        for (i in 1..12) {
+                            val fileS = File("$filesDir/sviatyja/opisanie$i.json")
+                            if (!fileS.exists() || (update && mun == i)) {
+                                val mURL = URL("https://carkva-gazeta.by/chytanne/sviatyja/opisanie$i.json")
+                                val conections = mURL.openConnection() as HttpURLConnection
+                                if (conections.responseCode == 200) {
                                     fileS.writer().use {
                                         it.write(mURL.readText())
                                     }
-                                } catch (e: Throwable) {
                                 }
                             }
                         }
+                    } catch (e: Throwable) {
                     }
                     builder = if (svity) fileOpisanieSviat.readText()
                     else fileOpisanie.readText()
@@ -314,11 +311,11 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                     if (MainActivity.isNetworkAvailable(this@Opisanie)) {
                         var bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                         withContext(Dispatchers.IO) {
-                            val mURL = if (svity) URL("https://carkva-gazeta.by/chytanne/icons/v_${day}_${mun}.jpg")
-                            else URL("https://carkva-gazeta.by/chytanne/icons/s_${day}_${mun}$schet.jpg")
-                            val conections = mURL.openConnection() as HttpURLConnection
-                            if (conections.responseCode == 200) {
-                                try {
+                            try {
+                                val mURL = if (svity) URL("https://carkva-gazeta.by/chytanne/icons/v_${day}_${mun}.jpg")
+                                else URL("https://carkva-gazeta.by/chytanne/icons/s_${day}_${mun}$schet.jpg")
+                                val conections = mURL.openConnection() as HttpURLConnection
+                                if (conections.responseCode == 200) {
                                     val bufferedInputStream = BufferedInputStream(conections.inputStream)
                                     val byteArrayOut = ByteArrayOutputStream()
                                     var c2: Int
@@ -333,7 +330,6 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                                     bmp.compress(Bitmap.CompressFormat.JPEG, 90, out)
                                     out.flush()
                                     out.close()
-                                } catch (e: Throwable) {
                                 }
                                 withContext(Dispatchers.Main) {
                                     opisanieData.imageView.post {
@@ -350,6 +346,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                                         }
                                     }
                                 }
+                            } catch (e: Throwable) {
                             }
                         }
                     }

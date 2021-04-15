@@ -1275,7 +1275,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
             val split = reader.use {
                 it.readText().split("===")
             }
-            for ((glava, e) in (1 until split.size).withIndex()) {
+            var glava = 0
+            (1 until split.size).forEach { e ->
+                glava++
                 val bibleline = split[e].split("\n")
                 var stix = 0
                 (1 until bibleline.size).forEach { r ->

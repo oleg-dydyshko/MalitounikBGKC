@@ -605,5 +605,6 @@
     <string name="add_pesny">Дадаць песьню</string>
     <string name="add_pesny_title">ДАДАЦЬ НОВУЮ ПЕСЬНЮ</string>
     <string name="hint_pesny_title">Імя песьні як у сказах</string>
+    <string name="zmena_chastki">Зьменныя часткі</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

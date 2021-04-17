@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_zmena"
+        android:icon="@drawable/bibliya"
+        android:orderInCategory="100"
+        android:title="@string/zmena_chastki"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_auto"
         android:icon="@drawable/scroll_icon"
         android:orderInCategory="100"

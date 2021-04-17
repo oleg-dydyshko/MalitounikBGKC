@@ -57,6 +57,12 @@ internal class ZmenyiaChastki(context: Context) {
         else chtenia(arrayData[kal[Calendar.DATE] - 1][9], apostal)
     }
 
+    fun raznica(): Int {
+        val kal = GregorianCalendar(2021, 3, 11)//Calendar.getInstance() as GregorianCalendar
+        val data = arrayData[kal[Calendar.DATE] - 1][22]
+        return data.toInt()
+    }
+
     /*string = "Зьменныя часткі"
     strLig = string.length
     t1 = text.indexOf(string)

@@ -87,9 +87,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var animatopRun = false
     private var onRestore = false
     private var onFind = false
+    private var chechZmena = false
+    private var raznica = 400
 
     companion object {
-        private val resursMap = ArrayMap<String, Int>()
+        val resursMap = ArrayMap<String, Int>()
 
         init {
             resursMap["bogashlugbovya1"] = R.raw.bogashlugbovya1
@@ -629,6 +631,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             val id = resursMap[resurs] ?: R.raw.bogashlugbovya1
             val inputStream = resources.openRawResource(id)
             val zmenyiaChastki = ZmenyiaChastki(this@Bogashlugbovya)
+            raznica = zmenyiaChastki.raznica()
             val gregorian = Calendar.getInstance() as GregorianCalendar
             val dayOfWeek = gregorian.get(Calendar.DAY_OF_WEEK)
             val isr = InputStreamReader(inputStream)
@@ -968,6 +971,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         })
         if (dzenNoch) binding.imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_niz_back)
         binding.imageView5.setOnClickListener { findNext() }
+        val slugbovyiaTextu = SlugbovyiaTextu()
+        if (slugbovyiaTextu.checkLiturgia(raznica)) {
+            chechZmena = true
+        }
         invalidateOptionsMenu()
     }
 
@@ -1161,6 +1168,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         itemVybranoe.title = spanString
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = k.getBoolean("admin", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_zmena).isVisible = chechZmena
         return true
     }
 
@@ -1199,6 +1207,15 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (id == android.R.id.home) {
             onBackPressed()
             return true
+        }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_zmena) {
+            val slugba = SlugbovyiaTextu()
+            val intent = Intent(this, Ton::class.java)
+            val resours = slugba.getResource(raznica, liturgia = true)
+            intent.putExtra("resurs", resours)
+            intent.putExtra("zmena_chastki", true)
+            intent.putExtra("title", slugba.getTitle(resours))
+            startActivity(intent)
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             editVybranoe = true

@@ -31,7 +31,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
 
-class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
+class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnScrollChangedCallback {
 
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")
@@ -62,9 +62,23 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
     private var resetTollbarJob: Job? = null
     private var id = R.raw.ton1
     private var resurs = "ton1"
+    private var positionY = 0
+    private var firstTextPosition = ""
+
+    override fun onScroll(t: Int, oldt: Int) {
+        positionY = t
+        val laneLayout = binding.TextView.layout
+        laneLayout?.let { layout ->
+            val textForVertical = binding.TextView.text.substring(binding.TextView.layout.getLineStart(layout.getLineForVertical(positionY)), binding.TextView.layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
+            if (textForVertical != "") firstTextPosition = textForVertical
+        }
+    }
 
     override fun onPause() {
         super.onPause()
+        val prefEditor = chin.edit()
+        prefEditor.putInt(resurs + "Scroll", positionY)
+        prefEditor.apply()
         resetTollbarJob?.cancel()
     }
 
@@ -116,6 +130,24 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         val tonNadzelny = intent.extras?.getBoolean("ton_naidzelny", true) ?: true
         var inputStream: InputStream
         when {
+            intent.extras?.getBoolean("zmena_chastki", false) == true -> {
+                resurs = intent?.extras?.getString("resurs") ?: ""
+                inputStream = r.openRawResource(Bogashlugbovya.resursMap[resurs] ?: R.raw.zmenyia_chastki_tamash)
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                var line: String
+                val builder = StringBuilder()
+                reader.use { bufferedReader ->
+                    bufferedReader.forEachLine {
+                        line = it
+                        if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                        builder.append(line)
+                    }
+                }
+                val resursOut = builder.toString()
+                title = intent.extras?.getString("title", "") ?: ""
+                binding.TextView.text = MainActivity.fromHtml(resursOut)
+            }
             intent.extras?.getBoolean("ton_na_sviaty", false) == true -> {
                 val c = Calendar.getInstance()
                 val mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: c[Calendar.MONTH] + 1
@@ -333,6 +365,25 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
                 MainActivity.checkBrightness = false
             }
         }
+        if (savedInstanceState != null) {
+            binding.TextView.post {
+                val textline = savedInstanceState.getString("textLine", "")
+                if (textline != "") {
+                    val index = binding.TextView.text.indexOf(textline)
+                    val line = binding.TextView.layout.getLineForOffset(index)
+                    val y = binding.TextView.layout.getLineTop(line)
+                    binding.scrollView2.scrollY = y
+                } else {
+                    binding.scrollView2.smoothScrollBy(0, positionY)
+                }
+            }
+        } else {
+            binding.scrollView2.post {
+                binding.scrollView2.smoothScrollBy(0, positionY)
+            }
+        }
+        binding.scrollView2.setOnScrollChangedCallback(this)
+        positionY = chin.getInt(resurs + "Scroll", 0)
     }
 
     private fun setTollbarTheme() {
@@ -535,5 +586,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
+        outState.putString("textLine", firstTextPosition)
     }
 }

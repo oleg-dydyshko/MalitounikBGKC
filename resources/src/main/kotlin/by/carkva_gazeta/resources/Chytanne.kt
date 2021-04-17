@@ -1004,7 +1004,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
     override fun onPause() {
         super.onPause()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
-        autoStartScrollJob?.cancel()
+        stopAutoStartScroll()
         procentJob?.cancel()
         resetTollbarJob?.cancel()
     }

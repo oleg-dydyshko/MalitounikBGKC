@@ -15,6 +15,7 @@ class SlugbovyiaTextu {
     private val dat15 = ArrayList<SlugbovyiaTextuData>()
     private val dat16 = ArrayList<SlugbovyiaTextuData>()
     private val dat17 = ArrayList<SlugbovyiaTextuData>()
+    private val dat18 = ArrayList<SlugbovyiaTextuData>()
     private val opisanieSviat = ArrayList<ArrayList<String>>()
     private var loadOpisanieSviatJob: Job? = null
 
@@ -78,6 +79,8 @@ class SlugbovyiaTextu {
         dat17.add(SlugbovyiaTextuData(-9, "Пятніца 6-га тыдня посту ўвечары", "bogashlugbovya17_6"))
         dat17.add(SlugbovyiaTextuData(-8, "Субота Лазара Ютрань", "bogashlugbovya17_7", utran = true))
         dat17.add(SlugbovyiaTextuData(-7, "Літургія", "bogashlugbovya17_8", liturgia = true))
+
+        dat18.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха) - Літургія", "zmenyia_chastki_tamash", liturgia = true))
     }
 
     fun getTydzen1() = dat12
@@ -136,6 +139,13 @@ class SlugbovyiaTextu {
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
+        dat18.forEach {
+            if (day == it.day) {
+                if (!utran && !liturgia) resource = it.resource
+                if (utran && utran == it.utran) resource = it.resource
+                if (liturgia && liturgia == it.liturgia) resource = it.resource
+            }
+        }
         return resource
     }
 
@@ -158,6 +168,9 @@ class SlugbovyiaTextu {
         dat17.forEach {
             if (resource == it.resource) return it.title
         }
+        dat18.forEach {
+            if (resource == it.resource) return it.title
+        }
         return ""
     }
 
@@ -168,15 +181,15 @@ class SlugbovyiaTextu {
                 if (MainActivity.isNetworkAvailable(activity)) {
                     loadOpisanieSviatJob = CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
-                            val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
-                            val conections = mURL.openConnection() as HttpURLConnection
-                            if (conections.responseCode == 200) {
-                                try {
+                            try {
+                                val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
+                                val conections = mURL.openConnection() as HttpURLConnection
+                                if (conections.responseCode == 200) {
                                     fileOpisanieSviat.writer().use {
                                         it.write(mURL.readText())
                                     }
-                                } catch (e: Throwable) {
                                 }
+                            } catch (e: Throwable) {
                             }
                         }
                         try {
@@ -257,6 +270,11 @@ class SlugbovyiaTextu {
                 if (it.utran) return true
             }
         }
+        dat18.forEach {
+            if (day == it.day) {
+                if (it.utran) return true
+            }
+        }
         return false
     }
 
@@ -300,6 +318,11 @@ class SlugbovyiaTextu {
                 if (it.liturgia) return true
             }
         }
+        dat18.forEach {
+            if (day == it.day) {
+                if (it.liturgia) return true
+            }
+        }
         return false
     }
 
@@ -339,6 +362,11 @@ class SlugbovyiaTextu {
             }
         }
         dat17.forEach {
+            if (day == it.day) {
+                if (!it.utran && !it.liturgia) return true
+            }
+        }
+        dat18.forEach {
             if (day == it.day) {
                 if (!it.utran && !it.liturgia) return true
             }

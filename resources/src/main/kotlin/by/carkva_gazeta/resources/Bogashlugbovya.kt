@@ -152,6 +152,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["bogashlugbovya17_6"] = R.raw.bogashlugbovya17_6
             resursMap["bogashlugbovya17_7"] = R.raw.bogashlugbovya17_7
             resursMap["bogashlugbovya17_8"] = R.raw.bogashlugbovya17_8
+            resursMap["zmenyia_chastki_tamash"] = R.raw.zmenyia_chastki_tamash
             resursMap["akafist0"] = R.raw.akafist0
             resursMap["akafist1"] = R.raw.akafist1
             resursMap["akafist2"] = R.raw.akafist2
@@ -343,6 +344,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             findListSpans.forEach {
                 text.setSpan(ForegroundColorSpan(it.color), it.start, it.size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
+            if (findListSpans.size >= findPosition) findPosition = 0
             findListSpans.clear()
         }
         val spans = text.getSpans(0, text.length, BackgroundColorSpan::class.java)
@@ -361,7 +363,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             val lineOld = binding.textView.layout.getLineForOffset(findListSpans[findPositionOld].start)
             val yOld = binding.textView.layout.getLineTop(lineOld)
             if (yOld > positionY) {
-                 findPosition--
+                findPosition--
             }
             if (findPosition == -1) {
                 findPosition = findListSpans.size - 1

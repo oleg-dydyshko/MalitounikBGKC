@@ -208,7 +208,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             viewHolder.text.text = fileList[position].title
             val t1 = fileName.indexOf("(")
             val t2 = fileName.indexOf(")")
-            if (t1 != -1 && t2 != -1 && fileList[position].title.contains(fileName.substring(t1 + 1, t2))) {
+            if (t1 != -1 && t2 != -1 && (fileList[position].title.contains(fileName.substring(t1 + 1, t2) + ".html") || fileList[position].title.contains(fileName.substring(t1 + 1, t2) + ".txt"))) {
                 viewHolder.text.background = ContextCompat.getDrawable(mContext, by.carkva_gazeta.malitounik.R.color.colorBezPosta)
             } else {
                 viewHolder.text.background = ContextCompat.getDrawable(mContext, by.carkva_gazeta.malitounik.R.color.colorWhite)

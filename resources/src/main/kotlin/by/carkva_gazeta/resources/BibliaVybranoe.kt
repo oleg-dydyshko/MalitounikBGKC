@@ -673,7 +673,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
     override fun onPause() {
         super.onPause()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
-        autoStartScrollJob?.cancel()
+        stopAutoStartScroll()
         procentJob?.cancel()
         resetTollbarJob?.cancel()
     }

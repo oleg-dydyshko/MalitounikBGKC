@@ -32,7 +32,7 @@ internal class ZmenyiaChastki(context: Context) {
             val inputStreamReader = InputStreamReader(inputStream)
             val reader = BufferedReader(inputStreamReader)
             val gson = Gson()
-            val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
+            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
             return ArrayList(gson.fromJson<Collection<ArrayList<String>>>(reader.readText(), type))
         }
 
@@ -53,8 +53,73 @@ internal class ZmenyiaChastki(context: Context) {
     fun zmenya(apostal: Int): String {
         val kal = Calendar.getInstance() as GregorianCalendar
         val data = arrayData[kal[Calendar.DATE] - 1][9]
-        return if (data.contains(context.resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + context.resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em>" else chtenia(arrayData[kal[Calendar.DATE] - 1][9], apostal)
+        return if (data.contains(context.resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + context.resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em>"
+        else chtenia(arrayData[kal[Calendar.DATE] - 1][9], apostal)
     }
+
+    /*string = "Зьменныя часткі"
+    strLig = string.length
+    t1 = text.indexOf(string)
+    if (t1 != -1) {
+        text.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                val slugba = SlugbovyiaTextu()
+                val cal = GregorianCalendar(2021, 3, 11)//Calendar.getInstance()
+                val data = cal[Calendar.DATE]
+                val mun = cal[Calendar.MONTH]
+                val year = cal[Calendar.YEAR]
+                val denNedzeli = cal[Calendar.DAY_OF_WEEK]
+                val checkSviatyia = false
+                val sviatyaName = "no_sviatyia"
+                val raznicia = 7
+                var ton1 = denNedzeli - 1
+                val ton = 1
+                var tonNaidzelny = false
+                if (ton != 0) {
+                    ton1 = ton
+                    tonNaidzelny = true
+                }
+                when {
+                    slugba.checkLiturgia(data, mun) -> {
+                        val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitleOpisanieSviat(data, mun), mun, data, ton1, tonNaidzelny, true, ton_na_viliki_post = false, resurs = "", sviatyaName, checkSviatyia, year)
+                        traparyAndKandaki.show(supportFragmentManager, "traparyAndKandaki")
+                    }
+                    slugba.checkLiturgia(raznicia) -> {
+                        if (denNedzeli == Calendar.SUNDAY && ton != 0) {
+                            val resours = slugba.getResource(raznicia, liturgia = true)
+                            val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton, true, ton_na_sviaty = false, ton_na_viliki_post = true, resurs = resours, sviatyaName, checkSviatyia, year)
+                            traparyAndKandaki.show(supportFragmentManager, "traparyAndKandaki")
+                        } else {
+                            val intent = Intent()
+                            val resours = slugba.getResource(raznicia, liturgia = true)
+                            intent.setClassName(this@Bogashlugbovya, MainActivity.BOGASHLUGBOVYA)
+                            intent.putExtra("resurs", resours)
+                            intent.putExtra("title", slugba.getTitle(resours))
+                            startActivity(intent)
+                        }
+                    }
+                    else -> {
+                        if (checkSviatyia) {
+                            val resours = slugba.getResource(raznicia, liturgia = true)
+                            val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton1, tonNaidzelny, ton_na_sviaty = false, ton_na_viliki_post = false, resurs = resours, sviatyaName, checkSviatyia, year)
+                            traparyAndKandaki.show(supportFragmentManager, "traparyAndKandaki")
+                        } else {
+                            val intent = Intent()
+                            intent.setClassName(this@Bogashlugbovya, MainActivity.TON)
+                            if (ton != 0) {
+                                intent.putExtra("ton", ton)
+                                intent.putExtra("ton_naidzelny", true)
+                            } else {
+                                intent.putExtra("ton", denNedzeli - 1)
+                                intent.putExtra("ton_naidzelny", false)
+                            }
+                            startActivity(intent)
+                        }
+                    }
+                }
+            }
+        }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    }*/
 
     private fun chtenia(w: String, apostal: Int): String {
         var w1 = w
@@ -223,7 +288,7 @@ internal class ZmenyiaChastki(context: Context) {
                 var t1 = result.indexOf(":", t2)
                 if (t1 == -1) t1 = result.indexOf(";", t3 + 1)
                 if (t1 == -1) t1 = result.indexOf(".", t3 + 1)
-                if (t1 != -1) result = result.substring(0, t1 + 1) + "<strike>" + result.substring(t1 + 1, result.length) + "</strike>"
+                if (t1 != -1) result = result.substring(0, t1 + 1) + "<strong>" + result.substring(t1 + 1, result.length) + "</strong>"
             }
             if (polstixaB) {
                 val t2 = result.indexOf("\n")
@@ -233,7 +298,7 @@ internal class ZmenyiaChastki(context: Context) {
                 var t1 = textPol.indexOf(":")
                 if (t1 == -1) t1 = textPol.indexOf(";", t3 + 1)
                 if (t1 == -1) t1 = textPol.indexOf(".", t3 + 1)
-                if (t1 != -1) result = result.substring(0, t3 + 1) + "<strike>" + result.substring(t3 + 1, t1 + 1) + "</strike>" + result.substring(t1 + 1, result.length)
+                if (t1 != -1) result = result.substring(0, t3 + 1) + "<strong>" + result.substring(t3 + 1, t1 + 1) + "</strong>" + result.substring(t1 + 1, result.length)
             }
         }
         return result

@@ -1058,7 +1058,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         maranAtaScrollPosition = binding.ListView.firstVisiblePosition
         prefEditors.putInt("maranAtaScrollPasition", maranAtaScrollPosition)
         prefEditors.apply()
-        autoStartScrollJob?.cancel()
+        stopAutoStartScroll()
         procentJob?.cancel()
         resetTollbarJob?.cancel()
     }

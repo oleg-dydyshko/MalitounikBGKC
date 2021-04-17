@@ -119,6 +119,9 @@ pesny_prasl_69<>Яму за ўсё слава
 pesny_prasl_70<>Цябе, Бога, хвалім
 pesny_prasl_71<>Мой Госпад, мой Збаўца
 pesny_prasl_72<>Крыжовы шлях
+pesny_prasl_73<>Аднаві маю надзею
+pesny_prasl_74<>Праслаўляйце Пана Бога
+pesny_prasl_75<>Радуйся і слаў Яго
 pesny_taize_0<>Magnifikat
 pesny_taize_1<>Ostende nobis
 pesny_taize_2<>Ubi caritas

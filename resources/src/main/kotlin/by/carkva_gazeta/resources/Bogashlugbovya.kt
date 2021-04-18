@@ -164,6 +164,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["akafist5"] = R.raw.akafist5
             resursMap["akafist6"] = R.raw.akafist6
             resursMap["akafist7"] = R.raw.akafist7
+            resursMap["akafist8"] = R.raw.akafist8
             resursMap["malitvy1"] = R.raw.malitvy1
             resursMap["malitvy2"] = R.raw.malitvy2
             resursMap["paslia_prychascia1"] = R.raw.paslia_prychascia1

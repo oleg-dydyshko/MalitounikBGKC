@@ -68,6 +68,10 @@ class MenuAkafisty : ListFragment() {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "akafist7")
                     }
+                    8 -> {
+                        intent.putExtra("title", data[position])
+                        intent.putExtra("resurs", "akafist8")
+                    }
                 }
                 startActivity(intent)
             }

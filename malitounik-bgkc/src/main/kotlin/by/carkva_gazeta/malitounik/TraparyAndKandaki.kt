@@ -97,8 +97,9 @@ class TraparyAndKandaki : DialogFragment() {
                     }
                     data[position].post -> {
                         val intent = Intent()
-                        intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                        intent.setClassName(it, MainActivity.TON)
                         intent.putExtra("resurs", resurs)
+                        intent.putExtra("zmena_chastki", true)
                         intent.putExtra("title", title)
                         startActivity(intent)
                     }

@@ -4,8 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
+import android.text.*
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
@@ -13,6 +12,7 @@ import android.util.TypedValue
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.text.toSpannable
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -33,6 +33,25 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     private lateinit var binding: AdminPasochnicaBinding
     private var resetTollbarJob: Job? = null
     private var fileName = "newFile.html"
+    private var history = ArrayList<History>()
+    private val textWatcher = object : TextWatcher {
+        var editPosition = 0
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            editPosition = start + count
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+            s?.let {
+                if (history.size == 51)
+                    history.removeAt(0)
+                history.add(History(it.toSpannable(), editPosition))
+            }
+        }
+    }
 
     override fun onPause() {
         super.onPause()
@@ -54,8 +73,12 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         binding.actionRed.setOnClickListener(this)
         binding.actionP.setOnClickListener(this)
         binding.actionBr.setOnClickListener(this)
+        binding.actionBack.setOnClickListener(this)
         fileName = intent.extras?.getString("fileName", "newFile.html") ?: "newFile.html"
-        if (savedInstanceState != null) fileName = savedInstanceState.getString("fileName", "")
+        if (savedInstanceState != null) {
+            fileName = savedInstanceState.getString("fileName", "")
+            history.clear()
+        }
         if (fileName != "newFile.html") getFilePostRequest(fileName)
         val text = intent.extras?.getString("text", "") ?: ""
         if (text != "") {
@@ -81,6 +104,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             binding.apisanne.setText(text)
         }
         setTollbarTheme()
+        binding.apisanne.addTextChangedListener(textWatcher)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -527,6 +551,15 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
 
     override fun onClick(v: View?) {
         val id = v?.id ?: 0
+        if (id == R.id.action_back) {
+            binding.apisanne.removeTextChangedListener(textWatcher)
+            if (history.size > 1) {
+                binding.apisanne.setText(history[history.size - 2].spannable)
+                binding.apisanne.setSelection(history[history.size - 1].editPosition)
+                history.removeAt(history.size - 1)
+            }
+            binding.apisanne.addTextChangedListener(textWatcher)
+        }
         if (id == R.id.action_bold) {
             val startSelect = binding.apisanne.selectionStart
             val endSelect = binding.apisanne.selectionEnd
@@ -656,4 +689,6 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         }
         return true
     }
+
+    private data class History(val spannable: Spannable, val editPosition: Int)
 }

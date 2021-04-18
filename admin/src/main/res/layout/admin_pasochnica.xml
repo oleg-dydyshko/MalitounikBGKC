@@ -77,6 +77,17 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
+            android:id="@+id/action_back"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:contentDescription="@string/empty"
+            app:srcCompat="@drawable/back" />
+
+        <ImageView
             android:id="@+id/action_bold"
             android:layout_width="28dp"
             android:layout_height="28dp"

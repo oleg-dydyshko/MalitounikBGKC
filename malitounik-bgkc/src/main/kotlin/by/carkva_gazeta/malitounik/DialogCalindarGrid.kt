@@ -278,8 +278,9 @@ class DialogCalindarGrid : DialogFragment() {
                                 slugba.checkViachernia(raznicia) -> {
                                     val intent = Intent()
                                     val resours = slugba.getResource(raznicia)
-                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                    intent.setClassName(it, MainActivity.TON)
                                     intent.putExtra("resurs", resours)
+                                    intent.putExtra("zmena_chastki", true)
                                     intent.putExtra("title", slugba.getTitle(resours))
                                     startActivity(intent)
                                 }
@@ -311,8 +312,9 @@ class DialogCalindarGrid : DialogFragment() {
                                     } else {
                                         val intent = Intent()
                                         val resours = slugba.getResource(raznicia, liturgia = true)
-                                        intent.setClassName(fragmentActivity, MainActivity.BOGASHLUGBOVYA)
+                                        intent.setClassName(fragmentActivity, MainActivity.TON)
                                         intent.putExtra("resurs", resours)
+                                        intent.putExtra("zmena_chastki", true)
                                         intent.putExtra("title", slugba.getTitle(resours))
                                         startActivity(intent)
                                     }
@@ -367,16 +369,18 @@ class DialogCalindarGrid : DialogFragment() {
                                 slugba.checkUtran(raznicia) -> {
                                     val intent = Intent()
                                     val resours = slugba.getResource(raznicia, utran = true)
-                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                    intent.setClassName(it, MainActivity.TON)
                                     intent.putExtra("resurs", resours)
+                                    intent.putExtra("zmena_chastki", true)
                                     intent.putExtra("title", slugba.getTitle(resours))
                                     startActivity(intent)
                                 }
                                 denNedzeli == 1 -> {
                                     val data = resources.getStringArray(R.array.bogaslugbovuia)
                                     val intent = Intent()
-                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                    intent.setClassName(it, MainActivity.TON)
                                     intent.putExtra("title", data[3])
+                                    intent.putExtra("zmena_chastki", true)
                                     intent.putExtra("resurs", "bogashlugbovya6")
                                     startActivity(intent)
                                 }

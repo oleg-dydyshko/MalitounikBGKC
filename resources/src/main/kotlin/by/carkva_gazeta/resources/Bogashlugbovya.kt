@@ -155,6 +155,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["bogashlugbovya17_7"] = R.raw.bogashlugbovya17_7
             resursMap["bogashlugbovya17_8"] = R.raw.bogashlugbovya17_8
             resursMap["zmenyia_chastki_tamash"] = R.raw.zmenyia_chastki_tamash
+            resursMap["zmenyia_chastki_miranosicay"] = R.raw.zmenyia_chastki_miranosicay
             resursMap["akafist0"] = R.raw.akafist0
             resursMap["akafist1"] = R.raw.akafist1
             resursMap["akafist2"] = R.raw.akafist2
@@ -972,7 +973,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (dzenNoch) binding.imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_niz_back)
         binding.imageView5.setOnClickListener { findNext() }
         val slugbovyiaTextu = SlugbovyiaTextu()
-        if (slugbovyiaTextu.checkLiturgia(raznica)) {
+        if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && slugbovyiaTextu.checkLiturgia(raznica)) {
             chechZmena = true
         }
         invalidateOptionsMenu()

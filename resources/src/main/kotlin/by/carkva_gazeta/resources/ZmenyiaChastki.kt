@@ -58,74 +58,10 @@ internal class ZmenyiaChastki(context: Context) {
     }
 
     fun raznica(): Int {
-        val kal = GregorianCalendar(2021, 3, 11)//Calendar.getInstance() as GregorianCalendar
+        val kal = Calendar.getInstance() as GregorianCalendar
         val data = arrayData[kal[Calendar.DATE] - 1][22]
         return data.toInt()
     }
-
-    /*string = "Зьменныя часткі"
-    strLig = string.length
-    t1 = text.indexOf(string)
-    if (t1 != -1) {
-        text.setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                val slugba = SlugbovyiaTextu()
-                val cal = GregorianCalendar(2021, 3, 11)//Calendar.getInstance()
-                val data = cal[Calendar.DATE]
-                val mun = cal[Calendar.MONTH]
-                val year = cal[Calendar.YEAR]
-                val denNedzeli = cal[Calendar.DAY_OF_WEEK]
-                val checkSviatyia = false
-                val sviatyaName = "no_sviatyia"
-                val raznicia = 7
-                var ton1 = denNedzeli - 1
-                val ton = 1
-                var tonNaidzelny = false
-                if (ton != 0) {
-                    ton1 = ton
-                    tonNaidzelny = true
-                }
-                when {
-                    slugba.checkLiturgia(data, mun) -> {
-                        val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitleOpisanieSviat(data, mun), mun, data, ton1, tonNaidzelny, true, ton_na_viliki_post = false, resurs = "", sviatyaName, checkSviatyia, year)
-                        traparyAndKandaki.show(supportFragmentManager, "traparyAndKandaki")
-                    }
-                    slugba.checkLiturgia(raznicia) -> {
-                        if (denNedzeli == Calendar.SUNDAY && ton != 0) {
-                            val resours = slugba.getResource(raznicia, liturgia = true)
-                            val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton, true, ton_na_sviaty = false, ton_na_viliki_post = true, resurs = resours, sviatyaName, checkSviatyia, year)
-                            traparyAndKandaki.show(supportFragmentManager, "traparyAndKandaki")
-                        } else {
-                            val intent = Intent()
-                            val resours = slugba.getResource(raznicia, liturgia = true)
-                            intent.setClassName(this@Bogashlugbovya, MainActivity.BOGASHLUGBOVYA)
-                            intent.putExtra("resurs", resours)
-                            intent.putExtra("title", slugba.getTitle(resours))
-                            startActivity(intent)
-                        }
-                    }
-                    else -> {
-                        if (checkSviatyia) {
-                            val resours = slugba.getResource(raznicia, liturgia = true)
-                            val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton1, tonNaidzelny, ton_na_sviaty = false, ton_na_viliki_post = false, resurs = resours, sviatyaName, checkSviatyia, year)
-                            traparyAndKandaki.show(supportFragmentManager, "traparyAndKandaki")
-                        } else {
-                            val intent = Intent()
-                            intent.setClassName(this@Bogashlugbovya, MainActivity.TON)
-                            if (ton != 0) {
-                                intent.putExtra("ton", ton)
-                                intent.putExtra("ton_naidzelny", true)
-                            } else {
-                                intent.putExtra("ton", denNedzeli - 1)
-                                intent.putExtra("ton_naidzelny", false)
-                            }
-                            startActivity(intent)
-                        }
-                    }
-                }
-            }
-        }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    }*/
 
     private fun chtenia(w: String, apostal: Int): String {
         var w1 = w

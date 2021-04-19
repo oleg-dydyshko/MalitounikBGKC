@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:name="by.carkva_gazeta.admin.StaryZapavietSemuxa"
-            android:windowSoftInputMode="stateAlwaysHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:label="@string/title_activity_stary_zapaviet2"
             android:theme="@style/AppTheme">
             <meta-data
@@ -43,7 +43,7 @@
         </activity>
         <activity
             android:name="by.carkva_gazeta.admin.NovyZapavietSemuxa"
-            android:windowSoftInputMode="stateAlwaysHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:label="@string/novy_zapaviet"
             android:theme="@style/AppTheme">
             <meta-data
@@ -52,7 +52,7 @@
         </activity>
         <activity
             android:name="by.carkva_gazeta.admin.Sviatyia"
-            android:windowSoftInputMode="stateAlwaysHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:label="@string/sviatyia"
             android:theme="@style/AppTheme">
             <meta-data
@@ -61,7 +61,7 @@
         </activity>
         <activity
             android:name="by.carkva_gazeta.admin.PasochnicaList"
-            android:windowSoftInputMode="stateAlwaysHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:label="@string/pasochnica"
             android:theme="@style/AppTheme">
             <meta-data
@@ -70,7 +70,7 @@
         </activity>
         <activity
             android:name="by.carkva_gazeta.admin.Pasochnica"
-            android:windowSoftInputMode="stateAlwaysHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:label="@string/pasochnica"
             android:theme="@style/AppTheme">
             <meta-data

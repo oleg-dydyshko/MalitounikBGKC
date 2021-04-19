@@ -243,7 +243,7 @@ internal class ZmenyiaChastki(context: Context) {
                 if (t1 != -1) result = result.substring(0, t3 + 1) + "<strong>" + result.substring(t3 + 1, t1 + 1) + "</strong>" + result.substring(t1 + 1, result.length)
             }
         }
-        return result
+        return "$result<br>"
     }
 
     fun traparyIKandakiNiadzelnyia(chast: Int): String {

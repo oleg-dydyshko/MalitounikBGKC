@@ -45,11 +45,14 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         }
 
         override fun afterTextChanged(s: Editable?) {
-            s?.let {
-                if (history.size == 51)
-                    history.removeAt(0)
-                history.add(History(it.toSpannable(), editPosition))
-            }
+            addHistory(s, editPosition)
+        }
+    }
+
+    private fun addHistory(s: Editable?, editPosition: Int) {
+        s?.let {
+            if (history.size == 51) history.removeAt(0)
+            history.add(History(it.toSpannable(), editPosition))
         }
     }
 
@@ -589,6 +592,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 binding.apisanne.setText(build)
                 binding.apisanne.setSelection(endSelect + 17)
             }
+            addHistory(binding.apisanne.text, binding.apisanne.selectionEnd)
         }
         if (id == R.id.action_em) {
             val startSelect = binding.apisanne.selectionStart
@@ -619,6 +623,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 binding.apisanne.setText(build)
                 binding.apisanne.setSelection(endSelect + 9)
             }
+            addHistory(binding.apisanne.text, binding.apisanne.selectionEnd)
         }
         if (id == R.id.action_red) {
             val startSelect = binding.apisanne.selectionStart
@@ -649,6 +654,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 binding.apisanne.setText(build)
                 binding.apisanne.setSelection(endSelect + 29)
             }
+            addHistory(binding.apisanne.text, binding.apisanne.selectionEnd)
         }
         if (id == R.id.action_br) {
             val endSelect = binding.apisanne.selectionEnd
@@ -661,6 +667,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             }
             binding.apisanne.setText(build)
             binding.apisanne.setSelection(endSelect + 4)
+            addHistory(binding.apisanne.text, binding.apisanne.selectionEnd)
         }
         if (id == R.id.action_p) {
             val endSelect = binding.apisanne.selectionEnd
@@ -673,6 +680,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             }
             binding.apisanne.setText(build)
             binding.apisanne.setSelection(endSelect + 3)
+            addHistory(binding.apisanne.text, binding.apisanne.selectionEnd)
         }
     }
 

@@ -71,6 +71,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         super.onCreate(savedInstanceState)
         binding = AdminPasochnicaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.apisanne.addTextChangedListener(textWatcher)
         binding.actionBold.setOnClickListener(this)
         binding.actionEm.setOnClickListener(this)
         binding.actionRed.setOnClickListener(this)
@@ -107,7 +108,6 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             binding.apisanne.setText(text)
         }
         setTollbarTheme()
-        binding.apisanne.addTextChangedListener(textWatcher)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

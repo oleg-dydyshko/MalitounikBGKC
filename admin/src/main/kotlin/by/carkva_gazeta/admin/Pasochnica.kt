@@ -46,13 +46,25 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
 
         override fun afterTextChanged(s: Editable?) {
             addHistory(s, editPosition)
+            if (history.size > 1) {
+                binding.actionBack.visibility = View.VISIBLE
+            } else {
+                binding.actionBack.visibility = View.GONE
+            }
         }
     }
 
     private fun addHistory(s: Editable?, editPosition: Int) {
         s?.let {
-            if (history.size == 51) history.removeAt(0)
-            history.add(History(it.toSpannable(), editPosition))
+            if (it.toString() != "") {
+                if (history.size == 51) history.removeAt(0)
+                history.add(History(it.toSpannable(), editPosition))
+            }
+            if (history.size > 1) {
+                binding.actionBack.visibility = View.VISIBLE
+            } else {
+                binding.actionBack.visibility = View.GONE
+            }
         }
     }
 
@@ -79,12 +91,23 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         binding.actionBr.setOnClickListener(this)
         binding.actionBack.setOnClickListener(this)
         fileName = intent.extras?.getString("fileName", "newFile.html") ?: "newFile.html"
+        val text = intent.extras?.getString("text", "") ?: ""
         if (savedInstanceState != null) {
             fileName = savedInstanceState.getString("fileName", "")
             history.clear()
+        } else {
+            if (fileName != "newFile.html") {
+                getFilePostRequest(fileName)
+            } else {
+                if (fileName.contains(".htm")) {
+                    binding.apisanne.setText(MainActivity.fromHtml(text))
+                    binding.actionP.visibility = View.GONE
+                    binding.actionBr.visibility = View.GONE
+                } else {
+                    binding.apisanne.setText(text)
+                }
+            }
         }
-        if (fileName != "newFile.html") getFilePostRequest(fileName)
-        val text = intent.extras?.getString("text", "") ?: ""
         if (text != "") {
             val gson = Gson()
             val resours = intent.extras?.getString("resours", "") ?: ""
@@ -99,13 +122,6 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             } else {
                 getFilePostRequest(fileName)
             }
-        }
-        if (fileName.contains(".htm")) {
-            binding.apisanne.setText(MainActivity.fromHtml(text))
-            binding.actionP.visibility = View.GONE
-            binding.actionBr.visibility = View.GONE
-        } else {
-            binding.apisanne.setText(text)
         }
         setTollbarTheme()
     }
@@ -560,6 +576,11 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 binding.apisanne.setText(history[history.size - 2].spannable)
                 binding.apisanne.setSelection(history[history.size - 1].editPosition)
                 history.removeAt(history.size - 1)
+            }
+            if (history.size > 1) {
+                binding.actionBack.visibility = View.VISIBLE
+            } else {
+                binding.actionBack.visibility = View.GONE
             }
             binding.apisanne.addTextChangedListener(textWatcher)
         }

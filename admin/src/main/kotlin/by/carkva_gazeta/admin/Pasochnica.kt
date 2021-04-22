@@ -574,7 +574,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             binding.apisanne.removeTextChangedListener(textWatcher)
             if (history.size > 1) {
                 binding.apisanne.setText(history[history.size - 2].spannable)
-                binding.apisanne.setSelection(history[history.size - 1].editPosition)
+                binding.apisanne.setSelection(history[history.size - 2].editPosition)
                 history.removeAt(history.size - 1)
             }
             if (history.size > 1) {

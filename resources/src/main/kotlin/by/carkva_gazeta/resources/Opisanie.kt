@@ -309,7 +309,6 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                     }
                 } else {
                     if (MainActivity.isNetworkAvailable(this@Opisanie)) {
-                        var bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                         withContext(Dispatchers.IO) {
                             try {
                                 val mURL = if (svity) URL("https://carkva-gazeta.by/chytanne/icons/v_${day}_${mun}.jpg")
@@ -323,25 +322,25 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                                         byteArrayOut.write(c2)
                                     }
                                     val byteArray = byteArrayOut.toByteArray()
-                                    bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                                    val bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
                                     val file2 = if (svity) File(dir, "v_${day}_${mun}.jpg")
                                     else File(dir, "s_${day}_${mun}$schet.jpg")
                                     val out = FileOutputStream(file2)
                                     bmp.compress(Bitmap.CompressFormat.JPEG, 90, out)
                                     out.flush()
                                     out.close()
-                                }
-                                withContext(Dispatchers.Main) {
-                                    opisanieData.imageView.post {
-                                        opisanieData.imageView.setImageBitmap(resizeImage(bmp))
-                                        opisanieData.imageView.visibility = View.VISIBLE
-                                        if (svity) opisanieData.imageName = "v_${day}_${mun}.jpg"
-                                        else opisanieData.imageName = "s_${day}_${mun}$schet.jpg"
-                                        opisanieData.imageView.setOnClickListener {
-                                            if (file.exists()) {
-                                                val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                                                binding.imageViewFull.setImageBitmap(bitmap)
-                                                binding.imageViewFull.visibility = View.VISIBLE
+                                    withContext(Dispatchers.Main) {
+                                        opisanieData.imageView.post {
+                                            opisanieData.imageView.setImageBitmap(resizeImage(bmp))
+                                            opisanieData.imageView.visibility = View.VISIBLE
+                                            if (svity) opisanieData.imageName = "v_${day}_${mun}.jpg"
+                                            else opisanieData.imageName = "s_${day}_${mun}$schet.jpg"
+                                            opisanieData.imageView.setOnClickListener {
+                                                if (file2.exists()) {
+                                                    val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                                                    binding.imageViewFull.setImageBitmap(bitmap)
+                                                    binding.imageViewFull.visibility = View.VISIBLE
+                                                }
                                             }
                                         }
                                     }

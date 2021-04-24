@@ -402,6 +402,11 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                     }
                     binding.apisanne.setText(res)
                     binding.progressBar2.visibility = View.GONE
+                    binding.sviaty.setSelection(binding.sviaty.text.toString().length)
+                    activity?.let {
+                        val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+                    }
                     stopTimer()
                 }
             }

@@ -64,10 +64,16 @@ class DialogPasochnicaFileName : DialogFragment() {
             linearLayout.addView(textViewZaglavie)
             input = EditTextRobotoCondensed(it)
             input.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (savedInstanceState != null) {
+            val text = if (savedInstanceState != null) {
                 input.setText(savedInstanceState.getString("fileName"))
+                savedInstanceState.getString("fileName") ?: "newFile.html"
             } else {
-                input.setText(arguments?.getString("oldFileName") ?: "")
+                input.setText(arguments?.getString("oldFileName") ?: "newFile.html")
+                arguments?.getString("oldFileName") ?: "newFile.html"
+            }
+            val t2 = text.lastIndexOf(".")
+            if (t2 != -1) {
+                input.setSelection(0, t2)
             }
             input.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             input.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorWhite)
@@ -81,8 +87,10 @@ class DialogPasochnicaFileName : DialogFragment() {
                 false
             }
             input.imeOptions = EditorInfo.IME_ACTION_GO
-            val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+            input.post {
+                val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+            }
             linearLayout.addView(input)
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int ->
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -749,6 +749,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             fileName = savedInstanceState.getString("fileName") ?: ""
             idSelect = savedInstanceState.getInt("idSelect")
             nameRubrika = savedInstanceState.getString("nameRubrika") ?: ""
+            MainActivity.dialogVisable = false
             when {
                 savedInstanceState.getInt("pdfView", 0) == 1 -> {
                     bindingcontent.swipeRefreshLayout.visibility = View.GONE

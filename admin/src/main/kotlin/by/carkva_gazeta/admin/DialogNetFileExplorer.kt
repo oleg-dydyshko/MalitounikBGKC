@@ -58,7 +58,6 @@ class DialogNetFileExplorer : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            MainActivity.dialogVisable = true
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             val linear = LinearLayout(it)
             linear.orientation = LinearLayout.VERTICAL

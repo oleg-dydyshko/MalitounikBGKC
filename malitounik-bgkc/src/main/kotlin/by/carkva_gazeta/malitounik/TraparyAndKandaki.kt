@@ -92,7 +92,7 @@ class TraparyAndKandaki : DialogFragment() {
                         i.setClassName(it, MainActivity.OPISANIE)
                         i.putExtra("mun", mun)
                         i.putExtra("day", day)
-                        i.putExtra("day", year)
+                        i.putExtra("year", year)
                         startActivity(i)
                     }
                     data[position].post -> {

@@ -61,6 +61,10 @@ class AdminMain : AppCompatActivity() {
             val intent = Intent(this, PasochnicaList::class.java)
             startActivity(intent)
         }
+        binding.sviaty.setOnClickListener {
+            val intent = Intent(this, Sviaty::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setTollbarTheme() {

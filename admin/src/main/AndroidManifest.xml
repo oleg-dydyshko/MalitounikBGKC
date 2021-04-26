@@ -77,5 +77,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.admin.PasochnicaList" />
         </activity>
+        <activity
+            android:name="by.carkva_gazeta.admin.Sviaty"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:label="@string/sviaty"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.admin.AdminMain" />
+        </activity>
     </application>
 </manifest>

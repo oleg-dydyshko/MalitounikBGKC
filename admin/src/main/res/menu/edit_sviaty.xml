@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu  xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_preview"
         android:icon="@drawable/natatka"
@@ -12,5 +12,11 @@
         android:icon="@drawable/save"
         android:orderInCategory="100"
         android:title="@string/save_sabytie"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_upload_image"
+        android:icon="@drawable/image_icon"
+        android:orderInCategory="100"
+        android:title="@string/image_upload"
         app:showAsAction="always" />
 </menu>

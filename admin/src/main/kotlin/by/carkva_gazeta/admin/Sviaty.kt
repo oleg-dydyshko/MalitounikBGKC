@@ -1,11 +1,16 @@
 package by.carkva_gazeta.admin
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
+import android.util.Base64
 import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -13,6 +18,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminSviatyBinding
 import by.carkva_gazeta.malitounik.EditTextRobotoCondensed
@@ -23,6 +29,8 @@ import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
+import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -30,7 +38,7 @@ import java.net.URLEncoder
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Sviaty : AppCompatActivity(), View.OnClickListener {
+class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplorer.DialogFileExplorerListener {
     private lateinit var binding: AdminSviatyBinding
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
@@ -39,6 +47,24 @@ class Sviaty : AppCompatActivity(), View.OnClickListener {
     private val timer = Timer()
     private var timerTask: TimerTask? = null
     private var edittext: EditTextRobotoCondensed? = null
+    private val myPermissionsWriteExternalStorage = 42
+
+    override fun onResume() {
+        super.onResume()
+        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == myPermissionsWriteExternalStorage) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                val fileExplorer = DialogImageFileExplorer()
+                fileExplorer.show(supportFragmentManager, "file_explorer")
+            }
+        }
+    }
 
     private fun startTimer() {
         timerTask = object : TimerTask() {
@@ -76,21 +102,21 @@ class Sviaty : AppCompatActivity(), View.OnClickListener {
         sviaty.add(SviatyData(-1, 0, "Уваход у Ерусалім"))
         sviaty.add(SviatyData(-1, 1, "Уваскрасеньне"))
         sviaty.add(SviatyData(-1, 2, "Узьнясеньне"))
-        sviaty.add(SviatyData(-1,3, "Тройца"))
-        sviaty.add(SviatyData(1,1, "1 Студзеня"))
-        sviaty.add(SviatyData(6,1,"6 Студзеня"))
-        sviaty.add(SviatyData(2,2,"2 Лютага"))
-        sviaty.add(SviatyData(25,3,"25 Сакавіка"))
-        sviaty.add(SviatyData(24,6,"24 Чэрвеня"))
-        sviaty.add(SviatyData(29,6,"29 Чэрвеня"))
-        sviaty.add(SviatyData(6,8,"6 Жніўня"))
-        sviaty.add(SviatyData(15,8,"15 Жніўня"))
-        sviaty.add(SviatyData(29,8,"29 Жніўня"))
-        sviaty.add(SviatyData(8,9,"8 Верасьня"))
-        sviaty.add(SviatyData(14,9,"14 Верасьня"))
-        sviaty.add(SviatyData(1,10,"1 Кастрычніка"))
-        sviaty.add(SviatyData(21,11,"21 Лістапада"))
-        sviaty.add(SviatyData(25, 12,"25 Сьнежня"))
+        sviaty.add(SviatyData(-1, 3, "Тройца"))
+        sviaty.add(SviatyData(1, 1, "1 Студзеня"))
+        sviaty.add(SviatyData(6, 1, "6 Студзеня"))
+        sviaty.add(SviatyData(2, 2, "2 Лютага"))
+        sviaty.add(SviatyData(25, 3, "25 Сакавіка"))
+        sviaty.add(SviatyData(24, 6, "24 Чэрвеня"))
+        sviaty.add(SviatyData(29, 6, "29 Чэрвеня"))
+        sviaty.add(SviatyData(6, 8, "6 Жніўня"))
+        sviaty.add(SviatyData(15, 8, "15 Жніўня"))
+        sviaty.add(SviatyData(29, 8, "29 Жніўня"))
+        sviaty.add(SviatyData(8, 9, "8 Верасьня"))
+        sviaty.add(SviatyData(14, 9, "14 Верасьня"))
+        sviaty.add(SviatyData(1, 10, "1 Кастрычніка"))
+        sviaty.add(SviatyData(21, 11, "21 Лістапада"))
+        sviaty.add(SviatyData(25, 12, "25 Сьнежня"))
         binding.actionBold.setOnClickListener(this)
         binding.actionEm.setOnClickListener(this)
         binding.actionRed.setOnClickListener(this)
@@ -185,6 +211,44 @@ class Sviaty : AppCompatActivity(), View.OnClickListener {
         binding.titleToolbar.isSingleLine = true
     }
 
+    private fun fileUpload(bitmap: Bitmap) {
+        if (MainActivity.isNetworkAvailable(this)) {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.progressBar2.visibility = View.VISIBLE
+                val bao = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bao)
+                val ba = bao.toByteArray()
+                val base64 = Base64.encodeToString(ba, Base64.DEFAULT)
+                var responseCodeS = 500
+                withContext(Dispatchers.IO) {
+                    var reqParam = URLEncoder.encode("imageSV", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("base64", "UTF-8") + "=" + URLEncoder.encode(base64, "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(sviaty[binding.spinnerSviaty.selectedItemPosition].data.toString(), "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode(sviaty[binding.spinnerSviaty.selectedItemPosition].mun.toString(), "UTF-8")
+                    val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                    with(mURL.openConnection() as HttpURLConnection) {
+                        requestMethod = "POST"
+                        val wr = OutputStreamWriter(outputStream)
+                        wr.write(reqParam)
+                        wr.flush()
+                        responseCodeS = responseCode
+                    }
+                }
+                if (responseCodeS == 200) {
+                    MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.save))
+                } else {
+                    MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
+                }
+                binding.progressBar2.visibility = View.GONE
+            }
+        }
+    }
+
+    override fun onDialogFile(file: File) {
+        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+        fileUpload(bitmap)
+    }
+
     override fun onClick(v: View?) {
         val id = v?.id ?: 0
         edittext?.let {
@@ -272,6 +336,15 @@ class Sviaty : AppCompatActivity(), View.OnClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (id == R.id.action_upload_image) {
+            val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+            if (PackageManager.PERMISSION_DENIED == permissionCheck) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+            } else {
+                val dialogImageFileExplorer = DialogImageFileExplorer()
+                dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
+            }
+        }
         if (id == R.id.action_save) {
             sendPostRequest(binding.spinnerSviaty.selectedItemPosition, binding.sviaty.text.toString(), binding.utran.text.toString(), binding.liturgia.text.toString(), binding.viachernia.text.toString())
         }
@@ -306,7 +379,6 @@ class Sviaty : AppCompatActivity(), View.OnClickListener {
                     reqParam += "&" + URLEncoder.encode("utran", "UTF-8") + "=" + URLEncoder.encode(utran, "UTF-8")
                     reqParam += "&" + URLEncoder.encode("linur", "UTF-8") + "=" + URLEncoder.encode(litur, "UTF-8")
                     reqParam += "&" + URLEncoder.encode("viach", "UTF-8") + "=" + URLEncoder.encode(viach, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("zaxavac", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
                     reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
                     val mURL = URL("https://carkva-gazeta.by/admin/android.php")
                     with(mURL.openConnection() as HttpURLConnection) {

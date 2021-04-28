@@ -69,30 +69,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="10dp"
+                android:gravity="start|top" />
 
             <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
                 android:id="@+id/sviaty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="start|top"
                 android:hint="@string/opisanie" />
 
             <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
                 android:id="@+id/utran"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="start|top"
                 android:hint="@string/utran" />
 
             <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
                 android:id="@+id/liturgia"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="start|top"
                 android:hint="@string/liturgia" />
 
             <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
                 android:id="@+id/viachernia"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="start|top"
                 android:hint="@string/viachernia" />
         </LinearLayout>
     </ScrollView>

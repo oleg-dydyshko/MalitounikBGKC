@@ -65,6 +65,10 @@ class AdminMain : AppCompatActivity() {
             val intent = Intent(this, Sviaty::class.java)
             startActivity(intent)
         }
+        binding.chytanne.setOnClickListener {
+            val intent = Intent(this, Chytanny::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setTollbarTheme() {

@@ -853,7 +853,7 @@ class ParalelnyeMesta {
             bible[2] = "Якава"
             bible[3] = "56"
         }
-        if (kniga == "1 Пет" || kniga == "1 Пт") {
+        if (kniga == "1 Пет" || kniga == "1 Птр") {
             bible[0] = "1 Петр"
             bible[1] = "1 Петра"
             bible[2] = "1 Пятра"
@@ -861,7 +861,7 @@ class ParalelnyeMesta {
             bible[4] = "1-е Петра"
             bible[5] = "1-е Пятра"
         }
-        if (kniga == "2 Пет" || kniga == "2 Пт") {
+        if (kniga == "2 Пет" || kniga == "2 Птр") {
             bible[0] = "2 Петр"
             bible[1] = "2 Петра"
             bible[2] = "2 Пятра"
@@ -893,7 +893,7 @@ class ParalelnyeMesta {
             bible[4] = "3-е Иоанна"
             bible[5] = "3-е Яна"
         }
-        if (kniga == "Иуд" || kniga == "Юд") {
+        if (kniga == "Иуд" || kniga == "Юды") {
             bible[0] = "Иуд"
             bible[1] = "Иуды"
             bible[2] = "Юды"

@@ -1265,6 +1265,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         const val ADMINNOVYZAPAVIETSEMUXA = "by.carkva_gazeta.admin.NovyZapavietSemuxa"
         const val ADMINSTARYZAPAVIETSEMUXA = "by.carkva_gazeta.admin.StaryZapavietSemuxa"
         const val ADMINSVIATYIA = "by.carkva_gazeta.admin.Sviatyia"
+        const val ADMINSVIATY = "by.carkva_gazeta.admin.Sviaty"
         const val PASOCHNICALIST = "by.carkva_gazeta.admin.PasochnicaList"
         const val BIBLIOTEKAVIEW = "by.carkva_gazeta.biblijateka.BibliotekaView"
         const val OPISANIE = "by.carkva_gazeta.resources.Opisanie"

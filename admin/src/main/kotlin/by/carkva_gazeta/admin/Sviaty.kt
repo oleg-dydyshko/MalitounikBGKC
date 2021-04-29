@@ -44,7 +44,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
     private var resetTollbarJob: Job? = null
     private val sviaty = ArrayList<SviatyData>()
     private var timerCount = 0
-    private val timer = Timer()
+    private var timer = Timer()
     private var timerTask: TimerTask? = null
     private var edittext: EditTextRobotoCondensed? = null
     private val myPermissionsWriteExternalStorage = 42
@@ -80,6 +80,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
                 timerCount++
             }
         }
+        timer = Timer()
         timer.schedule(timerTask, 0, 5000)
     }
 
@@ -166,7 +167,16 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
                 }
             }
             binding.spinnerSviaty.adapter = SpinnerAdapter(this@Sviaty, sviaty)
-            binding.spinnerSviaty.setSelection(0)
+            if (intent.extras != null) {
+                for (i in 0 until sviaty.size) {
+                    if (intent.extras?.getInt("day") == sviaty[i].data && intent.extras?.getInt("mun") == sviaty[i].mun) {
+                        binding.spinnerSviaty.setSelection(i)
+                        break
+                    }
+                }
+            } else {
+                binding.spinnerSviaty.setSelection(0)
+            }
             binding.progressBar2.visibility = View.GONE
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)

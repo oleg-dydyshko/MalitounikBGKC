@@ -1,21 +1,23 @@
 package by.carkva_gazeta.admin
 
+import android.app.Activity
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEachIndexed
 import by.carkva_gazeta.admin.databinding.AdminChytannyBinding
-import by.carkva_gazeta.malitounik.EditTextRobotoCondensed
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -24,14 +26,16 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import java.util.*
+import kotlin.collections.ArrayList
 
 class Chytanny : AppCompatActivity() {
     private lateinit var binding: AdminChytannyBinding
     private var timerCount = 0
-    private val timer = Timer()
+    private var timer = Timer()
     private var timerTask: TimerTask? = null
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
+    private val data = ArrayList<String>()
 
     override fun onResume() {
         super.onResume()
@@ -54,6 +58,7 @@ class Chytanny : AppCompatActivity() {
                 timerCount++
             }
         }
+        timer = Timer()
         timer.schedule(timerTask, 0, 5000)
     }
 
@@ -69,13 +74,8 @@ class Chytanny : AppCompatActivity() {
         urlJob?.cancel()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = AdminChytannyBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    private fun loadChytanny(year: Int) {
         urlJob = CoroutineScope(Dispatchers.Main).launch {
-            val cal = Calendar.getInstance()
-            val year = cal[Calendar.YEAR]
             binding.progressBar2.visibility = View.VISIBLE
             binding.linear.removeAllViewsInLayout()
             startTimer()
@@ -148,6 +148,23 @@ class Chytanny : AppCompatActivity() {
             stopTimer()
             binding.progressBar2.visibility = View.GONE
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = AdminChytannyBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) data.add(i.toString())
+        binding.spinnerYear.adapter = SpinnerAdapter(this, data)
+        binding.spinnerYear.setSelection(3)
+        binding.spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                loadChytanny(data[position].toInt())
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
         setTollbarTheme()
     }
 
@@ -174,6 +191,7 @@ class Chytanny : AppCompatActivity() {
         textView.layoutParams = llp
         textView.textSize = SettingsActivity.GET_DEFAULT_FONT_SIZE
         textView.setText(text)
+        textView.isSingleLine = true
         return textView
     }
 
@@ -240,8 +258,7 @@ class Chytanny : AppCompatActivity() {
                     }
                 }
             }
-            val cal = Calendar.getInstance()
-            val year = cal[Calendar.YEAR]
+            val year = data[binding.spinnerYear.selectedItemPosition].toInt()
             sendPostRequest(sb.toString().trim(), year)
         }
         return super.onOptionsItemSelected(item)
@@ -289,4 +306,46 @@ class Chytanny : AppCompatActivity() {
         }
         return true
     }
+
+    private class SpinnerAdapter(activity: Activity, private val data: ArrayList<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {
+
+        private val gc = Calendar.getInstance() as GregorianCalendar
+
+        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val v = super.getDropDownView(position, convertView, parent)
+            val textView = v as TextViewRobotoCondensed
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            textView.text = data[position]
+            if (gc[Calendar.YEAR] == data[position].toInt()) textView.setTypeface(null, Typeface.BOLD)
+            else textView.setTypeface(null, Typeface.NORMAL)
+            textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            return v
+        }
+
+        override fun getCount(): Int {
+            return data.size
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            if (convertView == null) {
+                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.text1)
+                rootView.tag = viewHolder
+            } else {
+                rootView = convertView
+                viewHolder = rootView.tag as ViewHolder
+            }
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            viewHolder.text.text = data[position]
+            if (gc[Calendar.YEAR] == data[position].toInt()) viewHolder.text.setTypeface(null, Typeface.BOLD)
+            else viewHolder.text.setTypeface(null, Typeface.NORMAL)
+            viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            return rootView
+        }
+    }
+
+    private class ViewHolder(var text: TextViewRobotoCondensed)
 }

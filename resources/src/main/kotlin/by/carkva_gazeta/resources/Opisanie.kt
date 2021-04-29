@@ -444,16 +444,22 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
             if (MainActivity.checkmodulesAdmin(this)) {
                 val intent = Intent()
-                intent.setClassName(this, MainActivity.ADMINSVIATYIA)
-                val cal = Calendar.getInstance() as GregorianCalendar
-                cal.set(Calendar.YEAR, year)
-                cal.set(Calendar.MONTH, mun - 1)
-                cal.set(Calendar.DAY_OF_MONTH, day)
-                var dayofyear = cal[Calendar.DAY_OF_YEAR] - 1
-                if (!cal.isLeapYear(cal[Calendar.YEAR]) && dayofyear >= 59) {
-                    dayofyear++
+                if (svity) {
+                    intent.setClassName(this, MainActivity.ADMINSVIATY)
+                    intent.putExtra("day", day)
+                    intent.putExtra("mun", mun)
+                } else {
+                    intent.setClassName(this, MainActivity.ADMINSVIATYIA)
+                    val cal = Calendar.getInstance() as GregorianCalendar
+                    cal.set(Calendar.YEAR, year)
+                    cal.set(Calendar.MONTH, mun - 1)
+                    cal.set(Calendar.DAY_OF_MONTH, day)
+                    var dayofyear = cal[Calendar.DAY_OF_YEAR] - 1
+                    if (!cal.isLeapYear(cal[Calendar.YEAR]) && dayofyear >= 59) {
+                        dayofyear++
+                    }
+                    intent.putExtra("dayOfYear", dayofyear)
                 }
-                intent.putExtra("dayOfYear", dayofyear)
                 startActivity(intent)
             } else {
                 MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))

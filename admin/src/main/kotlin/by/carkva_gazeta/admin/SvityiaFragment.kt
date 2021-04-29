@@ -46,7 +46,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     private val array = arrayOf("Чырвоны", "Чырвоны тоўсты", "Нармальны")
     private val arrayList = ArrayList<Tipicon>()
     private var timerCount = 0
-    private val timer = Timer()
+    private var timer = Timer()
     private var timerTask: TimerTask? = null
     private val myPermissionsWriteExternalStorage = 41
 
@@ -78,6 +78,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                 timerCount++
             }
         }
+        timer = Timer()
         timer.schedule(timerTask, 0, 5000)
     }
 

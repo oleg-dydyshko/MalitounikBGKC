@@ -608,5 +608,7 @@
     <string name="add_pesny_title">ДАДАЦЬ НОВУЮ ПЕСЬНЮ</string>
     <string name="hint_pesny_title">Імя песьні як у сказах</string>
     <string name="zmena_chastki">Зьменныя часткі</string>
+    <string name="add_piarliny">Дадаць пярліну</string>
+    <string name="clear_piarliny">Сьцерці</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

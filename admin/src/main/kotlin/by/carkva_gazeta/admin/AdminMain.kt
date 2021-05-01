@@ -69,6 +69,10 @@ class AdminMain : AppCompatActivity() {
             val intent = Intent(this, Chytanny::class.java)
             startActivity(intent)
         }
+        binding.parliny.setOnClickListener {
+            val intent = Intent(this, Piarliny::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setTollbarTheme() {

@@ -396,7 +396,7 @@ internal class ZmenyiaChastki(context: Context) {
                 }
             }
             if (chast == 4) {
-                readFile(R.raw.prichasnik)
+                result = readFile(R.raw.prichasnik)
             }
             return result
         }

@@ -82,6 +82,7 @@ class SlugbovyiaTextu {
 
         dat18.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха) - Літургія", "zmenyia_chastki_tamash", liturgia = true))
         dat18.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў – Літургія", "zmenyia_chastki_miranosicay", liturgia = true))
+        dat18.add(SlugbovyiaTextuData(28, "Нядзеля Самаранкі - Літургія", "zmenyia_chastki_samaranki", liturgia = true))
     }
 
     fun getTydzen1() = dat12

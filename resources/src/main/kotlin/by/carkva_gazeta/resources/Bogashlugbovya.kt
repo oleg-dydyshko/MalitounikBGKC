@@ -89,6 +89,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var onFind = false
     private var chechZmena = false
     private var raznica = 400
+    private var sviaty = false
+    private var daysv = 1
+    private var munsv = 0
 
     companion object {
         val resursMap = ArrayMap<String, Int>()
@@ -974,10 +977,97 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (dzenNoch) binding.imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_niz_back)
         binding.imageView5.setOnClickListener { findNext() }
         val slugbovyiaTextu = SlugbovyiaTextu()
-        if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && slugbovyiaTextu.checkLiturgia(raznica)) {
+        if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (slugbovyiaTextu.checkLiturgia(raznica) || checkDataCalindar(slugbovyiaTextu))) {
             chechZmena = true
         }
         invalidateOptionsMenu()
+    }
+
+    private val count: Int
+        get() {
+            val c = Calendar.getInstance() as GregorianCalendar
+            var dayyear = 0
+            for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) {
+                dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
+            }
+            return dayyear
+        }
+
+    private fun getCaliandarPosition(): Int {
+        val c = Calendar.getInstance() as GregorianCalendar
+        val g = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
+        for (i2 in 0 until count) {
+            if (c[Calendar.DATE] == g[Calendar.DATE] && c[Calendar.MONTH] == g[Calendar.MONTH] && c[Calendar.YEAR] == g[Calendar.YEAR]) {
+                return i2
+            }
+            g.add(Calendar.DATE, 1)
+        }
+        return 0
+    }
+
+    private fun getData(mun: Int): String {
+        return if (MenuCaliandar.munKal == mun && MenuCaliandar.dataJson != "") {
+            MenuCaliandar.dataJson
+        } else {
+            val inputStream = resources.openRawResource(MainActivity.getCaliandarResource(mun))
+            val isr = InputStreamReader(inputStream)
+            val reader = BufferedReader(isr)
+            val builder = reader.use {
+                it.readText()
+            }
+            MenuCaliandar.dataJson = builder
+            MenuCaliandar.munKal = mun
+            builder
+        }
+    }
+
+    private fun getmun(position: Int): Int {
+        var count2 = 0
+        val g = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
+        var mun = g[Calendar.MONTH]
+        for (i in 0 until count) {
+            g.add(Calendar.DATE, 1)
+            if (position == i) {
+                return count2
+            }
+            if (g[Calendar.MONTH] != mun) {
+                count2++
+                mun = g[Calendar.MONTH]
+            }
+        }
+        return count2
+    }
+
+    private fun checkDataCalindar(slugbovyiaTextu: SlugbovyiaTextu): Boolean {
+        slugbovyiaTextu.loadOpisanieSviat(this)
+        val data = ArrayList<ArrayList<String>>()
+        val gson = Gson()
+        val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+        data.addAll(gson.fromJson(getData(getmun(getCaliandarPosition())), type))
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.DATE, -1)
+        val day = cal[Calendar.DATE]
+        val svity = data[day][6]
+        daysv = data[day][1].toInt()
+        munsv = data[day][2].toInt() + 1
+        if (svity.contains("уваход у ерусалім", true)) {
+            daysv = -1
+            munsv = 0
+        }
+        if (svity.contains("уваскрасеньне", true)) {
+            daysv = -1
+            munsv = 1
+        }
+        if (svity.contains("узьнясеньне", true)) {
+            daysv = -1
+            munsv = 2
+        }
+        if (svity.contains("зыход", true)) {
+            daysv = -1
+            munsv = 3
+        }
+        sviaty = slugbovyiaTextu.checkLiturgia(daysv, munsv)
+        return sviaty
     }
 
     private fun autoStartScroll() {
@@ -1213,10 +1303,17 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (id == by.carkva_gazeta.malitounik.R.id.action_zmena) {
             val slugba = SlugbovyiaTextu()
             val intent = Intent(this, Ton::class.java)
-            val resours = slugba.getResource(raznica, liturgia = true)
-            intent.putExtra("resurs", resours)
-            intent.putExtra("zmena_chastki", true)
-            intent.putExtra("title", slugba.getTitle(resours))
+            if (sviaty) {
+                intent.putExtra("ton_na_sviaty", true)
+                intent.putExtra("lityrgia", 4)
+                intent.putExtra("day", daysv)
+                intent.putExtra("mun", munsv)
+            } else {
+                val resours = slugba.getResource(raznica, liturgia = true)
+                intent.putExtra("resurs", resours)
+                intent.putExtra("zmena_chastki", true)
+                intent.putExtra("title", slugba.getTitle(resours))
+            }
             startActivity(intent)
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {

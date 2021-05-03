@@ -177,6 +177,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     }
 
     private fun loadOpisanieSviat() {
+        binding.linearLayout.removeAllViewsInLayout()
         val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
         val builder = fileOpisanieSviat.readText()
         val gson = Gson()

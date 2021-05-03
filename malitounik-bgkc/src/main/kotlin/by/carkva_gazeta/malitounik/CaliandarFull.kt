@@ -456,7 +456,26 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     } else {
                         data[day][7].toInt()
                     }
-                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20].toInt(), data[day][0].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1, data[day][22].toInt(), data[day][4], data[day][23] == "1", data[day][3].toInt())
+                    val svity = data[day][6]
+                    var daysv = data[day][1].toInt()
+                    var munsv = data[day][2].toInt() + 1
+                    if (svity.contains("уваход у ерусалім", true)) {
+                        daysv = -1
+                        munsv = 0
+                    }
+                    if (svity.contains("уваскрасеньне", true)) {
+                        daysv = -1
+                        munsv = 1
+                    }
+                    if (svity.contains("узьнясеньне", true)) {
+                        daysv = -1
+                        munsv = 2
+                    }
+                    if (svity.contains("зыход", true)) {
+                        daysv = -1
+                        munsv = 3
+                    }
+                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20].toInt(), data[day][0].toInt(), daysv, munsv, data[day][22].toInt(), data[day][4], data[day][23] == "1", data[day][3].toInt())
                     dialogCalindarGrid.show(it, "grid")
                 }
             }

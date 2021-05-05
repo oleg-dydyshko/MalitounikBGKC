@@ -223,7 +223,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.trash) {
-            val natatki = DialogDeliteAllZakladkiINatatki.getInstance(resources.getString(by.carkva_gazeta.malitounik.R.string.natatki_biblii).toLowerCase(Locale.getDefault()), semuxa)
+            val natatki = DialogDeliteAllZakladkiINatatki.getInstance(resources.getString(by.carkva_gazeta.malitounik.R.string.natatki_biblii).lowercase(), semuxa)
             natatki.show(supportFragmentManager, "delite_all_zakladki_i_natatki")
         }
         return super.onOptionsItemSelected(item)

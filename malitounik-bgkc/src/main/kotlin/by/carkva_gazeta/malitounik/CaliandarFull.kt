@@ -475,7 +475,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         daysv = -1
                         munsv = 3
                     }
-                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20].toInt(), data[day][0].toInt(), daysv, munsv, data[day][22].toInt(), data[day][4], data[day][23] == "1", data[day][3].toInt())
+                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20].toInt(), data[day][0].toInt(), daysv, munsv, data[day][22].toInt(), data[day][4], data[day][23] == "1", data[day][3].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1)
                     dialogCalindarGrid.show(it, "grid")
                 }
             }

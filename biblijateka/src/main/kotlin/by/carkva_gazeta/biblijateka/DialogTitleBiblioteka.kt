@@ -23,8 +23,6 @@ import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
-import java.util.*
-import kotlin.collections.ArrayList
 
 class DialogTitleBiblioteka : DialogFragment() {
     private var bookmarks: ArrayList<String> = ArrayList()
@@ -67,7 +65,7 @@ class DialogTitleBiblioteka : DialogFragment() {
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(R.string.zmest).toUpperCase(Locale.getDefault())
+            textViewZaglavie.text = resources.getString(R.string.zmest).uppercase()
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))

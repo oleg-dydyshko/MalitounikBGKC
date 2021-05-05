@@ -76,7 +76,7 @@ class DialogBibliateka : DialogFragment() {
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             val file = File(it.filesDir.toString() + "/Biblijateka/" + listPosition)
             if (file.exists()) {
-                textViewZaglavie.text = getString(R.string.opisanie).toUpperCase(Locale.getDefault())
+                textViewZaglavie.text = getString(R.string.opisanie).uppercase()
             } else {
                 textViewZaglavie.text = getString(R.string.download_file, "")
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

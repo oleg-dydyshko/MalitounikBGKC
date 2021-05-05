@@ -23,7 +23,7 @@ import java.util.*
 class DialogCalindarGrid : DialogFragment() {
 
     companion object {
-        fun getInstance(post: Int, ton: Int, denNedzeli: Int, data: Int, mun: Int, raznicia: Int, svityiaName: String, checkSviatyia: Boolean, year: Int): DialogCalindarGrid {
+        fun getInstance(post: Int, ton: Int, denNedzeli: Int, data: Int, mun: Int, raznicia: Int, svityiaName: String, checkSviatyia: Boolean, year: Int, datareal: Int, munreal: Int): DialogCalindarGrid {
             val bundle = Bundle()
             bundle.putInt("post", post)
             bundle.putInt("ton", ton)
@@ -34,6 +34,8 @@ class DialogCalindarGrid : DialogFragment() {
             bundle.putInt("raznicia", raznicia)
             bundle.putString("svityiaName", svityiaName)
             bundle.putBoolean("checkSviatyia", checkSviatyia)
+            bundle.putInt("datareal", datareal)
+            bundle.putInt("munreal", munreal)
             val dialog = DialogCalindarGrid()
             dialog.arguments = bundle
             return dialog
@@ -49,6 +51,8 @@ class DialogCalindarGrid : DialogFragment() {
     private var denNedzeli = Calendar.SUNDAY
     private var data = 1
     private var mun = 1
+    private var datareal = 1
+    private var munreal = 1
     private var year = 2020
     private var raznicia = 400
     private var issetSvityia = true
@@ -140,6 +144,8 @@ class DialogCalindarGrid : DialogFragment() {
             denNedzeli = arguments?.getInt("denNedzeli") ?: 1
             data = arguments?.getInt("data") ?: 1
             mun = arguments?.getInt("mun") ?: 1
+            datareal = arguments?.getInt("datareal") ?: 1
+            munreal = arguments?.getInt("munreal") ?: 1
             year = arguments?.getInt("year", year) ?: 2020
             raznicia = arguments?.getInt("raznicia", 400) ?: 400
             sviatyaName = arguments?.getString("svityiaName", "no_sviatyia") ?: "no_sviatyia"
@@ -347,8 +353,8 @@ class DialogCalindarGrid : DialogFragment() {
                             if (!issetSvityia) {
                                 val i = Intent()
                                 i.setClassName(it, MainActivity.OPISANIE)
-                                i.putExtra("mun", mun)
-                                i.putExtra("day", data)
+                                i.putExtra("mun", munreal)
+                                i.putExtra("day", datareal)
                                 i.putExtra("year", year)
                                 startActivity(i)
                             }

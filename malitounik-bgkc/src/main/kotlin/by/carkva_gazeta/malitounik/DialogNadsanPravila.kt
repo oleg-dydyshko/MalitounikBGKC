@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.*
 
 class DialogNadsanPravila : DialogFragment() {
     private lateinit var alert: AlertDialog
@@ -32,7 +31,7 @@ class DialogNadsanPravila : DialogFragment() {
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(R.string.peryiady).toUpperCase(Locale.getDefault())
+            textViewZaglavie.text = resources.getString(R.string.peryiady).uppercase()
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))

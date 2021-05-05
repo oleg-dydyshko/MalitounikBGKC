@@ -425,7 +425,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         }
 
         override fun getPageTitle(position: Int): CharSequence {
-            return malitvy[position].title.toUpperCase(Locale.getDefault())
+            return malitvy[position].title.uppercase()
         }
 
         override fun getItemPosition(`object`: Any): Int {

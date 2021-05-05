@@ -14,7 +14,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
-import java.util.*
 
 class DialogDeliteAllZakladkiINatatki : DialogFragment() {
     private var mListener: DialogDeliteAllZakladkiINatatkiListener? = null
@@ -57,7 +56,7 @@ class DialogDeliteAllZakladkiINatatki : DialogFragment() {
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(R.string.Trash).toUpperCase(Locale.getDefault())
+            textViewZaglavie.text = resources.getString(R.string.Trash).uppercase()
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewZaglavie.setTypeface(null, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))

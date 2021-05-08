@@ -158,8 +158,7 @@ class MenuCviaty : CviatyListFragment() {
             val nedelName = arrayOf("", "нядзеля", "панядзелак", "аўторак", "серада", "чацьвер", "пятніца", "субота")
             val k = context?.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k?.getBoolean("dzen_noch", false)
-            val color: String
-            color = if (dzenNoch == true) "<font color=\"#f44336\">" else "<font color=\"#d00505\">"
+            val color = if (dzenNoch == true) "<font color=\"#f44336\">" else "<font color=\"#d00505\">"
             var prazdnik = emptyArray<Prazdniki>()
             c = GregorianCalendar(yearG, 0, 6)
             prazdnik += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--1-->" + color + "Богазьяўленьне (Вадохрышча)</font>", "<br><strong><em>6 студзеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + " </strong></em>")

@@ -234,6 +234,49 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["ton6_budni"] = R.raw.ton6_budni
             resursMap["ton7"] = R.raw.ton7
             resursMap["ton8"] = R.raw.ton8
+            resursMap["viachernia_niadzeli"] = R.raw.viachernia_niadzeli
+            resursMap["liccia_i_blaslavenne_xliabou"] = R.raw.liccia_i_blaslavenne_xliabou
+            resursMap["viachernia_na_kogny_dzen"] = R.raw.viachernia_na_kogny_dzen
+            resursMap["viachernia_y_vialikim_poste"] = R.raw.viachernia_y_vialikim_poste
+            resursMap["viachernia_ton1"] = R.raw.viachernia_ton1
+            resursMap["viachernia_ton2"] = R.raw.viachernia_ton2
+            resursMap["viachernia_ton3"] = R.raw.viachernia_ton3
+            resursMap["viachernia_ton4"] = R.raw.viachernia_ton4
+            resursMap["viachernia_ton5"] = R.raw.viachernia_ton5
+            resursMap["viachernia_ton6"] = R.raw.viachernia_ton6
+            resursMap["viachernia_ton7"] = R.raw.viachernia_ton7
+            resursMap["viachernia_ton8"] = R.raw.viachernia_ton8
+            resursMap["viachernia_bagarodzichnia_adpushchalnyia"] = R.raw.viachernia_bagarodzichnia_adpushchalnyia
+            resursMap["viachernia_mineia_agulnaia1"] = R.raw.viachernia_mineia_agulnaia1
+            resursMap["viachernia_mineia_agulnaia2"] = R.raw.viachernia_mineia_agulnaia2
+            resursMap["viachernia_mineia_agulnaia3"] = R.raw.viachernia_mineia_agulnaia3
+            resursMap["viachernia_mineia_agulnaia4"] = R.raw.viachernia_mineia_agulnaia4
+            resursMap["viachernia_mineia_agulnaia5"] = R.raw.viachernia_mineia_agulnaia5
+            resursMap["viachernia_mineia_agulnaia6"] = R.raw.viachernia_mineia_agulnaia6
+            resursMap["viachernia_mineia_agulnaia7"] = R.raw.viachernia_mineia_agulnaia7
+            resursMap["viachernia_mineia_agulnaia8"] = R.raw.viachernia_mineia_agulnaia8
+            resursMap["viachernia_mineia_agulnaia9"] = R.raw.viachernia_mineia_agulnaia9
+            resursMap["viachernia_mineia_agulnaia10"] = R.raw.viachernia_mineia_agulnaia10
+            resursMap["viachernia_mineia_agulnaia11"] = R.raw.viachernia_mineia_agulnaia11
+            resursMap["viachernia_mineia_agulnaia12"] = R.raw.viachernia_mineia_agulnaia12
+            resursMap["viachernia_mineia_agulnaia13"] = R.raw.viachernia_mineia_agulnaia13
+            resursMap["viachernia_mineia_agulnaia14"] = R.raw.viachernia_mineia_agulnaia14
+            resursMap["viachernia_mineia_agulnaia15"] = R.raw.viachernia_mineia_agulnaia15
+            resursMap["viachernia_mineia_agulnaia16"] = R.raw.viachernia_mineia_agulnaia16
+            resursMap["viachernia_mineia_agulnaia17"] = R.raw.viachernia_mineia_agulnaia17
+            resursMap["viachernia_mineia_agulnaia18"] = R.raw.viachernia_mineia_agulnaia18
+            resursMap["viachernia_mineia_agulnaia19"] = R.raw.viachernia_mineia_agulnaia19
+            resursMap["viachernia_mineia_agulnaia20"] = R.raw.viachernia_mineia_agulnaia20
+            resursMap["viachernia_mineia_agulnaia21"] = R.raw.viachernia_mineia_agulnaia21
+            resursMap["viachernia_mineia_agulnaia22"] = R.raw.viachernia_mineia_agulnaia22
+            resursMap["viachernia_mineia_agulnaia23"] = R.raw.viachernia_mineia_agulnaia23
+            resursMap["viachernia_mineia_sviatochnaia1"] = R.raw.viachernia_mineia_sviatochnaia1
+            resursMap["viachernia_mineia_sviatochnaia2"] = R.raw.viachernia_mineia_sviatochnaia2
+            resursMap["viachernia_mineia_sviatochnaia3"] = R.raw.viachernia_mineia_sviatochnaia3
+            resursMap["viachernia_mineia_sviatochnaia4"] = R.raw.viachernia_mineia_sviatochnaia4
+            resursMap["viachernia_mineia_sviatochnaia5"] = R.raw.viachernia_mineia_sviatochnaia5
+            resursMap["viachernia_mineia_sviatochnaia6"] = R.raw.viachernia_mineia_sviatochnaia6
+            resursMap["viachernia_mineia_sviatochnaia7"] = R.raw.viachernia_mineia_sviatochnaia7
             PesnyAll.resursMap.forEach {
                 resursMap[it.key] = it.value
             }
@@ -896,8 +939,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
-        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("ton")) {
-            if (resurs.contains("ton")) mAutoScroll = false
+        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("viachernia")) {
             if (savedInstanceState == null) {
                 if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
                     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -927,10 +969,22 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }
             }
         } else {
-            binding.scrollView2.post {
-                binding.scrollView2.smoothScrollBy(0, positionY)
-                if (autoscroll) {
-                    startAutoScroll()
+            if (resurs.contains("viachernia_ton")) {
+                binding.textView.post {
+                    val cal = Calendar.getInstance()
+                    val dzenNedeliname = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.dni_nedeli)
+                    val textline = dzenNedeliname[cal[Calendar.DAY_OF_WEEK]]
+                    val index = binding.textView.text.indexOf(textline, ignoreCase = true)
+                    val line = binding.textView.layout.getLineForOffset(index)
+                    val y = binding.textView.layout.getLineTop(line)
+                    binding.scrollView2.scrollY = y
+                }
+            } else {
+                binding.scrollView2.post {
+                    binding.scrollView2.smoothScrollBy(0, positionY)
+                    if (autoscroll) {
+                        startAutoScroll()
+                    }
                 }
             }
         }
@@ -1225,7 +1279,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         val itemVybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         val find = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find)
-        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec")) {
+        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("viachernia")) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
         }
         if (mAutoScroll) {

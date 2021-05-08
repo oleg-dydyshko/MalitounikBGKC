@@ -64,7 +64,7 @@ class DialogCalindarGrid : DialogFragment() {
     private fun getImage(id: Int, imageWhite: Boolean = false, imageSecondary: Boolean = false): Int {
         if (id == 1) {
             if (imageWhite) return R.drawable.moon2_white
-            if (imageSecondary) return R.drawable.moon2_secondary
+            if (imageSecondary) return 0
             return R.drawable.moon2_black
         }
         if (id == 2) {
@@ -230,9 +230,6 @@ class DialogCalindarGrid : DialogFragment() {
                 if (!(slugba.checkUtran(data, mun) || slugba.checkUtran(raznicia) || denNedzeli == 1) && mItemList[position] == 4) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                } else if (!(slugba.checkViachernia(data, mun) || slugba.checkViachernia(raznicia)) && mItemList[position] == 1) {
-                    holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
-                    holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                 } else if (issetSvityia && mItemList[position] == 7) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
@@ -288,6 +285,10 @@ class DialogCalindarGrid : DialogFragment() {
                                     intent.putExtra("resurs", resours)
                                     intent.putExtra("zmena_chastki", true)
                                     intent.putExtra("title", slugba.getTitle(resours))
+                                    startActivity(intent)
+                                }
+                                else -> {
+                                    val intent = Intent(activity, ViacherniaList::class.java)
                                     startActivity(intent)
                                 }
                             }

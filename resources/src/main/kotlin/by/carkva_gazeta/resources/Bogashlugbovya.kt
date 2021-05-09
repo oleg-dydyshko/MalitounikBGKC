@@ -160,6 +160,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["zmenyia_chastki_tamash"] = R.raw.zmenyia_chastki_tamash
             resursMap["zmenyia_chastki_miranosicay"] = R.raw.zmenyia_chastki_miranosicay
             resursMap["zmenyia_chastki_samaranki"] = R.raw.zmenyia_chastki_samaranki
+            resursMap["zmenyia_chastki_slepanarodz"] = R.raw.zmenyia_chastki_slepanarodz
             resursMap["akafist0"] = R.raw.akafist0
             resursMap["akafist1"] = R.raw.akafist1
             resursMap["akafist2"] = R.raw.akafist2

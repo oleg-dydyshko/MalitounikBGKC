@@ -78,7 +78,7 @@ class ViacherniaList : AppCompatActivity() {
                     }
                     1 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "liccia_i_blaslavenne_xliabou")
+                        intent.putExtra("resurs", "viachernia_liccia_i_blaslavenne_xliabou")
                     }
                     2 -> {
                         intent.putExtra("title", data[position])

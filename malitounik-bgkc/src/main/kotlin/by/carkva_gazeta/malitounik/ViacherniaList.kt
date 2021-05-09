@@ -218,29 +218,33 @@ class ViacherniaList : AppCompatActivity() {
                     }
                     36 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia1")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia24")
                     }
                     37 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia2")
+                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia1")
                     }
                     38 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia3")
+                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia2")
                     }
                     39 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia4")
+                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia3")
                     }
                     40 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia5")
+                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia4")
                     }
                     41 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia6")
+                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia5")
                     }
                     42 -> {
+                        intent.putExtra("title", data[position])
+                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia6")
+                    }
+                    43 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "viachernia_mineia_sviatochnaia7")
                     }

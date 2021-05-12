@@ -55,7 +55,7 @@ class ViacherniaList : AppCompatActivity() {
             }
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        binding.titleToolbar.text = resources.getText(R.string.viachernia)
+        binding.titleToolbar.text = resources.getText(R.string.actiox)
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
             binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
@@ -74,177 +74,161 @@ class ViacherniaList : AppCompatActivity() {
                 when (position) {
                     0 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_niadzeli")
+                        intent.putExtra("resurs", "viachernia_ton1")
                     }
                     1 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_liccia_i_blaslavenne_xliabou")
+                        intent.putExtra("resurs", "viachernia_ton2")
                     }
                     2 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_na_kogny_dzen")
+                        intent.putExtra("resurs", "viachernia_ton3")
                     }
                     3 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_y_vialikim_poste")
+                        intent.putExtra("resurs", "viachernia_ton4")
                     }
                     4 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_ton1")
+                        intent.putExtra("resurs", "viachernia_ton5")
                     }
                     5 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_ton2")
+                        intent.putExtra("resurs", "viachernia_ton6")
                     }
                     6 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_ton3")
+                        intent.putExtra("resurs", "viachernia_ton7")
                     }
                     7 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_ton4")
+                        intent.putExtra("resurs", "viachernia_ton8")
                     }
                     8 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_ton5")
+                        intent.putExtra("resurs", "viachernia_bagarodzichnia_adpushchalnyia")
                     }
                     9 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_ton6")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia1")
                     }
                     10 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_ton7")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia2")
                     }
                     11 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_ton8")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia3")
                     }
                     12 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_bagarodzichnia_adpushchalnyia")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia4")
                     }
                     13 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia1")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia5")
                     }
                     14 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia2")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia6")
                     }
                     15 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia3")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia7")
                     }
                     16 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia4")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia8")
                     }
                     17 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia5")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia9")
                     }
                     18 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia6")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia10")
                     }
                     19 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia7")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia11")
                     }
                     20 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia8")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia12")
                     }
                     21 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia9")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia13")
                     }
                     22 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia10")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia14")
                     }
                     23 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia11")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia15")
                     }
                     24 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia12")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia16")
                     }
                     25 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia13")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia17")
                     }
                     26 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia14")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia18")
                     }
                     27 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia15")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia19")
                     }
                     28 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia16")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia20")
                     }
                     29 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia17")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia21")
                     }
                     30 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia18")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia22")
                     }
                     31 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia19")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia23")
                     }
                     32 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia20")
+                        intent.putExtra("resurs", "viachernia_mineia_agulnaia24")
                     }
                     33 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia21")
+                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia1")
                     }
                     34 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia22")
+                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia2")
                     }
                     35 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia23")
+                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia3")
                     }
                     36 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_agulnaia24")
+                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia4")
                     }
                     37 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia1")
+                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia5")
                     }
                     38 -> {
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia2")
-                    }
-                    39 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia3")
-                    }
-                    40 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia4")
-                    }
-                    41 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia5")
-                    }
-                    42 -> {
-                        intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "viachernia_mineia_sviatochnaia6")
                     }
-                    43 -> {
+                    39 -> {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "viachernia_mineia_sviatochnaia7")
                     }

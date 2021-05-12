@@ -399,7 +399,11 @@
         <item>Набажэнства ў гонар Маці Божай Нястомнай Дапамогі</item>
         <item>Малітвы пасьля сьвятога прычасьця</item>
         <item>Ютрань нядзельная (у скароце)</item>
-        <item>Вячэрня</item>
+        <item>Вячэрня ў нядзелі і сьвяты</item>
+        <item>Ліцьця і блаславеньне хлябоў</item>
+        <item>Вячэрня ў звычайныя дні</item>
+        <item>Вячэрня ў вялікім посьце</item>
+        <item>Актоіх</item>
         <item>Абедніца</item>
         <item>Служба за памерлых — Малая паніхіда</item>
         <item>Трапары і кандакі нядзельныя васьмі тонаў</item>
@@ -611,11 +615,8 @@
     <string name="zmena_chastki">Зьменныя часткі</string>
     <string name="add_piarliny">Дадаць пярліну</string>
     <string name="clear_piarliny">Сьцерці</string>
+    <string name="actiox">Актоіх</string>
     <string-array name="viachernia_list">
-        <item>Вячэрня ў нядзелі і сьвяты</item>
-        <item>Ліцьця і блаславеньне хлябоў</item>
-        <item>Вячэрня ў звычайныя дні</item>
-        <item>Вячэрня ў вялікім посьце</item>
         <item>Вячэрня Тон 1</item>
         <item>Вячэрня Тон 2</item>
         <item>Вячэрня Тон 3</item>

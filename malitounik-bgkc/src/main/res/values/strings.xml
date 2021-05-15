@@ -658,5 +658,6 @@
         <item>16 студзеня Пакланеньне кайданам апостала Пятра</item>
         <item>30 студзеня Трох сьвятаначальнікаў: Васіля Вялікага, Рыгора Багаслова і Яна Залатавуснага</item>
     </string-array>
+    <string name="title_dynamicfeature">Admin</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

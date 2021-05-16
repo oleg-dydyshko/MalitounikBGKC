@@ -1596,17 +1596,17 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             }
             prefEditor.apply()
         }
-        binding.vibro.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        binding.guk.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        binding.sinoidal.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        binding.maranata.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        binding.prav.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        binding.pkc.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        binding.dzair.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        binding.praf.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        binding.checkBox5.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        binding.checkBox6.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
-        binding.checkBox7.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+        binding.vibro.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
+        binding.guk.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
+        binding.sinoidal.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
+        binding.maranata.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
+        binding.prav.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
+        binding.pkc.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
+        binding.dzair.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
+        binding.praf.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
+        binding.checkBox5.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
+        binding.checkBox6.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
+        binding.checkBox7.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
         if (savedInstanceState == null && (notification == 1 || notification == 2)) {
             if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true)) {
                 val notifi = DialogHelpNotification()

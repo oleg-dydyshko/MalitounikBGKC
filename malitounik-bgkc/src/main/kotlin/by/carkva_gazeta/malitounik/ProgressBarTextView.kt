@@ -15,7 +15,7 @@ class ProgressBarTextView : AppCompatTextView {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     override fun setTypeface(tf: Typeface?, style: Int) {
-        typeface = TextViewRobotoCondensed.createFont(style)
+        typeface = TextViewRobotoCondensed.createFont(context, style)
     }
 
     @Synchronized

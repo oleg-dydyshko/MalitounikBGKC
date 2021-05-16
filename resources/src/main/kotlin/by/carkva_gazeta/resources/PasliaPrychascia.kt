@@ -105,7 +105,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         for (i in 0 until binding.pagerTabStrip.childCount) {
             val nextChild = binding.pagerTabStrip.getChildAt(i)
             if (nextChild is TextView) {
-                nextChild.typeface = TextViewRobotoCondensed.createFont(Typeface.BOLD)
+                nextChild.typeface = TextViewRobotoCondensed.createFont(this, Typeface.BOLD)
                 if (dzenNoch)
                     nextChild.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
                 else

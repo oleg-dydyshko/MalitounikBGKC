@@ -41,7 +41,7 @@ class DialogSemuxaNoKnigi : DialogFragment() {
             linearLayout.addView(textView)
             val checkBox = CheckBox(it)
             checkBox.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            checkBox.typeface = TextViewRobotoCondensed.createFont(Typeface.NORMAL)
+            checkBox.typeface = TextViewRobotoCondensed.createFont(it, Typeface.NORMAL)
             checkBox.text = getString(R.string.sabytie_check_mun)
             checkBox.setOnCheckedChangeListener { _, isChecked ->
                 val edit = chin.edit()

@@ -12,7 +12,7 @@
         <item name="android:textColor">@color/colorPrimary_text</item>
         <!--<item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>-->
-        <item name="fontFamily">sans-serif-condensed</item>
+        <item name="fontFamily">@font/robotocondensed</item>
     </style>
 
     <style name="Theme.Transparent" parent="AppTheme">
@@ -68,6 +68,6 @@
         <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorPrimary_text</item>
         <item name="android:textColorSecondary">@color/colorSecondary_text</item>
         <item name="android:textColor">@color/colorWhite</item>
-        <item name="fontFamily">sans-serif-condensed</item>
+        <item name="fontFamily">@font/robotocondensed</item>
     </style>
 </resources>

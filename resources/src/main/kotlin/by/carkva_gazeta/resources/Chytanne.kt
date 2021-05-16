@@ -820,9 +820,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                     } catch (t: Throwable) {
                         error()
                     }
+                    if (i == 1 && e == 0) titleTwo = title
                 }
                 binding.textView.text = ssbTitle.trim()
-                if (i == 1) titleTwo = title
             }
             if (k.getBoolean("utran", true) && wOld.contains("На ютрані:") && savedInstanceState == null) {
                 binding.textView.post {

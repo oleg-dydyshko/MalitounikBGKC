@@ -79,6 +79,11 @@
                 android:gravity="start|top"
                 android:hint="@string/opisanie" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/colorPrimary" />
+
             <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
                 android:id="@+id/utran"
                 android:layout_width="match_parent"
@@ -86,12 +91,22 @@
                 android:gravity="start|top"
                 android:hint="@string/utran" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/colorPrimary" />
+
             <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
                 android:id="@+id/liturgia"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="start|top"
                 android:hint="@string/liturgia" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/colorPrimary" />
 
             <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
                 android:id="@+id/viachernia"

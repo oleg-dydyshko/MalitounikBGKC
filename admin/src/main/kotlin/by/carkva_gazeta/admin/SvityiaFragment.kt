@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaPageFragmentBinding
 import by.carkva_gazeta.malitounik.MainActivity
@@ -55,8 +54,8 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         if (requestCode == myPermissionsWriteExternalStorage) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 fragmentManager?.let {
-                    val fileExplorer = DialogImageFileExplorer()
-                    fileExplorer.show(it, "file_explorer")
+                    val dialogImageFileExplorer = DialogImageFileExplorer()
+                    dialogImageFileExplorer.show(it, "dialogImageFileExplorer")
                 }
             }
         }
@@ -257,7 +256,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
             activity?.let { activity ->
                 val permissionCheck = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
                 if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                    ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                    requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
                 } else {
                     fragmentManager?.let {
                         val dialogImageFileExplorer = DialogImageFileExplorer()

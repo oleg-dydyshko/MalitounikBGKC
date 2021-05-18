@@ -394,7 +394,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             searchViewQwery = poshuk1
             val menuListData = getMenuListData()
             for (i in menuListData.indices) {
-                val inputStream = resources.openRawResource(menuListData[i].id)
+                val inputStream = resources.openRawResource(PesnyAll.listRaw(activity, menuListData[i].type) )
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
                 var line: String
@@ -434,8 +434,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         reader.forEachLine {
             line = it
             val split = line.split("<>")
-            val id = PesnyAll.listRaw(activity, split[0])
-            menuListData.add(MenuListData(id, split[1], split[0]))
+            menuListData.add(MenuListData(split[1], split[0]))
         }
         if (pesny != "no_filter") {
             menuListData = menuListData.filter {

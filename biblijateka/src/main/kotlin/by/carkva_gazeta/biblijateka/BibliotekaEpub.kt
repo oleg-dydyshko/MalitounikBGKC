@@ -14,17 +14,19 @@ internal class BibliotekaEpub(dirPatch: String) {
 
     private fun getFullPatch(dirPatch: String): String {
         val file = File("$dirPatch/META-INF/container.xml")
-        val inputStream = FileReader(file)
-        val reader = BufferedReader(inputStream)
-        val line = reader.readText()
-        inputStream.close()
-        val t1 = line.indexOf("full-path=\"")
-        val t2 = line.indexOf("\"", t1 + 11)
-        contentOpf = line.substring(t1 + 11, t2)
-        val t3 = contentOpf.lastIndexOf("/")
-        if (t3 != -1) {
-            rootDir = "/" + contentOpf.substring(0, t3 + 1)
-            contentOpf = contentOpf.substring(t3 + 1)
+        if (file.exists()) {
+            val inputStream = FileReader(file)
+            val reader = BufferedReader(inputStream)
+            val line = reader.readText()
+            inputStream.close()
+            val t1 = line.indexOf("full-path=\"")
+            val t2 = line.indexOf("\"", t1 + 11)
+            contentOpf = line.substring(t1 + 11, t2)
+            val t3 = contentOpf.lastIndexOf("/")
+            if (t3 != -1) {
+                rootDir = "/" + contentOpf.substring(0, t3 + 1)
+                contentOpf = contentOpf.substring(t3 + 1)
+            }
         }
         return dirPatch + rootDir
     }

@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import android.widget.TextView
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -207,7 +208,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             if (dzenNoch) binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             else binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                         }
-                        binding.textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
+                        binding.textCviatyGlavnyia.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
                         binding.textCviatyGlavnyia.isEnabled = false
                     } else {
                         if (data[day][6].contains("нядзел", true) || data[day][6].contains("сьветл", true)) binding.textCviatyGlavnyia.isEnabled = false
@@ -326,7 +327,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     }
                 }
                 if (data[day][5].contains("2")) {
-                    binding.textCviatyGlavnyia.setTypeface(null, Typeface.NORMAL)
+                    binding.textCviatyGlavnyia.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
                 }
                 if (data[day][8] != "") {
                     binding.textPredsviaty.text = MainActivity.fromHtml(data[day][8])
@@ -579,7 +580,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
 
     private fun sabytieView(sabytieTitle: String) {
         val gc = Calendar.getInstance() as GregorianCalendar
-        val sabytieList = ArrayList<TextViewRobotoCondensed>()
+        val sabytieList = ArrayList<TextView>()
         MainActivity.padzeia.sort()
         for (index in 0 until MainActivity.padzeia.size) {
             val p = MainActivity.padzeia[index]
@@ -624,17 +625,17 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     activity?.let { activity ->
                         val density = resources.displayMetrics.density
                         val realpadding = (5 * density).toInt()
-                        val textViewT = TextViewRobotoCondensed(activity)
+                        val textViewT = TextView(activity)
                         textViewT.text = title
                         textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        textViewT.setTypeface(null, Typeface.BOLD)
+                        textViewT.typeface = MainActivity.createFont(activity,  Typeface.BOLD)
                         textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-                        textViewT.setTypeface(null, Typeface.BOLD)
+                        textViewT.typeface = MainActivity.createFont(activity,  Typeface.BOLD)
 
                         textViewT.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                         textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(activity)[p.color]))
                         sabytieList.add(textViewT)
-                        val textView = TextViewRobotoCondensed(activity)
+                        val textView = TextView(activity)
                         textView.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_text))
                         textView.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorDivider))
                         textView.setPadding(realpadding, realpadding, realpadding, realpadding)

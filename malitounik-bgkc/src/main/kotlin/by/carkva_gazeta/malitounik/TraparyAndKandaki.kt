@@ -11,6 +11,7 @@ import android.util.TypedValue
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.text.toSpanned
@@ -182,7 +183,7 @@ class TraparyAndKandaki : DialogFragment() {
         }
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 
     private data class Bogaslujbovyia(val title: Spanned, val lityrgia: Int, val sviata: Boolean = false, val post: Boolean = false, val sviatyia: Boolean = false)
 }

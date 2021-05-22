@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.storage.StorageManager
 import android.util.TypedValue
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -71,7 +72,7 @@ class DialogBibliateka : DialogFragment() {
             linearLayout2.addView(linearLayout)
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
-            val textViewZaglavie = TextViewRobotoCondensed(it)
+            val textViewZaglavie = TextView(it)
             if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             val file = File(it.filesDir.toString() + "/Biblijateka/" + listPosition)
@@ -96,13 +97,13 @@ class DialogBibliateka : DialogFragment() {
                 }
             }
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.setTypeface(null, Typeface.BOLD)
+            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
             val isv = InteractiveScrollView(it)
             isv.isVerticalScrollBarEnabled = false
             linearLayout.addView(isv)
-            val textView = TextViewRobotoCondensed(it)
+            val textView = TextView(it)
             textView.text = MainActivity.fromHtml(listStr)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))

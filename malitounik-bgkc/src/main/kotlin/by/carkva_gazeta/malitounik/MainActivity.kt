@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
+import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -18,10 +19,12 @@ import android.util.TypedValue
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentTransaction
@@ -152,7 +155,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    private fun ajustCompoundDrawableSizeWithText(textView: TextViewRobotoCondensed, leftDrawable: Drawable?) {
+    private fun ajustCompoundDrawableSizeWithText(textView: TextView, leftDrawable: Drawable?) {
         leftDrawable?.setBounds(0, 0, textView.textSize.toInt(), textView.textSize.toInt())
         textView.setCompoundDrawables(leftDrawable, null, null, null)
     }
@@ -1346,12 +1349,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             val progressBarModule = context.findViewById<ProgressBar>(R.id.progressBarModule)
             val layoutDialod = context.findViewById<LinearLayout>(R.id.linear)
             val layoutDialod2 = context.findViewById<LinearLayout>(R.id.linear2)
-            val text = context.findViewById<TextViewRobotoCondensed>(R.id.textProgress)
+            val text = context.findViewById<TextView>(R.id.textProgress)
             val k: SharedPreferences = context.getSharedPreferences("biblia", MODE_PRIVATE)
             val dzenNoch: Boolean = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 layoutDialod2.setBackgroundResource(R.color.colorbackground_material_dark)
-                val maduleDownload = context.findViewById<TextViewRobotoCondensed>(R.id.module_download)
+                val maduleDownload = context.findViewById<TextView>(R.id.module_download)
                 maduleDownload.setBackgroundResource(R.color.colorPrimary_black)
             }
             val splitInstallManager = SplitInstallManagerFactory.create(context)
@@ -1688,7 +1691,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             val layout = LinearLayout(context)
             if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black)
             else layout.setBackgroundResource(R.color.colorPrimary)
-            val toast = TextViewRobotoCondensed(context)
+            val toast = TextView(context)
             toast.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
             toast.setPadding(realpadding, realpadding, realpadding, realpadding)
             toast.text = message
@@ -1741,6 +1744,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                         else -> 0
                     }
                 } else 0
+            }
+        }
+
+        fun createFont(context: Context, style: Int): Typeface? {
+            return when (style) {
+                Typeface.BOLD -> ResourcesCompat.getFont(context, R.font.robotocondensedbold)
+                Typeface.ITALIC -> ResourcesCompat.getFont(context, R.font.robotocondenseditalic)
+                Typeface.BOLD_ITALIC -> ResourcesCompat.getFont(context, R.font.robotocondensedbolditalic)
+                else -> ResourcesCompat.getFont(context, R.font.robotocondensed)
             }
         }
     }

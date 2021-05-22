@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/gri"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,7 +13,7 @@
         android:paddingRight="10dp"
         android:text="@string/hryharyjan" />
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/ula"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

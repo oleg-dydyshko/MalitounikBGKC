@@ -9,15 +9,16 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.BibleGlobalList
-import by.carkva_gazeta.malitounik.EditTextRobotoCondensed
-import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
+import by.carkva_gazeta.malitounik.SettingsActivity
 
 class DialogBibleNatatkaEdit : DialogFragment() {
     private var edit: BibleNatatkaEditlistiner? = null
@@ -63,14 +64,14 @@ class DialogBibleNatatkaEdit : DialogFragment() {
             val linearLayout = LinearLayout(it)
             linearLayout.orientation = LinearLayout.VERTICAL
             var editText = ""
-            val textViewZaglavie = TextViewRobotoCondensed(it)
+            val textViewZaglavie = TextView(it)
             if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.setText(R.string.natatka_bersha_biblii)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.setTypeface(null, Typeface.BOLD)
+            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
             if (semuxa == 1) {
@@ -79,7 +80,7 @@ class DialogBibleNatatkaEdit : DialogFragment() {
             if (semuxa == 2) {
                 editText = BibleGlobalList.natatkiSinodal[position].list[5]
             }
-            val editTextView = EditTextRobotoCondensed(it)
+            val editTextView = EditText(it)
             editTextView.setPadding(realpadding, realpadding, realpadding, realpadding)
             editTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             editTextView.setText(editText)

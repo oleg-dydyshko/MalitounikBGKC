@@ -13,13 +13,13 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaListBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -347,5 +347,5 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
         }
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 }

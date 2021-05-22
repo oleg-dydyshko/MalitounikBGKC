@@ -11,6 +11,7 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
@@ -138,5 +139,5 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
         }
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 }

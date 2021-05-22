@@ -28,7 +28,7 @@
                 app:contentInsetStartWithNavigation="0dp"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/title_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/action_minus"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/action_plus" />
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/action_plus"
         android:layout_width="40dp"
         android:layout_height="wrap_content"

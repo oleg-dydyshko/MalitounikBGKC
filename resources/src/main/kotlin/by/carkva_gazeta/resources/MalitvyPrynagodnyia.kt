@@ -456,5 +456,5 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         }
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 }

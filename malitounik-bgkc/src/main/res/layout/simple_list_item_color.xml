@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

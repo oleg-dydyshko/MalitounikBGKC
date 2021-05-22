@@ -21,6 +21,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.TooltipCompat
@@ -1647,7 +1648,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 
     companion object {
         private var mPedakVisable = false

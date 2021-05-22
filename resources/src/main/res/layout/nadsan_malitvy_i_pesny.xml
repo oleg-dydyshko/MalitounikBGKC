@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/title_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/subtitle_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/malitvy_i_pesny"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

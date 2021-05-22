@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemSviatyBinding
 import java.util.*
@@ -121,7 +122,7 @@ class MenuCviaty : CviatyListFragment() {
 
     }
 
-    private class ViewHolder(var textView: TextViewRobotoCondensed)
+    private class ViewHolder(var textView: TextView)
 
     companion object {
         var opisanie: ArrayList<String> = ArrayList()

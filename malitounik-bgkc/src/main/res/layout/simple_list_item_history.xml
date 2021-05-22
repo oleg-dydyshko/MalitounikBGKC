@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/search_black"
         android:contentDescription="@string/empty" />
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/item"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

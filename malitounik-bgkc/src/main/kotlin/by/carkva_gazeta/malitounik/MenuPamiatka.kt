@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
 import java.io.BufferedReader
@@ -107,5 +108,5 @@ class MenuPamiatka : PadryxtoukaPamiatkaListFragment() {
 
     }
 
-    private class ExpArrayAdapterParallelItems(var textView: TextViewRobotoCondensed)
+    private class ExpArrayAdapterParallelItems(var textView: TextView)
 }

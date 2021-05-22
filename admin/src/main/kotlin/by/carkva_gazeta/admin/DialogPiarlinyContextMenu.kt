@@ -7,11 +7,12 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 
 class DialogPiarlinyContextMenu : DialogFragment() {
     private var position = 0
@@ -46,24 +47,24 @@ class DialogPiarlinyContextMenu : DialogFragment() {
             val builder = AlertDialog.Builder(it)
             val linearLayout = LinearLayout(it)
             linearLayout.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextViewRobotoCondensed(it)
+            val textViewZaglavie = TextView(it)
             textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.text = name
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.setTypeface(null, Typeface.BOLD)
+            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
-            val textView = TextViewRobotoCondensed(it)
+            val textView = TextView(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
             textView.text = getString(by.carkva_gazeta.malitounik.R.string.redagaktirovat)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textView.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             linearLayout.addView(textView)
-            val textView2 = TextViewRobotoCondensed(it)
+            val textView2 = TextView(it)
             textView2.setPadding(realpadding, realpadding, realpadding, realpadding)
             textView2.text = getString(by.carkva_gazeta.malitounik.R.string.delite)
             textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)

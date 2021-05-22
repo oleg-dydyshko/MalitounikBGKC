@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/yelloy"
                 android:layout_width="28dp"
                 android:layout_height="28dp"

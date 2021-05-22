@@ -31,7 +31,7 @@ import kotlin.collections.ArrayList
 class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     private var mLastClickTime: Long = 0
     private var editText: AutoCompleteTextView? = null
-    private var textViewCount: TextViewRobotoCondensed? = null
+    private var textViewCount: TextView? = null
     private var searchView: SearchView? = null
     private var searchViewQwery = ""
     private var search = false
@@ -220,7 +220,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.pesny, menu)
         val searchViewItem = menu.findItem(R.id.search)
-        textViewCount = menu.findItem(R.id.count).actionView as TextViewRobotoCondensed
+        textViewCount = menu.findItem(R.id.count).actionView as TextView
         if (search) {
             searchViewItem.expandActionView()
             menuList.clear()
@@ -519,7 +519,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         }
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 
     companion object {
         fun getInstance(pesny: String): MenuPesny {

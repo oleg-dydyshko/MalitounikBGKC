@@ -10,17 +10,13 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.ListView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.AdminSimpleListItemBinding
-import by.carkva_gazeta.malitounik.EditTextRobotoCondensed
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -41,7 +37,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     private lateinit var adapter: TitleListAdaprer
     private val fileList = ArrayList<MyNetFile>()
     private var dir = ""
-    private lateinit var editView: EditTextRobotoCondensed
+    private lateinit var editView: EditText
     private var fileName = ""
 
     internal interface DialogSaveAsFileExplorerListener {
@@ -64,17 +60,17 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             val builder = AlertDialog.Builder(fragmentActivity, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             val linear = LinearLayout(fragmentActivity)
             linear.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextViewRobotoCondensed(fragmentActivity)
+            val textViewZaglavie = TextView(fragmentActivity)
             textViewZaglavie.setBackgroundColor(ContextCompat.getColor(fragmentActivity, by.carkva_gazeta.malitounik.R.color.colorPrimary))
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.text = getString(by.carkva_gazeta.malitounik.R.string.save_as_up)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.setTypeface(null, Typeface.BOLD)
+            textViewZaglavie.typeface = MainActivity.createFont(fragmentActivity,  Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(fragmentActivity, by.carkva_gazeta.malitounik.R.color.colorWhite))
             linear.addView(textViewZaglavie)
-            val textView = TextViewRobotoCondensed(fragmentActivity)
+            val textView = TextView(fragmentActivity)
             val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             textView.layoutParams = layoutParams
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
@@ -90,7 +86,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             }
             linear.addView(textView)
             fileName = arguments?.getString("oldName", "") ?: ""
-            editView = EditTextRobotoCondensed(fragmentActivity)
+            editView = EditText(fragmentActivity)
             editView.setPadding(realpadding, 0, realpadding, realpadding)
             editView.setText(fileName)
             editView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
@@ -223,7 +219,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
 
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 
     private data class MyNetFile(val resources: Int, val title: String)
 

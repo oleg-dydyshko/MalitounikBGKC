@@ -21,7 +21,7 @@
             app:contentInsetStartWithNavigation="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/titleToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
 
     </ListView>
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/help"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -66,7 +66,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-    <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/textSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
         app:layout_constraintEnd_toStartOf="@+id/count"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

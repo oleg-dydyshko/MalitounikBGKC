@@ -8,12 +8,12 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -43,13 +43,13 @@ class DialogLiturgia : DialogFragment() {
             val builder = StringBuilder()
             val linearLayout = LinearLayout(it)
             linearLayout.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextViewRobotoCondensed(it)
+            val textViewZaglavie = TextView(it)
             if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.setTypeface(null, Typeface.BOLD)
+            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
             val r = it.resources
@@ -113,7 +113,7 @@ class DialogLiturgia : DialogFragment() {
             linearLayout.addView(scrollView)
             scrollView.isVerticalScrollBarEnabled = false
             scrollView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            val textView = TextViewRobotoCondensed(it)
+            val textView = TextView(it)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
             if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             textView.text = MainActivity.fromHtml(builder.toString())

@@ -10,11 +10,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
+import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -58,14 +55,14 @@ class DialogPrazdnik : DialogFragment() {
             val builder = AlertDialog.Builder(it, style)
             val linear = LinearLayout(it)
             linear.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextViewRobotoCondensed(it)
+            val textViewZaglavie = TextView(it)
             if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.text = resources.getString(R.string.carkva_sviaty)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.setTypeface(null, Typeface.BOLD)
+            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linear.addView(textViewZaglavie)
             val c = Calendar.getInstance() as GregorianCalendar
@@ -113,7 +110,7 @@ class DialogPrazdnik : DialogFragment() {
         }
     }
 
-    private inner class ListAdapter(mContext: Activity) : ArrayAdapter<Int>(mContext, R.layout.simple_list_item_1, arrayList) {
+    private inner class ListAdapter(private val mContext: Activity) : ArrayAdapter<Int>(mContext, R.layout.simple_list_item_1, arrayList) {
         private val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         private val gc = Calendar.getInstance() as GregorianCalendar
@@ -130,7 +127,7 @@ class DialogPrazdnik : DialogFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (gc[Calendar.YEAR] == arrayList[position]) viewHolder.text.setTypeface(null, Typeface.BOLD) else viewHolder.text.setTypeface(null, Typeface.NORMAL)
+            if (gc[Calendar.YEAR] == arrayList[position]) viewHolder.text.typeface = MainActivity.createFont(mContext,  Typeface.BOLD) else viewHolder.text.typeface = MainActivity.createFont(mContext,  Typeface.NORMAL)
             viewHolder.text.text = arrayList[position].toString()
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (dzenNoch)
@@ -143,9 +140,9 @@ class DialogPrazdnik : DialogFragment() {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            val text = v as TextViewRobotoCondensed
+            val text = v as TextView
             text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-            if (gc[Calendar.YEAR] == arrayList[position]) text.setTypeface(null, Typeface.BOLD) else text.setTypeface(null, Typeface.NORMAL)
+            if (gc[Calendar.YEAR] == arrayList[position]) text.typeface = MainActivity.createFont(mContext,  Typeface.BOLD) else text.typeface = MainActivity.createFont(mContext,  Typeface.NORMAL)
             text.text = arrayList[position].toString()
             if (dzenNoch)
                 text.setBackgroundResource(R.drawable.selector_dialog_font_dark)
@@ -155,5 +152,5 @@ class DialogPrazdnik : DialogFragment() {
         }
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 }

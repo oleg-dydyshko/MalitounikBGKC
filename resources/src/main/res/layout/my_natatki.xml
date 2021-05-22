@@ -18,7 +18,7 @@
             app:contentInsetStartWithNavigation="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/file"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
         android:scrollbarStyle="insideOverlay"
         android:scrollbars="none">
 
-        <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

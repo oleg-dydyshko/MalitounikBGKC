@@ -33,7 +33,7 @@
             android:background="@color/colorWhite"
             android:orientation="vertical">
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/module_download"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.admin.databinding.AdminPiarlinyBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -296,5 +296,5 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
         }
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 }

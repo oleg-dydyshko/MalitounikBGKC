@@ -26,7 +26,7 @@
             android:paddingBottom="5dp"
             android:src="@drawable/levo_catedra_black" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/nedelName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

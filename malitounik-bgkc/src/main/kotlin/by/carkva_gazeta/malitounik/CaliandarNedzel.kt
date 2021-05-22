@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.ListFragment
 import by.carkva_gazeta.malitounik.databinding.CalaindarNedelBinding
@@ -173,7 +174,7 @@ class CaliandarNedzel : ListFragment() {
             viewHolder.textPraz.visibility = View.GONE
             viewHolder.textPostS.visibility = View.GONE
             viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-            viewHolder.textPraz.setTypeface(null, Typeface.BOLD)
+            viewHolder.textPraz.typeface = MainActivity.createFont(mContext,  Typeface.BOLD)
             if (dzenNoch) {
                 viewHolder.textSviat.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
                 viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
@@ -195,7 +196,7 @@ class CaliandarNedzel : ListFragment() {
             // убот = субота
             if (arrayList[position][6].contains("Пачатак") || arrayList[position][6].contains("Вялікі") || arrayList[position][6].contains("Вялікая") || arrayList[position][6].contains("убот") || arrayList[position][6].contains("ВЕЧАР") || arrayList[position][6].contains("Палова")) {
                 viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                viewHolder.textPraz.setTypeface(null, Typeface.NORMAL)
+                viewHolder.textPraz.typeface = MainActivity.createFont(mContext,  Typeface.NORMAL)
             }
             when (arrayList[position][7].toInt()) {
                 1 -> {
@@ -222,7 +223,7 @@ class CaliandarNedzel : ListFragment() {
                 if (dzenNoch) viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black)) else viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
             }
             if (arrayList[position][5].contains("2")) {
-                viewHolder.textPraz.setTypeface(null, Typeface.NORMAL)
+                viewHolder.textPraz.typeface = MainActivity.createFont(mContext,  Typeface.NORMAL)
             }
             if (arrayList[position][7].contains("3")) {
                 viewHolder.textPostS.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
@@ -236,7 +237,7 @@ class CaliandarNedzel : ListFragment() {
         }
     }
 
-    private class ViewHolder(var textCalendar: TextViewRobotoCondensed, var textPraz: TextViewRobotoCondensed, var textSviat: TextViewRobotoCondensed, var textPostS: TextViewRobotoCondensed, var linearLayout: LinearLayout)
+    private class ViewHolder(var textCalendar: TextView, var textPraz: TextView, var textSviat: TextView, var textPostS: TextView, var linearLayout: LinearLayout)
 
     companion object {
         var setDenNedeli = false

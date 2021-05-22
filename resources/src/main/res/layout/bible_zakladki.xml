@@ -20,7 +20,7 @@
             app:contentInsetStartWithNavigation="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/title_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/help"
         android:layout_width="0dp"
         android:layout_height="0dp"

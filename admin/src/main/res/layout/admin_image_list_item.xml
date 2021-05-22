@@ -13,7 +13,7 @@
         android:contentDescription="@string/empty"
         app:srcCompat="@drawable/directory_icon" />
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

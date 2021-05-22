@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/textView13"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textView1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                 android:layout_marginBottom="10dp"
                 android:background="@color/colorPrimary" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                 android:text="@string/niadzeli_i_sviaty"
                 android:textColor="@color/colorWhite" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:paddingRight="10dp"
                 android:text="@string/Post" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                 android:text="@string/Strogi_post"
                 android:textColor="@color/colorWhite" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
                 android:paddingRight="10dp"
                 android:text="@string/No_post" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
                 android:paddingRight="10dp"
                 android:text="@string/zvychaynye_dny" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textView7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
                     android:contentDescription="@string/Vial_Dvun"
                     android:src="@drawable/znaki_krest_v_kruge" />
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/textView8"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -165,7 +165,7 @@
                     android:contentDescription="@string/Z_Lic_na_ve"
                     android:src="@drawable/znaki_krest_v_polukruge" />
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/textView9"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -192,7 +192,7 @@
                     android:contentDescription="@string/Z_v_v_v_u_n_u"
                     android:src="@drawable/znaki_krest" />
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/textView10"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -219,7 +219,7 @@
                     android:contentDescription="@string/Z_sh_v_v_u_u"
                     android:src="@drawable/znaki_ttk" />
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/textView11"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -246,7 +246,7 @@
                     android:contentDescription="@string/Z_sh_v_m_u_u"
                     android:src="@drawable/znaki_ttk_black" />
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/textView12"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

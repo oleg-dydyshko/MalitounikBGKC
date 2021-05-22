@@ -8,6 +8,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -42,17 +43,17 @@ class DialogSabytieDelite : DialogFragment() {
             val ad = AlertDialog.Builder(activity, style)
             val linearLayout = LinearLayout(activity)
             linearLayout.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextViewRobotoCondensed(activity)
+            val textViewZaglavie = TextView(activity)
             if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorPrimary))
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.text = resources.getString(R.string.remove)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.setTypeface(null, Typeface.BOLD)
+            textViewZaglavie.typeface = MainActivity.createFont(activity,  Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
-            val textView = TextViewRobotoCondensed(activity)
+            val textView = TextView(activity)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
             textView.text = getString(R.string.remove_sabytie_iak)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)

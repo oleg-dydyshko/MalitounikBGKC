@@ -9,10 +9,7 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEachIndexed
 import by.carkva_gazeta.admin.databinding.AdminChytannyBinding
@@ -168,10 +165,10 @@ class Chytanny : AppCompatActivity() {
         setTollbarTheme()
     }
 
-    private fun grateTextView(text: String): TextViewRobotoCondensed {
+    private fun grateTextView(text: String): TextView {
         val density = resources.displayMetrics.density
         val padding = 10 * density
-        val textView = TextViewRobotoCondensed(this)
+        val textView = TextView(this)
         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         llp.setMargins(padding.toInt(), padding.toInt(), 0, 0)
         textView.layoutParams = llp
@@ -181,10 +178,10 @@ class Chytanny : AppCompatActivity() {
         return textView
     }
 
-    private fun grateEditView(position: Int, text: String): EditTextRobotoCondensed {
+    private fun grateEditView(position: Int, text: String): EditText {
         val density = resources.displayMetrics.density
         val padding = 5 * density
-        val textView = EditTextRobotoCondensed(this)
+        val textView = EditText(this)
         textView.tag = position
         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         llp.setMargins(padding.toInt(), padding.toInt(), padding.toInt(), 0)
@@ -195,8 +192,8 @@ class Chytanny : AppCompatActivity() {
         return textView
     }
 
-    private fun grateEditViewHidden(text: String): EditTextRobotoCondensed {
-        val textView = EditTextRobotoCondensed(this)
+    private fun grateEditViewHidden(text: String): EditText {
+        val textView = EditText(this)
         textView.tag = -1
         textView.setText(text)
         textView.visibility = View.GONE
@@ -244,7 +241,7 @@ class Chytanny : AppCompatActivity() {
         if (id == R.id.action_save) {
             val sb = StringBuilder()
             binding.linear.forEachIndexed { _, view ->
-                if (view is EditTextRobotoCondensed) {
+                if (view is EditText) {
                     when (view.tag as Int) {
                         -1 -> {
                             sb.append(view.text.toString())
@@ -307,17 +304,17 @@ class Chytanny : AppCompatActivity() {
         return true
     }
 
-    private class SpinnerAdapter(activity: Activity, private val data: ArrayList<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {
+    private class SpinnerAdapter(private val activity: Activity, private val data: ArrayList<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {
 
         private val gc = Calendar.getInstance() as GregorianCalendar
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
-            val textView = v as TextViewRobotoCondensed
+            val textView = v as TextView
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textView.text = data[position]
-            if (gc[Calendar.YEAR] == data[position].toInt()) textView.setTypeface(null, Typeface.BOLD)
-            else textView.setTypeface(null, Typeface.NORMAL)
+            if (gc[Calendar.YEAR] == data[position].toInt()) textView.typeface = MainActivity.createFont(activity, Typeface.BOLD)
+            else textView.typeface = MainActivity.createFont(activity, Typeface.NORMAL)
             textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             return v
         }
@@ -340,12 +337,12 @@ class Chytanny : AppCompatActivity() {
             }
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolder.text.text = data[position]
-            if (gc[Calendar.YEAR] == data[position].toInt()) viewHolder.text.setTypeface(null, Typeface.BOLD)
-            else viewHolder.text.setTypeface(null, Typeface.NORMAL)
+            if (gc[Calendar.YEAR] == data[position].toInt()) viewHolder.text.typeface = MainActivity.createFont(activity, Typeface.BOLD)
+            else viewHolder.text.typeface = MainActivity.createFont(activity, Typeface.NORMAL)
             viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             return rootView
         }
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 }

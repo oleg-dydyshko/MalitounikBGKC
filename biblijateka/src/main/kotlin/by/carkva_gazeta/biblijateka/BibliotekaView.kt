@@ -385,7 +385,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         invalidateOptionsMenu()
     }
 
-    private fun ajustCompoundDrawableSizeWithText(textView: TextViewRobotoCondensed, leftDrawable: Drawable?) {
+    private fun ajustCompoundDrawableSizeWithText(textView: TextView, leftDrawable: Drawable?) {
         textView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
             override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
                 leftDrawable?.setBounds(0, 0, textView.textSize.toInt(), textView.textSize.toInt())
@@ -2014,5 +2014,5 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed, var imageView: ImageView, var buttonPopup: ImageView)
+    private class ViewHolder(var text: TextView, var imageView: ImageView, var buttonPopup: ImageView)
 }

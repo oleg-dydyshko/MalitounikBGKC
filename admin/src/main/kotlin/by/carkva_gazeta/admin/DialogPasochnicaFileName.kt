@@ -9,17 +9,18 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import java.util.*
 
 class DialogPasochnicaFileName : DialogFragment() {
-    private lateinit var input: EditTextRobotoCondensed
+    private lateinit var input: EditText
     private var mListener: DialogPasochnicaFileNameListener? = null
     private lateinit var builder: AlertDialog.Builder
 
@@ -52,17 +53,17 @@ class DialogPasochnicaFileName : DialogFragment() {
             val linearLayout = LinearLayout(it)
             linearLayout.orientation = LinearLayout.VERTICAL
             linearLayout2.addView(linearLayout)
-            val textViewZaglavie = TextViewRobotoCondensed(it)
+            val textViewZaglavie = TextView(it)
             textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.text = getString(by.carkva_gazeta.malitounik.R.string.set_file_name)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.setTypeface(null, Typeface.BOLD)
+            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
-            input = EditTextRobotoCondensed(it)
+            input = EditText(it)
             input.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val text = if (savedInstanceState != null) {
                 input.setText(savedInstanceState.getString("fileName"))

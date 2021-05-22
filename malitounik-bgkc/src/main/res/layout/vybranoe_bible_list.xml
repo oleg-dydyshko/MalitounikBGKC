@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/titleToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/subtitleToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

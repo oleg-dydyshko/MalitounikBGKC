@@ -2445,9 +2445,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val data = sab[0].split(".")
             val gc = GregorianCalendar(data[2].toInt(), data[1].toInt() - 1, data[0].toInt())
             if (gc[Calendar.DAY_OF_YEAR] == day[Calendar.DAY_OF_YEAR] && gc[Calendar.YEAR] == day[Calendar.YEAR]) {
-                holder.mText.setTypeface(null, Typeface.BOLD)
+                holder.mText.typeface = MainActivity.createFont(this@Sabytie,  Typeface.BOLD)
             } else {
-                holder.mText.setTypeface(null, Typeface.NORMAL)
+                holder.mText.typeface = MainActivity.createFont(this@Sabytie,  Typeface.NORMAL)
             }
             holder.mText.text = text
             holder.color.setBackgroundColor(Color.parseColor(colors[mItemList[position].color]))
@@ -2569,7 +2569,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = super.getDropDownView(position, convertView, parent)
-            val text = view.findViewById<TextViewRobotoCondensed>(R.id.label)
+            val text = view.findViewById<TextView>(R.id.label)
             text.setBackgroundColor(Color.parseColor(colors[position]))
             text.text = nazvaPadzei
             text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
@@ -2601,7 +2601,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = super.getDropDownView(position, convertView, parent)
-            val text = view as TextViewRobotoCondensed
+            val text = view as TextView
             text.text = spinnerList[position]
             text.textSize = SettingsActivity.GET_FONT_SIZE_MIN
             if (dzenNoch) text.setBackgroundResource(R.drawable.selector_dark)
@@ -2610,9 +2610,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
     }
 
-    private class ViewHolderColor(var text: TextViewRobotoCondensed)
+    private class ViewHolderColor(var text: TextView)
 
-    private inner class MyTextWatcher(private val editTextWatcher: EditTextRobotoCondensed) : TextWatcher {
+    private inner class MyTextWatcher(private val editTextWatcher: EditText) : TextWatcher {
         private var editPosition = 0
         private var check = 0
         private var editch = true

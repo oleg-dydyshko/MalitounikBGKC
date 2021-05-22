@@ -18,7 +18,7 @@
             app:contentInsetStartWithNavigation="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/titleToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             android:gravity="center_horizontal|start"
             android:orientation="vertical">
 
-            <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/pacatak"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                     android:text="@string/sabytie_pachatak"
                     android:textSize="15sp" />
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/label1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
                     android:padding="10dp"
                     android:textSize="15sp" />
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/label2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/kanec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
                     android:text="@string/Sabytie_end"
                     android:textSize="15sp" />
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/label12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -128,7 +128,7 @@
                     android:padding="10dp"
                     android:textSize="15sp" />
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/label22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/pavedamic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -160,7 +160,7 @@
                     android:textSize="15sp"
                     tools:ignore="RtlSymmetry" />
 
-                <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/editText2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -177,7 +177,7 @@
 
             </LinearLayout>
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/pavedamic2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -196,7 +196,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/pavtor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -243,7 +243,7 @@
                     android:orientation="horizontal"
                     android:visibility="gone">
 
-                    <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/editText4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -254,7 +254,7 @@
                         android:inputType="number"
                         android:text="5" />
 
-                    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                    <TextView
                         android:id="@+id/pazov"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -269,7 +269,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/Sabytie_install_data_end" />
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/labelbutton12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -288,7 +288,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+                <TextView
                     android:id="@+id/cvet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
@@ -160,21 +161,21 @@ class CaliandarMunTab1 : Fragment() {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val day = Calendar.getInstance() as GregorianCalendar
             val v = super.getDropDownView(position, convertView, parent)
-            val textView = v as TextViewRobotoCondensed
+            val textView = v as TextView
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
             if (dzenNoch) textView.setBackgroundResource(R.drawable.selector_dark)
             else textView.setBackgroundResource(R.drawable.selector_default)
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
-                    textView.setTypeface(null, Typeface.BOLD)
+                    textView.typeface = MainActivity.createFont(context,  Typeface.BOLD)
                 } else {
-                    textView.setTypeface(null, Typeface.NORMAL)
+                    textView.typeface = MainActivity.createFont(context,  Typeface.NORMAL)
                 }
             } else {
                 if (day[Calendar.YEAR] == position + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
-                    textView.setTypeface(null, Typeface.BOLD)
+                    textView.typeface = MainActivity.createFont(context,  Typeface.BOLD)
                 } else {
-                    textView.setTypeface(null, Typeface.NORMAL)
+                    textView.typeface = MainActivity.createFont(context,  Typeface.NORMAL)
                 }
             }
             return v
@@ -198,16 +199,16 @@ class CaliandarMunTab1 : Fragment() {
             else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position && day[Calendar.YEAR] == binding.spinner2.selectedItemPosition + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
-                    viewHolder.text.setTypeface(null, Typeface.BOLD)
+                    viewHolder.text.typeface = MainActivity.createFont(context,  Typeface.BOLD)
                 } else {
-                    viewHolder.text.setTypeface(null, Typeface.NORMAL)
+                    viewHolder.text.typeface = MainActivity.createFont(context,  Typeface.NORMAL)
                 }
                 viewHolder.text.text = names[position]
             } else {
                 if (day[Calendar.YEAR] == position + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
-                    viewHolder.text.setTypeface(null, Typeface.BOLD)
+                    viewHolder.text.typeface = MainActivity.createFont(context,  Typeface.BOLD)
                 } else {
-                    viewHolder.text.setTypeface(null, Typeface.NORMAL)
+                    viewHolder.text.typeface = MainActivity.createFont(context,  Typeface.NORMAL)
                 }
                 arrayList?.let { viewHolder.text.text = it[position] }
             }
@@ -236,7 +237,7 @@ class CaliandarMunTab1 : Fragment() {
         }
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 
     companion object {
         fun getInstance(posMun: Int, yearG: Int, day: Int, listener: CaliandarMunTab1Listener): CaliandarMunTab1 {

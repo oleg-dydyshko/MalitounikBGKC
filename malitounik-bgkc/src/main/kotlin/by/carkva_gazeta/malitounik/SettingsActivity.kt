@@ -18,6 +18,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -1596,17 +1597,17 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             }
             prefEditor.apply()
         }
-        binding.vibro.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
-        binding.guk.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
-        binding.sinoidal.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
-        binding.maranata.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
-        binding.prav.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
-        binding.pkc.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
-        binding.dzair.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
-        binding.praf.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
-        binding.checkBox5.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
-        binding.checkBox6.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
-        binding.checkBox7.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
+        binding.vibro.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        binding.guk.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        binding.sinoidal.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        binding.maranata.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        binding.prav.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        binding.pkc.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        binding.dzair.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        binding.praf.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        binding.checkBox5.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        binding.checkBox6.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        binding.checkBox7.typeface = MainActivity.createFont(this, Typeface.NORMAL)
         if (savedInstanceState == null && (notification == 1 || notification == 2)) {
             if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true)) {
                 val notifi = DialogHelpNotification()
@@ -1666,7 +1667,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         private val dzenNoch = k.getBoolean("dzen_noch", false)
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
-            val textView = v as TextViewRobotoCondensed
+            val textView = v as TextView
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             textView.text = dataTimes[position].string
             if (dzenNoch) textView.setBackgroundResource(R.drawable.selector_dark)
@@ -1704,7 +1705,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         private val dzenNoch = k.getBoolean("dzen_noch", false)
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
-            val textView = v as TextViewRobotoCondensed
+            val textView = v as TextView
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             textView.text = dataTimes[position]
             if (dzenNoch) textView.setBackgroundResource(R.drawable.selector_dark)
@@ -1737,7 +1738,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
 
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 
     private class DataTime(val string: String, val data: Int)
 }

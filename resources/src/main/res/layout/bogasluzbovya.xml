@@ -21,7 +21,7 @@
             app:contentInsetStartWithNavigation="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/title_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
             android:textIsSelectable="true" />
     </by.carkva_gazeta.malitounik.InteractiveScrollView>
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/progress"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -94,7 +94,7 @@
             app:layout_constraintTop_toTopOf="@+id/textSearch"
             app:srcCompat="@drawable/find_up" />
 
-        <by.carkva_gazeta.malitounik.EditTextRobotoCondensed
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/textSearch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
             app:layout_constraintTop_toTopOf="@+id/textSearch"
             app:srcCompat="@drawable/find_niz" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/textCount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -146,7 +146,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/action_minus"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
@@ -164,7 +164,7 @@
         app:layout_constraintBottom_toTopOf="@+id/find"
         app:layout_constraintEnd_toStartOf="@+id/action_plus" />
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/action_plus"
         android:layout_width="40dp"
         android:layout_height="wrap_content"

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
 
-    <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+    <TextView
         android:id="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/stiker"
-        android:drawableLeft="@drawable/stiker"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
         android:paddingStart="10dp"
@@ -17,5 +16,7 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/stiker"
+        app:drawableLeftCompat="@drawable/stiker" />
 </LinearLayout>

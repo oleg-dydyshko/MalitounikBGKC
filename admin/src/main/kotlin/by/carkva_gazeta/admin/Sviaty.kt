@@ -14,17 +14,14 @@ import android.util.Base64
 import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminSviatyBinding
-import by.carkva_gazeta.malitounik.EditTextRobotoCondensed
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -46,7 +43,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
     private var timerCount = 0
     private var timer = Timer()
     private var timerTask: TimerTask? = null
-    private var edittext: EditTextRobotoCondensed? = null
+    private var edittext: AppCompatEditText? = null
     private val myPermissionsWriteExternalStorage = 42
 
     override fun onResume() {
@@ -123,16 +120,16 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
         binding.actionRed.setOnClickListener(this)
         binding.actionP.setOnClickListener(this)
         binding.sviaty.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) edittext = v as? EditTextRobotoCondensed
+            if (hasFocus) edittext = v as? AppCompatEditText
         }
         binding.utran.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) edittext = v as? EditTextRobotoCondensed
+            if (hasFocus) edittext = v as? AppCompatEditText
         }
         binding.liturgia.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) edittext = v as? EditTextRobotoCondensed
+            if (hasFocus) edittext = v as? AppCompatEditText
         }
         binding.viachernia.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) edittext = v as? EditTextRobotoCondensed
+            if (hasFocus) edittext = v as? AppCompatEditText
         }
         urlJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
@@ -427,7 +424,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
-            val textView = v as TextViewRobotoCondensed
+            val textView = v as TextView
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textView.text = data[position].title
             textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
@@ -457,7 +454,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
         }
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 
     private data class SviatyData(val data: Int, val mun: Int, val title: String, var opisanie: String = "", var utran: String = "", var liturgia: String = "", var viachernia: String = "")
 }

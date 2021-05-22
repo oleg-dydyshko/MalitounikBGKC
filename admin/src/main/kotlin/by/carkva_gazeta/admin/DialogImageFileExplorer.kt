@@ -17,8 +17,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.AdminImageListItemBinding
+import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.FilenameFilter
@@ -102,14 +102,14 @@ class DialogImageFileExplorer : DialogFragment() {
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             val linear = LinearLayout(it)
             linear.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextViewRobotoCondensed(it)
+            val textViewZaglavie = TextView(it)
             textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.text = "ВЫБЕРЫЦЕ ФАЙЛ"
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.setTypeface(null, Typeface.BOLD)
+            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
             linear.addView(textViewZaglavie)
             val listViewCompat = ListView(it)
@@ -186,7 +186,7 @@ class DialogImageFileExplorer : DialogFragment() {
 
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed, var image: ImageView)
+    private class ViewHolder(var text: TextView, var image: ImageView)
 
     private class MyImageFile(val name: String, val file: Uri)
 }

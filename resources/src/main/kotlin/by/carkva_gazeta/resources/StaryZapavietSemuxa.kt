@@ -184,7 +184,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         for (i in 0 until binding.pagerTabStrip.childCount) {
             val nextChild = binding.pagerTabStrip.getChildAt(i)
             if (nextChild is TextView) {
-                nextChild.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
+                nextChild.typeface = MainActivity.createFont(this, Typeface.NORMAL)
             }
         }
         val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)

@@ -11,15 +11,11 @@ import android.util.Base64
 import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
-import android.widget.BaseAdapter
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaPageFragmentBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemTipiconBinding
 import com.google.gson.Gson
@@ -417,7 +413,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
-            val textView = v as TextViewRobotoCondensed
+            val textView = v as TextView
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textView.text = data[position]
             textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
@@ -447,7 +443,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         }
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 
     private class SpinnerAdapterTipicon(activity: Activity, private val data: ArrayList<Tipicon>) : BaseAdapter() {
         private val context = activity
@@ -488,7 +484,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         }
     }
 
-    private class ViewHolderImage(var image: ImageView, var text: TextViewRobotoCondensed)
+    private class ViewHolderImage(var image: ImageView, var text: TextView)
 
     private data class Tipicon(val imageResource: Int, val title: String)
 

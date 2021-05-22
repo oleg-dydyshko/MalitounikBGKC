@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:paddingBottom="20dp">
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="16dp"
             android:layout_gravity="start"
@@ -27,7 +27,7 @@
             android:layout_marginBottom="10dp">
 
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textDenNedeli"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textChislo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
                 android:src="@drawable/fishe"
                 android:visibility="gone" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textMesiac"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -113,7 +113,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textPost"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -128,7 +128,7 @@
                 android:visibility="gone" />
         </RelativeLayout>
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/textCviatyGlavnyia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
             android:textStyle="bold"
             android:visibility="gone" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/textPredsviaty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
             android:layout_marginRight="10dp"
             android:background="@color/colorSecondary_text" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/textSviatyia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -188,7 +188,7 @@
             android:layout_marginRight="10dp"
             android:background="@color/colorSecondary_text" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/chytanne"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -206,7 +206,7 @@
             android:textSize="18sp"
             android:textStyle="italic" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/textChytanne"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -223,7 +223,7 @@
             android:textColor="@color/colorPrimary_text"
             android:textSize="18sp" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/textChytanneSviatyiaDop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -242,7 +242,7 @@
             android:textStyle="italic"
             android:visibility="gone" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/textChytanneSviatyia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -260,7 +260,7 @@
             android:textStyle="italic"
             android:visibility="gone" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/textPamerlyia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -279,7 +279,7 @@
             android:textStyle="bold"
             android:visibility="gone" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/textBlaslavenne"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -296,7 +296,7 @@
             android:textSize="18sp"
             android:visibility="gone" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/textTitleMaranata"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -313,7 +313,7 @@
             android:textStyle="italic"
             android:visibility="gone" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/maranata"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -339,7 +339,7 @@
             android:layout_marginRight="10dp"
             android:orientation="vertical" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/pravaslavie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -358,7 +358,7 @@
             android:textStyle="italic"
             android:visibility="gone" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/RKC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -377,7 +377,7 @@
             android:textStyle="italic"
             android:visibility="gone" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/gosudarstvo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -396,7 +396,7 @@
             android:textStyle="italic"
             android:visibility="gone" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/prafesional"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

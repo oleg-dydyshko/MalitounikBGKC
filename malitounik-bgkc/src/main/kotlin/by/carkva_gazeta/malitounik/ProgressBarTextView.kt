@@ -1,7 +1,6 @@
 package by.carkva_gazeta.malitounik
 
 import android.content.Context
-import android.graphics.Typeface
 import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
@@ -13,10 +12,6 @@ class ProgressBarTextView : AppCompatTextView {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    override fun setTypeface(tf: Typeface?, style: Int) {
-        typeface = TextViewRobotoCondensed.createFont(context, style)
-    }
 
     @Synchronized
     fun setValue(value: Int) {

@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.PashaliiBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemSviatyBinding
@@ -167,7 +168,7 @@ class MenuPashalii : PashaliiFragment() {
         }
     }
 
-    private class ViewHolder(var textView: TextViewRobotoCondensed)
+    private class ViewHolder(var textView: TextView)
 
     private class Pashalii(val katolic: String, val pravas: String, val katolicYear: Int, val search: Int, val sovpadenie: Boolean)
 }

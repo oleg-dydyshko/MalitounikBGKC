@@ -47,7 +47,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
     private var dzenNoch = false
     private var mLastClickTime: Long = 0
     private var autoCompleteTextView: AutoCompleteTextView? = null
-    private var textViewCount: TextViewRobotoCondensed? = null
+    private var textViewCount: TextView? = null
     private var searchView: SearchView? = null
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
@@ -673,7 +673,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         searchViewItem.expandActionView()
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = title
-        textViewCount = menu.findItem(by.carkva_gazeta.malitounik.R.id.count).actionView as TextViewRobotoCondensed
+        textViewCount = menu.findItem(by.carkva_gazeta.malitounik.R.id.count).actionView as TextView
         textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, seash.size)
         changeSearchViewElements(searchView)
         for (i in 0 until menu.size()) {
@@ -1461,7 +1461,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
     private inner class SearchSpinnerAdapter(context: Activity, private val name: Array<String>) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_4, name) {
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v = super.getDropDownView(position, convertView, parent)
-            val textView = v as TextViewRobotoCondensed
+            val textView = v as TextView
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
             textView.gravity = Gravity.START
             if (dzenNoch) textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
@@ -1491,7 +1491,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
 
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 
     companion object {
         private var zavet = 1

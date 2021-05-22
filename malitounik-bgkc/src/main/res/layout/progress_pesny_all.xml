@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/progressTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,7 +25,7 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+        <TextView
             android:id="@+id/progressText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

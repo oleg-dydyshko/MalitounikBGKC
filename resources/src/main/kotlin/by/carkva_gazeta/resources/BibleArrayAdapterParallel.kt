@@ -12,9 +12,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BibleGlobalList
+import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibleBinding
 
 internal class BibleArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val Zapavet: Boolean, private val mPerevod: Int) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) { // 1-Сёмуха, 2-Синоидальный, 3-Псалтырь Надсана
@@ -651,7 +654,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         return ssb
     }
 
-    private class BibleArrayAdapterParallelItems(var textView: TextViewRobotoCondensed)
+    private class BibleArrayAdapterParallelItems(var textView: TextView)
 
     companion object {
         val colors = arrayOf("#000000", "#D00505", "#800080", "#C71585", "#FF00FF", "#F4A460", "#D2691E", "#A52A2A", "#1E90FF", "#6A5ACD", "#228B22", "#9ACD32", "#20B2AA")

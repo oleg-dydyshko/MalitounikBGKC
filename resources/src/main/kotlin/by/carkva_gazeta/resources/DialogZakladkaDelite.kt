@@ -8,12 +8,13 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 
 class DialogZakladkaDelite : DialogFragment() {
     private var delite: ZakladkaDeliteListiner? = null
@@ -62,17 +63,17 @@ class DialogZakladkaDelite : DialogFragment() {
             builder = AlertDialog.Builder(it, style)
             val linearLayout = LinearLayout(it)
             linearLayout.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextViewRobotoCondensed(it)
+            val textViewZaglavie = TextView(it)
             if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.text = resources.getString(R.string.remove)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.setTypeface(null, Typeface.BOLD)
+            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             linearLayout.addView(textViewZaglavie)
-            val textView = TextViewRobotoCondensed(it)
+            val textView = TextView(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
             if (zakladka) textView.text = resources.getString(R.string.delite_natatki_i_zakladki, getString(R.string.zakladki_bible2), name) else textView.text = resources.getString(R.string.delite_natatki_i_zakladki, getString(R.string.natatki_biblii2), name)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)

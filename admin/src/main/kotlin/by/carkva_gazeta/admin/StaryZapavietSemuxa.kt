@@ -22,7 +22,6 @@ import by.carkva_gazeta.admin.databinding.AdminBibleBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.SmartFragmentStatePagerAdapter
-import by.carkva_gazeta.malitounik.TextViewRobotoCondensed
 import kotlinx.coroutines.*
 
 class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRazdelListener {
@@ -70,7 +69,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
         for (i in 0 until binding.pagerTabStrip.childCount) {
             val nextChild = binding.pagerTabStrip.getChildAt(i)
             if (nextChild is TextView) {
-                nextChild.typeface = TextViewRobotoCondensed.createFont(this, Typeface.NORMAL)
+                nextChild.typeface = MainActivity.createFont(this, Typeface.NORMAL)
             }
         }
         val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)

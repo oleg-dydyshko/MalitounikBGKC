@@ -10,6 +10,7 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -45,15 +46,15 @@ class DialogSabytieShow : DialogFragment() {
             linearLayout.orientation = LinearLayout.VERTICAL
             val density = resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
-            val textViewT = TextViewRobotoCondensed(it)
+            val textViewT = TextView(it)
             textViewT.text = title
             textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewT.setTypeface(null, Typeface.BOLD)
+            textViewT.typeface = MainActivity.createFont(it,  Typeface.BOLD)
             if (dzenNoch) textViewT.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewT.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             linearLayout.addView(textViewT)
-            val textView = TextViewRobotoCondensed(it)
+            val textView = TextView(it)
             val textR = if (konecSabytie) {
                 SpannableString(getString(R.string.sabytie_kali, data, time, res))
             } else {

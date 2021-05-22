@@ -20,7 +20,7 @@
             app:contentInsetStartWithNavigation="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/titleToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textView14"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                 android:text="@string/widget_day_d_n"
                 android:textSize="12sp" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textView16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
                 android:text="@string/ekpan_on"
                 android:textSize="12sp" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/admin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -155,7 +155,7 @@
                 android:textSize="12sp"
                 android:visibility="gone" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textView15"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -189,7 +189,7 @@
                 android:text="@string/maranata"
                 android:textSize="12sp" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/maranataOpis"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -215,7 +215,7 @@
                 android:text="@string/bsinaidal"
                 android:textSize="12sp" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/notificationView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -240,7 +240,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <by.carkva_gazeta.malitounik.RadioButtonRobotoCondensed
+                <RadioButton
                     android:id="@+id/notificationOnly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -250,7 +250,7 @@
                     android:text="@string/apav_only"
                     android:textSize="12sp" />
 
-                <by.carkva_gazeta.malitounik.RadioButtonRobotoCondensed
+                <RadioButton
                     android:id="@+id/notificationFull"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -260,7 +260,7 @@
                     android:text="@string/apav_all"
                     android:textSize="12sp" />
 
-                <by.carkva_gazeta.malitounik.RadioButtonRobotoCondensed
+                <RadioButton
                     android:id="@+id/notificationNon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -308,7 +308,7 @@
                 android:text="@string/sound"
                 android:textSize="12sp" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/notifiSvizta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -321,7 +321,7 @@
                 android:textSize="12sp"
                 android:visibility="gone" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/help_notifi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -334,7 +334,7 @@
                 android:textSize="12sp"
                 android:visibility="gone" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/secret"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -415,7 +415,7 @@
                 android:layout_height="1dp"
                 android:background="@color/colorSecondary_text" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/reset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -427,7 +427,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="12sp" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/cheshe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -468,7 +468,7 @@
             android:background="@color/colorWhite"
             android:orientation="vertical">
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/module_download"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -479,7 +479,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <by.carkva_gazeta.malitounik.TextViewRobotoCondensed
+            <TextView
                 android:id="@+id/textProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

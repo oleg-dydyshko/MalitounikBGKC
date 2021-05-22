@@ -36,7 +36,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
     private lateinit var adapter: SearchListAdapter
     private var dzenNoch = false
     private var editText: AutoCompleteTextView? = null
-    private var textViewCount: TextViewRobotoCondensed? = null
+    private var textViewCount: TextView? = null
     private var searchView: SearchView? = null
     private var searchViewQwery = ""
     private var arrayLists: ArrayList<ArrayList<String>> = ArrayList()
@@ -122,7 +122,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         searchViewItem.expandActionView()
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = getString(R.string.search_svityia)
-        textViewCount = menu.findItem(R.id.count).actionView as TextViewRobotoCondensed
+        textViewCount = menu.findItem(R.id.count).actionView as TextView
         val density = resources.displayMetrics.density.toInt()
         textViewCount?.setPadding(0, 0, 10 * density, 0)
         menu.findItem(R.id.count).isVisible = true
@@ -588,7 +588,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         }
     }
 
-    private class ViewHolder(var text: TextViewRobotoCondensed)
+    private class ViewHolder(var text: TextView)
 
     private data class Searche(val dayOfYear: Int, val text: Spannable)
 }

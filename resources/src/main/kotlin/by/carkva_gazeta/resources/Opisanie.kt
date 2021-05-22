@@ -13,6 +13,7 @@ import android.util.TypedValue
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -115,10 +116,10 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         return imageView
     }
 
-    private fun grateTextView(text: String): TextViewRobotoCondensed {
+    private fun grateTextView(text: String): TextView {
         val density = resources.displayMetrics.density
         val padding = 10 * density
-        val textView = TextViewRobotoCondensed(this)
+        val textView = TextView(this)
         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         llp.setMargins(0, padding.toInt(), 0, 0)
         textView.layoutParams = llp
@@ -493,5 +494,5 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         return super.onOptionsItemSelected(item)
     }
 
-    private data class OpisanieData(val imageView: ImageView, val textView: TextViewRobotoCondensed, var imageName: String = "noImage")
+    private data class OpisanieData(val imageView: ImageView, val textView: TextView, var imageName: String = "noImage")
 }

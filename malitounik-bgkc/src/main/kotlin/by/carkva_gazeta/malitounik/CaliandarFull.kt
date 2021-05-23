@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import android.widget.TextView
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -36,7 +37,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import android.widget.TextView
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -120,11 +120,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = CalaindarBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         CoroutineScope(Dispatchers.Main).launch {
             activity?.let {
                 val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
@@ -208,7 +203,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             if (dzenNoch) binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             else binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                         }
-                        binding.textCviatyGlavnyia.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                        binding.textCviatyGlavnyia.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                         binding.textCviatyGlavnyia.isEnabled = false
                     } else {
                         if (data[day][6].contains("нядзел", true) || data[day][6].contains("сьветл", true)) binding.textCviatyGlavnyia.isEnabled = false
@@ -327,7 +322,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     }
                 }
                 if (data[day][5].contains("2")) {
-                    binding.textCviatyGlavnyia.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                    binding.textCviatyGlavnyia.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                 }
                 if (data[day][8] != "") {
                     binding.textPredsviaty.text = MainActivity.fromHtml(data[day][8])
@@ -427,6 +422,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 }
             }
         }
+        return binding.root
     }
 
     override fun onClick(v: View?) {
@@ -451,34 +447,32 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 }
             }
             R.id.kniga -> {
-                fragmentManager?.let {
-                    val colorDialog = if (data[day][5].contains("1") || data[day][5].contains("2") || data[day][5].contains("3")) {
-                        4
-                    } else {
-                        data[day][7].toInt()
-                    }
-                    val svity = data[day][6]
-                    var daysv = data[day][1].toInt()
-                    var munsv = data[day][2].toInt() + 1
-                    if (svity.contains("уваход у ерусалім", true)) {
-                        daysv = -1
-                        munsv = 0
-                    }
-                    if (svity.contains("уваскрасеньне", true)) {
-                        daysv = -1
-                        munsv = 1
-                    }
-                    if (svity.contains("узьнясеньне", true)) {
-                        daysv = -1
-                        munsv = 2
-                    }
-                    if (svity.contains("зыход", true)) {
-                        daysv = -1
-                        munsv = 3
-                    }
-                    val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20].toInt(), data[day][0].toInt(), daysv, munsv, data[day][22].toInt(), data[day][4], data[day][23] == "1", data[day][3].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1)
-                    dialogCalindarGrid.show(it, "grid")
+                val colorDialog = if (data[day][5].contains("1") || data[day][5].contains("2") || data[day][5].contains("3")) {
+                    4
+                } else {
+                    data[day][7].toInt()
                 }
+                val svity = data[day][6]
+                var daysv = data[day][1].toInt()
+                var munsv = data[day][2].toInt() + 1
+                if (svity.contains("уваход у ерусалім", true)) {
+                    daysv = -1
+                    munsv = 0
+                }
+                if (svity.contains("уваскрасеньне", true)) {
+                    daysv = -1
+                    munsv = 1
+                }
+                if (svity.contains("узьнясеньне", true)) {
+                    daysv = -1
+                    munsv = 2
+                }
+                if (svity.contains("зыход", true)) {
+                    daysv = -1
+                    munsv = 3
+                }
+                val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20].toInt(), data[day][0].toInt(), daysv, munsv, data[day][22].toInt(), data[day][4], data[day][23] == "1", data[day][3].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1)
+                dialogCalindarGrid.show(childFragmentManager, "grid")
             }
             R.id.textCviatyGlavnyia -> if (MainActivity.checkmoduleResources(activity)) {
                 activity?.let {
@@ -511,7 +505,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 }
             } else {
                 val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+                dadatak.show(childFragmentManager, "dadatak")
             }
             R.id.textSviatyia -> if (MainActivity.checkmoduleResources(activity)) {
                 activity?.let {
@@ -524,7 +518,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 }
             } else {
                 val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+                dadatak.show(childFragmentManager, "dadatak")
             }
             R.id.textChytanneSviatyia -> if (MainActivity.checkmoduleResources(activity)) {
                 activity?.let {
@@ -535,7 +529,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 }
             } else {
                 val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+                dadatak.show(childFragmentManager, "dadatak")
             }
             R.id.textChytanne -> if (MainActivity.checkmoduleResources(activity)) {
                 activity?.let {
@@ -546,7 +540,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 }
             } else {
                 val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+                dadatak.show(childFragmentManager, "dadatak")
             }
             R.id.textChytanneSviatyiaDop -> if (MainActivity.checkmoduleResources(activity)) {
                 activity?.let {
@@ -557,7 +551,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 }
             } else {
                 val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+                dadatak.show(childFragmentManager, "dadatak")
             }
             R.id.maranata -> if (MainActivity.checkmoduleResources(activity)) {
                 activity?.let {
@@ -568,12 +562,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 }
             } else {
                 val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+                dadatak.show(childFragmentManager, "dadatak")
             }
             R.id.znakTipicona -> {
                 val tipiconNumber = data[day][12].toInt()
                 val tipicon = DialogTipicon.getInstance(tipiconNumber)
-                fragmentManager?.let { tipicon.show(it, "tipicon") }
+                tipicon.show(childFragmentManager, "tipicon")
             }
         }
     }
@@ -628,9 +622,9 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         val textViewT = TextView(activity)
                         textViewT.text = title
                         textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        textViewT.typeface = MainActivity.createFont(activity,  Typeface.BOLD)
+                        textViewT.typeface = MainActivity.createFont(activity, Typeface.BOLD)
                         textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-                        textViewT.typeface = MainActivity.createFont(activity,  Typeface.BOLD)
+                        textViewT.typeface = MainActivity.createFont(activity, Typeface.BOLD)
 
                         textViewT.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                         textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(activity)[p.color]))
@@ -646,13 +640,11 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         }
                         val clickableSpanEdit = object : ClickableSpan() {
                             override fun onClick(p0: View) {
-                                fragmentManager?.let {
-                                    editCaliandarTitle = textViewT.text.toString()
-                                    val intent = Intent(activity, Sabytie::class.java)
-                                    intent.putExtra("edit", true)
-                                    intent.putExtra("position", index)
-                                    startActivity(intent)
-                                }
+                                editCaliandarTitle = textViewT.text.toString()
+                                val intent = Intent(activity, Sabytie::class.java)
+                                intent.putExtra("edit", true)
+                                intent.putExtra("position", index)
+                                startActivity(intent)
                             }
 
                             override fun updateDrawState(ds: TextPaint) {
@@ -662,10 +654,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         }
                         val clickableSpanRemove = object : ClickableSpan() {
                             override fun onClick(p0: View) {
-                                fragmentManager?.let {
-                                    val dd = DialogDelite.getInstance(index, "", "з падзей", MainActivity.padzeia[index].dat + " " + MainActivity.padzeia[index].padz)
-                                    dd.show(it, "dialig_delite")
-                                }
+                                val dd = DialogDelite.getInstance(index, "", "з падзей", MainActivity.padzeia[index].dat + " " + MainActivity.padzeia[index].padz)
+                                dd.show(childFragmentManager, "dialig_delite")
                             }
 
                             override fun updateDrawState(ds: TextPaint) {

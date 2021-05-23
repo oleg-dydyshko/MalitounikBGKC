@@ -11,9 +11,6 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -41,7 +38,6 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     private lateinit var chin: SharedPreferences
     private var resetTollbarJob: Job? = null
     private var loadIconsJob: Job? = null
-    private var opisanieDataLink = ArrayList<OpisanieData>()
     private var timerCount = 0
     private var timer = Timer()
     private var timerTask: TimerTask? = null
@@ -59,15 +55,20 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                         var builder = ""
                         if (fileOpisanie.exists()) builder = fileOpisanie.readText()
                         loadOpisanieSviatyia(builder)
-                        opisanieDataLink.forEachIndexed { i, opisanieData ->
+                        for (i in 0..3) {
                             var schet = ""
                             if (i > 0) schet = "_${i + 1}"
                             val file = File("$filesDir/icons/s_${day}_${mun}$schet.jpg")
                             if (file.exists()) {
-                                opisanieData.imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file.absolutePath)))
-                                opisanieData.imageView.visibility = View.VISIBLE
-                                opisanieData.imageName = "s_${day}_${mun}$schet.jpg"
-                                opisanieData.imageView.setOnClickListener {
+                                val imageView = when (i) {
+                                    1 -> binding.image2
+                                    2 -> binding.image3
+                                    3 -> binding.image4
+                                    else -> binding.image1
+                                }
+                                imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file.absolutePath)))
+                                imageView.visibility = View.VISIBLE
+                                imageView.setOnClickListener {
                                     if (file.exists()) {
                                         val bitmap = BitmapFactory.decodeFile(file.absolutePath)
                                         binding.imageViewFull.setImageBitmap(bitmap)
@@ -104,33 +105,6 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    private fun grateImageView(): ImageView {
-        val density = resources.displayMetrics.density
-        val padding = 10 * density
-        val imageView = ImageView(this)
-        val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        llp.setMargins(0, padding.toInt(), 0, 0)
-        llp.gravity = Gravity.CENTER
-        imageView.layoutParams = llp
-        imageView.visibility = View.GONE
-        return imageView
-    }
-
-    private fun grateTextView(text: String): TextView {
-        val density = resources.displayMetrics.density
-        val padding = 10 * density
-        val textView = TextView(this)
-        val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-        llp.setMargins(0, padding.toInt(), 0, 0)
-        textView.layoutParams = llp
-        textView.setTextIsSelectable(true)
-        val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
-        textView.textSize = fontBiblia
-        val res = MainActivity.fromHtml(text)
-        textView.text = res.trim()
-        return textView
-    }
-
     private fun resizeImage(bitmap: Bitmap): Bitmap {
         var newHeight = bitmap.height.toFloat()
         var newWidth = bitmap.width.toFloat()
@@ -146,8 +120,6 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     }
 
     private fun loadOpisanieSviatyia(builder: String) {
-        binding.linearLayout.removeAllViewsInLayout()
-        opisanieDataLink.removeAll(opisanieDataLink)
         val gson = Gson()
         val type = object : TypeToken<ArrayList<String>>() {}.type
         var res = ""
@@ -161,24 +133,40 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         }
         if (dzenNoch) res = res.replace("#d00505", "#f44336")
         if (res.contains("<!--image-->")) {
-            res.split("<!--image-->").forEach {
-                val imageView = grateImageView()
-                val textView = grateTextView(it)
-                binding.linearLayout.addView(imageView)
-                binding.linearLayout.addView(textView)
-                opisanieDataLink.add(OpisanieData(imageView, textView))
+            res.split("<!--image-->").forEachIndexed { index, text ->
+                val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                val spanned = MainActivity.fromHtml(text)
+                when (index) {
+                    0 -> {
+                        binding.TextView1.textSize = fontBiblia
+                        binding.TextView1.text = spanned.trim()
+                    }
+                    1 -> {
+                        binding.TextView2.textSize = fontBiblia
+                        binding.TextView2.text = spanned.trim()
+                        binding.TextView2.visibility = View.VISIBLE
+                    }
+                    2 -> {
+                        binding.TextView3.textSize = fontBiblia
+                        binding.TextView3.text = spanned.trim()
+                        binding.TextView3.visibility = View.VISIBLE
+                    }
+                    3 -> {
+                        binding.TextView4.textSize = fontBiblia
+                        binding.TextView4.text = spanned.trim()
+                        binding.TextView4.visibility = View.VISIBLE
+                    }
+                }
             }
         } else {
-            val imageView = grateImageView()
-            val textView = grateTextView(res)
-            binding.linearLayout.addView(imageView)
-            binding.linearLayout.addView(textView)
-            opisanieDataLink.add(OpisanieData(imageView, textView))
+            val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            val spanned = MainActivity.fromHtml(res)
+            binding.TextView1.textSize = fontBiblia
+            binding.TextView1.text = spanned.trim()
         }
     }
 
     private fun loadOpisanieSviat() {
-        binding.linearLayout.removeAllViewsInLayout()
         val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
         val builder = fileOpisanieSviat.readText()
         val gson = Gson()
@@ -188,11 +176,10 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             if (day == it[0].toInt() && mun == it[1].toInt()) {
                 var res = it[2]
                 if (dzenNoch) res = res.replace("#d00505", "#f44336")
-                val imageView = grateImageView()
-                val textView = grateTextView(res)
-                binding.linearLayout.addView(imageView)
-                binding.linearLayout.addView(textView)
-                opisanieDataLink.add(OpisanieData(imageView, textView))
+                val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                val spanned = MainActivity.fromHtml(res)
+                binding.TextView1.textSize = fontBiblia
+                binding.TextView1.text = spanned.trim()
             }
         }
     }
@@ -290,18 +277,22 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             if (dzenNoch) binding.imageViewFull.background = ContextCompat.getDrawable(this@Opisanie, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             val dir = File("$filesDir/icons/")
             if (!dir.exists()) dir.mkdir()
-            opisanieDataLink.forEachIndexed { i, opisanieData ->
+            for (i in 0..3) {
                 var schet = ""
                 if (i > 0) schet = "_${i + 1}"
                 val file = if (svity) File("$filesDir/icons/v_${day}_${mun}.jpg")
                 else File("$filesDir/icons/s_${day}_${mun}$schet.jpg")
                 if (file.exists() && !update) {
-                    opisanieData.imageView.post {
-                        opisanieData.imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file.absolutePath)))
-                        opisanieData.imageView.visibility = View.VISIBLE
-                        if (svity) opisanieData.imageName = "v_${day}_${mun}.jpg"
-                        else opisanieData.imageName = "s_${day}_${mun}$schet.jpg"
-                        opisanieData.imageView.setOnClickListener {
+                    val imageView = when (i) {
+                        1 -> binding.image2
+                        2 -> binding.image3
+                        3 -> binding.image4
+                        else -> binding.image1
+                    }
+                    imageView.post {
+                        imageView.setImageBitmap(resizeImage(BitmapFactory.decodeFile(file.absolutePath)))
+                        imageView.visibility = View.VISIBLE
+                        imageView.setOnClickListener {
                             if (file.exists()) {
                                 val bitmap = BitmapFactory.decodeFile(file.absolutePath)
                                 binding.imageViewFull.setImageBitmap(bitmap)
@@ -332,12 +323,16 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                                     out.flush()
                                     out.close()
                                     withContext(Dispatchers.Main) {
-                                        opisanieData.imageView.post {
-                                            opisanieData.imageView.setImageBitmap(resizeImage(bmp))
-                                            opisanieData.imageView.visibility = View.VISIBLE
-                                            if (svity) opisanieData.imageName = "v_${day}_${mun}.jpg"
-                                            else opisanieData.imageName = "s_${day}_${mun}$schet.jpg"
-                                            opisanieData.imageView.setOnClickListener {
+                                        val imageView = when (i) {
+                                            1 -> binding.image2
+                                            2 -> binding.image3
+                                            3 -> binding.image4
+                                            else -> binding.image1
+                                        }
+                                        imageView.post {
+                                            imageView.setImageBitmap(resizeImage(bmp))
+                                            imageView.visibility = View.VISIBLE
+                                            imageView.setOnClickListener {
                                                 if (file2.exists()) {
                                                     val bitmap = BitmapFactory.decodeFile(file.absolutePath)
                                                     binding.imageViewFull.setImageBitmap(bitmap)
@@ -359,9 +354,10 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     }
 
     override fun onDialogFontSize(fontSize: Float) {
-        opisanieDataLink.forEach {
-            it.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
-        }
+        binding.TextView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
+        binding.TextView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
+        binding.TextView3.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
+        binding.TextView4.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
     }
 
     private fun setTollbarTheme() {
@@ -493,6 +489,4 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    private data class OpisanieData(val imageView: ImageView, val textView: TextView, var imageName: String = "noImage")
 }

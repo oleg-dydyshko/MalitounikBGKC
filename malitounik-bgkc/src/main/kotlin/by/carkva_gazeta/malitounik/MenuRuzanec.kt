@@ -12,8 +12,7 @@ class MenuRuzanec : ListFragment() {
     private val data: Array<out String>
         get() = resources.getStringArray(R.array.ruzanec)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let {
             val adapter = MenuListAdaprer(it, data)
             listAdapter = adapter
@@ -69,7 +68,7 @@ class MenuRuzanec : ListFragment() {
             }
         } else {
             val dadatak = DialogInstallDadatak()
-            fragmentManager?.let { dadatak.show(it, "dadatak") }
+            dadatak.show(childFragmentManager, "dadatak")
         }
     }
 }

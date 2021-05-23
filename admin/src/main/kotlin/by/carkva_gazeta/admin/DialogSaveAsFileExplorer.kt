@@ -67,7 +67,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.text = getString(by.carkva_gazeta.malitounik.R.string.save_as_up)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(fragmentActivity,  Typeface.BOLD)
+            textViewZaglavie.typeface = MainActivity.createFont(fragmentActivity, Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(fragmentActivity, by.carkva_gazeta.malitounik.R.color.colorWhite))
             linear.addView(textViewZaglavie)
             val textView = TextView(fragmentActivity)
@@ -79,10 +79,8 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textView.background = ContextCompat.getDrawable(fragmentActivity, by.carkva_gazeta.malitounik.R.drawable.selector_default)
             textView.setOnClickListener {
-                fragmentManager?.let {
-                    val dialogPasochnicaMkDir = DialogPasochnicaMkDir.getInstance(dir)
-                    dialogPasochnicaMkDir.show(it, "dialogPasochnicaMkDir")
-                }
+                val dialogPasochnicaMkDir = DialogPasochnicaMkDir.getInstance(dir)
+                dialogPasochnicaMkDir.show(childFragmentManager, "dialogPasochnicaMkDir")
             }
             linear.addView(textView)
             fileName = arguments?.getString("oldName", "") ?: ""
@@ -121,10 +119,8 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 dialog.cancel()
             }
             builder.setNeutralButton(getString(by.carkva_gazeta.malitounik.R.string.add_pesny)) { _: DialogInterface, _: Int ->
-                fragmentManager?.let {
-                    val dialogAddPesny = DialogAddPesny.getInstance(arguments?.getString("oldName", "") ?: "")
-                    dialogAddPesny.show(it, "dialogAddPesny")
-                }
+                val dialogAddPesny = DialogAddPesny.getInstance(arguments?.getString("oldName", "") ?: "")
+                dialogAddPesny.show(childFragmentManager, "dialogAddPesny")
             }
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()

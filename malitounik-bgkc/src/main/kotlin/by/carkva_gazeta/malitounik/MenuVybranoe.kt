@@ -161,8 +161,7 @@ class MenuVybranoe : VybranoeFragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { fragmentActivity ->
             k = fragmentActivity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val gson = Gson()
@@ -193,12 +192,10 @@ class MenuVybranoe : VybranoeFragment() {
 
                 override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: ListSwipeItem.SwipeDirection) {
                     if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
-                        fragmentManager?.let {
-                            val adapterItem = item.tag as VybranoeData
-                            val pos: Int = binding.dragListView.adapter.getPositionForItem(adapterItem)
-                            val dd = DialogDelite.getInstance(pos, "", "з выбранага", adapter.itemList[pos].data)
-                            fragmentManager?.let { dd.show(it, "dialog_dilite") }
-                        }
+                        val adapterItem = item.tag as VybranoeData
+                        val pos: Int = binding.dragListView.adapter.getPositionForItem(adapterItem)
+                        val dd = DialogDelite.getInstance(pos, "", "з выбранага", adapter.itemList[pos].data)
+                        dd.show(childFragmentManager, "dialog_dilite")
                     }
                 }
             })
@@ -233,9 +230,7 @@ class MenuVybranoe : VybranoeFragment() {
         val id = item.itemId
         if (id == R.id.trash) {
             if (adapter.itemList.size > 0) {
-                fragmentManager?.let {
-                    DialogDeliteAllVybranoe().show(it, "DeliteVybranoe")
-                }
+                DialogDeliteAllVybranoe().show(childFragmentManager, "DeliteVybranoe")
             }
         }
         if (id == R.id.sortdate) {
@@ -341,14 +336,14 @@ class MenuVybranoe : VybranoeFragment() {
                         }
                     } else {
                         val dadatak = DialogInstallDadatak()
-                        fragmentManager?.let { dadatak.show(it, "dadatak") }
+                        dadatak.show(childFragmentManager, "dadatak")
                     }
                 }
             }
 
             override fun onItemLongClicked(view: View): Boolean {
                 val dd = DialogDelite.getInstance(adapterPosition, "", "з выбранага", itemList[adapterPosition].data)
-                fragmentManager?.let { dd.show(it, "dialog_dilite") }
+                dd.show(childFragmentManager, "dialog_dilite")
                 return true
             }
         }

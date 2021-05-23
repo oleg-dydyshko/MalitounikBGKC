@@ -57,8 +57,7 @@ class MenuCviaty : CviatyListFragment() {
         myArrayAdapter.notifyDataSetChanged()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         listView.isVerticalScrollBarEnabled = false
         listView.isHorizontalScrollBarEnabled = false
         activity?.let {

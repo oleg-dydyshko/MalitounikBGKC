@@ -18,7 +18,6 @@ import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.malitounik.databinding.CalendatTab1Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import java.util.*
-import kotlin.collections.ArrayList
 
 class CaliandarMunTab1 : Fragment() {
     private lateinit var adapterViewPager: SmartFragmentStatePagerAdapter
@@ -47,11 +46,6 @@ class CaliandarMunTab1 : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = CalendatTab1Binding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         activity?.let { activity ->
             val chin = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = chin.getBoolean("dzen_noch", false)
@@ -67,10 +61,8 @@ class CaliandarMunTab1 : Fragment() {
             val adapter2 = CaliandarMunAdapter(activity, data2)
             binding.spinner2.adapter = adapter2
 
-            fragmentManager?.let {
-                adapterViewPager = MyPagerAdapter(it)
-                binding.pager.adapter = adapterViewPager
-            }
+            adapterViewPager = MyPagerAdapter(childFragmentManager)
+            binding.pager.adapter = adapterViewPager
             val c = Calendar.getInstance() as GregorianCalendar
             val son = (yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + posMun
             binding.pager.currentItem = son
@@ -131,6 +123,7 @@ class CaliandarMunTab1 : Fragment() {
                 override fun onPageScrollStateChanged(state: Int) {}
             })
         }
+        return binding.root
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -167,15 +160,15 @@ class CaliandarMunTab1 : Fragment() {
             else textView.setBackgroundResource(R.drawable.selector_default)
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
-                    textView.typeface = MainActivity.createFont(context,  Typeface.BOLD)
+                    textView.typeface = MainActivity.createFont(context, Typeface.BOLD)
                 } else {
-                    textView.typeface = MainActivity.createFont(context,  Typeface.NORMAL)
+                    textView.typeface = MainActivity.createFont(context, Typeface.NORMAL)
                 }
             } else {
                 if (day[Calendar.YEAR] == position + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
-                    textView.typeface = MainActivity.createFont(context,  Typeface.BOLD)
+                    textView.typeface = MainActivity.createFont(context, Typeface.BOLD)
                 } else {
-                    textView.typeface = MainActivity.createFont(context,  Typeface.NORMAL)
+                    textView.typeface = MainActivity.createFont(context, Typeface.NORMAL)
                 }
             }
             return v
@@ -199,16 +192,16 @@ class CaliandarMunTab1 : Fragment() {
             else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position && day[Calendar.YEAR] == binding.spinner2.selectedItemPosition + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
-                    viewHolder.text.typeface = MainActivity.createFont(context,  Typeface.BOLD)
+                    viewHolder.text.typeface = MainActivity.createFont(context, Typeface.BOLD)
                 } else {
-                    viewHolder.text.typeface = MainActivity.createFont(context,  Typeface.NORMAL)
+                    viewHolder.text.typeface = MainActivity.createFont(context, Typeface.NORMAL)
                 }
                 viewHolder.text.text = names[position]
             } else {
                 if (day[Calendar.YEAR] == position + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
-                    viewHolder.text.typeface = MainActivity.createFont(context,  Typeface.BOLD)
+                    viewHolder.text.typeface = MainActivity.createFont(context, Typeface.BOLD)
                 } else {
-                    viewHolder.text.typeface = MainActivity.createFont(context,  Typeface.NORMAL)
+                    viewHolder.text.typeface = MainActivity.createFont(context, Typeface.NORMAL)
                 }
                 arrayList?.let { viewHolder.text.text = it[position] }
             }

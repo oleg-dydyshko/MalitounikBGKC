@@ -28,8 +28,7 @@ class MenuBibleSinoidal : Fragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { activity ->
             val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
@@ -87,7 +86,7 @@ class MenuBibleSinoidal : Fragment() {
                         startActivity(intent)
                     } else {
                         val dadatak = DialogInstallDadatak()
-                        fragmentManager?.let { dadatak.show(it, "dadatak") }
+                        dadatak.show(childFragmentManager, "dadatak")
                     }
                 } else {
                     if (MainActivity.checkmoduleResources(activity)) {
@@ -99,7 +98,7 @@ class MenuBibleSinoidal : Fragment() {
                         startActivity(intent)
                     } else {
                         val dadatak = DialogInstallDadatak()
-                        fragmentManager?.let { dadatak.show(it, "dadatak") }
+                        dadatak.show(childFragmentManager, "dadatak")
                     }
                 }
             }
@@ -115,7 +114,7 @@ class MenuBibleSinoidal : Fragment() {
                     startActivity(intent)
                 } else {
                     val dadatak = DialogInstallDadatak()
-                    fragmentManager?.let { dadatak.show(it, "dadatak") }
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
             }
             binding.natatki.setOnClickListener {
@@ -130,7 +129,7 @@ class MenuBibleSinoidal : Fragment() {
                     startActivity(intent)
                 } else {
                     val dadatak = DialogInstallDadatak()
-                    fragmentManager?.let { dadatak.show(it, "dadatak") }
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
             }
             binding.saeche.setOnClickListener {
@@ -145,7 +144,7 @@ class MenuBibleSinoidal : Fragment() {
                     startActivity(intent)
                 } else {
                     val dadatak = DialogInstallDadatak()
-                    fragmentManager?.let { dadatak.show(it, "dadatak") }
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
             }
             binding.umovyKarystannia.visibility = View.GONE

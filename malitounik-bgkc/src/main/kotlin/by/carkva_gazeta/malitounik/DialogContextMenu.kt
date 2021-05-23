@@ -60,6 +60,7 @@ class DialogContextMenu : DialogFragment() {
             val textView = TextView(it)
             textView.setPadding(realpadding, realpadding, realpadding, realpadding)
             textView.text = getString(R.string.redagaktirovat)
+            textView.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
                 textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -72,6 +73,7 @@ class DialogContextMenu : DialogFragment() {
             val textView2 = TextView(it)
             textView2.setPadding(realpadding, realpadding, realpadding, realpadding)
             textView2.text = getString(R.string.delite)
+            textView2.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
             textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
                 textView2.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))

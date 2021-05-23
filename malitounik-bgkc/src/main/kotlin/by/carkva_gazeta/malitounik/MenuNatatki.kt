@@ -43,8 +43,7 @@ class MenuNatatki : NatatkiFragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { activity ->
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val file = File(activity.filesDir.toString() + "/Natatki.json")
@@ -161,13 +160,13 @@ class MenuNatatki : NatatkiFragment() {
             }
         } else {
             val dadatak = DialogInstallDadatak()
-            fragmentManager?.let { dadatak.show(it, "dadatak") }
+            dadatak.show(childFragmentManager, "dadatak")
         }
     }
 
     override fun onDialogDeliteClick(position: Int, name: String) {
         val dd = DialogDelite.getInstance(position, "", "нататку", name)
-        fragmentManager?.let { dd.show(it, "dialog_delite") }
+        dd.show(childFragmentManager, "dialog_delite")
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -194,7 +193,7 @@ class MenuNatatki : NatatkiFragment() {
                 }
             } else {
                 val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+                dadatak.show(childFragmentManager, "dadatak")
             }
         }
         if (id == R.id.sortdate) {
@@ -257,8 +256,7 @@ class MenuNatatki : NatatkiFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class ItemAdapter(list: ArrayList<MyNatatkiFiles>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) :
-        DragItemAdapter<MyNatatkiFiles, ItemAdapter.ViewHolder>() {
+    private inner class ItemAdapter(list: ArrayList<MyNatatkiFiles>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<MyNatatkiFiles, ItemAdapter.ViewHolder>() {
         private var dzenNoch = false
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -307,13 +305,13 @@ class MenuNatatki : NatatkiFragment() {
                     }
                 } else {
                     val dadatak = DialogInstallDadatak()
-                    fragmentManager?.let { dadatak.show(it, "dadatak") }
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
             }
 
             override fun onItemLongClicked(view: View): Boolean {
                 val contextMenu = DialogContextMenu.getInstance(adapterPosition, itemList[adapterPosition].title)
-                fragmentManager?.let { contextMenu.show(it, "context_menu") }
+                contextMenu.show(childFragmentManager, "context_menu")
                 return true
             }
         }

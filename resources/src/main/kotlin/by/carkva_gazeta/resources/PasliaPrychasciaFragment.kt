@@ -35,8 +35,7 @@ class PasliaPrychasciaFragment : Fragment() {
         resursID = arguments?.getInt("resursID") ?: R.raw.paslia_prychascia1
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { activity ->
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = k.getBoolean("dzen_noch", false)

@@ -35,21 +35,14 @@ class CaliandarMunTab2 : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = CalendatTab2Binding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         activity?.let { activity ->
             val chin = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = chin.getBoolean("dzen_noch", false)
             day = arguments?.getInt("day") ?: 0
             posMun = arguments?.getInt("posMun") ?: 0
             yearG = arguments?.getInt("yearG") ?: 0
-            fragmentManager?.let {
-                adapterViewPagerNedel = MyCalendarNedelAdapter(it)
-                binding.pagerNedel.adapter = adapterViewPagerNedel
-            }
+            adapterViewPagerNedel = MyCalendarNedelAdapter(childFragmentManager)
+            binding.pagerNedel.adapter = adapterViewPagerNedel
             binding.imageButton.setOnClickListener { binding.pagerNedel.currentItem = binding.pagerNedel.currentItem - 1 }
             binding.imageButton2.setOnClickListener { binding.pagerNedel.currentItem = binding.pagerNedel.currentItem + 1 }
             if (dzenNoch) {
@@ -151,6 +144,7 @@ class CaliandarMunTab2 : Fragment() {
                 }
             }
         }
+        return binding.root
     }
 
     private inner class MyCalendarNedelAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {

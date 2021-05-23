@@ -56,8 +56,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { fraragment ->
             chin = fraragment.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             pesny = arguments?.getString("pesny") ?: "prasl"
@@ -113,10 +112,8 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             binding.History.adapter = historyAdapter
             binding.History.onItemClickListener = this
             binding.History.setOnItemLongClickListener { _, _, position, _ ->
-                fragmentManager?.let {
-                    val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
-                    dialogClearHishory.show(it, "dialogClearHishory")
-                }
+                val dialogClearHishory = DialogClearHishory.getInstance(position, history[position])
+                dialogClearHishory.show(childFragmentManager, "dialogClearHishory")
                 return@setOnItemLongClickListener true
             }
         }
@@ -190,10 +187,8 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_clean_histopy) {
-            fragmentManager?.let {
-                val dialogClearHishory = DialogClearHishory.getInstance()
-                dialogClearHishory.show(it, "dialogClearHishory")
-            }
+            val dialogClearHishory = DialogClearHishory.getInstance()
+            dialogClearHishory.show(childFragmentManager, "dialogClearHishory")
         }
         return super.onOptionsItemSelected(item)
     }
@@ -394,7 +389,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             searchViewQwery = poshuk1
             val menuListData = getMenuListData()
             for (i in menuListData.indices) {
-                val inputStream = resources.openRawResource(PesnyAll.listRaw(activity, menuListData[i].type) )
+                val inputStream = resources.openRawResource(PesnyAll.listRaw(activity, menuListData[i].type))
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
                 var line: String
@@ -459,8 +454,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
 
         override fun afterTextChanged(s: Editable) {
             if (editch && search) {
-                var edit = s.toString()
-                //searchViewQwery = edit
+                var edit = s.toString() //searchViewQwery = edit
                 edit = edit.replace("и", "і")
                 edit = edit.replace("И", "І")
                 edit = edit.replace("щ", "ў")
@@ -513,8 +507,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             val dzenNoch = chin.getBoolean("dzen_noch", false)
             viewHolder.text.text = menuList[position].data
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch)
-                viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }
     }

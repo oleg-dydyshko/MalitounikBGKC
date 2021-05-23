@@ -107,8 +107,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         CoroutineScope(Dispatchers.Main).launch {
             activity?.let { it ->
                 val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)

@@ -17,8 +17,7 @@ class MenuBogashlugbovya : ListFragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { listAdapter = MenuListAdaprer(it, data) }
         listView.isVerticalScrollBarEnabled = false
     }
@@ -195,7 +194,7 @@ class MenuBogashlugbovya : ListFragment() {
                     }
                 } else {
                     val dadatak = DialogInstallDadatak()
-                    fragmentManager?.let { dadatak.show(it, "dadatak") }
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
             }
         }

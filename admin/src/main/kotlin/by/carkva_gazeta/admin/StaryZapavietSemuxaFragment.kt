@@ -97,8 +97,7 @@ class StaryZapavietSemuxaFragment : Fragment() {
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { actyvity ->
             if (MainActivity.isNetworkAvailable(actyvity)) {
                 binding.progressBar2.visibility = View.VISIBLE

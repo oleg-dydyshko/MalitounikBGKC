@@ -63,8 +63,7 @@ class CaliandarNedzel : ListFragment() {
         return (SettingsActivity.GET_CALIANDAR_YEAR_MAX - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 1) * 12
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 val builder = StringBuilder()
@@ -204,7 +203,7 @@ class CaliandarNedzel : ListFragment() {
                     viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
                     viewHolder.textPostS.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
                     viewHolder.textPostS.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
-                    viewHolder.textPostS.text = mContext.resources.getString(R.string.No_post)
+                    viewHolder.textPostS.text = mContext.resources.getString(R.string.No_post_n)
                 }
                 2 -> {
                     viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
@@ -228,7 +227,7 @@ class CaliandarNedzel : ListFragment() {
             if (arrayList[position][7].contains("3")) {
                 viewHolder.textPostS.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
                 viewHolder.textPostS.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
-                viewHolder.textPostS.text = mContext.resources.getString(R.string.Strogi_post)
+                viewHolder.textPostS.text = mContext.resources.getString(R.string.Strogi_post_n)
                 viewHolder.textPostS.visibility = View.VISIBLE
             } else if (arrayList[position][0].contains("6")) { // Пятница
                 viewHolder.textPostS.visibility = View.VISIBLE

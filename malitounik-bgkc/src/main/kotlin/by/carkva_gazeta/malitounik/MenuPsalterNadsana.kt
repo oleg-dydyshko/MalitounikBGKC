@@ -31,8 +31,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let {
             k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
@@ -102,10 +101,8 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                     intent.putExtra("zavet", 3)
                     startActivity(intent)
                 } else {
-                    fragmentManager?.let {
-                        val dadatak = DialogInstallDadatak()
-                        dadatak.show(it, "dadatak")
-                    }
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(childFragmentManager, "dadatak")
                 }
             }
         }
@@ -128,12 +125,12 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                 startActivity(intent)
             } else {
                 val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+                dadatak.show(childFragmentManager, "dadatak")
             }
         }
         if (id == R.id.pravila_chtenia) {
             val pravila = DialogNadsanPravila()
-            fragmentManager?.let { pravila.show(it, "pravila") }
+            pravila.show(childFragmentManager, "pravila")
         }
         if (id == R.id.malitva_pered) {
             if (MainActivity.checkmoduleResources(activity)) {
@@ -146,7 +143,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                 }
             } else {
                 val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+                dadatak.show(childFragmentManager, "dadatak")
             }
         }
         if (id == R.id.malitva_posle) {
@@ -160,7 +157,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                 }
             } else {
                 val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+                dadatak.show(childFragmentManager, "dadatak")
             }
         }
         if (id == R.id.pesni) {
@@ -173,7 +170,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                 }
             } else {
                 val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+                dadatak.show(childFragmentManager, "dadatak")
             }
         }
         if (id == R.id.pravila) {
@@ -185,7 +182,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                 }
             } else {
                 val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+                dadatak.show(childFragmentManager, "dadatak")
             }
         }
         val glava = when (id) {
@@ -221,7 +218,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
                 }
             } else {
                 val dadatak = DialogInstallDadatak()
-                fragmentManager?.let { dadatak.show(it, "dadatak") }
+                dadatak.show(childFragmentManager, "dadatak")
             }
         }
     }

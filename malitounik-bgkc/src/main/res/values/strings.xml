@@ -188,7 +188,9 @@
     <string name="tipicon_fon">ФОН У КАЛЕНДАРЫ:</string>
     <string name="Post">Пост</string>
     <string name="Strogi_post">Строгі\nпост</string>
+    <string name="Strogi_post_n">Строгі пост</string>
     <string name="No_post">Посту\nняма</string>
+    <string name="No_post_n">Посту няма</string>
     <string name="niadzeli_i_sviaty">Нядзелі і сьвяты</string>
     <string name="zvychaynye_dny">Звычайныя дні</string>
     <string name="Znaki_cviat">ЗНАЧКІ СЬВЯТАЎ:</string>

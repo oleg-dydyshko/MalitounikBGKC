@@ -12,8 +12,7 @@ class MenuAkafisty : ListFragment() {
         get() = resources.getStringArray(R.array.akafisty)
     private var mLastClickTime: Long = 0
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let {
             val adapter = MenuListAdaprer(it, data)
             listAdapter = adapter
@@ -77,7 +76,7 @@ class MenuAkafisty : ListFragment() {
             }
         } else {
             val dadatak = DialogInstallDadatak()
-            fragmentManager?.let { dadatak.show(it, "dadatak") }
+            dadatak.show(childFragmentManager, "dadatak")
         }
     }
 

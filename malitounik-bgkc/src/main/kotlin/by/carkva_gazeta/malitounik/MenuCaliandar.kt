@@ -110,21 +110,18 @@ class MenuCaliandar : MenuCaliandarFragment() {
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        fragmentManager?.let {
-            adapter = MyCalendarAdapter(it)
-            binding.pager.adapter = adapter
-            binding.pager.currentItem = page
-            binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-                override fun onPageSelected(position: Int) {
-                    listinner?.setPage(position)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        adapter = MyCalendarAdapter(childFragmentManager)
+        binding.pager.adapter = adapter
+        binding.pager.currentItem = page
+        binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+            override fun onPageSelected(position: Int) {
+                listinner?.setPage(position)
+            }
 
-                override fun onPageScrollStateChanged(state: Int) {}
-            })
-        }
+            override fun onPageScrollStateChanged(state: Int) {}
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -261,7 +261,7 @@ class DialogCalindarGrid : DialogFragment() {
                 activity?.let { fragmentActivity ->
                     if (!MainActivity.checkmoduleResources(fragmentActivity)) {
                         val dadatak = DialogInstallDadatak()
-                        fragmentManager?.let { dadatak.show(it, "dadatak") }
+                        dadatak.show(childFragmentManager, "dadatak")
                         return
                     }
                 }
@@ -304,18 +304,14 @@ class DialogCalindarGrid : DialogFragment() {
                             }
                             when {
                                 slugba.checkLiturgia(data, mun) -> {
-                                    fragmentManager?.let {
-                                        val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitleOpisanieSviat(data, mun), mun, data, ton1, tonNaidzelny, true, ton_na_viliki_post = false, resurs = "", sviatyaName, checkSviatyia, year)
-                                        traparyAndKandaki.show(it, "traparyAndKandaki")
-                                    }
+                                    val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitleOpisanieSviat(data, mun), mun, data, ton1, tonNaidzelny, true, ton_na_viliki_post = false, resurs = "", sviatyaName, checkSviatyia, year)
+                                    traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                 }
                                 slugba.checkLiturgia(raznicia) -> {
                                     if (denNedzeli == Calendar.SUNDAY && ton != 0) {
                                         val resours = slugba.getResource(raznicia, liturgia = true)
-                                        fragmentManager?.let {
-                                            val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton, true, ton_na_sviaty = false, ton_na_viliki_post = true, resurs = resours, sviatyaName, checkSviatyia, year)
-                                            traparyAndKandaki.show(it, "traparyAndKandaki")
-                                        }
+                                        val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton, true, ton_na_sviaty = false, ton_na_viliki_post = true, resurs = resours, sviatyaName, checkSviatyia, year)
+                                        traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                     } else {
                                         val intent = Intent()
                                         val resours = slugba.getResource(raznicia, liturgia = true)
@@ -329,10 +325,8 @@ class DialogCalindarGrid : DialogFragment() {
                                 else -> {
                                     if (checkSviatyia) {
                                         val resours = slugba.getResource(raznicia, liturgia = true)
-                                        fragmentManager?.let {
-                                            val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton1, tonNaidzelny, ton_na_sviaty = false, ton_na_viliki_post = false, resurs = resours, sviatyaName, checkSviatyia, year)
-                                            traparyAndKandaki.show(it, "traparyAndKandaki")
-                                        }
+                                        val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton1, tonNaidzelny, ton_na_sviaty = false, ton_na_viliki_post = false, resurs = resours, sviatyaName, checkSviatyia, year)
+                                        traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                     } else {
                                         val intent = Intent()
                                         intent.setClassName(fragmentActivity, MainActivity.TON)

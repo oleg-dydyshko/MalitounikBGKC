@@ -49,10 +49,8 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == myPermissionsWriteExternalStorage) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                fragmentManager?.let {
                     val dialogImageFileExplorer = DialogImageFileExplorer()
-                    dialogImageFileExplorer.show(it, "dialogImageFileExplorer")
-                }
+                    dialogImageFileExplorer.show(childFragmentManager, "dialogImageFileExplorer")
             }
         }
     }
@@ -161,10 +159,8 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
             binding.apisanne.setSelection(endSelect + 3)
         }
         if (id == R.id.action_img) {
-            fragmentManager?.let {
                 val dialogSviatyiaImageHelp = DialogSviatyiaImageHelp()
-                dialogSviatyiaImageHelp.show(it, "dialogSviatyiaImageHelp")
-            }
+                dialogSviatyiaImageHelp.show(childFragmentManager, "dialogSviatyiaImageHelp")
         }
     }
 
@@ -254,10 +250,8 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                 if (PackageManager.PERMISSION_DENIED == permissionCheck) {
                     requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
                 } else {
-                    fragmentManager?.let {
                         val dialogImageFileExplorer = DialogImageFileExplorer()
-                        dialogImageFileExplorer.show(it, "dialogImageFileExplorer")
-                    }
+                        dialogImageFileExplorer.show(childFragmentManager, "dialogImageFileExplorer")
                 }
             }
         }

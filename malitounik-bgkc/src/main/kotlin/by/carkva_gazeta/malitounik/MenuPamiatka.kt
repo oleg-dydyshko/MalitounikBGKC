@@ -33,11 +33,11 @@ class MenuPamiatka : PadryxtoukaPamiatkaListFragment() {
         val id = item.itemId
         if (id == R.id.action_font) {
             val dialogFontSize = DialogFontSize()
-            fragmentManager?.let { dialogFontSize.show(it, "font") }
+            dialogFontSize.show(childFragmentManager, "font")
         }
         if (id == R.id.action_bright) {
             val dialogBrightness = DialogBrightness()
-            fragmentManager?.let { dialogBrightness.show(it, "brightness") }
+            dialogBrightness.show(childFragmentManager, "brightness")
         }
         if (id == R.id.action_dzen_noch) {
             item.isChecked = !item.isChecked
@@ -53,8 +53,7 @@ class MenuPamiatka : PadryxtoukaPamiatkaListFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { fragmentActivity ->
             k = fragmentActivity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             listView.isVerticalScrollBarEnabled = false

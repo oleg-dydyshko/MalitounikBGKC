@@ -12,8 +12,7 @@ class MenuParafiiBgkc : ListFragment() {
         get() = resources.getStringArray(R.array.parafii_bgkc)
     private var mLastClickTime: Long = 0
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let {
             listAdapter = MenuListAdaprer(it, data)
             listView.isVerticalScrollBarEnabled = false
@@ -47,7 +46,7 @@ class MenuParafiiBgkc : ListFragment() {
             }
         } else {
             val dadatak = DialogInstallDadatak()
-            fragmentManager?.let { dadatak.show(it, "dadatak") }
+            dadatak.show(childFragmentManager, "dadatak")
         }
     }
 }

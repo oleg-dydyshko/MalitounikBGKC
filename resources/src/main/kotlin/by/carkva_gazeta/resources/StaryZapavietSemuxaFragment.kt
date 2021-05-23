@@ -113,10 +113,7 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
                     if (maxIndex < it.id) maxIndex = it.id
                 }
                 maxIndex++
-                BibleGlobalList.zakladkiSemuxa.add(0,
-                    BibleZakladkiData(maxIndex,
-                        knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(
-                            bible[BibleGlobalList.bibleCopyList[0]]).toString() + "<!--" + color))
+                BibleGlobalList.zakladkiSemuxa.add(0, BibleZakladkiData(maxIndex, knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString() + "<!--" + color))
                 MainActivity.toastView(activity, getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
             }
             BibleGlobalList.mPedakVisable = false
@@ -125,7 +122,6 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
             adapter.notifyDataSetChanged()
         }
     }
-
 
 
     override fun addNatatka() {
@@ -434,8 +430,7 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.listView.setSelection(StaryZapavietSemuxa.fierstPosition)
         binding.listView.onItemLongClickListener = this
         binding.listView.onItemClickListener = this
@@ -788,10 +783,8 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
                         }
                     }
                     if (index == -1) {
-                        fragmentManager?.let {
-                            val dialog = DialogAddZakladka()
-                            dialog.show(it, "DialogAddZakladka")
-                        }
+                        val dialog = DialogAddZakladka()
+                        dialog.show(childFragmentManager, "DialogAddZakladka")
                     } else {
                         BibleGlobalList.zakladkiSemuxa.removeAt(index)
                         BibleGlobalList.mPedakVisable = false
@@ -834,10 +827,8 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
                         38 -> knigaReal = 45
                     }
                     val knigaName = knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_by) + " " + (BibleGlobalList.bibleCopyList[0] + 1)
-                    fragmentManager?.let { fragmentManager ->
-                        val zametka = DialogBibleNatatka.getInstance(semuxa = true, novyzavet = false, kniga = knigaReal, bibletext = knigaName)
-                        zametka.show(fragmentManager, "bible_zametka")
-                    }
+                    val zametka = DialogBibleNatatka.getInstance(semuxa = true, novyzavet = false, kniga = knigaReal, bibletext = knigaName)
+                    zametka.show(childFragmentManager, "bible_zametka")
                     binding.linearLayout4.animation = AnimationUtils.loadAnimation(activity.baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
                     binding.linearLayout4.visibility = View.GONE
                     BibleGlobalList.mPedakVisable = false

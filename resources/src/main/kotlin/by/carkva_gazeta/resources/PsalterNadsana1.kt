@@ -25,8 +25,7 @@ class PsalterNadsana1(private val activity: Activity) : Fragment(), View.OnClick
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val chin = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
         binding.textView1.setOnClickListener(this)

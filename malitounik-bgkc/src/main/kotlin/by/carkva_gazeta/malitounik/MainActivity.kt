@@ -21,6 +21,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -61,6 +62,60 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     private var shortcuts = false
     private var mLastClickTime: Long = 0
     private var resetTollbarJob: Job? = null
+    private val sabytieLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            if (intent != null) {
+                var dayyear = 0
+                val day = intent.getIntExtra("data", 0)
+                val year = intent.getIntExtra("year", c.get(Calendar.YEAR))
+                idSelect = R.id.label1
+                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
+                    dayyear += if (c.isLeapYear(i)) 366
+                    else 365
+                }
+                if (setDataCalendar != dayyear + day) {
+                    setDataCalendar = dayyear + day
+                    idOld = -1
+                    onClick(binding.label1)
+                }
+            }
+            onStart = true
+        }
+    }
+
+    private val searchSviatyiaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            if (intent != null) {
+                var dayyear = 0
+                val day = intent.getIntExtra("data", 0)
+                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until c.get(Calendar.YEAR)) {
+                    dayyear += if (c.isLeapYear(i)) 366
+                    else 365
+                }
+                if (setDataCalendar != dayyear + day) {
+                    setDataCalendar = dayyear + day
+                    idOld = -1
+                    onClick(binding.label1)
+                }
+            }
+        }
+    }
+
+    /*private val permission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+       when {
+           granted -> {
+               // доступ к камере разрешен, открываем камеру
+           }
+           !shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+               // доступ к камере запрещен, пользователь поставил галочку Don't ask again.
+           }
+           else -> {
+               // доступ к камере запрещен, пользователь отклонил запрос
+           }
+       }
+   }*/
 
     override fun setDataCalendar(day_of_year: Int, year: Int) {
         c = Calendar.getInstance() as GregorianCalendar
@@ -174,11 +229,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         if (savedInstanceState != null) {
             idSelect = savedInstanceState.getInt("id")
             idOld = savedInstanceState.getInt("idOld")
-        }
-        // Удаление кеша интернета
+        } // Удаление кеша интернета
         val fileSite = File("$filesDir/Site")
-        if (fileSite.exists()) fileSite.deleteRecursively()
-        // Создание нового формата нататок
+        if (fileSite.exists()) fileSite.deleteRecursively() // Создание нового формата нататок
         val fileNatatki = File("$filesDir/Natatki.json")
         if (!fileNatatki.exists()) {
             File(filesDir.toString().plus("/Malitva")).walk().forEach { file ->
@@ -619,11 +672,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
         if (id == R.id.sabytie) {
             val i = Intent(this, Sabytie::class.java)
-            startActivityForResult(i, 105)
+            sabytieLauncher.launch(i)
         }
         if (id == R.id.search_sviatyia) {
             val i = Intent(this, SearchSviatyia::class.java)
-            startActivityForResult(i, 140)
+            searchSviatyiaLauncher.launch(i)
         }
         if (id == R.id.action_mun) {
             if (onStart) {
@@ -635,7 +688,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 i.putExtra("mun", gregorianCalendar.get(Calendar.MONTH))
                 i.putExtra("day", gregorianCalendar.get(Calendar.DATE))
                 i.putExtra("year", gregorianCalendar.get(Calendar.YEAR))
-                startActivityForResult(i, 105)
+                sabytieLauncher.launch(i)
                 onStart = false
             }
         }
@@ -644,46 +697,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             dialogHelpListView.show(supportFragmentManager, "DialogHelpListView")
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 150 && resultCode == RESULT_OK) {
-            downloadDynamicModule(this)
-        }
-        if (requestCode == 105) {
-            if (data != null) {
-                var dayyear = 0
-                val day = data.getIntExtra("data", 0)
-                val year = data.getIntExtra("year", c.get(Calendar.YEAR))
-                idSelect = R.id.label1
-                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
-                    dayyear += if (c.isLeapYear(i)) 366
-                    else 365
-                }
-                if (setDataCalendar != dayyear + day) {
-                    setDataCalendar = dayyear + day
-                    idOld = -1
-                    onClick(binding.label1)
-                }
-            }
-            onStart = true
-        }
-        if (requestCode == 140) {
-            if (data != null) {
-                var dayyear = 0
-                val day = data.getIntExtra("data", 0)
-                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until c.get(Calendar.YEAR)) {
-                    dayyear += if (c.isLeapYear(i)) 366
-                    else 365
-                }
-                if (setDataCalendar != dayyear + day) {
-                    setDataCalendar = dayyear + day
-                    idOld = -1
-                    onClick(binding.label1)
-                }
-            }
-        }
     }
 
     override fun cleanFullHistory() {
@@ -999,7 +1012,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     if (shortcuts) {
                         val i = Intent(this, Sabytie::class.java)
                         i.putExtra("shortcuts", shortcuts)
-                        startActivityForResult(i, 105)
+                        sabytieLauncher.launch(i)
                         shortcuts = false
                     }
                 }

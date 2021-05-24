@@ -120,7 +120,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             }
             builder.setNeutralButton(getString(by.carkva_gazeta.malitounik.R.string.add_pesny)) { _: DialogInterface, _: Int ->
                 val dialogAddPesny = DialogAddPesny.getInstance(arguments?.getString("oldName", "") ?: "")
-                dialogAddPesny.show(childFragmentManager, "dialogAddPesny")
+                dialogAddPesny.show(fragmentActivity.supportFragmentManager, "dialogAddPesny")
             }
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()

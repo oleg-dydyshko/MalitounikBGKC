@@ -4,16 +4,13 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 
 class DialogFileExists : DialogFragment() {
     private var mListener: DialogFileExistsListener? = null
@@ -21,6 +18,13 @@ class DialogFileExists : DialogFragment() {
     private var oldFileName = ""
     private var fileName = ""
     private lateinit var alert: AlertDialog
+    private var _binding: DialogTextviewDisplayBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     interface DialogFileExistsListener {
         fun fileExists(dir: String, oldFileName: String, fileName: String)
@@ -46,28 +50,14 @@ class DialogFileExists : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            val linearLayout = LinearLayout(it)
-            linearLayout.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextView(it)
-            textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(by.carkva_gazeta.malitounik.R.string.file_exists)
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
-            linearLayout.addView(textViewZaglavie)
-            val textView = TextView(it)
-            textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView.text = getString(by.carkva_gazeta.malitounik.R.string.file_exists_opis, fileName)
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textView.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-            linearLayout.addView(textView)
+            binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.file_exists)
+            binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.file_exists_opis, fileName)
+            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             builder.setPositiveButton(resources.getText(by.carkva_gazeta.malitounik.R.string.file_perazapisac)) { _: DialogInterface, _: Int -> mListener?.fileExists(dir, oldFileName, fileName) }
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
-            builder.setView(linearLayout)
+            builder.setView(binding.root)
             alert = builder.create()
         }
         return alert

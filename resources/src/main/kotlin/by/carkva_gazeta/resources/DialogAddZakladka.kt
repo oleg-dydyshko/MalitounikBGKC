@@ -5,27 +5,32 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
-import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.databinding.DialogSpinnerDisplayBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemColorBinding
 
 class DialogAddZakladka : DialogFragment() {
-    private var realpadding = 0
     private var dzenNoch = false
     private lateinit var alert: AlertDialog
     private var dialogAddZakladkiListiner: DialogAddZakladkiListiner? = null
     private var color = 0
+    private var _binding: DialogSpinnerDisplayBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     interface DialogAddZakladkiListiner {
         fun addZakladka(color: Int)
@@ -48,44 +53,31 @@ class DialogAddZakladka : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            _binding = DialogSpinnerDisplayBinding.inflate(LayoutInflater.from(it))
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = k.getBoolean("dzen_noch", false)
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            val linear = LinearLayout(it)
-            linear.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextView(it)
             if (dzenNoch) {
                 BibleArrayAdapterParallel.colors[0] = "#FFFFFF"
                 BibleArrayAdapterParallel.colors[1] = "#f44336"
-                textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             } else {
                 BibleArrayAdapterParallel.colors[0] = "#000000"
                 BibleArrayAdapterParallel.colors[1] = "#D00505"
-                textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
+                binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             }
-            val density = resources.displayMetrics.density
-            realpadding = (10 * density).toInt()
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(R.string.add_color_zakladka)
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-            linear.addView(textViewZaglavie)
-            val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            layoutParams.setMargins(realpadding, realpadding, 0, 0)
-            val spinner = Spinner(it)
-            spinner.adapter = ColorAdapter(it)
-            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            binding.title.text = resources.getString(R.string.add_color_zakladka)
+            binding.content.adapter = ColorAdapter(it)
+            binding.content.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     color = position
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-            linear.addView(spinner, layoutParams)
-            builder.setView(linear)
+            builder.setView(binding.root)
             builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                 dialogAddZakladkiListiner?.addZakladka(color)
             }

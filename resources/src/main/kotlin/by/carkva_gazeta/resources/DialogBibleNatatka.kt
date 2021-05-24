@@ -4,18 +4,18 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.BibleGlobalList
+import by.carkva_gazeta.malitounik.BibleNatatkiData
 import by.carkva_gazeta.malitounik.R
+import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
 
 class DialogBibleNatatka : DialogFragment() {
     private var redaktor = false
@@ -29,6 +29,13 @@ class DialogBibleNatatka : DialogFragment() {
     private var bibletext = ""
     private lateinit var ad: AlertDialog.Builder
     private var dialogBibleNatatkaListiner: DialogBibleNatatkaListiner? = null
+    private var _binding: DialogEditviewDisplayBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     interface DialogBibleNatatkaListiner {
         fun addNatatka()
@@ -53,25 +60,17 @@ class DialogBibleNatatka : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        activity?.let { it ->
-            val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        activity?.let { fragmentActivity ->
+            _binding = DialogEditviewDisplayBinding.inflate(LayoutInflater.from(fragmentActivity))
+            val chin = fragmentActivity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
-            ad = AlertDialog.Builder(it, style)
-            val linearLayout = LinearLayout(it)
-            linearLayout.orientation = LinearLayout.VERTICAL
+            ad = AlertDialog.Builder(fragmentActivity, style)
             var editText = ""
-            val textViewZaglavie = TextView(it)
-            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.setText(R.string.natatka_bersha_biblii)
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-            linearLayout.addView(textViewZaglavie)
+            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_black))
+            else binding.title.setBackgroundColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary))
+            binding.title.setText(R.string.natatka_bersha_biblii)
             if (novyzavet)
                 nov = "1"
             if (semuxa) {
@@ -93,36 +92,33 @@ class DialogBibleNatatka : DialogFragment() {
                     }
                 }
             }
-            val editTextView = EditText(it)
-            editTextView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            editTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            editTextView.setText(editText)
-            editTextView.requestFocus()
+            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            binding.content.setText(editText)
+            binding.content.requestFocus()
             if (dzenNoch) {
-                editTextView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                editTextView.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
+                binding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorWhite))
+                binding.content.setBackgroundResource(R.color.colorbackground_material_dark_ligte)
             } else {
-                editTextView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-                editTextView.setBackgroundResource(R.color.colorWhite)
+                binding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_text))
+                binding.content.setBackgroundResource(R.color.colorWhite)
             }
-            val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm = fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-            linearLayout.addView(editTextView)
-            ad.setView(linearLayout)
+            ad.setView(binding.root)
             ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int ->
                 if (semuxa) {
                     if (redaktor && BibleGlobalList.natatkiSemuxa.size > 0) {
-                        if (editTextView.text.toString() == "") BibleGlobalList.natatkiSemuxa.removeAt(position)
-                        else BibleGlobalList.natatkiSemuxa[position].list[5] = editTextView.text.toString()
+                        if (binding.content.text.toString() == "") BibleGlobalList.natatkiSemuxa.removeAt(position)
+                        else BibleGlobalList.natatkiSemuxa[position].list[5] = binding.content.text.toString()
                     } else {
-                        if (editTextView.text.toString() != "") {
+                        if (binding.content.text.toString() != "") {
                             val temp = ArrayList<String>()
                             temp.add(nov)
                             temp.add(kniga.toString())
                             temp.add(glava.toString())
                             temp.add(stix.toString())
                             temp.add(bibletext)
-                            temp.add(editTextView.text.toString())
+                            temp.add(binding.content.text.toString())
                             var maxIndex: Long = 0
                             BibleGlobalList.natatkiSemuxa.forEach {
                                 if (maxIndex < it.id)
@@ -134,17 +130,17 @@ class DialogBibleNatatka : DialogFragment() {
                     }
                 } else {
                     if (redaktor && BibleGlobalList.natatkiSinodal.size > 0) {
-                        if (editTextView.text.toString() == "") BibleGlobalList.natatkiSinodal.removeAt(position)
-                        else BibleGlobalList.natatkiSinodal[position].list[5] = editTextView.text.toString()
+                        if (binding.content.text.toString() == "") BibleGlobalList.natatkiSinodal.removeAt(position)
+                        else BibleGlobalList.natatkiSinodal[position].list[5] = binding.content.text.toString()
                     } else {
-                        if (editTextView.text.toString() != "") {
+                        if (binding.content.text.toString() != "") {
                             val temp = ArrayList<String>()
                             temp.add(nov)
                             temp.add(kniga.toString())
                             temp.add(glava.toString())
                             temp.add(stix.toString())
                             temp.add(bibletext)
-                            temp.add(editTextView.text.toString())
+                            temp.add(binding.content.text.toString())
                             var maxIndex: Long = 0
                             BibleGlobalList.natatkiSinodal.forEach {
                                 if (maxIndex < it.id)
@@ -155,22 +151,22 @@ class DialogBibleNatatka : DialogFragment() {
                         }
                     }
                 }
-                val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm12.hideSoftInputFromWindow(editTextView.windowToken, 0)
+                val imm12 = fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm12.hideSoftInputFromWindow(binding.content.windowToken, 0)
                 dialogBibleNatatkaListiner?.addNatatka()
                 dialog.cancel()
             }
             ad.setNeutralButton(getString(R.string.bible_natatka)) { dialog: DialogInterface, _: Int ->
                 if (semuxa && BibleGlobalList.natatkiSemuxa.size > 0) BibleGlobalList.natatkiSemuxa.removeAt(position)
                 if (!semuxa && BibleGlobalList.natatkiSinodal.size > 0) BibleGlobalList.natatkiSinodal.removeAt(position)
-                val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm12.hideSoftInputFromWindow(editTextView.windowToken, 0)
+                val imm12 = fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm12.hideSoftInputFromWindow(binding.content.windowToken, 0)
                 dialogBibleNatatkaListiner?.addNatatka()
                 dialog.cancel()
             }
             ad.setNegativeButton(R.string.cansel) { dialog: DialogInterface, _: Int ->
-                val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm12.hideSoftInputFromWindow(editTextView.windowToken, 0)
+                val imm12 = fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm12.hideSoftInputFromWindow(binding.content.windowToken, 0)
                 dialog.cancel()
             }
         }

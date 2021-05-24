@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.ActivityNotFoundException
@@ -20,6 +21,7 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -86,6 +88,152 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     private var nazvaPadzei = "Назва падзеі"
     private lateinit var binding: SabytieBinding
     private var resetTollbarJob: Job? = null
+    private val labelbutton12Launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            if (intent != null) {
+                var dayyear: Long = 0
+                val day = intent.getIntExtra("data", 0).toLong()
+                val year = intent.getIntExtra("year", c[Calendar.YEAR])
+                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
+                    dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
+                }
+                val mills = (dayyear + day) * 86400000L
+                val setCal = Calendar.getInstance() as GregorianCalendar
+                setCal[SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1, 0, 0] = 0
+                val timeold = setCal.timeInMillis
+                this.result = mills + timeold
+                setCal.timeInMillis = this.result
+                var nol1 = ""
+                var nol2 = ""
+                if (setCal[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
+                if (setCal[Calendar.MONTH] < 9) nol2 = "0"
+                da = nol1 + setCal[Calendar.DAY_OF_MONTH] + "." + nol2 + (setCal[Calendar.MONTH] + 1) + "." + setCal[Calendar.YEAR]
+                yearG = setCal[Calendar.YEAR]
+                munG = setCal[Calendar.MONTH]
+                binding.labelbutton12.text = da
+                val days = binding.label1.text.toString().split(".")
+                val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
+                gc.add(Calendar.DATE, 1)
+                val days2 = binding.labelbutton12.text.toString().split(".")
+                val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
+                val kon = gc2.timeInMillis
+                val resul = gc.timeInMillis
+                if (kon - resul < 0) {
+                    MainActivity.toastView(this@Sabytie, getString(R.string.data_sabytie_error2))
+                    nol1 = ""
+                    nol2 = ""
+                    if (gc[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
+                    if (gc[Calendar.MONTH] < 9) nol2 = "0"
+                    binding.labelbutton12.text = resources.getString(R.string.Sabytie, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR])
+                }
+            }
+        }
+    }
+    private val labelbutton1Launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            if (intent != null) {
+                var dayyear: Long = 0
+                val day = intent.getIntExtra("data", 0).toLong()
+                val year = intent.getIntExtra("year", c[Calendar.YEAR])
+                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
+                    dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
+                }
+                val mills = (dayyear + day) * 86400000L
+                val setCal = Calendar.getInstance() as GregorianCalendar
+                setCal[SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1, 0, 0] = 0
+                val timeold = setCal.timeInMillis
+                this.result = mills + timeold
+                setCal.timeInMillis = this.result
+                var nol1 = ""
+                var nol2 = ""
+                if (setCal[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
+                if (setCal[Calendar.MONTH] < 9) nol2 = "0"
+                da = nol1 + setCal[Calendar.DAY_OF_MONTH] + "." + nol2 + (setCal[Calendar.MONTH] + 1) + "." + setCal[Calendar.YEAR]
+                yearG = setCal[Calendar.YEAR]
+                munG = setCal[Calendar.MONTH]
+                val days = binding.label1.text.toString().split(".")
+                val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
+                val days2 = binding.label12.text.toString().split(".")
+                val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
+                val kon = gc2[Calendar.DAY_OF_YEAR]
+                val res = gc[Calendar.DAY_OF_YEAR]
+                if (kon - res >= 0) {
+                    var da1: String
+                    setCal.add(Calendar.DATE, kon - res)
+                    nol1 = if (setCal[Calendar.DAY_OF_MONTH] < 10) "0" else ""
+                    nol2 = if (setCal[Calendar.MONTH] < 9) "0" else ""
+                    da1 = nol1 + setCal[Calendar.DAY_OF_MONTH] + "." + nol2 + (setCal[Calendar.MONTH] + 1) + "." + setCal[Calendar.YEAR]
+                    binding.label12.text = da1
+                    if (gc2[Calendar.YEAR] > gc[Calendar.YEAR]) {
+                        var leapYear = 365
+                        if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 366
+                        setCal.add(Calendar.DATE, -(kon - res))
+                        setCal.add(Calendar.DATE, leapYear - res + kon)
+                        nol1 = if (setCal[Calendar.DAY_OF_MONTH] < 10) "0" else ""
+                        nol2 = if (setCal[Calendar.MONTH] < 9) "0" else ""
+                        da1 = nol1 + setCal[Calendar.DAY_OF_MONTH] + "." + nol2 + (setCal[Calendar.MONTH] + 1) + "." + setCal[Calendar.YEAR]
+                        binding.label12.text = da1
+                    }
+                }
+                binding.label1.text = da
+                nol1 = ""
+                nol2 = ""
+                setCal.add(Calendar.DATE, 1)
+                if (setCal[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
+                if (setCal[Calendar.MONTH] < 9) nol2 = "0"
+                val days3 = binding.labelbutton12.text.toString().split(".")
+                val gc3 = GregorianCalendar(days3[2].toInt(), days3[1].toInt() - 1, days3[0].toInt(), 0, 0, 0)
+                val days4 = binding.label1.text.toString().split(".")
+                val gc4 = GregorianCalendar(days4[2].toInt(), days4[1].toInt() - 1, days4[0].toInt(), 0, 0, 0)
+                val kon2 = gc3.timeInMillis
+                val resul = gc4.timeInMillis
+                if (kon2 - resul < 0) binding.labelbutton12.text = resources.getString(R.string.Sabytie, nol1, setCal[Calendar.DAY_OF_MONTH], nol2, setCal[Calendar.MONTH] + 1, setCal[Calendar.YEAR])
+                val temp = binding.editText2.text
+                binding.editText2.setText("")
+                binding.editText2.text = temp
+            }
+        }
+    }
+    private val labelbutton12bLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            if (intent != null) {
+                var dayyear: Long = 0
+                val day = intent.getIntExtra("data", 0).toLong()
+                val year = intent.getIntExtra("year", c[Calendar.YEAR])
+                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
+                    dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
+                }
+                val mills = (dayyear + day) * 86400000L
+                val setCal = Calendar.getInstance() as GregorianCalendar
+                setCal[SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1, 0, 0] = 0
+                val timeold = setCal.timeInMillis
+                this.result = mills + timeold
+                setCal.timeInMillis = this.result
+                var nol1 = ""
+                var nol2 = ""
+                if (setCal[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
+                if (setCal[Calendar.MONTH] < 9) nol2 = "0"
+                da = nol1 + setCal[Calendar.DAY_OF_MONTH] + "." + nol2 + (setCal[Calendar.MONTH] + 1) + "." + setCal[Calendar.YEAR]
+                yearG = setCal[Calendar.YEAR]
+                munG = setCal[Calendar.MONTH]
+                binding.label12.text = da
+                val days = binding.label1.text.toString().split(".")
+                val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
+                val days2 = binding.label12.text.toString().split(".")
+                val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
+                val kon = gc2.timeInMillis
+                this.result = gc.timeInMillis
+                if (kon - this.result < 0) {
+                    MainActivity.toastView(this@Sabytie, getString(R.string.data_sabytie_error))
+                    da = binding.label1.text.toString()
+                    binding.label12.text = da
+                }
+            }
+        }
+    }
 
     override fun onPause() {
         super.onPause()
@@ -183,7 +331,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             i.putExtra("year", yearG)
             i.putExtra("mun", munG)
             i.putExtra("sabytie", true)
-            startActivityForResult(i, 1093)
+            labelbutton12Launcher.launch(i)
         })
         binding.radioGroup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -210,7 +358,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         i.putExtra("year", yearG)
                         i.putExtra("mun", munG)
                         i.putExtra("sabytie", true)
-                        startActivityForResult(i, 1093)
+                        labelbutton12Launcher.launch(i)
                     }
                     radio = 3
                     binding.radioButton2a.visibility = View.GONE
@@ -307,7 +455,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             i.putExtra("year", yearG)
             i.putExtra("mun", munG)
             i.putExtra("sabytie", true)
-            startActivityForResult(i, 109)
+            labelbutton1Launcher.launch(i)
         }
         binding.label2.text = ta
         binding.label2.setOnClickListener {
@@ -337,7 +485,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             i.putExtra("year", yearG)
             i.putExtra("mun", munG)
             i.putExtra("sabytie", true)
-            startActivityForResult(i, 1092)
+            labelbutton12bLauncher.launch(i)
         }
         binding.label22.text = ta
         binding.label22.setOnClickListener {
@@ -654,107 +802,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         menu?.let {
             val item = it.findItem(R.id.action_cansel)
             onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 109 || requestCode == 1092 || requestCode == 1093) {
-            if (data != null) {
-                var dayyear: Long = 0
-                val day = data.getIntExtra("data", 0).toLong()
-                val year = data.getIntExtra("year", c[Calendar.YEAR])
-                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
-                    dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
-                }
-                val mills = (dayyear + day) * 86400000L
-                val setCal = Calendar.getInstance() as GregorianCalendar
-                setCal[SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1, 0, 0] = 0
-                val timeold = setCal.timeInMillis
-                result = mills + timeold
-                setCal.timeInMillis = result
-                var nol1 = ""
-                var nol2 = ""
-                if (setCal[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
-                if (setCal[Calendar.MONTH] < 9) nol2 = "0"
-                da = nol1 + setCal[Calendar.DAY_OF_MONTH] + "." + nol2 + (setCal[Calendar.MONTH] + 1) + "." + setCal[Calendar.YEAR]
-                yearG = setCal[Calendar.YEAR]
-                munG = setCal[Calendar.MONTH]
-                if (requestCode == 109) {
-                    val days = binding.label1.text.toString().split(".")
-                    val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
-                    val days2 = binding.label12.text.toString().split(".")
-                    val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
-                    val kon = gc2[Calendar.DAY_OF_YEAR]
-                    val res = gc[Calendar.DAY_OF_YEAR]
-                    if (kon - res >= 0) {
-                        var da1: String
-                        setCal.add(Calendar.DATE, kon - res)
-                        nol1 = if (setCal[Calendar.DAY_OF_MONTH] < 10) "0" else ""
-                        nol2 = if (setCal[Calendar.MONTH] < 9) "0" else ""
-                        da1 = nol1 + setCal[Calendar.DAY_OF_MONTH] + "." + nol2 + (setCal[Calendar.MONTH] + 1) + "." + setCal[Calendar.YEAR]
-                        binding.label12.text = da1
-                        if (gc2[Calendar.YEAR] > gc[Calendar.YEAR]) {
-                            var leapYear = 365
-                            if (gc.isLeapYear(gc[Calendar.YEAR])) leapYear = 366
-                            setCal.add(Calendar.DATE, -(kon - res))
-                            setCal.add(Calendar.DATE, leapYear - res + kon)
-                            nol1 = if (setCal[Calendar.DAY_OF_MONTH] < 10) "0" else ""
-                            nol2 = if (setCal[Calendar.MONTH] < 9) "0" else ""
-                            da1 = nol1 + setCal[Calendar.DAY_OF_MONTH] + "." + nol2 + (setCal[Calendar.MONTH] + 1) + "." + setCal[Calendar.YEAR]
-                            binding.label12.text = da1
-                        }
-                    }
-                    binding.label1.text = da
-                    nol1 = ""
-                    nol2 = ""
-                    setCal.add(Calendar.DATE, 1)
-                    if (setCal[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
-                    if (setCal[Calendar.MONTH] < 9) nol2 = "0"
-                    val days3 = binding.labelbutton12.text.toString().split(".")
-                    val gc3 = GregorianCalendar(days3[2].toInt(), days3[1].toInt() - 1, days3[0].toInt(), 0, 0, 0)
-                    val days4 = binding.label1.text.toString().split(".")
-                    val gc4 = GregorianCalendar(days4[2].toInt(), days4[1].toInt() - 1, days4[0].toInt(), 0, 0, 0)
-                    val kon2 = gc3.timeInMillis
-                    val resul = gc4.timeInMillis
-                    if (kon2 - resul < 0) binding.labelbutton12.text = resources.getString(R.string.Sabytie, nol1, setCal[Calendar.DAY_OF_MONTH], nol2, setCal[Calendar.MONTH] + 1, setCal[Calendar.YEAR])
-                    val temp = binding.editText2.text
-                    binding.editText2.setText("")
-                    binding.editText2.text = temp
-                }
-                if (requestCode == 1092) {
-                    binding.label12.text = da
-                    val days = binding.label1.text.toString().split(".")
-                    val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
-                    val days2 = binding.label12.text.toString().split(".")
-                    val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
-                    val kon = gc2.timeInMillis
-                    result = gc.timeInMillis
-                    if (kon - result < 0) {
-                        MainActivity.toastView(this@Sabytie, getString(R.string.data_sabytie_error))
-                        da = binding.label1.text.toString()
-                        binding.label12.text = da
-                    }
-                }
-                if (requestCode == 1093) {
-                    binding.labelbutton12.text = da
-                    val days = binding.label1.text.toString().split(".")
-                    val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), 0, 0, 0)
-                    gc.add(Calendar.DATE, 1)
-                    val days2 = binding.labelbutton12.text.toString().split(".")
-                    val gc2 = GregorianCalendar(days2[2].toInt(), days2[1].toInt() - 1, days2[0].toInt(), 0, 0, 0)
-                    val kon = gc2.timeInMillis
-                    val resul = gc.timeInMillis
-                    if (kon - resul < 0) {
-                        MainActivity.toastView(this@Sabytie, getString(R.string.data_sabytie_error2))
-                        nol1 = ""
-                        nol2 = ""
-                        if (gc[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
-                        if (gc[Calendar.MONTH] < 9) nol2 = "0"
-                        binding.labelbutton12.text = resources.getString(R.string.Sabytie, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR])
-                    }
-                }
-            }
         }
     }
 
@@ -2445,9 +2492,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val data = sab[0].split(".")
             val gc = GregorianCalendar(data[2].toInt(), data[1].toInt() - 1, data[0].toInt())
             if (gc[Calendar.DAY_OF_YEAR] == day[Calendar.DAY_OF_YEAR] && gc[Calendar.YEAR] == day[Calendar.YEAR]) {
-                holder.mText.typeface = MainActivity.createFont(this@Sabytie,  Typeface.BOLD)
+                holder.mText.typeface = MainActivity.createFont(this@Sabytie, Typeface.BOLD)
             } else {
-                holder.mText.typeface = MainActivity.createFont(this@Sabytie,  Typeface.NORMAL)
+                holder.mText.typeface = MainActivity.createFont(this@Sabytie, Typeface.NORMAL)
             }
             holder.mText.text = text
             holder.color.setBackgroundColor(Color.parseColor(colors[mItemList[position].color]))

@@ -5,20 +5,21 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.biblijateka.databinding.BiblijatekaSimpleListItemBinding
-import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.databinding.DialogListviewDisplayBinding
 import com.google.android.play.core.splitcompat.SplitCompat
 import java.io.File
 import java.io.FilenameFilter
@@ -34,6 +35,13 @@ class DialogFileExplorer : DialogFragment() {
     private var sdCard = true
     private var sdCard2 = false
     private lateinit var alert: AlertDialog
+    private var _binding: DialogListviewDisplayBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     internal interface DialogFileExplorerListener {
         fun onDialogFile(file: File)
@@ -126,6 +134,7 @@ class DialogFileExplorer : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            _binding = DialogListviewDisplayBinding.inflate(LayoutInflater.from(it))
             chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
             val files = ContextCompat.getExternalFilesDirs(it, null)
@@ -144,30 +153,19 @@ class DialogFileExplorer : DialogFragment() {
             var style = by.carkva_gazeta.malitounik.R.style.AlertDialogTheme
             if (dzenNoch) style = by.carkva_gazeta.malitounik.R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            val linear = LinearLayout(it)
-            linear.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextView(it)
-            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = "ВЫБЕРЫЦЕ ФАЙЛ"
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
-            linear.addView(textViewZaglavie)
-            val listViewCompat = ListView(it)
+            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            else binding.title.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+            binding.title.text = "ВЫБЕРЫЦЕ ФАЙЛ"
             if (dzenNoch)
-                listViewCompat.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
+                binding.content.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_dark)
             else
-                listViewCompat.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+                binding.content.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_default)
             val listAdaprer = TitleListAdaprer(it)
-            listViewCompat.adapter = listAdaprer
-            linear.addView(listViewCompat)
-            builder.setView(linear)
+            binding.content.adapter = listAdaprer
+            builder.setView(binding.root)
             builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
-            listViewCompat.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, i: Int, _: Long ->
+            binding.content.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, i: Int, _: Long ->
                 if (sdCard) {
                     var dir = ContextCompat.getExternalFilesDirs(it, null)[i].absolutePath
                     val t1 = dir.indexOf("/Android/data/")

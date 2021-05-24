@@ -13,7 +13,7 @@
         android:orderInCategory="100"
         android:title="(0)"
         android:visible="false"
-        app:actionViewClass="by.carkva_gazeta.malitounik.TextViewRobotoCondensed"
+        app:actionViewClass="android.widget.TextView"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_clean_histopy"

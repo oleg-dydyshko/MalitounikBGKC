@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.RadioGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -26,13 +27,25 @@ class DialogSabytieSettings : DialogFragment(), View.OnClickListener {
     private var uriAlarm: Uri? = null
     private var uriNotification: Uri? = null
     private var uriRingtone: Uri? = null
-    private val ringtonepicker = 90
     private var uri: Uri? = null
     private lateinit var k: SharedPreferences
     private lateinit var prefEditor: Editor
     private lateinit var alert: AlertDialog
     private var _binding: DialogSabytieSettingsBinding? = null
     private val binding get() = _binding!!
+
+    private val ringtoneManagerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            uri = result.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+            activity?.let {
+                ringTone = RingtoneManager.getRingtone(it, uri)
+                binding.notificationPicker.text = getString(R.string.uriPicker, ringTone.getTitle(it))
+            }
+            prefEditor = k.edit()
+            prefEditor.putString("soundURI", uri.toString())
+            prefEditor.apply()
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -184,22 +197,9 @@ class DialogSabytieSettings : DialogFragment(), View.OnClickListener {
                     intent1.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
                     if (uri == null) uri = Uri.parse(k.getString("soundURI", ""))
                     intent1.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, uri)
-                    startActivityForResult(intent1, ringtonepicker)
+                    ringtoneManagerLauncher.launch(intent1)
                 }
             }
-            prefEditor.apply()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ringtonepicker && resultCode == Activity.RESULT_OK) {
-            uri = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
-            activity?.let {
-                ringTone = RingtoneManager.getRingtone(it, uri)
-                binding.notificationPicker.text = getString(R.string.uriPicker, ringTone.getTitle(it))
-            }
-            prefEditor = k.edit()
-            prefEditor.putString("soundURI", uri.toString())
             prefEditor.apply()
         }
     }

@@ -1,5 +1,6 @@
 package by.carkva_gazeta.resources
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -12,6 +13,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +41,11 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
     private lateinit var binding: BibleZakladkiBinding
     private var resetTollbarJob: Job? = null
     private lateinit var k: SharedPreferences
+    private val novyZapavietSemuxaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            adapter.notifyDataSetChanged()
+        }
+    }
 
     override fun fileAllNatatkiAlboZakladki(semuxa: Int) {
         if (semuxa == 1) {
@@ -288,13 +295,6 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
         invalidateOptionsMenu()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 500) {
-            adapter.notifyDataSetChanged()
-        }
-    }
-
     private inner class ItemAdapter(list: ArrayList<BibleZakladkiData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<BibleZakladkiData, ItemAdapter.ViewHolder>() {
         private var dzenNoch = false
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -532,7 +532,7 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
                 }
                 intent.putExtra("glava", glava - 1)
                 intent.putExtra("stix", stix - 1)
-                startActivityForResult(intent, 500)
+                novyZapavietSemuxaLauncher.launch(intent)
             }
 
             override fun onItemLongClicked(view: View): Boolean {

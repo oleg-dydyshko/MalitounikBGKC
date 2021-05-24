@@ -4,21 +4,23 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.admin.databinding.AdminImageListItemBinding
-import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.databinding.DialogListviewDisplayBinding
 import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.FilenameFilter
@@ -33,6 +35,13 @@ class DialogImageFileExplorer : DialogFragment() {
     private var sdCard = true
     private var sdCard2 = false
     private lateinit var alert: AlertDialog
+    private var _binding: DialogListviewDisplayBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     internal interface DialogFileExplorerListener {
         fun onDialogFile(file: File)
@@ -93,6 +102,7 @@ class DialogImageFileExplorer : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            _binding = DialogListviewDisplayBinding.inflate(LayoutInflater.from(it))
             val files = ContextCompat.getExternalFilesDirs(it, null)
             val uri = Uri.parse("android.resource://by.carkva_gazeta.malitounik/" + R.drawable.directory_icon)
             fileList.add(MyImageFile("Унутраная памяць", uri))
@@ -100,34 +110,20 @@ class DialogImageFileExplorer : DialogFragment() {
                 fileList.add(MyImageFile("Карта SD", uri))
             }
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            val linear = LinearLayout(it)
-            linear.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextView(it)
-            textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = "ВЫБЕРЫЦЕ ФАЙЛ"
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
-            linear.addView(textViewZaglavie)
-            val listViewCompat = ListView(it)
-            listViewCompat.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_default)
-            val listAdaprer = TitleListAdaprer(it)
-            listViewCompat.adapter = listAdaprer
-            linear.addView(listViewCompat)
-            builder.setView(linear)
+            binding.title.text = "ВЫБЕРЫЦЕ ФАЙЛ"
+            binding.content.selector = ContextCompat.getDrawable(it, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            binding.content.adapter = TitleListAdaprer(it)
+            builder.setView(binding.root)
             builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
-            listViewCompat.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, i: Int, _: Long ->
+            binding.content.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, i: Int, _: Long ->
                 if (sdCard) {
                     var dir = ContextCompat.getExternalFilesDirs(it, null)[i].absolutePath
                     val t1 = dir.indexOf("/Android/data/")
                     if (t1 != -1) dir = dir.substring(0, t1)
                     path = File(dir)
                     loadFileList()
-                    listAdaprer.notifyDataSetChanged()
+                    (binding.content.adapter as TitleListAdaprer).notifyDataSetChanged()
                 } else if (sdCard2 && i == 0) {
                     fileList.clear()
                     sdCard2 = false
@@ -136,7 +132,7 @@ class DialogImageFileExplorer : DialogFragment() {
                     if (files.size > 1) {
                         fileList.add(MyImageFile("Карта SD", uri))
                     }
-                    listAdaprer.notifyDataSetChanged()
+                    (binding.content.adapter as TitleListAdaprer).notifyDataSetChanged()
                 } else {
                     sdCard2 = false
                     chosenFile = fileList[i].name
@@ -146,7 +142,7 @@ class DialogImageFileExplorer : DialogFragment() {
                         str.add(chosenFile)
                         path = File(sel.toString() + "")
                         loadFileList()
-                        listAdaprer.notifyDataSetChanged()
+                        (binding.content.adapter as TitleListAdaprer).notifyDataSetChanged()
                     } else if (chosenFile == "Верх" && !sel.exists()) {
                         val s = str.removeAt(str.size - 1)
                         path = File(path.toString().substring(0, path.toString().lastIndexOf(s)))
@@ -154,7 +150,7 @@ class DialogImageFileExplorer : DialogFragment() {
                             firstLvl = true
                         }
                         loadFileList()
-                        listAdaprer.notifyDataSetChanged()
+                        (binding.content.adapter as TitleListAdaprer).notifyDataSetChanged()
                     } else {
                         mListener?.onDialogFile(sel)
                         alert.cancel()

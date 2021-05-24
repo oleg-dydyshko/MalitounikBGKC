@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -215,7 +216,14 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.pesny, menu)
         val searchViewItem = menu.findItem(R.id.search)
+        searchView = searchViewItem.actionView as SearchView
+        searchView?.queryHint = getString(R.string.search)
         textViewCount = menu.findItem(R.id.count).actionView as TextView
+        activity?.let {
+            val searcheTextView = searchView?.findViewById(androidx.appcompat.R.id.search_src_text) as TextView
+            searcheTextView.typeface = MainActivity.createFont(it, Typeface.NORMAL)
+            textViewCount?.typeface = MainActivity.createFont(it, Typeface.NORMAL)
+        }
         if (search) {
             searchViewItem.expandActionView()
             menuList.clear()
@@ -252,8 +260,6 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                 return true
             }
         })
-        searchView = searchViewItem.actionView as SearchView
-        searchView?.queryHint = getString(R.string.search)
         changeSearchViewElements(searchView)
         if (searchViewQwery != "") {
             menu.findItem(R.id.search).expandActionView()

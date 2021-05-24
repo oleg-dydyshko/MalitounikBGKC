@@ -169,6 +169,7 @@ class Chytanny : AppCompatActivity() {
         val density = resources.displayMetrics.density
         val padding = 10 * density
         val textView = TextView(this)
+        textView.typeface = MainActivity.createFont(this, Typeface.NORMAL)
         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         llp.setMargins(padding.toInt(), padding.toInt(), 0, 0)
         textView.layoutParams = llp
@@ -182,6 +183,7 @@ class Chytanny : AppCompatActivity() {
         val density = resources.displayMetrics.density
         val padding = 5 * density
         val textView = EditText(this)
+        textView.typeface = MainActivity.createFont(this, Typeface.NORMAL)
         textView.tag = position
         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         llp.setMargins(padding.toInt(), padding.toInt(), padding.toInt(), 0)
@@ -247,10 +249,10 @@ class Chytanny : AppCompatActivity() {
                             sb.append(view.text.toString())
                         }
                         1 -> {
-                            sb.append("\$calendar[]=array(\"cviaty\"=>\"${view.text.toString()}\", \"cytanne\"=>\"\".\$ahref.\"")
+                            sb.append("\$calendar[]=array(\"cviaty\"=>\"${view.text}\", \"cytanne\"=>\"\".\$ahref.\"")
                         }
                         2 -> {
-                            sb.append("${view.text.toString()}</a>\");\n")
+                            sb.append("${view.text}</a>\");\n")
                         }
                     }
                 }

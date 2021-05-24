@@ -3,22 +3,24 @@ package by.carkva_gazeta.admin
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.graphics.Typeface
 import android.os.Bundle
-import android.util.TypedValue
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.databinding.DialogContextDisplayBinding
 
 class DialogContextMenu : DialogFragment() {
     private var position = 0
     private var name: String = ""
     private lateinit var mListener: DialogContextMenuListener
     private lateinit var dialog: AlertDialog
+    private var _binding: DialogContextDisplayBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     interface DialogContextMenuListener {
         fun onDialogRenameClick(position: Int)
@@ -44,42 +46,18 @@ class DialogContextMenu : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            _binding = DialogContextDisplayBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it)
-            val linearLayout = LinearLayout(it)
-            linearLayout.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextView(it)
-            textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = name
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
-            linearLayout.addView(textViewZaglavie)
-            val textView = TextView(it)
-            textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView.text = getString(by.carkva_gazeta.malitounik.R.string.rename_file)
-            textView.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textView.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-            textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
-            linearLayout.addView(textView)
-            val textView2 = TextView(it)
-            textView2.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView2.text = getString(by.carkva_gazeta.malitounik.R.string.delite)
-            textView2.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
-            textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textView2.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-            textView2.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
-            linearLayout.addView(textView2)
-            builder.setView(linearLayout)
+            binding.title.text = name
+            binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.rename_file)
+            binding.content2.text = getString(by.carkva_gazeta.malitounik.R.string.delite)
+            builder.setView(binding.root)
             dialog = builder.create()
-            textView.setOnClickListener {
+            binding.content.setOnClickListener {
                 dialog.cancel()
                 mListener.onDialogRenameClick(position)
             }
-            textView2.setOnClickListener {
+            binding.content2.setOnClickListener {
                 dialog.cancel()
                 mListener.onDialogDeliteClick(position, name)
             }

@@ -10,11 +10,14 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.databinding.DialogSpinnerDisplayBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import java.util.*
 import kotlin.collections.ArrayList
@@ -22,8 +25,16 @@ import kotlin.collections.ArrayList
 class DialogPrazdnik : DialogFragment() {
     private var setid = 10
     private lateinit var arrayList: ArrayList<Int>
-    private lateinit var mListener: DialogPrazdnikListener
+    private var mListener: DialogPrazdnikListener? = null
     private lateinit var alert: AlertDialog
+    private var _binding: DialogSpinnerDisplayBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        mListener = null
+    }
 
     internal interface DialogPrazdnikListener {
         fun setPrazdnik(year: Int)
@@ -48,23 +59,15 @@ class DialogPrazdnik : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            _binding = DialogSpinnerDisplayBinding.inflate(LayoutInflater.from(it))
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val builder = AlertDialog.Builder(it, style)
-            val linear = LinearLayout(it)
-            linear.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextView(it)
-            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(R.string.carkva_sviaty)
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-            linear.addView(textViewZaglavie)
+            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
+            binding.title.text = resources.getString(R.string.carkva_sviaty)
             val c = Calendar.getInstance() as GregorianCalendar
             if (savedInstanceState != null) {
                 setid = savedInstanceState.getInt("setid")
@@ -76,25 +79,23 @@ class DialogPrazdnik : DialogFragment() {
                 }
             }
             val arrayAdapter = ListAdapter(it)
-            val spinner = Spinner(it)
-            spinner.adapter = arrayAdapter
+            binding.content.adapter = arrayAdapter
             for (i in arrayList.indices) {
                 if (arrayList[i] == arguments?.getInt("year")?: c[Calendar.YEAR]) {
                     setid = i
                 }
             }
-            spinner.setSelection(setid)
-            spinner.onItemSelectedListener = object : OnItemSelectedListener {
+            binding.content.setSelection(setid)
+            binding.content.onItemSelectedListener = object : OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     setid = position
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-            linear.addView(spinner)
-            builder.setView(linear)
+            builder.setView(binding.root)
             builder.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
-            builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int -> mListener.setPrazdnik(arrayList[setid]) }
+            builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int -> mListener?.setPrazdnik(arrayList[setid]) }
             alert = builder.create()
         }
         return alert
@@ -127,7 +128,8 @@ class DialogPrazdnik : DialogFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (gc[Calendar.YEAR] == arrayList[position]) viewHolder.text.typeface = MainActivity.createFont(mContext,  Typeface.BOLD) else viewHolder.text.typeface = MainActivity.createFont(mContext,  Typeface.NORMAL)
+            if (gc[Calendar.YEAR] == arrayList[position]) viewHolder.text.typeface = MainActivity.createFont(mContext,  Typeface.BOLD)
+            else viewHolder.text.typeface = MainActivity.createFont(mContext,  Typeface.NORMAL)
             viewHolder.text.text = arrayList[position].toString()
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (dzenNoch)
@@ -142,7 +144,8 @@ class DialogPrazdnik : DialogFragment() {
             val dzenNoch = k.getBoolean("dzen_noch", false)
             val text = v as TextView
             text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-            if (gc[Calendar.YEAR] == arrayList[position]) text.typeface = MainActivity.createFont(mContext,  Typeface.BOLD) else text.typeface = MainActivity.createFont(mContext,  Typeface.NORMAL)
+            if (gc[Calendar.YEAR] == arrayList[position]) text.typeface = MainActivity.createFont(mContext,  Typeface.BOLD)
+            else text.typeface = MainActivity.createFont(mContext,  Typeface.NORMAL)
             text.text = arrayList[position].toString()
             if (dzenNoch)
                 text.setBackgroundResource(R.drawable.selector_dialog_font_dark)

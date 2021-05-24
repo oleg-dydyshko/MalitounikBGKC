@@ -15,7 +15,7 @@ import by.carkva_gazeta.malitounik.databinding.DialogWidgetConfigBinding
 class DialogWidgetConfig : DialogFragment() {
     private var configDzenNoch = false
     private var widgetID = 0
-    private lateinit var mListener: DialogWidgetConfigListener
+    private var mListener: DialogWidgetConfigListener? = null
     private lateinit var alert: AlertDialog
     private var _binding: DialogWidgetConfigBinding? = null
     private val binding get() = _binding!!
@@ -59,7 +59,7 @@ class DialogWidgetConfig : DialogFragment() {
             val builder = AlertDialog.Builder(it, style)
             builder.setPositiveButton(resources.getText(R.string.ok)) { dialog: DialogInterface, _: Int ->
                 save()
-                mListener.onDialogWidgetConfigPositiveClick()
+                mListener?.onDialogWidgetConfigPositiveClick()
                 dialog.cancel()
             }
             _binding = DialogWidgetConfigBinding.inflate(LayoutInflater.from(it))

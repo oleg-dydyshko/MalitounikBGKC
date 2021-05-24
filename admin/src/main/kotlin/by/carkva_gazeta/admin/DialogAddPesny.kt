@@ -4,18 +4,19 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.admin.databinding.DialogAddpesnyBinding
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 
@@ -23,8 +24,14 @@ class DialogAddPesny : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var dialogAddPesnyListiner: DialogAddPesnyListiner? = null
     private lateinit var pesny: String
-    private lateinit var input: EditText
     private lateinit var array: Array<out String>
+    private var _binding: DialogAddpesnyBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     interface DialogAddPesnyListiner {
         fun addPesny(title: String, pesny: String, fileName: String)
@@ -43,32 +50,19 @@ class DialogAddPesny : DialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("fileName", input.text.toString())
+        outState.putString("fileName", binding.content.text.toString())
         outState.putString("pesny", pesny)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            _binding = DialogAddpesnyBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            val linear = LinearLayout(it)
-            linear.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextView(it)
-            textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = resources.getString(by.carkva_gazeta.malitounik.R.string.add_pesny_title)
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
-            linear.addView(textViewZaglavie)
-            input = EditText(it)
-            input.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            input.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-            input.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorWhite)
-            input.setPadding(realpadding, realpadding, realpadding, realpadding)
-            input.requestFocus()
-            input.setOnEditorActionListener { editText, actionId, _ ->
+            binding.title.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+            binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.add_pesny_title)
+            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            binding.content.requestFocus()
+            binding.content.setOnEditorActionListener { editText, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     if (editText.text.toString() != "") {
                         addPesny()
@@ -77,13 +71,9 @@ class DialogAddPesny : DialogFragment() {
                 }
                 false
             }
-            input.imeOptions = EditorInfo.IME_ACTION_GO
-            linear.addView(input)
-            val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            layoutParams.setMargins(realpadding, realpadding, 0, 0)
-            val spinner = Spinner(it)
-            spinner.adapter = PesnyAdapter(it)
-            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            binding.content.imeOptions = EditorInfo.IME_ACTION_GO
+            binding.spinner.adapter = PesnyAdapter(it)
+            binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     when (position) {
                         0 -> pesny = "pesny_prasl_"
@@ -97,7 +87,7 @@ class DialogAddPesny : DialogFragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
             if (savedInstanceState != null) {
-                input.setText(savedInstanceState.getString("fileName"))
+                binding.content.setText(savedInstanceState.getString("fileName"))
                 pesny = savedInstanceState.getString("pesny", getString(by.carkva_gazeta.malitounik.R.string.pesny1))
                 var position = 0
                 when (pesny) {
@@ -107,13 +97,12 @@ class DialogAddPesny : DialogFragment() {
                     "pesny_kal_" -> position = 3
                     "pesny_taize_" -> position = 4
                 }
-                spinner.setSelection(position)
+                binding.spinner.setSelection(position)
             }
-            input.hint = getString(by.carkva_gazeta.malitounik.R.string.hint_pesny_title)
-            linear.addView(spinner, layoutParams)
-            builder.setView(linear)
+            binding.content.hint = getString(by.carkva_gazeta.malitounik.R.string.hint_pesny_title)
+            builder.setView(binding.root)
             builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.add_pesny)) { _: DialogInterface, _: Int ->
-                if (input.text.toString() != "") {
+                if (binding.content.text.toString() != "") {
                     addPesny()
                 }
             }
@@ -124,7 +113,7 @@ class DialogAddPesny : DialogFragment() {
     }
 
     private fun addPesny() {
-        dialogAddPesnyListiner?.addPesny(input.text.toString().trim(), pesny, arguments?.getString("fileName", "")?: "")
+        dialogAddPesnyListiner?.addPesny(binding.content.text.toString().trim(), pesny, arguments?.getString("fileName", "")?: "")
     }
 
     private inner class PesnyAdapter(context: Context) : ArrayAdapter<String>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, array) {

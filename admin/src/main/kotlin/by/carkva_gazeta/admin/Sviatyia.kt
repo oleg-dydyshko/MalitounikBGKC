@@ -1,5 +1,6 @@
 package by.carkva_gazeta.admin
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -15,13 +16,17 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaBinding
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.CaliandarMun
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.SmartFragmentStatePagerAdapter
 import kotlinx.coroutines.*
 import java.io.File
 import java.util.*
@@ -36,6 +41,23 @@ class Sviatyia : AppCompatActivity(), DialogImageFileExplorer.DialogFileExplorer
     private var dayOfYear = 0
     private lateinit var adapterViewPager: MyPagerAdapter
     private val munName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
+    private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            if (intent != null) {
+                val day = intent.getIntExtra("data", 0)
+                val cal = Calendar.getInstance() as GregorianCalendar
+                if (cal.isLeapYear(cal[Calendar.YEAR])) {
+                    binding.pager.currentItem = day
+                } else {
+                    if (day <= 58)
+                        binding.pager.currentItem = day
+                    else
+                        binding.pager.currentItem = day + 1
+                }
+            }
+        }
+    }
 
     override fun onPause() {
         super.onPause()
@@ -144,27 +166,9 @@ class Sviatyia : AppCompatActivity(), DialogImageFileExplorer.DialogFileExplorer
             i.putExtra("year", cal[Calendar.YEAR])
             i.putExtra("mun", cal[Calendar.MONTH])
             i.putExtra("sabytie", true)
-            startActivityForResult(i, 1093)
+            caliandarMunLauncher.launch(i)
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1093) {
-            if (data != null) {
-                val day = data.getIntExtra("data", 0)
-                val cal = Calendar.getInstance() as GregorianCalendar
-                if (cal.isLeapYear(cal[Calendar.YEAR])) {
-                    binding.pager.currentItem = day
-                } else {
-                    if (day <= 58)
-                        binding.pager.currentItem = day
-                    else
-                        binding.pager.currentItem = day + 1
-                }
-            }
-        }
     }
 
     override fun onResume() {

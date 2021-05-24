@@ -3,17 +3,16 @@ package by.carkva_gazeta.malitounik
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 
 class DialogSabytieShow : DialogFragment() {
     private var title = ""
@@ -25,6 +24,13 @@ class DialogSabytieShow : DialogFragment() {
     private var paz = false
     private var konecSabytie = true
     private lateinit var alert: AlertDialog
+    private var _binding: DialogTextviewDisplayBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,21 +46,12 @@ class DialogSabytieShow : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            val linearLayout = LinearLayout(it)
-            linearLayout.orientation = LinearLayout.VERTICAL
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            val textViewT = TextView(it)
-            textViewT.text = title
-            textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-            textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewT.typeface = MainActivity.createFont(it,  Typeface.BOLD)
-            if (dzenNoch) textViewT.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewT.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
-            linearLayout.addView(textViewT)
-            val textView = TextView(it)
+            binding.title.text = title
+            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             val textR = if (konecSabytie) {
                 SpannableString(getString(R.string.sabytie_kali, data, time, res))
             } else {
@@ -62,22 +59,20 @@ class DialogSabytieShow : DialogFragment() {
             }
             val t1 = textR.indexOf(res)
             if (dzenNoch) {
-                textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                 if (paz)
                     textR.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary_black)), t1, textR.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             } else {
-                textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+                binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                 if (paz)
                     textR.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary)), t1, textR.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            textView.text = textR
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            linearLayout.addView(textView)
+            binding.content.text = textR
+            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val ad = AlertDialog.Builder(it, style)
-            ad.setView(linearLayout)
+            ad.setView(binding.root)
             ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = ad.create()
         }

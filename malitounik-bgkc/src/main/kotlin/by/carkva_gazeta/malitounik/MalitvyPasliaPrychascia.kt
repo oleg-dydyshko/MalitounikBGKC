@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
@@ -24,6 +26,13 @@ class MalitvyPasliaPrychascia : AppCompatActivity() {
     private lateinit var binding: AkafistListBinding
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
+
+    private val pasliaprychasciaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            this.result = true
+            recreate()
+        }
+    }
 
     override fun onPause() {
         super.onPause()
@@ -73,7 +82,7 @@ class MalitvyPasliaPrychascia : AppCompatActivity() {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASLIAPRYCHASCIA)
                 intent.putExtra("paslia_prychascia", position)
-                startActivityForResult(intent, 300)
+                pasliaprychasciaLauncher.launch(intent)
             } else {
                 val dadatak = DialogInstallDadatak()
                 dadatak.show(supportFragmentManager, "dadatak")
@@ -103,14 +112,6 @@ class MalitvyPasliaPrychascia : AppCompatActivity() {
         }
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 300) {
-            result = true
-            recreate()
-        }
     }
 
     override fun onBackPressed() {

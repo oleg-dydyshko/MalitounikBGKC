@@ -4,18 +4,16 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.os.storage.StorageManager
-import android.util.TypedValue
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.R
+import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,6 +31,13 @@ class DialogBibliateka : DialogFragment() {
     private var size: String = "0"
     private var mListener: DialogBibliatekaListener? = null
     private lateinit var builder: AlertDialog.Builder
+    private var _binding: DialogTextviewDisplayBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     internal interface DialogBibliatekaListener {
         fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) //void onDialogbibliatekaNeutralClick(String listPosition, String title);
@@ -59,27 +64,19 @@ class DialogBibliateka : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             builder = AlertDialog.Builder(it, style)
-            val linearLayout2 = LinearLayout(it)
-            linearLayout2.orientation = LinearLayout.VERTICAL
-            builder.setView(linearLayout2)
-            val linearLayout = LinearLayout(it)
-            linearLayout.orientation = LinearLayout.VERTICAL
-            linearLayout2.addView(linearLayout)
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            val textViewZaglavie = TextView(it)
-            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
+            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             val file = File(it.filesDir.toString() + "/Biblijateka/" + listPosition)
             if (file.exists()) {
-                textViewZaglavie.text = getString(R.string.opisanie).uppercase()
+                binding.title.text = getString(R.string.opisanie).uppercase()
             } else {
-                textViewZaglavie.text = getString(R.string.download_file, "")
+                binding.title.text = getString(R.string.download_file, "")
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     CoroutineScope(Dispatchers.Main).launch {
                         val format = withContext(Dispatchers.IO) {
@@ -92,23 +89,13 @@ class DialogBibliateka : DialogFragment() {
                                 else -> ""
                             }
                         }
-                        textViewZaglavie.text = getString(R.string.download_file, format)
+                        binding.title.text = getString(R.string.download_file, format)
                     }
                 }
             }
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-            linearLayout.addView(textViewZaglavie)
-            val isv = InteractiveScrollView(it)
-            isv.isVerticalScrollBarEnabled = false
-            linearLayout.addView(isv)
-            val textView = TextView(it)
-            textView.text = MainActivity.fromHtml(listStr)
-            textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
-            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-            isv.addView(textView)
+            binding.content.text = MainActivity.fromHtml(listStr)
+            if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) 
+            else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             val dirCount = size.toInt()
             val izm = if (dirCount / 1024 > 1000) {
                 formatFigureTwoPlaces(BigDecimal.valueOf(dirCount.toFloat() / 1024 / 1024.toDouble()).setScale(2, RoundingMode.HALF_UP).toFloat()) + " Мб"
@@ -129,6 +116,7 @@ class DialogBibliateka : DialogFragment() {
                 }
             }
         }
+        builder.setView(binding.root)
         return builder.create()
     }
 

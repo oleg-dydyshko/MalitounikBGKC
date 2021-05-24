@@ -5,45 +5,41 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 
 class DialogInstallDadatak : DialogFragment() {
     private lateinit var alert: AlertDialog
+    private var _binding: DialogTextviewDisplayBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
             val chin = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val ad = AlertDialog.Builder(it, style)
-            val linearLayout = LinearLayout(it)
-            linearLayout.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextView(it)
-            if (dzenNoch) textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black)) else textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = getString(R.string.install_dadatak)
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-            linearLayout.addView(textViewZaglavie)
-            val textView = TextView(it)
-            textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView.text = getString(R.string.install_dadatak_opis)
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) else textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-            linearLayout.addView(textView)
-            ad.setView(linearLayout)
+            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
+            binding.title.text = getString(R.string.install_dadatak)
+            binding.content.text = getString(R.string.install_dadatak_opis)
+            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+            else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
+            ad.setView(binding.root)
             ad.setPositiveButton("GOOGLE PLAY") { _: DialogInterface?, _: Int ->
                 val url = "https://play.google.com/store/apps/details?id=by.carkva_gazeta.malitounik"
                 try {

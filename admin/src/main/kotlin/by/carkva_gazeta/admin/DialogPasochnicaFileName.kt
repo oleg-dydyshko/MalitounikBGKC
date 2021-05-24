@@ -4,25 +4,28 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
 import java.util.*
 
 class DialogPasochnicaFileName : DialogFragment() {
-    private lateinit var input: EditText
     private var mListener: DialogPasochnicaFileNameListener? = null
     private lateinit var builder: AlertDialog.Builder
+    private var _binding: DialogEditviewDisplayBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     internal interface DialogPasochnicaFileNameListener {
         fun setFileName(oldFileName: String, fileName: String)
@@ -41,61 +44,44 @@ class DialogPasochnicaFileName : DialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("fileName", input.text.toString())
+        outState.putString("fileName", binding.content.text.toString())
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
+            _binding = DialogEditviewDisplayBinding.inflate(LayoutInflater.from(it))
             builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            val linearLayout2 = LinearLayout(it)
-            linearLayout2.orientation = LinearLayout.VERTICAL
-            builder.setView(linearLayout2)
-            val linearLayout = LinearLayout(it)
-            linearLayout.orientation = LinearLayout.VERTICAL
-            linearLayout2.addView(linearLayout)
-            val textViewZaglavie = TextView(it)
-            textViewZaglavie.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = getString(by.carkva_gazeta.malitounik.R.string.set_file_name)
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(it,  Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite))
-            linearLayout.addView(textViewZaglavie)
-            input = EditText(it)
-            input.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.set_file_name)
+            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val text = if (savedInstanceState != null) {
-                input.setText(savedInstanceState.getString("fileName"))
+                binding.content.setText(savedInstanceState.getString("fileName"))
                 savedInstanceState.getString("fileName") ?: "newFile.html"
             } else {
-                input.setText(arguments?.getString("oldFileName") ?: "newFile.html")
+                binding.content.setText(arguments?.getString("oldFileName") ?: "newFile.html")
                 arguments?.getString("oldFileName") ?: "newFile.html"
             }
             val t2 = text.lastIndexOf(".")
             if (t2 != -1) {
-                input.setSelection(0, t2)
+                binding.content.setSelection(0, t2)
             }
-            input.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-            input.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorWhite)
-            input.setPadding(realpadding, realpadding, realpadding, realpadding)
-            input.requestFocus()
-            input.setOnEditorActionListener { _, actionId, _ ->
+            binding.content.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+            binding.content.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorWhite)
+            binding.content.requestFocus()
+            binding.content.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     setFileName()
                     dialog?.cancel()
                 }
                 false
             }
-            input.imeOptions = EditorInfo.IME_ACTION_GO
-            input.post {
+            binding.content.imeOptions = EditorInfo.IME_ACTION_GO
+            binding.content.post {
                 val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             }
-            linearLayout.addView(input)
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int ->
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm12.hideSoftInputFromWindow(input.windowToken, 0)
+                imm12.hideSoftInputFromWindow(binding.content.windowToken, 0)
                 dialog.cancel()
             }
             val oldFileName = arguments?.getString("oldFileName") ?: "newFile.html"
@@ -105,7 +91,7 @@ class DialogPasochnicaFileName : DialogFragment() {
                 resources.getString(by.carkva_gazeta.malitounik.R.string.set_file_html)
             }
             builder.setNeutralButton(textNetral) { _: DialogInterface?, _: Int ->
-                var fileName = input.text.toString()
+                var fileName = binding.content.text.toString()
                 val t1 = fileName.lastIndexOf(".")
                 if (fileName == "") {
                     val gc = Calendar.getInstance()
@@ -131,11 +117,12 @@ class DialogPasochnicaFileName : DialogFragment() {
                 setFileName()
             }
         }
+        builder.setView(binding.root)
         return builder.create()
     }
 
     private fun setFileName() {
-        var fileName = input.text.toString()
+        var fileName = binding.content.text.toString()
         if (fileName == "") {
             val gc = Calendar.getInstance()
             val mun = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")

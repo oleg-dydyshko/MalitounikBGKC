@@ -1,5 +1,6 @@
 package by.carkva_gazeta.resources
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -10,6 +11,7 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +41,15 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
     private lateinit var binding: BibleZakladkiBinding
     private var resetTollbarJob: Job? = null
     private lateinit var k: SharedPreferences
+    private val staryZapavietSemuxaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            if (data.size == 0) {
+                binding.help.visibility = View.VISIBLE
+                binding.dragListView.visibility = View.GONE
+            }
+            adapter.notifyDataSetChanged()
+        }
+    }
 
     override fun setEdit() {
         adapter.notifyDataSetChanged()
@@ -304,17 +315,6 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
         invalidateOptionsMenu()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        if (requestCode == 500) {
-            if (data.size == 0) {
-                binding.help.visibility = View.VISIBLE
-                binding.dragListView.visibility = View.GONE
-            }
-            adapter.notifyDataSetChanged()
-        }
-    }
-
     private inner class ItemAdapter(list: ArrayList<BibleNatatkiData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<BibleNatatkiData, ItemAdapter.ViewHolder>() {
         private var dzenNoch = false
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -405,7 +405,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
                 }
                 intent.putExtra("glava", Integer.valueOf(data[adapterPosition].list[2]))
                 intent.putExtra("stix", Integer.valueOf(data[adapterPosition].list[3]))
-                startActivityForResult(intent, 500)
+                staryZapavietSemuxaLauncher.launch(intent)
             }
 
             override fun onItemLongClicked(view: View): Boolean {

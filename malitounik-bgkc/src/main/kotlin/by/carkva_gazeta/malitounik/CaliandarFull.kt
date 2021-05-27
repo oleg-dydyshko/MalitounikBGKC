@@ -9,10 +9,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.Layout
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.TextPaint
+import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.AlignmentSpan
 import android.text.style.ClickableSpan
@@ -29,92 +26,34 @@ import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.CalaindarBinding
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
 
 class CaliandarFull : Fragment(), View.OnClickListener {
-    private var dayYear = 0
-    private var day = 0
-    private var year = 0
     private var dzenNoch = false
     private var rColorColorprimary = R.drawable.selector_red
-    private val data = ArrayList<ArrayList<String>>()
-    private val gson = Gson()
     private var sabytieTitle = ""
     private var position = 0
     private var mLastClickTime: Long = 0
     private var _binding: CalaindarBinding? = null
     private val binding get() = _binding!!
 
-    private fun getData(mun: Int): String {
-        return if (MenuCaliandar.munKal == mun && MenuCaliandar.dataJson != "") {
-            MenuCaliandar.dataJson
-        } else {
-            val inputStream = resources.openRawResource(MainActivity.getCaliandarResource(mun))
-            val isr = InputStreamReader(inputStream)
-            val reader = BufferedReader(isr)
-            val builder = reader.use {
-                it.readText()
-            }
-            MenuCaliandar.dataJson = builder
-            MenuCaliandar.munKal = mun
-            builder
-        }
-    }
-
-    private fun getmun(position: Int): Int {
-        var count2 = 0
-        val g = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
-        var mun = g[Calendar.MONTH]
-        for (i in 0 until count) {
-            g.add(Calendar.DATE, 1)
-            if (position == i) {
-                return count2
-            }
-            if (g[Calendar.MONTH] != mun) {
-                count2++
-                mun = g[Calendar.MONTH]
-            }
-        }
-        return count2
-    }
-
-    private val count: Int
-        get() {
-            val c = Calendar.getInstance() as GregorianCalendar
-            var dayyear = 0
-            for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) {
-                dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
-            }
-            return dayyear
-        }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    fun getDayOfYear(): Int {
-        val cal = GregorianCalendar(data[day][3].toInt(), data[day][2].toInt(), data[day][1].toInt())
-        return cal[Calendar.DAY_OF_YEAR]
-    }
+    fun getDayOfYear() = MenuCaliandar.getDataCalaindar()[position][24].toInt()
 
-    fun getYear(): Int = data[day][3].toInt()
+    fun getYear() = MenuCaliandar.getDataCalaindar()[position][3].toInt()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        dayYear = arguments?.getInt("dayYear") ?: 1
-        year = arguments?.getInt("year") ?: SettingsActivity.GET_CALIANDAR_YEAR_MIN
-        day = arguments?.getInt("day") ?: 1
         position = arguments?.getInt("position") ?: 0
     }
 
@@ -122,8 +61,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         _binding = CalaindarBinding.inflate(inflater, container, false)
         CoroutineScope(Dispatchers.Main).launch {
             activity?.let {
-                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                data.addAll(gson.fromJson(getData(getmun(position)), type))
                 val nedelName = it.resources.getStringArray(R.array.dni_nedeli)
                 val monthName = it.resources.getStringArray(R.array.meciac)
                 val c = Calendar.getInstance() as GregorianCalendar
@@ -132,8 +69,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 if (dzenNoch) rColorColorprimary = R.drawable.selector_red_dark
                 val tileMe = BitmapDrawable(it.resources, BitmapFactory.decodeResource(resources, R.drawable.calendar_fon))
                 tileMe.tileModeX = Shader.TileMode.REPEAT
-                if (data[day][20].toInt() != 0 && data[day][0].toInt() == 1) {
-                    binding.textPost.text = getString(R.string.ton, data[day][20])
+                if (MenuCaliandar.getDataCalaindar()[position][20].toInt() != 0 && MenuCaliandar.getDataCalaindar()[position][0].toInt() == 1) {
+                    binding.textPost.text = getString(R.string.ton, MenuCaliandar.getDataCalaindar()[position][20])
                     if (dzenNoch) {
                         binding.textPost.setBackgroundResource(R.drawable.selector_dark)
                         binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
@@ -162,31 +99,31 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     }
                     binding.maranata.visibility = View.VISIBLE
                     binding.textTitleMaranata.visibility = View.VISIBLE
-                    var dataMaranAta = data[day][13]
+                    var dataMaranAta = MenuCaliandar.getDataCalaindar()[position][13]
                     if (k.getBoolean("belarus", false)) dataMaranAta = MainActivity.translateToBelarus(dataMaranAta)
                     binding.maranata.text = dataMaranAta
                 }
                 binding.znakTipicona.setOnClickListener(this@CaliandarFull)
-                if (data[day][21] != "") {
-                    binding.textBlaslavenne.text = data[day][21]
+                if (MenuCaliandar.getDataCalaindar()[position][21] != "") {
+                    binding.textBlaslavenne.text = MenuCaliandar.getDataCalaindar()[position][21]
                     binding.textBlaslavenne.visibility = View.VISIBLE
                 }
                 if (dzenNoch) {
                     it.let {
                         binding.textSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textSviatyia.setBackgroundResource(R.drawable.selector_dark)
-                        if (!(data[day][20].toInt() != 0 && data[day][0].toInt() == 1)) binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        if (!(MenuCaliandar.getDataCalaindar()[position][20].toInt() != 0 && MenuCaliandar.getDataCalaindar()[position][0].toInt() == 1)) binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                         binding.textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
                         binding.textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     }
                 }
-                binding.textDenNedeli.text = nedelName[data[day][0].toInt()]
-                binding.textChislo.text = data[day][1]
-                if (data[day][3].toInt() != c[Calendar.YEAR]) binding.textMesiac.text = getString(R.string.mesiach, monthName[data[day][2].toInt()], data[day][3])
-                else binding.textMesiac.text = monthName[data[day][2].toInt()]
-                if (!data[day][4].contains("no_sviatyia")) {
-                    var dataSviatyia = data[day][4]
+                binding.textDenNedeli.text = nedelName[MenuCaliandar.getDataCalaindar()[position][0].toInt()]
+                binding.textChislo.text = MenuCaliandar.getDataCalaindar()[position][1]
+                if (MenuCaliandar.getDataCalaindar()[position][3].toInt() != c[Calendar.YEAR]) binding.textMesiac.text = getString(R.string.mesiach, monthName[MenuCaliandar.getDataCalaindar()[position][2].toInt()], MenuCaliandar.getDataCalaindar()[position][3])
+                else binding.textMesiac.text = monthName[MenuCaliandar.getDataCalaindar()[position][2].toInt()]
+                if (!MenuCaliandar.getDataCalaindar()[position][4].contains("no_sviatyia")) {
+                    var dataSviatyia = MenuCaliandar.getDataCalaindar()[position][4]
                     if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
                     binding.textSviatyia.text = MainActivity.fromHtml(dataSviatyia)
                     if (!dataSviatyia.contains("<!--no_apisanne-->")) binding.textSviatyia.setOnClickListener(this@CaliandarFull)
@@ -195,10 +132,10 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     binding.polosa2.visibility = View.GONE
                     binding.textSviatyia.visibility = View.GONE
                 }
-                if (!data[day][6].contains("no_sviaty")) {
-                    binding.textCviatyGlavnyia.text = data[day][6]
+                if (!MenuCaliandar.getDataCalaindar()[position][6].contains("no_sviaty")) {
+                    binding.textCviatyGlavnyia.text = MenuCaliandar.getDataCalaindar()[position][6]
                     binding.textCviatyGlavnyia.visibility = View.VISIBLE
-                    if (data[day][6].contains("Пачатак") || data[day][6].contains("Вялікі") || data[day][6].contains("Вялікая") || data[day][6].contains("ВЕЧАР") || data[day][6].contains("Палова")) {
+                    if (MenuCaliandar.getDataCalaindar()[position][6].contains("Пачатак") || MenuCaliandar.getDataCalaindar()[position][6].contains("Вялікі") || MenuCaliandar.getDataCalaindar()[position][6].contains("Вялікая") || MenuCaliandar.getDataCalaindar()[position][6].contains("ВЕЧАР") || MenuCaliandar.getDataCalaindar()[position][6].contains("Палова")) {
                         it.let {
                             if (dzenNoch) binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             else binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
@@ -206,12 +143,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.textCviatyGlavnyia.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                         binding.textCviatyGlavnyia.isEnabled = false
                     } else {
-                        if (data[day][6].contains("нядзел", true) || data[day][6].contains("сьветл", true)) binding.textCviatyGlavnyia.isEnabled = false
+                        if (MenuCaliandar.getDataCalaindar()[position][6].contains("нядзел", true) || MenuCaliandar.getDataCalaindar()[position][6].contains("сьветл", true)) binding.textCviatyGlavnyia.isEnabled = false
                         else binding.textCviatyGlavnyia.setOnClickListener(this@CaliandarFull)
                     }
                 }
                 it.let {
-                    when (data[day][7].toInt()) {
+                    when (MenuCaliandar.getDataCalaindar()[position][7].toInt()) {
                         1 -> {
                             binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                             binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
@@ -227,7 +164,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textChytanneSviatyia.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textBlaslavenne.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textPamerlyia.setBackgroundResource(R.drawable.selector_bez_posta)
-                            if (data[day][0].contains("6")) {
+                            if (MenuCaliandar.getDataCalaindar()[position][0].contains("6")) {
                                 binding.textPost.visibility = View.VISIBLE
                                 binding.textPost.textSize = SettingsActivity.GET_FONT_SIZE_MIN
                                 binding.textPost.text = resources.getString(R.string.No_post)
@@ -248,7 +185,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_post_black)
                             else binding.kniga.setImageResource(R.drawable.book_post)
                             binding.textPamerlyia.setBackgroundResource(R.drawable.selector_post)
-                            if (data[day][0].contains("6")) {
+                            if (MenuCaliandar.getDataCalaindar()[position][0].contains("6")) {
                                 binding.PostFish.visibility = View.VISIBLE
                                 binding.textPost.visibility = View.VISIBLE
                                 binding.textPost.textSize = SettingsActivity.GET_FONT_SIZE_MIN
@@ -295,7 +232,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         }
                     }
                 }
-                if (data[day][5].contains("1") || data[day][5].contains("2") || data[day][5].contains("3")) {
+                if (MenuCaliandar.getDataCalaindar()[position][5].contains("1") || MenuCaliandar.getDataCalaindar()[position][5].contains("2") || MenuCaliandar.getDataCalaindar()[position][5].contains("3")) {
                     binding.textDenNedeli.setBackgroundResource(rColorColorprimary)
                     binding.textChislo.setBackgroundResource(rColorColorprimary)
                     binding.textMesiac.setBackgroundResource(rColorColorprimary)
@@ -306,7 +243,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     }
-                    if (data[day][7].toInt() != 3) {
+                    if (MenuCaliandar.getDataCalaindar()[position][7].toInt() != 3) {
                         binding.chytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.chytanne.setBackgroundResource(rColorColorprimary)
                         binding.textChytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -321,25 +258,25 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.textBlaslavenne.setBackgroundResource(rColorColorprimary)
                     }
                 }
-                if (data[day][5].contains("2")) {
+                if (MenuCaliandar.getDataCalaindar()[position][5].contains("2")) {
                     binding.textCviatyGlavnyia.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                 }
-                if (data[day][8] != "") {
-                    binding.textPredsviaty.text = MainActivity.fromHtml(data[day][8])
+                if (MenuCaliandar.getDataCalaindar()[position][8] != "") {
+                    binding.textPredsviaty.text = MainActivity.fromHtml(MenuCaliandar.getDataCalaindar()[position][8])
                     binding.textPredsviaty.visibility = View.VISIBLE
                 }
-                binding.textChytanne.text = data[day][9]
-                if (data[day][9] == getString(R.string.no_danyx) || data[day][9] == getString(R.string.no_lityrgii)) binding.textChytanne.isEnabled = false
-                if (data[day][9] == "") binding.textChytanne.visibility = View.GONE
-                if (data[day][10] != "") {
-                    binding.textChytanneSviatyia.text = data[day][10]
+                binding.textChytanne.text = MenuCaliandar.getDataCalaindar()[position][9]
+                if (MenuCaliandar.getDataCalaindar()[position][9] == getString(R.string.no_danyx) || MenuCaliandar.getDataCalaindar()[position][9] == getString(R.string.no_lityrgii)) binding.textChytanne.isEnabled = false
+                if (MenuCaliandar.getDataCalaindar()[position][9] == "") binding.textChytanne.visibility = View.GONE
+                if (MenuCaliandar.getDataCalaindar()[position][10] != "") {
+                    binding.textChytanneSviatyia.text = MenuCaliandar.getDataCalaindar()[position][10]
                     binding.textChytanneSviatyia.visibility = View.VISIBLE
                 }
-                if (data[day][11] != "") {
-                    binding.textChytanneSviatyiaDop.text = data[day][11]
+                if (MenuCaliandar.getDataCalaindar()[position][11] != "") {
+                    binding.textChytanneSviatyiaDop.text = MenuCaliandar.getDataCalaindar()[position][11]
                     binding.textChytanneSviatyiaDop.visibility = View.VISIBLE
                 }
-                when (data[day][12].toInt()) {
+                when (MenuCaliandar.getDataCalaindar()[position][12].toInt()) {
                     1 -> {
                         if (dzenNoch) binding.znakTipicona.setImageResource(R.drawable.znaki_krest_black) else binding.znakTipicona.setImageResource(R.drawable.znaki_krest)
                         binding.znakTipicona.visibility = View.VISIBLE
@@ -367,25 +304,25 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     }
                 }
                 if (k.getInt("pravas", 0) == 1) {
-                    if (data[day][14] != "") {
+                    if (MenuCaliandar.getDataCalaindar()[position][14] != "") {
                         binding.pravaslavie.visibility = View.VISIBLE
-                        binding.pravaslavie.text = data[day][14]
+                        binding.pravaslavie.text = MenuCaliandar.getDataCalaindar()[position][14]
                     }
                 }
                 if (k.getInt("pkc", 0) == 1) {
-                    if (data[day][19] != "") {
+                    if (MenuCaliandar.getDataCalaindar()[position][19] != "") {
                         binding.RKC.visibility = View.VISIBLE
-                        binding.RKC.text = data[day][19]
+                        binding.RKC.text = MenuCaliandar.getDataCalaindar()[position][19]
                     }
                 }
                 if (k.getInt("gosud", 0) == 1) {
-                    if (data[day][16] != "") {
+                    if (MenuCaliandar.getDataCalaindar()[position][16] != "") {
                         binding.gosudarstvo.visibility = View.VISIBLE
-                        binding.gosudarstvo.text = data[day][16]
+                        binding.gosudarstvo.text = MenuCaliandar.getDataCalaindar()[position][16]
                     }
-                    if (data[day][15] != "") {
+                    if (MenuCaliandar.getDataCalaindar()[position][15] != "") {
                         binding.gosudarstvo.visibility = View.VISIBLE
-                        binding.gosudarstvo.text = data[day][15]
+                        binding.gosudarstvo.text = MenuCaliandar.getDataCalaindar()[position][15]
                         it.let {
                             if (dzenNoch) binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                             else binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary))
@@ -393,12 +330,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     }
                 }
                 if (k.getInt("pafesii", 0) == 1) {
-                    if (data[day][17] != "") {
+                    if (MenuCaliandar.getDataCalaindar()[position][17] != "") {
                         binding.prafesional.visibility = View.VISIBLE
-                        binding.prafesional.text = data[day][17]
+                        binding.prafesional.text = MenuCaliandar.getDataCalaindar()[position][17]
                     }
                 }
-                if (data[day][18].contains("1")) {
+                if (MenuCaliandar.getDataCalaindar()[position][18].contains("1")) {
                     binding.textPamerlyia.visibility = View.VISIBLE
                 }
                 if (MainActivity.padzeia.size > 0) {
@@ -430,31 +367,26 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val c = Calendar.getInstance() as GregorianCalendar
-        var dayyear = 0
-        for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
-            dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
-        }
-        MainActivity.setDataCalendar = dayyear + dayYear
+        MainActivity.setDataCalendar = position
         when (v?.id ?: 0) {
             R.id.textPost -> {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.TON)
-                    intent.putExtra("ton", data[day][20].toInt())
+                    intent.putExtra("ton", MenuCaliandar.getDataCalaindar()[position][20].toInt())
                     intent.putExtra("ton_naidzelny", true)
                     startActivity(intent)
                 }
             }
             R.id.kniga -> {
-                val colorDialog = if (data[day][5].contains("1") || data[day][5].contains("2") || data[day][5].contains("3")) {
+                val colorDialog = if (MenuCaliandar.getDataCalaindar()[position][5].contains("1") || MenuCaliandar.getDataCalaindar()[position][5].contains("2") || MenuCaliandar.getDataCalaindar()[position][5].contains("3")) {
                     4
                 } else {
-                    data[day][7].toInt()
+                    MenuCaliandar.getDataCalaindar()[position][7].toInt()
                 }
-                val svity = data[day][6]
-                var daysv = data[day][1].toInt()
-                var munsv = data[day][2].toInt() + 1
+                val svity = MenuCaliandar.getDataCalaindar()[position][6]
+                var daysv = MenuCaliandar.getDataCalaindar()[position][1].toInt()
+                var munsv = MenuCaliandar.getDataCalaindar()[position][2].toInt() + 1
                 if (svity.contains("уваход у ерусалім", true)) {
                     daysv = -1
                     munsv = 0
@@ -471,14 +403,14 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     daysv = -1
                     munsv = 3
                 }
-                val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, data[day][20].toInt(), data[day][0].toInt(), daysv, munsv, data[day][22].toInt(), data[day][4], data[day][23] == "1", data[day][3].toInt(), data[day][1].toInt(), data[day][2].toInt() + 1)
+                val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, MenuCaliandar.getDataCalaindar()[position][20].toInt(), MenuCaliandar.getDataCalaindar()[position][0].toInt(), daysv, munsv, MenuCaliandar.getDataCalaindar()[position][22].toInt(), MenuCaliandar.getDataCalaindar()[position][4], MenuCaliandar.getDataCalaindar()[position][23] == "1", MenuCaliandar.getDataCalaindar()[position][3].toInt(), MenuCaliandar.getDataCalaindar()[position][1].toInt(), MenuCaliandar.getDataCalaindar()[position][2].toInt() + 1)
                 dialogCalindarGrid.show(childFragmentManager, "grid")
             }
             R.id.textCviatyGlavnyia -> if (MainActivity.checkmoduleResources(activity)) {
                 activity?.let {
-                    val svity = data[day][6]
-                    var daysv = data[day][1].toInt()
-                    var munsv = data[day][2].toInt() + 1
+                    val svity = MenuCaliandar.getDataCalaindar()[position][6]
+                    var daysv = MenuCaliandar.getDataCalaindar()[position][1].toInt()
+                    var munsv = MenuCaliandar.getDataCalaindar()[position][2].toInt() + 1
                     if (svity.contains("уваход у ерусалім", true)) {
                         daysv = -1
                         munsv = 0
@@ -500,7 +432,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     i.putExtra("glavnyia", true)
                     i.putExtra("mun", munsv)
                     i.putExtra("day", daysv)
-                    i.putExtra("year", data[day][3].toInt())
+                    i.putExtra("year", MenuCaliandar.getDataCalaindar()[position][3].toInt())
                     startActivity(i)
                 }
             } else {
@@ -511,9 +443,9 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 activity?.let {
                     val i = Intent()
                     i.setClassName(it, MainActivity.OPISANIE)
-                    i.putExtra("mun", data[day][2].toInt() + 1)
-                    i.putExtra("day", data[day][1].toInt())
-                    i.putExtra("year", data[day][3].toInt())
+                    i.putExtra("mun", MenuCaliandar.getDataCalaindar()[position][2].toInt() + 1)
+                    i.putExtra("day", MenuCaliandar.getDataCalaindar()[position][1].toInt())
+                    i.putExtra("year", MenuCaliandar.getDataCalaindar()[position][3].toInt())
                     startActivity(i)
                 }
             } else {
@@ -524,7 +456,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
-                    intent.putExtra("cytanne", data[day][10])
+                    intent.putExtra("cytanne", MenuCaliandar.getDataCalaindar()[position][10])
                     startActivity(intent)
                 }
             } else {
@@ -535,7 +467,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
-                    intent.putExtra("cytanne", data[day][9])
+                    intent.putExtra("cytanne", MenuCaliandar.getDataCalaindar()[position][9])
                     startActivity(intent)
                 }
             } else {
@@ -546,7 +478,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
-                    intent.putExtra("cytanne", data[day][11])
+                    intent.putExtra("cytanne", MenuCaliandar.getDataCalaindar()[position][11])
                     startActivity(intent)
                 }
             } else {
@@ -557,7 +489,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.MARANATA)
-                    intent.putExtra("cytanneMaranaty", data[day][13])
+                    intent.putExtra("cytanneMaranaty", MenuCaliandar.getDataCalaindar()[position][13])
                     startActivity(intent)
                 }
             } else {
@@ -565,13 +497,14 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 dadatak.show(childFragmentManager, "dadatak")
             }
             R.id.znakTipicona -> {
-                val tipiconNumber = data[day][12].toInt()
+                val tipiconNumber = MenuCaliandar.getDataCalaindar()[position][12].toInt()
                 val tipicon = DialogTipicon.getInstance(tipiconNumber)
                 tipicon.show(childFragmentManager, "tipicon")
             }
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun sabytieView(sabytieTitle: String) {
         val gc = Calendar.getInstance() as GregorianCalendar
         val sabytieList = ArrayList<TextView>()
@@ -594,7 +527,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             }
             gc[r1[2].toInt(), r1[1].toInt() - 1] = r1[0].toInt()
             for (i in 0 until rezkK) {
-                if (gc[Calendar.DAY_OF_YEAR] - 1 == dayYear && gc[Calendar.YEAR] == year) {
+                if (gc[Calendar.DAY_OF_YEAR] == getDayOfYear() && gc[Calendar.YEAR] == getYear()) {
                     val title = p.padz
                     val data = p.dat
                     val time = p.tim
@@ -624,7 +557,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)
                         textViewT.typeface = MainActivity.createFont(activity, Typeface.BOLD)
                         textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-                        textViewT.typeface = MainActivity.createFont(activity, Typeface.BOLD)
 
                         textViewT.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                         textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(activity)[p.color]))
@@ -679,8 +611,10 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary)), t1 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             if (paznicia) spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary)), t3, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
+                        val font = MainActivity.createFont(activity, Typeface.NORMAL)
                         spannable.setSpan(clickableSpanEdit, t1 + 1, t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         spannable.setSpan(clickableSpanRemove, t2 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        spannable.setSpan(CustomTypefaceSpan("", font), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
                         textView.text = spannable
                         textView.movementMethod = LinkMovementMethod.getInstance()
                         sabytieList.add(textView)
@@ -733,12 +667,9 @@ class CaliandarFull : Fragment(), View.OnClickListener {
 
     companion object {
         var editCaliandarTitle = ""
-        fun newInstance(position: Int, day: Int, year: Int, dayYear: Int): CaliandarFull {
+        fun newInstance(position: Int): CaliandarFull {
             val fragment = CaliandarFull()
             val args = Bundle()
-            args.putInt("dayYear", dayYear)
-            args.putInt("year", year)
-            args.putInt("day", day)
             args.putInt("position", position)
             fragment.arguments = args
             return fragment

@@ -12,10 +12,6 @@ import android.os.SystemClock
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.util.*
 
 class Widget : AppWidgetProvider() {
@@ -121,28 +117,10 @@ class Widget : AppWidgetProvider() {
             updateViews.setTextColor(R.id.textMesiac, ContextCompat.getColor(context, R.color.colorWhite))
         }
 
-        private fun getmun(): Int {
-            val g = Calendar.getInstance() as GregorianCalendar
-            val position = (g[Calendar.YEAR] - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + g[Calendar.MONTH]
-            val count = (SettingsActivity.GET_CALIANDAR_YEAR_MAX - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 1) * 12
-            for (i in 0 until count) {
-                if (position == i) {
-                    return position
-                }
-            }
-            return position
-        }
-
         fun kaliandar(context: Context, appWidgetManager: AppWidgetManager, widgetID: Int) {
             val updateViews = RemoteViews(context.packageName, R.layout.widget)
-            val inputStream = context.resources.openRawResource(MainActivity.getCaliandarResource(getmun()))
-            val isr = InputStreamReader(inputStream)
-            val reader = BufferedReader(isr)
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
-            val data: ArrayList<ArrayList<String>> = gson.fromJson(reader.readText(), type)
-            isr.close()
             val g = Calendar.getInstance() as GregorianCalendar
+            val data = MenuCaliandar.getDataCalaindar(mun = g[Calendar.MONTH], year = g[Calendar.YEAR])
             val day = g[Calendar.DATE] - 1
             val calendar = GregorianCalendar(data[day][3].toInt(), data[day][2].toInt(), data[day][1].toInt())
             val dzenNoch = context.getSharedPreferences("biblia", Context.MODE_PRIVATE).getBoolean("dzen_noch_widget_day$widgetID", false)

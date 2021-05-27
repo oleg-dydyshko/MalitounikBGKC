@@ -6,7 +6,9 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.*
 import android.widget.*
@@ -119,7 +121,7 @@ class Chytanny : AppCompatActivity() {
                     var ned = c[Calendar.DAY_OF_WEEK] - 1
                     var mon = c[Calendar.MONTH]
                     val data2 = c[Calendar.YEAR]
-                    var datefull = nedelName[ned] + ", <strong>" + data + " " + monName2[mon] + "</strong> " + year
+                    var datefull = SpannableString(nedelName[ned] + ", " + data + " " + monName2[mon] + " " + year)
                     countDay++
                     if (data2 != year) {
                         monthP = 1
@@ -132,9 +134,18 @@ class Chytanny : AppCompatActivity() {
                         data = c[Calendar.DATE]
                         ned = c[Calendar.DAY_OF_WEEK] - 1
                         mon = c[Calendar.MONTH]
-                        datefull = nedelName[ned] + ", <strong>" + data + " " + monName2[mon] + "</strong> " + year
+                        datefull = SpannableString(nedelName[ned] + ", " + data + " " + monName2[mon] + " " + year)
                         countDay++
                     }
+                    val c1 = nedelName[ned].length
+                    val c2 = data.toString().length
+                    val c3 = monName2[mon].length
+                    datefull.setSpan(StyleSpan(Typeface.BOLD), c1 + 2, c1 + 2 + c2 + c3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    val font = MainActivity.createFont(this@Chytanny, Typeface.NORMAL)
+                    val font2 = MainActivity.createFont(this@Chytanny, Typeface.BOLD)
+                    datefull.setSpan(CustomTypefaceSpan("", font), 0, c1 + 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+                    datefull.setSpan(CustomTypefaceSpan("", font2), c1 + 2, c1 + 2 + c2 + c3 + 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+                    datefull.setSpan(CustomTypefaceSpan("", font), c1 + 2 + c2 + c3 + 1, datefull.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
                     binding.linear.addView(grateTextView(datefull))
                     binding.linear.addView(grateEditView(1, fw.substring(t1 + 11, t2)))
                     binding.linear.addView(grateEditView(2, fw.substring(t3 + 10, t4)))
@@ -153,7 +164,7 @@ class Chytanny : AppCompatActivity() {
         setContentView(binding.root)
         for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) data.add(i.toString())
         binding.spinnerYear.adapter = SpinnerAdapter(this, data)
-        binding.spinnerYear.setSelection(3)
+        binding.spinnerYear.setSelection(2)
         binding.spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 loadChytanny(data[position].toInt())
@@ -165,17 +176,15 @@ class Chytanny : AppCompatActivity() {
         setTollbarTheme()
     }
 
-    private fun grateTextView(text: String): TextView {
+    private fun grateTextView(text: SpannableString): TextView {
         val density = resources.displayMetrics.density
         val padding = 10 * density
         val textView = TextView(this)
-        textView.typeface = MainActivity.createFont(this, Typeface.NORMAL)
         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         llp.setMargins(padding.toInt(), padding.toInt(), 0, 0)
         textView.layoutParams = llp
         textView.textSize = SettingsActivity.GET_DEFAULT_FONT_SIZE
-        val res = MainActivity.fromHtml(text)
-        textView.text = res.trim()
+        textView.text = text.trim()
         return textView
     }
 

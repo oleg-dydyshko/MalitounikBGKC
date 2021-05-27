@@ -83,9 +83,9 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
         val nedelia = chin.getInt("nedelia", 0)
         binding.tabLayout.getTabAt(nedelia)?.select()
         if (nedelia == 0) {
-            replaceFragment(CaliandarMunTab1.getInstance(posMun1, yearG1, day1, this))
+            replaceFragment(CaliandarMunTab1.getInstance(posMun1, yearG1, day1))
         } else {
-            replaceFragment(CaliandarMunTab2.getInstance(posMun2, yearG2, day2, this))
+            replaceFragment(CaliandarMunTab2.getInstance(posMun2, yearG2, day2))
         }
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -97,9 +97,9 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val position = tab?.position ?: 0
                 if (position == 0) {
-                    replaceFragment(CaliandarMunTab1.getInstance(posMun1, yearG1, day1, this@CaliandarMun))
+                    replaceFragment(CaliandarMunTab1.getInstance(posMun1, yearG1, day1))
                 } else {
-                    replaceFragment(CaliandarMunTab2.getInstance(posMun2, yearG2, day2, this@CaliandarMun))
+                    replaceFragment(CaliandarMunTab2.getInstance(posMun2, yearG2, day2))
                 }
                 val editor = chin.edit()
                 editor.putInt("nedelia", position)

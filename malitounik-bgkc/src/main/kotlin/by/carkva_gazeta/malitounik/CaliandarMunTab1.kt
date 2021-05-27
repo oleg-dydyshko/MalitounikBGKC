@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
@@ -37,6 +38,17 @@ class CaliandarMunTab1 : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is Activity) {
+            munListener = try {
+                context as CaliandarMunTab1Listener
+            } catch (e: ClassCastException) {
+                throw ClassCastException("$activity must implement CaliandarMunTab1Listener")
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -218,11 +230,11 @@ class CaliandarMunTab1 : Fragment() {
             val g = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, day)
             for (i in 0 until count) {
                 if (position == i) {
-                    return PageFragmentMonth.newInstance(day, g[Calendar.MONTH], g[Calendar.YEAR], position)
+                    return PageFragmentMonth.newInstance(day, g[Calendar.MONTH], g[Calendar.YEAR])
                 }
                 g.add(Calendar.MONTH, 1)
             }
-            return PageFragmentMonth.newInstance(g[Calendar.DATE], g[Calendar.MONTH], g[Calendar.YEAR], 0)
+            return PageFragmentMonth.newInstance(g[Calendar.DATE], g[Calendar.MONTH], g[Calendar.YEAR])
         }
 
         override fun getItemPosition(`object`: Any): Int {
@@ -233,9 +245,8 @@ class CaliandarMunTab1 : Fragment() {
     private class ViewHolder(var text: TextView)
 
     companion object {
-        fun getInstance(posMun: Int, yearG: Int, day: Int, listener: CaliandarMunTab1Listener): CaliandarMunTab1 {
+        fun getInstance(posMun: Int, yearG: Int, day: Int): CaliandarMunTab1 {
             val frag = CaliandarMunTab1()
-            frag.munListener = listener
             val bundle = Bundle()
             bundle.putInt("posMun", posMun)
             bundle.putInt("yearG", yearG)

@@ -62,27 +62,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     private var shortcuts = false
     private var mLastClickTime: Long = 0
     private var resetTollbarJob: Job? = null
-    private val sabytieLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val intent = result.data
-            if (intent != null) {
-                var dayyear = 0
-                val day = intent.getIntExtra("data", 0)
-                val year = intent.getIntExtra("year", c.get(Calendar.YEAR))
-                idSelect = R.id.label1
-                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
-                    dayyear += if (c.isLeapYear(i)) 366
-                    else 365
-                }
-                if (setDataCalendar != dayyear + day) {
-                    setDataCalendar = dayyear + day
-                    idOld = -1
-                    onClick(binding.label1)
-                }
-            }
-            onStart = true
-        }
-    }
 
     private val searchSviatyiaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -102,20 +81,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }
         }
     }
-
-    /*private val permission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-       when {
-           granted -> {
-               // доступ к камере разрешен, открываем камеру
-           }
-           !shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
-               // доступ к камере запрещен, пользователь поставил галочку Don't ask again.
-           }
-           else -> {
-               // доступ к камере запрещен, пользователь отклонил запрос
-           }
-       }
-   }*/
 
     override fun setDataCalendar(day_of_year: Int, year: Int) {
         c = Calendar.getInstance() as GregorianCalendar
@@ -514,9 +479,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }
         }
 
+        CoroutineScope(Dispatchers.IO).launch {
+            if (padzeia.size == 0)
+                setListPadzeia(this@MainActivity)
+        }
+
         if (k.getBoolean("setAlarm", true)) {
             CoroutineScope(Dispatchers.IO).launch {
-                setListPadzeia(this@MainActivity)
                 val notify = k.getInt("notification", 2)
                 SettingsActivity.setNotifications(this@MainActivity, notify)
                 val edit = k.edit()
@@ -672,25 +641,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
         if (id == R.id.sabytie) {
             val i = Intent(this, Sabytie::class.java)
-            sabytieLauncher.launch(i)
+            startActivity(i)
         }
         if (id == R.id.search_sviatyia) {
             val i = Intent(this, SearchSviatyia::class.java)
             searchSviatyiaLauncher.launch(i)
-        }
-        if (id == R.id.action_mun) {
-            if (onStart) {
-                val gregorianCalendar = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
-                for (i in 0 until setDataCalendar) {
-                    gregorianCalendar.add(Calendar.DATE, 1)
-                }
-                val i = Intent(this, CaliandarMun::class.java)
-                i.putExtra("mun", gregorianCalendar.get(Calendar.MONTH))
-                i.putExtra("day", gregorianCalendar.get(Calendar.DATE))
-                i.putExtra("year", gregorianCalendar.get(Calendar.YEAR))
-                sabytieLauncher.launch(i)
-                onStart = false
-            }
         }
         if (id == R.id.action_help) {
             val dialogHelpListView = DialogHelpListView.getInstance(1)
@@ -1012,7 +967,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     if (shortcuts) {
                         val i = Intent(this, Sabytie::class.java)
                         i.putExtra("shortcuts", shortcuts)
-                        sabytieLauncher.launch(i)
+                        startActivity(i)
                         shortcuts = false
                     }
                 }
@@ -1312,7 +1267,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         var setDataCalendar = -1
         var checkBrightness = true
         private var SessionId = 0
-        var onStart = true
         var brightness = 15
         var dialogVisable = false
         var moduleName = "biblijateka"
@@ -1487,73 +1441,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 }
             }
             return false
-        }
-
-        fun getCaliandarResource(mun: Int): Int {
-            var resource = R.raw.caliandar0
-            when (mun) {
-                0 -> resource = R.raw.caliandar0
-                1 -> resource = R.raw.caliandar1
-                2 -> resource = R.raw.caliandar2
-                3 -> resource = R.raw.caliandar3
-                4 -> resource = R.raw.caliandar4
-                5 -> resource = R.raw.caliandar5
-                6 -> resource = R.raw.caliandar6
-                7 -> resource = R.raw.caliandar7
-                8 -> resource = R.raw.caliandar8
-                9 -> resource = R.raw.caliandar9
-                10 -> resource = R.raw.caliandar10
-                11 -> resource = R.raw.caliandar11
-                12 -> resource = R.raw.caliandar12
-                13 -> resource = R.raw.caliandar13
-                14 -> resource = R.raw.caliandar14
-                15 -> resource = R.raw.caliandar15
-                16 -> resource = R.raw.caliandar16
-                17 -> resource = R.raw.caliandar17
-                18 -> resource = R.raw.caliandar18
-                19 -> resource = R.raw.caliandar19
-                20 -> resource = R.raw.caliandar20
-                21 -> resource = R.raw.caliandar21
-                22 -> resource = R.raw.caliandar22
-                23 -> resource = R.raw.caliandar23
-                24 -> resource = R.raw.caliandar24
-                25 -> resource = R.raw.caliandar25
-                26 -> resource = R.raw.caliandar26
-                27 -> resource = R.raw.caliandar27
-                28 -> resource = R.raw.caliandar28
-                29 -> resource = R.raw.caliandar29
-                30 -> resource = R.raw.caliandar30
-                31 -> resource = R.raw.caliandar31
-                32 -> resource = R.raw.caliandar32
-                33 -> resource = R.raw.caliandar33
-                34 -> resource = R.raw.caliandar34
-                35 -> resource = R.raw.caliandar35
-                36 -> resource = R.raw.caliandar36
-                37 -> resource = R.raw.caliandar37
-                38 -> resource = R.raw.caliandar38
-                39 -> resource = R.raw.caliandar39
-                40 -> resource = R.raw.caliandar40
-                41 -> resource = R.raw.caliandar41
-                42 -> resource = R.raw.caliandar42
-                43 -> resource = R.raw.caliandar43
-                44 -> resource = R.raw.caliandar44
-                45 -> resource = R.raw.caliandar45
-                46 -> resource = R.raw.caliandar46
-                47 -> resource = R.raw.caliandar47
-                48 -> resource = R.raw.caliandar48
-                49 -> resource = R.raw.caliandar49
-                50 -> resource = R.raw.caliandar50
-                51 -> resource = R.raw.caliandar51
-                52 -> resource = R.raw.caliandar52
-                53 -> resource = R.raw.caliandar53
-                54 -> resource = R.raw.caliandar54
-                55 -> resource = R.raw.caliandar55
-                56 -> resource = R.raw.caliandar56
-                57 -> resource = R.raw.caliandar57
-                58 -> resource = R.raw.caliandar58
-                59 -> resource = R.raw.caliandar59
-            }
-            return resource
         }
 
         fun removeZnakiAndSlovy(ctenie: String): String {

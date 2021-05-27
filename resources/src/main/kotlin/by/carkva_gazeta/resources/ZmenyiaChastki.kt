@@ -3,9 +3,7 @@ package by.carkva_gazeta.resources
 import android.content.Context
 import androidx.collection.ArrayMap
 import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.SettingsActivity
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import by.carkva_gazeta.malitounik.MenuCaliandar
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
@@ -14,54 +12,26 @@ internal class ZmenyiaChastki(context: Context) {
     private val data: ArrayMap<String, Int> = ArrayMap()
     private val arrayData: ArrayList<ArrayList<String>>
     private val context: Context
-    private fun getmun(): Int {
-        val g = Calendar.getInstance() as GregorianCalendar
-        val position = (SettingsActivity.GET_CALIANDAR_YEAR_MAX - 1 - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + g[Calendar.MONTH]
-        val count = (SettingsActivity.GET_CALIANDAR_YEAR_MAX - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 1) * 12
-        for (i in 0 until count) {
-            if (position == i) {
-                return position
-            }
-        }
-        return position
-    }
 
     private val date: ArrayList<ArrayList<String>>
         get() {
-            val inputStream = context.resources.openRawResource(MainActivity.getCaliandarResource(getmun()))
-            val inputStreamReader = InputStreamReader(inputStream)
-            val reader = BufferedReader(inputStreamReader)
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-            return ArrayList(gson.fromJson<Collection<ArrayList<String>>>(reader.readText(), type))
+            val g = Calendar.getInstance() as GregorianCalendar
+            return MenuCaliandar.getDataCalaindar(g[Calendar.DATE])
         }
 
-    fun sviatyia(): String {
-        val gc = Calendar.getInstance() as GregorianCalendar
-        return arrayData[gc[Calendar.DATE] - 1][10]
-    }
+    fun sviatyia() = arrayData[0][10]
 
-    fun sviatyiaDop(): String {
-        val gc = Calendar.getInstance() as GregorianCalendar
-        return arrayData[gc[Calendar.DATE] - 1][11]
-    }
+    fun sviatyiaDop() = arrayData[0][11]
 
-    fun sviatyiaView(apostal: Int): String {
-        return chtenia(sviatyia(), apostal)
-    }
+    fun sviatyiaView(apostal: Int) = chtenia(sviatyia(), apostal)
 
     fun zmenya(apostal: Int): String {
-        val kal = Calendar.getInstance() as GregorianCalendar
-        val data = arrayData[kal[Calendar.DATE] - 1][9]
+        val data = arrayData[0][9]
         return if (data.contains(context.resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + context.resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em>"
-        else chtenia(arrayData[kal[Calendar.DATE] - 1][9], apostal)
+        else chtenia(arrayData[0][9], apostal)
     }
 
-    fun raznica(): Int {
-        val kal = Calendar.getInstance() as GregorianCalendar
-        val data = arrayData[kal[Calendar.DATE] - 1][22]
-        return data.toInt()
-    }
+    fun raznica() = arrayData[0][22].toInt()
 
     private fun chtenia(w: String, apostal: Int): String {
         var w1 = w
@@ -247,9 +217,8 @@ internal class ZmenyiaChastki(context: Context) {
     }
 
     fun traparyIKandakiNiadzelnyia(chast: Int): String {
-        val kal = Calendar.getInstance() as GregorianCalendar
-        if (arrayData[kal[Calendar.DATE] - 1][20] != "") {
-            val w = arrayData[kal[Calendar.DATE] - 1][20]
+        if (arrayData[0][20] != "") {
+            val w = arrayData[0][20]
             var result = ""
             if (w.contains("1")) {
                 val res = readFile(R.raw.ton1)

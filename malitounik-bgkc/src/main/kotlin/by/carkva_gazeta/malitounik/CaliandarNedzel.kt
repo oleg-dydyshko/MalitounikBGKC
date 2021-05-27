@@ -16,26 +16,19 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.ListFragment
 import by.carkva_gazeta.malitounik.databinding.CalaindarNedelBinding
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
 
 class CaliandarNedzel : ListFragment() {
     private var year = 0
     private var mun = 0
-    private var date = 0
     private var dateInt = 0
     private var position = 0
-    private var count = 0
-    private val strings = ArrayList<ArrayList<String>>()
-    private val strings2 = ArrayList<ArrayList<String>>()
+    private var niadzelia = ArrayList<ArrayList<String>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,81 +36,17 @@ class CaliandarNedzel : ListFragment() {
         mun = arguments?.getInt("mun") ?: 0
         dateInt = arguments?.getInt("date") ?: 1
         position = arguments?.getInt("position") ?: 0
-        count = count()
-        date = getMun()
-    }
-
-    private fun getMun(): Int {
-        val gS = GregorianCalendar(year, mun, dateInt)
-        val g = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
-        for (i in 0 until count) {
-            if (g[Calendar.MONTH] == gS[Calendar.MONTH] && g[Calendar.YEAR] == gS[Calendar.YEAR]) {
-                return i
-            }
-            g.add(Calendar.MONTH, 1)
-        }
-        return 0
-    }
-
-    private fun count(): Int {
-        return (SettingsActivity.GET_CALIANDAR_YEAR_MAX - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 1) * 12
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
-                val builder = StringBuilder()
-                var inputStream = resources.openRawResource(MainActivity.getCaliandarResource(date))
-                var isr = InputStreamReader(inputStream)
-                var reader = BufferedReader(isr)
-                reader.forEachLine {
-                    builder.append(it)
-                }
-                isr.close()
-                var out = builder.toString()
-                val gson = Gson()
-                val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
-                strings.addAll(gson.fromJson(out, type))
-                if (date != count - 1) {
-                    for (i in strings.indices) {
-                        if (26 >= strings[i][1].toInt()) {
-                            val t1 = builder.toString().lastIndexOf("]")
-                            val builderN = StringBuilder()
-                            inputStream = resources.openRawResource(MainActivity.getCaliandarResource(date + 1))
-                            isr = InputStreamReader(inputStream)
-                            reader = BufferedReader(isr)
-                            reader.forEachLine {
-                                builderN.append(it)
-                            }
-                            isr.close()
-                            val t2 = builderN.toString().indexOf("[")
-                            val out1 = out.substring(0, t1)
-                            val out2 = builderN.toString().substring(t2 + 1)
-                            out = "$out1,$out2"
-                            strings.clear()
-                            break
-                        }
-                    }
-                }
-                strings.addAll(gson.fromJson(out, type))
-                var i = 0
-                while (i < strings.size) {
-                    if (strings[i][1].toInt() == dateInt) {
-                        for (e in 0..6) {
-                            strings2.add(strings[i])
-                            i++
-                        }
-                        break
-                    }
-                    i++
-                }
+                niadzelia = MenuCaliandar.getDataCalaindar(dateInt, mun, year)
             }
-
             activity?.let {
-                listAdapter = CaliandarNedzelListAdapter(it, strings2)
+                listAdapter = CaliandarNedzelListAdapter(it, niadzelia)
                 listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
             }
-
             if (setDenNedeli) {
                 val c = Calendar.getInstance() as GregorianCalendar
                 if (getNedzel(c[Calendar.WEEK_OF_YEAR] - 1) == position) {
@@ -140,10 +69,10 @@ class CaliandarNedzel : ListFragment() {
 
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
         super.onListItemClick(l, v, position, id)
-        val g = GregorianCalendar(strings2[position][3].toInt(), strings2[position][2].toInt(), strings2[position][1].toInt())
+        val g = GregorianCalendar(niadzelia[position][3].toInt(), niadzelia[position][2].toInt(), niadzelia[position][1].toInt())
         val intent = Intent()
         intent.putExtra("data", g[Calendar.DAY_OF_YEAR] - 1)
-        intent.putExtra("year", strings2[position][3].toInt())
+        intent.putExtra("year", niadzelia[position][3].toInt())
         activity?.setResult(Activity.RESULT_OK, intent)
         activity?.finish()
     }

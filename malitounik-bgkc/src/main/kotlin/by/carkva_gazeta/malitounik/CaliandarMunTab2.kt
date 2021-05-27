@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -31,6 +32,17 @@ class CaliandarMunTab2 : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is Activity) {
+            tydzenListener = try {
+                context as CaliandarMunTab2Listener
+            } catch (e: ClassCastException) {
+                throw ClassCastException("$activity must implement CaliandarMunTab2Listener")
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -200,9 +212,8 @@ class CaliandarMunTab2 : Fragment() {
     }
 
     companion object {
-        fun getInstance(posMun: Int, yearG: Int, day: Int, listener: CaliandarMunTab2Listener): CaliandarMunTab2 {
+        fun getInstance(posMun: Int, yearG: Int, day: Int): CaliandarMunTab2 {
             val frag = CaliandarMunTab2()
-            frag.tydzenListener = listener
             val bundle = Bundle()
             bundle.putInt("posMun", posMun)
             bundle.putInt("yearG", yearG)

@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package by.carkva_gazeta.malitounik
 
 import android.util.SparseArray

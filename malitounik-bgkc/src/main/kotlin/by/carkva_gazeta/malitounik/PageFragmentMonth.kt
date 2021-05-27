@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -20,13 +21,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.Sabytie.Companion.getColors
 import by.carkva_gazeta.malitounik.databinding.CalendarMunBinding
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -37,7 +34,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
     private var year = 0
     private var pageNumberFull = 0
     private var dzenNoch = false
-    private val data = ArrayList<ArrayList<String>>()
+    private lateinit var data: ArrayList<ArrayList<String>>
     private val padzei = ArrayList<Padzeia>()
     private var viewId = 0
     private var mLastClickTime: Long = 0
@@ -58,11 +55,8 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         date = arguments?.getInt("date") ?: 0
         mun = arguments?.getInt("mun") ?: 0
-        year = arguments?.getInt("year") ?: 0
-        val position = arguments?.getInt("position") ?: 0
-        val gson = Gson()
-        val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
-        data.addAll(gson.fromJson(getData(position), type))
+        year = arguments?.getInt("year") ?: SettingsActivity.GET_CALIANDAR_YEAR_MIN
+        data = MenuCaliandar.getDataCalaindar(mun = mun, year = year)
         for (p in MainActivity.padzeia) {
             val r1 = p.dat.split(".")
             val munL = r1[1].toInt() - 1
@@ -71,17 +65,6 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                 padzei.add(p)
             }
         }
-    }
-
-    private fun getData(mun: Int): String {
-        var builder = ""
-        activity?.let {
-            val inputStream = resources.openRawResource(MainActivity.getCaliandarResource(mun))
-            val isr = InputStreamReader(inputStream)
-            val reader = BufferedReader(isr)
-            builder = reader.readText()
-        }
-        return builder
     }
 
     private fun sabytieCheck(day: Int): Boolean {
@@ -96,7 +79,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
         }
         return sabytie
     }
-    
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -186,7 +169,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                 for (e in 1..42) {
                     var denNedeli: Int
                     if (e < wik) {
-                        ++oldDay
+                        oldDay++
                         day = "start"
                     } else if (e < munAll + wik) {
                         i++
@@ -196,7 +179,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         strogiPost = data[i - 1][7].toInt() == 3
                         if (data[i - 1][5].toInt() == 1 || data[i - 1][5].toInt() == 2) nopost = false
                     } else {
-                        ++newDay
+                        newDay++
                         day = "end"
                     }
                     if (42 - (munAll + wik) >= 6) binding.TableRow.visibility = View.GONE
@@ -210,7 +193,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button1.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button1.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button1.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -227,7 +210,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button1.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button1.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button1.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -244,7 +227,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button1.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button1.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button1.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -277,7 +260,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button2.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button2.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button2.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -294,7 +277,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button2.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button2.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button2.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -311,7 +294,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button2.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button2.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button2.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -344,7 +327,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button3.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button3.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button3.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -361,7 +344,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button3.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button3.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button3.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -378,7 +361,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button3.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button3.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button3.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -411,7 +394,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button4.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button4.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button4.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -428,7 +411,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button4.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button4.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button4.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -445,7 +428,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button4.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button4.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button4.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -478,7 +461,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button5.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button5.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button5.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -495,7 +478,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button5.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button5.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button5.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -512,7 +495,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button5.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button5.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button5.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -545,7 +528,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button6.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button6.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button6.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -562,7 +545,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button6.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button6.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button6.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -579,7 +562,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button6.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button6.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button6.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -607,7 +590,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 7) {
                         val sab = sabytieCheck(i)
                         binding.button7.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button7.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button7.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -624,7 +607,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button7.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button7.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button7.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -641,7 +624,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button7.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button7.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button7.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -668,7 +651,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 8) {
                         val sab = sabytieCheck(i)
                         binding.button8.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button8.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button8.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -685,7 +668,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button8.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button8.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button8.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -702,7 +685,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button8.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button8.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button8.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -729,7 +712,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 9) {
                         val sab = sabytieCheck(i)
                         binding.button9.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button9.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button9.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -746,7 +729,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button9.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button9.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button9.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -763,7 +746,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button9.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button9.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button9.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -790,7 +773,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 10) {
                         val sab = sabytieCheck(i)
                         binding.button10.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button10.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button10.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -807,7 +790,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button10.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button10.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button10.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -824,7 +807,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button10.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button10.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button10.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -851,7 +834,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 11) {
                         val sab = sabytieCheck(i)
                         binding.button11.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button11.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button11.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -868,7 +851,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button11.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button11.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button11.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -885,7 +868,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button11.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button11.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button11.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -912,7 +895,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 12) {
                         val sab = sabytieCheck(i)
                         binding.button12.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button12.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button12.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -929,7 +912,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button12.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button12.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button12.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -946,7 +929,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button12.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button12.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button12.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -973,7 +956,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 13) {
                         val sab = sabytieCheck(i)
                         binding.button13.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button13.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button13.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -990,7 +973,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button13.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button13.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button13.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1007,7 +990,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button13.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button13.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button13.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1034,7 +1017,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 14) {
                         val sab = sabytieCheck(i)
                         binding.button14.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button14.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button14.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1051,7 +1034,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button14.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button14.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button14.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1068,7 +1051,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button14.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button14.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button14.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1095,7 +1078,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 15) {
                         val sab = sabytieCheck(i)
                         binding.button15.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button15.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button15.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1112,7 +1095,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button15.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button15.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button15.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1129,7 +1112,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button15.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button15.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button15.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1156,7 +1139,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 16) {
                         val sab = sabytieCheck(i)
                         binding.button16.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button16.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button16.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1173,7 +1156,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button16.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button16.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button16.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1190,7 +1173,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button16.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button16.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button16.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1217,7 +1200,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 17) {
                         val sab = sabytieCheck(i)
                         binding.button17.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button17.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button17.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1234,7 +1217,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button17.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button17.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button17.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1251,7 +1234,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button17.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button17.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button17.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1278,7 +1261,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 18) {
                         val sab = sabytieCheck(i)
                         binding.button18.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button18.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button18.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1295,7 +1278,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button18.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button18.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button18.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1312,7 +1295,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button18.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button18.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button18.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1339,7 +1322,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 19) {
                         val sab = sabytieCheck(i)
                         binding.button19.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button19.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button19.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1356,7 +1339,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button19.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button19.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button19.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1373,7 +1356,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button19.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button19.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button19.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1400,7 +1383,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 20) {
                         val sab = sabytieCheck(i)
                         binding.button20.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button20.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button20.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1417,7 +1400,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button20.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button20.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button20.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1434,7 +1417,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button20.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button20.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button20.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1461,7 +1444,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 21) {
                         val sab = sabytieCheck(i)
                         binding.button21.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button21.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button21.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1478,7 +1461,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button21.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button21.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button21.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1495,7 +1478,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button21.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button21.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button21.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1522,7 +1505,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 22) {
                         val sab = sabytieCheck(i)
                         binding.button22.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button22.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button22.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1539,7 +1522,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button22.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button22.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button22.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1556,7 +1539,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button22.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button22.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button22.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1583,7 +1566,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 23) {
                         val sab = sabytieCheck(i)
                         binding.button23.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button23.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button23.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1600,7 +1583,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button23.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button23.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button23.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1617,7 +1600,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button23.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button23.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button23.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1644,7 +1627,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 24) {
                         val sab = sabytieCheck(i)
                         binding.button24.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button24.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button24.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1661,7 +1644,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button24.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button24.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button24.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1678,7 +1661,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button24.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button24.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button24.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1705,7 +1688,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 25) {
                         val sab = sabytieCheck(i)
                         binding.button25.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button25.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button25.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1722,7 +1705,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button25.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button25.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button25.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1739,7 +1722,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button25.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button25.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button25.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1766,7 +1749,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 26) {
                         val sab = sabytieCheck(i)
                         binding.button26.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button26.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button26.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1783,7 +1766,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button26.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button26.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button26.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1800,7 +1783,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button26.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button26.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button26.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1827,7 +1810,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 27) {
                         val sab = sabytieCheck(i)
                         binding.button27.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button27.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button27.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1844,7 +1827,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button27.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button27.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button27.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1861,7 +1844,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button27.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button27.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button27.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1888,7 +1871,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                     if (e == 28) {
                         val sab = sabytieCheck(i)
                         binding.button28.text = day
-                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button28.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button28.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         when (data[i - 1][5].toInt()) {
                             1 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1905,7 +1888,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button28.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button28.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                binding.button28.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             }
                             2 -> {
                                 if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1922,7 +1905,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                     }
                                 }
                                 binding.button28.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                binding.button28.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                binding.button28.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                             }
                             else -> {
                                 if (nopost) {
@@ -1954,7 +1937,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button29.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button29.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button29.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1971,7 +1954,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button29.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button29.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button29.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -1988,7 +1971,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button29.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button29.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button29.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -2021,7 +2004,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button30.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button30.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button30.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2038,7 +2021,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button30.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button30.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button30.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2055,7 +2038,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button30.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button30.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button30.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -2088,7 +2071,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button31.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button31.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button31.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2105,7 +2088,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button31.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button31.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button31.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2122,7 +2105,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button31.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button31.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button31.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -2155,7 +2138,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button32.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button32.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button32.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2172,7 +2155,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button32.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button32.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button32.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2189,7 +2172,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button32.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button32.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button32.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -2222,7 +2205,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button33.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button33.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button33.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2239,7 +2222,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button33.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button33.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button33.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2256,7 +2239,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button33.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button33.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button33.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -2289,7 +2272,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button34.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button34.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button34.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2306,7 +2289,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button34.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button34.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button34.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2323,7 +2306,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button34.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button34.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button34.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -2356,7 +2339,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button35.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button35.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button35.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2373,7 +2356,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button35.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button35.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button35.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2390,7 +2373,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button35.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button35.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button35.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -2423,7 +2406,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button36.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button36.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button36.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2440,7 +2423,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button36.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button36.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button36.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2457,7 +2440,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button36.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button36.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button36.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -2490,7 +2473,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             val sab = sabytieCheck(i)
                             binding.button37.text = day
-                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button37.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                            if (data[i - 1][4].contains("<font color=#d00505><strong>")) binding.button37.typeface = MainActivity.createFont(it, Typeface.BOLD)
                             when (data[i - 1][5].toInt()) {
                                 1 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2507,7 +2490,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button37.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button37.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                                    binding.button37.typeface = MainActivity.createFont(it, Typeface.BOLD)
                                 }
                                 2 -> {
                                     if (c[Calendar.DAY_OF_MONTH] == i && munTudey) {
@@ -2524,7 +2507,7 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                                         }
                                     }
                                     binding.button37.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                                    binding.button37.typeface = MainActivity.createFont(it,  Typeface.NORMAL)
+                                    binding.button37.typeface = MainActivity.createFont(it, Typeface.NORMAL)
                                 }
                                 else -> {
                                     if (nopost) {
@@ -2950,9 +2933,8 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         val textViewT = TextView(it)
                         textViewT.text = title
                         textViewT.setPadding(20, 10, 10, 10)
-                        textViewT.typeface = MainActivity.createFont(it,  Typeface.BOLD)
+                        textViewT.typeface = MainActivity.createFont(it, Typeface.BOLD)
                         textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-                        textViewT.typeface = MainActivity.createFont(it,  Typeface.BOLD)
                         textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         textViewT.setBackgroundColor(Color.parseColor(getColors(it)[p.color]))
                         sabytieList.add(textViewT)
@@ -2978,6 +2960,8 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
                         } else {
                             if (paznicia) spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary)), t3, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
+                        val font = MainActivity.createFont(it, Typeface.NORMAL)
+                        spannable.setSpan(CustomTypefaceSpan("", font), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
                         textView.text = spannable
                         sabytieList.add(textView)
                         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
@@ -2996,13 +2980,12 @@ class PageFragmentMonth : Fragment(), View.OnClickListener {
     }
 
     companion object {
-        fun newInstance(date: Int, mun: Int, year: Int, position: Int): PageFragmentMonth {
+        fun newInstance(date: Int, mun: Int, year: Int): PageFragmentMonth {
             val fragmentFirst = PageFragmentMonth()
             val args = Bundle()
             args.putInt("date", date)
             args.putInt("mun", mun)
             args.putInt("year", year)
-            args.putInt("position", position)
             fragmentFirst.arguments = args
             return fragmentFirst
         }

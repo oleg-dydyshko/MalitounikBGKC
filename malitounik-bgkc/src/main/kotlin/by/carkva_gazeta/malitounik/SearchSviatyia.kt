@@ -13,7 +13,6 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.util.SparseIntArray
 import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -27,8 +26,6 @@ import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -39,8 +36,8 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
     private var textViewCount: TextView? = null
     private var searchView: SearchView? = null
     private var searchViewQwery = ""
-    private var arrayLists: ArrayList<ArrayList<String>> = ArrayList()
-    private var arrayRes: ArrayList<Searche> = ArrayList()
+    private var arrayLists = ArrayList<ArrayList<String>>()
+    private var arrayRes = ArrayList<Searche>()
     private lateinit var chin: SharedPreferences
     private lateinit var c: GregorianCalendar
     private var mLastClickTime: Long = 0
@@ -234,50 +231,10 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             saveHistopy()
             finish()
         }
-        file
+        arrayLists = MenuCaliandar.getDataCalaindar(year = SettingsActivity.GET_CALIANDAR_YEAR_MIN)
         MenuCviaty.getPrazdnik(this, c[Calendar.YEAR])
         setTollbarTheme()
     }
-
-    private val file: Unit
-        get() {
-            val sparseArray = SparseIntArray()
-            sparseArray.append(0, R.raw.caliandar36)
-            sparseArray.append(1, R.raw.caliandar37)
-            sparseArray.append(2, R.raw.caliandar38)
-            sparseArray.append(3, R.raw.caliandar39)
-            sparseArray.append(4, R.raw.caliandar40)
-            sparseArray.append(5, R.raw.caliandar41)
-            sparseArray.append(6, R.raw.caliandar42)
-            sparseArray.append(7, R.raw.caliandar43)
-            sparseArray.append(8, R.raw.caliandar44)
-            sparseArray.append(9, R.raw.caliandar45)
-            sparseArray.append(10, R.raw.caliandar46)
-            sparseArray.append(11, R.raw.caliandar47)
-            val builder = StringBuilder()
-            for (i in 0 until sparseArray.size()) {
-                val inputStream = resources.openRawResource(sparseArray[i])
-                val isr = InputStreamReader(inputStream)
-                val reader = BufferedReader(isr)
-                var line: String
-                reader.forEachLine {
-                    line = it
-                    if (sparseArray.keyAt(i) > 0) {
-                        val t1 = line.indexOf("[")
-                        line = line.substring(t1 + 1)
-                    }
-                    if (sparseArray.keyAt(i) < 11) {
-                        val t1 = line.lastIndexOf("]")
-                        line = line.substring(0, t1) + ","
-                    }
-                    builder.append(line).append("\n")
-                }
-                inputStream.close()
-            }
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-            arrayLists = gson.fromJson(builder.toString(), type)
-        }
 
     private fun setTollbarTheme() {
         binding.titleToolbar.setOnClickListener {

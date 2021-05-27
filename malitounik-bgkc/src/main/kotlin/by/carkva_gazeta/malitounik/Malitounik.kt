@@ -10,4 +10,16 @@ class Malitounik : SplitCompatApplication() {
         super.attachBaseContext(context)
         SplitCompat.install(this)
     }
+
+    init {
+        instance = this
+    }
+
+    companion object {
+        private var instance: Malitounik? = null
+
+        fun applicationContext(): Context {
+            return instance!!.applicationContext
+        }
+    }
 }

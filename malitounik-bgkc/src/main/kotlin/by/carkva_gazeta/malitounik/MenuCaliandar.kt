@@ -7,16 +7,19 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.malitounik.databinding.MenuCaliandarBinding
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.BufferedReader
 import java.io.FileWriter
+import java.io.InputStreamReader
 import java.util.*
 
 class MenuCaliandar : MenuCaliandarFragment() {
@@ -25,6 +28,22 @@ class MenuCaliandar : MenuCaliandarFragment() {
     private var page = 0
     private var _binding: MenuCaliandarBinding? = null
     private val binding get() = _binding!!
+    private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            if (intent != null) {
+                val c = Calendar.getInstance() as GregorianCalendar
+                var dayyear = 0
+                val day = intent.getIntExtra("data", 0)
+                val year = intent.getIntExtra("year", c.get(Calendar.YEAR))
+                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
+                    dayyear += if (c.isLeapYear(i)) 366
+                    else 365
+                }
+                binding.pager.currentItem = dayyear + day
+            }
+        }
+    }
 
     internal interface MenuCaliandarPageListinner {
         fun setPage(page: Int)
@@ -116,6 +135,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
         binding.pager.currentItem = page
         binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
             override fun onPageSelected(position: Int) {
                 listinner?.setPage(position)
             }
@@ -185,56 +205,97 @@ class MenuCaliandar : MenuCaliandarFragment() {
                 }
             }
         }
+        if (id == R.id.action_mun) {
+            activity?.let {
+                val gregorianCalendar = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
+                for (i in 0 until MainActivity.setDataCalendar) {
+                    gregorianCalendar.add(Calendar.DATE, 1)
+                }
+                val i = Intent(it, CaliandarMun::class.java)
+                i.putExtra("mun", gregorianCalendar.get(Calendar.MONTH))
+                i.putExtra("day", gregorianCalendar.get(Calendar.DATE))
+                i.putExtra("year", gregorianCalendar.get(Calendar.YEAR))
+                caliandarMunLauncher.launch(i)
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 
     private class MyCalendarAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
-        private var currentFragment: Fragment? = null
-        private var mun = Calendar.JANUARY
-        private var year = SettingsActivity.GET_CALIANDAR_YEAR_MIN
-        private val c = Calendar.getInstance() as GregorianCalendar
 
-        override fun getItem(position: Int): Fragment {
-            val g = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
-            for (i2 in 0 until count) {
-                if (position == i2) {
-                    if (mun != g[Calendar.MONTH] || year != g[Calendar.YEAR]) {
-                        mun = g[Calendar.MONTH]
-                        year = g[Calendar.YEAR]
-                    }
-                    val dayofyear = g[Calendar.DAY_OF_YEAR] - 1
-                    val year = g[Calendar.YEAR]
-                    val day = g[Calendar.DATE] - 1
-                    return CaliandarFull.newInstance(position, day, year, dayofyear)
-                }
-                g.add(Calendar.DATE, 1)
-            }
-            return CaliandarFull.newInstance(0, 1, SettingsActivity.GET_CALIANDAR_YEAR_MIN, 1)
-        }
+        override fun getCount() = getDataCalaindar().size
+
+        override fun getItem(position: Int) = CaliandarFull.newInstance(position)
 
         override fun getItemPosition(`object`: Any): Int {
             return PagerAdapter.POSITION_NONE
         }
-
-        override fun getCount(): Int {
-            var dayyear = 0
-            for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) {
-                dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
-            }
-            return dayyear
-        }
-
-        override fun setPrimaryItem(container: ViewGroup, position: Int, ob: Any) {
-            if (currentFragment !== ob) {
-                currentFragment = ob as Fragment
-            }
-            super.setPrimaryItem(container, position, ob)
-        }
     }
 
     companion object {
-        var dataJson = ""
-        var munKal = 0
+        private val data = ArrayList<ArrayList<String>>()
+
+        fun getDataCalaindar(day: Int = -1, mun: Int = -1, year: Int = -1): ArrayList<ArrayList<String>> {
+            if (data.size == 0) {
+                val inputStream = Malitounik.applicationContext().resources.openRawResource(R.raw.caliandar)
+                val isr = InputStreamReader(inputStream)
+                val reader = BufferedReader(isr)
+                val builder = reader.use {
+                    it.readText()
+                }
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                data.addAll(gson.fromJson(builder, type))
+            }
+            when {
+                day != -1 && mun != -1 && year != -1 -> {
+                    val niadzeliaList = ArrayList<ArrayList<String>>()
+                    var count = 0
+                    data.forEach { arrayList ->
+                        if (day == arrayList[1].toInt() && mun == arrayList[2].toInt() && year == arrayList[3].toInt()) {
+                            count++
+                        }
+                        if (count in 1..7) {
+                            niadzeliaList.add(arrayList)
+                            count++
+                        }
+                        if (count == 8) return@forEach
+                    }
+                    return niadzeliaList
+                }
+                mun != -1 && year != -1 -> {
+                    val munList = ArrayList<ArrayList<String>>()
+                    data.forEach { arrayList ->
+                        if (mun == arrayList[2].toInt() && year == arrayList[3].toInt()) {
+                            munList.add(arrayList)
+                        }
+                    }
+                    return munList
+                }
+                year != -1 -> {
+                    val yearList = ArrayList<ArrayList<String>>()
+                    data.forEach { arrayList ->
+                        if (year == arrayList[3].toInt()) {
+                            yearList.add(arrayList)
+                        }
+                    }
+                    return yearList
+                }
+                day != -1 -> {
+                    val dayList = ArrayList<ArrayList<String>>()
+                    val g = Calendar.getInstance()
+                    data.forEach { arrayList ->
+                        if (day == arrayList[1].toInt() && g[Calendar.MONTH] == arrayList[2].toInt() && g[Calendar.YEAR] == arrayList[3].toInt()) {
+                            dayList.add(arrayList)
+                            return@forEach
+                        }
+                    }
+                    return dayList
+                }
+                else -> return data
+            }
+        }
+
         fun newInstance(page: Int): MenuCaliandar {
             val caliandar = MenuCaliandar()
             val bundle = Bundle()

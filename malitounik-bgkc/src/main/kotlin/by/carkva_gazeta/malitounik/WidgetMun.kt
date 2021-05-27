@@ -12,10 +12,6 @@ import android.os.SystemClock
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.util.*
 
 class WidgetMun : AppWidgetProvider() {
@@ -240,18 +236,6 @@ class WidgetMun : AppWidgetProvider() {
         }
     }
 
-    private fun getmun(mun: Int, year: Int): Int {
-        val g = GregorianCalendar(year, mun, 1) //(GregorianCalendar) Calendar.getInstance();
-        val position = (year - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + g[Calendar.MONTH]
-        val count = (SettingsActivity.GET_CALIANDAR_YEAR_MAX - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 1) * 12
-        for (i in 0 until count) {
-            if (position == i) {
-                return position
-            }
-        }
-        return position
-    }
-
     private fun mun(context: Context, widgetID: Int) {
         updateViews?.setViewVisibility(R.id.nedel5, View.VISIBLE)
         updateViews?.setViewVisibility(R.id.nedel6, View.VISIBLE)
@@ -260,13 +244,7 @@ class WidgetMun : AppWidgetProvider() {
         var calendarPost: GregorianCalendar
         val month = chin.getInt("WIDGET$widgetID", c[Calendar.MONTH])
         val year = chin.getInt("WIDGETYEAR$widgetID", c[Calendar.YEAR])
-        val inputStream = context.resources.openRawResource(MainActivity.getCaliandarResource(getmun(month, year)))
-        val isr = InputStreamReader(inputStream)
-        val reader = BufferedReader(isr)
-        val gson = Gson()
-        val type = object : TypeToken<ArrayList<ArrayList<String?>?>?>() {}.type
-        data = gson.fromJson(reader.readText(), type)
-        isr.close()
+        data = MenuCaliandar.getDataCalaindar(mun = month, year = year)
         val calendarFull = GregorianCalendar(year, month, 1)
         var munTudey = false
         if (month == c[Calendar.MONTH] && year == c[Calendar.YEAR]) munTudey = true

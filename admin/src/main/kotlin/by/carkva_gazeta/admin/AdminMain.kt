@@ -2,7 +2,6 @@ package by.carkva_gazeta.admin
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.TypedValue
@@ -17,8 +16,6 @@ import com.google.android.play.core.splitcompat.SplitCompat
 import kotlinx.coroutines.*
 
 class AdminMain : AppCompatActivity() {
-    private lateinit var k: SharedPreferences
-    private var dzenNoch = false
     private lateinit var binding: AdminMainBinding
     private var resetTollbarJob: Job? = null
 
@@ -29,9 +26,6 @@ class AdminMain : AppCompatActivity() {
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = AdminMainBinding.inflate(layoutInflater)
         try {
@@ -95,9 +89,6 @@ class AdminMain : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.site_admin)
-        if (dzenNoch) {
-            binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
-        }
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
@@ -116,14 +107,13 @@ class AdminMain : AppCompatActivity() {
             onBackPressed()
             return true
         }
-        //val prefEditors = k.edit()
-        //dzenNoch = k.getBoolean("dzen_noch", false)
         return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        val k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 }

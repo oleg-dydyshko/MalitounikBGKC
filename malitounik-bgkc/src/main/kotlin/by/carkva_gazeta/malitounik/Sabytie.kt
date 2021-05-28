@@ -92,18 +92,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             if (intent != null) {
-                var dayyear: Long = 0
-                val day = intent.getIntExtra("data", 0).toLong()
-                val year = intent.getIntExtra("year", c[Calendar.YEAR])
-                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
-                    dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
-                }
-                val mills = (dayyear + day) * 86400000L
-                val setCal = Calendar.getInstance() as GregorianCalendar
-                setCal[SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1, 0, 0] = 0
-                val timeold = setCal.timeInMillis
-                this.result = mills + timeold
-                setCal.timeInMillis = this.result
+                val position = intent.getIntExtra("position", 0)
+                val arrayList = MenuCaliandar.getPositionCaliandar(position)
+                val setCal = GregorianCalendar(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0 , 0)
+                setCal[Calendar.MILLISECOND] = 0
+                this.result = setCal.timeInMillis
                 var nol1 = ""
                 var nol2 = ""
                 if (setCal[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
@@ -120,7 +113,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 val kon = gc2.timeInMillis
                 val resul = gc.timeInMillis
                 if (kon - resul < 0) {
-                    MainActivity.toastView(this@Sabytie, getString(R.string.data_sabytie_error2))
+                    MainActivity.toastView(getString(R.string.data_sabytie_error2))
                     nol1 = ""
                     nol2 = ""
                     if (gc[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
@@ -134,18 +127,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             if (intent != null) {
-                var dayyear: Long = 0
-                val day = intent.getIntExtra("data", 0).toLong()
-                val year = intent.getIntExtra("year", c[Calendar.YEAR])
-                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
-                    dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
-                }
-                val mills = (dayyear + day) * 86400000L
-                val setCal = Calendar.getInstance() as GregorianCalendar
-                setCal[SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1, 0, 0] = 0
-                val timeold = setCal.timeInMillis
-                this.result = mills + timeold
-                setCal.timeInMillis = this.result
+                val position = intent.getIntExtra("position", 0)
+                val arrayList = MenuCaliandar.getPositionCaliandar(position)
+                val setCal = GregorianCalendar(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0 , 0)
+                setCal[Calendar.MILLISECOND] = 0
+                this.result = setCal.timeInMillis
                 var nol1 = ""
                 var nol2 = ""
                 if (setCal[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
@@ -200,18 +186,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             if (intent != null) {
-                var dayyear: Long = 0
-                val day = intent.getIntExtra("data", 0).toLong()
-                val year = intent.getIntExtra("year", c[Calendar.YEAR])
-                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
-                    dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
-                }
-                val mills = (dayyear + day) * 86400000L
-                val setCal = Calendar.getInstance() as GregorianCalendar
-                setCal[SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1, 0, 0] = 0
-                val timeold = setCal.timeInMillis
-                this.result = mills + timeold
-                setCal.timeInMillis = this.result
+                val position = intent.getIntExtra("position", 0)
+                val arrayList = MenuCaliandar.getPositionCaliandar(position)
+                val setCal = GregorianCalendar(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0 , 0)
+                setCal[Calendar.MILLISECOND] = 0
+                this.result = setCal.timeInMillis
                 var nol1 = ""
                 var nol2 = ""
                 if (setCal[Calendar.DAY_OF_MONTH] < 10) nol1 = "0"
@@ -227,7 +206,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 val kon = gc2.timeInMillis
                 this.result = gc.timeInMillis
                 if (kon - this.result < 0) {
-                    MainActivity.toastView(this@Sabytie, getString(R.string.data_sabytie_error))
+                    MainActivity.toastView(getString(R.string.data_sabytie_error))
                     da = binding.label1.text.toString()
                     binding.label12.text = da
                 }
@@ -754,7 +733,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 }
             }
         }
-        MainActivity.toastView(this@Sabytie, getString(R.string.remove_padzea))
+        MainActivity.toastView(getString(R.string.remove_padzea))
     }
 
     override fun onDialogDeliteClick(position: Int) {
@@ -783,7 +762,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
         } else {
             if (redak) {
-                MainActivity.setListPadzeia(this)
+                MainActivity.setListPadzeia()
                 onSupportNavigateUp()
             } else {
                 super.onBackPressed()
@@ -878,7 +857,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
                         startActivity(intent)
                     } catch (ex: ActivityNotFoundException) {
-                        MainActivity.toastView(this, getString(R.string.error_ch))
+                        MainActivity.toastView(getString(R.string.error_ch))
                     }
                 }
             } else {
@@ -1523,7 +1502,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 adapter.notifyDataSetChanged()
                 binding.editText.setText("")
                 binding.editText2.setText("")
-                MainActivity.toastView(this@Sabytie, getString(R.string.save))
+                MainActivity.toastView(getString(R.string.save))
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
                 binding.titleLayout.visibility = View.GONE
@@ -2203,7 +2182,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 binding.label2.text = ta
                 binding.label12.text = da
                 binding.label22.text = ta
-                MainActivity.toastView(this@Sabytie, getString(R.string.save))
+                MainActivity.toastView(getString(R.string.save))
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
                 binding.titleLayout.visibility = View.GONE
@@ -2384,7 +2363,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
         sabytie2.clear()
         adapter.notifyDataSetChanged()
-        MainActivity.toastView(this, getString(R.string.remove_padzea))
+        MainActivity.toastView(getString(R.string.remove_padzea))
     }
 
     override fun sabytieDelOld() {
@@ -2492,9 +2471,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val data = sab[0].split(".")
             val gc = GregorianCalendar(data[2].toInt(), data[1].toInt() - 1, data[0].toInt())
             if (gc[Calendar.DAY_OF_YEAR] == day[Calendar.DAY_OF_YEAR] && gc[Calendar.YEAR] == day[Calendar.YEAR]) {
-                holder.mText.typeface = MainActivity.createFont(this@Sabytie, Typeface.BOLD)
+                holder.mText.typeface = MainActivity.createFont(Typeface.BOLD)
             } else {
-                holder.mText.typeface = MainActivity.createFont(this@Sabytie, Typeface.NORMAL)
+                holder.mText.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
             holder.mText.text = text
             holder.color.setBackgroundColor(Color.parseColor(colors[mItemList[position].color]))

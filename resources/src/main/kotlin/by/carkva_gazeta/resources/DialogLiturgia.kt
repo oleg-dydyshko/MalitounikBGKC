@@ -38,18 +38,18 @@ class DialogLiturgia : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        activity?.let { it ->
-            _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(it))
+        activity?.let { activity ->
+            _binding = DialogTextviewDisplayBinding.inflate(LayoutInflater.from(activity))
             MainActivity.dialogVisable = true
-            val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             var style = by.carkva_gazeta.malitounik.R.style.AlertDialogTheme
             if (dzenNoch) style = by.carkva_gazeta.malitounik.R.style.AlertDialogThemeBlack
-            ab = AlertDialog.Builder(it, style)
+            ab = AlertDialog.Builder(activity, style)
             val builder = StringBuilder()
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-            val r = it.resources
+            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
+            else binding.title.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+            val r = activity.resources
             var inputStream: InputStream = r.openRawResource(R.raw.bogashlugbovya1_1)
             when (chast) {
                 1 -> {
@@ -82,12 +82,12 @@ class DialogLiturgia : DialogFragment() {
                 }
                 8 -> {
                     binding.title.text = by.carkva_gazeta.malitounik.R.string.czytanne.toString().uppercase()
-                    val zch = ZmenyiaChastki(it)
+                    val zch = ZmenyiaChastki()
                     builder.append(zch.sviatyiaView(1))
                 }
                 9 -> {
                     binding.title.text = by.carkva_gazeta.malitounik.R.string.czytanne.toString().uppercase()
-                    val zch = ZmenyiaChastki(it)
+                    val zch = ZmenyiaChastki()
                     builder.append(zch.sviatyiaView(0))
                 }
                 10 -> {
@@ -107,11 +107,11 @@ class DialogLiturgia : DialogFragment() {
                 inputStream.close()
             }
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
-            if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorWhite)) 
-            else binding.content.setTextColor(ContextCompat.getColor(it, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
+            if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
+            else binding.content.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             binding.content.text = MainActivity.fromHtml(builder.toString())
             ab.setView(binding.root)
-            ab.setPositiveButton(it.resources.getString(by.carkva_gazeta.malitounik.R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            ab.setPositiveButton(activity.resources.getString(by.carkva_gazeta.malitounik.R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
         }
         return ab.create()
     }

@@ -45,7 +45,7 @@ class MenuBogashlugbovya : ListFragment() {
                 startActivity(intent)
             }
             else -> {
-                if (MainActivity.checkmoduleResources(activity)) {
+                if (MainActivity.checkmoduleResources()) {
                     when (position) {
                         0 -> {
                             activity?.let {

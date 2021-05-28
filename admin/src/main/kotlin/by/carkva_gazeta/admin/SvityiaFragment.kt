@@ -63,7 +63,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {
                         activity?.let {
-                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
+                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
                         }
                         binding.progressBar2.visibility = View.GONE
                     }
@@ -204,7 +204,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
 
     private fun fileUpload(bitmap: Bitmap) {
         activity?.let { actyvity ->
-            if (MainActivity.isNetworkAvailable(actyvity)) {
+            if (MainActivity.isNetworkAvailable()) {
                 CoroutineScope(Dispatchers.Main).launch {
                     binding.progressBar2.visibility = View.VISIBLE
                     val bao = ByteArrayOutputStream()
@@ -227,9 +227,9 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                         }
                     }
                     if (responseCodeS == 200) {
-                        MainActivity.toastView(actyvity, getString(by.carkva_gazeta.malitounik.R.string.save))
+                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
                     } else {
-                        MainActivity.toastView(actyvity, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
                     }
                     binding.progressBar2.visibility = View.GONE
                 }
@@ -287,7 +287,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
 
     private fun sendPostRequest(data: Int, mun: Int, dayOfYear: Int, name: String, chtenie: String, bold: Int, tipicon: String, spaw: String) {
         activity?.let { actyvity ->
-            if (MainActivity.isNetworkAvailable(actyvity)) {
+            if (MainActivity.isNetworkAvailable()) {
                 CoroutineScope(Dispatchers.Main).launch {
                     var style = 8
                     when (bold) {
@@ -319,9 +319,9 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                         }
                     }
                     if (responseCodeS == 200) {
-                        MainActivity.toastView(actyvity, getString(by.carkva_gazeta.malitounik.R.string.save))
+                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
                     } else {
-                        MainActivity.toastView(actyvity, getString(by.carkva_gazeta.malitounik.R.string.error))
+                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
                     }
                     binding.progressBar2.visibility = View.GONE
                 }
@@ -340,7 +340,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         arrayList.add(Tipicon(by.carkva_gazeta.malitounik.R.drawable.znaki_ttk, "З штодзённай вячэрняй і вялікім услаўленьнем на ютрані"))
         arrayList.add(Tipicon(by.carkva_gazeta.malitounik.R.drawable.znaki_ttk_black, "З штодзённай вячэрняй і малым услаўленьнем на ютрані"))
         activity?.let { actyvity ->
-            if (MainActivity.isNetworkAvailable(actyvity)) {
+            if (MainActivity.isNetworkAvailable()) {
                 binding.actionBold.setOnClickListener(this)
                 binding.actionEm.setOnClickListener(this)
                 binding.actionRed.setOnClickListener(this)

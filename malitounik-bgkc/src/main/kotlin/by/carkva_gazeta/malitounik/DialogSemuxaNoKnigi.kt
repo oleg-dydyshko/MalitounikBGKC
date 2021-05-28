@@ -37,7 +37,7 @@ class DialogSemuxaNoKnigi : DialogFragment() {
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-            binding.checkbox.typeface = MainActivity.createFont(it, Typeface.NORMAL)
+            binding.checkbox.typeface = MainActivity.createFont(Typeface.NORMAL)
             binding.checkbox.text = getString(R.string.sabytie_check_mun)
             binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
                 val edit = chin.edit()

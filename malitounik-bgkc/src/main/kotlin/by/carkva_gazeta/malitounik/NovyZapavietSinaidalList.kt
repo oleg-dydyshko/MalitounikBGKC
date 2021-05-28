@@ -175,7 +175,7 @@ class NovyZapavietSinaidalList : AppCompatActivity() {
                 return@setOnChildClickListener true
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources(this)) {
+            if (MainActivity.checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.NOVYZAPAVIETSINAIDAL)
                 intent.putExtra("kniga", groupPosition)

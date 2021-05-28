@@ -28,8 +28,8 @@ class MenuGlavnoe : ListFragment() {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         if (position == 7) {
-            if (MainActivity.checkmoduleResources(activity)) {
-                if (MainActivity.checkmodulesBiblijateka(activity)) {
+            if (MainActivity.checkmoduleResources()) {
+                if (MainActivity.checkmodulesBiblijateka()) {
                     activity?.let {
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.BIBLIOTEKAVIEW)

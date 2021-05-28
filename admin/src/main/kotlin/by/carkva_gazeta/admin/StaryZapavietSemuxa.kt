@@ -69,7 +69,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
         for (i in 0 until binding.pagerTabStrip.childCount) {
             val nextChild = binding.pagerTabStrip.getChildAt(i)
             if (nextChild is TextView) {
-                nextChild.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+                nextChild.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
         }
         val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)

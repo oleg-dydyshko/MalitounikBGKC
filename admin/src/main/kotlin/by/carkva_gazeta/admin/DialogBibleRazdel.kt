@@ -100,7 +100,7 @@ class DialogBibleRazdel : DialogFragment() {
             val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm1.hideSoftInputFromWindow(binding.content.windowToken, 0)
             if (binding.content.text.toString() == "") {
-                MainActivity.toastView(it, getString(R.string.error))
+                MainActivity.toastView(getString(R.string.error))
             } else {
                 val value: Int = try {
                     binding.content.text.toString().toInt() - 1
@@ -110,7 +110,7 @@ class DialogBibleRazdel : DialogFragment() {
                 if (value in 0 until fullGlav) {
                     mListener?.onComplete(value)
                 } else {
-                    MainActivity.toastView(it, getString(R.string.error))
+                    MainActivity.toastView(getString(R.string.error))
                 }
             }
         }

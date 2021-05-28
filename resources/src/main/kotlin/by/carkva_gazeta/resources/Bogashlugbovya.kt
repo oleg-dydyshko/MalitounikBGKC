@@ -684,7 +684,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: R.raw.bogashlugbovya1
             val inputStream = resources.openRawResource(id)
-            val zmenyiaChastki = ZmenyiaChastki(this@Bogashlugbovya)
+            val zmenyiaChastki = ZmenyiaChastki()
             raznica = zmenyiaChastki.raznica()
             val gregorian = Calendar.getInstance() as GregorianCalendar
             val dayOfWeek = gregorian.get(Calendar.DAY_OF_WEEK)
@@ -1345,7 +1345,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             editVybranoe = true
             men = setVybranoe(this, resurs, title)
             if (men) {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
+                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
             }
             invalidateOptionsMenu()
         }
@@ -1374,7 +1374,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
         prefEditor.apply()
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
-            if (MainActivity.checkmodulesAdmin(this)) {
+            if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
                 val idres = resursMap[resurs] ?: R.raw.bogashlugbovya1
@@ -1387,7 +1387,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 intent.putExtra("text", text)
                 startActivity(intent)
             } else {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
             }
         }
         return super.onOptionsItemSelected(item)

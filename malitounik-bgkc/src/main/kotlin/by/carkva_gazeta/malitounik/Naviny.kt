@@ -49,7 +49,7 @@ class Naviny : AppCompatActivity() {
                 if (timerCount == 6) {
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {
-                        MainActivity.toastView(this@Naviny, getString(R.string.bad_internet), Toast.LENGTH_LONG)
+                        MainActivity.toastView(getString(R.string.bad_internet), Toast.LENGTH_LONG)
                     }
                 }
                 timerCount++
@@ -72,7 +72,7 @@ class Naviny : AppCompatActivity() {
         binding = NavinyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.swipeRefreshLayout.setOnRefreshListener {
-            if (MainActivity.isNetworkAvailable(this)) {
+            if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
                 binding.viewWeb.reload()
             } else error()
@@ -104,37 +104,37 @@ class Naviny : AppCompatActivity() {
         var error = false
         when (naviny) {
             0 -> {
-                if (MainActivity.isNetworkAvailable(this)) {
+                if (MainActivity.isNetworkAvailable()) {
                     binding.viewWeb.loadUrl("https://carkva-gazeta.by/")
                 } else error = true
             }
             1 -> {
-                if (MainActivity.isNetworkAvailable(this)) {
+                if (MainActivity.isNetworkAvailable()) {
                     binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
                 } else error = true
             }
             2 -> {
-                if (MainActivity.isNetworkAvailable(this)) {
+                if (MainActivity.isNetworkAvailable()) {
                     binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
                 } else error = true
             }
             3 -> {
-                if (MainActivity.isNetworkAvailable(this)) {
+                if (MainActivity.isNetworkAvailable()) {
                     binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
                 } else error = true
             }
             4 -> {
-                if (MainActivity.isNetworkAvailable(this)) {
+                if (MainActivity.isNetworkAvailable()) {
                     binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
                 } else error = true
             }
             5 -> {
-                if (MainActivity.isNetworkAvailable(this)) {
+                if (MainActivity.isNetworkAvailable()) {
                     binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
                 } else error = true
             }
             6 -> {
-                if (MainActivity.isNetworkAvailable(this)) {
+                if (MainActivity.isNetworkAvailable()) {
                     binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
                 } else error = true
             }
@@ -195,7 +195,7 @@ class Naviny : AppCompatActivity() {
             binding.viewWeb.goForward()
         }
         if (id == R.id.action_update) {
-            if (MainActivity.isNetworkAvailable(this)) {
+            if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
                 binding.viewWeb.clearCache(true)
                 binding.viewWeb.reload()
@@ -207,22 +207,22 @@ class Naviny : AppCompatActivity() {
             onChrome(webHistoryItem?.url ?: "https://carkva-gazeta.by")
         }
         if (id == R.id.num) {
-            if (MainActivity.isNetworkAvailable(this)) {
+            if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?num=")
             } else error = true
         }
         if (id == R.id.sva) {
-            if (MainActivity.isNetworkAvailable(this)) {
+            if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?sva=")
             } else error = true
         }
         if (id == R.id.his) {
-            if (MainActivity.isNetworkAvailable(this)) {
+            if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?his=")
             } else error = true
         }
         if (id == R.id.gra) {
-            if (MainActivity.isNetworkAvailable(this)) {
+            if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?gra=")
             } else error = true
         }
@@ -241,17 +241,17 @@ class Naviny : AppCompatActivity() {
             startActivity(intent)
         }
         if (id == R.id.it) {
-            if (MainActivity.isNetworkAvailable(this)) {
+            if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?it=")
             } else error = true
         }
         if (id == R.id.ik) {
-            if (MainActivity.isNetworkAvailable(this)) {
+            if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.loadUrl("https://carkva-gazeta.by/index.php?ik=")
             } else error = true
         }
         if (id == R.id.bib) {
-            if (MainActivity.checkmoduleResources(this)) {
+            if (MainActivity.checkmoduleResources()) {
                 val prefEditors = kq.edit()
                 prefEditors.putInt("id", R.id.label2)
                 prefEditors.apply()
@@ -392,7 +392,7 @@ class Naviny : AppCompatActivity() {
                 return true
             }
             if (url.contains("https://carkva-gazeta.by/index.php?bib=")) {
-                if (MainActivity.checkmoduleResources(this@Naviny)) {
+                if (MainActivity.checkmoduleResources()) {
                     val prefEditors = kq.edit()
                     prefEditors.putInt("id", R.id.label2)
                     prefEditors.apply()
@@ -400,7 +400,7 @@ class Naviny : AppCompatActivity() {
                     intent.putExtra("site", true)
                     startActivity(intent)
                 } else {
-                    if (MainActivity.isNetworkAvailable(this@Naviny)) {
+                    if (MainActivity.isNetworkAvailable()) {
                         invalidateOptionsMenu()
                         return false
                     } else {
@@ -409,7 +409,7 @@ class Naviny : AppCompatActivity() {
                 }
                 return true
             }
-            if (MainActivity.isNetworkAvailable(this@Naviny)) {
+            if (MainActivity.isNetworkAvailable()) {
                 if (url.contains("translate.google.com") || url.contains("carkva-gazeta.by/download.php")) {
                     onChrome(url)
                 } else {

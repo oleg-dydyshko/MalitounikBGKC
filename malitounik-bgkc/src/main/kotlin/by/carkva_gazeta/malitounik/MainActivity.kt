@@ -364,36 +364,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
             if (extras.getBoolean(widgetmun, false) && savedInstanceState == null) {
                 idSelect = R.id.label1
-                var dayyear = 0
-                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until extras.getInt("Year", c.get(Calendar.YEAR))) {
-                    dayyear += if (c.isLeapYear(i)) 366
-                    else 365
-                }
-                setDataCalendar = dayyear + extras.getInt("DayYear", c.get(Calendar.DAY_OF_YEAR)) - 1
+                setDataCalendar = extras.getInt("position", -1)
             }
             if (extras.getBoolean(widgetday, false) && savedInstanceState == null) {
                 idSelect = R.id.label1
-                val chyt = c.get(Calendar.DAY_OF_YEAR) - 1
-                var dayyear = 0
-                val chytanneYear = c.get(Calendar.YEAR)
-                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until chytanneYear) {
-                    dayyear += if (c.isLeapYear(i)) 366
-                    else 365
-                }
-                setDataCalendar = dayyear + chyt
+                val arrayList = MenuCaliandar.getDataCalaindar(c[Calendar.DATE])
+                setDataCalendar = arrayList[0][25].toInt()
             }
 
             if (extras.getBoolean("sabytie", false)) {
                 idSelect = R.id.label1
                 val chyt = extras.getInt("data") - 1
-                var dayyear = 0
-                var chytanneYear = extras.getInt("year")
-                if (chytanneYear == -1) chytanneYear = c.get(Calendar.YEAR)
-                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until chytanneYear) {
-                    dayyear += if (c.isLeapYear(i)) 366
-                    else 365
-                }
-                setDataCalendar = dayyear + chyt
+                val arrayList = MenuCaliandar.getDataCalaindar(chyt)
+                setDataCalendar = arrayList[0][25].toInt()
             }
         }
         var scroll = false
@@ -480,8 +463,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
 
         CoroutineScope(Dispatchers.IO).launch {
-            if (padzeia.size == 0)
-                setListPadzeia(this@MainActivity)
+            if (padzeia.size == 0) setListPadzeia()
         }
 
         if (k.getBoolean("setAlarm", true)) {
@@ -576,7 +558,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 super.onBackPressed()
             } else {
                 back_pressed = System.currentTimeMillis()
-                toastView(this, getString(R.string.exit))
+                toastView(getString(R.string.exit))
             }
         } else {
             binding.drawerLayout.openDrawer(GravityCompat.START)
@@ -600,12 +582,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_glava) {
-            var dayyear = 0
-            for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until c.get(Calendar.YEAR)) {
-                dayyear += if (c.isLeapYear(i)) 366
-                else 365
-            }
-            setDataCalendar = dayyear + c.get(Calendar.DAY_OF_YEAR) - 1
+            val arrayList = MenuCaliandar.getDataCalaindar(c[Calendar.DATE])
+            setDataCalendar = arrayList[0][25].toInt()
             idOld = -1
             onClick(binding.label1)
         }
@@ -955,13 +933,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             if (idSelect != R.id.label2 && bindingcontent.linear.visibility == View.VISIBLE) bindingcontent.linear.visibility = View.GONE
             when (idSelect) {
                 R.id.label1 -> {
-                    var dayyear = 0
-                    for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until c.get(Calendar.YEAR)) {
-                        dayyear += if (c.isLeapYear(i)) 366
-                        else 365
-                    }
-                    if (setDataCalendar == -1) setDataCalendar = dayyear + c.get(Calendar.DAY_OF_YEAR) - 1
-                    val caliandar: MenuCaliandar = MenuCaliandar.newInstance(setDataCalendar)
+                    val arrayList = MenuCaliandar.getDataCalaindar(c[Calendar.DATE])
+                    if (setDataCalendar == -1) setDataCalendar = arrayList[0][25].toInt()
+                    val caliandar = MenuCaliandar.newInstance(setDataCalendar)
                     ftrans.replace(R.id.conteiner, caliandar, "menuCaliandar")
                     prefEditors.putInt("id", idSelect)
                     if (shortcuts) {
@@ -974,8 +948,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 R.id.label2 -> {
                     prefEditors.putInt("id", idSelect)
                     if (shortcuts || intent.extras?.containsKey("site") == true) {
-                        if (checkmoduleResources(this)) {
-                            if (checkmodulesBiblijateka(this)) {
+                        if (checkmoduleResources()) {
+                            if (checkmodulesBiblijateka()) {
                                 val intentBib = Intent()
                                 intentBib.setClassName(this, BIBLIOTEKAVIEW)
                                 intentBib.data = intent.data
@@ -1185,7 +1159,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }
 
     private fun loadOpisanieSviatyiaISxiaty() {
-        if (isNetworkAvailable(this)) {
+        if (isNetworkAvailable()) {
             val timeUpdate = Calendar.getInstance().timeInMillis
             val timeUpdateSave = k.getLong("OpisanieTimeUpdate", timeUpdate)
             val update = timeUpdate - timeUpdateSave > (7 * 24 * 60 * 60 * 1000L)
@@ -1271,10 +1245,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         var dialogVisable = false
         var moduleName = "biblijateka"
 
-        fun setListPadzeia(activity: Activity) {
+        fun setListPadzeia() {
             padzeia.clear()
             val gson = Gson()
-            val dir = File(activity.filesDir.toString() + "/Sabytie")
+            val dir = File(Malitounik.applicationContext().filesDir.toString() + "/Sabytie")
             if (dir.exists()) {
                 dir.walk().forEach { file ->
                     if (file.isFile && file.exists()) {
@@ -1294,13 +1268,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                         inputStream.close()
                     }
                 }
-                val file = File(activity.filesDir.toString() + "/Sabytie.json")
+                val file = File(Malitounik.applicationContext().filesDir.toString() + "/Sabytie.json")
                 file.writer().use {
                     it.write(gson.toJson(padzeia))
                 }
                 dir.deleteRecursively()
             } else {
-                val file = File(activity.filesDir.toString() + "/Sabytie.json")
+                val file = File(Malitounik.applicationContext().filesDir.toString() + "/Sabytie.json")
                 if (file.exists()) {
                     try {
                         val type = object : TypeToken<ArrayList<Padzeia>>() {}.type
@@ -1398,46 +1372,40 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
             splitInstallManager.startInstall(request).addOnFailureListener {
                 if ((it as SplitInstallException).errorCode == SplitInstallErrorCode.NETWORK_ERROR) {
-                    toastView(context, context.getString(R.string.no_internet))
+                    toastView(context.getString(R.string.no_internet))
                 }
             }.addOnSuccessListener {
                 SessionId = it
             }
         }
 
-        fun checkmodulesAdmin(context: Context?): Boolean {
-            context?.let {
-                val muduls = SplitInstallManagerFactory.create(it).installedModules
-                for (mod in muduls) {
-                    if (mod == "admin") {
-                        return true
-                    }
+        fun checkmodulesAdmin(): Boolean {
+            val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
+            for (mod in muduls) {
+                if (mod == "admin") {
+                    return true
                 }
             }
             return false
         }
 
-        fun checkmodulesBiblijateka(context: Context?): Boolean {
+        fun checkmodulesBiblijateka(): Boolean {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return true
-            context?.let {
-                val muduls = SplitInstallManagerFactory.create(it).installedModules
-                for (mod in muduls) {
-                    if (mod == "biblijateka") {
-                        return true
-                    }
+            val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
+            for (mod in muduls) {
+                if (mod == "biblijateka") {
+                    return true
                 }
             }
             return false
         }
 
-        fun checkmoduleResources(context: Context?): Boolean {
+        fun checkmoduleResources(): Boolean {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return true
-            context?.let {
-                val muduls = SplitInstallManagerFactory.create(it).installedModules
-                for (mod in muduls) {
-                    if (mod == "resources") {
-                        return true
-                    }
+            val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
+            for (mod in muduls) {
+                if (mod == "resources") {
+                    return true
                 }
             }
             return false
@@ -1583,21 +1551,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
 
         @Suppress("DEPRECATION")
-        fun toastView(context: Context, message: String, ToastLength: Int = Toast.LENGTH_SHORT) {
-            val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        fun toastView(message: String, ToastLength: Int = Toast.LENGTH_SHORT) {
+            val chin = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            val density = context.resources.displayMetrics.density
+            val density = Malitounik.applicationContext().resources.displayMetrics.density
             val realpadding = (10 * density).toInt()
-            val layout = LinearLayout(context)
+            val layout = LinearLayout(Malitounik.applicationContext())
             if (dzenNoch) layout.setBackgroundResource(R.color.colorPrimary_black)
             else layout.setBackgroundResource(R.color.colorPrimary)
-            val toast = TextView(context)
-            toast.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
+            val toast = TextView(Malitounik.applicationContext())
+            toast.typeface = createFont(Typeface.NORMAL)
+            toast.setTextColor(ContextCompat.getColor(Malitounik.applicationContext(), R.color.colorWhite))
             toast.setPadding(realpadding, realpadding, realpadding, realpadding)
             toast.text = message
             toast.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             layout.addView(toast)
-            val mes = Toast(context)
+            val mes = Toast(Malitounik.applicationContext())
             mes.duration = ToastLength
             mes.view = layout
             mes.show()
@@ -1608,8 +1577,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         fun toHtml(html: Spannable) = HtmlCompat.toHtml(html, HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL)
 
         @Suppress("DEPRECATION")
-        fun isNetworkAvailable(context: Context): Boolean {
-            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        fun isNetworkAvailable(): Boolean {
+            val connectivityManager = Malitounik.applicationContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val nw = connectivityManager.activeNetwork ?: return false
                 val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
@@ -1625,8 +1594,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
 
         @Suppress("DEPRECATION")
-        fun isIntNetworkAvailable(context: Context): Int {
-            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        fun isIntNetworkAvailable(): Int {
+            val connectivityManager = Malitounik.applicationContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val nw = connectivityManager.activeNetwork ?: return 0
                 val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return 0
@@ -1647,12 +1616,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }
         }
 
-        fun createFont(context: Context, style: Int): Typeface? {
+        fun createFont(style: Int): Typeface? {
             return when (style) {
-                Typeface.BOLD -> ResourcesCompat.getFont(context, R.font.robotocondensedbold)
-                Typeface.ITALIC -> ResourcesCompat.getFont(context, R.font.robotocondenseditalic)
-                Typeface.BOLD_ITALIC -> ResourcesCompat.getFont(context, R.font.robotocondensedbolditalic)
-                else -> ResourcesCompat.getFont(context, R.font.robotocondensed)
+                Typeface.BOLD -> ResourcesCompat.getFont(Malitounik.applicationContext(), R.font.robotocondensedbold)
+                Typeface.ITALIC -> ResourcesCompat.getFont(Malitounik.applicationContext(), R.font.robotocondenseditalic)
+                Typeface.BOLD_ITALIC -> ResourcesCompat.getFont(Malitounik.applicationContext(), R.font.robotocondensedbolditalic)
+                else -> ResourcesCompat.getFont(Malitounik.applicationContext(), R.font.robotocondensed)
             }
         }
     }

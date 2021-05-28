@@ -70,7 +70,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
                     urlJob?.cancel()
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {
-                        MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
+                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
                         binding.progressBar2.visibility = View.GONE
                     }
                 }
@@ -219,7 +219,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
     }
 
     private fun fileUpload(bitmap: Bitmap) {
-        if (MainActivity.isNetworkAvailable(this)) {
+        if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 val bao = ByteArrayOutputStream()
@@ -242,9 +242,9 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
                     }
                 }
                 if (responseCodeS == 200) {
-                    MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.save))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
                 } else {
-                    MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
                 binding.progressBar2.visibility = View.GONE
             }
@@ -375,7 +375,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
     }
 
     private fun sendPostRequest(position: Int, apisanne: String, utran: String, litur: String, viach: String) {
-        if (MainActivity.isNetworkAvailable(this)) {
+        if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
@@ -397,9 +397,9 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
                     }
                 }
                 if (responseCodeS == 200) {
-                    MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.save))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
                 } else {
-                    MainActivity.toastView(this@Sviaty, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
                 binding.progressBar2.visibility = View.GONE
             }

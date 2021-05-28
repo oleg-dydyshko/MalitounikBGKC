@@ -53,7 +53,7 @@ class StaryZapavietSemuxaFragment : Fragment() {
 
     private fun sendPostRequest(id: Int, spaw: String, sv: Int) {
         activity?.let { actyvity ->
-            if (MainActivity.isNetworkAvailable(actyvity)) {
+            if (MainActivity.isNetworkAvailable()) {
                 CoroutineScope(Dispatchers.Main).launch {
                     binding.progressBar2.visibility = View.VISIBLE
                     val response = StringBuffer()
@@ -86,9 +86,9 @@ class StaryZapavietSemuxaFragment : Fragment() {
                     }
                     activity?.let {
                         if (responseCodeS == 200) {
-                            MainActivity.toastView(it, response.toString())
+                            MainActivity.toastView(response.toString())
                         } else {
-                            MainActivity.toastView(it, getString(by.carkva_gazeta.malitounik.R.string.error))
+                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
                         }
                         binding.progressBar2.visibility = View.GONE
                     }
@@ -99,7 +99,7 @@ class StaryZapavietSemuxaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { actyvity ->
-            if (MainActivity.isNetworkAvailable(actyvity)) {
+            if (MainActivity.isNetworkAvailable()) {
                 binding.progressBar2.visibility = View.VISIBLE
                 var url = "https://www.carkva-gazeta.by/chytanne/Semucha/biblias1.txt"
                 when (kniga) {

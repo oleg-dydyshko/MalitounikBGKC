@@ -105,7 +105,7 @@ class DialogBibliateka : DialogFragment() {
             if (file.exists()) {
                 builder.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             } else {
-                if (MainActivity.isIntNetworkAvailable(it) != 0) {
+                if (MainActivity.isIntNetworkAvailable() != 0) {
                     builder.setPositiveButton("Спампаваць $izm") { dialog: DialogInterface, _: Int ->
                         mListener?.onDialogbibliatekaPositiveClick(listPosition, title)
                         dialog.cancel()

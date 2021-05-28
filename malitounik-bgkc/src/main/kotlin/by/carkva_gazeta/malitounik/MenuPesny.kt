@@ -221,8 +221,8 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         textViewCount = menu.findItem(R.id.count).actionView as TextView
         activity?.let {
             val searcheTextView = searchView?.findViewById(androidx.appcompat.R.id.search_src_text) as TextView
-            searcheTextView.typeface = MainActivity.createFont(it, Typeface.NORMAL)
-            textViewCount?.typeface = MainActivity.createFont(it, Typeface.NORMAL)
+            searcheTextView.typeface = MainActivity.createFont(Typeface.NORMAL)
+            textViewCount?.typeface = MainActivity.createFont(Typeface.NORMAL)
         }
         if (search) {
             searchViewItem.expandActionView()

@@ -48,7 +48,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
                     urlJob?.cancel()
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {
-                        MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
+                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
                         binding.progressBar2.visibility = View.GONE
                     }
                 }
@@ -244,7 +244,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
     }
 
     private fun sendPostRequest(piarliny: String) {
-        if (MainActivity.isNetworkAvailable(this)) {
+        if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
@@ -265,9 +265,9 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
                     binding.addPiarliny.setText("")
                     binding.ok.text = getString(by.carkva_gazeta.malitounik.R.string.add_piarliny)
                     edit = -1
-                    MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.save))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
                 } else {
-                    MainActivity.toastView(this@Piarliny, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
                 val adapter = binding.listView.adapter as PiarlinyListAdaprer
                 adapter.notifyDataSetChanged()

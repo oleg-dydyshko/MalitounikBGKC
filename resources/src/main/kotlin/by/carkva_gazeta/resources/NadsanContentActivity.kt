@@ -109,7 +109,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         for (i in 0 until binding.pagerTabStrip.childCount) {
             val nextChild = binding.pagerTabStrip.getChildAt(i)
             if (nextChild is TextView) {
-                nextChild.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+                nextChild.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
         }
         val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
@@ -290,7 +290,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             checkSetDzenNoch = true
             men = VybranoeBibleList.setVybranoe(this, resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2), 0, binding.pager.currentItem, bibleName = 3)
             if (men) {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
+                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
                 if (!VybranoeBibleList.checkVybranoe("3")) {
                     MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "3", getString(by.carkva_gazeta.malitounik.R.string.title_psalter)))
                     val gson = Gson()
@@ -339,7 +339,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             hide()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
-            if (MainActivity.checkmodulesAdmin(this)) {
+            if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
                 val inputStream = resources.openRawResource(R.raw.nadsan_psaltyr)
@@ -351,7 +351,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
                 intent.putExtra("text", text)
                 startActivity(intent)
             } else {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
             }
         }
         prefEditors.apply()

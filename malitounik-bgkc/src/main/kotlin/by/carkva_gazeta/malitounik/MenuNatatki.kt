@@ -149,7 +149,7 @@ class MenuNatatki : NatatkiFragment() {
     }
 
     override fun onDialogEditClick(position: Int) {
-        if (MainActivity.checkmoduleResources(activity)) {
+        if (MainActivity.checkmoduleResources()) {
             activity?.let {
                 val f = adapter.itemList[position]
                 val intent = Intent()
@@ -183,7 +183,7 @@ class MenuNatatki : NatatkiFragment() {
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_add) {
-            if (MainActivity.checkmoduleResources(activity)) {
+            if (MainActivity.checkmoduleResources()) {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.MYNATATKI)
@@ -244,12 +244,12 @@ class MenuNatatki : NatatkiFragment() {
         }
         if (id == R.id.action_carkva) {
             activity?.let {
-                if (MainActivity.checkmodulesAdmin(it)) {
+                if (MainActivity.checkmodulesAdmin()) {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.PASOCHNICALIST)
                     startActivity(intent)
                 } else {
-                    MainActivity.toastView(it, getString(R.string.error))
+                    MainActivity.toastView(getString(R.string.error))
                 }
             }
         }
@@ -294,7 +294,7 @@ class MenuNatatki : NatatkiFragment() {
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources(activity)) {
+                if (MainActivity.checkmoduleResources()) {
                     activity?.let {
                         val f = itemList[adapterPosition]
                         val intent = Intent()

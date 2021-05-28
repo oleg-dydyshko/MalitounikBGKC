@@ -201,7 +201,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     }
 
     private fun sendSaveAsAddNewPesnyPostRequest(title: String, pesny: String, fileName: String) {
-        if (MainActivity.isNetworkAvailable(this)) {
+        if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
@@ -220,9 +220,9 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     }
                 }
                 if (responseCodeS == 200) {
-                    MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.save))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
                 } else {
-                    MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
                 binding.progressBar2.visibility = View.GONE
             }
@@ -230,7 +230,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     }
 
     private fun getFileIssetPostRequest(dir: String, oldFileName: String, fileName: String) {
-        if (MainActivity.isNetworkAvailable(this)) {
+        if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 var result = ""
                 binding.progressBar2.visibility = View.VISIBLE
@@ -269,7 +269,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     }
 
     private fun sendSaveAsPostRequest(dirToFile: String, fileName: String) {
-        if (MainActivity.isNetworkAvailable(this)) {
+        if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
@@ -287,9 +287,9 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     }
                 }
                 if (responseCodeS == 200) {
-                    MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.save))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
                 } else {
-                    MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
                 binding.progressBar2.visibility = View.GONE
             }
@@ -297,7 +297,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     }
 
     private fun getFilePostRequest(fileName: String) {
-        if (MainActivity.isNetworkAvailable(this)) {
+        if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 var result = ""
                 binding.progressBar2.visibility = View.VISIBLE
@@ -337,7 +337,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     }
 
     private fun sendPostRequest(fileName: String, content: String) {
-        if (MainActivity.isNetworkAvailable(this)) {
+        if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
@@ -355,9 +355,9 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     }
                 }
                 if (responseCodeS == 200) {
-                    MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.save))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
                 } else {
-                    MainActivity.toastView(this@Pasochnica, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
                 binding.progressBar2.visibility = View.GONE
             }

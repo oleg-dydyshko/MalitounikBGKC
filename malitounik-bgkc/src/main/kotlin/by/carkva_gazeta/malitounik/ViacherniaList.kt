@@ -76,7 +76,7 @@ class ViacherniaList : AppCompatActivity() {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources(this)) {
+            if (MainActivity.checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
                 when (position) {

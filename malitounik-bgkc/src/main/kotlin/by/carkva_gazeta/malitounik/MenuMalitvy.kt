@@ -27,7 +27,7 @@ class MenuMalitvy : ListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        if (MainActivity.checkmoduleResources(activity)) {
+        if (MainActivity.checkmoduleResources()) {
             activity?.let {
                 when (position) {
                     0 -> {

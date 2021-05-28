@@ -73,7 +73,7 @@ class DialogSetPageBiblioteka : DialogFragment() {
                 val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm1.hideSoftInputFromWindow(binding.content.windowToken, 0)
                 if (binding.content.text.toString() == "") {
-                    MainActivity.toastView(it, getString(R.string.error))
+                    MainActivity.toastView(getString(R.string.error))
                 } else {
                     val value: Int = try {
                         binding.content.text.toString().toInt()
@@ -83,7 +83,7 @@ class DialogSetPageBiblioteka : DialogFragment() {
                     if (value in 1..pageCount) {
                         mListener?.onDialogSetPage(value)
                     } else {
-                        MainActivity.toastView(it, getString(R.string.error))
+                        MainActivity.toastView(getString(R.string.error))
                     }
                 }
             }

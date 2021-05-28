@@ -95,7 +95,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
         val id = v?.id ?: 0
         if (id == R.id.saeche) {
             activity?.let { activity ->
-                if (MainActivity.checkmoduleResources(activity)) {
+                if (MainActivity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
                     intent.putExtra("zavet", 3)
@@ -117,7 +117,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
             val gson = Gson()
             val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
             val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
-            if (MainActivity.checkmoduleResources(activity)) {
+            if (MainActivity.checkmoduleResources()) {
                 val intent = Intent(activity, NadsanContent::class.java)
                 intent.putExtra("glava", set["glava"])
                 intent.putExtra("stix", set["stix"])
@@ -133,7 +133,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
             pravila.show(childFragmentManager, "pravila")
         }
         if (id == R.id.malitva_pered) {
-            if (MainActivity.checkmoduleResources(activity)) {
+            if (MainActivity.checkmoduleResources()) {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.NADSANMALITVYIPESNI)
@@ -147,7 +147,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
             }
         }
         if (id == R.id.malitva_posle) {
-            if (MainActivity.checkmoduleResources(activity)) {
+            if (MainActivity.checkmoduleResources()) {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.NADSANMALITVYIPESNI)
@@ -161,7 +161,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
             }
         }
         if (id == R.id.pesni) {
-            if (MainActivity.checkmoduleResources(activity)) {
+            if (MainActivity.checkmoduleResources()) {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.NADSANMALITVYIPESNILIST)
@@ -174,7 +174,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
             }
         }
         if (id == R.id.pravila) {
-            if (MainActivity.checkmoduleResources(activity)) {
+            if (MainActivity.checkmoduleResources()) {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.PSALTERNADSANA)
@@ -209,7 +209,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
             else -> -1
         }
         if (glava != -1) {
-            if (MainActivity.checkmoduleResources(activity)) {
+            if (MainActivity.checkmoduleResources()) {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.NADSANCONTENTACTIVITY)

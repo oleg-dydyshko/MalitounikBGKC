@@ -1189,7 +1189,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
                         startActivity(intent)
                     } catch (ex: ActivityNotFoundException) {
-                        MainActivity.toastView(this, getString(R.string.error_ch))
+                        MainActivity.toastView(getString(R.string.error_ch))
                     }
                 }
             }
@@ -1253,7 +1253,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         }
         binding.admin.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.admin.setOnClickListener {
-            if (MainActivity.checkmodulesAdmin(this)) {
+            if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.ADMINMAIN)
                 startActivity(intent)
@@ -1380,7 +1380,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                 if (del) prefEditor.remove(key)
             }
             File("$filesDir/Book").deleteRecursively()
-            MainActivity.toastView(this, getString(R.string.save))
+            MainActivity.toastView(getString(R.string.save))
             prefEditor.putInt("id", id)
             prefEditor.putFloat("font_biblia", GET_DEFAULT_FONT_SIZE)
             prefEditor.putBoolean("dzen_noch", false)
@@ -1597,17 +1597,17 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             }
             prefEditor.apply()
         }
-        binding.vibro.typeface = MainActivity.createFont(this, Typeface.NORMAL)
-        binding.guk.typeface = MainActivity.createFont(this, Typeface.NORMAL)
-        binding.sinoidal.typeface = MainActivity.createFont(this, Typeface.NORMAL)
-        binding.maranata.typeface = MainActivity.createFont(this, Typeface.NORMAL)
-        binding.prav.typeface = MainActivity.createFont(this, Typeface.NORMAL)
-        binding.pkc.typeface = MainActivity.createFont(this, Typeface.NORMAL)
-        binding.dzair.typeface = MainActivity.createFont(this, Typeface.NORMAL)
-        binding.praf.typeface = MainActivity.createFont(this, Typeface.NORMAL)
-        binding.checkBox5.typeface = MainActivity.createFont(this, Typeface.NORMAL)
-        binding.checkBox6.typeface = MainActivity.createFont(this, Typeface.NORMAL)
-        binding.checkBox7.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        binding.vibro.typeface = MainActivity.createFont(Typeface.NORMAL)
+        binding.guk.typeface = MainActivity.createFont(Typeface.NORMAL)
+        binding.sinoidal.typeface = MainActivity.createFont(Typeface.NORMAL)
+        binding.maranata.typeface = MainActivity.createFont(Typeface.NORMAL)
+        binding.prav.typeface = MainActivity.createFont(Typeface.NORMAL)
+        binding.pkc.typeface = MainActivity.createFont(Typeface.NORMAL)
+        binding.dzair.typeface = MainActivity.createFont(Typeface.NORMAL)
+        binding.praf.typeface = MainActivity.createFont(Typeface.NORMAL)
+        binding.checkBox5.typeface = MainActivity.createFont(Typeface.NORMAL)
+        binding.checkBox6.typeface = MainActivity.createFont(Typeface.NORMAL)
+        binding.checkBox7.typeface = MainActivity.createFont(Typeface.NORMAL)
         if (savedInstanceState == null && (notification == 1 || notification == 2)) {
             if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true)) {
                 val notifi = DialogHelpNotification()
@@ -1656,7 +1656,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         prefEditor.putBoolean("admin", true)
         prefEditor.apply()
         binding.admin.visibility = View.VISIBLE
-        if (!MainActivity.checkmodulesAdmin(this)) {
+        if (!MainActivity.checkmodulesAdmin()) {
             MainActivity.moduleName = "admin"
             MainActivity.downloadDynamicModule(this)
         }

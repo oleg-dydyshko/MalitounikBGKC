@@ -81,10 +81,8 @@ class Widget : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (intent.action.equals(updateAllWidgets, ignoreCase = true)) {
-            val thisAppWidget = ComponentName(
-                    context.packageName, javaClass.name)
-            val appWidgetManager = AppWidgetManager
-                    .getInstance(context)
+            val thisAppWidget = ComponentName(context.packageName, javaClass.name)
+            val appWidgetManager = AppWidgetManager.getInstance(context)
             val ids = appWidgetManager.getAppWidgetIds(thisAppWidget)
             onUpdate(context, appWidgetManager, ids)
             val intentUpdate = Intent(context, Widget::class.java)
@@ -120,9 +118,7 @@ class Widget : AppWidgetProvider() {
         fun kaliandar(context: Context, appWidgetManager: AppWidgetManager, widgetID: Int) {
             val updateViews = RemoteViews(context.packageName, R.layout.widget)
             val g = Calendar.getInstance() as GregorianCalendar
-            val data = MenuCaliandar.getDataCalaindar(mun = g[Calendar.MONTH], year = g[Calendar.YEAR])
-            val day = g[Calendar.DATE] - 1
-            val calendar = GregorianCalendar(data[day][3].toInt(), data[day][2].toInt(), data[day][1].toInt())
+            val data = MenuCaliandar.getDataCalaindar(g[Calendar.DATE])
             val dzenNoch = context.getSharedPreferences("biblia", Context.MODE_PRIVATE).getBoolean("dzen_noch_widget_day$widgetID", false)
             val rColorColorPrimaryText: Int
             val rColorColorPrimary: Int
@@ -133,9 +129,9 @@ class Widget : AppWidgetProvider() {
                 rColorColorPrimary = R.color.colorPrimary
                 rColorColorPrimaryText = R.color.colorPrimary_text
             }
-            val month = calendar[Calendar.MONTH]
-            val dayofmounth = calendar[Calendar.DAY_OF_MONTH]
-            val nedel = calendar[Calendar.DAY_OF_WEEK]
+            val month = data[0][2].toInt()
+            val dayofmounth = data[0][1].toInt()
+            val nedel = data[0][0].toInt()
             val intent = Intent(context, SplashActivity::class.java)
             val widgetDay = "widget_day"
             intent.putExtra(widgetDay, true)
@@ -173,7 +169,7 @@ class Widget : AppWidgetProvider() {
             updateViews.setTextColor(R.id.textCviatyGlavnyia, ContextCompat.getColor(context, rColorColorPrimary))
             updateViews.setViewVisibility(R.id.textSviatyia, View.GONE)
             updateViews.setTextViewText(R.id.textChislo, dayofmounth.toString())
-            if (data[day][7].toInt() == 1) {
+            if (data[0][7].toInt() == 1) {
                 updateViews.setTextColor(R.id.textDenNedeli, ContextCompat.getColor(context, R.color.colorPrimary_text))
                 updateViews.setTextColor(R.id.textChislo, ContextCompat.getColor(context, R.color.colorPrimary_text))
                 updateViews.setTextColor(R.id.textMesiac, ContextCompat.getColor(context, R.color.colorPrimary_text))
@@ -182,7 +178,7 @@ class Widget : AppWidgetProvider() {
                 updateViews.setInt(R.id.textMesiac, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorBezPosta))
             }
             if (!(nedel == 1 || nedel == 7)) {
-                if (data[day][7].toInt() == 1) {
+                if (data[0][7].toInt() == 1) {
                     updateViews.setInt(R.id.textDenNedeli, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorBezPosta))
                     updateViews.setInt(R.id.textChislo, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorBezPosta))
                     updateViews.setInt(R.id.textMesiac, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorBezPosta))
@@ -194,30 +190,30 @@ class Widget : AppWidgetProvider() {
                 }
             }
             if (!(nedel == 1 || nedel == 7)) {
-                if (data[day][7].toInt() == 2) {
+                if (data[0][7].toInt() == 2) {
                     updateViews.setInt(R.id.textDenNedeli, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorPost))
                     updateViews.setInt(R.id.textChislo, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorPost))
                     updateViews.setInt(R.id.textMesiac, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorPost))
                 }
             }
-            if (!data[day][6].contains("no_sviaty")) {
-                val svita = data[day][6].replace("\n", "<br>")
-                if (data[day][5].contains("1")) updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml("<strong>$svita</strong>")) else updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml(svita))
+            if (!data[0][6].contains("no_sviaty")) {
+                val svita = data[0][6].replace("\n", "<br>")
+                if (data[0][5].contains("1")) updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml("<strong>$svita</strong>")) else updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml(svita))
                 updateViews.setViewVisibility(R.id.textCviatyGlavnyia, View.VISIBLE)
             }
-            if (data[day][6].contains("Пачатак") || data[day][6].contains("Вялікі") || data[day][6].contains("Вялікая") || data[day][6].contains("убот") || data[day][6].contains("ВЕЧАР") || data[day][6].contains("Палова")) {
+            if (data[0][6].contains("Пачатак") || data[0][6].contains("Вялікі") || data[0][6].contains("Вялікая") || data[0][6].contains("убот") || data[0][6].contains("ВЕЧАР") || data[0][6].contains("Палова")) {
                 updateViews.setTextColor(R.id.textCviatyGlavnyia, ContextCompat.getColor(context, rColorColorPrimaryText))
-                updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml(data[day][6]))
+                updateViews.setTextViewText(R.id.textCviatyGlavnyia, MainActivity.fromHtml(data[0][6]))
                 updateViews.setViewVisibility(R.id.textCviatyGlavnyia, View.VISIBLE)
             }
             var dataSviatyia = ""
-            if (!data[day][4].contains("no_sviatyia")) {
-                dataSviatyia = data[day][4]
+            if (!data[0][4].contains("no_sviatyia")) {
+                dataSviatyia = data[0][4]
             }
-            if (data[day][8] != "") {
-                dataSviatyia = data[day][8] + "<br>" + dataSviatyia
+            if (data[0][8] != "") {
+                dataSviatyia = data[0][8] + "<br>" + dataSviatyia
             }
-            if (data[day][18] == "1") {
+            if (data[0][18] == "1") {
                 dataSviatyia = dataSviatyia + "<br><strong>" + context.getString(R.string.pamerlyia) + "</strong>"
             }
             if (dataSviatyia != "") {
@@ -225,7 +221,7 @@ class Widget : AppWidgetProvider() {
                 updateViews.setTextViewText(R.id.textSviatyia, MainActivity.fromHtml(dataSviatyia))
                 updateViews.setViewVisibility(R.id.textSviatyia, View.VISIBLE)
             }
-            if (data[day][7].contains("2")) {
+            if (data[0][7].contains("2")) {
                 updateViews.setInt(R.id.textDenNedeli, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorPost))
                 updateViews.setInt(R.id.textChislo, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorPost))
                 updateViews.setInt(R.id.textMesiac, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorPost))
@@ -234,7 +230,7 @@ class Widget : AppWidgetProvider() {
                     updateViews.setViewVisibility(R.id.textPost, View.VISIBLE)
                     updateViews.setViewVisibility(R.id.imageView4, View.VISIBLE)
                 }
-            } else if (data[day][7].contains("3")) {
+            } else if (data[0][7].contains("3")) {
                 updateViews.setInt(R.id.textDenNedeli, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorStrogiPost))
                 updateViews.setTextColor(R.id.textDenNedeli, ContextCompat.getColor(context, R.color.colorWhite))
                 updateViews.setInt(R.id.textChislo, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorStrogiPost))
@@ -248,11 +244,11 @@ class Widget : AppWidgetProvider() {
                 updateViews.setViewVisibility(R.id.imageView4, View.VISIBLE)
                 if (dzenNoch) updateViews.setImageViewResource(R.id.imageView4, R.drawable.fishe_red_black) else updateViews.setImageViewResource(R.id.imageView4, R.drawable.fishe_red)
             }
-            if (data[day][5].contains("1") || data[day][5].contains("2") || data[day][5].contains("3")) {
+            if (data[0][5].contains("1") || data[0][5].contains("2") || data[0][5].contains("3")) {
                 updateViews.setTextColor(R.id.textCviatyGlavnyia, ContextCompat.getColor(context, rColorColorPrimary))
                 prazdnik(context, updateViews, rColorColorPrimary)
             }
-            when (data[day][12].toInt()) {
+            when (data[0][12].toInt()) {
                 1 -> {
                     if (dzenNoch) updateViews.setImageViewResource(R.id.znakTipicona, R.drawable.znaki_krest_black) else updateViews.setImageViewResource(R.id.znakTipicona, R.drawable.znaki_krest)
                     updateViews.setViewVisibility(R.id.znakTipicona, View.VISIBLE)
@@ -279,16 +275,11 @@ class Widget : AppWidgetProvider() {
             val nedelName = arrayOf("", "нядзеля", "панядзелак", "аўторак", "серада", "чацьвер", "пятніца", "субота")
             updateViews.setTextViewText(R.id.textDenNedeli, nedelName[nedel])
             if (nedel == 1) prazdnik(context, updateViews, rColorColorPrimary)
-            val monthName = arrayOf("СТУДЗЕНЯ", "ЛЮТАГА", "САКАВІКА", "КРАСАВІКА", "ТРАЎНЯ", "ЧЭРВЕНЯ",
-                    "ЛІПЕНЯ", "ЖНІЎНЯ", "ВЕРАСЬНЯ", "КАСТРЫЧНІКА", "ЛІСТАПАДА", "СЬНЕЖНЯ")
-            if (month == Calendar.OCTOBER)
-                updateViews.setFloat(R.id.textMesiac, "setTextSize", 12f)
-            else
-                updateViews.setFloat(R.id.textMesiac, "setTextSize", 14f)
-            if (nedel == Calendar.MONDAY)
-                updateViews.setFloat(R.id.textDenNedeli, "setTextSize", 12f)
-            else
-                updateViews.setFloat(R.id.textDenNedeli, "setTextSize", 14f)
+            val monthName = arrayOf("СТУДЗЕНЯ", "ЛЮТАГА", "САКАВІКА", "КРАСАВІКА", "ТРАЎНЯ", "ЧЭРВЕНЯ", "ЛІПЕНЯ", "ЖНІЎНЯ", "ВЕРАСЬНЯ", "КАСТРЫЧНІКА", "ЛІСТАПАДА", "СЬНЕЖНЯ")
+            if (month == Calendar.OCTOBER) updateViews.setFloat(R.id.textMesiac, "setTextSize", 12f)
+            else updateViews.setFloat(R.id.textMesiac, "setTextSize", 14f)
+            if (nedel == Calendar.MONDAY) updateViews.setFloat(R.id.textDenNedeli, "setTextSize", 12f)
+            else updateViews.setFloat(R.id.textDenNedeli, "setTextSize", 14f)
             updateViews.setTextViewText(R.id.textMesiac, monthName[month])
             appWidgetManager.updateAppWidget(widgetID, updateViews)
         }

@@ -3,19 +3,19 @@ package by.carkva_gazeta.resources
 import android.content.Context
 import androidx.collection.ArrayMap
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.Malitounik
 import by.carkva_gazeta.malitounik.MenuCaliandar
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
 
-internal class ZmenyiaChastki(context: Context) {
+internal class ZmenyiaChastki {
     private val data: ArrayMap<String, Int> = ArrayMap()
     private val arrayData: ArrayList<ArrayList<String>>
-    private val context: Context
 
     private val date: ArrayList<ArrayList<String>>
         get() {
-            val g = Calendar.getInstance() as GregorianCalendar
+            val g = Calendar.getInstance()
             return MenuCaliandar.getDataCalaindar(g[Calendar.DATE])
         }
 
@@ -27,7 +27,7 @@ internal class ZmenyiaChastki(context: Context) {
 
     fun zmenya(apostal: Int): String {
         val data = arrayData[0][9]
-        return if (data.contains(context.resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + context.resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em>"
+        return if (data.contains(Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em>"
         else chtenia(arrayData[0][9], apostal)
     }
 
@@ -142,7 +142,7 @@ internal class ZmenyiaChastki(context: Context) {
             if (zagl == "2 Цім") kniga = 32
             if (zagl == "Як") kniga = 33
             if (zagl == "1 Цім") kniga = 34
-            val r = context.resources
+            val r = Malitounik.applicationContext().resources
             val inputStream = r.openRawResource(data.valueAt(kniga))
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
@@ -516,10 +516,10 @@ internal class ZmenyiaChastki(context: Context) {
     }
 
     private fun readFile(resource: Int): String {
-        val inputStream = context.resources.openRawResource(resource)
+        val inputStream = Malitounik.applicationContext().resources.openRawResource(resource)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
-        val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = k.getBoolean("dzen_noch", false)
         val builder = StringBuilder()
         var line: String
@@ -568,7 +568,6 @@ internal class ZmenyiaChastki(context: Context) {
         data["Кніга прарока Ёіля"] = R.raw.biblias29
         data["Кніга прарока Сафона"] = R.raw.biblias36
         data["Кніга прарока Ісаі"] = R.raw.biblias23
-        this.context = context
         arrayData = date
     }
 }

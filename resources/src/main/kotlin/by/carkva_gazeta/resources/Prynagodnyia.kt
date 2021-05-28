@@ -313,7 +313,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             men = Bogashlugbovya.setVybranoe(this, resurs, title)
             if (men) {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
+                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
             }
             invalidateOptionsMenu()
         }
@@ -342,7 +342,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         }
         prefEditor.apply()
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
-            if (MainActivity.checkmodulesAdmin(this)) {
+            if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
                 val inputStream = resources.openRawResource(this.id)
@@ -354,7 +354,7 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                 intent.putExtra("text", text)
                 startActivity(intent)
             } else {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
             }
         }
         return super.onOptionsItemSelected(item)

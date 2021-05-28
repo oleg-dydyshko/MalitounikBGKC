@@ -70,7 +70,7 @@ class TonNaKoznyDzen : AppCompatActivity() {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources(this)) {
+            if (MainActivity.checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.TON)
                 intent.putExtra("ton", position + 1)

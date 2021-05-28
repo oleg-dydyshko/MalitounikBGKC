@@ -310,7 +310,7 @@ class MenuVybranoe : VybranoeFragment() {
                         startActivity(intent)
                     }
                 } else {
-                    if (MainActivity.checkmoduleResources(activity)) {
+                    if (MainActivity.checkmoduleResources()) {
                         when (itemList[adapterPosition].resurs) {
                             "1" -> {
                                 VybranoeBibleList.biblia = 1

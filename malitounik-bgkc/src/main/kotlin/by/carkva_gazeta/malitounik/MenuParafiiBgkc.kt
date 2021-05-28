@@ -29,7 +29,7 @@ class MenuParafiiBgkc : ListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        if (MainActivity.checkmoduleResources(activity)) {
+        if (MainActivity.checkmoduleResources()) {
             activity?.let {
                 if (position == 0) {
                     val intent = Intent()

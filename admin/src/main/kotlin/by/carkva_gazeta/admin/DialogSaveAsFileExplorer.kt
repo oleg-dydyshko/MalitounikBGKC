@@ -67,7 +67,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
             textViewZaglavie.text = getString(by.carkva_gazeta.malitounik.R.string.save_as_up)
             textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(fragmentActivity, Typeface.BOLD)
+            textViewZaglavie.typeface = MainActivity.createFont(Typeface.BOLD)
             textViewZaglavie.setTextColor(ContextCompat.getColor(fragmentActivity, by.carkva_gazeta.malitounik.R.color.colorWhite))
             linear.addView(textViewZaglavie)
             val textView = TextView(fragmentActivity)
@@ -135,7 +135,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
 
     private fun getDirListRequest(dir: String) {
         activity?.let { activity ->
-            if (MainActivity.isNetworkAvailable(activity)) {
+            if (MainActivity.isNetworkAvailable()) {
                 CoroutineScope(Dispatchers.Main).launch {
                     withContext(Dispatchers.IO) {
                         var reqParam = URLEncoder.encode("list", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")

@@ -643,7 +643,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                         binding.ListView.visibility = View.VISIBLE
                         execute(edit)
                     } else {
-                        MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.seashmin))
+                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.seashmin))
                     }
                 }
                 true
@@ -674,9 +674,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         searchView = searchViewItem.actionView as SearchView
         searchView?.queryHint = title
         val searcheTextView = searchView?.findViewById(androidx.appcompat.R.id.search_src_text) as TextView
-        searcheTextView.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        searcheTextView.typeface = MainActivity.createFont(Typeface.NORMAL)
         textViewCount = menu.findItem(by.carkva_gazeta.malitounik.R.id.count).actionView as TextView
-        textViewCount?.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        textViewCount?.typeface = MainActivity.createFont(Typeface.NORMAL)
         textViewCount?.text = resources.getString(by.carkva_gazeta.malitounik.R.string.seash, seash.size)
         changeSearchViewElements(searchView)
         for (i in 0 until menu.size()) {

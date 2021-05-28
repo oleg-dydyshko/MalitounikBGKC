@@ -173,7 +173,7 @@ class NovyZapavietSemuxaList : AppCompatActivity() {
                 return@setOnChildClickListener true
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources(this)) {
+            if (MainActivity.checkmoduleResources()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.NOVYZAPAVIETSEMUXA)
                 intent.putExtra("kniga", groupPosition)

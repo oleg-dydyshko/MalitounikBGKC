@@ -147,7 +147,7 @@ class CaliandarMunTab1 : Fragment() {
                 } else {
                     resources.getString(R.string.sabytie_enable_mun)
                 }
-                MainActivity.toastView(it, messege)
+                MainActivity.toastView(messege)
                 adapterViewPager.notifyDataSetChanged()
                 it.invalidateOptionsMenu()
             }
@@ -172,15 +172,15 @@ class CaliandarMunTab1 : Fragment() {
             else textView.setBackgroundResource(R.drawable.selector_default)
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position) {
-                    textView.typeface = MainActivity.createFont(context, Typeface.BOLD)
+                    textView.typeface = MainActivity.createFont(Typeface.BOLD)
                 } else {
-                    textView.typeface = MainActivity.createFont(context, Typeface.NORMAL)
+                    textView.typeface = MainActivity.createFont(Typeface.NORMAL)
                 }
             } else {
                 if (day[Calendar.YEAR] == position + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
-                    textView.typeface = MainActivity.createFont(context, Typeface.BOLD)
+                    textView.typeface = MainActivity.createFont(Typeface.BOLD)
                 } else {
-                    textView.typeface = MainActivity.createFont(context, Typeface.NORMAL)
+                    textView.typeface = MainActivity.createFont(Typeface.NORMAL)
                 }
             }
             return v
@@ -204,16 +204,16 @@ class CaliandarMunTab1 : Fragment() {
             else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             if (arrayList == null) {
                 if (day[Calendar.MONTH] == position && day[Calendar.YEAR] == binding.spinner2.selectedItemPosition + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
-                    viewHolder.text.typeface = MainActivity.createFont(context, Typeface.BOLD)
+                    viewHolder.text.typeface = MainActivity.createFont(Typeface.BOLD)
                 } else {
-                    viewHolder.text.typeface = MainActivity.createFont(context, Typeface.NORMAL)
+                    viewHolder.text.typeface = MainActivity.createFont(Typeface.NORMAL)
                 }
                 viewHolder.text.text = names[position]
             } else {
                 if (day[Calendar.YEAR] == position + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
-                    viewHolder.text.typeface = MainActivity.createFont(context, Typeface.BOLD)
+                    viewHolder.text.typeface = MainActivity.createFont(Typeface.BOLD)
                 } else {
-                    viewHolder.text.typeface = MainActivity.createFont(context, Typeface.NORMAL)
+                    viewHolder.text.typeface = MainActivity.createFont(Typeface.NORMAL)
                 }
                 arrayList?.let { viewHolder.text.text = it[position] }
             }

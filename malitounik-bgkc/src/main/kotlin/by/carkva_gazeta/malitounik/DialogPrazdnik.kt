@@ -128,8 +128,8 @@ class DialogPrazdnik : DialogFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            if (gc[Calendar.YEAR] == arrayList[position]) viewHolder.text.typeface = MainActivity.createFont(mContext,  Typeface.BOLD)
-            else viewHolder.text.typeface = MainActivity.createFont(mContext,  Typeface.NORMAL)
+            if (gc[Calendar.YEAR] == arrayList[position]) viewHolder.text.typeface = MainActivity.createFont(Typeface.BOLD)
+            else viewHolder.text.typeface = MainActivity.createFont(Typeface.NORMAL)
             viewHolder.text.text = arrayList[position].toString()
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (dzenNoch)
@@ -144,8 +144,8 @@ class DialogPrazdnik : DialogFragment() {
             val dzenNoch = k.getBoolean("dzen_noch", false)
             val text = v as TextView
             text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-            if (gc[Calendar.YEAR] == arrayList[position]) text.typeface = MainActivity.createFont(mContext,  Typeface.BOLD)
-            else text.typeface = MainActivity.createFont(mContext,  Typeface.NORMAL)
+            if (gc[Calendar.YEAR] == arrayList[position]) text.typeface = MainActivity.createFont(Typeface.BOLD)
+            else text.typeface = MainActivity.createFont(Typeface.NORMAL)
             text.text = arrayList[position].toString()
             if (dzenNoch)
                 text.setBackgroundResource(R.drawable.selector_dialog_font_dark)

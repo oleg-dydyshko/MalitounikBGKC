@@ -77,7 +77,7 @@ class MenuBibleSinoidal : Fragment() {
                 val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
                 val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
                 if (set["zavet"] == 1) {
-                    if (MainActivity.checkmoduleResources(activity)) {
+                    if (MainActivity.checkmoduleResources()) {
                         val intent = Intent(activity, NovyZapavietSinaidalList::class.java)
                         intent.putExtra("kniga", set["kniga"])
                         intent.putExtra("glava", set["glava"])
@@ -89,7 +89,7 @@ class MenuBibleSinoidal : Fragment() {
                         dadatak.show(childFragmentManager, "dadatak")
                     }
                 } else {
-                    if (MainActivity.checkmoduleResources(activity)) {
+                    if (MainActivity.checkmoduleResources()) {
                         val intent = Intent(activity, StaryZapavietSinaidalList::class.java)
                         intent.putExtra("kniga", set["kniga"])
                         intent.putExtra("glava", set["glava"])
@@ -107,7 +107,7 @@ class MenuBibleSinoidal : Fragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources(activity)) {
+                if (MainActivity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.BIBLEZAKLADKI)
                     intent.putExtra("semuxa", 2)
@@ -122,7 +122,7 @@ class MenuBibleSinoidal : Fragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources(activity)) {
+                if (MainActivity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.BIBLENATATKI)
                     intent.putExtra("semuxa", 2)
@@ -137,7 +137,7 @@ class MenuBibleSinoidal : Fragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources(activity)) {
+                if (MainActivity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(activity, MainActivity.SEARCHBIBLIA)
                     intent.putExtra("zavet", 2)

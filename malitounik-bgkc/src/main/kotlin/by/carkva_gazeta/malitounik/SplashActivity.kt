@@ -19,8 +19,7 @@ class SplashActivity : AppCompatActivity() {
         val widgetMun = "widget_mun"
         if (extras.getBoolean(widgetMun, false)) {
             intent1.putExtra(widgetMun, true)
-            intent1.putExtra("DayYear", extras.getInt("DayYear"))
-            intent1.putExtra("Year", extras.getInt("Year"))
+            intent1.putExtra("position", extras.getInt("position"))
         }
         val widgetDay = "widget_day"
         if (extras.getBoolean(widgetDay, false)) {

@@ -593,7 +593,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         if (id == R.id.action_vybranoe) {
             men = setVybranoe(this, resurs, title)
             if (men) {
-                MainActivity.toastView(this, getString(R.string.addVybranoe))
+                MainActivity.toastView(getString(R.string.addVybranoe))
             }
             invalidateOptionsMenu()
         }
@@ -622,7 +622,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         }
         prefEditor.apply()
         if (id == R.id.action_carkva) {
-            if (MainActivity.checkmodulesAdmin(this)) {
+            if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
                 val inputStream = resources.openRawResource(resursMap[resurs] ?: R.raw.pesny_prasl_0)
@@ -634,7 +634,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 intent.putExtra("text", text)
                 startActivity(intent)
             } else {
-                MainActivity.toastView(this, getString(R.string.error))
+                MainActivity.toastView(getString(R.string.error))
             }
         }
         return super.onOptionsItemSelected(item)

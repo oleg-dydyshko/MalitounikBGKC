@@ -168,7 +168,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     }
 
     private fun getFileCopyPostRequest(dirToFile: String, fileName: String) {
-        if (MainActivity.isNetworkAvailable(this)) {
+        if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 withContext(Dispatchers.IO) {
@@ -193,7 +193,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     }
 
     private fun getFileUnlinkPostRequest(fileName: String) {
-        if (MainActivity.isNetworkAvailable(this)) {
+        if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 withContext(Dispatchers.IO) {
@@ -215,7 +215,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     }
 
     private fun getFileRenamePostRequest(oldFileName: String, fileName: String) {
-        if (MainActivity.isNetworkAvailable(this)) {
+        if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 withContext(Dispatchers.IO) {
@@ -238,7 +238,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     }
 
     private fun getDirPostRequest() {
-        if (MainActivity.isNetworkAvailable(this)) {
+        if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 withContext(Dispatchers.IO) {

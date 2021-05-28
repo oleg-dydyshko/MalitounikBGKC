@@ -30,7 +30,7 @@ class MenuAkafisty : ListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        if (MainActivity.checkmoduleResources(activity)) {
+        if (MainActivity.checkmoduleResources()) {
             activity?.let {
                 val intent = Intent()
                 intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)

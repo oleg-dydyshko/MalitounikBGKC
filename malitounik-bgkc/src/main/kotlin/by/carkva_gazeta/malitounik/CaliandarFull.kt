@@ -140,7 +140,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             if (dzenNoch) binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             else binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                         }
-                        binding.textCviatyGlavnyia.typeface = MainActivity.createFont(it, Typeface.NORMAL)
+                        binding.textCviatyGlavnyia.typeface = MainActivity.createFont(Typeface.NORMAL)
                         binding.textCviatyGlavnyia.isEnabled = false
                     } else {
                         if (MenuCaliandar.getDataCalaindar()[position][6].contains("нядзел", true) || MenuCaliandar.getDataCalaindar()[position][6].contains("сьветл", true)) binding.textCviatyGlavnyia.isEnabled = false
@@ -259,7 +259,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     }
                 }
                 if (MenuCaliandar.getDataCalaindar()[position][5].contains("2")) {
-                    binding.textCviatyGlavnyia.typeface = MainActivity.createFont(it, Typeface.NORMAL)
+                    binding.textCviatyGlavnyia.typeface = MainActivity.createFont(Typeface.NORMAL)
                 }
                 if (MenuCaliandar.getDataCalaindar()[position][8] != "") {
                     binding.textPredsviaty.text = MainActivity.fromHtml(MenuCaliandar.getDataCalaindar()[position][8])
@@ -367,7 +367,6 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        MainActivity.setDataCalendar = position
         when (v?.id ?: 0) {
             R.id.textPost -> {
                 activity?.let {
@@ -406,7 +405,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, MenuCaliandar.getDataCalaindar()[position][20].toInt(), MenuCaliandar.getDataCalaindar()[position][0].toInt(), daysv, munsv, MenuCaliandar.getDataCalaindar()[position][22].toInt(), MenuCaliandar.getDataCalaindar()[position][4], MenuCaliandar.getDataCalaindar()[position][23] == "1", MenuCaliandar.getDataCalaindar()[position][3].toInt(), MenuCaliandar.getDataCalaindar()[position][1].toInt(), MenuCaliandar.getDataCalaindar()[position][2].toInt() + 1)
                 dialogCalindarGrid.show(childFragmentManager, "grid")
             }
-            R.id.textCviatyGlavnyia -> if (MainActivity.checkmoduleResources(activity)) {
+            R.id.textCviatyGlavnyia -> if (MainActivity.checkmoduleResources()) {
                 activity?.let {
                     val svity = MenuCaliandar.getDataCalaindar()[position][6]
                     var daysv = MenuCaliandar.getDataCalaindar()[position][1].toInt()
@@ -439,7 +438,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 val dadatak = DialogInstallDadatak()
                 dadatak.show(childFragmentManager, "dadatak")
             }
-            R.id.textSviatyia -> if (MainActivity.checkmoduleResources(activity)) {
+            R.id.textSviatyia -> if (MainActivity.checkmoduleResources()) {
                 activity?.let {
                     val i = Intent()
                     i.setClassName(it, MainActivity.OPISANIE)
@@ -452,7 +451,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 val dadatak = DialogInstallDadatak()
                 dadatak.show(childFragmentManager, "dadatak")
             }
-            R.id.textChytanneSviatyia -> if (MainActivity.checkmoduleResources(activity)) {
+            R.id.textChytanneSviatyia -> if (MainActivity.checkmoduleResources()) {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
@@ -463,7 +462,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 val dadatak = DialogInstallDadatak()
                 dadatak.show(childFragmentManager, "dadatak")
             }
-            R.id.textChytanne -> if (MainActivity.checkmoduleResources(activity)) {
+            R.id.textChytanne -> if (MainActivity.checkmoduleResources()) {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
@@ -474,7 +473,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 val dadatak = DialogInstallDadatak()
                 dadatak.show(childFragmentManager, "dadatak")
             }
-            R.id.textChytanneSviatyiaDop -> if (MainActivity.checkmoduleResources(activity)) {
+            R.id.textChytanneSviatyiaDop -> if (MainActivity.checkmoduleResources()) {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
@@ -485,7 +484,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 val dadatak = DialogInstallDadatak()
                 dadatak.show(childFragmentManager, "dadatak")
             }
-            R.id.maranata -> if (MainActivity.checkmoduleResources(activity)) {
+            R.id.maranata -> if (MainActivity.checkmoduleResources()) {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.MARANATA)
@@ -555,7 +554,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         val textViewT = TextView(activity)
                         textViewT.text = title
                         textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        textViewT.typeface = MainActivity.createFont(activity, Typeface.BOLD)
+                        textViewT.typeface = MainActivity.createFont(Typeface.BOLD)
                         textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
 
                         textViewT.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
@@ -611,7 +610,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary)), t1 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             if (paznicia) spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary)), t3, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
-                        val font = MainActivity.createFont(activity, Typeface.NORMAL)
+                        val font = MainActivity.createFont(Typeface.NORMAL)
                         spannable.setSpan(clickableSpanEdit, t1 + 1, t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         spannable.setSpan(clickableSpanRemove, t2 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         spannable.setSpan(CustomTypefaceSpan("", font), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)

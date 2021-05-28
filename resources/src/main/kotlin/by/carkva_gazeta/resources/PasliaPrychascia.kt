@@ -105,7 +105,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         for (i in 0 until binding.pagerTabStrip.childCount) {
             val nextChild = binding.pagerTabStrip.getChildAt(i)
             if (nextChild is TextView) {
-                nextChild.typeface = MainActivity.createFont(this, Typeface.BOLD)
+                nextChild.typeface = MainActivity.createFont(Typeface.BOLD)
                 if (dzenNoch)
                     nextChild.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
                 else
@@ -266,7 +266,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             men = Bogashlugbovya.setVybranoe(this, malitvy[pasliaPrychascia].resourse, malitvy[pasliaPrychascia].title)
             if (men) {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
+                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
             }
             invalidateOptionsMenu()
         }
@@ -288,7 +288,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         }
         prefEditor.apply()
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
-            if (MainActivity.checkmodulesAdmin(this)) {
+            if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
                 val inputStream = resources.openRawResource(malitvy[pasliaPrychascia].resourseID)
@@ -300,7 +300,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
                 intent.putExtra("text", text)
                 startActivity(intent)
             } else {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
             }
         }
         return super.onOptionsItemSelected(item)

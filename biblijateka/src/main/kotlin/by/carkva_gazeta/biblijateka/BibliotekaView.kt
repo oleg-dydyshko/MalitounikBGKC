@@ -204,7 +204,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         arrayList.removeAll(temp)
                         adapter.notifyDataSetChanged()
                         bindingcontent.progressBar2.visibility = View.GONE
-                        MainActivity.toastView(this@BibliotekaView, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
+                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
                         runSql = false
                     }
                 }
@@ -282,7 +282,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     override fun onDialogPositiveClick(listPosition: String?) {
-        if (MainActivity.isIntNetworkAvailable(this) == 0) {
+        if (MainActivity.isIntNetworkAvailable() == 0) {
             val dialogNoInternet = DialogNoInternet()
             dialogNoInternet.show(supportFragmentManager, "no_internet")
         } else {
@@ -301,7 +301,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             bindingcontent.scrollViewB.visibility = View.GONE
             invalidateOptionsMenu()
         } else {
-            if (MainActivity.isIntNetworkAvailable(this) == 2) {
+            if (MainActivity.isIntNetworkAvailable() == 2) {
                 val bibliotekaWiFi: DialogBibliotekaWIFI = DialogBibliotekaWIFI.getInstance(listPosition)
                 bibliotekaWiFi.show(supportFragmentManager, "biblioteka_WI_FI")
             } else {
@@ -523,7 +523,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         bindingcontent.swipeRefreshLayout.setOnRefreshListener {
             if (runSql) return@setOnRefreshListener
-            if (MainActivity.isIntNetworkAvailable(this) == 0) {
+            if (MainActivity.isIntNetworkAvailable() == 0) {
                 val dialogNoInternet = DialogNoInternet()
                 dialogNoInternet.show(supportFragmentManager, "no_internet")
             } else {
@@ -604,7 +604,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     val prefEditor = k.edit()
                     prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
                     prefEditor.apply()
-                    MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.no_file))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.no_file))
                 }
             } else {
                 file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), arrayList[position][2])
@@ -1635,7 +1635,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             val timeUpdateSave = k.getLong("BibliotekaTimeUpdate", timeUpdate)
             if (!(json == "" || timeUpdate - timeUpdateSave == 0L)) {
                 if (timeUpdate - timeUpdateSave > (24 * 60 * 60 * 1000L)) {
-                    if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(this) == 2) {
+                    if (MainActivity.isIntNetworkAvailable() == 1 || MainActivity.isIntNetworkAvailable() == 2) {
                         val prefEditors: SharedPreferences.Editor = k.edit()
                         prefEditors.putLong("BibliotekaTimeUpdate", timeUpdate)
                         prefEditors.apply()
@@ -1659,7 +1659,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     adapter.notifyDataSetChanged()
                 }
             } else {
-                if (MainActivity.isIntNetworkAvailable(this) == 1 || MainActivity.isIntNetworkAvailable(this) == 2) {
+                if (MainActivity.isIntNetworkAvailable() == 1 || MainActivity.isIntNetworkAvailable() == 2) {
                     val prefEditors: SharedPreferences.Editor = k.edit()
                     prefEditors.putLong("BibliotekaTimeUpdate", timeUpdate)
                     prefEditors.apply()
@@ -1724,7 +1724,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     val imageLocal: String = "$filesDir/image_temp/" + pdf.substring(0, t1) + ".png" //image.substring(t1 + 1)
                     mySqlList.add(imageLocal)
                     mySqlList.add(id)
-                    if (MainActivity.isIntNetworkAvailable(this@BibliotekaView) == 1 || MainActivity.isIntNetworkAvailable(this@BibliotekaView) == 2) {
+                    if (MainActivity.isIntNetworkAvailable() == 1 || MainActivity.isIntNetworkAvailable() == 2) {
                         val dir = File("$filesDir/image_temp")
                         if (!dir.exists()) dir.mkdir()
                         var mIcon11: Bitmap
@@ -1891,7 +1891,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             popup.menu.getItem(1).isVisible = false
         } else {
             popup.menu.getItem(2).isVisible = false
-            if (MainActivity.isIntNetworkAvailable(this) == 0) popup.menu.getItem(1).isVisible = false
+            if (MainActivity.isIntNetworkAvailable() == 0) popup.menu.getItem(1).isVisible = false
         }
         for (i in 0 until popup.menu.size()) {
             val item = popup.menu.getItem(i)

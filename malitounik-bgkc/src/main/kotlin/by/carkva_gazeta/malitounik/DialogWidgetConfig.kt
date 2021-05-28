@@ -63,7 +63,7 @@ class DialogWidgetConfig : DialogFragment() {
                 dialog.cancel()
             }
             _binding = DialogWidgetConfigBinding.inflate(LayoutInflater.from(it))
-            binding.checkBox20.typeface = MainActivity.createFont(it, Typeface.NORMAL)
+            binding.checkBox20.typeface = MainActivity.createFont(Typeface.NORMAL)
             binding.checkBox20.isChecked = chin.getBoolean("dzen_noch_widget_day$widgetID", false)
             binding.checkBox20.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
                 configDzenNoch = isChecked

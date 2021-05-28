@@ -78,7 +78,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                             }
                         }
                         binding.progressBar2.visibility = View.GONE
-                        MainActivity.toastView(this@Opisanie, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
+                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
                     }
                 }
                 timerCount++
@@ -228,7 +228,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             var builder = ""
             val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
             val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
-            if (!MainActivity.isNetworkAvailable(this@Opisanie)) {
+            if (!MainActivity.isNetworkAvailable()) {
                 if (svity) {
                     if (fileOpisanieSviat.exists()) builder = fileOpisanieSviat.readText()
                 } else {
@@ -301,7 +301,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                         }
                     }
                 } else {
-                    if (MainActivity.isNetworkAvailable(this@Opisanie)) {
+                    if (MainActivity.isNetworkAvailable()) {
                         withContext(Dispatchers.IO) {
                             try {
                                 val mURL = if (svity) URL("https://carkva-gazeta.by/chytanne/icons/v_${day}_${mun}.jpg")
@@ -440,7 +440,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
-            if (MainActivity.checkmodulesAdmin(this)) {
+            if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
                 if (svity) {
                     intent.setClassName(this, MainActivity.ADMINSVIATY)
@@ -460,7 +460,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                 }
                 startActivity(intent)
             } else {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
             }
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {

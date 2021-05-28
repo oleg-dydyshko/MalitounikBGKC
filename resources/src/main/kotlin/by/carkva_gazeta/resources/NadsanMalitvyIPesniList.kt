@@ -75,7 +75,7 @@ class NadsanMalitvyIPesniList : AppCompatActivity() {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            if (MainActivity.checkmoduleResources(this)) {
+            if (MainActivity.checkmoduleResources()) {
                 val intent = Intent(this, NadsanMalitvyIPesni::class.java)
                 intent.putExtra("malitva", 2)
                 intent.putExtra("pesnia", position + 1)

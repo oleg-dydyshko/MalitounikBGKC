@@ -182,7 +182,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
         for (i in 0 until binding.pagerTabStrip.childCount) {
             val nextChild = binding.pagerTabStrip.getChildAt(i)
             if (nextChild is TextView) {
-                nextChild.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+                nextChild.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
         }
         val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
@@ -437,7 +437,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
             checkSetDzenNoch = true
             men = VybranoeBibleList.setVybranoe(this, title, kniga, BibleGlobalList.mListGlava, true, 2)
             if (men) {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
+                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
                 if (!VybranoeBibleList.checkVybranoe("2")) {
                     MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "2", getString(by.carkva_gazeta.malitounik.R.string.bsinaidal)))
                     val gson = Gson()

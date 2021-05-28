@@ -98,7 +98,7 @@ class DialogPasochnicaMkDir : DialogFragment() {
         val dirName = binding.content.text.toString()
         if (dirName != "") {
             activity?.let {
-                if (MainActivity.isNetworkAvailable(it)) {
+                if (MainActivity.isNetworkAvailable()) {
                     CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
                             var reqParam = URLEncoder.encode("mkdir", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")

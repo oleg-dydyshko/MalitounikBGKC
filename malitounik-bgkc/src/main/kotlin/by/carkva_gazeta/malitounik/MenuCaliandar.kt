@@ -21,6 +21,7 @@ import java.io.BufferedReader
 import java.io.FileWriter
 import java.io.InputStreamReader
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MenuCaliandar : MenuCaliandarFragment() {
     private var listinner: MenuCaliandarPageListinner? = null
@@ -32,15 +33,8 @@ class MenuCaliandar : MenuCaliandarFragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             if (intent != null) {
-                val c = Calendar.getInstance() as GregorianCalendar
-                var dayyear = 0
-                val day = intent.getIntExtra("data", 0)
-                val year = intent.getIntExtra("year", c.get(Calendar.YEAR))
-                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
-                    dayyear += if (c.isLeapYear(i)) 366
-                    else 365
-                }
-                binding.pager.currentItem = dayyear + day
+                val position = intent.getIntExtra("position", 0)
+                binding.pager.currentItem = position
             }
         }
     }
@@ -123,7 +117,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
                     }
                 }
             }
-            MainActivity.toastView(it, getString(R.string.remove_padzea))
+            MainActivity.toastView(getString(R.string.remove_padzea))
             adapter.notifyDataSetChanged()
             Sabytie.editCaliandar = true
         }
@@ -188,7 +182,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
         val id = item.itemId
         if (id == R.id.action_carkva) {
             activity?.let {
-                if (MainActivity.checkmodulesAdmin(it)) {
+                if (MainActivity.checkmodulesAdmin()) {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.ADMINSVIATYIA)
                     val caliandarFull = adapter.getFragment(binding.pager.currentItem) as CaliandarFull
@@ -201,20 +195,17 @@ class MenuCaliandar : MenuCaliandarFragment() {
                     intent.putExtra("dayOfYear", dayofyear)
                     startActivity(intent)
                 } else {
-                    MainActivity.toastView(it, getString(R.string.error))
+                    MainActivity.toastView(getString(R.string.error))
                 }
             }
         }
         if (id == R.id.action_mun) {
             activity?.let {
-                val gregorianCalendar = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
-                for (i in 0 until MainActivity.setDataCalendar) {
-                    gregorianCalendar.add(Calendar.DATE, 1)
-                }
+                val data = getPositionCaliandar(binding.pager.currentItem)
                 val i = Intent(it, CaliandarMun::class.java)
-                i.putExtra("mun", gregorianCalendar.get(Calendar.MONTH))
-                i.putExtra("day", gregorianCalendar.get(Calendar.DATE))
-                i.putExtra("year", gregorianCalendar.get(Calendar.YEAR))
+                i.putExtra("mun", data[2].toInt())
+                i.putExtra("day", data[1].toInt())
+                i.putExtra("year", data[3].toInt())
                 caliandarMunLauncher.launch(i)
             }
         }
@@ -234,6 +225,8 @@ class MenuCaliandar : MenuCaliandarFragment() {
 
     companion object {
         private val data = ArrayList<ArrayList<String>>()
+
+        fun getPositionCaliandar(position: Int) = data[position]
 
         fun getDataCalaindar(day: Int = -1, mun: Int = -1, year: Int = -1): ArrayList<ArrayList<String>> {
             if (data.size == 0) {

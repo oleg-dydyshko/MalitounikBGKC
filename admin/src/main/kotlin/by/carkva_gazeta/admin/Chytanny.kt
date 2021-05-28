@@ -50,7 +50,7 @@ class Chytanny : AppCompatActivity() {
                     urlJob?.cancel()
                     stopTimer()
                     CoroutineScope(Dispatchers.Main).launch {
-                        MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
+                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
                         binding.progressBar2.visibility = View.GONE
                     }
                 }
@@ -141,8 +141,8 @@ class Chytanny : AppCompatActivity() {
                     val c2 = data.toString().length
                     val c3 = monName2[mon].length
                     datefull.setSpan(StyleSpan(Typeface.BOLD), c1 + 2, c1 + 2 + c2 + c3 + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    val font = MainActivity.createFont(this@Chytanny, Typeface.NORMAL)
-                    val font2 = MainActivity.createFont(this@Chytanny, Typeface.BOLD)
+                    val font = MainActivity.createFont(Typeface.NORMAL)
+                    val font2 = MainActivity.createFont(Typeface.BOLD)
                     datefull.setSpan(CustomTypefaceSpan("", font), 0, c1 + 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
                     datefull.setSpan(CustomTypefaceSpan("", font2), c1 + 2, c1 + 2 + c2 + c3 + 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
                     datefull.setSpan(CustomTypefaceSpan("", font), c1 + 2 + c2 + c3 + 1, datefull.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
@@ -192,7 +192,7 @@ class Chytanny : AppCompatActivity() {
         val density = resources.displayMetrics.density
         val padding = 5 * density
         val textView = EditText(this)
-        textView.typeface = MainActivity.createFont(this, Typeface.NORMAL)
+        textView.typeface = MainActivity.createFont(Typeface.NORMAL)
         textView.tag = position
         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         llp.setMargins(padding.toInt(), padding.toInt(), padding.toInt(), 0)
@@ -273,7 +273,7 @@ class Chytanny : AppCompatActivity() {
     }
 
     private fun sendPostRequest(cytanni: String, year: Int) {
-        if (MainActivity.isNetworkAvailable(this)) {
+        if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
@@ -292,9 +292,9 @@ class Chytanny : AppCompatActivity() {
                     }
                 }
                 if (responseCodeS == 200) {
-                    MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.save))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
                 } else {
-                    MainActivity.toastView(this@Chytanny, getString(by.carkva_gazeta.malitounik.R.string.error))
+                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
                 binding.progressBar2.visibility = View.GONE
             }
@@ -324,8 +324,8 @@ class Chytanny : AppCompatActivity() {
             val textView = v as TextView
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             textView.text = data[position]
-            if (gc[Calendar.YEAR] == data[position].toInt()) textView.typeface = MainActivity.createFont(activity, Typeface.BOLD)
-            else textView.typeface = MainActivity.createFont(activity, Typeface.NORMAL)
+            if (gc[Calendar.YEAR] == data[position].toInt()) textView.typeface = MainActivity.createFont(Typeface.BOLD)
+            else textView.typeface = MainActivity.createFont(Typeface.NORMAL)
             textView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             return v
         }
@@ -348,8 +348,8 @@ class Chytanny : AppCompatActivity() {
             }
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             viewHolder.text.text = data[position]
-            if (gc[Calendar.YEAR] == data[position].toInt()) viewHolder.text.typeface = MainActivity.createFont(activity, Typeface.BOLD)
-            else viewHolder.text.typeface = MainActivity.createFont(activity, Typeface.NORMAL)
+            if (gc[Calendar.YEAR] == data[position].toInt()) viewHolder.text.typeface = MainActivity.createFont(Typeface.BOLD)
+            else viewHolder.text.typeface = MainActivity.createFont(Typeface.NORMAL)
             viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             return rootView
         }

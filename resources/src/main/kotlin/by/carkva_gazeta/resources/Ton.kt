@@ -154,7 +154,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
                 val day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
                 val fileOpisanieSviat = File("${filesDir}/opisanie_sviat.json")
                 if (!fileOpisanieSviat.exists()) {
-                    if (MainActivity.isNetworkAvailable(this)) {
+                    if (MainActivity.isNetworkAvailable()) {
                         CoroutineScope(Dispatchers.Main).launch {
                             withContext(Dispatchers.IO) {
                                 val mURL = URL("https://carkva-gazeta.by/opisanie_sviat.json")
@@ -533,7 +533,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
         }
         prefEditor.apply()
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
-            if (MainActivity.checkmodulesAdmin(this)) {
+            if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
                 val inputStream = resources.openRawResource(this.id)
@@ -545,7 +545,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
                 intent.putExtra("text", text)
                 startActivity(intent)
             } else {
-                MainActivity.toastView(this, getString(by.carkva_gazeta.malitounik.R.string.error))
+                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
             }
         }
         return super.onOptionsItemSelected(item)

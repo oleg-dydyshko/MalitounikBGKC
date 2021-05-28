@@ -181,7 +181,7 @@ class SlugbovyiaTextu {
         if (opisanieSviat.size == 0 && loadOpisanieSviatJob?.isActive != true) {
             val fileOpisanieSviat = File("${activity.filesDir}/opisanie_sviat.json")
             if (!fileOpisanieSviat.exists()) {
-                if (MainActivity.isNetworkAvailable(activity)) {
+                if (MainActivity.isNetworkAvailable()) {
                     loadOpisanieSviatJob = CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
                             try {

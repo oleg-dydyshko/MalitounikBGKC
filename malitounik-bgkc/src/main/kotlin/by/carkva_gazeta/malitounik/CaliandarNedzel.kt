@@ -102,7 +102,7 @@ class CaliandarNedzel : ListFragment() {
             viewHolder.textPraz.visibility = View.GONE
             viewHolder.textPostS.visibility = View.GONE
             viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-            viewHolder.textPraz.typeface = MainActivity.createFont(mContext,  Typeface.BOLD)
+            viewHolder.textPraz.typeface = MainActivity.createFont(Typeface.BOLD)
             if (dzenNoch) {
                 viewHolder.textSviat.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
                 viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
@@ -124,7 +124,7 @@ class CaliandarNedzel : ListFragment() {
             // убот = субота
             if (arrayList[position][6].contains("Пачатак") || arrayList[position][6].contains("Вялікі") || arrayList[position][6].contains("Вялікая") || arrayList[position][6].contains("убот") || arrayList[position][6].contains("ВЕЧАР") || arrayList[position][6].contains("Палова")) {
                 viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
-                viewHolder.textPraz.typeface = MainActivity.createFont(mContext,  Typeface.NORMAL)
+                viewHolder.textPraz.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
             when (arrayList[position][7].toInt()) {
                 1 -> {
@@ -151,7 +151,7 @@ class CaliandarNedzel : ListFragment() {
                 if (dzenNoch) viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black)) else viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
             }
             if (arrayList[position][5].contains("2")) {
-                viewHolder.textPraz.typeface = MainActivity.createFont(mContext,  Typeface.NORMAL)
+                viewHolder.textPraz.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
             if (arrayList[position][7].contains("3")) {
                 viewHolder.textPostS.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))

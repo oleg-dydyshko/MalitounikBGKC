@@ -96,7 +96,7 @@ class DialogNetFileExplorer : DialogFragment() {
 
     private fun getDirListRequest(dir: String) {
         activity?.let { activity ->
-            if (MainActivity.isNetworkAvailable(activity)) {
+            if (MainActivity.isNetworkAvailable()) {
                 CoroutineScope(Dispatchers.Main).launch {
                     withContext(Dispatchers.IO) {
                         var reqParam = URLEncoder.encode("list", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")

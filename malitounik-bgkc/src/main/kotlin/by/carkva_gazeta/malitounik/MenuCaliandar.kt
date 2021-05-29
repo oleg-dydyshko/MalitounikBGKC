@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.FileWriter
 import java.io.InputStreamReader
@@ -82,44 +83,46 @@ class MenuCaliandar : MenuCaliandarFragment() {
             outputStream.write(gson.toJson(MainActivity.padzeia))
             outputStream.close()
             MainActivity.padzeia.sort()
-            CoroutineScope(Dispatchers.IO).launch {
-                if (sab.count == "0") {
-                    if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
-                        if (sab.sec != "-1") {
-                            val intent = createIntent(sab.padz, "Падзея" + " " + sab.dat + " у " + sab.tim, sab.dat, sab.tim)
-                            val londs3 = sab.paznic / 100000L
-                            val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, 0)
-                            am.cancel(pIntent)
-                            pIntent.cancel()
-                        }
-                    } else {
-                        for (p in del) {
-                            if (p.padz.contains(filen)) {
-                                if (p.sec != "-1") {
-                                    val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
-                                    val londs3 = p.paznic / 100000L
-                                    val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, 0)
-                                    am.cancel(pIntent)
-                                    pIntent.cancel()
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    if (sab.count == "0") {
+                        if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
+                            if (sab.sec != "-1") {
+                                val intent = createIntent(sab.padz, "Падзея" + " " + sab.dat + " у " + sab.tim, sab.dat, sab.tim)
+                                val londs3 = sab.paznic / 100000L
+                                val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, 0)
+                                am.cancel(pIntent)
+                                pIntent.cancel()
+                            }
+                        } else {
+                            for (p in del) {
+                                if (p.padz.contains(filen)) {
+                                    if (p.sec != "-1") {
+                                        val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
+                                        val londs3 = p.paznic / 100000L
+                                        val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, 0)
+                                        am.cancel(pIntent)
+                                        pIntent.cancel()
+                                    }
                                 }
                             }
                         }
-                    }
-                } else {
-                    for (p in del) {
-                        if (p.sec != "-1") {
-                            val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
-                            val londs3 = p.paznic / 100000L
-                            val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, 0)
-                            am.cancel(pIntent)
-                            pIntent.cancel()
+                    } else {
+                        for (p in del) {
+                            if (p.sec != "-1") {
+                                val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
+                                val londs3 = p.paznic / 100000L
+                                val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, 0)
+                                am.cancel(pIntent)
+                                pIntent.cancel()
+                            }
                         }
                     }
                 }
+                MainActivity.toastView(getString(R.string.remove_padzea))
+                adapter.notifyDataSetChanged()
+                Sabytie.editCaliandar = true
             }
-            MainActivity.toastView(getString(R.string.remove_padzea))
-            adapter.notifyDataSetChanged()
-            Sabytie.editCaliandar = true
         }
     }
 
@@ -228,6 +231,28 @@ class MenuCaliandar : MenuCaliandarFragment() {
 
         fun getPositionCaliandar(position: Int) = data[position]
 
+        fun getPositionCaliandarNiadzel(day: Int, mun: Int, year: Int): Int {
+            var position = 0
+            data.forEach { arrayList ->
+                if (day==arrayList[1].toInt() && mun == arrayList[2].toInt() && year == arrayList[3].toInt()) {
+                    position = arrayList[26].toInt()
+                    return@forEach
+                }
+            }
+            return position
+        }
+
+        fun getFirstPositionNiadzel(position: Int): ArrayList<String> {
+            var pos = 0
+            data.forEach {
+                if (it[26].toInt() == position && it[0].toInt() == Calendar.SUNDAY) {
+                    pos = it[25].toInt()
+                    return@forEach
+                }
+            }
+            return data[pos]
+        }
+
         fun getDataCalaindar(day: Int = -1, mun: Int = -1, year: Int = -1): ArrayList<ArrayList<String>> {
             if (data.size == 0) {
                 val inputStream = Malitounik.applicationContext().resources.openRawResource(R.raw.caliandar)
@@ -247,6 +272,8 @@ class MenuCaliandar : MenuCaliandarFragment() {
                     data.forEach { arrayList ->
                         if (day == arrayList[1].toInt() && mun == arrayList[2].toInt() && year == arrayList[3].toInt()) {
                             count++
+                            if (arrayList[26].toInt() == 0)
+                                count = arrayList[0].toInt()
                         }
                         if (count in 1..7) {
                             niadzeliaList.add(arrayList)

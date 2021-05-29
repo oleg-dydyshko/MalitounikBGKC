@@ -47,9 +47,9 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         _binding = null
     }
 
-    fun getDayOfYear() = MenuCaliandar.getDataCalaindar()[position][24].toInt()
+    fun getDayOfYear() = MenuCaliandar.getPositionCaliandar(position)[24].toInt()
 
-    fun getYear() = MenuCaliandar.getDataCalaindar()[position][3].toInt()
+    fun getYear() = MenuCaliandar.getPositionCaliandar(position)[3].toInt()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,8 +69,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 if (dzenNoch) rColorColorprimary = R.drawable.selector_red_dark
                 val tileMe = BitmapDrawable(it.resources, BitmapFactory.decodeResource(resources, R.drawable.calendar_fon))
                 tileMe.tileModeX = Shader.TileMode.REPEAT
-                if (MenuCaliandar.getDataCalaindar()[position][20].toInt() != 0 && MenuCaliandar.getDataCalaindar()[position][0].toInt() == 1) {
-                    binding.textPost.text = getString(R.string.ton, MenuCaliandar.getDataCalaindar()[position][20])
+                if (MenuCaliandar.getPositionCaliandar(position)[20].toInt() != 0 && MenuCaliandar.getPositionCaliandar(position)[0].toInt() == 1) {
+                    binding.textPost.text = getString(R.string.ton, MenuCaliandar.getPositionCaliandar(position)[20])
                     if (dzenNoch) {
                         binding.textPost.setBackgroundResource(R.drawable.selector_dark)
                         binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
@@ -99,31 +99,31 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     }
                     binding.maranata.visibility = View.VISIBLE
                     binding.textTitleMaranata.visibility = View.VISIBLE
-                    var dataMaranAta = MenuCaliandar.getDataCalaindar()[position][13]
+                    var dataMaranAta = MenuCaliandar.getPositionCaliandar(position)[13]
                     if (k.getBoolean("belarus", false)) dataMaranAta = MainActivity.translateToBelarus(dataMaranAta)
                     binding.maranata.text = dataMaranAta
                 }
                 binding.znakTipicona.setOnClickListener(this@CaliandarFull)
-                if (MenuCaliandar.getDataCalaindar()[position][21] != "") {
-                    binding.textBlaslavenne.text = MenuCaliandar.getDataCalaindar()[position][21]
+                if (MenuCaliandar.getPositionCaliandar(position)[21] != "") {
+                    binding.textBlaslavenne.text = MenuCaliandar.getPositionCaliandar(position)[21]
                     binding.textBlaslavenne.visibility = View.VISIBLE
                 }
                 if (dzenNoch) {
                     it.let {
                         binding.textSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textSviatyia.setBackgroundResource(R.drawable.selector_dark)
-                        if (!(MenuCaliandar.getDataCalaindar()[position][20].toInt() != 0 && MenuCaliandar.getDataCalaindar()[position][0].toInt() == 1)) binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                        if (!(MenuCaliandar.getPositionCaliandar(position)[20].toInt() != 0 && MenuCaliandar.getPositionCaliandar(position)[0].toInt() == 1)) binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                         binding.textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
                         binding.textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     }
                 }
-                binding.textDenNedeli.text = nedelName[MenuCaliandar.getDataCalaindar()[position][0].toInt()]
-                binding.textChislo.text = MenuCaliandar.getDataCalaindar()[position][1]
-                if (MenuCaliandar.getDataCalaindar()[position][3].toInt() != c[Calendar.YEAR]) binding.textMesiac.text = getString(R.string.mesiach, monthName[MenuCaliandar.getDataCalaindar()[position][2].toInt()], MenuCaliandar.getDataCalaindar()[position][3])
-                else binding.textMesiac.text = monthName[MenuCaliandar.getDataCalaindar()[position][2].toInt()]
-                if (!MenuCaliandar.getDataCalaindar()[position][4].contains("no_sviatyia")) {
-                    var dataSviatyia = MenuCaliandar.getDataCalaindar()[position][4]
+                binding.textDenNedeli.text = nedelName[MenuCaliandar.getPositionCaliandar(position)[0].toInt()]
+                binding.textChislo.text = MenuCaliandar.getPositionCaliandar(position)[1]
+                if (MenuCaliandar.getPositionCaliandar(position)[3].toInt() != c[Calendar.YEAR]) binding.textMesiac.text = getString(R.string.mesiach, monthName[MenuCaliandar.getPositionCaliandar(position)[2].toInt()], MenuCaliandar.getPositionCaliandar(position)[3])
+                else binding.textMesiac.text = monthName[MenuCaliandar.getPositionCaliandar(position)[2].toInt()]
+                if (!MenuCaliandar.getPositionCaliandar(position)[4].contains("no_sviatyia")) {
+                    var dataSviatyia = MenuCaliandar.getPositionCaliandar(position)[4]
                     if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
                     binding.textSviatyia.text = MainActivity.fromHtml(dataSviatyia)
                     if (!dataSviatyia.contains("<!--no_apisanne-->")) binding.textSviatyia.setOnClickListener(this@CaliandarFull)
@@ -132,10 +132,10 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     binding.polosa2.visibility = View.GONE
                     binding.textSviatyia.visibility = View.GONE
                 }
-                if (!MenuCaliandar.getDataCalaindar()[position][6].contains("no_sviaty")) {
-                    binding.textCviatyGlavnyia.text = MenuCaliandar.getDataCalaindar()[position][6]
+                if (!MenuCaliandar.getPositionCaliandar(position)[6].contains("no_sviaty")) {
+                    binding.textCviatyGlavnyia.text = MenuCaliandar.getPositionCaliandar(position)[6]
                     binding.textCviatyGlavnyia.visibility = View.VISIBLE
-                    if (MenuCaliandar.getDataCalaindar()[position][6].contains("Пачатак") || MenuCaliandar.getDataCalaindar()[position][6].contains("Вялікі") || MenuCaliandar.getDataCalaindar()[position][6].contains("Вялікая") || MenuCaliandar.getDataCalaindar()[position][6].contains("ВЕЧАР") || MenuCaliandar.getDataCalaindar()[position][6].contains("Палова")) {
+                    if (MenuCaliandar.getPositionCaliandar(position)[6].contains("Пачатак") || MenuCaliandar.getPositionCaliandar(position)[6].contains("Вялікі") || MenuCaliandar.getPositionCaliandar(position)[6].contains("Вялікая") || MenuCaliandar.getPositionCaliandar(position)[6].contains("ВЕЧАР") || MenuCaliandar.getPositionCaliandar(position)[6].contains("Палова")) {
                         it.let {
                             if (dzenNoch) binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             else binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
@@ -143,12 +143,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.textCviatyGlavnyia.typeface = MainActivity.createFont(Typeface.NORMAL)
                         binding.textCviatyGlavnyia.isEnabled = false
                     } else {
-                        if (MenuCaliandar.getDataCalaindar()[position][6].contains("нядзел", true) || MenuCaliandar.getDataCalaindar()[position][6].contains("сьветл", true)) binding.textCviatyGlavnyia.isEnabled = false
+                        if (MenuCaliandar.getPositionCaliandar(position)[6].contains("нядзел", true) || MenuCaliandar.getPositionCaliandar(position)[6].contains("сьветл", true)) binding.textCviatyGlavnyia.isEnabled = false
                         else binding.textCviatyGlavnyia.setOnClickListener(this@CaliandarFull)
                     }
                 }
                 it.let {
-                    when (MenuCaliandar.getDataCalaindar()[position][7].toInt()) {
+                    when (MenuCaliandar.getPositionCaliandar(position)[7].toInt()) {
                         1 -> {
                             binding.textDenNedeli.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                             binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
@@ -164,7 +164,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             binding.textChytanneSviatyia.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textBlaslavenne.setBackgroundResource(R.drawable.selector_bez_posta)
                             binding.textPamerlyia.setBackgroundResource(R.drawable.selector_bez_posta)
-                            if (MenuCaliandar.getDataCalaindar()[position][0].contains("6")) {
+                            if (MenuCaliandar.getPositionCaliandar(position)[0].contains("6")) {
                                 binding.textPost.visibility = View.VISIBLE
                                 binding.textPost.textSize = SettingsActivity.GET_FONT_SIZE_MIN
                                 binding.textPost.text = resources.getString(R.string.No_post)
@@ -185,7 +185,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             if (dzenNoch) binding.kniga.setImageResource(R.drawable.book_post_black)
                             else binding.kniga.setImageResource(R.drawable.book_post)
                             binding.textPamerlyia.setBackgroundResource(R.drawable.selector_post)
-                            if (MenuCaliandar.getDataCalaindar()[position][0].contains("6")) {
+                            if (MenuCaliandar.getPositionCaliandar(position)[0].contains("6")) {
                                 binding.PostFish.visibility = View.VISIBLE
                                 binding.textPost.visibility = View.VISIBLE
                                 binding.textPost.textSize = SettingsActivity.GET_FONT_SIZE_MIN
@@ -232,7 +232,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         }
                     }
                 }
-                if (MenuCaliandar.getDataCalaindar()[position][5].contains("1") || MenuCaliandar.getDataCalaindar()[position][5].contains("2") || MenuCaliandar.getDataCalaindar()[position][5].contains("3")) {
+                if (MenuCaliandar.getPositionCaliandar(position)[5].contains("1") || MenuCaliandar.getPositionCaliandar(position)[5].contains("2") || MenuCaliandar.getPositionCaliandar(position)[5].contains("3")) {
                     binding.textDenNedeli.setBackgroundResource(rColorColorprimary)
                     binding.textChislo.setBackgroundResource(rColorColorprimary)
                     binding.textMesiac.setBackgroundResource(rColorColorprimary)
@@ -243,7 +243,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.textChislo.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.textMesiac.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     }
-                    if (MenuCaliandar.getDataCalaindar()[position][7].toInt() != 3) {
+                    if (MenuCaliandar.getPositionCaliandar(position)[7].toInt() != 3) {
                         binding.chytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                         binding.chytanne.setBackgroundResource(rColorColorprimary)
                         binding.textChytanne.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -258,25 +258,25 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.textBlaslavenne.setBackgroundResource(rColorColorprimary)
                     }
                 }
-                if (MenuCaliandar.getDataCalaindar()[position][5].contains("2")) {
+                if (MenuCaliandar.getPositionCaliandar(position)[5].contains("2")) {
                     binding.textCviatyGlavnyia.typeface = MainActivity.createFont(Typeface.NORMAL)
                 }
-                if (MenuCaliandar.getDataCalaindar()[position][8] != "") {
-                    binding.textPredsviaty.text = MainActivity.fromHtml(MenuCaliandar.getDataCalaindar()[position][8])
+                if (MenuCaliandar.getPositionCaliandar(position)[8] != "") {
+                    binding.textPredsviaty.text = MainActivity.fromHtml(MenuCaliandar.getPositionCaliandar(position)[8])
                     binding.textPredsviaty.visibility = View.VISIBLE
                 }
-                binding.textChytanne.text = MenuCaliandar.getDataCalaindar()[position][9]
-                if (MenuCaliandar.getDataCalaindar()[position][9] == getString(R.string.no_danyx) || MenuCaliandar.getDataCalaindar()[position][9] == getString(R.string.no_lityrgii)) binding.textChytanne.isEnabled = false
-                if (MenuCaliandar.getDataCalaindar()[position][9] == "") binding.textChytanne.visibility = View.GONE
-                if (MenuCaliandar.getDataCalaindar()[position][10] != "") {
-                    binding.textChytanneSviatyia.text = MenuCaliandar.getDataCalaindar()[position][10]
+                binding.textChytanne.text = MenuCaliandar.getPositionCaliandar(position)[9]
+                if (MenuCaliandar.getPositionCaliandar(position)[9] == getString(R.string.no_danyx) || MenuCaliandar.getPositionCaliandar(position)[9] == getString(R.string.no_lityrgii)) binding.textChytanne.isEnabled = false
+                if (MenuCaliandar.getPositionCaliandar(position)[9] == "") binding.textChytanne.visibility = View.GONE
+                if (MenuCaliandar.getPositionCaliandar(position)[10] != "") {
+                    binding.textChytanneSviatyia.text = MenuCaliandar.getPositionCaliandar(position)[10]
                     binding.textChytanneSviatyia.visibility = View.VISIBLE
                 }
-                if (MenuCaliandar.getDataCalaindar()[position][11] != "") {
-                    binding.textChytanneSviatyiaDop.text = MenuCaliandar.getDataCalaindar()[position][11]
+                if (MenuCaliandar.getPositionCaliandar(position)[11] != "") {
+                    binding.textChytanneSviatyiaDop.text = MenuCaliandar.getPositionCaliandar(position)[11]
                     binding.textChytanneSviatyiaDop.visibility = View.VISIBLE
                 }
-                when (MenuCaliandar.getDataCalaindar()[position][12].toInt()) {
+                when (MenuCaliandar.getPositionCaliandar(position)[12].toInt()) {
                     1 -> {
                         if (dzenNoch) binding.znakTipicona.setImageResource(R.drawable.znaki_krest_black) else binding.znakTipicona.setImageResource(R.drawable.znaki_krest)
                         binding.znakTipicona.visibility = View.VISIBLE
@@ -304,25 +304,25 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     }
                 }
                 if (k.getInt("pravas", 0) == 1) {
-                    if (MenuCaliandar.getDataCalaindar()[position][14] != "") {
+                    if (MenuCaliandar.getPositionCaliandar(position)[14] != "") {
                         binding.pravaslavie.visibility = View.VISIBLE
-                        binding.pravaslavie.text = MenuCaliandar.getDataCalaindar()[position][14]
+                        binding.pravaslavie.text = MenuCaliandar.getPositionCaliandar(position)[14]
                     }
                 }
                 if (k.getInt("pkc", 0) == 1) {
-                    if (MenuCaliandar.getDataCalaindar()[position][19] != "") {
+                    if (MenuCaliandar.getPositionCaliandar(position)[19] != "") {
                         binding.RKC.visibility = View.VISIBLE
-                        binding.RKC.text = MenuCaliandar.getDataCalaindar()[position][19]
+                        binding.RKC.text = MenuCaliandar.getPositionCaliandar(position)[19]
                     }
                 }
                 if (k.getInt("gosud", 0) == 1) {
-                    if (MenuCaliandar.getDataCalaindar()[position][16] != "") {
+                    if (MenuCaliandar.getPositionCaliandar(position)[16] != "") {
                         binding.gosudarstvo.visibility = View.VISIBLE
-                        binding.gosudarstvo.text = MenuCaliandar.getDataCalaindar()[position][16]
+                        binding.gosudarstvo.text = MenuCaliandar.getPositionCaliandar(position)[16]
                     }
-                    if (MenuCaliandar.getDataCalaindar()[position][15] != "") {
+                    if (MenuCaliandar.getPositionCaliandar(position)[15] != "") {
                         binding.gosudarstvo.visibility = View.VISIBLE
-                        binding.gosudarstvo.text = MenuCaliandar.getDataCalaindar()[position][15]
+                        binding.gosudarstvo.text = MenuCaliandar.getPositionCaliandar(position)[15]
                         it.let {
                             if (dzenNoch) binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                             else binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary))
@@ -330,12 +330,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     }
                 }
                 if (k.getInt("pafesii", 0) == 1) {
-                    if (MenuCaliandar.getDataCalaindar()[position][17] != "") {
+                    if (MenuCaliandar.getPositionCaliandar(position)[17] != "") {
                         binding.prafesional.visibility = View.VISIBLE
-                        binding.prafesional.text = MenuCaliandar.getDataCalaindar()[position][17]
+                        binding.prafesional.text = MenuCaliandar.getPositionCaliandar(position)[17]
                     }
                 }
-                if (MenuCaliandar.getDataCalaindar()[position][18].contains("1")) {
+                if (MenuCaliandar.getPositionCaliandar(position)[18].contains("1")) {
                     binding.textPamerlyia.visibility = View.VISIBLE
                 }
                 if (MainActivity.padzeia.size > 0) {
@@ -372,20 +372,20 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.TON)
-                    intent.putExtra("ton", MenuCaliandar.getDataCalaindar()[position][20].toInt())
+                    intent.putExtra("ton", MenuCaliandar.getPositionCaliandar(position)[20].toInt())
                     intent.putExtra("ton_naidzelny", true)
                     startActivity(intent)
                 }
             }
             R.id.kniga -> {
-                val colorDialog = if (MenuCaliandar.getDataCalaindar()[position][5].contains("1") || MenuCaliandar.getDataCalaindar()[position][5].contains("2") || MenuCaliandar.getDataCalaindar()[position][5].contains("3")) {
+                val colorDialog = if (MenuCaliandar.getPositionCaliandar(position)[5].contains("1") || MenuCaliandar.getPositionCaliandar(position)[5].contains("2") || MenuCaliandar.getPositionCaliandar(position)[5].contains("3")) {
                     4
                 } else {
-                    MenuCaliandar.getDataCalaindar()[position][7].toInt()
+                    MenuCaliandar.getPositionCaliandar(position)[7].toInt()
                 }
-                val svity = MenuCaliandar.getDataCalaindar()[position][6]
-                var daysv = MenuCaliandar.getDataCalaindar()[position][1].toInt()
-                var munsv = MenuCaliandar.getDataCalaindar()[position][2].toInt() + 1
+                val svity = MenuCaliandar.getPositionCaliandar(position)[6]
+                var daysv = MenuCaliandar.getPositionCaliandar(position)[1].toInt()
+                var munsv = MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1
                 if (svity.contains("уваход у ерусалім", true)) {
                     daysv = -1
                     munsv = 0
@@ -402,14 +402,14 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     daysv = -1
                     munsv = 3
                 }
-                val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, MenuCaliandar.getDataCalaindar()[position][20].toInt(), MenuCaliandar.getDataCalaindar()[position][0].toInt(), daysv, munsv, MenuCaliandar.getDataCalaindar()[position][22].toInt(), MenuCaliandar.getDataCalaindar()[position][4], MenuCaliandar.getDataCalaindar()[position][23] == "1", MenuCaliandar.getDataCalaindar()[position][3].toInt(), MenuCaliandar.getDataCalaindar()[position][1].toInt(), MenuCaliandar.getDataCalaindar()[position][2].toInt() + 1)
+                val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, MenuCaliandar.getPositionCaliandar(position)[20].toInt(), MenuCaliandar.getPositionCaliandar(position)[0].toInt(), daysv, munsv, MenuCaliandar.getPositionCaliandar(position)[22].toInt(), MenuCaliandar.getPositionCaliandar(position)[4], MenuCaliandar.getPositionCaliandar(position)[23] == "1", MenuCaliandar.getPositionCaliandar(position)[3].toInt(), MenuCaliandar.getPositionCaliandar(position)[1].toInt(), MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1)
                 dialogCalindarGrid.show(childFragmentManager, "grid")
             }
             R.id.textCviatyGlavnyia -> if (MainActivity.checkmoduleResources()) {
                 activity?.let {
-                    val svity = MenuCaliandar.getDataCalaindar()[position][6]
-                    var daysv = MenuCaliandar.getDataCalaindar()[position][1].toInt()
-                    var munsv = MenuCaliandar.getDataCalaindar()[position][2].toInt() + 1
+                    val svity = MenuCaliandar.getPositionCaliandar(position)[6]
+                    var daysv = MenuCaliandar.getPositionCaliandar(position)[1].toInt()
+                    var munsv = MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1
                     if (svity.contains("уваход у ерусалім", true)) {
                         daysv = -1
                         munsv = 0
@@ -431,7 +431,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     i.putExtra("glavnyia", true)
                     i.putExtra("mun", munsv)
                     i.putExtra("day", daysv)
-                    i.putExtra("year", MenuCaliandar.getDataCalaindar()[position][3].toInt())
+                    i.putExtra("year", MenuCaliandar.getPositionCaliandar(position)[3].toInt())
                     startActivity(i)
                 }
             } else {
@@ -442,9 +442,9 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 activity?.let {
                     val i = Intent()
                     i.setClassName(it, MainActivity.OPISANIE)
-                    i.putExtra("mun", MenuCaliandar.getDataCalaindar()[position][2].toInt() + 1)
-                    i.putExtra("day", MenuCaliandar.getDataCalaindar()[position][1].toInt())
-                    i.putExtra("year", MenuCaliandar.getDataCalaindar()[position][3].toInt())
+                    i.putExtra("mun", MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1)
+                    i.putExtra("day", MenuCaliandar.getPositionCaliandar(position)[1].toInt())
+                    i.putExtra("year", MenuCaliandar.getPositionCaliandar(position)[3].toInt())
                     startActivity(i)
                 }
             } else {
@@ -455,7 +455,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
-                    intent.putExtra("cytanne", MenuCaliandar.getDataCalaindar()[position][10])
+                    intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[10])
                     startActivity(intent)
                 }
             } else {
@@ -466,7 +466,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
-                    intent.putExtra("cytanne", MenuCaliandar.getDataCalaindar()[position][9])
+                    intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[9])
                     startActivity(intent)
                 }
             } else {
@@ -477,7 +477,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.CHYTANNE)
-                    intent.putExtra("cytanne", MenuCaliandar.getDataCalaindar()[position][11])
+                    intent.putExtra("cytanne", MenuCaliandar.getPositionCaliandar(position)[11])
                     startActivity(intent)
                 }
             } else {
@@ -488,7 +488,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.MARANATA)
-                    intent.putExtra("cytanneMaranaty", MenuCaliandar.getDataCalaindar()[position][13])
+                    intent.putExtra("cytanneMaranaty", MenuCaliandar.getPositionCaliandar(position)[13])
                     startActivity(intent)
                 }
             } else {
@@ -496,7 +496,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 dadatak.show(childFragmentManager, "dadatak")
             }
             R.id.znakTipicona -> {
-                val tipiconNumber = MenuCaliandar.getDataCalaindar()[position][12].toInt()
+                val tipiconNumber = MenuCaliandar.getPositionCaliandar(position)[12].toInt()
                 val tipicon = DialogTipicon.getInstance(tipiconNumber)
                 tipicon.show(childFragmentManager, "tipicon")
             }

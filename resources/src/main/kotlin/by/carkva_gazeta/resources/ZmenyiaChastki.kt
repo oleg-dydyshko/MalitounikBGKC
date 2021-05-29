@@ -12,8 +12,6 @@ import java.util.*
 internal class ZmenyiaChastki {
     private val data: ArrayMap<String, Int> = ArrayMap()
     private val arrayData: ArrayList<ArrayList<String>>
-
-    private val date: ArrayList<ArrayList<String>>
         get() {
             val g = Calendar.getInstance()
             return MenuCaliandar.getDataCalaindar(g[Calendar.DATE])
@@ -568,6 +566,5 @@ internal class ZmenyiaChastki {
         data["Кніга прарока Ёіля"] = R.raw.biblias29
         data["Кніга прарока Сафона"] = R.raw.biblias36
         data["Кніга прарока Ісаі"] = R.raw.biblias23
-        arrayData = date
     }
 }

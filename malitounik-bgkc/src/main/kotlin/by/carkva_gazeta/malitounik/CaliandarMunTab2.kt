@@ -17,7 +17,6 @@ import java.util.*
 class CaliandarMunTab2 : Fragment() {
     private var dzenNoch = false
     private lateinit var adapterViewPagerNedel: SmartFragmentStatePagerAdapter
-    private val c = Calendar.getInstance() as GregorianCalendar
     private var day = 0
     private var posMun = 0
     private var yearG = 0
@@ -69,121 +68,32 @@ class CaliandarMunTab2 : Fragment() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                val start = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
-                start.firstDayOfWeek = Calendar.SUNDAY
-                for (i in 0..6) {
-                    if (start[Calendar.DAY_OF_WEEK] == Calendar.SUNDAY) break
-                    start.add(Calendar.DATE, 1)
-                }
-                var ned = start[Calendar.WEEK_OF_YEAR]
-                for (i in 0 until adapterViewPagerNedel.count) {
-                    if (position == i) {
-                        binding.nedelName.text = getString(R.string.tydzen_name, ned)
-                        tydzenListener?.setDayAndMun2(start[Calendar.DATE], start[Calendar.MONTH], start[Calendar.YEAR])
-                    }
-                    start.add(Calendar.DATE, 7)
-                    ned = start[Calendar.WEEK_OF_YEAR]
-                }
-                if (adapterViewPagerNedel.count - 1 == position) binding.imageButton2.visibility = View.GONE else binding.imageButton2.visibility = View.VISIBLE
-                if (position == 0) binding.imageButton.visibility = View.GONE else binding.imageButton.visibility = View.VISIBLE
+                val firstPosition = MenuCaliandar.getFirstPositionNiadzel(position)
+                tydzenListener?.setDayAndMun2(firstPosition[1].toInt(), firstPosition[2].toInt(), firstPosition[3].toInt())
+                val c = GregorianCalendar(firstPosition[3].toInt(), firstPosition[2].toInt(), firstPosition[1].toInt())
+                c.firstDayOfWeek = Calendar.SUNDAY
+                binding.nedelName.text = getString(R.string.tydzen_name, c[Calendar.WEEK_OF_YEAR])
+                if (adapterViewPagerNedel.count - 1 == position) binding.imageButton2.visibility = View.GONE
+                else binding.imageButton2.visibility = View.VISIBLE
+                if (position == 0) binding.imageButton.visibility = View.GONE
+                else binding.imageButton.visibility = View.VISIBLE
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-        var dayyear = 0
-        for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until yearG) {
-            dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
-        }
-        var count2 = 0
-        var dayyear2 = 0
-        for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) {
-            dayyear2 = if (c.isLeapYear(i)) 366 + dayyear2 else 365 + dayyear2
-        }
-        val calendarStart = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
-        calendarStart.firstDayOfWeek = Calendar.SUNDAY
-        var ost = calendarStart[Calendar.DAY_OF_WEEK]
-        if (ost == 1) ost = 8
-        for (i in 0..6) {
-            if (calendarStart[Calendar.DAY_OF_WEEK] == Calendar.SUNDAY) break
-            calendarStart.add(Calendar.DATE, 1)
-        }
-        val calendarEnd = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MAX, 11, 31)
-        calendarEnd.firstDayOfWeek = Calendar.SUNDAY
-        for (i in 7 downTo 1) {
-            if (calendarEnd[Calendar.DAY_OF_WEEK] == Calendar.SATURDAY) break
-            calendarEnd.add(Calendar.DATE, -1)
-        }
-        val c2 = GregorianCalendar(yearG, posMun, day)
-        c2.firstDayOfWeek = Calendar.SUNDAY
-        when {
-            calendarEnd.timeInMillis <= c2.timeInMillis -> {
-                for (e in 0 until dayyear2) {
-                    var dayFull = dayyear + calendarEnd[Calendar.DAY_OF_YEAR] - 7 - (8 - ost)
-                    if (dayFull < 0) dayFull = 0
-                    if (e == dayFull) {
-                        binding.pagerNedel.currentItem = count2
-                        binding.nedelName.text = getString(R.string.tydzen_name, calendarEnd[Calendar.WEEK_OF_YEAR])
-                    }
-                    if (e % 7 == 0) {
-                        count2++
-                    }
-                }
-            }
-            calendarStart.timeInMillis <= c2.timeInMillis -> {
-                for (e in 0 until dayyear2) {
-                    var dayFull = dayyear + c2[Calendar.DAY_OF_YEAR] - 7 - (8 - ost)
-                    if (dayFull < 0) dayFull = 0
-                    if (e == dayFull) {
-                        binding.pagerNedel.currentItem = count2
-                        binding.nedelName.text = getString(R.string.tydzen_name, c2[Calendar.WEEK_OF_YEAR])
-                    }
-                    if (e % 7 == 0) {
-                        count2++
-                    }
-                }
-            }
-            else -> {
-                for (e in 0 until dayyear2) {
-                    var dayFull = dayyear + calendarStart[Calendar.DAY_OF_YEAR] - 7 - (8 - ost)
-                    if (dayFull < 0) dayFull = 0
-                    if (e == dayFull) {
-                        binding.pagerNedel.currentItem = count2
-                        binding.nedelName.text = getString(R.string.tydzen_name, calendarStart[Calendar.WEEK_OF_YEAR])
-                    }
-                    if (e % 7 == 0) {
-                        count2++
-                    }
-                }
-            }
-        }
+        val firstPosition = MenuCaliandar.getFirstPositionNiadzel(MenuCaliandar.getPositionCaliandarNiadzel(day, posMun, yearG))
+        binding.pagerNedel.currentItem = firstPosition[26].toInt()
+        val c = GregorianCalendar(firstPosition[3].toInt(), firstPosition[2].toInt(), firstPosition[1].toInt())
+        c.firstDayOfWeek = Calendar.SUNDAY
+        binding.nedelName.text = getString(R.string.tydzen_name, c[Calendar.WEEK_OF_YEAR])
         return binding.root
     }
 
     private inner class MyCalendarNedelAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
-        private var currentFragment: Fragment? = null
-        private var cor = 1
 
         override fun getItem(position: Int): Fragment {
-            val calendarStart = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
-            for (i in 0..6) {
-                if (calendarStart[Calendar.DAY_OF_WEEK] == Calendar.SUNDAY) break
-                calendarStart.add(Calendar.DATE, 1)
-            }
-            var count = 0
-            var dayyear = 0
-            for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) {
-                dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
-            }
-            for (e in 1..dayyear) {
-                if (e % 7 == 0) {
-                    if (count == position) {
-                        return CaliandarNedzel.newInstance(calendarStart[Calendar.YEAR], calendarStart[Calendar.MONTH], calendarStart[Calendar.DATE], position)
-                    }
-                    count++
-                    calendarStart.add(Calendar.DATE, 7)
-                }
-            }
-            return CaliandarNedzel.newInstance(calendarStart[Calendar.YEAR], calendarStart[Calendar.MONTH], calendarStart[Calendar.DATE], 0)
+            val arrayList = MenuCaliandar.getFirstPositionNiadzel(position)
+            return CaliandarNedzel.newInstance(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt())
         }
 
         override fun getItemPosition(ob: Any): Int {
@@ -191,23 +101,10 @@ class CaliandarMunTab2 : Fragment() {
         }
 
         override fun getCount(): Int {
-            var dayyear = 0
-            for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) {
-                dayyear = if (c.isLeapYear(i)) 366 + dayyear else 365 + dayyear
-            }
-            return dayyear / 7 - cor
-        }
-
-        override fun setPrimaryItem(container: ViewGroup, position: Int, ob: Any) {
-            if (currentFragment !== ob) {
-                currentFragment = ob as Fragment
-            }
-            super.setPrimaryItem(container, position, ob)
-        }
-
-        init {
-            val calendarStart = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, 1)
-            if (calendarStart[Calendar.DAY_OF_WEEK] == Calendar.SUNDAY) cor = 0
+            var count = MenuCaliandar.getDataCalaindar().size / 7
+            if (MenuCaliandar.getDataCalaindar()[0][0].toInt() != Calendar.SUNDAY) count++
+            if (MenuCaliandar.getDataCalaindar()[MenuCaliandar.getDataCalaindar().size - 1][0].toInt() != Calendar.SATURDAY) count++
+            return count
         }
     }
 

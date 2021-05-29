@@ -3,7 +3,6 @@ package by.carkva_gazeta.malitounik
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,7 +18,6 @@ import by.carkva_gazeta.malitounik.databinding.CalaindarNedelBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,7 +25,6 @@ class CaliandarNedzel : ListFragment() {
     private var year = 0
     private var mun = 0
     private var dateInt = 0
-    private var position = 0
     private var niadzelia = ArrayList<ArrayList<String>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,36 +32,22 @@ class CaliandarNedzel : ListFragment() {
         year = arguments?.getInt("year") ?: SettingsActivity.GET_CALIANDAR_YEAR_MIN
         mun = arguments?.getInt("mun") ?: 0
         dateInt = arguments?.getInt("date") ?: 1
-        position = arguments?.getInt("position") ?: 0
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                niadzelia = MenuCaliandar.getDataCalaindar(dateInt, mun, year)
-            }
+            niadzelia = MenuCaliandar.getDataCalaindar(dateInt, mun, year)
             activity?.let {
-                listAdapter = CaliandarNedzelListAdapter(it, niadzelia)
+                listAdapter = CaliandarNedzelListAdapter(it)
                 listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
             }
             if (setDenNedeli) {
                 val c = Calendar.getInstance() as GregorianCalendar
-                if (getNedzel(c[Calendar.WEEK_OF_YEAR] - 1) == position) {
-                    listView.setSelection(c[Calendar.DAY_OF_WEEK] - 1)
-                    setDenNedeli = false
-                }
+                listView.setSelection(c[Calendar.DAY_OF_WEEK] - 1)
+                setDenNedeli = false
             }
             listView.isVerticalScrollBarEnabled = false
         }
-    }
-
-    private fun getNedzel(WeekOfYear: Int): Int {
-        val calendar = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MAX, 11, 31)
-        var dayyear = 0
-        for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until SettingsActivity.GET_CALIANDAR_YEAR_MAX - 1) {
-            dayyear = if (calendar.isLeapYear(i)) 366 + dayyear else 365 + dayyear
-        }
-        return dayyear / 7 + WeekOfYear
     }
 
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
@@ -77,11 +60,11 @@ class CaliandarNedzel : ListFragment() {
         activity?.finish()
     }
 
-    private inner class CaliandarNedzelListAdapter(private val mContext: Activity, private val arrayList: ArrayList<ArrayList<String>>) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.calaindar_nedel, arrayList) {
-        private val c: GregorianCalendar = Calendar.getInstance() as GregorianCalendar
-        private val chin: SharedPreferences = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+    private inner class CaliandarNedzelListAdapter(private val mContext: Context) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.calaindar_nedel, niadzelia) {
+        private val c = Calendar.getInstance() as GregorianCalendar
+        private val chin = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private val munName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
-        private val nedelName = arrayOf("", "нядзеля", "панядзелак", "аўторак", "серада", "чацьвер", "пятніца", "субота")
+        private val nedelName = mContext.resources.getStringArray(R.array.dni_nedeli)
 
         override fun getView(position: Int, rootView: View?, parent: ViewGroup): View {
             val view: View
@@ -107,26 +90,25 @@ class CaliandarNedzel : ListFragment() {
                 viewHolder.textSviat.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
                 viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black))
             }
-            if (c[Calendar.YEAR] == arrayList[position][3].toInt() && c[Calendar.DATE] == arrayList[position][1].toInt() && c[Calendar.MONTH] == arrayList[position][2].toInt()) {
+            if (c[Calendar.YEAR] == niadzelia[position][3].toInt() && c[Calendar.DATE] == niadzelia[position][1].toInt() && c[Calendar.MONTH] == niadzelia[position][2].toInt()) {
                 if (dzenNoch) viewHolder.linearLayout.setBackgroundResource(R.drawable.calendar_nedel_today_black)
                 else viewHolder.linearLayout.setBackgroundResource(R.drawable.calendar_nedel_today)
             }
-            if (arrayList[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar.text = getString(R.string.tydzen_name3, nedelName[arrayList[position][0].toInt()], arrayList[position][1], munName[arrayList[position][2].toInt()], arrayList[position][3])
-            else viewHolder.textCalendar.text = getString(R.string.tydzen_name2, nedelName[arrayList[position][0].toInt()], arrayList[position][1], munName[arrayList[position][2].toInt()])
-            var sviatyia = arrayList[position][4]
+            if (niadzelia[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar.text = getString(R.string.tydzen_name3, nedelName[niadzelia[position][0].toInt()], niadzelia[position][1], munName[niadzelia[position][2].toInt()], niadzelia[position][3])
+            else viewHolder.textCalendar.text = getString(R.string.tydzen_name2, nedelName[niadzelia[position][0].toInt()], niadzelia[position][1], munName[niadzelia[position][2].toInt()])
+            var sviatyia = niadzelia[position][4]
             if (dzenNoch) {
                 sviatyia = sviatyia.replace("#d00505", "#f44336")
             }
             viewHolder.textSviat.text = MainActivity.fromHtml(sviatyia)
-            if (arrayList[position][4].contains("no_sviatyia")) viewHolder.textSviat.visibility = View.GONE
-            viewHolder.textPraz.text = arrayList[position][6]
-            if (!arrayList[position][6].contains("no_sviaty")) viewHolder.textPraz.visibility = View.VISIBLE
-            // убот = субота
-            if (arrayList[position][6].contains("Пачатак") || arrayList[position][6].contains("Вялікі") || arrayList[position][6].contains("Вялікая") || arrayList[position][6].contains("убот") || arrayList[position][6].contains("ВЕЧАР") || arrayList[position][6].contains("Палова")) {
+            if (niadzelia[position][4].contains("no_sviatyia")) viewHolder.textSviat.visibility = View.GONE
+            viewHolder.textPraz.text = niadzelia[position][6]
+            if (!niadzelia[position][6].contains("no_sviaty")) viewHolder.textPraz.visibility = View.VISIBLE // убот = субота
+            if (niadzelia[position][6].contains("Пачатак") || niadzelia[position][6].contains("Вялікі") || niadzelia[position][6].contains("Вялікая") || niadzelia[position][6].contains("убот") || niadzelia[position][6].contains("ВЕЧАР") || niadzelia[position][6].contains("Палова")) {
                 viewHolder.textPraz.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
                 viewHolder.textPraz.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
-            when (arrayList[position][7].toInt()) {
+            when (niadzelia[position][7].toInt()) {
                 1 -> {
                     viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary_text))
                     viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBezPosta))
@@ -146,19 +128,19 @@ class CaliandarNedzel : ListFragment() {
                     viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
                 }
             }
-            if (arrayList[position][5].contains("1") || arrayList[position][5].contains("2") || arrayList[position][5].contains("3")) {
+            if (niadzelia[position][5].contains("1") || niadzelia[position][5].contains("2") || niadzelia[position][5].contains("3")) {
                 viewHolder.textCalendar.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
                 if (dzenNoch) viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary_black)) else viewHolder.textCalendar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
             }
-            if (arrayList[position][5].contains("2")) {
+            if (niadzelia[position][5].contains("2")) {
                 viewHolder.textPraz.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
-            if (arrayList[position][7].contains("3")) {
+            if (niadzelia[position][7].contains("3")) {
                 viewHolder.textPostS.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
                 viewHolder.textPostS.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
                 viewHolder.textPostS.text = mContext.resources.getString(R.string.Strogi_post_n)
                 viewHolder.textPostS.visibility = View.VISIBLE
-            } else if (arrayList[position][0].contains("6")) { // Пятница
+            } else if (niadzelia[position][0].contains("6")) { // Пятница
                 viewHolder.textPostS.visibility = View.VISIBLE
             }
             return view
@@ -169,10 +151,9 @@ class CaliandarNedzel : ListFragment() {
 
     companion object {
         var setDenNedeli = false
-        fun newInstance(year: Int, mun: Int, date: Int, position: Int): CaliandarNedzel {
+        fun newInstance(year: Int, mun: Int, date: Int): CaliandarNedzel {
             val fragment = CaliandarNedzel()
             val args = Bundle()
-            args.putInt("position", position)
             args.putInt("year", year)
             args.putInt("mun", mun)
             args.putInt("date", date)

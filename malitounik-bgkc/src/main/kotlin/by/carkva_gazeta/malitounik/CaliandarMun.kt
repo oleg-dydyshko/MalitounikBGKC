@@ -77,9 +77,9 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
         yearG1 = intent.extras?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
         if (yearG1 > SettingsActivity.GET_CALIANDAR_YEAR_MAX) yearG1 = SettingsActivity.GET_CALIANDAR_YEAR_MAX
         yearG2 = yearG1
-        day1 = intent.extras?.getInt("day", -1) ?: -2
+        day1 = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         day2 = day1
-        CaliandarNedzel.setDenNedeli = true
+        if (day1 == c[Calendar.DATE] && posMun1 == c[Calendar.MONTH] && yearG1 == c[Calendar.YEAR]) CaliandarNedzel.setDenNedeli = true
         val nedelia = chin.getInt("nedelia", 0)
         binding.tabLayout.getTabAt(nedelia)?.select()
         if (nedelia == 0) {

@@ -93,21 +93,19 @@ class NovyZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickListe
     }
 
     override fun addZakladka(color: Int) {
-        activity?.let { activity ->
-            if (color != -1) {
-                var maxIndex: Long = 0
-                BibleGlobalList.zakladkiSinodal.forEach {
-                    if (maxIndex < it.id) maxIndex = it.id
-                }
-                maxIndex++
-                BibleGlobalList.zakladkiSinodal.add(0, BibleZakladkiData(maxIndex, knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_ru) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString() + "<!--" + color))
-                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
+        if (color != -1) {
+            var maxIndex: Long = 0
+            BibleGlobalList.zakladkiSinodal.forEach {
+                if (maxIndex < it.id) maxIndex = it.id
             }
-            BibleGlobalList.mPedakVisable = false
-            listPositionListiner?.setEdit(true)
-            BibleGlobalList.bibleCopyList.clear()
-            adapter.notifyDataSetChanged()
+            maxIndex++
+            BibleGlobalList.zakladkiSinodal.add(0, BibleZakladkiData(maxIndex, knigaBible + "/" + resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (BibleGlobalList.mListGlava + 1) + getString(by.carkva_gazeta.malitounik.R.string.stix_ru) + " " + (BibleGlobalList.bibleCopyList[0] + 1) + "\n\n" + MainActivity.fromHtml(bible[BibleGlobalList.bibleCopyList[0]]).toString() + "<!--" + color))
+            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.add_to_zakladki))
         }
+        BibleGlobalList.mPedakVisable = false
+        listPositionListiner?.setEdit(true)
+        BibleGlobalList.bibleCopyList.clear()
+        adapter.notifyDataSetChanged()
     }
 
     override fun addNatatka() {

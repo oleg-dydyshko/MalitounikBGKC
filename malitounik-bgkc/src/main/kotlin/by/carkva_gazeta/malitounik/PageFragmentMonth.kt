@@ -170,7 +170,16 @@ class PageFragmentMonth : Fragment() {
                 var nopost = false
                 var post = false
                 var strogiPost = false
-                for (e in 1..42) {
+                var end = 42
+                if (42 - (munAll + wik) >= 6) {
+                    binding.TableRow.visibility = View.GONE
+                    end -= 7
+                }
+                if (munAll + wik == 29) {
+                    binding.TableRowPre.visibility = View.GONE
+                    end -= 7
+                }
+                for (e in 1..end) {
                     var denNedeli: Int
                     if (e < wik) {
                         oldDay++
@@ -186,8 +195,6 @@ class PageFragmentMonth : Fragment() {
                         newDay++
                         day = "end"
                     }
-                    if (42 - (munAll + wik) >= 6) binding.TableRow.visibility = View.GONE
-                    if (munAll + wik == 29) binding.TableRowPre.visibility = View.GONE
                     val calendarPost = GregorianCalendar(year, mun, i)
                     when (day) {
                         "start" -> {
@@ -214,7 +221,8 @@ class PageFragmentMonth : Fragment() {
                             getTextView(e).setOnClickListener {
                                 val intent = Intent()
                                 if (binding.linearLayout.visibility == View.GONE) {
-                                    val position = data[data.size - 1][25].toInt() + newDay
+                                    val text = (it as TextView).text.toString().toInt()
+                                    val position = data[data.size - 1][25].toInt() + text
                                     intent.putExtra("position", position)
                                     activity.setResult(Activity.RESULT_OK, intent)
                                     activity.finish()
@@ -227,8 +235,8 @@ class PageFragmentMonth : Fragment() {
                             getTextView(e).setOnClickListener {
                                 val intent = Intent()
                                 if (binding.linearLayout.visibility == View.GONE) {
-                                    val test = (it as TextView).text.toString().toInt()
-                                    val position = data[test - 1][25].toInt()
+                                    val text = (it as TextView).text.toString().toInt()
+                                    val position = data[text - 1][25].toInt()
                                     intent.putExtra("position", position)
                                     activity.setResult(Activity.RESULT_OK, intent)
                                     activity.finish()

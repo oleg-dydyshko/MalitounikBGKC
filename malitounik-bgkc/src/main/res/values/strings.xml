@@ -661,5 +661,7 @@
         <item>30 студзеня Трох сьвятаначальнікаў: Васіля Вялікага, Рыгора Багаслова і Яна Залатавуснага</item>
     </string-array>
     <string name="title_dynamicfeature">Admin</string>
+    <string name="left_caliandar">Лева календаря</string>
+    <string name="right_caliandar">Права календаря</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

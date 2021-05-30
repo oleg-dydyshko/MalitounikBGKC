@@ -52,10 +52,8 @@ class CaliandarNedzel : ListFragment() {
 
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
         super.onListItemClick(l, v, position, id)
-        val g = GregorianCalendar(niadzelia[position][3].toInt(), niadzelia[position][2].toInt(), niadzelia[position][1].toInt())
         val intent = Intent()
-        intent.putExtra("data", g[Calendar.DAY_OF_YEAR] - 1)
-        intent.putExtra("year", niadzelia[position][3].toInt())
+        intent.putExtra("position", niadzelia[position][25].toInt())
         activity?.setResult(Activity.RESULT_OK, intent)
         activity?.finish()
     }

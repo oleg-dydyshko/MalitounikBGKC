@@ -9,6 +9,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -34,10 +35,11 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
         yearG1 = year
     }
 
-    override fun setDayAndMun2(day: Int, mun: Int, year: Int) {
+    override fun setDayAndMun2(day: Int, mun: Int, year: Int, weekOfYear: Int) {
         day2 = day
         posMun2 = mun
         yearG2 = year
+        binding.subtitleToolbar.text = getString(R.string.tydzen_name, weekOfYear)
     }
 
     override fun onResume() {
@@ -66,6 +68,7 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.subtitleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         sabytue = intent.getBooleanExtra("sabytie", false)
         if (sabytue) binding.titleToolbar.setText(R.string.get_date) else binding.titleToolbar.setText(R.string.kaliandar)
         if (dzenNoch) {
@@ -84,8 +87,13 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
         binding.tabLayout.getTabAt(nedelia)?.select()
         if (nedelia == 0) {
             replaceFragment(CaliandarMunTab1.getInstance(posMun1, yearG1, day1))
+            binding.subtitleToolbar.visibility = View.GONE
         } else {
             replaceFragment(CaliandarMunTab2.getInstance(posMun2, yearG2, day2))
+            val cal = GregorianCalendar(yearG2, posMun2, day2)
+            cal.firstDayOfWeek = Calendar.SUNDAY
+            binding.subtitleToolbar.text = getString(R.string.tydzen_name, cal[Calendar.WEEK_OF_YEAR])
+            binding.subtitleToolbar.visibility = View.VISIBLE
         }
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -98,8 +106,13 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
                 val position = tab?.position ?: 0
                 if (position == 0) {
                     replaceFragment(CaliandarMunTab1.getInstance(posMun1, yearG1, day1))
+                    binding.subtitleToolbar.visibility = View.GONE
                 } else {
                     replaceFragment(CaliandarMunTab2.getInstance(posMun2, yearG2, day2))
+                    val cal = GregorianCalendar(yearG2, posMun2, day2)
+                    cal.firstDayOfWeek = Calendar.SUNDAY
+                    binding.subtitleToolbar.text = getString(R.string.tydzen_name, cal[Calendar.WEEK_OF_YEAR])
+                    binding.subtitleToolbar.visibility = View.VISIBLE
                 }
                 val editor = chin.edit()
                 editor.putInt("nedelia", position)
@@ -110,9 +123,12 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
     }
 
     private fun replaceFragment(fragment: Fragment) {
+        val pos = chin.getInt("nedelia", 0)
+        val tag = if (pos == 0) "mun"
+        else "niadzelia"
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(binding.fragmentContainer.id, fragment)
+        transaction.replace(binding.fragmentContainer.id, fragment, tag)
         transaction.commit()
     }
 
@@ -141,11 +157,16 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
                 if (dzenNoch) menu.findItem(R.id.action_padzeia).setIcon(R.drawable.calendar_padzea_black_off) else menu.findItem(R.id.action_padzeia).setIcon(R.drawable.calendar_padzea_off)
             }
         }
+        if (pos == 1) {
+            menu.findItem(R.id.action_left).isVisible = true
+            menu.findItem(R.id.action_right).isVisible = true
+        }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
+        val id = item.itemId
+        if (id == android.R.id.home) {
             onBackPressed()
             return true
         }

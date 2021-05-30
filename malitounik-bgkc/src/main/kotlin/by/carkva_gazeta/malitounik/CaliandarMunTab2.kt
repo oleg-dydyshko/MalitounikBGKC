@@ -3,10 +3,7 @@ package by.carkva_gazeta.malitounik
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
@@ -25,7 +22,12 @@ class CaliandarMunTab2 : Fragment() {
     private var tydzenListener: CaliandarMunTab2Listener? = null
 
     interface CaliandarMunTab2Listener {
-        fun setDayAndMun2(day: Int, mun: Int, year: Int)
+        fun setDayAndMun2(day: Int, mun: Int, year: Int, weekOfYear: Int)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onDestroyView() {
@@ -54,39 +56,40 @@ class CaliandarMunTab2 : Fragment() {
             yearG = arguments?.getInt("yearG") ?: 0
             adapterViewPagerNedel = MyCalendarNedelAdapter(childFragmentManager)
             binding.pagerNedel.adapter = adapterViewPagerNedel
-            binding.imageButton.setOnClickListener { binding.pagerNedel.currentItem = binding.pagerNedel.currentItem - 1 }
-            binding.imageButton2.setOnClickListener { binding.pagerNedel.currentItem = binding.pagerNedel.currentItem + 1 }
-            if (dzenNoch) {
-                binding.imageButton.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.levo_catedra))
-                binding.imageButton2.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.pravo_catedra))
-                binding.nedelName.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
-            }
-            if (adapterViewPagerNedel.count - 1 == binding.pagerNedel.currentItem) binding.imageButton2.visibility = View.GONE
-            if (binding.pagerNedel.currentItem == 0) binding.imageButton.visibility = View.GONE
+            binding.pagerNedel.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+                override fun onPageSelected(position: Int) {
+                    val firstPosition = MenuCaliandar.getFirstPositionNiadzel(position)
+                    val c = GregorianCalendar(firstPosition[3].toInt(), firstPosition[2].toInt(), firstPosition[1].toInt())
+                    c.firstDayOfWeek = Calendar.SUNDAY
+                    tydzenListener?.setDayAndMun2(c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR], c[Calendar.WEEK_OF_YEAR])
+                    activity.invalidateOptionsMenu()
+                }
+
+                override fun onPageScrollStateChanged(state: Int) {}
+            })
+            val firstPosition = MenuCaliandar.getFirstPositionNiadzel(MenuCaliandar.getPositionCaliandarNiadzel(day, posMun, yearG))
+            binding.pagerNedel.currentItem = firstPosition[26].toInt()
         }
-        binding.pagerNedel.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-
-            override fun onPageSelected(position: Int) {
-                val firstPosition = MenuCaliandar.getFirstPositionNiadzel(position)
-                tydzenListener?.setDayAndMun2(firstPosition[1].toInt(), firstPosition[2].toInt(), firstPosition[3].toInt())
-                val c = GregorianCalendar(firstPosition[3].toInt(), firstPosition[2].toInt(), firstPosition[1].toInt())
-                c.firstDayOfWeek = Calendar.SUNDAY
-                binding.nedelName.text = getString(R.string.tydzen_name, c[Calendar.WEEK_OF_YEAR])
-                if (adapterViewPagerNedel.count - 1 == position) binding.imageButton2.visibility = View.GONE
-                else binding.imageButton2.visibility = View.VISIBLE
-                if (position == 0) binding.imageButton.visibility = View.GONE
-                else binding.imageButton.visibility = View.VISIBLE
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {}
-        })
-        val firstPosition = MenuCaliandar.getFirstPositionNiadzel(MenuCaliandar.getPositionCaliandarNiadzel(day, posMun, yearG))
-        binding.pagerNedel.currentItem = firstPosition[26].toInt()
-        val c = GregorianCalendar(firstPosition[3].toInt(), firstPosition[2].toInt(), firstPosition[1].toInt())
-        c.firstDayOfWeek = Calendar.SUNDAY
-        binding.nedelName.text = getString(R.string.tydzen_name, c[Calendar.WEEK_OF_YEAR])
         return binding.root
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(R.id.action_right).isVisible = adapterViewPagerNedel.count - 1 != binding.pagerNedel.currentItem
+        menu.findItem(R.id.action_left).isVisible = 0 != binding.pagerNedel.currentItem
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.action_left) {
+            binding.pagerNedel.currentItem = binding.pagerNedel.currentItem - 1
+        }
+        if (id == R.id.action_right) {
+            binding.pagerNedel.currentItem = binding.pagerNedel.currentItem + 1
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private inner class MyCalendarNedelAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {

@@ -134,52 +134,50 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     }
 
     private fun getDirListRequest(dir: String) {
-        activity?.let { activity ->
-            if (MainActivity.isNetworkAvailable()) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    withContext(Dispatchers.IO) {
-                        var reqParam = URLEncoder.encode("list", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("dir", "UTF-8") + "=" + URLEncoder.encode(dir, "UTF-8")
-                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
-                        with(mURL.openConnection() as HttpURLConnection) {
-                            requestMethod = "POST"
-                            val wr = OutputStreamWriter(outputStream)
-                            wr.write(reqParam)
-                            wr.flush()
-                            val sb = StringBuilder()
-                            BufferedReader(InputStreamReader(inputStream)).use {
-                                var inputLine = it.readLine()
-                                while (inputLine != null) {
-                                    sb.append(inputLine)
-                                    inputLine = it.readLine()
-                                }
-                            }
-                            val result = sb.toString()
-                            fileList.clear()
-                            val temp = ArrayList<MyNetFile>()
-                            if (result != "null") {
-                                val gson = Gson()
-                                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                                val arrayList = ArrayList<ArrayList<String>>()
-                                arrayList.addAll(gson.fromJson(result, type))
-                                arrayList.forEach {
-                                    if (it[0].contains("dir")) {
-                                        if (it[1] == "..") temp.add(MyNetFile(R.drawable.directory_up, it[1].replace("..", "Верх")))
-                                        else temp.add(MyNetFile(R.drawable.directory_icon, it[1]))
-                                    } else {
-                                        if (it[1].contains(".htm")) {
-                                            temp.add(MyNetFile(R.drawable.file_html_icon, it[1]))
-                                        } else {
-                                            temp.add(MyNetFile(R.drawable.file_txt_icon, it[1]))
-                                        }
-                                    }
-                                }
-                                fileList.addAll(temp)
+        if (MainActivity.isNetworkAvailable()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    var reqParam = URLEncoder.encode("list", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("dir", "UTF-8") + "=" + URLEncoder.encode(dir, "UTF-8")
+                    val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                    with(mURL.openConnection() as HttpURLConnection) {
+                        requestMethod = "POST"
+                        val wr = OutputStreamWriter(outputStream)
+                        wr.write(reqParam)
+                        wr.flush()
+                        val sb = StringBuilder()
+                        BufferedReader(InputStreamReader(inputStream)).use {
+                            var inputLine = it.readLine()
+                            while (inputLine != null) {
+                                sb.append(inputLine)
+                                inputLine = it.readLine()
                             }
                         }
+                        val result = sb.toString()
+                        fileList.clear()
+                        val temp = ArrayList<MyNetFile>()
+                        if (result != "null") {
+                            val gson = Gson()
+                            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                            val arrayList = ArrayList<ArrayList<String>>()
+                            arrayList.addAll(gson.fromJson(result, type))
+                            arrayList.forEach {
+                                if (it[0].contains("dir")) {
+                                    if (it[1] == "..") temp.add(MyNetFile(R.drawable.directory_up, it[1].replace("..", "Верх")))
+                                    else temp.add(MyNetFile(R.drawable.directory_icon, it[1]))
+                                } else {
+                                    if (it[1].contains(".htm")) {
+                                        temp.add(MyNetFile(R.drawable.file_html_icon, it[1]))
+                                    } else {
+                                        temp.add(MyNetFile(R.drawable.file_txt_icon, it[1]))
+                                    }
+                                }
+                            }
+                            fileList.addAll(temp)
+                        }
                     }
-                    adapter.notifyDataSetChanged()
                 }
+                adapter.notifyDataSetChanged()
             }
         }
     }

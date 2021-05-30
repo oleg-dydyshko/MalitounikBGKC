@@ -258,12 +258,10 @@ class DialogCalindarGrid : DialogFragment() {
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                activity?.let { fragmentActivity ->
-                    if (!MainActivity.checkmoduleResources()) {
-                        val dadatak = DialogInstallDadatak()
-                        dadatak.show(childFragmentManager, "dadatak")
-                        return
-                    }
+                if (!MainActivity.checkmoduleResources()) {
+                    val dadatak = DialogInstallDadatak()
+                    dadatak.show(childFragmentManager, "dadatak")
+                    return
                 }
                 when (itemList[adapterPosition].toInt()) {
                     1 -> {

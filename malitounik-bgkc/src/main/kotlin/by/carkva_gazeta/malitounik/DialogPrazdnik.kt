@@ -111,7 +111,7 @@ class DialogPrazdnik : DialogFragment() {
         }
     }
 
-    private inner class ListAdapter(private val mContext: Activity) : ArrayAdapter<Int>(mContext, R.layout.simple_list_item_1, arrayList) {
+    private inner class ListAdapter(mContext: Activity) : ArrayAdapter<Int>(mContext, R.layout.simple_list_item_1, arrayList) {
         private val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         private val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         private val gc = Calendar.getInstance() as GregorianCalendar

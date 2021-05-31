@@ -38,7 +38,12 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
         day2 = day
         posMun2 = mun
         yearG2 = year
-        binding.subtitleToolbar.text = cviatyGlavnyia
+        if (!cviatyGlavnyia.contains("no_sviaty")) {
+            binding.subtitleToolbar.text = cviatyGlavnyia
+            binding.subtitleToolbar.visibility = View.VISIBLE
+        } else {
+            binding.subtitleToolbar.visibility = View.GONE
+        }
     }
 
     private fun fullTextTollbar() {

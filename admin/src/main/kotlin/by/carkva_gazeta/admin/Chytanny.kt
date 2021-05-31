@@ -315,7 +315,7 @@ class Chytanny : AppCompatActivity() {
         return true
     }
 
-    private class SpinnerAdapter(private val activity: Activity, private val data: ArrayList<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {
+    private class SpinnerAdapter(activity: Activity, private val data: ArrayList<String>) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_1, data) {
 
         private val gc = Calendar.getInstance() as GregorianCalendar
 

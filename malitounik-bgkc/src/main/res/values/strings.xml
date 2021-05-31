@@ -582,6 +582,20 @@
         <item>ЛІСТАПАДА</item>
         <item>СЬНЕЖНЯ</item>
     </string-array>
+    <string-array name="meciac_smoll">
+        <item>студзеня</item>
+        <item>лютага</item>
+        <item>сакавіка</item>
+        <item>красавіка</item>
+        <item>траўня</item>
+        <item>чэрвеня</item>
+        <item>ліпеня</item>
+        <item>жніўня</item>
+        <item>верасьня</item>
+        <item>кастрычніка</item>
+        <item>лістапада</item>
+        <item>сьнежня</item>
+    </string-array>
     <string name="site_admin">Кіраваньне сайтам</string>
     <string name="admin_panel">ПАНЭЛЬ КІРАВАНЬНЯ</string>
     <string name="login">Логін</string>

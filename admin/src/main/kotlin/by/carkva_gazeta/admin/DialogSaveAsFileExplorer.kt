@@ -4,16 +4,17 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.carkva_gazeta.admin.databinding.AdminDialigSaveAsBinding
 import by.carkva_gazeta.admin.databinding.AdminSimpleListItemBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
@@ -37,11 +38,17 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     private lateinit var adapter: TitleListAdaprer
     private val fileList = ArrayList<MyNetFile>()
     private var dir = ""
-    private lateinit var editView: EditText
     private var fileName = ""
+    private var _binding: AdminDialigSaveAsBinding? = null
+    private val binding get() = _binding!!
 
     internal interface DialogSaveAsFileExplorerListener {
         fun onDialogSaveAsFile(dir: String, oldFileName: String, fileName: String)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onAttach(context: Context) {
@@ -57,48 +64,22 @@ class DialogSaveAsFileExplorer : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let { fragmentActivity ->
+            _binding = AdminDialigSaveAsBinding.inflate(LayoutInflater.from(fragmentActivity))
             val builder = AlertDialog.Builder(fragmentActivity, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            val linear = LinearLayout(fragmentActivity)
-            linear.orientation = LinearLayout.VERTICAL
-            val textViewZaglavie = TextView(fragmentActivity)
-            textViewZaglavie.setBackgroundColor(ContextCompat.getColor(fragmentActivity, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-            val density = resources.displayMetrics.density
-            val realpadding = (10 * density).toInt()
-            textViewZaglavie.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textViewZaglavie.text = getString(by.carkva_gazeta.malitounik.R.string.save_as_up)
-            textViewZaglavie.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textViewZaglavie.typeface = MainActivity.createFont(Typeface.BOLD)
-            textViewZaglavie.setTextColor(ContextCompat.getColor(fragmentActivity, by.carkva_gazeta.malitounik.R.color.colorWhite))
-            linear.addView(textViewZaglavie)
-            val textView = TextView(fragmentActivity)
-            val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            textView.layoutParams = layoutParams
-            textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-            textView.text = getString(by.carkva_gazeta.malitounik.R.string.mk_dir)
-            textView.setTextColor(ContextCompat.getColor(fragmentActivity, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            textView.background = ContextCompat.getDrawable(fragmentActivity, by.carkva_gazeta.malitounik.R.drawable.selector_default)
-            textView.setOnClickListener {
+            binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.save_as_up)
+            binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.mk_dir)
+            binding.content.setOnClickListener {
                 val dialogPasochnicaMkDir = DialogPasochnicaMkDir.getInstance(dir)
                 dialogPasochnicaMkDir.show(childFragmentManager, "dialogPasochnicaMkDir")
             }
-            linear.addView(textView)
             fileName = arguments?.getString("oldName", "") ?: ""
-            editView = EditText(fragmentActivity)
-            editView.setPadding(realpadding, 0, realpadding, realpadding)
-            editView.setText(fileName)
-            editView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            editView.setTextColor(ContextCompat.getColor(fragmentActivity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
-            linear.addView(editView)
-            val listViewCompat = ListView(fragmentActivity)
-            listViewCompat.selector = ContextCompat.getDrawable(fragmentActivity, by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            binding.edittext.setText(fileName)
+            binding.listView.selector = ContextCompat.getDrawable(fragmentActivity, by.carkva_gazeta.malitounik.R.drawable.selector_default)
             adapter = TitleListAdaprer(fragmentActivity)
-            listViewCompat.adapter = adapter
-            linear.addView(listViewCompat)
-
-            builder.setView(linear)
+            binding.listView.adapter = adapter
+            builder.setView(binding.root)
             getDirListRequest("")
-            listViewCompat.setOnItemClickListener { _, _, position, _ ->
+            binding.listView.setOnItemClickListener { _, _, position, _ ->
                 when (fileList[position].resources) {
                     R.drawable.directory_up -> {
                         val t1 = dir.lastIndexOf("/")
@@ -110,12 +91,12 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                         getDirListRequest(dir)
                     }
                     else -> {
-                        editView.setText(fileList[position].title)
+                        binding.edittext.setText(fileList[position].title)
                     }
                 }
             }
             builder.setPositiveButton(getString(by.carkva_gazeta.malitounik.R.string.save_sabytie)) { dialog: DialogInterface, _: Int ->
-                mListener?.onDialogSaveAsFile(dir, arguments?.getString("oldName", "") ?: "", editView.text.toString())
+                mListener?.onDialogSaveAsFile(dir, arguments?.getString("oldName", "") ?: "", binding.edittext.text.toString())
                 dialog.cancel()
             }
             builder.setNeutralButton(getString(by.carkva_gazeta.malitounik.R.string.add_pesny)) { _: DialogInterface, _: Int ->

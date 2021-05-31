@@ -67,14 +67,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             if (intent != null) {
-                var dayyear = 0
-                val day = intent.getIntExtra("data", 0)
-                for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until c.get(Calendar.YEAR)) {
-                    dayyear += if (c.isLeapYear(i)) 366
-                    else 365
-                }
-                if (setDataCalendar != dayyear + day) {
-                    setDataCalendar = dayyear + day
+                val dayOfYear = intent.getIntExtra("dayOfYear", 0)
+                val data = MenuCaliandar.getPositionCaliandar(dayOfYear, c.get(Calendar.YEAR))
+                if (setDataCalendar != data[25].toInt()) {
+                    setDataCalendar = data[25].toInt()
                     idOld = -1
                     onClick(binding.label1)
                 }
@@ -82,15 +78,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
     }
 
-    override fun setDataCalendar(day_of_year: Int, year: Int) {
+    override fun setDataCalendar(dayOfYear: Int, year: Int) {
+        val data = MenuCaliandar.getPositionCaliandar(dayOfYear, year)
         c = Calendar.getInstance() as GregorianCalendar
         idSelect = R.id.label1
-        var dayyear = 0
-        for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN until year) {
-            dayyear += if (c.isLeapYear(i)) 366
-            else 365
-        }
-        setDataCalendar = dayyear + day_of_year - 1
+        setDataCalendar = data[25].toInt()
         idOld = -1
         onClick(binding.label1)
     }

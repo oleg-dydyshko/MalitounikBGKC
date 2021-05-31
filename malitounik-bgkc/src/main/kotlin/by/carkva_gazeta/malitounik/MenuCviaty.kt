@@ -39,7 +39,7 @@ class MenuCviaty : CviatyListFragment() {
 
     override fun setCviatyYear(year: Int) {
         this.year = year
-        list = getPrazdnik(activity, year)
+        list = getPrazdnik(year)
         activity?.let {
             if (SettingsActivity.GET_CALIANDAR_YEAR_MAX >= year) {
                 listView.isClickable = true
@@ -63,9 +63,9 @@ class MenuCviaty : CviatyListFragment() {
         activity?.let {
             if (savedInstanceState != null) {
                 year = savedInstanceState.getInt("year")
-                list = getPrazdnik(activity, year)
+                list = getPrazdnik(year)
             } else {
-                list = getPrazdnik(activity)
+                list = getPrazdnik()
             }
             myArrayAdapter = MyArrayAdapter(it)
             listAdapter = myArrayAdapter
@@ -83,7 +83,7 @@ class MenuCviaty : CviatyListFragment() {
     }
 
     internal interface CarkvaCarkvaListener {
-        fun setDataCalendar(day_of_year: Int, year: Int)
+        fun setDataCalendar(dayOfYear: Int, year: Int)
     }
 
     override fun onAttach(context: Context) {
@@ -127,7 +127,7 @@ class MenuCviaty : CviatyListFragment() {
         var opisanie: ArrayList<String> = ArrayList()
         private var data: ArrayList<Int> = ArrayList()
 
-        fun getPrazdnik(context: Context?, yearG: Int = Calendar.getInstance().get(Calendar.YEAR)): ArrayList<String> {
+        fun getPrazdnik(yearG: Int = Calendar.getInstance().get(Calendar.YEAR)): ArrayList<String> {
             val builder = ArrayList<String>()
             data = ArrayList()
             opisanie = ArrayList()
@@ -153,12 +153,11 @@ class MenuCviaty : CviatyListFragment() {
                 if (d == 28 && ex == 6) dataP = 18
                 monthP = 4
             }
-            val monthName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня",
-                    "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
-            val nedelName = arrayOf("", "нядзеля", "панядзелак", "аўторак", "серада", "чацьвер", "пятніца", "субота")
-            val k = context?.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k?.getBoolean("dzen_noch", false)
-            val color = if (dzenNoch == true) "<font color=\"#f44336\">" else "<font color=\"#d00505\">"
+            val monthName = Malitounik.applicationContext().resources.getStringArray(R.array.meciac_smoll)
+            val nedelName = Malitounik.applicationContext().resources.getStringArray(R.array.dni_nedeli)
+            val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = k.getBoolean("dzen_noch", false)
+            val color = if (dzenNoch) "<font color=\"#f44336\">" else "<font color=\"#d00505\">"
             var prazdnik = emptyArray<Prazdniki>()
             c = GregorianCalendar(yearG, 0, 6)
             prazdnik += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--1-->" + color + "Богазьяўленьне (Вадохрышча)</font>", "<br><strong><em>6 студзеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + " </strong></em>")

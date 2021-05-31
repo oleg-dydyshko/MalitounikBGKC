@@ -231,10 +231,21 @@ class MenuCaliandar : MenuCaliandarFragment() {
 
         fun getPositionCaliandar(position: Int) = data[position]
 
+        fun getPositionCaliandar(day_of_year: Int, year: Int): ArrayList<String> {
+            var position = 0
+            data.forEach { arrayList ->
+                if (day_of_year == arrayList[24].toInt() && year == arrayList[3].toInt()) {
+                    position = arrayList[25].toInt()
+                    return@forEach
+                }
+            }
+            return data[position]
+        }
+
         fun getPositionCaliandarNiadzel(day: Int, mun: Int, year: Int): Int {
             var position = 0
             data.forEach { arrayList ->
-                if (day==arrayList[1].toInt() && mun == arrayList[2].toInt() && year == arrayList[3].toInt()) {
+                if (day == arrayList[1].toInt() && mun == arrayList[2].toInt() && year == arrayList[3].toInt()) {
                     position = arrayList[26].toInt()
                     return@forEach
                 }
@@ -272,8 +283,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
                     data.forEach { arrayList ->
                         if (day == arrayList[1].toInt() && mun == arrayList[2].toInt() && year == arrayList[3].toInt()) {
                             count++
-                            if (arrayList[26].toInt() == 0)
-                                count = arrayList[0].toInt()
+                            if (arrayList[26].toInt() == 0) count = arrayList[0].toInt()
                         }
                         if (count in 1..7) {
                             niadzeliaList.add(arrayList)

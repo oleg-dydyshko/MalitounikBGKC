@@ -221,7 +221,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
 
         override fun getItem(position: Int) = CaliandarFull.newInstance(position)
 
-        override fun getItemPosition(`object`: Any): Int {
+        override fun getItemPosition(any: Any): Int {
             return PagerAdapter.POSITION_NONE
         }
     }

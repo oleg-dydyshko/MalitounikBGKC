@@ -351,7 +351,6 @@
     <string name="bible_natatki">%1$s \n\n%2$s</string>
     <string name="font_sp">%1$d sp%2$s</string>
     <string name="mesiach">%1$s, %2$s</string>
-    <string name="tydzen_name">%1$d тыдзень</string>
     <string name="tydzen_name2">%1$s %2$s %3$s</string>
     <string name="tydzen_name3">%1$s %2$s %3$s, %4$s</string>
     <string name="get_font">%1$d sp</string>

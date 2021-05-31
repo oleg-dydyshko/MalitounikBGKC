@@ -22,7 +22,7 @@ class CaliandarMunTab2 : Fragment() {
     private var tydzenListener: CaliandarMunTab2Listener? = null
 
     interface CaliandarMunTab2Listener {
-        fun setDayAndMun2(day: Int, mun: Int, year: Int, weekOfYear: Int)
+        fun setDayAndMun2(day: Int, mun: Int, year: Int, cviatyGlavnyia: String)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,9 +61,7 @@ class CaliandarMunTab2 : Fragment() {
 
                 override fun onPageSelected(position: Int) {
                     val firstPosition = MenuCaliandar.getFirstPositionNiadzel(position)
-                    val c = GregorianCalendar(firstPosition[3].toInt(), firstPosition[2].toInt(), firstPosition[1].toInt())
-                    c.firstDayOfWeek = Calendar.SUNDAY
-                    tydzenListener?.setDayAndMun2(c[Calendar.DATE], c[Calendar.MONTH], c[Calendar.YEAR], c[Calendar.WEEK_OF_YEAR])
+                    tydzenListener?.setDayAndMun2(firstPosition[1].toInt(), firstPosition[2].toInt(), firstPosition[3].toInt(), firstPosition[6])
                     activity.invalidateOptionsMenu()
                 }
 

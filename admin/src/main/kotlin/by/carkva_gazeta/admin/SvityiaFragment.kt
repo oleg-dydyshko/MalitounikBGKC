@@ -12,6 +12,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaPageFragmentBinding
 import by.carkva_gazeta.malitounik.MainActivity
@@ -43,15 +44,10 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     private var timerCount = 0
     private var timer = Timer()
     private var timerTask: TimerTask? = null
-    private val myPermissionsWriteExternalStorage = 41
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == myPermissionsWriteExternalStorage) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                val dialogImageFileExplorer = DialogImageFileExplorer()
-                dialogImageFileExplorer.show(childFragmentManager, "dialogImageFileExplorer")
-            }
+    private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (it) {
+            val dialogImageFileExplorer = DialogImageFileExplorer()
+            dialogImageFileExplorer.show(childFragmentManager, "dialogImageFileExplorer")
         }
     }
 
@@ -246,7 +242,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
             activity?.let { activity ->
                 val permissionCheck = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
                 if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                    requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                    mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                 } else {
                     val dialogImageFileExplorer = DialogImageFileExplorer()
                     dialogImageFileExplorer.show(childFragmentManager, "dialogImageFileExplorer")

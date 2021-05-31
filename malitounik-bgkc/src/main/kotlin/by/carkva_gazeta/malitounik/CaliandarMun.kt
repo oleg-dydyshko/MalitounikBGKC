@@ -7,14 +7,12 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.CalendarBinding
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.*
 import java.util.*
 
 class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, CaliandarMunTab2.CaliandarMunTab2Listener {
@@ -28,6 +26,7 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
     private lateinit var chin: SharedPreferences
     private var sabytue = false
     private lateinit var binding: CalendarBinding
+    private var resetTollbarJob: Job? = null
 
     override fun setDayAndMun1(day: Int, mun: Int, year: Int) {
         day1 = day
@@ -35,11 +34,44 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
         yearG1 = year
     }
 
-    override fun setDayAndMun2(day: Int, mun: Int, year: Int, weekOfYear: Int) {
+    override fun setDayAndMun2(day: Int, mun: Int, year: Int, cviatyGlavnyia: String) {
         day2 = day
         posMun2 = mun
         yearG2 = year
-        binding.subtitleToolbar.text = getString(R.string.tydzen_name, weekOfYear)
+        binding.subtitleToolbar.text = cviatyGlavnyia
+    }
+
+    private fun fullTextTollbar() {
+        val layoutParams = binding.toolbar.layoutParams
+        resetTollbarJob?.cancel()
+        if (binding.titleToolbar.isSelected) {
+            resetTollbar(layoutParams)
+        } else {
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            binding.titleToolbar.isSingleLine = false
+            binding.subtitleToolbar.isSingleLine = false
+            binding.titleToolbar.isSelected = true
+            resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                delay(5000)
+                resetTollbar(layoutParams)
+            }
+        }
+    }
+
+    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
+        val tv = TypedValue()
+        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            layoutParams.height = actionBarHeight
+        }
+        binding.titleToolbar.isSelected = false
+        binding.titleToolbar.isSingleLine = true
+        binding.subtitleToolbar.isSingleLine = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        resetTollbarJob?.cancel()
     }
 
     override fun onResume() {
@@ -69,6 +101,12 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         binding.subtitleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
+        binding.titleToolbar.setOnClickListener {
+            fullTextTollbar()
+        }
+        binding.subtitleToolbar.setOnClickListener {
+            fullTextTollbar()
+        }
         sabytue = intent.getBooleanExtra("sabytie", false)
         if (sabytue) binding.titleToolbar.setText(R.string.get_date) else binding.titleToolbar.setText(R.string.kaliandar)
         if (dzenNoch) {
@@ -90,9 +128,6 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
             binding.subtitleToolbar.visibility = View.GONE
         } else {
             replaceFragment(CaliandarMunTab2.getInstance(posMun2, yearG2, day2))
-            val cal = GregorianCalendar(yearG2, posMun2, day2)
-            cal.firstDayOfWeek = Calendar.SUNDAY
-            binding.subtitleToolbar.text = getString(R.string.tydzen_name, cal[Calendar.WEEK_OF_YEAR])
             binding.subtitleToolbar.visibility = View.VISIBLE
         }
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -109,9 +144,6 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
                     binding.subtitleToolbar.visibility = View.GONE
                 } else {
                     replaceFragment(CaliandarMunTab2.getInstance(posMun2, yearG2, day2))
-                    val cal = GregorianCalendar(yearG2, posMun2, day2)
-                    cal.firstDayOfWeek = Calendar.SUNDAY
-                    binding.subtitleToolbar.text = getString(R.string.tydzen_name, cal[Calendar.WEEK_OF_YEAR])
                     binding.subtitleToolbar.visibility = View.VISIBLE
                 }
                 val editor = chin.edit()

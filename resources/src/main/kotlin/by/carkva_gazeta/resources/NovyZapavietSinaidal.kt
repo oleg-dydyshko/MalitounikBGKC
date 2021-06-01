@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
@@ -580,10 +579,6 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
 
         override fun getPageTitle(position: Int): CharSequence {
             return resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (position + 1)
-        }
-
-        override fun getItemPosition(`object`: Any): Int {
-            return PagerAdapter.POSITION_NONE
         }
     }
 

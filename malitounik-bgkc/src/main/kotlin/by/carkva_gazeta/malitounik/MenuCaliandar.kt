@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.malitounik.databinding.MenuCaliandarBinding
 import com.google.gson.Gson
@@ -220,51 +219,12 @@ class MenuCaliandar : MenuCaliandarFragment() {
         override fun getCount() = getDataCalaindar().size
 
         override fun getItem(position: Int) = CaliandarFull.newInstance(position)
-
-        override fun getItemPosition(any: Any): Int {
-            return PagerAdapter.POSITION_NONE
-        }
     }
 
     companion object {
         private val data = ArrayList<ArrayList<String>>()
 
-        fun getPositionCaliandar(position: Int) = data[position]
-
-        fun getPositionCaliandar(day_of_year: Int, year: Int): ArrayList<String> {
-            var position = 0
-            data.forEach { arrayList ->
-                if (day_of_year == arrayList[24].toInt() && year == arrayList[3].toInt()) {
-                    position = arrayList[25].toInt()
-                    return@forEach
-                }
-            }
-            return data[position]
-        }
-
-        fun getPositionCaliandarNiadzel(day: Int, mun: Int, year: Int): Int {
-            var position = 0
-            data.forEach { arrayList ->
-                if (day == arrayList[1].toInt() && mun == arrayList[2].toInt() && year == arrayList[3].toInt()) {
-                    position = arrayList[26].toInt()
-                    return@forEach
-                }
-            }
-            return position
-        }
-
-        fun getFirstPositionNiadzel(position: Int): ArrayList<String> {
-            var pos = 0
-            data.forEach {
-                if (it[26].toInt() == position && it[0].toInt() == Calendar.SUNDAY) {
-                    pos = it[25].toInt()
-                    return@forEach
-                }
-            }
-            return data[pos]
-        }
-
-        fun getDataCalaindar(day: Int = -1, mun: Int = -1, year: Int = -1): ArrayList<ArrayList<String>> {
+        private fun getData() {
             if (data.size == 0) {
                 val inputStream = Malitounik.applicationContext().resources.openRawResource(R.raw.caliandar)
                 val isr = InputStreamReader(inputStream)
@@ -276,6 +236,51 @@ class MenuCaliandar : MenuCaliandarFragment() {
                 val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
                 data.addAll(gson.fromJson(builder, type))
             }
+        }
+
+        fun getPositionCaliandar(position: Int): ArrayList<String> {
+            getData()
+            return data[position]
+        }
+
+        fun getPositionCaliandar(day_of_year: Int, year: Int): ArrayList<String> {
+            getData()
+            var position = 0
+            data.forEach { arrayList ->
+                if (day_of_year == arrayList[24].toInt() && year == arrayList[3].toInt()) {
+                    position = arrayList[25].toInt()
+                    return@forEach
+                }
+            }
+            return data[position]
+        }
+
+        fun getPositionCaliandarNiadzel(day: Int, mun: Int, year: Int): Int {
+            getData()
+            var position = 0
+            data.forEach { arrayList ->
+                if (day == arrayList[1].toInt() && mun == arrayList[2].toInt() && year == arrayList[3].toInt()) {
+                    position = arrayList[26].toInt()
+                    return@forEach
+                }
+            }
+            return position
+        }
+
+        fun getFirstPositionNiadzel(position: Int): ArrayList<String> {
+            getData()
+            var pos = 0
+            data.forEach {
+                if (it[26].toInt() == position && it[0].toInt() == Calendar.SUNDAY) {
+                    pos = it[25].toInt()
+                    return@forEach
+                }
+            }
+            return data[pos]
+        }
+
+        fun getDataCalaindar(day: Int = -1, mun: Int = -1, year: Int = -1): ArrayList<ArrayList<String>> {
+            getData()
             when {
                 day != -1 && mun != -1 && year != -1 -> {
                     val niadzeliaList = ArrayList<ArrayList<String>>()

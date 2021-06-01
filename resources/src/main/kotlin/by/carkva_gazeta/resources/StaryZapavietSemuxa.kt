@@ -665,10 +665,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         override fun getPageTitle(position: Int): CharSequence {
             return if (kniga == 18) resources.getString(by.carkva_gazeta.malitounik.R.string.psalom) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
         }
-
-        override fun getItemPosition(`object`: Any): Int {
-            return PagerAdapter.POSITION_NONE
-        }
     }
 
     companion object {

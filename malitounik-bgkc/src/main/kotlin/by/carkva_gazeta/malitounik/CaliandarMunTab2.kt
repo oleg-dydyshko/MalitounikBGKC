@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.malitounik.databinding.CalendatTab2Binding
 import java.util.*
@@ -95,10 +94,6 @@ class CaliandarMunTab2 : Fragment() {
         override fun getItem(position: Int): Fragment {
             val arrayList = MenuCaliandar.getFirstPositionNiadzel(position)
             return CaliandarNedzel.newInstance(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt())
-        }
-
-        override fun getItemPosition(ob: Any): Int {
-            return PagerAdapter.POSITION_NONE
         }
 
         override fun getCount(): Int {

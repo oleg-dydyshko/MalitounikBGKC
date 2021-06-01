@@ -15,9 +15,9 @@ import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminSviatyBinding
 import by.carkva_gazeta.malitounik.MainActivity
@@ -44,23 +44,18 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
     private var timer = Timer()
     private var timerTask: TimerTask? = null
     private var edittext: AppCompatEditText? = null
-    private val myPermissionsWriteExternalStorage = 42
+    private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (it) {
+            val fileExplorer = DialogImageFileExplorer()
+            fileExplorer.show(supportFragmentManager, "file_explorer")
+        }
+    }
 
     override fun onResume() {
         super.onResume()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == myPermissionsWriteExternalStorage) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                val fileExplorer = DialogImageFileExplorer()
-                fileExplorer.show(supportFragmentManager, "file_explorer")
-            }
-        }
     }
 
     private fun startTimer() {
@@ -346,7 +341,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
         if (id == R.id.action_upload_image) {
             val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
             if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             } else {
                 val dialogImageFileExplorer = DialogImageFileExplorer()
                 dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")

@@ -4,7 +4,6 @@ import android.content.Context
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.android.play.core.splitcompat.SplitCompatApplication
 
-@Suppress("unused")
 class Malitounik : SplitCompatApplication() {
     override fun attachBaseContext(context: Context) {
         super.attachBaseContext(context)

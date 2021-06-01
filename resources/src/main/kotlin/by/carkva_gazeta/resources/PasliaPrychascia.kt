@@ -427,10 +427,6 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         override fun getPageTitle(position: Int): CharSequence {
             return malitvy[position].title.uppercase()
         }
-
-        override fun getItemPosition(`object`: Any): Int {
-            return PagerAdapter.POSITION_NONE
-        }
     }
 
     private data class Malitvy(val resourseID: Int, val resourse: String, val title: String)

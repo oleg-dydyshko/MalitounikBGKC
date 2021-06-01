@@ -30,10 +30,10 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import by.carkva_gazeta.biblijateka.databinding.BibliotekaViewAppBinding
@@ -77,13 +77,13 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
+
     private fun mShowPart2Runnable() {
         supportActionBar?.show()
     }
 
     private lateinit var pdfView: PDFView
     private var mLastClickTime: Long = 0
-    private val myPermissionsWriteExternalStorage = 39
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
@@ -181,6 +181,45 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     private var timerCount = 0
     private var timer = Timer()
     private var timerTask: TimerTask? = null
+    private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (it) {
+            if (idSelect == R.id.label6) {
+                bindingcontent.progressBar2.visibility = View.GONE
+                val fileExplorer = DialogFileExplorer()
+                fileExplorer.show(supportFragmentManager, "file_explorer")
+            } else {
+                when {
+                    fileName.contains(".pdf", true) -> {
+                        loadFilePDF()
+                    }
+                    fileName.contains(".fb2.zip", true) -> {
+                        loadFileFB2ZIP()
+                    }
+                    fileName.contains(".fb2", true) -> {
+                        loadFileFB2()
+                    }
+                    fileName.contains(".txt", true) -> {
+                        loadFileTXT()
+                    }
+                    fileName.contains(".htm", true) -> {
+                        loadFileHTML()
+                    }
+                    else -> {
+                        loadFileEPUB()
+                    }
+                }
+                if (!fileName.contains(".pdf", true)) {
+                    autoscroll = k.getBoolean("autoscroll", false)
+                    spid = k.getInt("autoscrollSpid", 60)
+                    if (autoscroll) {
+                        startAutoScroll()
+                    }
+                }
+                bindingcontent.swipeRefreshLayout.visibility = View.GONE
+                invalidateOptionsMenu()
+            }
+        }
+    }
 
     private fun startTimer(rub: Int) {
         timer = Timer()
@@ -484,14 +523,12 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
-        }
-        // Копирование и удаление старых файлов из Библиотеки
+        } // Копирование и удаление старых файлов из Библиотеки
         getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.let {
             val file = File("$filesDir/Biblijateka")
             if (file.exists()) file.copyRecursively(it, overwrite = true)
         }
-        File("$filesDir/Biblijateka").deleteRecursively()
-        ////////////////////////////////////
+        File("$filesDir/Biblijateka").deleteRecursively() ////////////////////////////////////
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         dzenNoch = k.getBoolean("dzen_noch", false)
@@ -552,7 +589,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     if (!File(arrayList[position][2]).exists()) {
                         val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                         if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                            mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                             return@setOnItemClickListener
                         }
                     }
@@ -842,7 +879,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                     loadFilePDF()
                 }
                 PackageManager.PERMISSION_DENIED == permissionCheck -> {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                    mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                 }
                 else -> {
                     when {
@@ -1361,49 +1398,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         bindingappbar.titleToolbar.isSingleLine = true
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == myPermissionsWriteExternalStorage) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (idSelect == R.id.label6) {
-                    bindingcontent.progressBar2.visibility = View.GONE
-                    val fileExplorer = DialogFileExplorer()
-                    fileExplorer.show(supportFragmentManager, "file_explorer")
-                } else {
-                    when {
-                        fileName.contains(".pdf", true) -> {
-                            loadFilePDF()
-                        }
-                        fileName.contains(".fb2.zip", true) -> {
-                            loadFileFB2ZIP()
-                        }
-                        fileName.contains(".fb2", true) -> {
-                            loadFileFB2()
-                        }
-                        fileName.contains(".txt", true) -> {
-                            loadFileTXT()
-                        }
-                        fileName.contains(".htm", true) -> {
-                            loadFileHTML()
-                        }
-                        else -> {
-                            loadFileEPUB()
-                        }
-                    }
-                    if (!fileName.contains(".pdf", true)) {
-                        autoscroll = k.getBoolean("autoscroll", false)
-                        spid = k.getInt("autoscrollSpid", 60)
-                        if (autoscroll) {
-                            startAutoScroll()
-                        }
-                    }
-                    bindingcontent.swipeRefreshLayout.visibility = View.GONE
-                    invalidateOptionsMenu()
-                }
-            }
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val prefEditor: SharedPreferences.Editor = k.edit()
         val id: Int = item.itemId
@@ -1614,7 +1608,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
             R.id.label6 -> {
                 if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                    mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                 } else {
                     bindingcontent.progressBar2.visibility = View.GONE
                     val fileExplorer = DialogFileExplorer()

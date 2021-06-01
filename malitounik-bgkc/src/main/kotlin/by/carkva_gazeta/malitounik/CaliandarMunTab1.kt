@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.malitounik.databinding.CalendatTab1Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
@@ -235,10 +234,6 @@ class CaliandarMunTab1 : Fragment() {
                 g.add(Calendar.MONTH, 1)
             }
             return PageFragmentMonth.newInstance(g[Calendar.DATE], g[Calendar.MONTH], g[Calendar.YEAR])
-        }
-
-        override fun getItemPosition(`object`: Any): Int {
-            return PagerAdapter.POSITION_NONE
         }
     }
 

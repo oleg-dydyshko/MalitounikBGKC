@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 
 abstract class SmartFragmentStatePagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     private val registeredFragments = SparseArray<Fragment>()
@@ -20,6 +21,10 @@ abstract class SmartFragmentStatePagerAdapter(fragmentManager: FragmentManager) 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
         registeredFragments.remove(position)
         super.destroyItem(container, position, obj)
+    }
+
+    override fun getItemPosition(any: Any): Int {
+        return PagerAdapter.POSITION_NONE
     }
 
     fun getFragment(key: Int) : Fragment {

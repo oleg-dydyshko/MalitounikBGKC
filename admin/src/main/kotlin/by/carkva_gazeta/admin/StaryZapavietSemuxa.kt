@@ -16,7 +16,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.admin.databinding.AdminBibleBinding
 import by.carkva_gazeta.malitounik.MainActivity
@@ -378,10 +377,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
 
         override fun getPageTitle(position: Int): CharSequence {
             return if (kniga == 18) resources.getString(by.carkva_gazeta.malitounik.R.string.psalom) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
-        }
-
-        override fun getItemPosition(`object`: Any): Int {
-            return PagerAdapter.POSITION_NONE
         }
     }
 

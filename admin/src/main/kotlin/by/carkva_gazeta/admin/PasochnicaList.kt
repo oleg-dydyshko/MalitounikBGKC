@@ -14,8 +14,8 @@ import android.util.TypedValue
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaListBinding
 import by.carkva_gazeta.malitounik.MainActivity
@@ -40,21 +40,16 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     private var resetTollbarJob: Job? = null
     private var fileList = ArrayList<String>()
     private lateinit var adapter: PasochnicaListAdaprer
-    private val myPermissionsWriteExternalStorage = 40
+    private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (it) {
+            val fileExplorer = DialogFileExplorer()
+            fileExplorer.show(supportFragmentManager, "file_explorer")
+        }
+    }
 
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == myPermissionsWriteExternalStorage) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                val fileExplorer = DialogFileExplorer()
-                fileExplorer.show(supportFragmentManager, "file_explorer")
-            }
-        }
     }
 
     override fun onDialogFile(file: File) {
@@ -304,7 +299,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
         if (id == R.id.action_open_file) {
             val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
             if (PackageManager.PERMISSION_DENIED == permissionCheck) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), myPermissionsWriteExternalStorage)
+                mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             } else {
                 val fileExplorer = DialogFileExplorer()
                 fileExplorer.show(supportFragmentManager, "file_explorer")

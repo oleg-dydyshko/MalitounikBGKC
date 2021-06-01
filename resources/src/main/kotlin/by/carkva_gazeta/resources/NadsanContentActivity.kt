@@ -418,10 +418,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         override fun getPageTitle(position: Int): CharSequence {
             return resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2) + " " + (position + 1)
         }
-
-        override fun getItemPosition(`object`: Any): Int {
-            return PagerAdapter.POSITION_NONE
-        }
     }
 
     companion object {

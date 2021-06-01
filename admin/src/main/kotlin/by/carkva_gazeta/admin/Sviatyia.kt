@@ -20,7 +20,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaBinding
 import by.carkva_gazeta.malitounik.CaliandarMun
@@ -202,7 +201,5 @@ class Sviatyia : AppCompatActivity(), DialogImageFileExplorer.DialogFileExplorer
             caliandar.set(Calendar.DAY_OF_YEAR, position + 1)
             return "${caliandar[Calendar.DAY_OF_MONTH]} ${munName[caliandar[Calendar.MONTH]]}"
         }
-
-        override fun getItemPosition(`object`: Any): Int = PagerAdapter.POSITION_NONE
     }
 }

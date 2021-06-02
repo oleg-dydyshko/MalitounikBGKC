@@ -412,40 +412,19 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                     }
                 }
             }
-            for (e in MenuCviaty.opisanie.indices) {
-                if (MenuCviaty.opisanie[e].replace("ё", "е", true).contains(poshuk, true)) {
-                    var result = MenuCviaty.opisanie[e]
-                    if (result.contains("<font color=")) {
-                        val t1 = result.indexOf("<font")
-                        val t2 = result.indexOf("\">")
-                        val t3 = result.indexOf("</font>")
-                        result = result.substring(0, t1) + result.substring(t2 + 2, t3)
-                    }
-                    val t1 = result.indexOf("<!--")
-                    val t2 = result.indexOf(":")
-                    val t3 = result.indexOf("-->")
-                    var res1 = "0"
-                    var t7 = t3
-                    val t6 = result.indexOf("<!--", t3)
-                    if (t6 != -1) {
-                        t7 = result.indexOf("-->", t6)
-                        res1 = result.substring(t6 + 4, t7)
-                    }
-                    val g = GregorianCalendar(c[Calendar.YEAR], result.substring(t2 + 1, t3).toInt(), result.substring(t1 + 4, t2).toInt())
-                    val aSviatyia = result.substring(t7 + 3)
-                    val t4 = aSviatyia.replace("ё", "е", true).indexOf(poshuk, ignoreCase = true)
-                    val t5 = poshuk.length
-                    val span = SpannableString(aSviatyia.substring(0, t4) + aSviatyia.substring(t4, t4 + t5) + aSviatyia.substring(t4 + t5))
-                    span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), t4, t4 + t5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_text)), t4, t4 + t5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    val str1 = SpannableString(g[Calendar.DATE].toString() + " " + munName[g[Calendar.MONTH]])
-                    when {
-                        res1.contains("1") -> {
+            val data = MenuCviaty.getPrazdnik()
+            for (e in data.indices) {
+                val sviatya = data[e].opisanie.replace("ё", "е", true)
+                if (sviatya.contains(poshuk, true)) {
+                    val resultSpan = SpannableStringBuilder()
+                    val str1 = SpannableString(data[e].date.toString() + " " + munName[data[e].month])
+                    when (data[e].svaity) {
+                        -1, -2, 2 -> {
                             str1.setSpan(StyleSpan(Typeface.BOLD_ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             if (dzenNoch) str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_black)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             else str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
-                        res1.contains("2") -> {
+                        -3, 3 -> {
                             str1.setSpan(StyleSpan(Typeface.ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             if (dzenNoch) str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_black)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             else str1.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary)), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -454,12 +433,13 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                             str1.setSpan(StyleSpan(Typeface.ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
                     }
-                    if (res1.contains("3")) {
-                        span.setSpan(StyleSpan(Typeface.ITALIC), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    }
-                    val resultSpan = SpannableStringBuilder()
+                    val span = SpannableString(data[e].opisanie)
+                    val t1 = sviatya.indexOf(poshuk, ignoreCase = true)
+                    val t2 = poshuk.length
+                    span.setSpan(BackgroundColorSpan(ContextCompat.getColor(this, R.color.colorBezPosta)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    span.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary_text)), t1, t1 + t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     resultSpan.append(str1).append("\n").append(span)
-                    arrayRes.add(Searche(g[Calendar.DAY_OF_YEAR], resultSpan))
+                    arrayRes.add(Searche(data[e].dayOfYear, resultSpan))
                 }
             }
         }

@@ -16,7 +16,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.PashaliiBinding
-import by.carkva_gazeta.malitounik.databinding.SimpleListItemSviatyBinding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItemPaschaliiBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -50,8 +50,8 @@ class MenuPashalii : PashaliiFragment() {
         activity?.let {
             binding.gri.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
             binding.ula.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            if (savedInstanceState == null) setArrayPasha()
-            else setArrayPasha(savedInstanceState.getInt("year"))
+            if (savedInstanceState == null) setArrayPasha(it)
+            else setArrayPasha(it, savedInstanceState.getInt("year"))
             myArrayAdapter = MyArrayAdapter(it)
             binding.pasha.adapter = myArrayAdapter
             binding.pasha.selector = ContextCompat.getDrawable(it, android.R.color.transparent)
@@ -60,12 +60,14 @@ class MenuPashalii : PashaliiFragment() {
     }
 
     override fun setPasha(year: Int) {
-        pasxi.clear()
-        setArrayPasha(year)
-        myArrayAdapter.notifyDataSetChanged()
+        activity?.let {
+            pasxi.clear()
+            setArrayPasha(it, year)
+            myArrayAdapter.notifyDataSetChanged()
+        }
     }
 
-    private fun setArrayPasha(year: Int = Calendar.getInstance()[Calendar.YEAR]) {
+    private fun setArrayPasha(context: Activity, year: Int = Calendar.getInstance()[Calendar.YEAR]) {
         var yearG = year
         val yearG2: Int
         if (1586 <= yearG) {
@@ -78,7 +80,7 @@ class MenuPashalii : PashaliiFragment() {
         var monthP: Int
         var dataPrav: Int
         var monthPrav: Int
-        val monthName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
+        val monthName = context.resources.getStringArray(R.array.meciac_smoll)
         for (i in yearG..yearG2) {
             val a = i % 19
             val b = i % 4
@@ -127,7 +129,7 @@ class MenuPashalii : PashaliiFragment() {
             val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val ea: ViewHolder
             if (convertView == null) {
-                val binding = SimpleListItemSviatyBinding.inflate(LayoutInflater.from(context), parent, false)
+                val binding = SimpleListItemPaschaliiBinding.inflate(LayoutInflater.from(context), parent, false)
                 rootView = binding.root
                 ea = ViewHolder(binding.label)
                 rootView.tag = ea

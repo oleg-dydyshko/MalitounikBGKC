@@ -2,9 +2,13 @@ package by.carkva_gazeta.malitounik
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.TypedValue
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +25,7 @@ class MenuCviaty : CviatyListFragment() {
     private lateinit var mListener: CarkvaCarkvaListener
     private var mLastClickTime: Long = 0
     private lateinit var myArrayAdapter: MyArrayAdapter
-    private var list = ArrayList<String>()
+    private var list = ArrayList<Prazdniki>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +83,7 @@ class MenuCviaty : CviatyListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        if (SettingsActivity.GET_CALIANDAR_YEAR_MAX >= year) mListener.setDataCalendar(data[position], year)
+        if (SettingsActivity.GET_CALIANDAR_YEAR_MAX >= year) mListener.setDataCalendar(list[position].dayOfYear, year)
     }
 
     internal interface CarkvaCarkvaListener {
@@ -97,7 +101,7 @@ class MenuCviaty : CviatyListFragment() {
         }
     }
 
-    private inner class MyArrayAdapter(private val context: Activity) : ArrayAdapter<String>(context, R.layout.simple_list_item_sviaty, list) {
+    private inner class MyArrayAdapter(private val context: Activity) : ArrayAdapter<Prazdniki>(context, R.layout.simple_list_item_sviaty, list) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val rootView: View
             val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -105,33 +109,66 @@ class MenuCviaty : CviatyListFragment() {
             if (convertView == null) {
                 val binding = SimpleListItemSviatyBinding.inflate(LayoutInflater.from(context), parent, false)
                 rootView = binding.root
-                ea = ViewHolder(binding.label)
+                ea = ViewHolder(binding.title, binding.date)
                 rootView.tag = ea
             } else {
                 rootView = convertView
                 ea = rootView.tag as ViewHolder
             }
-            ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
-            ea.textView.text = MainActivity.fromHtml(list[position])
             if (k.getBoolean("dzen_noch", false)) {
-                ea.textView.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
+                ea.title.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary_black))
             }
+            var title = SpannableString(list[position].opisanie)
+            when (list[position].svaity) {
+                -1 -> {
+                    title.setSpan(StyleSpan(Typeface.BOLD), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                -2 -> {
+                    title = SpannableString("ДВУНАДЗЯСЯТЫЯ СЬВЯТЫ\n\n${list[position].opisanie}")
+                    title.setSpan(StyleSpan(Typeface.BOLD), 0, 20, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                -3 -> {
+                    title = SpannableString("ВЯЛІКІЯ СЬВЯТЫ\n\n${list[position].opisanie}")
+                    title.setSpan(StyleSpan(Typeface.BOLD), 0, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                -4 -> {
+                    title = SpannableString("ДНІ ЎСПАМІНУ ПАМЁРЛЫХ\n\n${list[position].opisanie}")
+                    title.setSpan(StyleSpan(Typeface.BOLD), 0, 21, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    if (k.getBoolean("dzen_noch", false)) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorWhite)), 21, list[position].opisanie.length + 23, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 21, list[position].opisanie.length + 23, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                -5 -> {
+                    title = SpannableString("ЦАРКОЎНЫЯ ПАМЯТНЫЯ ДАТЫ\n\n${list[position].opisanie}")
+                    title.setSpan(StyleSpan(Typeface.BOLD), 0, 23, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    if (k.getBoolean("dzen_noch", false)) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorWhite)), 23, list[position].opisanie.length + 25, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 23, list[position].opisanie.length + 25, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                -6 -> {
+                    title = SpannableString("ПАРАФІЯЛЬНЫЯ СЬВЯТЫ\n\n${list[position].opisanie}")
+                    title.setSpan(StyleSpan(Typeface.BOLD), 0, 19, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                else -> {
+                    title = SpannableString(list[position].opisanie)
+                    if (list[position].svaity in 4..5) {
+                        if (k.getBoolean("dzen_noch", false)) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorWhite)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_text)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    } else {
+                        if (k.getBoolean("dzen_noch", false)) title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary_black)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        else title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorPrimary)), 0, list[position].opisanie.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
+                }
+            }
+            ea.title.text = title
+            ea.date.text = list[position].opisanieData
             return rootView
         }
 
     }
 
-    private class ViewHolder(var textView: TextView)
+    private class ViewHolder(var title: TextView, var date: TextView)
 
     companion object {
-        var opisanie: ArrayList<String> = ArrayList()
-        private var data: ArrayList<Int> = ArrayList()
-
-        fun getPrazdnik(yearG: Int = Calendar.getInstance().get(Calendar.YEAR)): ArrayList<String> {
-            val builder = ArrayList<String>()
-            data = ArrayList()
-            opisanie = ArrayList()
-            var c: GregorianCalendar
+        fun getPrazdnik(yearG: Int = Calendar.getInstance().get(Calendar.YEAR)): ArrayList<Prazdniki> {
             val a = yearG % 19
             val b = yearG % 4
             val cx = yearG % 7
@@ -155,187 +192,147 @@ class MenuCviaty : CviatyListFragment() {
             }
             val monthName = Malitounik.applicationContext().resources.getStringArray(R.array.meciac_smoll)
             val nedelName = Malitounik.applicationContext().resources.getStringArray(R.array.dni_nedeli)
-            val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
-            val color = if (dzenNoch) "<font color=\"#f44336\">" else "<font color=\"#d00505\">"
-            var prazdnik = emptyArray<Prazdniki>()
-            c = GregorianCalendar(yearG, 0, 6)
-            prazdnik += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--1-->" + color + "Богазьяўленьне (Вадохрышча)</font>", "<br><strong><em>6 студзеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + " </strong></em>")
-            c = GregorianCalendar(yearG, 1, 2)
-            prazdnik += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--1-->" + color + "Сустрэча Госпада нашага Ісуса Хрыста (Грамніцы)</font>", "<br><strong><em>2 лютага, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 2, 25)
-            prazdnik += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--1-->" + color + "Дабравешчаньне</font>", "<br><strong><em>25 сакавіка, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            var calendar = GregorianCalendar(c[Calendar.YEAR], monthP - 1, dataP)
-            calendar.add(Calendar.DATE, -7)
-            prazdnik += Prazdniki(calendar[Calendar.DAY_OF_YEAR], "<!--" + calendar[Calendar.DATE] + ":" + calendar[Calendar.MONTH] + "--><!--1-->" + color + "Уваход Гасподні ў Ерусалім (Вербніца)</font>", "<br><strong><em>" + calendar[Calendar.DAY_OF_MONTH] + " " + monthName[calendar[Calendar.MONTH]] + ", " + nedelName[calendar[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            calendar.add(Calendar.DATE, 46)
-            prazdnik += Prazdniki(calendar[Calendar.DAY_OF_YEAR], "<!--" + calendar[Calendar.DATE] + ":" + calendar[Calendar.MONTH] + "--><!--1-->" + color + "Узьнясеньне Гасподняе (Ушэсьце)</font>", "<br><strong><em>" + calendar[Calendar.DAY_OF_MONTH] + " " + monthName[calendar[Calendar.MONTH]] + ", " + nedelName[calendar[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            calendar.add(Calendar.DATE, 10)
-            prazdnik += Prazdniki(calendar[Calendar.DAY_OF_YEAR], "<!--" + calendar[Calendar.DATE] + ":" + calendar[Calendar.MONTH] + "--><!--1-->" + color + "Зыход Сьвятога Духа (Тройца)</font>", "<br><strong><em>" + calendar[Calendar.DAY_OF_MONTH] + " " + monthName[calendar[Calendar.MONTH]] + ", " + nedelName[calendar[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 7, 6)
-            prazdnik += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--1-->" + color + "Перамяненьне Гасподняе (Спас)</font>", "<br><strong><em>6 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 7, 15)
-            prazdnik += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--1-->" + color + "Усьпеньне Найсьвяцейшай Багародзіцы</font>", "<br><strong><em>15 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 8, 8)
-            prazdnik += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--1-->" + color + "Нараджэньне Найсьвяцейшай Багародзіцы</font>", "<br><strong><em>8 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 8, 14)
-            prazdnik += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--1-->" + color + "Крыжаўзвышэньне</font>", "<br><strong><em>14 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 10, 21)
-            prazdnik += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--1-->" + color + "Уваход у Храм Найсьвяцейшай Багародзіцы</font>", "<br><strong><em>21 лістапада, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 11, 25)
-            prazdnik += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--1-->" + color + "Нараджэньне Хрыстова (Каляды)</font>", "<br><strong><em>25 сьнежня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            Arrays.sort(prazdnik)
-            var prazdnikV = emptyArray<Prazdniki>()
-            c = GregorianCalendar(yearG, 0, 1)
-            prazdnikV += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--2-->" + color + "Абрэзаньне Гасподняе</font>", "<br><strong><em>1 студзеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 5, 24)
-            prazdnikV += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--2-->" + color + "Нараджэньне сьв. Яна Прадвесьніка і Хрысьціцеля</font>", "<br><strong><em>24 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 5, 29)
-            prazdnikV += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--2-->" + color + "Сьвятых вярхоўных апосталаў Пятра і Паўла</font>", "<br><strong><em>29 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 7, 29)
-            prazdnikV += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--2-->" + color + "Адсячэньне галавы сьв. Яна Прадвесьніка і Хрысьціцеля</font>", "<br><strong><em>29 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 9, 1)
-            prazdnikV += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--2-->" + color + "Покрыва Найсьвяцейшай Багародзіцы</font>", "<br><strong><em>1 кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            Arrays.sort(prazdnikV)
-            var prazdnikPamer = emptyArray<Prazdniki>()
-            c = GregorianCalendar(yearG, monthP - 1, dataP)
+            val prazdnikiAll = ArrayList<Prazdniki>()
+            val prazdnik = ArrayList<Prazdniki>()
+            val c = GregorianCalendar(yearG, monthP - 1, dataP)
+            prazdnikiAll.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -1, "ПАСХА ХРЫСТОВА (ВЯЛІКДЗЕНЬ)", c[Calendar.DATE].toString() + " " + monthName[c[Calendar.MONTH]] + " " + yearG + " году, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 0, 6)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -2, "Богазьяўленьне (Вадохрышча)", "6 студзеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 1, 2)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Сустрэча Госпада нашага Ісуса Хрыста (Грамніцы)", "2 лютага, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 2, 25)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Дабравешчаньне", "25 сакавіка, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(c[Calendar.YEAR], monthP - 1, dataP)
+            c.add(Calendar.DATE, -7)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Уваход Гасподні ў Ерусалім (Вербніца)", c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.add(Calendar.DATE, 46)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Узьнясеньне Гасподняе (Ушэсьце)", c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.add(Calendar.DATE, 10)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Зыход Сьвятога Духа (Тройца)", c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 7, 6)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Перамяненьне Гасподняе (Спас)", "6 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 7, 15)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Усьпеньне Найсьвяцейшай Багародзіцы", "15 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 8, 8)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Нараджэньне Найсьвяцейшай Багародзіцы", "8 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 8, 14)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Крыжаўзвышэньне", "14 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 10, 21)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Уваход у Храм Найсьвяцейшай Багародзіцы", "21 лістапада, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 11, 25)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 2, "Нараджэньне Хрыстова (Каляды)", "25 сьнежня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.sort()
+            prazdnikiAll.addAll(prazdnik)
+            prazdnik.clear()
+            c.set(yearG, 0, 1)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -3, "Абрэзаньне Гасподняе", "1 студзеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 5, 24)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 3, "Нараджэньне сьв. Яна Прадвесьніка і Хрысьціцеля", "24 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 5, 29)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 3, "Сьвятых вярхоўных апосталаў Пятра і Паўла", "29 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 7, 29)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 3, "Адсячэньне галавы сьв. Яна Прадвесьніка і Хрысьціцеля", "29 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 9, 1)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 3, "Покрыва Найсьвяцейшай Багародзіцы", "1 кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.sort()
+            prazdnikiAll.addAll(prazdnik)
+            prazdnik.clear()
+            c.set(yearG, monthP - 1, dataP)
             c.add(Calendar.DATE, -57)
-            prazdnikPamer += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--3-->Мясапусная бацькоўская субота", "<br><strong><em>" + c[Calendar.DATE] + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, monthP - 1, dataP)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -4, "Мясапусная бацькоўская субота", c[Calendar.DATE].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, monthP - 1, dataP)
             c.add(Calendar.DATE, -50)
-            prazdnikPamer += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--3-->Успамін усіх сьвятых айцоў, манахаў і посьнікаў", "<br><strong><em>" + c[Calendar.DATE] + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, monthP - 1, dataP)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 4, "Успамін усіх сьвятых айцоў, манахаў і посьнікаў", c[Calendar.DATE].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, monthP - 1, dataP)
             c.add(Calendar.DATE, -29)
-            prazdnikPamer += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--3-->Субота 3-га тыдня Вялікага посту", "<br><strong><em>" + c[Calendar.DATE] + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, monthP - 1, dataP)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 4, "Субота 3-га тыдня Вялікага посту", c[Calendar.DATE].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, monthP - 1, dataP)
             c.add(Calendar.DATE, -22)
-            prazdnikPamer += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--3-->Субота 4-га тыдня Вялікага посту", "<br><strong><em>" + c[Calendar.DATE] + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, monthP - 1, dataP)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 4, "Субота 4-га тыдня Вялікага посту", c[Calendar.DATE].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, monthP - 1, dataP)
             c.add(Calendar.DATE, 9)
-            prazdnikPamer += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--3-->Радаўніца", "<br><strong><em>" + c[Calendar.DATE] + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, monthP - 1, dataP)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 4, "Радаўніца", c[Calendar.DATE].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, monthP - 1, dataP)
             c.add(Calendar.DATE, 48)
-            prazdnikPamer += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--3-->Траецкая бацькоўская субота", "<br><strong><em>" + c[Calendar.DATE] + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 4, "Траецкая бацькоўская субота", c[Calendar.DATE].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             for (i in 19..25) {
-                c = GregorianCalendar(yearG, 9, i)
+                c.set(yearG, 9, i)
                 val dayofweek = c[Calendar.DAY_OF_WEEK]
                 if (7 == dayofweek) {
-                    prazdnikPamer += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--3-->Зьмітраўская бацькоўская субота", "<br><strong><em>" + c[Calendar.DATE] + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
+                    prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 4, "Зьмітраўская бацькоўская субота", c[Calendar.DATE].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
                 }
             }
-            c = GregorianCalendar(yearG, 10, 2)
-            prazdnikPamer += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--3-->Дзяды, дзень успаміну памёрлых", "<br><strong><em>2 лістапада, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            Arrays.sort(prazdnikPamer)
-            var prazdnikU = emptyArray<Prazdniki>()
-            c = GregorianCalendar(yearG, 6, 11)
-            prazdnikU += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--3-->Успамін мучаніцкай сьмерці ў катэдры сьв. Сафіі ў Полацку 5 манахаў-базыльянаў", "<br><strong><em>11 ліпеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 8, 15)
-            prazdnikU += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--3-->Успамін Бабровіцкай трагедыі (зьнішчэньне ў 1942 г. жыхароў уніяцкай парафіі в. Бабровічы Івацэвіцкага р-ну)", "<br><strong><em>15 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 9, 8)
-            prazdnikU += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--3-->Успамін Берасьцейскай царкоўнай Уніі 1596 году", "<br><strong><em>8(18) кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            Arrays.sort(prazdnikU)
-            var prazdnikP = emptyArray<Prazdniki>()
-            c = GregorianCalendar(yearG, 0, 30)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Гомель: Трох Сьвяціцеляў</font>", "<br><strong><em>30 студзеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            calendar = GregorianCalendar(c[Calendar.YEAR], monthP - 1, dataP)
-            prazdnikP += Prazdniki(calendar[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Антвэрпан: Уваскрасеньня Хрыстовага</font>", "<br><strong><em>" + calendar[Calendar.DAY_OF_MONTH] + " " + monthName[calendar[Calendar.MONTH]] + ", " + nedelName[calendar[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            prazdnikP += Prazdniki(calendar[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Віцебск: Уваскрасеньня Хрыстовага</font>", "<br><strong><em>" + calendar[Calendar.DAY_OF_MONTH] + " " + monthName[calendar[Calendar.MONTH]] + ", " + nedelName[calendar[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 3, 28)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Пінск: сьвятога Кірылы Тураўскага</font>", "<br><strong><em>28 красавіка, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 4, 1)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Маладэчна: Хрыста Чалавекалюбцы</font>", "<br><strong><em>1 траўня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 4, 7)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Івацэвічы: Маці Божай Жыровіцкай</font>", "<br><strong><em>7 траўня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 4, 11)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Баранавічы: сьвятых роўнаапостальных Кірылы і Мятода</font>", "<br><strong><em>11 траўня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 4, 13)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Горадня: Маці Божай Фацімскай</font>", "<br><strong><em>13 траўня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            calendar = GregorianCalendar(c[Calendar.YEAR], monthP - 1, dataP)
-            calendar.add(Calendar.DATE, 56)
-            prazdnikP += Prazdniki(calendar[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Слонім: Сьвятой Тройцы</font>", "<br><strong><em>" + calendar[Calendar.DAY_OF_MONTH] + " " + monthName[calendar[Calendar.MONTH]] + ", " + nedelName[calendar[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            calendar.add(Calendar.DATE, 1)
-            prazdnikP += Prazdniki(calendar[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Менск: Сьвятога Духа</font>", "<br><strong><em>" + calendar[Calendar.DAY_OF_MONTH] + " " + monthName[calendar[Calendar.MONTH]] + ", " + nedelName[calendar[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 5, 27)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Менск: Маці Божай Нястомнай Дапамогі</font>", "<br><strong><em>27 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 5, 29)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Лондан: сьвятых апосталаў Пятра і Паўла</font>", "<br><strong><em>29 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Жодзіна: сьвятых апосталаў Пятра і Паўла</font>", "<br><strong><em>29 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
+            c.set(yearG, 10, 2)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 4, "Дзяды, дзень успаміну памёрлых", "2 лістапада, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.sort()
+            prazdnikiAll.addAll(prazdnik)
+            prazdnik.clear()
+            c.set(yearG, 6, 11)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -5, "Успамін мучаніцкай сьмерці ў катэдры сьв. Сафіі ў Полацку 5 манахаў-базыльянаў", "11 ліпеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 8, 15)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 5, "Успамін Бабровіцкай трагедыі (зьнішчэньне ў 1942 г. жыхароў уніяцкай парафіі в. Бабровічы Івацэвіцкага р-ну)", "15 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 9, 8)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 5, "Успамін Берасьцейскай царкоўнай Уніі 1596 году", "8(18) кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.sort()
+            prazdnikiAll.addAll(prazdnik)
+            prazdnik.clear()
+            c.set(yearG, 0, 30)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -6, "Гомель: Трох Сьвяціцеляў", "30 студзеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(c[Calendar.YEAR], monthP - 1, dataP)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Антвэрпан: Уваскрасеньня Хрыстовага", c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Віцебск: Уваскрасеньня Хрыстовага", c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 3, 28)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Пінск: сьвятога Кірылы Тураўскага", "28 красавіка, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 4, 1)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Маладэчна: Хрыста Чалавекалюбцы", "1 траўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 4, 7)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Івацэвічы: Маці Божай Жыровіцкай", "7 траўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 4, 11)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Баранавічы: сьвятых роўнаапостальных Кірылы і Мятода", "11 траўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 4, 13)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Горадня: Маці Божай Фацімскай", "13 траўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(c[Calendar.YEAR], monthP - 1, dataP)
+            c.add(Calendar.DATE, 56)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Слонім: Сьвятой Тройцы", c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.add(Calendar.DATE, 1)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Менск: Сьвятога Духа", c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 5, 27)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Менск: Маці Божай Нястомнай Дапамогі", "27 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 5, 29)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Лондан: сьвятых апосталаў Пятра і Паўла", "29 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Жодзіна: сьвятых апосталаў Пятра і Паўла", "29 чэрвеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             val chisla = intArrayOf(24, 25, 26, 27, 28, 29, 30)
             var brest = 24
             for (aChisla in chisla) {
-                val cal = GregorianCalendar(c[Calendar.YEAR], 5, aChisla)
+                val cal = GregorianCalendar(yearG, 5, aChisla)
                 val deyNed = cal[Calendar.DAY_OF_WEEK]
                 if (deyNed == 7) brest = aChisla
             }
-            c = GregorianCalendar(yearG, 5, brest)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Берасьце: сьвятых братоў-апосталаў Пятра і Андрэя</font>", "<br><strong><em>" + c[Calendar.DAY_OF_MONTH] + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 6, 24)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Наваградак: сьв. Барыса і Глеба</font>", "<br><strong><em>24 ліпеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Полацак: манастыр сьв. Барыса і Глеба</font>", "<br><strong><em>24 ліпеня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 7, 6)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Заслаўе: Перамяненьня Гасподняга</font>", "<br><strong><em>6 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 8, 8)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Магілёў: Бялыніцкай іконы Маці Божай</font>", "<br><strong><em>8 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 8, 16)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Ліда: сьвятамучаніка Язафата Полацкага</font>", "<br><strong><em>16 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 9, 1)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Ворша: Покрыва Найсьвяцейшай Багародзіцы</font>", "<br><strong><em>1 кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Мар’іна Горка: Покрыва Найсьвяцейшай Багародзіцы</font>", "<br><strong><em>1 кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 10, 8)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Барысаў: сьвятога Арханёла Міхаіла</font>", "<br><strong><em>8 лістапада, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 10, 12)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Полацак: сьвятамучаніка Язафата</font>", "<br><strong><em>12 лістапада, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 11, 6)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Менск: сьвятога Мікалая Цудатворцы</font>", "<br><strong><em>6 сьнежня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            c = GregorianCalendar(yearG, 11, 27)
-            prazdnikP += Prazdniki(c[Calendar.DAY_OF_YEAR], "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "-->" + color + "Менск: праведнага Язэпа</font>", "<br><strong><em>27 сьнежня, " + nedelName[c[Calendar.DAY_OF_WEEK]] + "</strong></em>")
-            Arrays.sort(prazdnikP)
-            c = GregorianCalendar(yearG, monthP - 1, dataP)
-            var pasha = color + "<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><strong>ПАСХА ХРЫСТОВА (ВЯЛІКДЗЕНЬ)</strong></font><br><strong><em>" + dataP + " " + monthName[monthP - 1] + " " + yearG + " году, " + nedelName[1] + "</strong></em>"
-            builder.add(pasha)
-            data.add(c[Calendar.DAY_OF_YEAR])
-            opisanie.add("<!--" + c[Calendar.DATE] + ":" + c[Calendar.MONTH] + "--><!--1-->ПАСХА ХРЫСТОВА (ВЯЛІКДЗЕНЬ)")
-            pasha = "$color<strong>ДВУНАДЗЯСЯТЫЯ СЬВЯТЫ</strong></font><br><br>"
-            var one = 0
-            for (aPrazdnik in prazdnik) {
-                if (one == 0) builder.add(pasha + aPrazdnik.opisanie + aPrazdnik.opisanieData) else builder.add(aPrazdnik.opisanie + aPrazdnik.opisanieData)
-                data.add(aPrazdnik.data)
-                opisanie.add(aPrazdnik.opisanie)
-                one++
-            }
-            pasha = "$color<strong>ВЯЛІКІЯ СЬВЯТЫ</strong></font><br><br>"
-            one = 0
-            for (aPrazdnikV in prazdnikV) {
-                if (one == 0) builder.add(pasha + aPrazdnikV.opisanie + aPrazdnikV.opisanieData) else builder.add(aPrazdnikV.opisanie + aPrazdnikV.opisanieData)
-                data.add(aPrazdnikV.data)
-                opisanie.add(aPrazdnikV.opisanie)
-                one++
-            }
-            pasha = "$color<strong>ДНІ ЎСПАМІНУ ПАМЁРЛЫХ</strong></font><br><br>"
-            one = 0
-            for (pPrazdnik in prazdnikPamer) {
-                if (one == 0) builder.add(pasha + pPrazdnik.opisanie + pPrazdnik.opisanieData) else builder.add(pPrazdnik.opisanie + pPrazdnik.opisanieData)
-                data.add(pPrazdnik.data)
-                opisanie.add(pPrazdnik.opisanie)
-                one++
-            }
-            pasha = "$color<strong>ЦАРКОЎНЫЯ ПАМЯТНЫЯ ДАТЫ</strong></font><br><br>"
-            one = 0
-            for (aPrazdnikU in prazdnikU) {
-                if (one == 0) builder.add(pasha + aPrazdnikU.opisanie + aPrazdnikU.opisanieData) else builder.add(aPrazdnikU.opisanie + aPrazdnikU.opisanieData)
-                data.add(aPrazdnikU.data)
-                opisanie.add(aPrazdnikU.opisanie)
-                one++
-            }
-            pasha = "$color<strong>ПАРАФІЯЛЬНЫЯ СЬВЯТЫ</strong></font><br><br>"
-            one = 0
-            for (aPrazdnikP in prazdnikP) {
-                if (one == 0) builder.add(pasha + aPrazdnikP.opisanie + aPrazdnikP.opisanieData) else builder.add(aPrazdnikP.opisanie + aPrazdnikP.opisanieData)
-                data.add(aPrazdnikP.data)
-                opisanie.add(aPrazdnikP.opisanie)
-                one++
-            }
-            return builder
+            c.set(yearG, 5, brest)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Берасьце: сьвятых братоў-апосталаў Пятра і Андрэя", c[Calendar.DAY_OF_MONTH].toString() + " " + monthName[c[Calendar.MONTH]] + ", " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 6, 24)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Наваградак: сьв. Барыса і Глеба", "24 ліпеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Полацак: манастыр сьв. Барыса і Глеба", "24 ліпеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 7, 6)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Заслаўе: Перамяненьня Гасподняга", "6 жніўня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 8, 8)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Магілёў: Бялыніцкай іконы Маці Божай", "8 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 8, 16)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Ліда: сьвятамучаніка Язафата Полацкага", "16 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 9, 1)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Ворша: Покрыва Найсьвяцейшай Багародзіцы", "1 кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Мар’іна Горка: Покрыва Найсьвяцейшай Багародзіцы", "1 кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 10, 8)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Барысаў: сьвятога Арханёла Міхаіла", "8 лістапада, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 10, 12)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Полацак: сьвятамучаніка Язафата", "12 лістапада, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 11, 6)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Менск: сьвятога Мікалая Цудатворцы", "6 сьнежня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            c.set(yearG, 11, 27)
+            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 6, "Менск: праведнага Язэпа", "27 сьнежня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+            prazdnik.sort()
+            prazdnikiAll.addAll(prazdnik)
+            return prazdnikiAll
         }
     }
 }

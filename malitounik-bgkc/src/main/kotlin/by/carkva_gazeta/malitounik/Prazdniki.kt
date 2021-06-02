@@ -1,10 +1,10 @@
 package by.carkva_gazeta.malitounik
 
-internal data class Prazdniki(val data: Int, val opisanie: String, val opisanieData: String) : Comparable<Prazdniki> {
+data class Prazdniki(val dayOfYear: Int, val date: Int, val month: Int, val svaity: Int, val opisanie: String, val opisanieData: String) : Comparable<Prazdniki> {
     override fun compareTo(other: Prazdniki): Int {
-        if (data < other.data) {
+        if (dayOfYear < other.dayOfYear) {
             return -1
-        } else if (data > other.data) {
+        } else if (dayOfYear > other.dayOfYear) {
             return 1
         }
         return 0

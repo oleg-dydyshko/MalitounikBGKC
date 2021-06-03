@@ -680,11 +680,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
+        val zmenyiaChastki = ZmenyiaChastki()
         val res = withContext(Dispatchers.IO) {
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: R.raw.bogashlugbovya1
             val inputStream = resources.openRawResource(id)
-            val zmenyiaChastki = ZmenyiaChastki()
             raznica = zmenyiaChastki.raznica()
             val gregorian = Calendar.getInstance() as GregorianCalendar
             val dayOfWeek = gregorian.get(Calendar.DAY_OF_WEEK)
@@ -841,6 +841,22 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     anim.setDuration(1500).start()
                 }
             }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        if (resurs == "bogashlugbovya8") {
+            string = "Заканчэньне ў час Вялікага посту гл. ніжэй"
+            strLig = string.length
+            t1 = text.indexOf(string)
+            if (t1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val strPosition = text.indexOf("Заканчэньне абедніцы", t1 + strLig, true)
+                        val line = binding.textView.layout.getLineForOffset(strPosition)
+                        val y = binding.textView.layout.getLineTop(line)
+                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                        anim.setDuration(1500).start()
+                    }
+                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
         }
         if (resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") {
             string = "Пс 102 (гл. тут)."
@@ -1036,16 +1052,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (dzenNoch) binding.imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_niz_back)
         binding.imageView5.setOnClickListener { findNext() }
         val slugbovyiaTextu = SlugbovyiaTextu()
-        if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (slugbovyiaTextu.checkLiturgia(raznica) || checkDataCalindar(slugbovyiaTextu))) {
+        if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (slugbovyiaTextu.checkLiturgia(raznica) || checkDataCalindar(slugbovyiaTextu, zmenyiaChastki.getData()))) {
             chechZmena = true
         }
         invalidateOptionsMenu()
     }
 
-    private fun checkDataCalindar(slugbovyiaTextu: SlugbovyiaTextu): Boolean {
-        slugbovyiaTextu.loadOpisanieSviat(this)
-        val cal = Calendar.getInstance()
-        val data = MenuCaliandar.getDataCalaindar(cal[Calendar.DATE])
+    private fun checkDataCalindar(slugbovyiaTextu: SlugbovyiaTextu, data: ArrayList<ArrayList<String>>): Boolean {
+        slugbovyiaTextu.loadOpisanieSviat()
         val svity = data[0][6]
         daysv = data[0][1].toInt()
         munsv = data[0][2].toInt() + 1

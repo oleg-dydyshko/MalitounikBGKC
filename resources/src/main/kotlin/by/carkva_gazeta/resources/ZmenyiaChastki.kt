@@ -11,11 +11,9 @@ import java.util.*
 
 internal class ZmenyiaChastki {
     private val data: ArrayMap<String, Int> = ArrayMap()
-    private val arrayData: ArrayList<ArrayList<String>>
-        get() {
-            val g = Calendar.getInstance()
-            return MenuCaliandar.getDataCalaindar(g[Calendar.DATE])
-        }
+    private val arrayData = ArrayList<ArrayList<String>>()
+
+    fun getData() = arrayData
 
     fun sviatyia() = arrayData[0][10]
 
@@ -39,7 +37,7 @@ internal class ZmenyiaChastki {
         var knigaN: String
         var knigaK = "0"
         var zaglnum = 0
-        var chtenie: Int = if (apostal == 1) 0 else 1
+        var chtenie = if (apostal == 1) 0 else 1
         if (w.contains("На ютрані")) chtenie++
         val zaglavie = split[chtenie].split(",")
         var zagl = ""
@@ -566,5 +564,6 @@ internal class ZmenyiaChastki {
         data["Кніга прарока Ёіля"] = R.raw.biblias29
         data["Кніга прарока Сафона"] = R.raw.biblias36
         data["Кніга прарока Ісаі"] = R.raw.biblias23
+        arrayData.addAll(MenuCaliandar.getDataCalaindar(Calendar.getInstance()[Calendar.DATE]))
     }
 }

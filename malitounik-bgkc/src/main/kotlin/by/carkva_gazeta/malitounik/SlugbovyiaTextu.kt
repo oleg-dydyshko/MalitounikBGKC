@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.app.Activity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -177,9 +176,9 @@ class SlugbovyiaTextu {
         return ""
     }
 
-    fun loadOpisanieSviat(activity: Activity) {
+    fun loadOpisanieSviat() {
         if (opisanieSviat.size == 0 && loadOpisanieSviatJob?.isActive != true) {
-            val fileOpisanieSviat = File("${activity.filesDir}/opisanie_sviat.json")
+            val fileOpisanieSviat = File("${Malitounik.applicationContext().filesDir}/opisanie_sviat.json")
             if (!fileOpisanieSviat.exists()) {
                 if (MainActivity.isNetworkAvailable()) {
                     loadOpisanieSviatJob = CoroutineScope(Dispatchers.Main).launch {

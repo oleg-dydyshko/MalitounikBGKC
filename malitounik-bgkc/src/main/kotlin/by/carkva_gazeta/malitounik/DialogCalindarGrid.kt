@@ -137,7 +137,7 @@ class DialogCalindarGrid : DialogFragment() {
             _binding = CalindarGridBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it)
             builder.setView(binding.root)
-            slugba.loadOpisanieSviat(it)
+            slugba.loadOpisanieSviat()
             alert = builder.create()
             post = arguments?.getInt("post") ?: 0
             ton = arguments?.getInt("ton") ?: 0

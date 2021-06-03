@@ -416,11 +416,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             else findPosition++
         }
         if (findListSpans.isNotEmpty()) {
-            val lineOld = binding.textView.layout.getLineForOffset(findListSpans[findPositionOld].start)
-            val yOld = binding.textView.layout.getLineTop(lineOld)
-            if (yOld > positionY) {
-                findPosition--
-            }
             if (findPosition == -1) {
                 findPosition = findListSpans.size - 1
             }

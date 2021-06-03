@@ -293,6 +293,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
             mPedakVisable = false
             bibleCopyList.clear()
+            invalidateOptionsMenu()
             adapter.notifyDataSetChanged()
         }
         binding.adpravit.setOnClickListener {
@@ -337,6 +338,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 binding.linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
+                invalidateOptionsMenu()
                 adapter.notifyDataSetChanged()
             } else {
                 MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
@@ -363,6 +365,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 binding.linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
+                invalidateOptionsMenu()
                 adapter.notifyDataSetChanged()
             } else {
                 MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))
@@ -389,6 +392,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 binding.linearLayout4.visibility = View.GONE
                 mPedakVisable = false
                 bibleCopyList.clear()
+                invalidateOptionsMenu()
                 adapter.notifyDataSetChanged()
             } else {
                 MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.set_versh))

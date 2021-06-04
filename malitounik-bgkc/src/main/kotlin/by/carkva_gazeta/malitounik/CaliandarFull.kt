@@ -86,8 +86,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 binding.textChytanne.setOnClickListener(this@CaliandarFull)
                 binding.textChytanneSviatyia.setOnClickListener(this@CaliandarFull)
                 binding.textChytanneSviatyiaDop.setOnClickListener(this@CaliandarFull)
-                val maranataSh = k.getInt("maranata", 0)
-                if (maranataSh == 1) {
+                if (k.getInt("maranata", 0) == 1) {
                     binding.maranata.setOnClickListener(this@CaliandarFull)
                     if (dzenNoch) {
                         it.let {
@@ -303,37 +302,38 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         }
                     }
                 }
-                if (k.getInt("pravas", 0) == 1) {
-                    if (MenuCaliandar.getPositionCaliandar(position)[14] != "") {
-                        binding.pravaslavie.visibility = View.VISIBLE
-                        binding.pravaslavie.text = MenuCaliandar.getPositionCaliandar(position)[14]
+                val drugasnuiaSvity = withContext(Dispatchers.IO) {
+                    val svityDrugasnuia = SpannableStringBuilder()
+                    if (k.getInt("pravas", 0) == 1 && MenuCaliandar.getPositionCaliandar(position)[14] != "") {
+                        svityDrugasnuia.append(MenuCaliandar.getPositionCaliandar(position)[14])
                     }
-                }
-                if (k.getInt("pkc", 0) == 1) {
-                    if (MenuCaliandar.getPositionCaliandar(position)[19] != "") {
-                        binding.RKC.visibility = View.VISIBLE
-                        binding.RKC.text = MenuCaliandar.getPositionCaliandar(position)[19]
+                    if (k.getInt("pkc", 0) == 1 && MenuCaliandar.getPositionCaliandar(position)[19] != "") {
+                        if (svityDrugasnuia.isNotEmpty()) svityDrugasnuia.append("\n\n")
+                        svityDrugasnuia.append(MenuCaliandar.getPositionCaliandar(position)[19])
                     }
-                }
-                if (k.getInt("gosud", 0) == 1) {
-                    if (MenuCaliandar.getPositionCaliandar(position)[16] != "") {
-                        binding.gosudarstvo.visibility = View.VISIBLE
-                        binding.gosudarstvo.text = MenuCaliandar.getPositionCaliandar(position)[16]
-                    }
-                    if (MenuCaliandar.getPositionCaliandar(position)[15] != "") {
-                        binding.gosudarstvo.visibility = View.VISIBLE
-                        binding.gosudarstvo.text = MenuCaliandar.getPositionCaliandar(position)[15]
-                        it.let {
-                            if (dzenNoch) binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-                            else binding.gosudarstvo.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary))
+                    if (k.getInt("gosud", 0) == 1) {
+                        if (MenuCaliandar.getPositionCaliandar(position)[16] != "") {
+                            if (svityDrugasnuia.isNotEmpty()) svityDrugasnuia.append("\n\n")
+                            svityDrugasnuia.append(MenuCaliandar.getPositionCaliandar(position)[16])
+                        }
+                        if (MenuCaliandar.getPositionCaliandar(position)[15] != "") {
+                            if (svityDrugasnuia.isNotEmpty()) svityDrugasnuia.append("\n\n")
+                            val sviata = MenuCaliandar.getPositionCaliandar(position)[15]
+                            val svityDrugasnuiaLength = svityDrugasnuia.length
+                            svityDrugasnuia.append(sviata)
+                            if (dzenNoch) svityDrugasnuia.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary_black)), svityDrugasnuiaLength, svityDrugasnuia.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            else svityDrugasnuia.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary)), svityDrugasnuiaLength, svityDrugasnuia.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
                     }
-                }
-                if (k.getInt("pafesii", 0) == 1) {
-                    if (MenuCaliandar.getPositionCaliandar(position)[17] != "") {
-                        binding.prafesional.visibility = View.VISIBLE
-                        binding.prafesional.text = MenuCaliandar.getPositionCaliandar(position)[17]
+                    if (k.getInt("pafesii", 0) == 1 && MenuCaliandar.getPositionCaliandar(position)[17] != "") {
+                        if (svityDrugasnuia.isNotEmpty()) svityDrugasnuia.append("\n\n")
+                        svityDrugasnuia.append(MenuCaliandar.getPositionCaliandar(position)[17])
                     }
+                    return@withContext svityDrugasnuia
+                }
+                if (drugasnuiaSvity.isNotEmpty()) {
+                    binding.sviatyDrugasnyia.text = drugasnuiaSvity
+                    binding.sviatyDrugasnyia.visibility = View.VISIBLE
                 }
                 if (MenuCaliandar.getPositionCaliandar(position)[18].contains("1")) {
                     binding.textPamerlyia.visibility = View.VISIBLE

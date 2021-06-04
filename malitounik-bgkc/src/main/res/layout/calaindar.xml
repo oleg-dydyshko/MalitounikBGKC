@@ -340,7 +340,7 @@
             android:orientation="vertical" />
 
         <TextView
-            android:id="@+id/pravaslavie"
+            android:id="@+id/sviatyDrugasnyia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -352,64 +352,6 @@
             android:paddingEnd="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
-            android:text="@string/pvaslavnye_sviaty"
-            android:textColor="@color/colorSecondary_text"
-            android:textSize="18sp"
-            android:textStyle="italic"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/RKC"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"
-            android:gravity="end"
-            android:paddingStart="5dp"
-            android:paddingLeft="5dp"
-            android:paddingEnd="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="5dp"
-            android:text="@string/ryma_katalickia_sviaty"
-            android:textColor="@color/colorSecondary_text"
-            android:textSize="18sp"
-            android:textStyle="italic"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/gosudarstvo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"
-            android:gravity="end"
-            android:paddingStart="5dp"
-            android:paddingLeft="5dp"
-            android:paddingEnd="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="5dp"
-            android:text="@string/dziarjaunyia_sviaty"
-            android:textColor="@color/colorSecondary_text"
-            android:textSize="18sp"
-            android:textStyle="italic"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/prafesional"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"
-            android:gravity="end"
-            android:paddingStart="5dp"
-            android:paddingLeft="5dp"
-            android:paddingEnd="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="5dp"
-            android:text="@string/prafisijnyia_sviaty"
             android:textColor="@color/colorSecondary_text"
             android:textSize="18sp"
             android:textStyle="italic"

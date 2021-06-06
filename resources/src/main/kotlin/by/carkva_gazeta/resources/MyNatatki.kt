@@ -75,7 +75,7 @@ class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             filename = intent.getStringExtra("filename") ?: ""
             redak = intent.getIntExtra("redak", 2)
         }
-        binding.file.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+        binding.file.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         binding.EditText.tag = binding.EditText.keyListener
         binding.file.tag = binding.file.keyListener
         binding.file.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)

@@ -6,9 +6,11 @@
 
     <LinearLayout
         android:id="@+id/progress"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,22 +50,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/action_plus_brighess"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginBottom="20dp"
-            android:contentDescription="@string/empty"
+        <TextView
+            android:id="@+id/brighess_plus"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/selector_red_maran_ata"
             android:gravity="center"
-            app:srcCompat="@drawable/plus_v_kruge" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/plus"
+            android:textColor="@color/colorWhite"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/find"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <ImageView
-            android:id="@+id/action_minus_brighess"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:contentDescription="@string/empty"
+        <TextView
+            android:id="@+id/brighess_minus"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_red_maran_ata"
             android:gravity="center"
-            app:srcCompat="@drawable/minus_v_kruge" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/minus"
+            android:textColor="@color/colorWhite"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/find"
+            app:layout_constraintEnd_toStartOf="@+id/action_plus" />
     </LinearLayout>
 
     <LinearLayout
@@ -78,21 +92,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/action_plus_font"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginBottom="20dp"
-            android:contentDescription="@string/empty"
+        <TextView
+            android:id="@+id/fontSize_plus"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/selector_red_maran_ata"
             android:gravity="center"
-            app:srcCompat="@drawable/plus_v_kruge" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/plus"
+            android:textColor="@color/colorWhite"
+            android:textSize="30sp" />
 
-        <ImageView
-            android:id="@+id/action_minus_font"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:contentDescription="@string/empty"
+        <TextView
+            android:id="@+id/fontSize_minus"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_red_maran_ata"
             android:gravity="center"
-            app:srcCompat="@drawable/minus_v_kruge" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/minus"
+            android:textColor="@color/colorWhite"
+            android:textSize="30sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

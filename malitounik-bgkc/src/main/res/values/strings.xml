@@ -349,7 +349,6 @@
     <string name="dastupna_bat">: ДАСТУПНА %1$s КБ</string>
     <string name="dastupna_bates">: ДАСТУПНА %1$d БАЙТ</string>
     <string name="bible_natatki">%1$s \n\n%2$s</string>
-    <string name="font_sp">%1$d sp%2$s</string>
     <string name="mesiach">%1$s, %2$s</string>
     <string name="tydzen_name2">%1$s %2$s %3$s</string>
     <string name="tydzen_name3">%1$s %2$s %3$s, %4$s</string>
@@ -676,5 +675,8 @@
     <string name="title_dynamicfeature">Admin</string>
     <string name="left_caliandar">Лева календаря</string>
     <string name="right_caliandar">Права календаря</string>
+    <string name="speed_auto_scroll">Хуткасьць прагорткі</string>
+    <string name="max_font">Максымум</string>
+    <string name="min_font">Мінімум</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

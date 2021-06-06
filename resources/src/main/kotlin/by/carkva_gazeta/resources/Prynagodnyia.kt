@@ -99,10 +99,6 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         if (dzenNoch) {
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            bindingprogress.actionPlusBrighess.setImageResource(by.carkva_gazeta.malitounik.R.drawable.plus_v_kruge_black)
-            bindingprogress.actionMinusBrighess.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
-            bindingprogress.actionPlusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.plus_v_kruge_black)
-            bindingprogress.actionMinusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
         }
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         id = intent.extras?.getInt("prynagodnyiaID", R.raw.prynagodnyia_0) ?: R.raw.prynagodnyia_0
@@ -121,37 +117,35 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         inputStream.close()
         binding.TextView.text = MainActivity.fromHtml(builder.toString())
         men = Bogashlugbovya.checkVybranoe(this, resurs)
-        bindingprogress.actionPlusFont.setOnClickListener {
+        bindingprogress.fontSizePlus.setOnClickListener {
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
-                var max = ""
-                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
+                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent()
                 val prefEditor: Editor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
                 prefEditor.apply()
                 onDialogFontSize(fontBiblia)
             }
+            startProcent()
         }
-        bindingprogress.actionMinusFont.setOnClickListener {
+        bindingprogress.fontSizeMinus.setOnClickListener {
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.min_font)
             if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
                 fontBiblia -= 4
-                var min = ""
-                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
+                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent()
                 val prefEditor: Editor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
                 prefEditor.apply()
                 onDialogFontSize(fontBiblia)
             }
+            startProcent()
         }
-        bindingprogress.actionPlusBrighess.setOnClickListener {
+        bindingprogress.brighessPlus.setOnClickListener {
             if (MainActivity.brightness < 100) {
                 MainActivity.brightness = MainActivity.brightness + 1
                 val lp = window.attributes
@@ -160,11 +154,11 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                 bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent()
                 MainActivity.checkBrightness = false
             }
+            startProcent()
         }
-        bindingprogress.actionMinusBrighess.setOnClickListener {
+        bindingprogress.brighessMinus.setOnClickListener {
             if (MainActivity.brightness > 0) {
                 MainActivity.brightness = MainActivity.brightness - 1
                 val lp = window.attributes
@@ -173,9 +167,9 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                 bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent()
                 MainActivity.checkBrightness = false
             }
+            startProcent()
         }
     }
 
@@ -219,8 +213,8 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
         procentJob = CoroutineScope(Dispatchers.Main).launch {
             delay(3000)
             bindingprogress.progress.visibility = View.GONE
-            bindingprogress.fontSize.visibility = View.GONE
             bindingprogress.brighess.visibility = View.GONE
+            bindingprogress.fontSize.visibility = View.GONE
         }
     }
 
@@ -238,20 +232,17 @@ class Prynagodnyia : AppCompatActivity(), OnTouchListener, DialogFontSizeListene
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
                     if (x < otstup) {
-                        bindingprogress.brighess.visibility = View.VISIBLE
                         bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
                         bindingprogress.progress.visibility = View.VISIBLE
+                        bindingprogress.brighess.visibility = View.VISIBLE
                         startProcent()
                     }
                     if (x > widthConstraintLayout - otstup) {
-                        bindingprogress.fontSize.visibility = View.VISIBLE
-                        var minmax = ""
-                        if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
-                        if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
+                        bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
                         bindingprogress.progress.visibility = View.VISIBLE
+                        bindingprogress.fontSize.visibility = View.VISIBLE
                         startProcent()
                     }
                 }

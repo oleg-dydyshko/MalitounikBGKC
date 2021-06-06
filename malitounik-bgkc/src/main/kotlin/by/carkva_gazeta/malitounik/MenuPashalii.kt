@@ -137,7 +137,7 @@ class MenuPashalii : PashaliiFragment() {
                 rootView = convertView
                 ea = rootView.tag as ViewHolder
             }
-            ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
+            ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
             var color = R.color.colorPrimary_text
             var colorP = R.color.colorPrimary
             if (k.getBoolean("dzen_noch", false)) {

@@ -52,42 +52,6 @@ class DialogFontSize : DialogFragment() {
         outState.putInt("seekbar", binding.seekBar.progress)
     }
 
-    private fun setProgress(fontBiblia: Int): Int {
-        var progress = 1
-        when (fontBiblia) {
-            14 -> progress = 0
-            18 -> progress = 1
-            22 -> progress = 2
-            26 -> progress = 3
-            30 -> progress = 4
-            34 -> progress = 5
-            38 -> progress = 6
-            42 -> progress = 7
-            46 -> progress = 8
-            50 -> progress = 9
-            54 -> progress = 10
-        }
-        return progress
-    }
-
-    private fun getFont(progress: Int): Float {
-        var font = SettingsActivity.GET_DEFAULT_FONT_SIZE
-        when (progress) {
-            0 -> font = 14F
-            1 -> font = 18F
-            2 -> font = 22F
-            3 -> font = 26F
-            4 -> font = 30F
-            5 -> font = 34F
-            6 -> font = 38F
-            7 -> font = 42F
-            8 -> font = 46F
-            9 -> font = 50F
-            10 -> font = 54F
-        }
-        return font
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.window?.setDimAmount(0F)
         return super.onCreateView(inflater, container, savedInstanceState)
@@ -133,7 +97,7 @@ class DialogFontSize : DialogFragment() {
             }
             binding.ok.setOnClickListener {
                 val progress = binding.seekBar.progress
-                val fontSize = getFont(progress)
+                val fontSize = PesnyAll.getFont(progress)
                 val prefEditors = k.edit()
                 prefEditors.putFloat("font_biblia", fontSize)
                 prefEditors.apply()
@@ -144,12 +108,12 @@ class DialogFontSize : DialogFragment() {
                 val seekbar = savedInstanceState.getInt("seekbar")
                 binding.seekBar.progress = seekbar
             } else {
-                binding.seekBar.progress = setProgress(fontBiblia.toInt())
+                binding.seekBar.progress = PesnyAll.setProgressFontSize(fontBiblia.toInt())
             }
             binding.seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                     val prefEditors = k.edit()
-                    val fontSize = getFont(progress)
+                    val fontSize = PesnyAll.getFont(progress)
                     prefEditors.putFloat("font_biblia", fontSize)
                     prefEditors.apply()
                     binding.textSize.text = getString(R.string.get_font, fontSize.toInt())

@@ -300,6 +300,42 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             }
             return check
         }
+
+        fun setProgressFontSize(fontBiblia: Int): Int {
+            var progress = 1
+            when (fontBiblia) {
+                14 -> progress = 0
+                18 -> progress = 1
+                22 -> progress = 2
+                26 -> progress = 3
+                30 -> progress = 4
+                34 -> progress = 5
+                38 -> progress = 6
+                42 -> progress = 7
+                46 -> progress = 8
+                50 -> progress = 9
+                54 -> progress = 10
+            }
+            return progress
+        }
+
+        fun getFont(progress: Int): Float {
+            var font = SettingsActivity.GET_DEFAULT_FONT_SIZE
+            when (progress) {
+                0 -> font = 14F
+                1 -> font = 18F
+                2 -> font = 22F
+                3 -> font = 26F
+                4 -> font = 30F
+                5 -> font = 34F
+                6 -> font = 38F
+                7 -> font = 42F
+                8 -> font = 46F
+                9 -> font = 50F
+                10 -> font = 54F
+            }
+            return font
+        }
     }
 
     private fun findAllAsanc(search: String) {
@@ -366,10 +402,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         if (dzenNoch) {
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            bindingprogress.actionPlusBrighess.setImageResource(R.drawable.plus_v_kruge_black)
-            bindingprogress.actionMinusBrighess.setImageResource(R.drawable.minus_v_kruge_black)
-            bindingprogress.actionPlusFont.setImageResource(R.drawable.plus_v_kruge_black)
-            bindingprogress.actionMinusFont.setImageResource(R.drawable.minus_v_kruge_black)
         }
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         title = intent.extras?.getString("pesny", "") ?: ""
@@ -395,37 +427,35 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         val search = intent.extras?.getString("search", "") ?: ""
         if (search != "") findAllAsanc(search)
         men = checkVybranoe(this, resurs)
-        bindingprogress.actionPlusFont.setOnClickListener {
+        bindingprogress.fontSizePlus.setOnClickListener {
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX)  bindingprogress.progressTitle.text = getString(R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
-                var max = ""
-                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                bindingprogress.progressText.text = getString(R.string.font_sp, fontBiblia.toInt(), max)
+                bindingprogress.progressText.text = getString(R.string.get_font, fontBiblia.toInt())
                 bindingprogress.progressTitle.text = getString(R.string.font_size)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent()
                 val prefEditor: Editor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
                 prefEditor.apply()
                 onDialogFontSize(fontBiblia)
             }
+            startProcent()
         }
-        bindingprogress.actionMinusFont.setOnClickListener {
+        bindingprogress.fontSizeMinus.setOnClickListener {
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN)  bindingprogress.progressTitle.text = getString(R.string.min_font)
             if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
                 fontBiblia -= 4
-                var min = ""
-                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                bindingprogress.progressText.text = getString(R.string.font_sp, fontBiblia.toInt(), min)
+                bindingprogress.progressText.text = getString(R.string.get_font, fontBiblia.toInt())
                 bindingprogress.progressTitle.text = getString(R.string.font_size)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent()
                 val prefEditor: Editor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
                 prefEditor.apply()
                 onDialogFontSize(fontBiblia)
             }
+            startProcent()
         }
-        bindingprogress.actionPlusBrighess.setOnClickListener {
+        bindingprogress.brighessPlus.setOnClickListener {
             if (MainActivity.brightness < 100) {
                 MainActivity.brightness = MainActivity.brightness + 1
                 val lp = window.attributes
@@ -434,11 +464,11 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 bindingprogress.progressText.text = resources.getString(R.string.procent, MainActivity.brightness)
                 bindingprogress.progressTitle.text = getString(R.string.Bright)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent()
                 MainActivity.checkBrightness = false
             }
+            startProcent()
         }
-        bindingprogress.actionMinusBrighess.setOnClickListener {
+        bindingprogress.brighessMinus.setOnClickListener {
             if (MainActivity.brightness > 0) {
                 MainActivity.brightness = MainActivity.brightness - 1
                 val lp = window.attributes
@@ -447,9 +477,9 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 bindingprogress.progressText.text = resources.getString(R.string.procent, MainActivity.brightness)
                 bindingprogress.progressTitle.text = getString(R.string.Bright)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent()
                 MainActivity.checkBrightness = false
             }
+            startProcent()
         }
     }
 
@@ -493,8 +523,8 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         procentJob = CoroutineScope(Dispatchers.Main).launch {
             delay(3000)
             bindingprogress.progress.visibility = View.GONE
-            bindingprogress.fontSize.visibility = View.GONE
             bindingprogress.brighess.visibility = View.GONE
+            bindingprogress.fontSize.visibility = View.GONE
         }
     }
 
@@ -512,20 +542,17 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
                 MotionEvent.ACTION_DOWN -> {
                     n = event?.y?.toInt() ?: 0
                     if (x < otstup) {
-                        bindingprogress.brighess.visibility = View.VISIBLE
                         bindingprogress.progressText.text = resources.getString(R.string.procent, MainActivity.brightness)
                         bindingprogress.progressTitle.text = getString(R.string.Bright)
                         bindingprogress.progress.visibility = View.VISIBLE
+                        bindingprogress.brighess.visibility = View.VISIBLE
                         startProcent()
                     }
                     if (x > widthConstraintLayout - otstup) {
-                        bindingprogress.fontSize.visibility = View.VISIBLE
-                        var minmax = ""
-                        if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
-                        if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        bindingprogress.progressText.text = getString(R.string.font_sp, fontBiblia.toInt(), minmax)
+                        bindingprogress.progressText.text = getString(R.string.get_font, fontBiblia.toInt())
                         bindingprogress.progressTitle.text = getString(R.string.font_size)
                         bindingprogress.progress.visibility = View.VISIBLE
+                        bindingprogress.fontSize.visibility = View.VISIBLE
                         startProcent()
                     }
                 }

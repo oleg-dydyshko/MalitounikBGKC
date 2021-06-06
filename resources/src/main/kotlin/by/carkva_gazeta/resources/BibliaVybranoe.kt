@@ -121,47 +121,41 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
         if (dzenNoch) {
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            bindingprogress.actionPlusBrighess.setImageResource(by.carkva_gazeta.malitounik.R.drawable.plus_v_kruge_black)
-            bindingprogress.actionMinusBrighess.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
-            bindingprogress.actionPlusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.plus_v_kruge_black)
-            bindingprogress.actionMinusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
             binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
         spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
         loadBible(savedInstanceState)
-        bindingprogress.actionPlusFont.setOnClickListener {
+        bindingprogress.fontSizePlus.setOnClickListener {
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
-                var max = ""
-                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
+                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent(3000)
                 val prefEditor: Editor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
                 prefEditor.apply()
                 onDialogFontSize(fontBiblia)
             }
+            startProcent(3000)
         }
-        bindingprogress.actionMinusFont.setOnClickListener {
+        bindingprogress.fontSizeMinus.setOnClickListener {
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.min_font)
             if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
                 fontBiblia -= 4
-                var min = ""
-                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
+                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent(3000)
                 val prefEditor: Editor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
                 prefEditor.apply()
                 onDialogFontSize(fontBiblia)
             }
+            startProcent(3000)
         }
-        bindingprogress.actionPlusBrighess.setOnClickListener {
+        bindingprogress.brighessPlus.setOnClickListener {
             if (MainActivity.brightness < 100) {
                 MainActivity.brightness = MainActivity.brightness + 1
                 val lp = window.attributes
@@ -170,11 +164,11 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
                 bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent(3000)
                 MainActivity.checkBrightness = false
             }
+            startProcent(3000)
         }
-        bindingprogress.actionMinusBrighess.setOnClickListener {
+        bindingprogress.brighessMinus.setOnClickListener {
             if (MainActivity.brightness > 0) {
                 MainActivity.brightness = MainActivity.brightness - 1
                 val lp = window.attributes
@@ -183,16 +177,16 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
                 bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent(3000)
                 MainActivity.checkBrightness = false
             }
+            startProcent(3000)
         }
         binding.actionPlus.setOnClickListener {
             if (spid in 20..235) {
                 spid -= 5
                 val proc = 100 - (spid - 15) * 100 / 215
                 bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                bindingprogress.progressTitle.text = ""
+                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
                 bindingprogress.progress.visibility = View.VISIBLE
                 startProcent()
                 val prefEditors = k.edit()
@@ -205,7 +199,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
                 spid += 5
                 val proc = 100 - (spid - 15) * 100 / 215
                 bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                bindingprogress.progressTitle.text = ""
+                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
                 bindingprogress.progress.visibility = View.VISIBLE
                 startProcent()
                 val prefEditors = k.edit()
@@ -283,27 +277,24 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
                     n = event?.y?.toInt() ?: 0
                     val proc: Int
                     if (x < otstup) {
-                        bindingprogress.brighess.visibility = View.VISIBLE
                         bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
                         bindingprogress.progress.visibility = View.VISIBLE
+                        bindingprogress.brighess.visibility = View.VISIBLE
                         startProcent(3000)
                     }
                     if (x > widthConstraintLayout - otstup) {
-                        bindingprogress.fontSize.visibility = View.VISIBLE
-                        var minmax = ""
-                        if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
-                        if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
+                        bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
                         bindingprogress.progress.visibility = View.VISIBLE
+                        bindingprogress.fontSize.visibility = View.VISIBLE
                         startProcent(3000)
                     }
                     if (y > heightConstraintLayout - otstup) {
                         spid = k.getInt("autoscrollSpid", 60)
                         proc = 100 - (spid - 15) * 100 / 215
                         bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                        bindingprogress.progressTitle.text = ""
+                        bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
                         bindingprogress.progress.visibility = View.VISIBLE
                         startProcent()
                         autoscroll = k.getBoolean("autoscroll", false)
@@ -562,8 +553,8 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
         procentJob = CoroutineScope(Dispatchers.Main).launch {
             delay(delayTime)
             bindingprogress.progress.visibility = View.GONE
-            bindingprogress.fontSize.visibility = View.GONE
             bindingprogress.brighess.visibility = View.GONE
+            bindingprogress.fontSize.visibility = View.GONE
         }
     }
 

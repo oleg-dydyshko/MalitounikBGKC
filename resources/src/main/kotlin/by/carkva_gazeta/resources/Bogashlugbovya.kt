@@ -347,6 +347,24 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
             return false
         }
+
+        fun getFont(progress: Int): Float {
+            var font = SettingsActivity.GET_DEFAULT_FONT_SIZE
+            when (progress) {
+                0 -> font = 14F
+                1 -> font = 18F
+                2 -> font = 22F
+                3 -> font = 26F
+                4 -> font = 30F
+                5 -> font = 34F
+                6 -> font = 38F
+                7 -> font = 42F
+                8 -> font = 46F
+                9 -> font = 50F
+                10 -> font = 54F
+            }
+            return font
+        }
     }
 
     private fun findAllAsanc(noNext: Boolean = true) {
@@ -459,20 +477,32 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
-        binding.textView.textSize = fontBiblia
+        val laneLayout = binding.textView.layout
+        laneLayout?.let { layout ->
+            val textForVertical = binding.textView.text.substring(layout.getLineStart(layout.getLineForVertical(positionY)), layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
+            binding.textView.textSize = fontBiblia
+            binding.textView.post {
+                binding.textView.layout?.let {
+                    val strPosition = binding.textView.text.indexOf(textForVertical, ignoreCase = true)
+                    val line = it.getLineForOffset(strPosition)
+                    val y = it.getLineTop(line)
+                    binding.scrollView2.scrollTo(0, y)
+                }
+            }
+        }
     }
 
     override fun onScroll(t: Int, oldt: Int) {
         positionY = t
         val laneLayout = binding.textView.layout
         laneLayout?.let { layout ->
-            val textForVertical = binding.textView.text.substring(binding.textView.layout.getLineStart(layout.getLineForVertical(positionY)), binding.textView.layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
+            val textForVertical = binding.textView.text.substring(layout.getLineStart(layout.getLineForVertical(positionY)), layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
             if (textForVertical != "") firstTextPosition = textForVertical
             if (binding.find.visibility == View.VISIBLE && !animatopRun) {
                 if (findListSpans.isNotEmpty()) {
                     val text = binding.textView.text as SpannableString
                     for (i in 0 until findListSpans.size) {
-                        if (binding.textView.layout.getLineForOffset(findListSpans[i].start) == layout.getLineForVertical(positionY)) {
+                        if (layout.getLineForOffset(findListSpans[i].start) == layout.getLineForVertical(positionY)) {
                             var ii = i + 1
                             if (i == 0) ii = 1
                             findPosition = i
@@ -530,45 +560,39 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-            bindingprogress.actionPlusBrighess.setImageResource(by.carkva_gazeta.malitounik.R.drawable.plus_v_kruge_black)
-            bindingprogress.actionMinusBrighess.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
-            bindingprogress.actionPlusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.plus_v_kruge_black)
-            bindingprogress.actionMinusFont.setImageResource(by.carkva_gazeta.malitounik.R.drawable.minus_v_kruge_black)
             binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
         men = checkVybranoe(this, resurs)
-        bindingprogress.actionPlusFont.setOnClickListener {
+        bindingprogress.fontSizePlus.setOnClickListener {
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
-                var max = ""
-                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) max = " (макс)"
-                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), max)
+                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent(3000)
                 val prefEditor: Editor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
                 prefEditor.apply()
                 onDialogFontSize(fontBiblia)
             }
+            startProcent(3000)
         }
-        bindingprogress.actionMinusFont.setOnClickListener {
+        bindingprogress.fontSizeMinus.setOnClickListener {
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.min_font)
             if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
                 fontBiblia -= 4
-                var min = ""
-                if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) min = " (мін)"
-                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), min)
+                bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent(3000)
                 val prefEditor: Editor = k.edit()
                 prefEditor.putFloat("font_biblia", fontBiblia)
                 prefEditor.apply()
                 onDialogFontSize(fontBiblia)
             }
+            startProcent(3000)
         }
-        bindingprogress.actionPlusBrighess.setOnClickListener {
+        bindingprogress.brighessPlus.setOnClickListener {
             if (MainActivity.brightness < 100) {
                 MainActivity.brightness = MainActivity.brightness + 1
                 val lp = window.attributes
@@ -577,11 +601,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent(3000)
                 MainActivity.checkBrightness = false
             }
+            startProcent(3000)
         }
-        bindingprogress.actionMinusBrighess.setOnClickListener {
+        bindingprogress.brighessMinus.setOnClickListener {
             if (MainActivity.brightness > 0) {
                 MainActivity.brightness = MainActivity.brightness - 1
                 val lp = window.attributes
@@ -590,16 +614,16 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                 bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
                 bindingprogress.progress.visibility = View.VISIBLE
-                startProcent(3000)
                 MainActivity.checkBrightness = false
             }
+            startProcent(3000)
         }
         binding.actionPlus.setOnClickListener {
             if (spid in 20..235) {
                 spid -= 5
                 val proc = 100 - (spid - 15) * 100 / 215
                 bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                bindingprogress.progressTitle.text = ""
+                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
                 bindingprogress.progress.visibility = View.VISIBLE
                 startProcent()
                 val prefEditors = k.edit()
@@ -612,7 +636,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 spid += 5
                 val proc = 100 - (spid - 15) * 100 / 215
                 bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                bindingprogress.progressTitle.text = ""
+                bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
                 bindingprogress.progress.visibility = View.VISIBLE
                 startProcent()
                 val prefEditors = k.edit()
@@ -1191,20 +1215,17 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     n = event?.y?.toInt() ?: 0
                     val proc: Int
                     if (x < otstup) {
-                        bindingprogress.brighess.visibility = View.VISIBLE
                         bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, MainActivity.brightness)
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.Bright)
                         bindingprogress.progress.visibility = View.VISIBLE
+                        bindingprogress.brighess.visibility = View.VISIBLE
                         startProcent(3000)
                     }
                     if (x > widthConstraintLayout - otstup) {
-                        bindingprogress.fontSize.visibility = View.VISIBLE
-                        var minmax = ""
-                        if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) minmax = " (мін)"
-                        if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) minmax = " (макс)"
-                        bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.font_sp, fontBiblia.toInt(), minmax)
+                        bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
                         bindingprogress.progress.visibility = View.VISIBLE
+                        bindingprogress.fontSize.visibility = View.VISIBLE
                         startProcent(3000)
                     }
                     if (y > heightConstraintLayout - otstup) {
@@ -1212,7 +1233,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             spid = k.getInt("autoscrollSpid", 60)
                             proc = 100 - (spid - 15) * 100 / 215
                             bindingprogress.progressText.text = resources.getString(by.carkva_gazeta.malitounik.R.string.procent, proc)
-                            bindingprogress.progressTitle.text = ""
+                            bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
                             bindingprogress.progress.visibility = View.VISIBLE
                             startProcent()
                             autoscroll = k.getBoolean("autoscroll", false)

@@ -1369,6 +1369,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             noDelite.add("help_")
             noDelite.add("FullscreenHelp")
             noDelite.add("bible_time")
+            noDelite.add("admin")
             for ((key) in k.all) {
                 var del = true
                 for (i in 0 until noDelite.size) {

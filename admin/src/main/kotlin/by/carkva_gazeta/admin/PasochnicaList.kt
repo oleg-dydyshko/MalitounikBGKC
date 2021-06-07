@@ -111,6 +111,9 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
 
     override fun fileDelite(position: Int) {
         getFileUnlinkPostRequest(fileList[position])
+        val prefEditor = k.edit()
+        prefEditor.remove("admin" + fileList[position] + "position")
+        prefEditor.apply()
     }
 
     override fun setFileName(oldFileName: String, fileName: String) {

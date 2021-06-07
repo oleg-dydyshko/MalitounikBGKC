@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
-import android.text.*
+import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
@@ -14,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.text.toSpannable
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaBinding
+import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.gson.Gson
@@ -27,13 +31,15 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner {
+class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner, InteractiveScrollView.OnScrollChangedCallback {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
     private var resetTollbarJob: Job? = null
     private var fileName = "newFile.html"
     private var history = ArrayList<History>()
+    private var positionY = 0
+    private var firstTextPosition = ""
     private val textWatcher = object : TextWatcher {
         var editPosition = 0
 
@@ -68,9 +74,21 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         }
     }
 
+    override fun onScroll(t: Int, oldt: Int) {
+        positionY = t
+        val laneLayout = binding.apisanne.layout
+        laneLayout?.let { layout ->
+            val textForVertical = binding.apisanne.text.toString().substring(layout.getLineStart(layout.getLineForVertical(positionY)), layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
+            if (textForVertical != "") firstTextPosition = textForVertical
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
+        val prefEditor = k.edit()
+        prefEditor.putInt("admin" + fileName + "position", positionY)
+        prefEditor.apply()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,11 +108,23 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         binding.actionP.setOnClickListener(this)
         binding.actionBr.setOnClickListener(this)
         binding.actionBack.setOnClickListener(this)
+        binding.scrollView.setOnScrollChangedCallback(this)
         fileName = intent.extras?.getString("fileName", "newFile.html") ?: "newFile.html"
         val text = intent.extras?.getString("text", "") ?: ""
         if (savedInstanceState != null) {
             fileName = savedInstanceState.getString("fileName", "")
             history.clear()
+            binding.apisanne.post {
+                val textline = savedInstanceState.getString("textLine", "")
+                if (textline != "") {
+                    val index = binding.apisanne.text.toString().indexOf(textline)
+                    val line = binding.apisanne.layout.getLineForOffset(index)
+                    val y = binding.apisanne.layout.getLineTop(line)
+                    binding.scrollView.scrollY = y
+                } else {
+                    binding.scrollView.smoothScrollBy(0, positionY)
+                }
+            }
         } else {
             if (fileName != "newFile.html") {
                 getFilePostRequest(fileName)
@@ -107,6 +137,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     binding.apisanne.setText(text)
                 }
             }
+
         }
         if (text != "") {
             val gson = Gson()
@@ -123,12 +154,14 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 getFilePostRequest(fileName)
             }
         }
+        positionY = k.getInt("admin" + fileName + "position", 0)
         setTollbarTheme()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("fileName", fileName)
+        outState.putString("textLine", firstTextPosition)
     }
 
     private fun setTollbarTheme() {
@@ -330,6 +363,9 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     binding.actionBr.visibility = View.GONE
                 } else {
                     binding.apisanne.setText(result)
+                }
+                binding.apisanne.post {
+                    binding.scrollView.smoothScrollBy(0, positionY)
                 }
                 binding.progressBar2.visibility = View.GONE
             }

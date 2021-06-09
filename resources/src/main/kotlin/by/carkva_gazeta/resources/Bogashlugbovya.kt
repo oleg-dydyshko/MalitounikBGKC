@@ -347,24 +347,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
             return false
         }
-
-        fun getFont(progress: Int): Float {
-            var font = SettingsActivity.GET_DEFAULT_FONT_SIZE
-            when (progress) {
-                0 -> font = 14F
-                1 -> font = 18F
-                2 -> font = 22F
-                3 -> font = 26F
-                4 -> font = 30F
-                5 -> font = 34F
-                6 -> font = 38F
-                7 -> font = 42F
-                8 -> font = 46F
-                9 -> font = 50F
-                10 -> font = 54F
-            }
-            return font
-        }
     }
 
     private fun findAllAsanc(noNext: Boolean = true) {
@@ -479,7 +461,12 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         fontBiblia = fontSize
         val laneLayout = binding.textView.layout
         laneLayout?.let { layout ->
-            val textForVertical = binding.textView.text.substring(layout.getLineStart(layout.getLineForVertical(positionY)), layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
+            var lineForVertical = layout.getLineForVertical(positionY)
+            var textForVertical = binding.textView.text.substring(layout.getLineStart(lineForVertical), layout.getLineEnd(lineForVertical)).trim()
+            if (textForVertical == "" && lineForVertical != 0) {
+                lineForVertical--
+                textForVertical = binding.textView.text.substring(layout.getLineStart(lineForVertical), layout.getLineEnd(lineForVertical)).trim()
+            }
             binding.textView.textSize = fontBiblia
             binding.textView.post {
                 binding.textView.layout?.let {
@@ -565,7 +552,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
         men = checkVybranoe(this, resurs)
         bindingprogress.fontSizePlus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
                 bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
@@ -579,7 +566,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             startProcent(3000)
         }
         bindingprogress.fontSizeMinus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.min_font)
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.min_font)
             if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
                 fontBiblia -= 4
                 bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())

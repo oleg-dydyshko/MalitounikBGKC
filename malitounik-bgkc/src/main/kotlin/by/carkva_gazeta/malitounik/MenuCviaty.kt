@@ -271,7 +271,7 @@ class MenuCviaty : CviatyListFragment() {
             prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -5, "Успамін мучаніцкай сьмерці ў катэдры сьв. Сафіі ў Полацку 5 манахаў-базыльянаў", "11 ліпеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(yearG, 8, 15)
             prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 5, "Успамін Бабровіцкай трагедыі (зьнішчэньне ў 1942 г. жыхароў уніяцкай парафіі в. Бабровічы Івацэвіцкага р-ну)", "15 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
-            c.set(yearG, 9, 8)
+            c.set(yearG, 9, 18)
             prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 5, "Успамін Берасьцейскай царкоўнай Уніі 1596 году", "8(18) кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             prazdnik.sort()
             prazdnikiAll.addAll(prazdnik)

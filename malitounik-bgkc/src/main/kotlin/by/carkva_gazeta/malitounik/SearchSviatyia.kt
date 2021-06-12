@@ -39,9 +39,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
     private var arrayLists = ArrayList<ArrayList<String>>()
     private var arrayRes = ArrayList<Searche>()
     private lateinit var chin: SharedPreferences
-    private lateinit var c: GregorianCalendar
     private var mLastClickTime: Long = 0
-    private val munName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
     private var actionExpandOn = true
@@ -147,7 +145,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             window.attributes = lp
         }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        c = Calendar.getInstance() as GregorianCalendar
+        val c = Calendar.getInstance() as GregorianCalendar
         dzenNoch = chin.getBoolean("dzen_noch", false)
         super.onCreate(savedInstanceState)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
@@ -233,7 +231,6 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             finish()
         }
         arrayLists = MenuCaliandar.getDataCalaindar(year = SettingsActivity.GET_CALIANDAR_YEAR_MIN)
-        MenuCviaty.getPrazdnik(c[Calendar.YEAR])
         setTollbarTheme()
     }
 
@@ -329,6 +326,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
     }
 
     private fun rawAsset(poshukString: String) {
+        val munName = resources.getStringArray(R.array.meciac_smoll)
         var poshuk = poshukString
         val posukOrig = poshuk
         arrayRes.clear()
@@ -417,7 +415,10 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                 val sviatya = data[e].opisanie.replace("ё", "е", true)
                 if (sviatya.contains(poshuk, true)) {
                     val resultSpan = SpannableStringBuilder()
-                    val str1 = SpannableString(data[e].date.toString() + " " + munName[data[e].month])
+                    var opisanieData = data[e].opisanieData
+                    val opis1 = opisanieData.indexOf(",")
+                    if (opis1 != -1) opisanieData = opisanieData.substring(0, opis1)
+                    val str1 = SpannableString(opisanieData)
                     when (data[e].svaity) {
                         -1, -2, 2 -> {
                             str1.setSpan(StyleSpan(Typeface.BOLD_ITALIC), 0, str1.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

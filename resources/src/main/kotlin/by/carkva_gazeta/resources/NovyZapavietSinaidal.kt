@@ -3,7 +3,6 @@ package by.carkva_gazeta.resources
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
@@ -11,16 +10,18 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.adapter.FragmentViewHolder
+import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.DialogBibleRazdel.DialogBibleRazdelListener
 import by.carkva_gazeta.resources.databinding.ActivityBibleBinding
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -131,7 +132,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
     }
 
     override fun onComplete(glava: Int) {
-        binding.pager.currentItem = glava
+        binding.pager.setCurrentItem(glava, false)
     }
 
     override fun getListPosition(position: Int) {
@@ -143,14 +144,12 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
     }
 
     override fun addZakladka(color: Int) {
-        val adapter = binding.pager.adapter as MyPagerAdapter
-        val fragment = adapter.getFragment(binding.pager.currentItem) as BackPressedFragment
+        val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
         fragment.addZakladka(color)
     }
 
     override fun addNatatka() {
-        val adapter = binding.pager.adapter as MyPagerAdapter
-        val fragment = adapter.getFragment(binding.pager.currentItem) as BackPressedFragment
+        val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
         fragment.addNatatka()
     }
 
@@ -177,27 +176,19 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
             trak = true
         }
         BibleGlobalList.mListGlava = 0
-        binding.pagerTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        for (i in 0 until binding.pagerTabStrip.childCount) {
-            val nextChild = binding.pagerTabStrip.getChildAt(i)
-            if (nextChild is TextView) {
-                nextChild.typeface = MainActivity.createFont(Typeface.NORMAL)
-            }
-        }
-        val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
+        val adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
-        binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
-
+        TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
+            tab.text = resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (position + 1)
+        }.attach()
+        binding.pager.offscreenPageLimit = 3
+        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 BibleGlobalList.mListGlava = position
                 men = VybranoeBibleList.checkVybranoe(this@NovyZapavietSinaidal, kniga, position, 2)
-                if (glava != position) NovyZapavietSemuxa.fierstPosition = 0
+                if (glava != position) fierstPosition = 0
                 invalidateOptionsMenu()
             }
-
-            override fun onPageScrollStateChanged(state: Int) {}
         })
         when (kniga) {
             0 -> {
@@ -320,7 +311,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
                 setOnClic(cytanneParalelnye, cytanneSours)
             }
         }
-        binding.pager.currentItem = glava
+        binding.pager.setCurrentItem(glava, false)
         val file = File("$filesDir/BibliaSinodalNovyZavet/$kniga.json")
         if (file.exists()) {
             val inputStream = FileReader(file)
@@ -392,6 +383,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
         if (paralel) {
             binding.scroll.visibility = View.GONE
             binding.pager.visibility = View.VISIBLE
+            binding.tabLayout.visibility = View.VISIBLE
             binding.subtitleToolbar.visibility = View.VISIBLE
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.novsinaidal)
             binding.subtitleToolbar.text = title
@@ -401,8 +393,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
             fullscreenPage = false
             show()
         } else if (BibleGlobalList.mPedakVisable) {
-            val adapter = binding.pager.adapter as MyPagerAdapter
-            val fragment = adapter.getFragment(binding.pager.currentItem) as BackPressedFragment
+            val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
             fragment.onBackPressedFragment()
         } else {
             if (setedit || checkSetDzenNoch) {
@@ -540,13 +531,20 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
         binding.conteiner.text = pm.paralel(this@NovyZapavietSinaidal, this.cytanneSours, this.cytanneParalelnye, false).trim()
         binding.scroll.visibility = View.VISIBLE
         binding.pager.visibility = View.GONE
+        binding.tabLayout.visibility = View.GONE
         binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)
         binding.subtitleToolbar.visibility = View.GONE
         invalidateOptionsMenu()
     }
 
-    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
-        override fun getCount(): Int {
+    private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+
+        override fun onBindViewHolder(holder: FragmentViewHolder, position: Int, payloads: MutableList<Any>) {
+            val fragment = supportFragmentManager.findFragmentByTag("f" + holder.itemId) as? NovyZapavietSinaidalFragment
+            fragment?.upDateListView() ?: super.onBindViewHolder(holder, position, payloads)
+        }
+
+        override fun getItemCount(): Int {
             var fullglav = 1
             when (kniga) {
                 0, 4 -> fullglav = 28
@@ -565,8 +563,8 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
             return fullglav
         }
 
-        override fun getItem(position: Int): BackPressedFragment {
-            for (i in 0 until count) {
+        override fun createFragment(position: Int): BackPressedFragment {
+            for (i in 0 until itemCount) {
                 if (position == i) {
                     val pazicia: Int = if (trak) {
                         if (glava != i) 0 else fierstPosition
@@ -575,10 +573,6 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
                 }
             }
             return NovyZapavietSinaidalFragment.newInstance(0, kniga, 1)
-        }
-
-        override fun getPageTitle(position: Int): CharSequence {
-            return resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (position + 1)
         }
     }
 

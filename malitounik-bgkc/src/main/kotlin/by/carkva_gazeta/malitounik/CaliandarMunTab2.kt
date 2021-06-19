@@ -5,18 +5,18 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.ViewPager
-import by.carkva_gazeta.malitounik.databinding.CalendatTab2Binding
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import by.carkva_gazeta.malitounik.databinding.CalendarTab2Binding
 import java.util.*
 
 class CaliandarMunTab2 : Fragment() {
     private var dzenNoch = false
-    private lateinit var adapterViewPagerNedel: SmartFragmentStatePagerAdapter
+    private lateinit var adapterViewPagerNedel: FragmentStateAdapter
     private var day = 0
     private var posMun = 0
     private var yearG = 0
-    private var _binding: CalendatTab2Binding? = null
+    private var _binding: CalendarTab2Binding? = null
     private val binding get() = _binding!!
     private var tydzenListener: CaliandarMunTab2Listener? = null
 
@@ -46,61 +46,58 @@ class CaliandarMunTab2 : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = CalendatTab2Binding.inflate(inflater, container, false)
+        _binding = CalendarTab2Binding.inflate(inflater, container, false)
+        binding.pagerNedel.offscreenPageLimit = 3
         activity?.let { activity ->
             val chin = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = chin.getBoolean("dzen_noch", false)
             day = arguments?.getInt("day") ?: 0
             posMun = arguments?.getInt("posMun") ?: 0
             yearG = arguments?.getInt("yearG") ?: 0
-            adapterViewPagerNedel = MyCalendarNedelAdapter(childFragmentManager)
+            adapterViewPagerNedel = MyCalendarNedelAdapter(this)
             binding.pagerNedel.adapter = adapterViewPagerNedel
-            binding.pagerNedel.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-
+            binding.pagerNedel.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     val firstPosition = MenuCaliandar.getFirstPositionNiadzel(position)
                     tydzenListener?.setDayAndMun2(firstPosition[1].toInt(), firstPosition[2].toInt(), firstPosition[3].toInt(), firstPosition[6])
                     activity.invalidateOptionsMenu()
                 }
-
-                override fun onPageScrollStateChanged(state: Int) {}
             })
             val firstPosition = MenuCaliandar.getFirstPositionNiadzel(MenuCaliandar.getPositionCaliandarNiadzel(day, posMun, yearG))
-            binding.pagerNedel.currentItem = firstPosition[26].toInt()
+            binding.pagerNedel.setCurrentItem(firstPosition[26].toInt(), false)
         }
         return binding.root
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.action_right).isVisible = adapterViewPagerNedel.count - 1 != binding.pagerNedel.currentItem
+        menu.findItem(R.id.action_right).isVisible = adapterViewPagerNedel.itemCount - 1 != binding.pagerNedel.currentItem
         menu.findItem(R.id.action_left).isVisible = 0 != binding.pagerNedel.currentItem
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_left) {
-            binding.pagerNedel.currentItem = binding.pagerNedel.currentItem - 1
+            binding.pagerNedel.setCurrentItem(binding.pagerNedel.currentItem - 1, false)
         }
         if (id == R.id.action_right) {
-            binding.pagerNedel.currentItem = binding.pagerNedel.currentItem + 1
+            binding.pagerNedel.setCurrentItem(binding.pagerNedel.currentItem + 1, false)
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class MyCalendarNedelAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
+    private inner class MyCalendarNedelAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-        override fun getItem(position: Int): Fragment {
-            val arrayList = MenuCaliandar.getFirstPositionNiadzel(position)
-            return CaliandarNedzel.newInstance(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt())
-        }
-
-        override fun getCount(): Int {
+        override fun getItemCount(): Int {
             var count = MenuCaliandar.getDataCalaindar().size / 7
             if (MenuCaliandar.getDataCalaindar()[0][0].toInt() != Calendar.SUNDAY) count++
             if (MenuCaliandar.getDataCalaindar()[MenuCaliandar.getDataCalaindar().size - 1][0].toInt() != Calendar.SATURDAY) count++
             return count
+        }
+
+        override fun createFragment(position: Int): Fragment {
+            val arrayList = MenuCaliandar.getFirstPositionNiadzel(position)
+            return CaliandarNedzel.newInstance(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt())
         }
     }
 

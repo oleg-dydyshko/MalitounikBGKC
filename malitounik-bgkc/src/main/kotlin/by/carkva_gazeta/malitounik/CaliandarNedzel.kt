@@ -8,24 +8,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
-import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.ListFragment
+import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.CalaindarNedelBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import by.carkva_gazeta.malitounik.databinding.CaliandarNedzeliaBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
-class CaliandarNedzel : ListFragment() {
+class CaliandarNedzel : Fragment(), AdapterView.OnItemClickListener {
     private var year = 0
     private var mun = 0
     private var dateInt = 0
     private var niadzelia = ArrayList<ArrayList<String>>()
+    private var _binding: CaliandarNedzeliaBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,24 +39,25 @@ class CaliandarNedzel : ListFragment() {
         dateInt = arguments?.getInt("date") ?: 1
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        CoroutineScope(Dispatchers.Main).launch {
-            niadzelia = MenuCaliandar.getDataCalaindar(dateInt, mun, year)
-            activity?.let {
-                listAdapter = CaliandarNedzelListAdapter(it)
-                listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
-            }
-            if (setDenNedeli) {
-                val c = Calendar.getInstance() as GregorianCalendar
-                listView.setSelection(c[Calendar.DAY_OF_WEEK] - 1)
-                setDenNedeli = false
-            }
-            listView.isVerticalScrollBarEnabled = false
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = CaliandarNedzeliaBinding.inflate(inflater, container, false)
+        niadzelia = MenuCaliandar.getDataCalaindar(dateInt, mun, year)
+        activity?.let {
+            binding.listView.adapter = CaliandarNedzelListAdapter(it)
+            binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
         }
+        val c = GregorianCalendar(year, mun, dateInt)
+        val cReal = Calendar.getInstance() as GregorianCalendar
+        cReal[Calendar.DATE] = dateInt
+        if (c[Calendar.YEAR] == cReal[Calendar.YEAR] && c[Calendar.DAY_OF_YEAR] == cReal[Calendar.DAY_OF_YEAR]) {
+            binding.listView.setSelection(c[Calendar.DAY_OF_WEEK] - 1)
+        }
+        binding.listView.isVerticalScrollBarEnabled = false
+        binding.listView.onItemClickListener = this
+        return binding.root
     }
 
-    override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
-        super.onListItemClick(l, v, position, id)
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val intent = Intent()
         intent.putExtra("position", niadzelia[position][25].toInt())
         activity?.setResult(Activity.RESULT_OK, intent)
@@ -61,7 +67,7 @@ class CaliandarNedzel : ListFragment() {
     private inner class CaliandarNedzelListAdapter(private val mContext: Context) : ArrayAdapter<ArrayList<String>>(mContext, R.layout.calaindar_nedel, niadzelia) {
         private val c = Calendar.getInstance() as GregorianCalendar
         private val chin = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        private val munName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
+        private val munName = mContext.resources.getStringArray(R.array.meciac_smoll)
         private val nedelName = mContext.resources.getStringArray(R.array.dni_nedeli)
 
         override fun getView(position: Int, rootView: View?, parent: ViewGroup): View {
@@ -91,6 +97,9 @@ class CaliandarNedzel : ListFragment() {
             if (c[Calendar.YEAR] == niadzelia[position][3].toInt() && c[Calendar.DATE] == niadzelia[position][1].toInt() && c[Calendar.MONTH] == niadzelia[position][2].toInt()) {
                 if (dzenNoch) viewHolder.linearLayout.setBackgroundResource(R.drawable.calendar_nedel_today_black)
                 else viewHolder.linearLayout.setBackgroundResource(R.drawable.calendar_nedel_today)
+            } else {
+                if (dzenNoch) viewHolder.linearLayout.setBackgroundResource(R.drawable.selector_dark)
+                else viewHolder.linearLayout.setBackgroundResource(R.drawable.selector_default)
             }
             if (niadzelia[position][3].toInt() != c[Calendar.YEAR]) viewHolder.textCalendar.text = getString(R.string.tydzen_name3, nedelName[niadzelia[position][0].toInt()], niadzelia[position][1], munName[niadzelia[position][2].toInt()], niadzelia[position][3])
             else viewHolder.textCalendar.text = getString(R.string.tydzen_name2, nedelName[niadzelia[position][0].toInt()], niadzelia[position][1], munName[niadzelia[position][2].toInt()])
@@ -148,7 +157,6 @@ class CaliandarNedzel : ListFragment() {
     private class ViewHolder(var textCalendar: TextView, var textPraz: TextView, var textSviat: TextView, var textPostS: TextView, var linearLayout: LinearLayout)
 
     companion object {
-        var setDenNedeli = false
         fun newInstance(year: Int, mun: Int, date: Int): CaliandarNedzel {
             val fragment = CaliandarNedzel()
             val args = Bundle()

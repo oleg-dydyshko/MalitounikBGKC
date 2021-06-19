@@ -22,7 +22,6 @@ import by.carkva_gazeta.malitounik.databinding.SimpleListItemBibleBinding
 
 internal class BibleArrayAdapterParallel(private val context: Activity, private val stixi: ArrayList<String>, private val kniga: Int, private val glava: Int, private val Zapavet: Boolean, private val mPerevod: Int) : ArrayAdapter<String>(context, R.layout.simple_list_item_bible, stixi) { // 1-Сёмуха, 2-Синоидальный, 3-Псалтырь Надсана
     private val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-    private val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup): View {
         val rootView: View
@@ -36,6 +35,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             rootView = convertView
             ea = rootView.tag as BibleArrayAdapterParallelItems
         }
+        val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
         ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
         val parallel = BibliaParallelChtenia()
         var res = "+-+"
@@ -499,6 +499,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                         11 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark11)
                         12 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark12)
                     }
+                    val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
                     val realpadding = (fontSize * context.resources.displayMetrics.density).toInt()
                     d?.setBounds(0, 0, realpadding, realpadding)
                     d?.let {
@@ -641,6 +642,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                         11 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark11)
                         12 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark12)
                     }
+                    val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
                     val realpadding = (fontSize * context.resources.displayMetrics.density).toInt()
                     d?.setBounds(0, 0, realpadding, realpadding)
                     d?.let {

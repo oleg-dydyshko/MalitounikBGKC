@@ -47,7 +47,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToLong
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuCviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
 
     private lateinit var c: GregorianCalendar
     private lateinit var k: SharedPreferences
@@ -563,7 +563,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }
 
     override fun setPrazdnik(year: Int) {
-        val menuCviaty = supportFragmentManager.findFragmentByTag("MenuCviaty") as? MenuCviaty
+        val menuCviaty = supportFragmentManager.findFragmentByTag("MenuCviaty") as? MenuSviaty
         menuCviaty?.setCviatyYear(year)
     }
 
@@ -600,7 +600,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             pasxa.show(supportFragmentManager, "pasxa")
         }
         if (id == R.id.prazdnik) {
-            val menuCviaty = supportFragmentManager.findFragmentByTag("MenuCviaty") as? MenuCviaty
+            val menuCviaty = supportFragmentManager.findFragmentByTag("MenuCviaty") as? MenuSviaty
             val year = menuCviaty?.getCviatyYear() ?: Calendar.getInstance()[Calendar.YEAR]
             val prazdnik = DialogPrazdnik.getInstance(year)
             prazdnik.show(supportFragmentManager, "prazdnik")
@@ -1062,7 +1062,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 }
                 R.id.label103 -> {
                     prefEditors.putInt("id", idSelect)
-                    val menuCviaty = MenuCviaty()
+                    val menuCviaty = MenuSviaty()
                     ftrans.replace(R.id.conteiner, menuCviaty, "MenuCviaty")
                 }
                 R.id.label104 -> {

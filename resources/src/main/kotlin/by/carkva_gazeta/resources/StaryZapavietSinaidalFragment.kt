@@ -103,6 +103,10 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
         fun setEdit(edit: Boolean = false)
     }
 
+    fun upDateListView() {
+        adapter.notifyDataSetChanged()
+    }
+
     override fun onBackPressedFragment() {
         BibleGlobalList.mPedakVisable = false
         BibleGlobalList.bibleCopyList.clear()

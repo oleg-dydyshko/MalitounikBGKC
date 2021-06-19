@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -15,17 +14,17 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.admin.databinding.AdminSviatyiaBinding
 import by.carkva_gazeta.malitounik.CaliandarMun
 import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MenuCaliandar
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.SmartFragmentStatePagerAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
 import java.io.File
 import java.util.*
@@ -39,21 +38,14 @@ class Sviatyia : AppCompatActivity(), DialogImageFileExplorer.DialogFileExplorer
     private var caliandar = Calendar.getInstance()
     private var dayOfYear = 0
     private lateinit var adapterViewPager: MyPagerAdapter
-    private val munName = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             if (intent != null) {
-                val day = intent.getIntExtra("data", 0)
-                val cal = Calendar.getInstance() as GregorianCalendar
-                if (cal.isLeapYear(cal[Calendar.YEAR])) {
-                    binding.pager.currentItem = day
-                } else {
-                    if (day <= 58)
-                        binding.pager.currentItem = day
-                    else
-                        binding.pager.currentItem = day + 1
-                }
+                val position = intent.getIntExtra("position", 0)
+                val arrayList = MenuCaliandar.getPositionCaliandar(position)
+                val cal = GregorianCalendar(VYSOCOSNYI_GOD, arrayList[2].toInt(), arrayList[1].toInt())
+                binding.pager.setCurrentItem(cal[Calendar.DAY_OF_YEAR] - 1, false)
             }
         }
     }
@@ -79,28 +71,22 @@ class Sviatyia : AppCompatActivity(), DialogImageFileExplorer.DialogFileExplorer
         super.onCreate(savedInstanceState)
         binding = AdminSviatyiaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.pagerTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        for (i in 0 until binding.pagerTabStrip.childCount) {
-            val nextChild = binding.pagerTabStrip.getChildAt(i)
-            if (nextChild is TextView) {
-                nextChild.typeface = MainActivity.createFont(Typeface.NORMAL)
-            }
-        }
-        adapterViewPager = MyPagerAdapter(supportFragmentManager)
+        binding.pager.offscreenPageLimit = 3
+        adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
-        binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
-
+        caliandar.set(Calendar.YEAR, VYSOCOSNYI_GOD)
+        dayOfYear = caliandar[Calendar.DAY_OF_YEAR] - 1
+        binding.pager.setCurrentItem(dayOfYear, false)
+        val munName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
+        TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
+            caliandar.set(Calendar.DAY_OF_YEAR, position + 1)
+            tab.text = "${caliandar[Calendar.DAY_OF_MONTH]} ${munName[caliandar[Calendar.MONTH]]}"
+        }.attach()
+        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 dayOfYear = position
             }
-
-            override fun onPageScrollStateChanged(state: Int) {}
         })
-        caliandar.set(Calendar.YEAR, 2020)
-        dayOfYear = intent.extras?.getInt("dayOfYear", caliandar[Calendar.DAY_OF_YEAR] - 1) ?: caliandar[Calendar.DAY_OF_YEAR] - 1
-        binding.pager.currentItem = dayOfYear
     }
 
     private fun setTollbarTheme() {
@@ -140,19 +126,18 @@ class Sviatyia : AppCompatActivity(), DialogImageFileExplorer.DialogFileExplorer
     }
 
     override fun onDialogFile(file: File) {
-        val sviatyiaFragment = adapterViewPager.getFragment(binding.pager.currentItem) as SvityiaFragment
+        val sviatyiaFragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as SvityiaFragment
         sviatyiaFragment.onDialogFile(file)
     }
 
     override fun insertIMG() {
-        val sviatyiaFragment = adapterViewPager.getFragment(binding.pager.currentItem) as SvityiaFragment
+        val sviatyiaFragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as SvityiaFragment
         sviatyiaFragment.insertIMG()
     }
 
     override fun onBackPressed() {
-        val fragment = adapterViewPager.getFragment(binding.pager.currentItem) as BackPressedFragment
-        if (fragment.onBackPressedFragment())
-            super.onBackPressed()
+        val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
+        if (fragment.onBackPressedFragment()) super.onBackPressed()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -191,15 +176,13 @@ class Sviatyia : AppCompatActivity(), DialogImageFileExplorer.DialogFileExplorer
         return true
     }
 
-    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
+    private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+        override fun getItemCount() = 366
 
-        override fun getCount(): Int = 366
+        override fun createFragment(position: Int) = SvityiaFragment.newInstance(position + 1)
+    }
 
-        override fun getItem(position: Int): Fragment = SvityiaFragment.newInstance(position + 1)
-
-        override fun getPageTitle(position: Int): CharSequence {
-            caliandar.set(Calendar.DAY_OF_YEAR, position + 1)
-            return "${caliandar[Calendar.DAY_OF_MONTH]} ${munName[caliandar[Calendar.MONTH]]}"
-        }
+    companion object {
+        private const val VYSOCOSNYI_GOD = 2020
     }
 }

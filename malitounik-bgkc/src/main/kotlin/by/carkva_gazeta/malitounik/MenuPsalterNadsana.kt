@@ -114,6 +114,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
             startActivity(Intent(activity, NadsanContent::class.java))
         }
         if (id == R.id.prodolzych) {
+            bibleTime = k.getString("psalter_time_psalter_nadsan", "") ?: ""
             val gson = Gson()
             val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
             val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)

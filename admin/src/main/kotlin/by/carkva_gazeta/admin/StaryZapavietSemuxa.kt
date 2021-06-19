@@ -2,7 +2,6 @@ package by.carkva_gazeta.admin
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -12,15 +11,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.admin.databinding.AdminBibleBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
-import by.carkva_gazeta.malitounik.SmartFragmentStatePagerAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
 
 class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRazdelListener {
@@ -41,7 +40,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
     }
 
     override fun onComplete(glava: Int) {
-        binding.pager.currentItem = glava
+        binding.pager.setCurrentItem(glava, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,25 +63,17 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
             trak = true
         }
-        binding.pagerTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        for (i in 0 until binding.pagerTabStrip.childCount) {
-            val nextChild = binding.pagerTabStrip.getChildAt(i)
-            if (nextChild is TextView) {
-                nextChild.typeface = MainActivity.createFont(Typeface.NORMAL)
-            }
-        }
-        val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
+        binding.pager.offscreenPageLimit = 3
+        val adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
-        binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
-
+        TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
+            tab.text = if (kniga == 18) resources.getString(by.carkva_gazeta.malitounik.R.string.psalom) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
+        }.attach()
+        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                if (glava != position) NovyZapavietSemuxa.fierstPosition = 0
+                if (glava != position) fierstPosition = 0
                 invalidateOptionsMenu()
             }
-
-            override fun onPageScrollStateChanged(state: Int) {}
         })
         when (kniga) {
             0 -> {
@@ -242,7 +233,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
                 fullglav = 4
             }
         }
-        binding.pager.currentItem = glava
+        binding.pager.setCurrentItem(glava, false)
     }
 
     private fun setTollbarTheme() {
@@ -317,8 +308,9 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
         return true
     }
 
-    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
-        override fun getCount(): Int {
+    private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+
+        override fun getItemCount(): Int {
             var fullglav = 1
             when (kniga) {
                 0 -> fullglav = 50
@@ -363,8 +355,8 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
             return fullglav
         }
 
-        override fun getItem(position: Int): Fragment {
-            for (i in 0 until count) {
+        override fun createFragment(position: Int): Fragment {
+            for (i in 0 until itemCount) {
                 if (position == i) {
                     val pazicia: Int = if (trak) {
                         if (glava != i) 0 else fierstPosition
@@ -373,10 +365,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
                 }
             }
             return StaryZapavietSemuxaFragment.newInstance(0, kniga, 1)
-        }
-
-        override fun getPageTitle(position: Int): CharSequence {
-            return if (kniga == 18) resources.getString(by.carkva_gazeta.malitounik.R.string.psalom) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
         }
     }
 

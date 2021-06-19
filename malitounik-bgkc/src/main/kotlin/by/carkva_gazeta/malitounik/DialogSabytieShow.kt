@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -68,7 +67,6 @@ class DialogSabytieShow : DialogFragment() {
                     textR.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary)), t1, textR.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
             binding.content.text = textR
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             val ad = AlertDialog.Builder(it, style)

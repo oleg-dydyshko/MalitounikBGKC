@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
@@ -12,20 +11,20 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.PagerAdapter
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.adapter.FragmentViewHolder
+import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.DialogBibleRazdel.Companion.getInstance
 import by.carkva_gazeta.resources.DialogBibleRazdel.DialogBibleRazdelListener
-import by.carkva_gazeta.resources.NadsanContentPage.Companion.newInstance
 import by.carkva_gazeta.resources.databinding.ActivityBibleBinding
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 import java.io.File
@@ -44,13 +43,14 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
+
     private fun mShowPart2Runnable() {
         val actionBar = supportActionBar
         actionBar?.show()
     }
+
     private var fullscreenPage = false
     private var trak = false
-    private var fullglav = 0
     private var glava = 0
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
@@ -77,7 +77,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     }
 
     override fun onComplete(glava: Int) {
-        binding.pager.currentItem = glava
+        binding.pager.setCurrentItem(glava, false)
     }
 
     override fun getListPosition(position: Int) {
@@ -105,38 +105,29 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
             trak = true
         }
-        binding.pagerTabStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-        for (i in 0 until binding.pagerTabStrip.childCount) {
-            val nextChild = binding.pagerTabStrip.getChildAt(i)
-            if (nextChild is TextView) {
-                nextChild.typeface = MainActivity.createFont(Typeface.NORMAL)
-            }
-        }
-        val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
+        val adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
+        TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
+            tab.text = resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2) + " " + (position + 1)
+        }.attach()
+        binding.pager.offscreenPageLimit = 3
         binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.psalter)
         binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2, getKafizma(glava))
-        binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
-
+        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (glava != position) fierstPosition = 0
                 binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2, getKafizma(position))
                 men = VybranoeBibleList.checkVybranoe(this@NadsanContentActivity, 0, position, 3)
                 invalidateOptionsMenu()
             }
-
-            override fun onPageScrollStateChanged(state: Int) {}
         })
-        fullglav = 151
         men = VybranoeBibleList.checkVybranoe(this, 0, glava, 3)
         if (savedInstanceState != null) {
             dialog = savedInstanceState.getBoolean("dialog")
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
-        binding.pager.currentItem = glava
+        binding.pager.setCurrentItem(glava, false)
     }
 
     private fun setTollbarTheme() {
@@ -249,8 +240,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
                 show()
             }
             BibleGlobalList.mPedakVisable -> {
-                val adapter = binding.pager.adapter as MyPagerAdapter
-                val fragment = adapter.getFragment(binding.pager.currentItem) as BackPressedFragment
+                val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
                 fragment.onBackPressedFragment()
             }
             checkSetDzenNoch -> {
@@ -319,7 +309,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_glava) {
-            val dialogBibleRazdel = getInstance(fullglav)
+            val dialogBibleRazdel = getInstance(151)
             dialogBibleRazdel.show(supportFragmentManager, "full_glav")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_font) {
@@ -402,21 +392,21 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         }
     }
 
-    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
-        override fun getCount(): Int {
-            return 151
+    private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+
+        override fun onBindViewHolder(holder: FragmentViewHolder, position: Int, payloads: MutableList<Any>) {
+            val fragment = supportFragmentManager.findFragmentByTag("f" + holder.itemId) as? NadsanContentPage
+            fragment?.upDateListView() ?: super.onBindViewHolder(holder, position, payloads)
         }
 
-        override fun getItem(position: Int): Fragment {
+        override fun getItemCount() = 151
+
+        override fun createFragment(position: Int): Fragment {
             val pazicia: Int = if (trak) {
                 if (glava != position) 0
                 else fierstPosition
             } else 0
-            return newInstance(position, pazicia)
-        }
-
-        override fun getPageTitle(position: Int): CharSequence {
-            return resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2) + " " + (position + 1)
+            return NadsanContentPage.newInstance(position, pazicia)
         }
     }
 

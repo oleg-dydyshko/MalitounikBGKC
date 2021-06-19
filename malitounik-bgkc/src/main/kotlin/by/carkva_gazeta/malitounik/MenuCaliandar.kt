@@ -8,8 +8,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.databinding.MenuCaliandarBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -34,7 +35,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
             val intent = result.data
             if (intent != null) {
                 val position = intent.getIntExtra("position", 0)
-                binding.pager.currentItem = position
+                binding.pager.setCurrentItem(position, false)
             }
         }
     }
@@ -126,17 +127,14 @@ class MenuCaliandar : MenuCaliandarFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        adapter = MyCalendarAdapter(childFragmentManager)
+        adapter = MyCalendarAdapter(this)
+        binding.pager.offscreenPageLimit = 3
         binding.pager.adapter = adapter
-        binding.pager.currentItem = page
-        binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-
+        binding.pager.setCurrentItem(page, false)
+        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 listinner?.setPage(position)
             }
-
-            override fun onPageScrollStateChanged(state: Int) {}
         })
     }
 
@@ -187,7 +185,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
                 if (MainActivity.checkmodulesAdmin()) {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.ADMINSVIATYIA)
-                    val caliandarFull = adapter.getFragment(binding.pager.currentItem) as CaliandarFull
+                    val caliandarFull = childFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as CaliandarFull
                     val year = caliandarFull.getYear()
                     val cal = GregorianCalendar(year, 0, 1)
                     var dayofyear = caliandarFull.getDayOfYear() - 1
@@ -214,11 +212,11 @@ class MenuCaliandar : MenuCaliandarFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private class MyCalendarAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
+    private class MyCalendarAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-        override fun getCount() = getDataCalaindar().size
+        override fun getItemCount() = getDataCalaindar().size
 
-        override fun getItem(position: Int) = CaliandarFull.newInstance(position)
+        override fun createFragment(position: Int) = CaliandarFull.newInstance(position)
     }
 
     companion object {
@@ -253,6 +251,18 @@ class MenuCaliandar : MenuCaliandarFragment() {
                 }
             }
             return data[position]
+        }
+
+        fun getPositionCaliandarMun(position: Int, day: Int): ArrayList<String> {
+            getData()
+            var pos = 0
+            data.forEach {
+                if (it[27].toInt() == position && it[1].toInt() == day) {
+                    pos = it[25].toInt()
+                    return@forEach
+                }
+            }
+            return data[pos]
         }
 
         fun getPositionCaliandarNiadzel(day: Int, mun: Int, year: Int): Int {

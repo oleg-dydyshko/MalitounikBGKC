@@ -24,6 +24,11 @@ class PasliaPrychasciaFragment : Fragment() {
     private var _binding: AkafistFragmentPasliaPrichBinding? = null
     private val binding get() = _binding!!
 
+    fun upDateTextView() {
+        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

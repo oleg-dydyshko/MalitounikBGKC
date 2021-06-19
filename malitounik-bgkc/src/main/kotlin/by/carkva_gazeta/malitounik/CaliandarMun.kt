@@ -15,7 +15,7 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.*
 import java.util.*
 
-class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, CaliandarMunTab2.CaliandarMunTab2Listener {
+class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, CaliandarMunTab2.CaliandarMunTab2Listener, DialogCaliandarMunDate.DialogCaliandarMunDateListener {
     private var yearG1 = 0
     private var posMun1 = 0
     private var day1 = 0
@@ -27,6 +27,11 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
     private var sabytue = false
     private lateinit var binding: CalendarBinding
     private var resetTollbarJob: Job? = null
+
+    override fun setDataCalendar(dataCalendar: Int) {
+        val fragment = supportFragmentManager.findFragmentByTag("mun") as? CaliandarMunTab1
+        fragment?.setDataCalendar(dataCalendar)
+    }
 
     override fun setDayAndMun1(day: Int, mun: Int, year: Int) {
         day1 = day
@@ -125,7 +130,6 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
         yearG2 = yearG1
         day1 = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         day2 = day1
-        if (day1 == c[Calendar.DATE] && posMun1 == c[Calendar.MONTH] && yearG1 == c[Calendar.YEAR]) CaliandarNedzel.setDenNedeli = true
         val nedelia = chin.getInt("nedelia", 0)
         binding.tabLayout.getTabAt(nedelia)?.select()
         if (nedelia == 0) {

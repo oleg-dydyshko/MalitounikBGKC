@@ -4,29 +4,24 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.ViewPager
-import by.carkva_gazeta.malitounik.databinding.CalendatTab1Binding
-import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import by.carkva_gazeta.malitounik.databinding.CalendarTab1Binding
 import java.util.*
 
 class CaliandarMunTab1 : Fragment() {
-    private lateinit var adapterViewPager: SmartFragmentStatePagerAdapter
+    private lateinit var adapterViewPager: FragmentStateAdapter
     private var dzenNoch = false
-    private val names = arrayOf("СТУДЗЕНЬ", "ЛЮТЫ", "САКАВІК", "КРАСАВІК", "ТРАВЕНЬ", "ЧЭРВЕНЬ", "ЛІПЕНЬ", "ЖНІВЕНЬ", "ВЕРАСЕНЬ", "КАСТРЫЧНІК", "ЛІСТАПАД", "СЬНЕЖАНЬ")
+    private lateinit var names: Array<out String>
     private var day = 0
     private var posMun = 0
     private var yearG = 0
-    private var _binding: CalendatTab1Binding? = null
+    private var _binding: CalendarTab1Binding? = null
     private val binding get() = _binding!!
     private var munListener: CaliandarMunTab1Listener? = null
 
@@ -55,83 +50,84 @@ class CaliandarMunTab1 : Fragment() {
         setHasOptionsMenu(true)
     }
 
+    fun setDataCalendar(dataCalendar: Int) {
+        val c = Calendar.getInstance() as GregorianCalendar
+        if (dataCalendar >= SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
+            yearG = dataCalendar
+            if (yearG == c[Calendar.YEAR]) {
+                binding.year.typeface = MainActivity.createFont(Typeface.BOLD)
+            } else {
+                binding.year.typeface = MainActivity.createFont(Typeface.NORMAL)
+            }
+            binding.year.text = yearG.toString()
+        } else {
+            posMun = dataCalendar
+            if (posMun == c[Calendar.MONTH] && yearG == c[Calendar.YEAR]) {
+                binding.mun.typeface = MainActivity.createFont(Typeface.BOLD)
+            } else {
+                binding.mun.typeface = MainActivity.createFont(Typeface.NORMAL)
+            }
+            binding.mun.text = names[posMun]
+        }
+        val son1 = (yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + posMun
+        binding.pager.setCurrentItem(son1, false)
+        munListener?.setDayAndMun1(day, posMun, yearG)
+    }
+
+    private fun showDialog(data: Int) {
+        val dialogCaliandarMunDate = DialogCaliandarMunDate.getInstance(data)
+        dialogCaliandarMunDate.show(childFragmentManager, "dialogCaliandarMunDate")
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = CalendatTab1Binding.inflate(inflater, container, false)
+        _binding = CalendarTab1Binding.inflate(inflater, container, false)
         activity?.let { activity ->
             val chin = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = chin.getBoolean("dzen_noch", false)
             day = arguments?.getInt("day") ?: 0
             posMun = arguments?.getInt("posMun") ?: 0
             yearG = arguments?.getInt("yearG") ?: 0
-            val adapter = CaliandarMunAdapter(activity, names)
-            binding.spinner.adapter = adapter
-            val data2 = ArrayList<String>()
-            for (i in SettingsActivity.GET_CALIANDAR_YEAR_MIN..SettingsActivity.GET_CALIANDAR_YEAR_MAX) {
-                data2.add(i.toString())
-            }
-            val adapter2 = CaliandarMunAdapter(activity, data2)
-            binding.spinner2.adapter = adapter2
-
-            adapterViewPager = MyPagerAdapter(childFragmentManager)
-            binding.pager.adapter = adapterViewPager
+            names = resources.getStringArray(R.array.meciac2)
             val c = Calendar.getInstance() as GregorianCalendar
+            if (posMun == c[Calendar.MONTH]) {
+                binding.mun.typeface = MainActivity.createFont(Typeface.BOLD)
+            }
+            if (yearG == c[Calendar.YEAR]) {
+                binding.year.typeface = MainActivity.createFont(Typeface.BOLD)
+            }
+            binding.mun.text = names[posMun]
+            binding.year.text = yearG.toString()
+            binding.mun.setOnClickListener {
+                showDialog(posMun)
+            }
+            binding.year.setOnClickListener {
+                showDialog(yearG)
+            }
+            binding.pager.offscreenPageLimit = 3
+            adapterViewPager = MyPagerAdapter(this)
+            binding.pager.adapter = adapterViewPager
+
             val son = (yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + posMun
-            binding.pager.currentItem = son
-            binding.spinner.setSelection(posMun)
-            binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val son1 = (yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + position
-                    posMun = position
-                    val pagepos1 = binding.pager.currentItem
-                    if (pagepos1 != son1) {
-                        binding.pager.currentItem = son1
-                    }
-                    munListener?.setDayAndMun1(day, posMun, yearG)
-                }
-
-                override fun onNothingSelected(arg0: AdapterView<*>?) {}
-            }
-            binding.spinner2.setSelection(yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN)
-            binding.spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                    yearG = (parent.selectedItem as String).toInt()
-                    val son1 = (yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN) * 12 + posMun
-                    val pagepos1 = binding.pager.currentItem
-                    if (pagepos1 != son1) {
-                        binding.pager.currentItem = son1
-                        (binding.spinner.adapter as CaliandarMunAdapter).notifyDataSetChanged()
-                    }
-                    munListener?.setDayAndMun1(day, posMun, yearG)
-                }
-
-                override fun onNothingSelected(arg0: AdapterView<*>?) {}
-            }
-            binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+            binding.pager.setCurrentItem(son, false)
+            binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    for (i in 0 until adapterViewPager.count) {
-                        if (position == i) {
-                            var r = SettingsActivity.GET_CALIANDAR_YEAR_MIN
-                            var t = 0
-                            for (s in 0..c[Calendar.YEAR] - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 2) {
-                                for (w in 0..11) {
-                                    if (i == t) {
-                                        yearG = r
-                                        posMun = w
-
-                                    }
-                                    t++
-                                }
-                                r++
-                            }
-                            binding.spinner.setSelection(posMun)
-                            binding.spinner2.setSelection(yearG - SettingsActivity.GET_CALIANDAR_YEAR_MIN)
-                            munListener?.setDayAndMun1(day, posMun, yearG)
-                        }
+                    val caliandarMun = MenuCaliandar.getPositionCaliandarMun(position, day)
+                    yearG = caliandarMun[3].toInt()
+                    posMun = caliandarMun[2].toInt()
+                    if (posMun == c[Calendar.MONTH] && yearG == c[Calendar.YEAR]) {
+                        binding.mun.typeface = MainActivity.createFont(Typeface.BOLD)
+                    } else {
+                        binding.mun.typeface = MainActivity.createFont(Typeface.NORMAL)
                     }
+                    if (yearG == c[Calendar.YEAR]) {
+                        binding.year.typeface = MainActivity.createFont(Typeface.BOLD)
+                    } else {
+                        binding.year.typeface = MainActivity.createFont(Typeface.NORMAL)
+                    }
+                    binding.mun.text = names[posMun]
+                    binding.year.text = yearG.toString()
+                    munListener?.setDayAndMun1(day, posMun, yearG)
                 }
-
-                override fun onPageScrollStateChanged(state: Int) {}
             })
         }
         return binding.root
@@ -154,90 +150,14 @@ class CaliandarMunTab1 : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class CaliandarMunAdapter : ArrayAdapter<String> {
-        private var arrayList: List<String>? = null
+    private inner class MyPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+        override fun getItemCount() = (SettingsActivity.GET_CALIANDAR_YEAR_MAX - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 1) * 12
 
-        constructor(context: Context, strings: Array<String>) : super(context, R.layout.simple_list_item_4, strings)
-        constructor(context: Context, list: List<String>) : super(context, R.layout.simple_list_item_4, list) {
-            arrayList = list
-        }
-
-        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val day = Calendar.getInstance() as GregorianCalendar
-            val v = super.getDropDownView(position, convertView, parent)
-            val textView = v as TextView
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            if (dzenNoch) textView.setBackgroundResource(R.drawable.selector_dark)
-            else textView.setBackgroundResource(R.drawable.selector_default)
-            if (arrayList == null) {
-                if (day[Calendar.MONTH] == position) {
-                    textView.typeface = MainActivity.createFont(Typeface.BOLD)
-                } else {
-                    textView.typeface = MainActivity.createFont(Typeface.NORMAL)
-                }
-            } else {
-                if (day[Calendar.YEAR] == position + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
-                    textView.typeface = MainActivity.createFont(Typeface.BOLD)
-                } else {
-                    textView.typeface = MainActivity.createFont(Typeface.NORMAL)
-                }
-            }
-            return v
-        }
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val convert: View
-            val viewHolder: ViewHolder
-            val day = Calendar.getInstance() as GregorianCalendar
-            if (convertView == null) {
-                val binding = SimpleListItem4Binding.inflate(LayoutInflater.from(context), parent, false)
-                convert = binding.root
-                viewHolder = ViewHolder(binding.text1)
-                convert.tag = viewHolder
-            } else {
-                convert = convertView
-                viewHolder = convert.tag as ViewHolder
-            }
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            if (dzenNoch) viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
-            else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
-            if (arrayList == null) {
-                if (day[Calendar.MONTH] == position && day[Calendar.YEAR] == binding.spinner2.selectedItemPosition + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
-                    viewHolder.text.typeface = MainActivity.createFont(Typeface.BOLD)
-                } else {
-                    viewHolder.text.typeface = MainActivity.createFont(Typeface.NORMAL)
-                }
-                viewHolder.text.text = names[position]
-            } else {
-                if (day[Calendar.YEAR] == position + SettingsActivity.GET_CALIANDAR_YEAR_MIN) {
-                    viewHolder.text.typeface = MainActivity.createFont(Typeface.BOLD)
-                } else {
-                    viewHolder.text.typeface = MainActivity.createFont(Typeface.NORMAL)
-                }
-                arrayList?.let { viewHolder.text.text = it[position] }
-            }
-            return convert
+        override fun createFragment(position: Int): Fragment {
+            val caliandarMun = MenuCaliandar.getPositionCaliandarMun(position, day)
+            return PageFragmentMonth.newInstance(caliandarMun[1].toInt(), caliandarMun[2].toInt(), caliandarMun[3].toInt())
         }
     }
-
-    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
-        override fun getCount(): Int {
-            return (SettingsActivity.GET_CALIANDAR_YEAR_MAX - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 1) * 12
-        }
-
-        override fun getItem(position: Int): Fragment {
-            val g = GregorianCalendar(SettingsActivity.GET_CALIANDAR_YEAR_MIN, 0, day)
-            for (i in 0 until count) {
-                if (position == i) {
-                    return PageFragmentMonth.newInstance(day, g[Calendar.MONTH], g[Calendar.YEAR])
-                }
-                g.add(Calendar.MONTH, 1)
-            }
-            return PageFragmentMonth.newInstance(g[Calendar.DATE], g[Calendar.MONTH], g[Calendar.YEAR])
-        }
-    }
-
-    private class ViewHolder(var text: TextView)
 
     companion object {
         fun getInstance(posMun: Int, yearG: Int, day: Int): CaliandarMunTab1 {

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -15,19 +16,25 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.adapter.FragmentViewHolder
+import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.databinding.AkafistActivityPasliaPrichBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSizeListener {
 
@@ -43,10 +50,12 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
     }
+
     private fun mShowPart2Runnable() {
         val actionBar = supportActionBar
         actionBar?.show()
     }
+
     private var fullscreenPage = false
     private var checkSetDzenNoch = false
     private lateinit var k: SharedPreferences
@@ -72,6 +81,10 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         if (fullscreenPage) hide()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        val tabLayout = (binding.tabLayout.getChildAt(0) as ViewGroup).getChildAt(pasliaPrychascia) as LinearLayout
+        val tabTextView = tabLayout.getChildAt(1) as TextView
+        tabTextView.typeface = MainActivity.createFont(Typeface.BOLD)
+        tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -101,43 +114,49 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         pasliaPrychascia = intent.extras?.getInt("paslia_prychascia") ?: 0
         men = Bogashlugbovya.checkVybranoe(this, malitvy[pasliaPrychascia].resourse)
         binding.constraint.setOnTouchListener(this)
-        for (i in 0 until binding.pagerTabStrip.childCount) {
-            val nextChild = binding.pagerTabStrip.getChildAt(i)
-            if (nextChild is TextView) {
-                nextChild.typeface = MainActivity.createFont(Typeface.BOLD)
-                if (dzenNoch)
-                    nextChild.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
-                else
-                    nextChild.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
-                nextChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            }
-        }
-        val adapterViewPager: SmartFragmentStatePagerAdapter = MyPagerAdapter(supportFragmentManager)
+        val adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
-        binding.pager.currentItem = pasliaPrychascia
+        TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
+            tab.text = malitvy[position].title
+        }.attach()
+        if (dzenNoch) binding.tabLayout.setTabTextColors(Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorSecondary_text))), Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))))
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val tabLayout = (binding.tabLayout.getChildAt(0) as ViewGroup).getChildAt(tab?.position ?: 0) as LinearLayout
+                val tabTextView = tabLayout.getChildAt(1) as TextView
+                tabTextView.typeface = MainActivity.createFont(Typeface.BOLD)
+                tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                val tabLayout = (binding.tabLayout.getChildAt(0) as ViewGroup).getChildAt(tab?.position ?: 0) as LinearLayout
+                val tabTextView = tabLayout.getChildAt(1) as TextView
+                tabTextView.typeface = MainActivity.createFont(Typeface.NORMAL)
+                tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+        binding.pager.offscreenPageLimit = 3
+        binding.pager.setCurrentItem(pasliaPrychascia, false)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
-        binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
-
+        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 men = Bogashlugbovya.checkVybranoe(this@PasliaPrychascia, malitvy[position].resourse)
                 pasliaPrychascia = position
                 invalidateOptionsMenu()
             }
-
-            override fun onPageScrollStateChanged(state: Int) {}
         })
         if (dzenNoch) {
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
         }
         bindingprogress.fontSizePlus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
                 bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
@@ -151,7 +170,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             startProcent()
         }
         bindingprogress.fontSizeMinus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.min_font)
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.min_font)
             if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
                 fontBiblia -= 4
                 bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
@@ -404,19 +423,16 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
     }
 
-    private inner class MyPagerAdapter(fragmentManager: FragmentManager) : SmartFragmentStatePagerAdapter(fragmentManager) {
+    private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
-        override fun getCount(): Int {
-            return malitvy.size
+        override fun onBindViewHolder(holder: FragmentViewHolder, position: Int, payloads: MutableList<Any>) {
+            val fragment = supportFragmentManager.findFragmentByTag("f" + holder.itemId) as? PasliaPrychasciaFragment
+            fragment?.upDateTextView() ?: super.onBindViewHolder(holder, position, payloads)
         }
 
-        override fun getItem(position: Int): Fragment {
-            return PasliaPrychasciaFragment.newInstance(malitvy[position].resourseID)
-        }
+        override fun getItemCount() = malitvy.size
 
-        override fun getPageTitle(position: Int): CharSequence {
-            return malitvy[position].title.uppercase()
-        }
+        override fun createFragment(position: Int) = PasliaPrychasciaFragment.newInstance(malitvy[position].resourseID)
     }
 
     private data class Malitvy(val resourseID: Int, val resourse: String, val title: String)

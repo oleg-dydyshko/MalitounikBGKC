@@ -73,9 +73,10 @@ class MenuBibleSemuxa : Fragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
+                val bibleTime2 = k.getString("bible_time_semuxa", "") ?: ""
                 val gson = Gson()
                 val type = object : TypeToken<ArrayMap<String?, Int?>?>() {}.type
-                val set: ArrayMap<String, Int> = gson.fromJson(bibleTime, type)
+                val set: ArrayMap<String, Int> = gson.fromJson(bibleTime2, type)
                 if (set["zavet"] == 1) {
                     if (MainActivity.checkmoduleResources()) {
                         val intent = Intent(activity, NovyZapavietSemuxaList::class.java)

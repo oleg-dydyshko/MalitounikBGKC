@@ -72,24 +72,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_default"
-                    android:drawableEnd="@drawable/arrow_down_float_sabytie"
-                    android:drawableRight="@drawable/arrow_down_float_sabytie"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:padding="10dp"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
+                    app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />
 
                 <TextView
                     android:id="@+id/label2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_default"
-                    android:drawableEnd="@drawable/arrow_down_float_sabytie"
-                    android:drawableRight="@drawable/arrow_down_float_sabytie"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:padding="10dp"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
+                    app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />
 
                 <CheckBox
                     android:id="@+id/checkBox2"
@@ -121,24 +121,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_default"
-                    android:drawableEnd="@drawable/arrow_down_float_sabytie"
-                    android:drawableRight="@drawable/arrow_down_float_sabytie"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:padding="10dp"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
+                    app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />
 
                 <TextView
                     android:id="@+id/label22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_default"
-                    android:drawableEnd="@drawable/arrow_down_float_sabytie"
-                    android:drawableRight="@drawable/arrow_down_float_sabytie"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:padding="10dp"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
+                    app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />
             </LinearLayout>
 
             <LinearLayout
@@ -274,12 +274,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_default"
-                    android:drawableEnd="@drawable/arrow_down_float_sabytie"
-                    android:drawableRight="@drawable/arrow_down_float_sabytie"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:padding="10dp"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    app:drawableEndCompat="@drawable/arrow_down_float_sabytie"
+                    app:drawableRightCompat="@drawable/arrow_down_float_sabytie" />
             </RadioGroup>
 
             <LinearLayout

@@ -48,6 +48,10 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
         }
     }
 
+    fun upDateListView() {
+        adapter.notifyDataSetChanged()
+    }
+
     override fun onBackPressedFragment() {
         BibleGlobalList.mPedakVisable = false
         BibleGlobalList.bibleCopyList.clear()

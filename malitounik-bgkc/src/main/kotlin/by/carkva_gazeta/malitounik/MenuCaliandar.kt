@@ -253,11 +253,11 @@ class MenuCaliandar : MenuCaliandarFragment() {
             return data[position]
         }
 
-        fun getPositionCaliandarMun(position: Int, day: Int): ArrayList<String> {
+        fun getPositionCaliandarMun(position: Int): ArrayList<String> {
             getData()
             var pos = 0
             data.forEach {
-                if (it[27].toInt() == position && it[1].toInt() == day) {
+                if (it[27].toInt() == position) {
                     pos = it[25].toInt()
                     return@forEach
                 }

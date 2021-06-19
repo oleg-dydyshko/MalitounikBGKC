@@ -111,7 +111,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         malitvy.add(Malitvy(R.raw.paslia_prychascia3, "paslia_prychascia3", "Малітва Сымона Мэтафраста"))
         malitvy.add(Malitvy(R.raw.paslia_prychascia4, "paslia_prychascia4", "Iншая малітва"))
         malitvy.add(Malitvy(R.raw.paslia_prychascia5, "paslia_prychascia5", "Малітва да Найсьвяцейшай Багародзіцы"))
-        pasliaPrychascia = intent.extras?.getInt("paslia_prychascia") ?: 0
+        pasliaPrychascia = savedInstanceState?.getInt("pasliaPrychascia") ?: (intent.extras?.getInt("paslia_prychascia") ?: 0)
         men = Bogashlugbovya.checkVybranoe(this, malitvy[pasliaPrychascia].resourse)
         binding.constraint.setOnTouchListener(this)
         val adapterViewPager = MyPagerAdapter(this)
@@ -122,7 +122,8 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         if (dzenNoch) binding.tabLayout.setTabTextColors(Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorSecondary_text))), Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))))
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                val tabLayout = (binding.tabLayout.getChildAt(0) as ViewGroup).getChildAt(tab?.position ?: 0) as LinearLayout
+                pasliaPrychascia = tab?.position ?: 0
+                val tabLayout = (binding.tabLayout.getChildAt(0) as ViewGroup).getChildAt(pasliaPrychascia) as LinearLayout
                 val tabTextView = tabLayout.getChildAt(1) as TextView
                 tabTextView.typeface = MainActivity.createFont(Typeface.BOLD)
                 tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
@@ -421,6 +422,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
+        outState.putInt("pasliaPrychascia", pasliaPrychascia)
     }
 
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {

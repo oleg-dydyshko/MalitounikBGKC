@@ -89,7 +89,7 @@ class CaliandarMunTab1 : Fragment() {
             yearG = arguments?.getInt("yearG") ?: 0
             names = resources.getStringArray(R.array.meciac2)
             val c = Calendar.getInstance() as GregorianCalendar
-            if (posMun == c[Calendar.MONTH]) {
+            if (posMun == c[Calendar.MONTH] && yearG == c[Calendar.YEAR]) {
                 binding.mun.typeface = MainActivity.createFont(Typeface.BOLD)
             }
             if (yearG == c[Calendar.YEAR]) {
@@ -111,7 +111,7 @@ class CaliandarMunTab1 : Fragment() {
             binding.pager.setCurrentItem(son, false)
             binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    val caliandarMun = MenuCaliandar.getPositionCaliandarMun(position, day)
+                    val caliandarMun = MenuCaliandar.getPositionCaliandarMun(position)
                     yearG = caliandarMun[3].toInt()
                     posMun = caliandarMun[2].toInt()
                     if (posMun == c[Calendar.MONTH] && yearG == c[Calendar.YEAR]) {
@@ -154,7 +154,7 @@ class CaliandarMunTab1 : Fragment() {
         override fun getItemCount() = (SettingsActivity.GET_CALIANDAR_YEAR_MAX - SettingsActivity.GET_CALIANDAR_YEAR_MIN + 1) * 12
 
         override fun createFragment(position: Int): Fragment {
-            val caliandarMun = MenuCaliandar.getPositionCaliandarMun(position, day)
+            val caliandarMun = MenuCaliandar.getPositionCaliandarMun(position)
             return PageFragmentMonth.newInstance(caliandarMun[1].toInt(), caliandarMun[2].toInt(), caliandarMun[3].toInt())
         }
     }

@@ -265,6 +265,7 @@
     <string name="stix_ru">/Стих</string>
     <string name="stix_by">/Верш</string>
     <string name="semuxa_maran_ata_error">У перакладзе Бібліі на беларускую мову В. Сёмухі гэтая кніга адсутнічае\n</string>
+    <string name="semuxa_maran_ata_error_glava">У перакладзе Бібліі на беларускую мову В. Сёмухі гэтая глава адсутнічае\n</string>
     <string name="end_fabreary_be">Чытаецца 28.02 альбо 1.03</string>
     <string name="end_fabreary_ru">Читается 28.02 или 1.03</string>
     <string name="get_date">Выберыце дату</string>
@@ -524,7 +525,7 @@
     <string name="no_danyx">Прабачце, няма дадзеных</string>
     <string name="no_lityrgii">Літургіі няма</string>
     <string name="skip_utran">Прапусьціць ютрань</string>
-    <string name="onli_kanon_knigi">У Бібліі толькі кананічныя кнігі</string>
+    <string name="onli_kanon_knigi">У Бібліі толькі кананічныя кнігі і главы</string>
     <string name="pvaslavnye_sviaty">Праваслаўныя сьвяты</string>
     <string name="ryma_katalickia_sviaty">Рыма-каталіцкія сьвяты</string>
     <string name="dziarjaunyia_sviaty">Дзяржаўныя сьвяты</string>

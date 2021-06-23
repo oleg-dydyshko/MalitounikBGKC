@@ -34,10 +34,7 @@ import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileWriter
-import java.io.InputStreamReader
+import java.io.*
 
 class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener {
 
@@ -176,7 +173,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
         }
         bindingprogress.fontSizePlus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
                 bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
@@ -190,7 +187,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             startProcent(3000)
         }
         bindingprogress.fontSizeMinus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.min_font)
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.min_font)
             if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
                 fontBiblia -= 4
                 bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
@@ -624,193 +621,103 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         }
                     }
                 }
-                val r = resources
-                var inputStream = r.openRawResource(R.raw.biblias1)
-                var replace = true
+                var inputStream: InputStream
+                var replace = false
                 if (belarus) {
                     when (nomer) {
-                        17 -> inputStream = r.openRawResource(R.raw.sinaidals17)
-                        18 -> inputStream = r.openRawResource(R.raw.sinaidals18)
-                        19 -> inputStream = r.openRawResource(R.raw.sinaidals19)
-                        26 -> inputStream = r.openRawResource(R.raw.sinaidals26)
-                        27 -> inputStream = r.openRawResource(R.raw.sinaidals27)
-                        31 -> inputStream = r.openRawResource(R.raw.sinaidals31)
-                        32 -> inputStream = r.openRawResource(R.raw.sinaidals32)
-                        47 -> inputStream = r.openRawResource(R.raw.sinaidals47)
-                        48 -> inputStream = r.openRawResource(R.raw.sinaidals48)
-                        49 -> inputStream = r.openRawResource(R.raw.sinaidals49)
-                        50 -> inputStream = r.openRawResource(R.raw.sinaidals50)
-                        else -> replace = false
-                    }
-                    when (nomer) {
-                        1 -> inputStream = r.openRawResource(R.raw.biblias1)
-                        2 -> inputStream = r.openRawResource(R.raw.biblias2)
-                        3 -> inputStream = r.openRawResource(R.raw.biblias3)
-                        4 -> inputStream = r.openRawResource(R.raw.biblias4)
-                        5 -> inputStream = r.openRawResource(R.raw.biblias5)
-                        6 -> inputStream = r.openRawResource(R.raw.biblias6)
-                        7 -> inputStream = r.openRawResource(R.raw.biblias7)
-                        8 -> inputStream = r.openRawResource(R.raw.biblias8)
-                        9 -> inputStream = r.openRawResource(R.raw.biblias9)
-                        10 -> inputStream = r.openRawResource(R.raw.biblias10)
-                        11 -> inputStream = r.openRawResource(R.raw.biblias11)
-                        12 -> inputStream = r.openRawResource(R.raw.biblias12)
-                        13 -> inputStream = r.openRawResource(R.raw.biblias13)
-                        14 -> inputStream = r.openRawResource(R.raw.biblias14)
-                        15 -> inputStream = r.openRawResource(R.raw.biblias15)
-                        16 -> inputStream = r.openRawResource(R.raw.biblias16)
-                        20 -> inputStream = r.openRawResource(R.raw.biblias17)
-                        21 -> inputStream = r.openRawResource(R.raw.biblias18)
-                        22 -> inputStream = r.openRawResource(R.raw.biblias19)
-                        23 -> inputStream = r.openRawResource(R.raw.biblias20)
-                        24 -> inputStream = r.openRawResource(R.raw.biblias21)
-                        25 -> inputStream = r.openRawResource(R.raw.biblias22)
-                        28 -> inputStream = r.openRawResource(R.raw.biblias23)
-                        29 -> inputStream = r.openRawResource(R.raw.biblias24)
-                        30 -> inputStream = r.openRawResource(R.raw.biblias25)
-                        33 -> inputStream = r.openRawResource(R.raw.biblias26)
-                        34 -> inputStream = r.openRawResource(R.raw.biblias27)
-                        35 -> inputStream = r.openRawResource(R.raw.biblias28)
-                        36 -> inputStream = r.openRawResource(R.raw.biblias29)
-                        37 -> inputStream = r.openRawResource(R.raw.biblias30)
-                        38 -> inputStream = r.openRawResource(R.raw.biblias31)
-                        39 -> inputStream = r.openRawResource(R.raw.biblias32)
-                        40 -> inputStream = r.openRawResource(R.raw.biblias33)
-                        41 -> inputStream = r.openRawResource(R.raw.biblias34)
-                        42 -> inputStream = r.openRawResource(R.raw.biblias35)
-                        43 -> inputStream = r.openRawResource(R.raw.biblias36)
-                        44 -> inputStream = r.openRawResource(R.raw.biblias37)
-                        45 -> inputStream = r.openRawResource(R.raw.biblias38)
-                        46 -> inputStream = r.openRawResource(R.raw.biblias39)
-                        51 -> inputStream = r.openRawResource(R.raw.biblian1)
-                        52 -> inputStream = r.openRawResource(R.raw.biblian2)
-                        53 -> inputStream = r.openRawResource(R.raw.biblian3)
-                        54 -> inputStream = r.openRawResource(R.raw.biblian4)
-                        55 -> inputStream = r.openRawResource(R.raw.biblian5)
-                        56 -> inputStream = r.openRawResource(R.raw.biblian6)
-                        57 -> inputStream = r.openRawResource(R.raw.biblian7)
-                        58 -> inputStream = r.openRawResource(R.raw.biblian8)
-                        59 -> inputStream = r.openRawResource(R.raw.biblian9)
-                        60 -> inputStream = r.openRawResource(R.raw.biblian10)
-                        61 -> inputStream = r.openRawResource(R.raw.biblian11)
-                        62 -> inputStream = r.openRawResource(R.raw.biblian12)
-                        63 -> inputStream = r.openRawResource(R.raw.biblian13)
-                        64 -> inputStream = r.openRawResource(R.raw.biblian14)
-                        65 -> inputStream = r.openRawResource(R.raw.biblian15)
-                        66 -> inputStream = r.openRawResource(R.raw.biblian16)
-                        67 -> inputStream = r.openRawResource(R.raw.biblian17)
-                        68 -> inputStream = r.openRawResource(R.raw.biblian18)
-                        69 -> inputStream = r.openRawResource(R.raw.biblian19)
-                        70 -> inputStream = r.openRawResource(R.raw.biblian20)
-                        71 -> inputStream = r.openRawResource(R.raw.biblian21)
-                        72 -> inputStream = r.openRawResource(R.raw.biblian22)
-                        73 -> inputStream = r.openRawResource(R.raw.biblian23)
-                        74 -> inputStream = r.openRawResource(R.raw.biblian24)
-                        75 -> inputStream = r.openRawResource(R.raw.biblian25)
-                        76 -> inputStream = r.openRawResource(R.raw.biblian26)
-                        77 -> inputStream = r.openRawResource(R.raw.biblian27)
+                        1 -> inputStream = resources.openRawResource(R.raw.biblias1)
+                        2 -> inputStream = resources.openRawResource(R.raw.biblias2)
+                        3 -> inputStream = resources.openRawResource(R.raw.biblias3)
+                        4 -> inputStream = resources.openRawResource(R.raw.biblias4)
+                        5 -> inputStream = resources.openRawResource(R.raw.biblias5)
+                        6 -> inputStream = resources.openRawResource(R.raw.biblias6)
+                        7 -> inputStream = resources.openRawResource(R.raw.biblias7)
+                        8 -> inputStream = resources.openRawResource(R.raw.biblias8)
+                        9 -> inputStream = resources.openRawResource(R.raw.biblias9)
+                        10 -> inputStream = resources.openRawResource(R.raw.biblias10)
+                        11 -> inputStream = resources.openRawResource(R.raw.biblias11)
+                        12 -> inputStream = resources.openRawResource(R.raw.biblias12)
+                        13 -> inputStream = resources.openRawResource(R.raw.biblias13)
+                        14 -> inputStream = resources.openRawResource(R.raw.biblias14)
+                        15 -> inputStream = resources.openRawResource(R.raw.biblias15)
+                        16 -> inputStream = resources.openRawResource(R.raw.biblias16)
+                        20 -> inputStream = resources.openRawResource(R.raw.biblias17)
+                        21 -> inputStream = resources.openRawResource(R.raw.biblias18)
+                        22 -> inputStream = resources.openRawResource(R.raw.biblias19)
+                        23 -> inputStream = resources.openRawResource(R.raw.biblias20)
+                        24 -> inputStream = resources.openRawResource(R.raw.biblias21)
+                        25 -> inputStream = resources.openRawResource(R.raw.biblias22)
+                        28 -> inputStream = resources.openRawResource(R.raw.biblias23)
+                        29 -> inputStream = resources.openRawResource(R.raw.biblias24)
+                        30 -> inputStream = resources.openRawResource(R.raw.biblias25)
+                        33 -> inputStream = resources.openRawResource(R.raw.biblias26)
+                        34 -> inputStream = resources.openRawResource(R.raw.biblias27)
+                        35 -> inputStream = resources.openRawResource(R.raw.biblias28)
+                        36 -> inputStream = resources.openRawResource(R.raw.biblias29)
+                        37 -> inputStream = resources.openRawResource(R.raw.biblias30)
+                        38 -> inputStream = resources.openRawResource(R.raw.biblias31)
+                        39 -> inputStream = resources.openRawResource(R.raw.biblias32)
+                        40 -> inputStream = resources.openRawResource(R.raw.biblias33)
+                        41 -> inputStream = resources.openRawResource(R.raw.biblias34)
+                        42 -> inputStream = resources.openRawResource(R.raw.biblias35)
+                        43 -> inputStream = resources.openRawResource(R.raw.biblias36)
+                        44 -> inputStream = resources.openRawResource(R.raw.biblias37)
+                        45 -> inputStream = resources.openRawResource(R.raw.biblias38)
+                        46 -> inputStream = resources.openRawResource(R.raw.biblias39)
+                        51 -> inputStream = resources.openRawResource(R.raw.biblian1)
+                        52 -> inputStream = resources.openRawResource(R.raw.biblian2)
+                        53 -> inputStream = resources.openRawResource(R.raw.biblian3)
+                        54 -> inputStream = resources.openRawResource(R.raw.biblian4)
+                        55 -> inputStream = resources.openRawResource(R.raw.biblian5)
+                        56 -> inputStream = resources.openRawResource(R.raw.biblian6)
+                        57 -> inputStream = resources.openRawResource(R.raw.biblian7)
+                        58 -> inputStream = resources.openRawResource(R.raw.biblian8)
+                        59 -> inputStream = resources.openRawResource(R.raw.biblian9)
+                        60 -> inputStream = resources.openRawResource(R.raw.biblian10)
+                        61 -> inputStream = resources.openRawResource(R.raw.biblian11)
+                        62 -> inputStream = resources.openRawResource(R.raw.biblian12)
+                        63 -> inputStream = resources.openRawResource(R.raw.biblian13)
+                        64 -> inputStream = resources.openRawResource(R.raw.biblian14)
+                        65 -> inputStream = resources.openRawResource(R.raw.biblian15)
+                        66 -> inputStream = resources.openRawResource(R.raw.biblian16)
+                        67 -> inputStream = resources.openRawResource(R.raw.biblian17)
+                        68 -> inputStream = resources.openRawResource(R.raw.biblian18)
+                        69 -> inputStream = resources.openRawResource(R.raw.biblian19)
+                        70 -> inputStream = resources.openRawResource(R.raw.biblian20)
+                        71 -> inputStream = resources.openRawResource(R.raw.biblian21)
+                        72 -> inputStream = resources.openRawResource(R.raw.biblian22)
+                        73 -> inputStream = resources.openRawResource(R.raw.biblian23)
+                        74 -> inputStream = resources.openRawResource(R.raw.biblian24)
+                        75 -> inputStream = resources.openRawResource(R.raw.biblian25)
+                        76 -> inputStream = resources.openRawResource(R.raw.biblian26)
+                        77 -> inputStream = resources.openRawResource(R.raw.biblian27)
+                        else -> {
+                            inputStream = getSinoidalResource(nomer)
+                            replace = true
+                        }
                     }
                 } else {
-                    when (nomer) {
-                        1 -> inputStream = r.openRawResource(R.raw.sinaidals1)
-                        2 -> inputStream = r.openRawResource(R.raw.sinaidals2)
-                        3 -> inputStream = r.openRawResource(R.raw.sinaidals3)
-                        4 -> inputStream = r.openRawResource(R.raw.sinaidals4)
-                        5 -> inputStream = r.openRawResource(R.raw.sinaidals5)
-                        6 -> inputStream = r.openRawResource(R.raw.sinaidals6)
-                        7 -> inputStream = r.openRawResource(R.raw.sinaidals7)
-                        8 -> inputStream = r.openRawResource(R.raw.sinaidals8)
-                        9 -> inputStream = r.openRawResource(R.raw.sinaidals9)
-                        10 -> inputStream = r.openRawResource(R.raw.sinaidals10)
-                        11 -> inputStream = r.openRawResource(R.raw.sinaidals11)
-                        12 -> inputStream = r.openRawResource(R.raw.sinaidals12)
-                        13 -> inputStream = r.openRawResource(R.raw.sinaidals13)
-                        14 -> inputStream = r.openRawResource(R.raw.sinaidals14)
-                        15 -> inputStream = r.openRawResource(R.raw.sinaidals15)
-                        16 -> inputStream = r.openRawResource(R.raw.sinaidals16)
-                        17 -> inputStream = r.openRawResource(R.raw.sinaidals17)
-                        18 -> inputStream = r.openRawResource(R.raw.sinaidals18)
-                        19 -> inputStream = r.openRawResource(R.raw.sinaidals19)
-                        20 -> inputStream = r.openRawResource(R.raw.sinaidals20)
-                        21 -> inputStream = r.openRawResource(R.raw.sinaidals21)
-                        22 -> inputStream = r.openRawResource(R.raw.sinaidals22)
-                        23 -> inputStream = r.openRawResource(R.raw.sinaidals23)
-                        24 -> inputStream = r.openRawResource(R.raw.sinaidals24)
-                        25 -> inputStream = r.openRawResource(R.raw.sinaidals25)
-                        26 -> inputStream = r.openRawResource(R.raw.sinaidals26)
-                        27 -> inputStream = r.openRawResource(R.raw.sinaidals27)
-                        28 -> inputStream = r.openRawResource(R.raw.sinaidals28)
-                        29 -> inputStream = r.openRawResource(R.raw.sinaidals29)
-                        30 -> inputStream = r.openRawResource(R.raw.sinaidals30)
-                        31 -> inputStream = r.openRawResource(R.raw.sinaidals31)
-                        32 -> inputStream = r.openRawResource(R.raw.sinaidals32)
-                        33 -> inputStream = r.openRawResource(R.raw.sinaidals33)
-                        34 -> inputStream = r.openRawResource(R.raw.sinaidals34)
-                        35 -> inputStream = r.openRawResource(R.raw.sinaidals35)
-                        36 -> inputStream = r.openRawResource(R.raw.sinaidals36)
-                        37 -> inputStream = r.openRawResource(R.raw.sinaidals37)
-                        38 -> inputStream = r.openRawResource(R.raw.sinaidals38)
-                        39 -> inputStream = r.openRawResource(R.raw.sinaidals39)
-                        40 -> inputStream = r.openRawResource(R.raw.sinaidals40)
-                        41 -> inputStream = r.openRawResource(R.raw.sinaidals41)
-                        42 -> inputStream = r.openRawResource(R.raw.sinaidals42)
-                        43 -> inputStream = r.openRawResource(R.raw.sinaidals43)
-                        44 -> inputStream = r.openRawResource(R.raw.sinaidals44)
-                        45 -> inputStream = r.openRawResource(R.raw.sinaidals45)
-                        46 -> inputStream = r.openRawResource(R.raw.sinaidals46)
-                        47 -> inputStream = r.openRawResource(R.raw.sinaidals47)
-                        48 -> inputStream = r.openRawResource(R.raw.sinaidals48)
-                        49 -> inputStream = r.openRawResource(R.raw.sinaidals49)
-                        50 -> inputStream = r.openRawResource(R.raw.sinaidals50)
-                        51 -> inputStream = r.openRawResource(R.raw.sinaidaln1)
-                        52 -> inputStream = r.openRawResource(R.raw.sinaidaln2)
-                        53 -> inputStream = r.openRawResource(R.raw.sinaidaln3)
-                        54 -> inputStream = r.openRawResource(R.raw.sinaidaln4)
-                        55 -> inputStream = r.openRawResource(R.raw.sinaidaln5)
-                        56 -> inputStream = r.openRawResource(R.raw.sinaidaln6)
-                        57 -> inputStream = r.openRawResource(R.raw.sinaidaln7)
-                        58 -> inputStream = r.openRawResource(R.raw.sinaidaln8)
-                        59 -> inputStream = r.openRawResource(R.raw.sinaidaln9)
-                        60 -> inputStream = r.openRawResource(R.raw.sinaidaln10)
-                        61 -> inputStream = r.openRawResource(R.raw.sinaidaln11)
-                        62 -> inputStream = r.openRawResource(R.raw.sinaidaln12)
-                        63 -> inputStream = r.openRawResource(R.raw.sinaidaln13)
-                        64 -> inputStream = r.openRawResource(R.raw.sinaidaln14)
-                        65 -> inputStream = r.openRawResource(R.raw.sinaidaln15)
-                        66 -> inputStream = r.openRawResource(R.raw.sinaidaln16)
-                        67 -> inputStream = r.openRawResource(R.raw.sinaidaln17)
-                        68 -> inputStream = r.openRawResource(R.raw.sinaidaln18)
-                        69 -> inputStream = r.openRawResource(R.raw.sinaidaln19)
-                        70 -> inputStream = r.openRawResource(R.raw.sinaidaln20)
-                        71 -> inputStream = r.openRawResource(R.raw.sinaidaln21)
-                        72 -> inputStream = r.openRawResource(R.raw.sinaidaln22)
-                        73 -> inputStream = r.openRawResource(R.raw.sinaidaln23)
-                        74 -> inputStream = r.openRawResource(R.raw.sinaidaln24)
-                        75 -> inputStream = r.openRawResource(R.raw.sinaidaln25)
-                        76 -> inputStream = r.openRawResource(R.raw.sinaidaln26)
-                        77 -> inputStream = r.openRawResource(R.raw.sinaidaln27)
-                    }
-                    replace = false
+                    inputStream = getSinoidalResource(nomer)
                 }
                 if (replace) {
                     maranAta.add("<!--no--><br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error) + "</em>")
                 }
-                val isr = InputStreamReader(inputStream)
-                val reader = BufferedReader(isr)
-                var line: String
                 val builder = StringBuilder()
-                reader.forEachLine {
-                    line = it
-                    line = line.replace("\\n", "<br>")
-                    if (line.contains("//")) {
-                        val t1 = line.indexOf("//")
-                        line = line.substring(0, t1).trim()
-                        if (line != "") builder.append(line).append("\n")
-                    } else {
-                        builder.append(line).append("\n")
+                var line: String
+                val isr = InputStreamReader(inputStream)
+                BufferedReader(isr).use {
+                    it.forEachLine { string ->
+                        line = string
+                        line = line.replace("\\n", "<br>")
+                        if (line.contains("//")) {
+                            val t1 = line.indexOf("//")
+                            line = line.substring(0, t1).trim()
+                            if (line != "") builder.append(line).append("\n")
+                        } else {
+                            builder.append(line).append("\n")
+                        }
                     }
                 }
-                inputStream.close()
                 if (chten.size == 6 && i == 3) {
                     if (belarus) {
                         maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_be) + "</em><br>\n")
@@ -818,8 +725,14 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         maranAta.add("<br><em><!--no-->" + resources.getString(by.carkva_gazeta.malitounik.R.string.end_fabreary_ru) + "</em><br>\n")
                     }
                 }
-                val split2 = builder.toString().split("===")
-                if (konec == split2.size) konec -= 1
+                val split2Pre = builder.toString().split("===")
+                val split2 = ArrayList<String>()
+                split2.addAll(split2Pre)
+                var addGlava = -1
+                if (konec == split2.size) {
+                    addGlava = konec
+                    split2.add(getSinoidalGlavas(nomer, konec))
+                }
                 var vN: Int
                 var vK: Int
                 val r1 = StringBuilder()
@@ -828,20 +741,22 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     if (stixn != -1) {
                         if (s5 != -1) {
                             if (e == nachalo) {
-                                vN = if (belarus) split2[e].indexOf("$stixn. ") else split2[e].indexOf("$stixn ")
+                                vN = if (belarus && !replace) split2[e].indexOf("$stixn. ")
+                                else split2[e].indexOf("$stixn ")
                                 r1.append(split2[e].substring(vN).trim())
                             }
                             if (e != nachalo && e != konec) {
                                 r1.append("\n").append(split2[e].trim())
                             }
                             if (e == konec) {
-                                val vK1: Int = if (belarus) split2[e].indexOf("$stixk. ") else split2[e].indexOf("$stixk ")
+                                val vK1 = if (belarus && !replace) split2[e].indexOf("$stixk. ")
+                                else split2[e].indexOf("$stixk ")
                                 vK = split2[e].indexOf("\n", vK1)
                                 r2 = split2[e].substring(0, vK)
                             }
                         } else {
                             var vK1: Int
-                            if (belarus) {
+                            if (belarus && !replace) {
                                 vN = split2[e].indexOf("$stixn. ")
                                 vK1 = split2[e].indexOf("$stixk. ")
                             } else {
@@ -853,6 +768,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         }
                     } else {
                         if (belarus) {
+                            if (addGlava == e)
+                                maranAta.add("<!--no--><br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>")
                             maranAta.add("<!--no--><!--nazva+++$nazvaBel $e--><br><strong>$nazvaFullBel $e</strong><br>\n")
                         } else {
                             maranAta.add("<!--no--><!--nazva+++$nazva $e--><br><strong>$nazvaFull $e</strong><br>\n")
@@ -861,7 +778,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         var i3: Int
                         for (i2 in splitline.indices) {
                             i3 = if (kniga.contains("Сир") && e == 1 && i2 >= 8) i2 - 7 else i2 + 1
-                            if (belarus) maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazvaBel + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n") else maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazva + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
+                            if (belarus) maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazvaBel + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
+                            else maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazva + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
                         }
                     }
                 }
@@ -876,18 +794,21 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     var i2 = 0
                     var i3 = stixn
                     while (i2 < res1.size) {
-                        if (belarus) maranAta.add("<!--$kniga.$nachalo.$i3--><!--nazva+++$nazvaBel " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n") else maranAta.add("<!--$kniga.$nachalo.$i3--><!--nazva+++$nazva " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n")
+                        if (belarus) maranAta.add("<!--$kniga.$nachalo.$i3--><!--nazva+++$nazvaBel " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n")
+                        else maranAta.add("<!--$kniga.$nachalo.$i3--><!--nazva+++$nazva " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n")
                         i2++
                         i3++
                     }
                     if (konec - nachalo != 0) {
                         val res2 = r2.trim().split("\n")
                         for (i21 in res2.indices) {
-                            if (belarus) maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazvaBel + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n") else maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazva + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n")
+                            if (belarus) maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazvaBel + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n")
+                            else maranAta.add("<!--" + kniga + "." + konec + "." + (i21 + 1) + "--><!--nazva+++" + nazva + " " + konec + "-->" + res2[i21] + getParallel(nomer, konec, i21) + "\n")
                         }
                     }
                 }
             } catch (t: Throwable) {
+                t.printStackTrace()
                 val t1 = fit.lastIndexOf(" ")
                 if (belarus) {
                     maranAta.add("<!--no--><br><strong>$nazvaFullBel ${fit.substring(t1 + 1)}</strong><br>\n")
@@ -898,6 +819,102 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
         }
         adapter.notifyDataSetChanged()
+    }
+
+    private fun getSinoidalGlavas(nomer: Int, konec: Int): String {
+        val inputStream = getSinoidalResource(nomer)
+        val builder = StringBuilder()
+        val isr = InputStreamReader(inputStream)
+        BufferedReader(isr).use {
+            it.forEachLine { string ->
+                builder.append(string).append("\n")
+            }
+        }
+        return builder.toString().split("===")[konec]
+    }
+
+    private fun getSinoidalResource(nomer: Int): InputStream {
+        var inputStream = resources.openRawResource(R.raw.biblias1)
+        when (nomer) {
+            1 -> inputStream = resources.openRawResource(R.raw.sinaidals1)
+            2 -> inputStream = resources.openRawResource(R.raw.sinaidals2)
+            3 -> inputStream = resources.openRawResource(R.raw.sinaidals3)
+            4 -> inputStream = resources.openRawResource(R.raw.sinaidals4)
+            5 -> inputStream = resources.openRawResource(R.raw.sinaidals5)
+            6 -> inputStream = resources.openRawResource(R.raw.sinaidals6)
+            7 -> inputStream = resources.openRawResource(R.raw.sinaidals7)
+            8 -> inputStream = resources.openRawResource(R.raw.sinaidals8)
+            9 -> inputStream = resources.openRawResource(R.raw.sinaidals9)
+            10 -> inputStream = resources.openRawResource(R.raw.sinaidals10)
+            11 -> inputStream = resources.openRawResource(R.raw.sinaidals11)
+            12 -> inputStream = resources.openRawResource(R.raw.sinaidals12)
+            13 -> inputStream = resources.openRawResource(R.raw.sinaidals13)
+            14 -> inputStream = resources.openRawResource(R.raw.sinaidals14)
+            15 -> inputStream = resources.openRawResource(R.raw.sinaidals15)
+            16 -> inputStream = resources.openRawResource(R.raw.sinaidals16)
+            17 -> inputStream = resources.openRawResource(R.raw.sinaidals17)
+            18 -> inputStream = resources.openRawResource(R.raw.sinaidals18)
+            19 -> inputStream = resources.openRawResource(R.raw.sinaidals19)
+            20 -> inputStream = resources.openRawResource(R.raw.sinaidals20)
+            21 -> inputStream = resources.openRawResource(R.raw.sinaidals21)
+            22 -> inputStream = resources.openRawResource(R.raw.sinaidals22)
+            23 -> inputStream = resources.openRawResource(R.raw.sinaidals23)
+            24 -> inputStream = resources.openRawResource(R.raw.sinaidals24)
+            25 -> inputStream = resources.openRawResource(R.raw.sinaidals25)
+            26 -> inputStream = resources.openRawResource(R.raw.sinaidals26)
+            27 -> inputStream = resources.openRawResource(R.raw.sinaidals27)
+            28 -> inputStream = resources.openRawResource(R.raw.sinaidals28)
+            29 -> inputStream = resources.openRawResource(R.raw.sinaidals29)
+            30 -> inputStream = resources.openRawResource(R.raw.sinaidals30)
+            31 -> inputStream = resources.openRawResource(R.raw.sinaidals31)
+            32 -> inputStream = resources.openRawResource(R.raw.sinaidals32)
+            33 -> inputStream = resources.openRawResource(R.raw.sinaidals33)
+            34 -> inputStream = resources.openRawResource(R.raw.sinaidals34)
+            35 -> inputStream = resources.openRawResource(R.raw.sinaidals35)
+            36 -> inputStream = resources.openRawResource(R.raw.sinaidals36)
+            37 -> inputStream = resources.openRawResource(R.raw.sinaidals37)
+            38 -> inputStream = resources.openRawResource(R.raw.sinaidals38)
+            39 -> inputStream = resources.openRawResource(R.raw.sinaidals39)
+            40 -> inputStream = resources.openRawResource(R.raw.sinaidals40)
+            41 -> inputStream = resources.openRawResource(R.raw.sinaidals41)
+            42 -> inputStream = resources.openRawResource(R.raw.sinaidals42)
+            43 -> inputStream = resources.openRawResource(R.raw.sinaidals43)
+            44 -> inputStream = resources.openRawResource(R.raw.sinaidals44)
+            45 -> inputStream = resources.openRawResource(R.raw.sinaidals45)
+            46 -> inputStream = resources.openRawResource(R.raw.sinaidals46)
+            47 -> inputStream = resources.openRawResource(R.raw.sinaidals47)
+            48 -> inputStream = resources.openRawResource(R.raw.sinaidals48)
+            49 -> inputStream = resources.openRawResource(R.raw.sinaidals49)
+            50 -> inputStream = resources.openRawResource(R.raw.sinaidals50)
+            51 -> inputStream = resources.openRawResource(R.raw.sinaidaln1)
+            52 -> inputStream = resources.openRawResource(R.raw.sinaidaln2)
+            53 -> inputStream = resources.openRawResource(R.raw.sinaidaln3)
+            54 -> inputStream = resources.openRawResource(R.raw.sinaidaln4)
+            55 -> inputStream = resources.openRawResource(R.raw.sinaidaln5)
+            56 -> inputStream = resources.openRawResource(R.raw.sinaidaln6)
+            57 -> inputStream = resources.openRawResource(R.raw.sinaidaln7)
+            58 -> inputStream = resources.openRawResource(R.raw.sinaidaln8)
+            59 -> inputStream = resources.openRawResource(R.raw.sinaidaln9)
+            60 -> inputStream = resources.openRawResource(R.raw.sinaidaln10)
+            61 -> inputStream = resources.openRawResource(R.raw.sinaidaln11)
+            62 -> inputStream = resources.openRawResource(R.raw.sinaidaln12)
+            63 -> inputStream = resources.openRawResource(R.raw.sinaidaln13)
+            64 -> inputStream = resources.openRawResource(R.raw.sinaidaln14)
+            65 -> inputStream = resources.openRawResource(R.raw.sinaidaln15)
+            66 -> inputStream = resources.openRawResource(R.raw.sinaidaln16)
+            67 -> inputStream = resources.openRawResource(R.raw.sinaidaln17)
+            68 -> inputStream = resources.openRawResource(R.raw.sinaidaln18)
+            69 -> inputStream = resources.openRawResource(R.raw.sinaidaln19)
+            70 -> inputStream = resources.openRawResource(R.raw.sinaidaln20)
+            71 -> inputStream = resources.openRawResource(R.raw.sinaidaln21)
+            72 -> inputStream = resources.openRawResource(R.raw.sinaidaln22)
+            73 -> inputStream = resources.openRawResource(R.raw.sinaidaln23)
+            74 -> inputStream = resources.openRawResource(R.raw.sinaidaln24)
+            75 -> inputStream = resources.openRawResource(R.raw.sinaidaln25)
+            76 -> inputStream = resources.openRawResource(R.raw.sinaidaln26)
+            77 -> inputStream = resources.openRawResource(R.raw.sinaidaln27)
+        }
+        return inputStream
     }
 
     private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {

@@ -32,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
+
 class Naviny : AppCompatActivity() {
 
     private lateinit var kq: SharedPreferences
@@ -375,6 +376,35 @@ class Naviny : AppCompatActivity() {
         }
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            if (url.contains("viber://")) {
+                try {
+                    val share = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    share.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    share.setPackage("com.viber.voip")
+                    startActivity(share)
+                } catch (e: ActivityNotFoundException) {
+                    val marketUri = Uri.parse("market://details?id=" + "com.viber.voip")
+                    val marketIntent = Intent(Intent.ACTION_VIEW, marketUri)
+                    startActivity(marketIntent)
+                }
+                return true
+            }
+            /*if (url.contains("https://telegram.me/share")) {
+                try { //https://telegram.me/share?url=https://carkva-gazeta.by/index.php?num=781&year=2021
+                    // https://t.me/share/url?url={url}&text={text}
+                    val urltel = url.replace("telegram", "t")
+                    val share = Intent(Intent.ACTION_VIEW, Uri.parse(urltel))
+                    share.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    share.setPackage("org.telegram.messenger")
+                    startActivity(share)
+                } catch (e: ActivityNotFoundException) {
+                    MainActivity.toastView("Install telegram android application")
+                    val marketUri = Uri.parse("market://details?id=" + "org.telegram.messenger")
+                    val marketIntent = Intent(Intent.ACTION_VIEW, marketUri)
+                    startActivity(marketIntent)
+                }
+                return true
+            }*/
             if (url.contains("https://malitounik.page.link/caliandar")) {
                 val prefEditors = kq.edit()
                 prefEditors.putInt("id", R.id.label1)

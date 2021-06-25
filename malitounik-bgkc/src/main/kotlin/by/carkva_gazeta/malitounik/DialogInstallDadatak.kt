@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -18,6 +17,14 @@ class DialogInstallDadatak : DialogFragment() {
     private lateinit var alert: AlertDialog
     private var _binding: DialogTextviewDisplayBinding? = null
     private val binding get() = _binding!!
+    private var dadatak = "Дадатак"
+    private var url = "https://play.google.com/store/apps/details?id=by.carkva_gazeta.malitounik"
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        dadatak = arguments?.getString("dadatak") ?: dadatak
+        url = arguments?.getString("url") ?: url
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -35,13 +42,11 @@ class DialogInstallDadatak : DialogFragment() {
             if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = getString(R.string.install_dadatak)
-            binding.content.text = getString(R.string.install_dadatak_opis)
-            binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            binding.content.text = getString(R.string.install_dadatak_opis, dadatak)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             ad.setView(binding.root)
             ad.setPositiveButton("GOOGLE PLAY") { _: DialogInterface?, _: Int ->
-                val url = "https://play.google.com/store/apps/details?id=by.carkva_gazeta.malitounik"
                 try {
                     val intent = Intent(Intent.ACTION_VIEW)
                     intent.data = Uri.parse(url)
@@ -55,5 +60,16 @@ class DialogInstallDadatak : DialogFragment() {
             alert = ad.create()
         }
         return alert
+    }
+
+    companion object {
+        fun getInstance(dadatak: String, url: String): DialogInstallDadatak {
+            val bundle = Bundle()
+            bundle.putString("dadatak", dadatak)
+            bundle.putString("url", url)
+            val dialog = DialogInstallDadatak()
+            dialog.arguments = bundle
+            return dialog
+        }
     }
 }

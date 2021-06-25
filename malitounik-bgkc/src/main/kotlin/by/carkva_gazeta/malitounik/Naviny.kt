@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -22,14 +21,10 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.webkit.*
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.NavinyBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -38,31 +33,6 @@ class Naviny : AppCompatActivity() {
     private lateinit var kq: SharedPreferences
     private var dzenNoch = false
     private lateinit var binding: NavinyBinding
-    private var timerCount = 0
-    private var timer = Timer()
-    private var timerTask: TimerTask? = null
-
-    private fun startTimer() {
-        timer = Timer()
-        timerCount = 0
-        timerTask = object : TimerTask() {
-            override fun run() {
-                if (timerCount == 6) {
-                    stopTimer()
-                    CoroutineScope(Dispatchers.Main).launch {
-                        MainActivity.toastView(getString(R.string.bad_internet), Toast.LENGTH_LONG)
-                    }
-                }
-                timerCount++
-            }
-        }
-        timer.schedule(timerTask, 0, 5000)
-    }
-
-    private fun stopTimer() {
-        timer.cancel()
-        timerTask = null
-    }
 
     @SuppressLint("SetTextI18n", "SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -174,7 +144,6 @@ class Naviny : AppCompatActivity() {
 
     override fun onPause() {
         binding.viewWeb.onPause()
-        stopTimer()
         super.onPause()
     }
 
@@ -365,16 +334,6 @@ class Naviny : AppCompatActivity() {
 
     private inner class MyWebViewClient : WebViewClient() {
 
-        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-            super.onPageStarted(view, url, favicon)
-            startTimer()
-        }
-
-        override fun onPageFinished(view: WebView?, url: String?) {
-            super.onPageFinished(view, url)
-            stopTimer()
-        }
-
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             if (url.contains("viber://")) {
                 try {
@@ -383,28 +342,23 @@ class Naviny : AppCompatActivity() {
                     share.setPackage("com.viber.voip")
                     startActivity(share)
                 } catch (e: ActivityNotFoundException) {
-                    val marketUri = Uri.parse("market://details?id=" + "com.viber.voip")
-                    val marketIntent = Intent(Intent.ACTION_VIEW, marketUri)
-                    startActivity(marketIntent)
+                    val dialog = DialogInstallDadatak.getInstance("Viber", "market://details?id=" + "com.viber.voip")
+                    dialog.show(supportFragmentManager, "dialogInstallDadatak")
                 }
                 return true
             }
-            /*if (url.contains("https://telegram.me/share")) {
-                try { //https://telegram.me/share?url=https://carkva-gazeta.by/index.php?num=781&year=2021
-                    // https://t.me/share/url?url={url}&text={text}
-                    val urltel = url.replace("telegram", "t")
-                    val share = Intent(Intent.ACTION_VIEW, Uri.parse(urltel))
+            if (url.contains("tg:msg_url")) {
+                try {
+                    val share = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                     share.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     share.setPackage("org.telegram.messenger")
                     startActivity(share)
                 } catch (e: ActivityNotFoundException) {
-                    MainActivity.toastView("Install telegram android application")
-                    val marketUri = Uri.parse("market://details?id=" + "org.telegram.messenger")
-                    val marketIntent = Intent(Intent.ACTION_VIEW, marketUri)
-                    startActivity(marketIntent)
+                    val dialog = DialogInstallDadatak.getInstance("Telegram", "market://details?id=" + "org.telegram.messenger")
+                    dialog.show(supportFragmentManager, "dialogInstallDadatak")
                 }
                 return true
-            }*/
+            }
             if (url.contains("https://malitounik.page.link/caliandar")) {
                 val prefEditors = kq.edit()
                 prefEditors.putInt("id", R.id.label1)

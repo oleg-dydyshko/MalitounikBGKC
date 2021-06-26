@@ -670,7 +670,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         invalidateOptionsMenu()
         binding.editText.requestFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        imm.showSoftInput(binding.editText, InputMethodManager.SHOW_FORCED)
     }
 
     override fun fileDeliteCancel() {
@@ -702,9 +702,14 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             if (sab.count == "0") {
                 if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
                     if (sab.sec != "-1") {
+                        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            PendingIntent.FLAG_IMMUTABLE or 0
+                        } else {
+                            0
+                        }
                         val intent = createIntent(sab.padz, "Падзея" + " " + sab.dat + " у " + sab.tim, sab.dat, sab.tim)
                         val londs3 = sab.paznic / 100000L
-                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                         am.cancel(pIntent)
                         pIntent.cancel()
                     }
@@ -712,9 +717,14 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     for (p in del) {
                         if (p.padz.contains(filen)) {
                             if (p.sec != "-1") {
+                                val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    PendingIntent.FLAG_IMMUTABLE or 0
+                                } else {
+                                    0
+                                }
                                 val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
                                 val londs3 = p.paznic / 100000L
-                                val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                 am.cancel(pIntent)
                                 pIntent.cancel()
                             }
@@ -724,9 +734,14 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             } else {
                 for (p in del) {
                     if (p.sec != "-1") {
+                        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            PendingIntent.FLAG_IMMUTABLE or 0
+                        } else {
+                            0
+                        }
                         val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
                         val londs3 = p.paznic / 100000L
-                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                         am.cancel(pIntent)
                         pIntent.cancel()
                     }
@@ -836,6 +851,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
         }
         mLastClickTime = SystemClock.elapsedRealtime()
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_IMMUTABLE or 0
+        } else {
+            0
+        }
         val id = item.itemId
         c = Calendar.getInstance() as GregorianCalendar
         val shakeanimation = AnimationUtils.loadAnimation(this, R.anim.shake)
@@ -904,7 +924,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             val londs3 = londs2 / 100000L
                             if (londs2 > c.timeInMillis) {
                                 val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                 when {
                                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                         am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -954,7 +974,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 while (i < 731) {
                                     if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, londs2, 86400000L, pIntent)
                                         break
                                     }
@@ -972,7 +992,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (radio != 1) {
                                     if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         when {
                                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1036,7 +1056,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                     val londs3 = londs2 / 100000L
                                     if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         when {
                                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1101,7 +1121,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                     val londs3 = londs2 / 100000L
                                     if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         when {
                                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1165,7 +1185,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 while (i < 731) {
                                     if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, londs2, 604800000L, pIntent)
                                         break
                                     }
@@ -1183,7 +1203,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (radio != 1) {
                                     if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         when {
                                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1246,7 +1266,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 while (i < 731) {
                                     if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, londs2, 14 * 86400000L, pIntent)
                                         break
                                     }
@@ -1264,7 +1284,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (radio != 1) {
                                     if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         when {
                                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1327,7 +1347,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 while (i < 731) {
                                     if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, londs2, 2419200000L, pIntent)
                                         break
                                     }
@@ -1345,7 +1365,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (radio != 1) {
                                     if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         when {
                                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1407,7 +1427,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 val londs3 = londs2 / 100000L
                                 if (londs2 > c.timeInMillis) {
                                     val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                    val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                    val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                     when {
                                         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1455,7 +1475,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 val londs3 = londs2 / 100000L
                                 if (londs2 > c.timeInMillis) {
                                     val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                    val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                    val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                     when {
                                         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1554,7 +1574,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         if (it.sec != "-1") {
                             intent = createIntent(it.padz, "Падзея" + " " + it.dat + " у " + it.tim, it.dat, it.tim)
                             val londs3 = it.paznic / 100000L
-                            pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                             am.cancel(pIntent)
                             pIntent.cancel()
                         }
@@ -1569,7 +1589,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             val londs3 = londs2 / 100000L
                             if (londs2 > c.timeInMillis) {
                                 intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                 when {
                                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                         am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1619,7 +1639,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 while (i < 731) {
                                     if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, londs2, 86400000L, pIntent)
                                         break
                                     }
@@ -1637,7 +1657,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (radio != 1) {
                                     if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         when {
                                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1701,7 +1721,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                     val londs3 = londs2 / 100000L
                                     if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         when {
                                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1766,7 +1786,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                     val londs3 = londs2 / 100000L
                                     if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         when {
                                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1831,7 +1851,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 while (i < 731) {
                                     if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, londs2, 604800000L, pIntent)
                                         break
                                     }
@@ -1849,7 +1869,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (radio != 1) {
                                     if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         when {
                                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1911,7 +1931,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 while (i < 731) {
                                     if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, londs2, 1209600000L, pIntent)
                                         break
                                     }
@@ -1929,7 +1949,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (radio != 1) {
                                     if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         when {
                                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -1991,7 +2011,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 while (i < 731) {
                                     if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, londs2, 2419200000L, pIntent)
                                         break
                                     }
@@ -2009,7 +2029,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (radio != 1) {
                                     if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                         when {
                                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -2071,7 +2091,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 val londs3 = londs2 / 100000L
                                 if (londs2 > c.timeInMillis) {
                                     intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                    pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                    pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                     when {
                                         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -2120,7 +2140,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 val londs3 = londs2 / 100000L
                                 if (londs2 > c.timeInMillis) {
                                     intent = createIntent(edit, "Падзея $da у $ta", da, ta)
-                                    pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                                    pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                                     when {
                                         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
@@ -2295,7 +2315,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         invalidateOptionsMenu()
         binding.editText.requestFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        imm.showSoftInput(binding.editText, InputMethodManager.SHOW_FORCED)
     }
 
     private fun addSabytie() {
@@ -2337,17 +2357,22 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         invalidateOptionsMenu()
         binding.editText.requestFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        imm.showSoftInput(binding.editText, InputMethodManager.SHOW_FORCED)
     }
 
     override fun sabytieDelAll() {
         redak = true
         CoroutineScope(Dispatchers.IO).launch {
+            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_IMMUTABLE or 0
+            } else {
+                0
+            }
             for (p in MainActivity.padzeia) {
                 if (p.sec != "-1") {
                     val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
                     val londs3 = p.paznic / 100000L
-                    val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, 0)
+                    val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
                     am.cancel(pIntent)
                     pIntent.cancel()
                 }
@@ -2367,6 +2392,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     }
 
     override fun sabytieDelOld() {
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_IMMUTABLE or 0
+        } else {
+            0
+        }
         val c2 = Calendar.getInstance() as GregorianCalendar
         c2.set(Calendar.SECOND, 0)
         val del = ArrayList<Padzeia>()
@@ -2379,7 +2409,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     if (p.sec != "-1") {
                         val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
                         val londs3 = p.paznic / 100000L
-                        val pIntent = PendingIntent.getBroadcast(this, londs3.toInt(), intent, 0)
+                        val pIntent = PendingIntent.getBroadcast(this, londs3.toInt(), intent, flags)
                         am.cancel(pIntent)
                         pIntent.cancel()
                     }
@@ -2393,7 +2423,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     if (p.sec != "-1") {
                         val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
                         val londs3 = p.paznic / 100000L
-                        val pIntent = PendingIntent.getBroadcast(this, londs3.toInt(), intent, 0)
+                        val pIntent = PendingIntent.getBroadcast(this, londs3.toInt(), intent, flags)
                         am.cancel(pIntent)
                         pIntent.cancel()
                     }

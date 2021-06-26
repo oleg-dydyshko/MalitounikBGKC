@@ -41,7 +41,12 @@ class ReceiverBroad : BroadcastReceiver() {
             notificationIntent.putExtra("sabytieView", true)
             notificationIntent.putExtra("sabytieTitle", Sviata)
         }
-        val contentIntent = PendingIntent.getActivity(context, 15, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
+        val contentIntent = PendingIntent.getActivity(context, 15, notificationIntent, flags)
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val uri: Uri
         var bigIcon = R.drawable.calendar_full

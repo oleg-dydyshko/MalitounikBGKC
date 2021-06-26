@@ -29,9 +29,14 @@ class Widget : AppWidgetProvider() {
         sp.edit().putBoolean("WIDGET_ENABLED", true).apply()
         val intent = Intent(context, Widget::class.java)
         intent.action = updateAllWidgets
-        val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, 0)
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_IMMUTABLE or 0
+        } else {
+            0
+        }
+        val pIntentBoot = PendingIntent.getBroadcast(context, 53, intent, flags)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pIntent = PendingIntent.getBroadcast(context, 50, intent, 0)
+        val pIntent = PendingIntent.getBroadcast(context, 50, intent, flags)
         val c = Calendar.getInstance() as GregorianCalendar
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
@@ -64,8 +69,13 @@ class Widget : AppWidgetProvider() {
         sp.edit().putBoolean("WIDGET_ENABLED", false).apply()
         val intent = Intent(context, Widget::class.java)
         intent.action = updateAllWidgets
-        val pIntent = PendingIntent.getBroadcast(context, 50, intent, 0)
-        val pIntentBoot = PendingIntent.getBroadcast(context, 51, intent, 0)
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_IMMUTABLE or 0
+        } else {
+            0
+        }
+        val pIntent = PendingIntent.getBroadcast(context, 50, intent, flags)
+        val pIntentBoot = PendingIntent.getBroadcast(context, 51, intent, flags)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pIntent)
         alarmManager.cancel(pIntentBoot)
@@ -90,7 +100,12 @@ class Widget : AppWidgetProvider() {
             val c = Calendar.getInstance() as GregorianCalendar
             c.add(Calendar.DATE, 1)
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val pIntent = PendingIntent.getBroadcast(context, 50, intentUpdate, 0)
+            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_IMMUTABLE or 0
+            } else {
+                0
+            }
+            val pIntent = PendingIntent.getBroadcast(context, 50, intentUpdate, flags)
             when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
@@ -136,13 +151,18 @@ class Widget : AppWidgetProvider() {
             val widgetDay = "widget_day"
             intent.putExtra(widgetDay, true)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-            val pIntent = PendingIntent.getActivity(context, 500, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            } else {
+                PendingIntent.FLAG_UPDATE_CURRENT
+            }
+            val pIntent = PendingIntent.getActivity(context, 500, intent, flags)
             updateViews.setOnClickPendingIntent(R.id.fullCaliandar, pIntent)
             val settings = Intent(context, WidgetConfig::class.java)
             settings.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             settings.action = "android.appwidget.action.APPWIDGET_CONFIGURE"
             settings.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID)
-            val pSsettings = PendingIntent.getActivity(context, 1000 + widgetID, settings, PendingIntent.FLAG_UPDATE_CURRENT)
+            val pSsettings = PendingIntent.getActivity(context, 1000 + widgetID, settings, flags)
             updateViews.setOnClickPendingIntent(R.id.settings, pSsettings)
             if (dzenNoch) {
                 updateViews.setInt(R.id.Layout, "setBackgroundColor", ContextCompat.getColor(context, R.color.colorbackground_material_dark))

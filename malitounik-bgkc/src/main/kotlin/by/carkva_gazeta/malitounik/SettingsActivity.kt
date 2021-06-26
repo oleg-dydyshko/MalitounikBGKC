@@ -121,11 +121,21 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                 var resetWid = false
                 intent = Intent(context, WidgetMun::class.java)
                 intent.action = UPDATE_ALL_WIDGETS
-                pIntent = PendingIntent.getBroadcast(context, 51, intent, PendingIntent.FLAG_NO_CREATE)
+                var flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
+                } else {
+                    PendingIntent.FLAG_NO_CREATE
+                }
+                pIntent = PendingIntent.getBroadcast(context, 51, intent, flags)
                 if (pIntent != null) {
                     cw.add(Calendar.DATE, 1)
                 }
-                pIntent = PendingIntent.getBroadcast(context, 51, intent, 0)
+                flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    PendingIntent.FLAG_IMMUTABLE or 0
+                } else {
+                    0
+                }
+                pIntent = PendingIntent.getBroadcast(context, 51, intent, flags)
                 when {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                         am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(cw[Calendar.YEAR], cw[Calendar.MONTH], cw[Calendar.DAY_OF_MONTH]), pIntent)
@@ -148,7 +158,12 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                 if (resetWid) {
                     val reset = Intent(context, WidgetMun::class.java)
                     reset.action = RESET_MAIN
-                    val pReset = PendingIntent.getBroadcast(context, 257, reset, PendingIntent.FLAG_UPDATE_CURRENT)
+                    flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    } else {
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    }
+                    val pReset = PendingIntent.getBroadcast(context, 257, reset, flags)
                     when {
                         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 120000L, pReset)
@@ -166,11 +181,21 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                 val cw = Calendar.getInstance() as GregorianCalendar
                 intent = Intent(context, Widget::class.java)
                 intent.action = UPDATE_ALL_WIDGETS
-                pIntent = PendingIntent.getBroadcast(context, 50, intent, PendingIntent.FLAG_NO_CREATE)
+                var flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
+                } else {
+                    PendingIntent.FLAG_NO_CREATE
+                }
+                pIntent = PendingIntent.getBroadcast(context, 50, intent, flags)
                 if (pIntent != null) {
                     cw.add(Calendar.DATE, 1)
                 }
-                pIntent = PendingIntent.getBroadcast(context, 50, intent, 0)
+                flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    PendingIntent.FLAG_IMMUTABLE or 0
+                } else {
+                    0
+                }
+                pIntent = PendingIntent.getBroadcast(context, 50, intent, flags)
                 when {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                         am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(cw[Calendar.YEAR], cw[Calendar.MONTH], cw[Calendar.DAY_OF_MONTH]), pIntent)
@@ -184,6 +209,11 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                 }
             }
             val c = Calendar.getInstance() as GregorianCalendar
+            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_IMMUTABLE or 0
+            } else {
+                0
+            }
             MainActivity.padzeia.forEach {
                 if (it.sec != "-1") {
                     if (it.count == "0") {
@@ -193,7 +223,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                                 while (true) {
                                     if (timerepit > c.timeInMillis) {
                                         intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
-                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 86400000L, pIntent)
                                         break
                                     }
@@ -205,7 +235,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                                 while (true) {
                                     if (timerepit > c.timeInMillis) {
                                         intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
-                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 604800000L, pIntent)
                                         break
                                     }
@@ -217,7 +247,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                                 while (true) {
                                     if (timerepit > c.timeInMillis) {
                                         intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
-                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 1209600000L, pIntent)
                                         break
                                     }
@@ -229,7 +259,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                                 while (true) {
                                     if (timerepit > c.timeInMillis) {
                                         intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
-                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, 0)
+                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 2419200000L, pIntent)
                                         break
                                     }
@@ -238,7 +268,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                             else -> if (it.paznic > c.timeInMillis) {
                                 intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
-                                pIntent = PendingIntent.getBroadcast(context, (it.paznic / 100000).toInt(), intent, 0)
+                                pIntent = PendingIntent.getBroadcast(context, (it.paznic / 100000).toInt(), intent, flags)
                                 when {
                                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                         am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, it.paznic, pIntent)
@@ -255,7 +285,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     } else {
                         if (it.paznic > c.timeInMillis) {
                             intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
-                            pIntent = PendingIntent.getBroadcast(context, (it.paznic / 100000).toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, (it.paznic / 100000).toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, it.paznic, pIntent)
@@ -300,7 +330,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, monthP - 1, dataP - 1, 19)) {
                         intent = createIntent(context, context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, monthP - 1, dataP), mkTimeYear(year, monthP, dataP - 1)) // Абавязковае
                         val code = "1$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, monthP - 1, dataP - 1, 19), pIntent)
@@ -316,7 +346,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, monthP - 1, dataP, timeNotification)) {
                         intent = createIntent(context, context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "2$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, monthP - 1, dataP, timeNotification), pIntent)
@@ -332,7 +362,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, 0, 5, 19)) {
                         intent = createIntent(context, context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 0, 6), mkTimeYear(year, 0, 6)) // Абавязковае
                         val code = "3$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 0, 5, 19), pIntent)
@@ -348,7 +378,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, 0, 6, timeNotification)) {
                         intent = createIntent(context, context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "4$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 0, 6, timeNotification), pIntent)
@@ -367,7 +397,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], 19)) {
                         intent = createIntent(context, context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1), mkTimeYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1)) // Абавязковае
                         val code = "5$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], 19), pIntent)
@@ -384,7 +414,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], timeNotification)) {
                         intent = createIntent(context, context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "6$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], timeNotification), pIntent)
@@ -402,7 +432,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], 19)) {
                         intent = createIntent(context, context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1), mkTimeYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1)) // Абавязковае
                         val code = "7$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], 19), pIntent)
@@ -419,7 +449,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], timeNotification)) {
                         intent = createIntent(context, context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "8$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], timeNotification), pIntent)
@@ -437,7 +467,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], 19)) {
                         intent = createIntent(context, context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1), mkTimeYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1)) // Абавязковае
                         val code = "9$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], 19), pIntent)
@@ -454,7 +484,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], timeNotification)) {
                         intent = createIntent(context, context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "10$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], timeNotification), pIntent)
@@ -470,7 +500,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, 2, 24, 19)) {
                         intent = createIntent(context, context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 2, 25), mkTimeYear(year, 2, 25)) // Абавязковае
                         val code = "11$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 2, 24, 19), pIntent)
@@ -486,7 +516,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, 2, 25, timeNotification)) {
                         intent = createIntent(context, context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "12$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 2, 25, timeNotification), pIntent)
@@ -502,7 +532,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, 7, 14, 19)) {
                         intent = createIntent(context, context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 7, 15), mkTimeYear(year, 7, 15)) // Абавязковае
                         val code = "13$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 7, 14, 19), pIntent)
@@ -518,7 +548,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, 7, 15, timeNotification)) {
                         intent = createIntent(context, context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "14$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 7, 15, timeNotification), pIntent)
@@ -534,7 +564,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, 11, 24, 19)) {
                         intent = createIntent(context, context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 11, 25), mkTimeYear(year, 11, 25)) // Абавязковае
                         val code = "15$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 11, 24, 19), pIntent)
@@ -550,7 +580,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, 11, 25, timeNotification)) {
                         intent = createIntent(context, context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "16$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 11, 25, timeNotification), pIntent)
@@ -566,7 +596,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, 5, 28, 19)) {
                         intent = createIntent(context, context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 5, 29), mkTimeYear(year, 5, 29)) // Абавязковае
                         val code = "17$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 5, 28, 19), pIntent)
@@ -582,7 +612,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (c.timeInMillis < mkTime(year, 5, 29, timeNotification)) {
                         intent = createIntent(context, context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "18$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 5, 29, timeNotification), pIntent)
@@ -599,7 +629,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 1, 1, 19)) {
                             intent = createIntent(context, context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 1, 2), mkTimeYear(year, 1, 2))
                             val code = "19$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 1, 1, 19), pIntent)
@@ -615,7 +645,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 1, 2, timeNotification)) {
                             intent = createIntent(context, context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv2))
                             val code = "20$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 1, 2, timeNotification), pIntent)
@@ -631,7 +661,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 7, 5, 19)) {
                             intent = createIntent(context, context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 7, 6), mkTimeYear(year, 7, 6))
                             val code = "21$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 7, 5, 19), pIntent)
@@ -647,7 +677,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 7, 6, timeNotification)) {
                             intent = createIntent(context, context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv2))
                             val code = "22$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 7, 6, timeNotification), pIntent)
@@ -663,7 +693,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 8, 7, 19)) {
                             intent = createIntent(context, context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 8, 8), mkTimeYear(year, 8, 8))
                             val code = "23$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 8, 7, 19), pIntent)
@@ -679,7 +709,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 8, 8, timeNotification)) {
                             intent = createIntent(context, context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv2))
                             val code = "24$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 8, 8, timeNotification), pIntent)
@@ -695,7 +725,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 8, 13, 19)) {
                             intent = createIntent(context, context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 8, 14), mkTimeYear(year, 8, 14))
                             val code = "25$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 8, 13, 19), pIntent)
@@ -711,7 +741,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 8, 14, timeNotification)) {
                             intent = createIntent(context, context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv2))
                             val code = "26$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 8, 14, timeNotification), pIntent)
@@ -727,7 +757,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 10, 20, 19)) {
                             intent = createIntent(context, context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 10, 21), mkTimeYear(year, 10, 21))
                             val code = "27$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 10, 20, 19), pIntent)
@@ -743,7 +773,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 10, 21, timeNotification)) {
                             intent = createIntent(context, context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv2))
                             val code = "28$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 10, 21, timeNotification), pIntent)
@@ -759,7 +789,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 11, 31, 19)) {
                             intent = createIntent(context, context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year + 1, 0, 1), mkTimeYear(year + 1, 0, 1))
                             val code = "29$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 11, 31, 19), pIntent)
@@ -775,7 +805,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 0, 1, timeNotification)) {
                             intent = createIntent(context, context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv2))
                             val code = "30$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 0, 1, timeNotification), pIntent)
@@ -791,7 +821,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 5, 23, 19)) {
                             intent = createIntent(context, context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 5, 24), mkTimeYear(year, 5, 24))
                             val code = "31$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 5, 23, 19), pIntent)
@@ -807,7 +837,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 5, 24, timeNotification)) {
                             intent = createIntent(context, context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv2))
                             val code = "32$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 5, 24, timeNotification), pIntent)
@@ -823,7 +853,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 7, 28, 19)) {
                             intent = createIntent(context, context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 7, 29), mkTimeYear(year, 7, 29))
                             val code = "33$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 7, 28, 19), pIntent)
@@ -839,7 +869,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 7, 29, timeNotification)) {
                             intent = createIntent(context, context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv2))
                             val code = "34$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 7, 29, timeNotification), pIntent)
@@ -855,7 +885,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 8, 30, 19)) {
                             intent = createIntent(context, context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 9, 1), mkTimeYear(year, 9, 1))
                             val code = "35$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 8, 30, 19), pIntent)
@@ -871,7 +901,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         if (c.timeInMillis < mkTime(year, 9, 1, timeNotification)) {
                             intent = createIntent(context, context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv2))
                             val code = "36$year"
-                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                            pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(year, 9, 1, timeNotification), pIntent)
@@ -891,148 +921,148 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     if (notifications != 1) {
                         intent = createIntent(context, context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "1$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "2$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "3$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "4$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "5$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "6$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "7$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "8$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "9$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "10$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "11$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "12$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "13$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "14$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "15$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "16$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "17$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                         intent = createIntent(context, context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "18$year"
-                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                        pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                     }
                     intent = createIntent(context, context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv1))
                     code = "19$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv2))
                     code = "20$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv1))
                     code = "21$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv2))
                     code = "22$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv1))
                     code = "23$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv2))
                     code = "24$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv1))
                     code = "25$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv2))
                     code = "26$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv1))
                     code = "27$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv2))
                     code = "28$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv1))
                     code = "29$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv2))
                     code = "30$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv1))
                     code = "31$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv2))
                     code = "32$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv1))
                     code = "33$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv2))
                     code = "34$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv1))
                     code = "35$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                     intent = createIntent(context, context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv2))
                     code = "36$year"
-                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, 0)
+                    pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
                 }
             }

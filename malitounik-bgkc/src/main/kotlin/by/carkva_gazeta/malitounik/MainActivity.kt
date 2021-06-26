@@ -366,8 +366,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
             if (extras.getBoolean("sabytie", false)) {
                 idSelect = R.id.label1
-                val chyt = extras.getInt("data") - 1
-                val arrayList = MenuCaliandar.getDataCalaindar(chyt)
+                val chyt = extras.getInt("data")
+                val calendar = Calendar.getInstance()
+                calendar.set(Calendar.DAY_OF_YEAR, chyt)
+                val arrayList = MenuCaliandar.getDataCalaindar(calendar[Calendar.DATE])
                 setDataCalendar = arrayList[0][25].toInt()
             }
         }

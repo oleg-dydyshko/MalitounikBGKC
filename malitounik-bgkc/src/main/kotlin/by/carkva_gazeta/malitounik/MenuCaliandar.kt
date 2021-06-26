@@ -5,6 +5,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
@@ -85,12 +86,17 @@ class MenuCaliandar : MenuCaliandarFragment() {
             MainActivity.padzeia.sort()
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
+                    val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        PendingIntent.FLAG_IMMUTABLE or 0
+                    } else {
+                        0
+                    }
                     if (sab.count == "0") {
                         if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
                             if (sab.sec != "-1") {
                                 val intent = createIntent(sab.padz, "Падзея" + " " + sab.dat + " у " + sab.tim, sab.dat, sab.tim)
                                 val londs3 = sab.paznic / 100000L
-                                val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, 0)
+                                val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, flags)
                                 am.cancel(pIntent)
                                 pIntent.cancel()
                             }
@@ -100,7 +106,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
                                     if (p.sec != "-1") {
                                         val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
                                         val londs3 = p.paznic / 100000L
-                                        val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, 0)
+                                        val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, flags)
                                         am.cancel(pIntent)
                                         pIntent.cancel()
                                     }
@@ -112,7 +118,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
                             if (p.sec != "-1") {
                                 val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
                                 val londs3 = p.paznic / 100000L
-                                val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, 0)
+                                val pIntent = PendingIntent.getBroadcast(it, londs3.toInt(), intent, flags)
                                 am.cancel(pIntent)
                                 pIntent.cancel()
                             }

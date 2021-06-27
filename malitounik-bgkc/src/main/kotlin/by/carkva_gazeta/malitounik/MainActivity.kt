@@ -366,11 +366,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
             if (extras.getBoolean("sabytie", false)) {
                 idSelect = R.id.label1
-                val chyt = extras.getInt("data")
                 val calendar = Calendar.getInstance()
+                val chyt = extras.getInt("data")
+                val year = extras.getInt("year")
                 calendar.set(Calendar.DAY_OF_YEAR, chyt)
-                val arrayList = MenuCaliandar.getDataCalaindar(calendar[Calendar.DATE])
-                setDataCalendar = arrayList[0][25].toInt()
+                calendar.set(Calendar.YEAR, year)
+                val arrayList = MenuCaliandar.getDataCalaindar(mun = calendar[Calendar.MONTH], year = calendar[Calendar.YEAR])
+                setDataCalendar = arrayList[calendar[Calendar.DATE] - 1][25].toInt()
             }
         }
         var scroll = false

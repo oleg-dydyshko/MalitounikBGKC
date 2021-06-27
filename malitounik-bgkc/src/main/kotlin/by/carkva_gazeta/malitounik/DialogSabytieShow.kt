@@ -3,6 +3,7 @@ package by.carkva_gazeta.malitounik
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -22,6 +23,7 @@ class DialogSabytieShow : DialogFragment() {
     private var res = ""
     private var paz = false
     private var konecSabytie = true
+    private var color = 0
     private lateinit var alert: AlertDialog
     private var _binding: DialogTextviewDisplayBinding? = null
     private val binding get() = _binding!!
@@ -41,6 +43,7 @@ class DialogSabytieShow : DialogFragment() {
         res = arguments?.getString("res") ?: ""
         paz = arguments?.getBoolean("paz") ?: false
         konecSabytie = arguments?.getBoolean("konecSabytie") ?: true
+        color = arguments?.getInt("color") ?: 0
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -49,8 +52,7 @@ class DialogSabytieShow : DialogFragment() {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             binding.title.text = title
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
+            binding.title.setBackgroundColor(Color.parseColor(Sabytie.getColors(color)))
             val textR = if (konecSabytie) {
                 SpannableString(getString(R.string.sabytie_kali, data, time, res))
             } else {
@@ -78,7 +80,7 @@ class DialogSabytieShow : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(title: String, data: String, time: String, dataK: String, timeK: String, res: String, paz: Boolean, konecSabytie: Boolean): DialogSabytieShow {
+        fun getInstance(title: String, data: String, time: String, dataK: String, timeK: String, res: String, paz: Boolean, konecSabytie: Boolean, color: Int): DialogSabytieShow {
             val dialogShowSabytie = DialogSabytieShow()
             val bundle = Bundle()
             bundle.putString("title", title)
@@ -89,6 +91,7 @@ class DialogSabytieShow : DialogFragment() {
             bundle.putString("res", res)
             bundle.putBoolean("paz", paz)
             bundle.putBoolean("konecSabytie", konecSabytie)
+            bundle.putInt("color", color)
             dialogShowSabytie.arguments = bundle
             return dialogShowSabytie
         }

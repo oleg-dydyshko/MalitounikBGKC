@@ -2455,8 +2455,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         i.putExtra("extra", extra)
         val dateN = data.split(".")
         val timeN = time.split(":")
-        val g = GregorianCalendar(dateN[2].toInt(), dateN[1].toInt() - 1, dateN[0].toInt(), 0, 0, 0)
+        val g = GregorianCalendar(dateN[2].toInt(), dateN[1].toInt() - 1, dateN[0].toInt())
         i.putExtra("dataString", dateN[0] + dateN[1] + timeN[0] + timeN[1])
+        i.putExtra("dayofyear", g[Calendar.DAY_OF_YEAR])
         i.putExtra("year", g[Calendar.YEAR])
         return i
     }
@@ -2566,6 +2567,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 var timeK = ""
                 var paz: Long = 0
                 var konecSabytie = false
+                var color = 0
                 for (i in MainActivity.padzeia.indices) {
                     if (i == adapterPosition) {
                         val p = MainActivity.padzeia[i]
@@ -2576,6 +2578,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         dataK = p.datK
                         timeK = p.timK
                         konecSabytie = p.konecSabytie
+                        color = p.color
                     }
                 }
                 var res = getString(R.string.sabytie_no_pavedam)
@@ -2593,7 +2596,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     res = "Паведаміць: " + nol11 + gc[Calendar.DAY_OF_MONTH] + "." + nol21 + (gc[Calendar.MONTH] + 1) + "." + gc[Calendar.YEAR] + " у " + gc[Calendar.HOUR_OF_DAY] + ":" + nol3 + gc[Calendar.MINUTE]
                     if (realTime > paz) paznicia = true
                 }
-                val dialogShowSabytie = DialogSabytieShow.getInstance(title, data, time, dataK, timeK, res, paznicia, !konecSabytie)
+                val dialogShowSabytie = DialogSabytieShow.getInstance(title, data, time, dataK, timeK, res, paznicia, !konecSabytie, color)
                 dialogShowSabytie.show(supportFragmentManager, "sabytie")
             }
         }
@@ -2742,15 +2745,15 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         private val colors = arrayOf("#D00505", "#800080", "#C71585", "#FF00FF", "#F4A460", "#D2691E", "#A52A2A", "#1E90FF", "#6A5ACD", "#228B22", "#9ACD32", "#20B2AA")
         var editCaliandar = false
 
-        fun getColors(context: Context): Array<String> {
-            val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+        fun getColors(color: Int): String {
+            val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) {
                 colors[0] = "#f44336"
             } else {
                 colors[0] = "#D00505"
             }
-            return colors
+            return colors[color]
         }
     }
 }

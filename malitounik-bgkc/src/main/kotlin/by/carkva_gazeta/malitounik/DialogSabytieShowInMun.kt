@@ -44,9 +44,6 @@ class DialogSabytieShowInMun : DialogFragment() {
             _binding = DialogSabytieShowInMunBinding.inflate(LayoutInflater.from(it))
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            binding.title.text = getString(R.string.sabytie).uppercase()
-            if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
-            else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             var style = R.style.AlertDialogTheme
             if (dzenNoch) style = R.style.AlertDialogThemeBlack
             sabytieView(dayYear)
@@ -111,15 +108,14 @@ class DialogSabytieShowInMun : DialogFragment() {
                         textViewT.text = title
                         textViewT.setPadding(10 * density, 10 * density, 10 * density, 10 * density)
                         textViewT.typeface = MainActivity.createFont(Typeface.BOLD)
-                        textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                        textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
                         textViewT.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
-                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(it)[p.color]))
+                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(p.color)))
                         sabytieList.add(textViewT)
                         val textView = TextView(it)
                         textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                         textView.setPadding(10 * density, 0, 10 * density, 10 * density)
                         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-                        textView.setBackgroundColor(ContextCompat.getColor(it, R.color.colorDivider))
                         if (dzenNoch) {
                             textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             textView.setBackgroundResource(R.color.colorprimary_material_dark)

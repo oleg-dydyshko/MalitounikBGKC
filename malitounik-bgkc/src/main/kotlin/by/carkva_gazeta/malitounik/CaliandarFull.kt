@@ -555,7 +555,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
 
                         textViewT.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
-                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(activity)[p.color]))
+                        textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(p.color)))
                         sabytieList.add(textViewT)
                         val textView = TextView(activity)
                         textView.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_text))

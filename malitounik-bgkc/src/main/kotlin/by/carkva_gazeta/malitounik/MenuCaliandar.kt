@@ -11,6 +11,7 @@ import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.adapter.FragmentViewHolder
 import androidx.viewpager2.widget.ViewPager2
 import by.carkva_gazeta.malitounik.databinding.MenuCaliandarBinding
 import com.google.gson.Gson
@@ -126,8 +127,8 @@ class MenuCaliandar : MenuCaliandarFragment() {
                     }
                 }
                 MainActivity.toastView(getString(R.string.remove_padzea))
-                adapter.notifyDataSetChanged()
                 Sabytie.editCaliandar = true
+                adapter.notifyDataSetChanged()
             }
         }
     }
@@ -218,7 +219,12 @@ class MenuCaliandar : MenuCaliandarFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private class MyCalendarAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+    private class MyCalendarAdapter(val fragment: Fragment) : FragmentStateAdapter(fragment) {
+
+        override fun onBindViewHolder(holder: FragmentViewHolder, position: Int, payloads: MutableList<Any>) {
+            val fragment = fragment.childFragmentManager.findFragmentByTag("f" + holder.itemId) as? CaliandarFull
+            fragment?.sabytieView("") ?: super.onBindViewHolder(holder, position, payloads)
+        }
 
         override fun getItemCount() = getDataCalaindar().size
 

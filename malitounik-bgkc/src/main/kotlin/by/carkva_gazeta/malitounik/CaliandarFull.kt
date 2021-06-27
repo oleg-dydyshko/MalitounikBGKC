@@ -14,7 +14,6 @@ import android.text.method.LinkMovementMethod
 import android.text.style.AlignmentSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -303,7 +302,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         binding.znakTipicona.setImageResource(R.drawable.znaki_ttk_black)
                     }
                 }
-            } //val drugasnuiaSvity = withContext(Dispatchers.IO) {
+            }
             val svityDrugasnuia = SpannableStringBuilder()
             if (k.getInt("pravas", 0) == 1 && MenuCaliandar.getPositionCaliandar(position)[14] != "") {
                 svityDrugasnuia.append(MenuCaliandar.getPositionCaliandar(position)[14])
@@ -329,8 +328,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             if (k.getInt("pafesii", 0) == 1 && MenuCaliandar.getPositionCaliandar(position)[17] != "") {
                 if (svityDrugasnuia.isNotEmpty()) svityDrugasnuia.append("\n\n")
                 svityDrugasnuia.append(MenuCaliandar.getPositionCaliandar(position)[17])
-            } //return@withContext svityDrugasnuia
-            //}
+            }
             if (svityDrugasnuia.isNotEmpty()) {
                 binding.sviatyDrugasnyia.text = svityDrugasnuia
                 binding.sviatyDrugasnyia.visibility = View.VISIBLE
@@ -357,7 +355,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     Sabytie.editCaliandar = false
                 }
             }
-        } //}
+        }
         return binding.root
     }
 
@@ -502,8 +500,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         }
     }
 
-    @Suppress("DEPRECATION")
-    private fun sabytieView(sabytieTitle: String) {
+    fun sabytieView(sabytieTitle: String) {
+        binding.padzei.removeAllViewsInLayout()
         val gc = Calendar.getInstance() as GregorianCalendar
         val sabytieList = ArrayList<TextView>()
         MainActivity.padzeia.sort()

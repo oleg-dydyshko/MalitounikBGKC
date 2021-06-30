@@ -9,8 +9,6 @@ import androidx.fragment.app.Fragment
 import by.carkva_gazeta.admin.databinding.AdminBiblePageFragmentBinding
 import by.carkva_gazeta.malitounik.MainActivity
 import kotlinx.coroutines.*
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -55,7 +53,6 @@ class NovyZapavietSemuxaFragment : Fragment() {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
-                val response = StringBuffer()
                 var responseCodeS = 500
                 withContext(Dispatchers.IO) {
                     var zag = "Разьдзел"
@@ -74,18 +71,11 @@ class NovyZapavietSemuxaFragment : Fragment() {
                         wr.write(reqParam)
                         wr.flush()
                         responseCodeS = responseCode
-                        BufferedReader(InputStreamReader(inputStream)).use {
-                            var inputLine = it.readLine()
-                            while (inputLine != null) {
-                                response.append(inputLine)
-                                inputLine = it.readLine()
-                            }
-                        }
                     }
                 }
                 activity?.let {
                     if (responseCodeS == 200) {
-                        MainActivity.toastView(response.toString())
+                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
                     } else {
                         MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
                     }

@@ -309,6 +309,12 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                         wr.write(reqParam)
                         wr.flush()
                         responseCodeS = responseCode
+                        /*BufferedReader(InputStreamReader(inputStream)).use {
+                            val inputLine = it.readLine()
+                            if (inputLine != null) {
+                                response.append(inputLine)
+                            }
+                        }*/
                     }
                 }
                 if (responseCodeS == 200) {

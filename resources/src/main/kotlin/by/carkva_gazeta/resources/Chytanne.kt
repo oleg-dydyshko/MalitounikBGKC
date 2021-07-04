@@ -54,7 +54,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
-    private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
+    private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
     private var dzenNoch = false
     private var autoscroll = false
     private var n = 0
@@ -101,7 +101,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                 autoStartScroll()
             }
         }
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         binding.constraint.setOnTouchListener(this)
         binding.InteractiveScroll.setOnBottomReachedListener(object : OnBottomReachedListener {

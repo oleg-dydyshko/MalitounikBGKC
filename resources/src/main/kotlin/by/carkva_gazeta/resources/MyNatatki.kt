@@ -64,7 +64,7 @@ class MyNatatki : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         binding = MyNatatkiBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.EditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         if (savedInstanceState != null) {
             filename = savedInstanceState.getString("filename") ?: ""

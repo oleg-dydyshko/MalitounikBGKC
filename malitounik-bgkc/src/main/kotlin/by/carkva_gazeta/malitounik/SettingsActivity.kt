@@ -45,7 +45,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
     companion object {
         private const val UPDATE_ALL_WIDGETS = "update_all_widgets"
         private const val RESET_MAIN = "reset_main"
-        const val GET_DEFAULT_FONT_SIZE = 18F
+        const val GET_FONT_SIZE_DEFAULT = 18F
         const val GET_FONT_SIZE_MIN = 14F
         const val GET_FONT_SIZE_MAX = 54F
         const val GET_FONT_SIZE_TOAST = 12F
@@ -1413,7 +1413,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             File("$filesDir/Book").deleteRecursively()
             MainActivity.toastView(getString(R.string.save))
             prefEditor.putInt("id", id)
-            prefEditor.putFloat("font_biblia", GET_DEFAULT_FONT_SIZE)
+            prefEditor.putFloat("font_biblia", GET_FONT_SIZE_DEFAULT)
             prefEditor.putBoolean("dzen_noch", false)
             prefEditor.putInt("pravas", 0)
             prefEditor.putInt("pkc", 0)

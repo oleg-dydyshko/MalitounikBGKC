@@ -52,7 +52,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
-    private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
+    private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
     private var dzenNoch = false
     private var autoscroll = false
     private var n = 0
@@ -100,7 +100,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             }
         }
         title = intent.extras?.getString("title", "") ?: ""
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.constraint.setOnTouchListener(this)
         binding.InteractiveScroll.setOnBottomReachedListener(object : OnBottomReachedListener {
             override fun onBottomReached() {

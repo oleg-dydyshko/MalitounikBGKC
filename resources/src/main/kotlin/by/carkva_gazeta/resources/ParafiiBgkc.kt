@@ -42,7 +42,7 @@ class ParafiiBgkc : AppCompatActivity() {
             window.attributes = lp
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         val dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)

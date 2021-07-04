@@ -19,13 +19,13 @@ class PasliaPrychasciaFragment : Fragment() {
 
     private var resursID = R.raw.paslia_prychascia1
     private lateinit var k: SharedPreferences
-    private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
+    private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
     private var dzenNoch = false
     private var _binding: AkafistFragmentPasliaPrichBinding? = null
     private val binding get() = _binding!!
 
     fun upDateTextView() {
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
     }
 
@@ -44,7 +44,7 @@ class PasliaPrychasciaFragment : Fragment() {
         activity?.let { activity ->
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = k.getBoolean("dzen_noch", false)
-            fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             binding.TextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             val inputStream = activity.resources.openRawResource(resursID)
             val isr = InputStreamReader(inputStream)

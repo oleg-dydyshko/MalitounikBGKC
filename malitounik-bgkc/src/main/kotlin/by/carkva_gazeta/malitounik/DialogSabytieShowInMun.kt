@@ -115,7 +115,7 @@ class DialogSabytieShowInMun : DialogFragment() {
                         val textView = TextView(it)
                         textView.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                         textView.setPadding(10 * density, 0, 10 * density, 10 * density)
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
                         if (dzenNoch) {
                             textView.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                             textView.setBackgroundResource(R.color.colorprimary_material_dark)

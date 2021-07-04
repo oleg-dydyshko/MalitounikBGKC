@@ -60,7 +60,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var change = false
     private var cytanne = ""
     private lateinit var k: SharedPreferences
-    private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
+    private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
     private var dzenNoch = false
     private var autoscroll = false
     private lateinit var adapter: MaranAtaListAdaprer
@@ -143,7 +143,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.ListView.onItemClickListener = this
         binding.ListView.onItemLongClickListener = this
         binding.ListView.setOnTouchListener(this)
@@ -570,7 +570,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     private fun setMaranata(cytanne: String) {
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         val chten = cytanne.split(";")
         for (i in chten.indices) {
             val fit = chten[i].trim()
@@ -729,9 +729,11 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 val split2 = ArrayList<String>()
                 split2.addAll(split2Pre)
                 var addGlava = -1
-                if (konec == split2.size) {
-                    addGlava = konec
-                    split2.add(getSinoidalGlavas(nomer, konec))
+                if (konec >= split2.size) {
+                    addGlava = split2.size
+                    for (g in split2.size..konec) {
+                        split2.add(getSinoidalGlavas(nomer, g))
+                    }
                 }
                 var vN: Int
                 var vK: Int

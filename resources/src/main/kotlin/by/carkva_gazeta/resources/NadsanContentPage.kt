@@ -247,7 +247,7 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
                     viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
                 }
             }
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT))
             viewHolder.text.text = MainActivity.fromHtml(bible[position])
             return rootView
         }

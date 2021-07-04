@@ -51,7 +51,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
     }
     private var fullscreenPage = false
     private lateinit var chin: SharedPreferences
-    private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
+    private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
     private var dzenNoch = false
     private var n = 0
     private var title = ""
@@ -115,7 +115,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
-        fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         if (dzenNoch) {
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
@@ -487,7 +487,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         dzenNoch = chin.getBoolean("dzen_noch", false)
         val prefEditor: Editor = chin.edit()
         val id = item.itemId

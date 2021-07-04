@@ -183,7 +183,7 @@ class Chytanny : AppCompatActivity() {
         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         llp.setMargins(padding.toInt(), padding.toInt(), 0, 0)
         textView.layoutParams = llp
-        textView.textSize = SettingsActivity.GET_DEFAULT_FONT_SIZE
+        textView.textSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
         textView.text = text.trim()
         return textView
     }
@@ -197,7 +197,7 @@ class Chytanny : AppCompatActivity() {
         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         llp.setMargins(padding.toInt(), padding.toInt(), padding.toInt(), 0)
         textView.layoutParams = llp
-        textView.textSize = SettingsActivity.GET_DEFAULT_FONT_SIZE
+        textView.textSize = SettingsActivity.GET_FONT_SIZE_DEFAULT
         textView.setText(text)
         textView.isSingleLine = true
         return textView

@@ -29,7 +29,6 @@ import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.resources.databinding.AkafistActivityPasliaPrichBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
 import java.util.*
@@ -64,7 +63,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     private var dzenNoch = false
     private var pasliaPrychascia = 0
     private var n = 0
-    private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
+    private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
     private lateinit var binding: AkafistActivityPasliaPrichBinding
     private lateinit var bindingprogress: ProgressBinding
     private var procentJob: Job? = null
@@ -84,7 +83,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         val tabLayout = (binding.tabLayout.getChildAt(0) as ViewGroup).getChildAt(pasliaPrychascia) as LinearLayout
         val tabTextView = tabLayout.getChildAt(1) as TextView
         tabTextView.typeface = MainActivity.createFont(Typeface.BOLD)
-        tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -100,7 +99,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             window.attributes = lp
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = AkafistActivityPasliaPrichBinding.inflate(layoutInflater)
@@ -120,24 +119,6 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             tab.text = malitvy[position].title
         }.attach()
         if (dzenNoch) binding.tabLayout.setTabTextColors(Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorSecondary_text))), Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))))
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                pasliaPrychascia = tab?.position ?: 0
-                val tabLayout = (binding.tabLayout.getChildAt(0) as ViewGroup).getChildAt(pasliaPrychascia) as LinearLayout
-                val tabTextView = tabLayout.getChildAt(1) as TextView
-                tabTextView.typeface = MainActivity.createFont(Typeface.BOLD)
-                tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                val tabLayout = (binding.tabLayout.getChildAt(0) as ViewGroup).getChildAt(tab?.position ?: 0) as LinearLayout
-                val tabTextView = tabLayout.getChildAt(1) as TextView
-                tabTextView.typeface = MainActivity.createFont(Typeface.NORMAL)
-                tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })
         binding.pager.offscreenPageLimit = 3
         binding.pager.setCurrentItem(pasliaPrychascia, false)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)

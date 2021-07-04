@@ -35,7 +35,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             rootView = convertView
             ea = rootView.tag as BibleArrayAdapterParallelItems
         }
-        val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
         val parallel = BibliaParallelChtenia()
         var res = "+-+"
@@ -499,7 +499,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                         11 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark11)
                         12 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark12)
                     }
-                    val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                    val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
                     val realpadding = (fontSize * context.resources.displayMetrics.density).toInt()
                     d?.setBounds(0, 0, realpadding, realpadding)
                     d?.let {
@@ -642,7 +642,7 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                         11 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark11)
                         12 -> d = ContextCompat.getDrawable(context, R.drawable.bookmark12)
                     }
-                    val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                    val fontSize = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
                     val realpadding = (fontSize * context.resources.displayMetrics.density).toInt()
                     d?.setBounds(0, 0, realpadding, realpadding)
                     d?.let {

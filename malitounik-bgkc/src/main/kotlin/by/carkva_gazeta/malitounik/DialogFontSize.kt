@@ -66,7 +66,7 @@ class DialogFontSize : DialogFragment() {
     }
 
     private fun getFont(progress: Int): Float {
-        var font = SettingsActivity.GET_DEFAULT_FONT_SIZE
+        var font = SettingsActivity.GET_FONT_SIZE_DEFAULT
         when (progress) {
             0 -> font = 14F
             1 -> font = 18F
@@ -102,7 +102,7 @@ class DialogFontSize : DialogFragment() {
             alert = builder.create()
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             if (dzenNoch) {
                 binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 binding.textSize.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -119,9 +119,9 @@ class DialogFontSize : DialogFragment() {
             binding.ok.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_TOAST)
             binding.zmauchanni.setOnClickListener {
                 val prefEditors = k.edit()
-                prefEditors.putFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                prefEditors.putFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
                 prefEditors.apply()
-                mListener.onDialogFontSize(SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                mListener.onDialogFontSize(SettingsActivity.GET_FONT_SIZE_DEFAULT)
                 dialog?.cancel()
             }
             binding.cansel.setOnClickListener {

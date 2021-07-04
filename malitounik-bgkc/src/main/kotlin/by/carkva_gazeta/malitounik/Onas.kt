@@ -43,7 +43,7 @@ class Onas : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = OnasBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.onas.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         binding.onas.movementMethod = LinkMovementMethod.getInstance()
         setSupportActionBar(binding.toolbar)

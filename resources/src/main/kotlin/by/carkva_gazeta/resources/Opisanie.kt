@@ -134,7 +134,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         if (dzenNoch) res = res.replace("#d00505", "#f44336")
         if (res.contains("<!--image-->")) {
             res.split("<!--image-->").forEachIndexed { index, text ->
-                val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
                 val spanned = MainActivity.fromHtml(text)
                 when (index) {
                     0 -> {
@@ -159,7 +159,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                 }
             }
         } else {
-            val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             val spanned = MainActivity.fromHtml(res)
             binding.TextView1.textSize = fontBiblia
             binding.TextView1.text = spanned.trim()
@@ -176,7 +176,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             if (day == it[0].toInt() && mun == it[1].toInt()) {
                 var res = it[2]
                 if (dzenNoch) res = res.replace("#d00505", "#f44336")
-                val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
                 val spanned = MainActivity.fromHtml(res)
                 binding.TextView1.textSize = fontBiblia
                 binding.TextView1.text = spanned.trim()

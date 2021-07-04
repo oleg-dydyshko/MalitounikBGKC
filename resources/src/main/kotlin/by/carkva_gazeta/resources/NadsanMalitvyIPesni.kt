@@ -41,7 +41,7 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
     private var checkSetDzenNoch = false
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
-    private var fontBiblia = SettingsActivity.GET_DEFAULT_FONT_SIZE
+    private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
     private lateinit var binding: NadsanMalitvyIPesnyBinding
     private var resetTollbarJob: Job? = null
 
@@ -99,7 +99,7 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE)
+        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.malitvyIPesny.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         setTollbarTheme()
     }

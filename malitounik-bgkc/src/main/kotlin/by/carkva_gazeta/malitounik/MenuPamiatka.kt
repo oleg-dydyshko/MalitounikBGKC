@@ -97,7 +97,7 @@ class MenuPamiatka : PadryxtoukaPamiatkaListFragment() {
                 rootView = convertView
                 ea = rootView.tag as ExpArrayAdapterParallelItems
             }
-            ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_DEFAULT_FONT_SIZE))
+            ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT))
             ea.textView.text = MainActivity.fromHtml(list[position])
             if (k.getBoolean("dzen_noch", false)) {
                 ea.textView.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))

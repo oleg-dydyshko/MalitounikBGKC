@@ -48,8 +48,8 @@ class MenuPashalii : PashaliiFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let {
-            binding.gri.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
-            binding.ula.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            binding.gri.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
+            binding.ula.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             if (savedInstanceState == null) setArrayPasha(it)
             else setArrayPasha(it, savedInstanceState.getInt("year"))
             myArrayAdapter = MyArrayAdapter(it)
@@ -137,7 +137,7 @@ class MenuPashalii : PashaliiFragment() {
                 rootView = convertView
                 ea = rootView.tag as ViewHolder
             }
-            ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+            ea.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
             var color = R.color.colorPrimary_text
             var colorP = R.color.colorPrimary
             if (k.getBoolean("dzen_noch", false)) {

@@ -552,7 +552,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         textViewT.text = title
                         textViewT.setPadding(realpadding, realpadding, realpadding, realpadding)
                         textViewT.typeface = MainActivity.createFont(Typeface.BOLD)
-                        textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                        textViewT.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
 
                         textViewT.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                         textViewT.setBackgroundColor(Color.parseColor(Sabytie.getColors(p.color)))
@@ -561,7 +561,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         textView.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary_text))
                         textView.setBackgroundColor(ContextCompat.getColor(activity, R.color.colorDivider))
                         textView.setPadding(realpadding, realpadding, realpadding, realpadding)
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_DEFAULT_FONT_SIZE)
+                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
                         if (dzenNoch) {
                             textView.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
                             textView.setBackgroundResource(R.color.colorprimary_material_dark)

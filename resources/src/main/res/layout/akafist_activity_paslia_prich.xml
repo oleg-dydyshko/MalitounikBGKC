@@ -46,6 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         app:tabMode="auto"
         app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextAppearance="@style/TabTextPasliaPrychastia"
         app:tabTextColor="@color/colorSecondary_text" />
 
     <androidx.viewpager2.widget.ViewPager2

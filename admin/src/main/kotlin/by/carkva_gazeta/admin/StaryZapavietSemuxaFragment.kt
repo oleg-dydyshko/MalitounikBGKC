@@ -1,6 +1,7 @@
 package by.carkva_gazeta.admin
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -21,6 +22,7 @@ class StaryZapavietSemuxaFragment : Fragment() {
     private var _binding: AdminBiblePageFragmentBinding? = null
     private val binding get() = _binding!!
     private var urlJob: Job? = null
+    private var mLastClickTime: Long = 0
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -42,11 +44,15 @@ class StaryZapavietSemuxaFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return super.onOptionsItemSelected(item)
+        }
+        mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_save) {
             sendPostRequest(kniga + 1, binding.textView.text.toString(), page + 1)
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     private fun sendPostRequest(id: Int, spaw: String, sv: Int) {

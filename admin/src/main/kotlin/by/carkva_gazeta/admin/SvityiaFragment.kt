@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Base64
 import android.util.TypedValue
 import android.view.*
@@ -50,6 +51,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
             dialogImageFileExplorer.show(childFragmentManager, "dialogImageFileExplorer")
         }
     }
+    private var mLastClickTime: Long = 0
 
     private fun startTimer() {
         timerTask = object : TimerTask() {
@@ -80,8 +82,20 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         super.onDestroyView()
         stopTimer()
         urlJob?.cancel()
-        binding.apisanne.onFocusChangeListener = null
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.apisanne.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) binding.linearLayout2.visibility = View.VISIBLE
+            else binding.linearLayout2.visibility = View.GONE
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.apisanne.onFocusChangeListener = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -237,6 +251,10 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return super.onOptionsItemSelected(item)
+        }
+        mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_upload_image) {
             activity?.let { activity ->
@@ -276,7 +294,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                 }
             }
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     private fun sendPostRequest(data: Int, mun: Int, dayOfYear: Int, name: String, chtenie: String, bold: Int, tipicon: String, spaw: String) {
@@ -308,8 +326,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                         val wr = OutputStreamWriter(outputStream)
                         wr.write(reqParam)
                         wr.flush()
-                        responseCodeS = responseCode
-                        /*BufferedReader(InputStreamReader(inputStream)).use {
+                        responseCodeS = responseCode/*BufferedReader(InputStreamReader(inputStream)).use {
                             val inputLine = it.readLine()
                             if (inputLine != null) {
                                 response.append(inputLine)
@@ -344,10 +361,6 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
             binding.actionP.setOnClickListener(this)
             binding.actionImg.setOnClickListener(this)
             binding.progressBar2.visibility = View.VISIBLE
-            binding.apisanne.setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) binding.linearLayout2.visibility = View.VISIBLE
-                else binding.linearLayout2.visibility = View.GONE
-            }
             urlJob = CoroutineScope(Dispatchers.Main).launch {
                 startTimer()
                 var res = ""

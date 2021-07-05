@@ -809,6 +809,7 @@ class ParalelnyeMesta {
             bible[5] = "3-я Макабэяў"
         }
         if (kniga == "3 Езд" || kniga == "3 Эзд") {
+            bible[0] = "3 Езд"
             bible[1] = "3 Ездры"
             bible[2] = "3 Эздры"
             bible[3] = "50"

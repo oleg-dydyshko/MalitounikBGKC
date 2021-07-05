@@ -770,8 +770,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         }
                     } else {
                         if (belarus) {
-                            if (addGlava == e)
-                                maranAta.add("<!--no--><br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>")
+                            if (addGlava == e) maranAta.add("<!--no--><br><em>" + resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error_glava) + "</em>")
                             maranAta.add("<!--no--><!--nazva+++$nazvaBel $e--><br><strong>$nazvaFullBel $e</strong><br>\n")
                         } else {
                             maranAta.add("<!--no--><!--nazva+++$nazva $e--><br><strong>$nazvaFull $e</strong><br>\n")
@@ -793,12 +792,36 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         maranAta.add("<!--no--><!--nazva+++$nazva " + fit.substring(s2 + 1, t1) + "--><br><strong>" + nazvaFull + " " + fit.substring(s2 + 1) + "</strong><br>\n")
                     }
                     val res1 = r1.toString().trim().split("\n")
-                    var i2 = 0
                     var i3 = stixn
-                    while (i2 < res1.size) {
-                        if (belarus) maranAta.add("<!--$kniga.$nachalo.$i3--><!--nazva+++$nazvaBel " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n")
-                        else maranAta.add("<!--$kniga.$nachalo.$i3--><!--nazva+++$nazva " + fit.substring(s2 + 1, t1) + "-->" + res1[i2] + getParallel(nomer, nachalo, i3 - 1) + "\n")
-                        i2++
+                    var ires1 = 1
+                    var glava = fit.substring(s2 + 1, t1).toInt()
+                    for (i2 in res1.indices) {
+                        val tr1 = res1[i2].indexOf(" ")
+                        if (tr1 != -1) {
+                            var str1 = res1[i2].substring(0, tr1)
+                            val tr2 = str1.indexOf(".")
+                            if (tr2 != -1) {
+                                str1 = res1[i2].substring(0, tr2)
+                            }
+                            if (ires1 > str1.toInt()) {
+                                glava++
+                                i3 = 1
+                            }
+                            ires1 = str1.toInt()
+                        }
+                        var parallel = "<!--$kniga.$glava.$i3-->"
+                        var getParallel = getParallel(nomer, glava, i3 - 1)
+                        if (kniga.contains("Сир") && i2 <= 8) {
+                            glava = 1
+                            getParallel = getParallel(nomer, glava, i3 - 1)
+                            parallel = "<!--$kniga.$glava.$i3-->"
+                            if (i2 < 7) {
+                                parallel = "<!--no-->"
+                                getParallel = ""
+                            }
+                        }
+                        if (belarus) maranAta.add("$parallel<!--nazva+++$nazvaBel " + glava + "-->" + res1[i2] + getParallel + "\n")
+                        else maranAta.add("$parallel<!--nazva+++$nazva " + glava + "-->" + res1[i2] + getParallel + "\n")
                         i3++
                     }
                     if (konec - nachalo != 0) {

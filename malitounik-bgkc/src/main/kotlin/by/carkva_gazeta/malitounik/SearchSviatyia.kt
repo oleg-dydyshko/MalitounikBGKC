@@ -410,7 +410,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
                     }
                 }
             }
-            val data = MenuSviaty.getPrazdnik()
+            val data = MenuSviaty.getPrazdnik(search = true)
             for (e in data.indices) {
                 val sviatya = data[e].opisanie.replace("ё", "е", true)
                 if (sviatya.contains(poshuk, true)) {

@@ -168,7 +168,7 @@ class MenuSviaty : SviatyListFragment() {
     private class ViewHolder(var title: TextView, var date: TextView)
 
     companion object {
-        fun getPrazdnik(yearG: Int = Calendar.getInstance().get(Calendar.YEAR)): ArrayList<Prazdniki> {
+        fun getPrazdnik(yearG: Int = Calendar.getInstance().get(Calendar.YEAR), search: Boolean = false): ArrayList<Prazdniki> {
             val a = yearG % 19
             val b = yearG % 4
             val cx = yearG % 7
@@ -267,15 +267,17 @@ class MenuSviaty : SviatyListFragment() {
             prazdnik.sort()
             prazdnikiAll.addAll(prazdnik)
             prazdnik.clear()
-            c.set(yearG, 6, 11)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -5, "Успамін мучаніцкай сьмерці ў катэдры сьв. Сафіі ў Полацку 5 манахаў-базыльянаў", "11 ліпеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
-            c.set(yearG, 8, 15)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 5, "Успамін Бабровіцкай трагедыі (зьнішчэньне ў 1942 г. жыхароў уніяцкай парафіі в. Бабровічы Івацэвіцкага р-ну)", "15 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
-            c.set(yearG, 9, 18)
-            prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 5, "Успамін Берасьцейскай царкоўнай Уніі 1596 году", "8(18) кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
-            prazdnik.sort()
-            prazdnikiAll.addAll(prazdnik)
-            prazdnik.clear()
+            if (!search) {
+                c.set(yearG, 6, 11)
+                prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -5, "Успамін мучаніцкай сьмерці ў катэдры сьв. Сафіі ў Полацку 5 манахаў-базыльянаў", "11 ліпеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+                c.set(yearG, 8, 15)
+                prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 5, "Успамін Бабровіцкай трагедыі (зьнішчэньне ў 1942 г. жыхароў уніяцкай парафіі в. Бабровічы Івацэвіцкага р-ну)", "15 верасьня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+                c.set(yearG, 9, 18)
+                prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], 5, "Успамін Берасьцейскай царкоўнай Уніі 1596 году", "8(18) кастрычніка, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
+                prazdnik.sort()
+                prazdnikiAll.addAll(prazdnik)
+                prazdnik.clear()
+            }
             c.set(yearG, 0, 30)
             prazdnik.add(Prazdniki(c[Calendar.DAY_OF_YEAR], c[Calendar.DATE], c[Calendar.MONTH], -6, "Гомель: Трох Сьвяціцеляў", "30 студзеня, " + nedelName[c[Calendar.DAY_OF_WEEK]]))
             c.set(c[Calendar.YEAR], monthP - 1, dataP)

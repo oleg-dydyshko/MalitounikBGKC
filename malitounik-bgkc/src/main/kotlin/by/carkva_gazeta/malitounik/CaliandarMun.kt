@@ -148,6 +148,9 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val position = tab?.position ?: 0
+                val editor = chin.edit()
+                editor.putInt("nedelia", position)
+                editor.apply()
                 if (position == 0) {
                     replaceFragment(CaliandarMunTab1.getInstance(posMun1, yearG1, day1))
                     binding.subtitleToolbar.visibility = View.GONE
@@ -155,9 +158,6 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
                     replaceFragment(CaliandarMunTab2.getInstance(posMun2, yearG2, day2))
                     binding.subtitleToolbar.visibility = View.VISIBLE
                 }
-                val editor = chin.edit()
-                editor.putInt("nedelia", position)
-                editor.apply()
                 invalidateOptionsMenu()
             }
         })

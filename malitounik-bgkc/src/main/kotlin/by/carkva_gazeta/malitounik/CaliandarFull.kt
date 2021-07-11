@@ -100,7 +100,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 binding.maranata.visibility = View.VISIBLE
                 binding.textTitleMaranata.visibility = View.VISIBLE
                 var dataMaranAta = MenuCaliandar.getPositionCaliandar(position)[13]
-                if (k.getBoolean("belarus", false)) dataMaranAta = MainActivity.translateToBelarus(dataMaranAta)
+                if (k.getBoolean("belarus", true)) dataMaranAta = MainActivity.translateToBelarus(dataMaranAta)
                 binding.maranata.text = dataMaranAta
             }
             binding.znakTipicona.setOnClickListener(this@CaliandarFull)

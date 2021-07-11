@@ -1353,6 +1353,16 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                 notifi.show(supportFragmentManager, "help_notification")
             }
         }
+        binding.maranataBel.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        binding.maranataRus.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        val belarus = k.getBoolean("belarus", true)
+        if (belarus) {
+            binding.maranataBel.isChecked = true
+            binding.maranataRus.isChecked = false
+        } else {
+            binding.maranataRus.isChecked = true
+            binding.maranataBel.isChecked = false
+        }
         binding.notificationOnly.isChecked = notification == 1
         binding.notificationFull.isChecked = notification == 2
         binding.notificationNon.isChecked = notification == 0
@@ -1365,6 +1375,12 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         binding.maranata.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (maranata == 1) {
             binding.maranata.isChecked = true
+        } else {
+            binding.maranataBel.isClickable = false
+            binding.maranataRus.isClickable = false
+            binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
         }
         val dzenNochSettings = k.getBoolean("dzen_noch", false)
         if (dzenNoch) binding.checkBox5.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -1420,7 +1436,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             prefEditor.putInt("nedelia", 0)
             prefEditor.putInt("gosud", 0)
             prefEditor.putInt("pafesii", 0)
-            prefEditor.putBoolean("belarus", false)
+            prefEditor.putBoolean("belarus", true)
             prefEditor.putInt("notification", 2)
             prefEditor.putInt("power", 1)
             prefEditor.putInt("vibra", 1)
@@ -1434,6 +1450,11 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             prefEditor.putInt("biblia_seash", 0)
             prefEditor.putBoolean("pegistrbukv", true)
             prefEditor.putInt("slovocalkam", 0)
+            binding.maranataBel.isClickable = false
+            binding.maranataRus.isClickable = false
+            binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             prefEditor.putInt("trafic", 0)
             prefEditor.putBoolean("admin", false)
             prefEditor.apply()
@@ -1445,6 +1466,8 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             binding.checkBox6.isChecked = false
             binding.checkBox7.isChecked = false
             binding.maranata.isChecked = false
+            binding.maranataRus.isChecked = false
+            binding.maranataBel.isChecked = true
             binding.sinoidal.isChecked = false
             binding.notificationOnly.isChecked = false
             binding.notificationFull.isChecked = true
@@ -1458,6 +1481,21 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             binding.dzair.isChecked = false
             binding.praf.isChecked = false
             recreate()
+        }
+        binding.maranataGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
+            when (checkedId) {
+                R.id.maranataBel -> {
+                    prefEditor.putBoolean("belarus", true)
+                    val semuxaNoKnigi = DialogSemuxaNoKnigi.getInstance(true)
+                    semuxaNoKnigi.show(supportFragmentManager, "semuxa_no_knigi")
+                }
+                R.id.maranataRus -> {
+                    prefEditor.putBoolean("belarus", false)
+                }
+                else -> {
+                }
+            }
+            prefEditor.apply()
         }
         binding.notificationGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
             when (checkedId) {
@@ -1584,14 +1622,29 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         binding.maranata.setOnCheckedChangeListener { _, isChecked: Boolean ->
             edit = true
             if (isChecked) {
+                if (k.getBoolean("belarus", true)) {
+                    val semuxaNoKnigi = DialogSemuxaNoKnigi.getInstance(true)
+                    semuxaNoKnigi.show(supportFragmentManager, "semuxa_no_knigi")
+                }
                 prefEditor.putInt("maranata", 1)
+                binding.maranataBel.isClickable = true
+                binding.maranataRus.isClickable = true
                 if (dzenNoch) {
+                    binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+                    binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                     binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                 } else {
+                    binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                    binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                     binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
                 }
             } else {
                 prefEditor.putInt("maranata", 0)
+                binding.maranataBel.isClickable = false
+                binding.maranataRus.isClickable = false
+                binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+                binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+                binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             }
             prefEditor.apply()
         }

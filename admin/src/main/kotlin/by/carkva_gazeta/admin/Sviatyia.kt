@@ -26,10 +26,9 @@ import by.carkva_gazeta.malitounik.MenuCaliandar
 import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
-import java.io.File
 import java.util.*
 
-class Sviatyia : AppCompatActivity(), DialogImageFileExplorer.DialogFileExplorerListener, DialogSviatyiaImageHelp.DialodSviatyiaImageHelpListener {
+class Sviatyia : AppCompatActivity(), DialogImageFileLoad.DialogFileExplorerListener, DialogSviatyiaImageHelp.DialodSviatyiaImageHelpListener {
     private lateinit var k: SharedPreferences
     private var setedit = false
     private var checkSetDzenNoch = false
@@ -125,9 +124,9 @@ class Sviatyia : AppCompatActivity(), DialogImageFileExplorer.DialogFileExplorer
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onDialogFile(file: File) {
+    override fun onDialogFile(absolutePath: String, image: Int) {
         val sviatyiaFragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as SvityiaFragment
-        sviatyiaFragment.onDialogFile(file)
+        sviatyiaFragment.onDialogFile(absolutePath, image)
     }
 
     override fun insertIMG() {

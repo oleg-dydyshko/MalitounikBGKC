@@ -27,7 +27,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -35,7 +34,7 @@ import java.net.URLEncoder
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplorer.DialogFileExplorerListener {
+class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.DialogFileExplorerListener {
     private lateinit var binding: AdminSviatyBinding
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
@@ -213,7 +212,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
         binding.titleToolbar.isSingleLine = true
     }
 
-    private fun fileUpload(bitmap: Bitmap) {
+    private fun fileUpload(bitmap: Bitmap, image: Int) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
@@ -227,6 +226,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
                     reqParam += "&" + URLEncoder.encode("base64", "UTF-8") + "=" + URLEncoder.encode(base64, "UTF-8")
                     reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(sviaty[binding.spinnerSviaty.selectedItemPosition].data.toString(), "UTF-8")
                     reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode(sviaty[binding.spinnerSviaty.selectedItemPosition].mun.toString(), "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("numar", "UTF-8") + "=" + URLEncoder.encode(image.toString(), "UTF-8")
                     val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
                     with(mURL.openConnection() as HttpURLConnection) {
                         requestMethod = "POST"
@@ -246,9 +246,9 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileExplore
         }
     }
 
-    override fun onDialogFile(file: File) {
-        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-        fileUpload(bitmap)
+    override fun onDialogFile(absolutePath: String, image: Int) {
+        val bitmap = BitmapFactory.decodeFile(absolutePath)
+        fileUpload(bitmap, image)
     }
 
     override fun onClick(v: View?) {

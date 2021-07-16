@@ -1111,10 +1111,8 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
     }
 
     override fun onBackPressed() {
-        if (edit)
-            onSupportNavigateUp()
-        else
-            super.onBackPressed()
+        if (edit) onSupportNavigateUp()
+        else super.onBackPressed()
     }
 
     private fun formatFigureTwoPlaces(value: Float): String {
@@ -1232,8 +1230,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             binding.textView14.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.textView15.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.textView16.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            binding.notificationView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
-            //textView57.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.notificationView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black)) //textView57.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.secret.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.line1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
@@ -1255,6 +1252,11 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     checkLogin.show(supportFragmentManager, "checkLogin")
                 }
             }
+            when (adminItemCount) {
+                4 -> MainActivity.toastView("3")
+                5 -> MainActivity.toastView("2")
+                6 -> MainActivity.toastView("1")
+            }
         }
         binding.cheshe.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         val dir = File("$filesDir/icons/")
@@ -1273,8 +1275,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             binding.cheshe.text = getString(R.string.remove_cashe, size, "Кб")
         }
         binding.cheshe.setOnClickListener {
-            if (dir.exists())
-                dir.deleteRecursively()
+            if (dir.exists()) dir.deleteRecursively()
             binding.cheshe.text = getString(R.string.remove_cashe, "0,00", "Кб")
         }
 
@@ -1486,8 +1487,10 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             when (checkedId) {
                 R.id.maranataBel -> {
                     prefEditor.putBoolean("belarus", true)
-                    val semuxaNoKnigi = DialogSemuxaNoKnigi.getInstance(true)
-                    semuxaNoKnigi.show(supportFragmentManager, "semuxa_no_knigi")
+                    if (binding.maranata.isChecked) {
+                        val semuxaNoKnigi = DialogSemuxaNoKnigi.getInstance(true)
+                        semuxaNoKnigi.show(supportFragmentManager, "semuxa_no_knigi")
+                    }
                 }
                 R.id.maranataRus -> {
                     prefEditor.putBoolean("belarus", false)
@@ -1692,11 +1695,9 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         binding.checkBox5.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.checkBox6.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.checkBox7.typeface = MainActivity.createFont(Typeface.NORMAL)
-        if (savedInstanceState == null && (notification == 1 || notification == 2)) {
-            if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true)) {
-                val notifi = DialogHelpNotification()
-                notifi.show(supportFragmentManager, "help_notification")
-            }
+        if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true) && (notification == 1 || notification == 2)) {
+            val notifi = DialogHelpNotification()
+            notifi.show(supportFragmentManager, "help_notification")
         }
         setTollbarTheme()
     }

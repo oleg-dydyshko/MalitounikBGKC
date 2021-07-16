@@ -24,7 +24,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -212,7 +211,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         }
     }
 
-    private fun fileUpload(bitmap: Bitmap) {
+    private fun fileUpload(bitmap: Bitmap, image: Int) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
@@ -226,6 +225,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                     reqParam += "&" + URLEncoder.encode("base64", "UTF-8") + "=" + URLEncoder.encode(base64, "UTF-8")
                     reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(cal[Calendar.DATE].toString(), "UTF-8")
                     reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode((cal[Calendar.MONTH] + 1).toString(), "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("numar", "UTF-8") + "=" + URLEncoder.encode(image.toString(), "UTF-8")
                     val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
                     with(mURL.openConnection() as HttpURLConnection) {
                         requestMethod = "POST"
@@ -245,9 +245,11 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         }
     }
 
-    fun onDialogFile(file: File) {
-        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-        fileUpload(bitmap)
+    fun onDialogFile(absolutePath: String, image: Int) {
+        val bitmap = BitmapFactory.decodeFile(absolutePath)
+        fileUpload(bitmap, image)
+        val dialogImageFileExplorer = childFragmentManager.findFragmentByTag("dialogImageFileExplorer") as? DialogImageFileExplorer
+        dialogImageFileExplorer?.dialog?.cancel()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

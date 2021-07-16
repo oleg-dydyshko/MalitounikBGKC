@@ -2,7 +2,6 @@ package by.carkva_gazeta.admin
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
@@ -31,7 +30,6 @@ class DialogImageFileExplorer : DialogFragment() {
     private val fileList = ArrayList<MyImageFile>()
     private var path: File? = null
     private var chosenFile = ""
-    private var mListener: DialogFileExplorerListener? = null
     private var sdCard = true
     private var sdCard2 = false
     private lateinit var alert: AlertDialog
@@ -43,19 +41,8 @@ class DialogImageFileExplorer : DialogFragment() {
         _binding = null
     }
 
-    internal interface DialogFileExplorerListener {
-        fun onDialogFile(file: File)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is Activity) {
-            mListener = try {
-                context as DialogFileExplorerListener
-            } catch (e: ClassCastException) {
-                throw ClassCastException("$context must implement DialogFileExplorerListener")
-            }
-        }
+    fun onCancelDialog() {
+        dialog?.cancel()
     }
 
     private fun loadFileList() {
@@ -152,8 +139,8 @@ class DialogImageFileExplorer : DialogFragment() {
                         loadFileList()
                         (binding.content.adapter as TitleListAdaprer).notifyDataSetChanged()
                     } else {
-                        mListener?.onDialogFile(sel)
-                        alert.cancel()
+                        val dialogImageFileLoad = DialogImageFileLoad.getInstance(sel.absolutePath)
+                        dialogImageFileLoad.show(childFragmentManager, "dialogImageFileLoad")
                     }
                 }
             }

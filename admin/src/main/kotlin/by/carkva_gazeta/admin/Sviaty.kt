@@ -212,7 +212,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
         binding.titleToolbar.isSingleLine = true
     }
 
-    private fun fileUpload(bitmap: Bitmap, image: Int) {
+    private fun fileUpload(bitmap: Bitmap) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
@@ -226,7 +226,6 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
                     reqParam += "&" + URLEncoder.encode("base64", "UTF-8") + "=" + URLEncoder.encode(base64, "UTF-8")
                     reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(sviaty[binding.spinnerSviaty.selectedItemPosition].data.toString(), "UTF-8")
                     reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode(sviaty[binding.spinnerSviaty.selectedItemPosition].mun.toString(), "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("numar", "UTF-8") + "=" + URLEncoder.encode(image.toString(), "UTF-8")
                     val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
                     with(mURL.openConnection() as HttpURLConnection) {
                         requestMethod = "POST"
@@ -248,7 +247,9 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
 
     override fun onDialogFile(absolutePath: String, image: Int) {
         val bitmap = BitmapFactory.decodeFile(absolutePath)
-        fileUpload(bitmap, image)
+        fileUpload(bitmap)
+        val dialogImageFileExplorer = supportFragmentManager.findFragmentByTag("dialogImageFileExplorer") as? DialogImageFileExplorer
+        dialogImageFileExplorer?.dialog?.cancel()
     }
 
     override fun onClick(v: View?) {

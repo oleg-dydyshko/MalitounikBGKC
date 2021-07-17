@@ -277,7 +277,9 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             if (dzenNoch) binding.imageViewFull.background = ContextCompat.getDrawable(this@Opisanie, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             val dir = File("$filesDir/icons/")
             if (!dir.exists()) dir.mkdir()
-            for (i in 0..3) {
+            var endImage = 3
+            if (svity) endImage = 0
+            for (i in 0..endImage) {
                 var schet = ""
                 if (i > 0) schet = "_${i + 1}"
                 val file = if (svity) File("$filesDir/icons/v_${day}_${mun}.jpg")
@@ -306,6 +308,8 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                             try {
                                 val mURL = if (svity) URL("https://carkva-gazeta.by/chytanne/icons/v_${day}_${mun}.jpg")
                                 else URL("https://carkva-gazeta.by/chytanne/icons/s_${day}_${mun}$schet.jpg")
+                                val file2 = if (svity) File(dir, "v_${day}_${mun}.jpg")
+                                else File(dir, "s_${day}_${mun}$schet.jpg")
                                 val conections = mURL.openConnection() as HttpURLConnection
                                 if (conections.responseCode == 200) {
                                     val bufferedInputStream = BufferedInputStream(conections.inputStream)
@@ -316,8 +320,6 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                                     }
                                     val byteArray = byteArrayOut.toByteArray()
                                     val bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-                                    val file2 = if (svity) File(dir, "v_${day}_${mun}.jpg")
-                                    else File(dir, "s_${day}_${mun}$schet.jpg")
                                     val out = FileOutputStream(file2)
                                     bmp.compress(Bitmap.CompressFormat.JPEG, 90, out)
                                     out.flush()
@@ -340,6 +342,18 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                                                 }
                                             }
                                         }
+                                    }
+                                }
+                                if (conections.responseCode != 200 && file2.exists()) {
+                                    file2.delete()
+                                    val imageView = when (i) {
+                                        1 -> binding.image2
+                                        2 -> binding.image3
+                                        3 -> binding.image4
+                                        else -> binding.image1
+                                    }
+                                    imageView.post {
+                                        imageView.visibility = View.GONE
                                     }
                                 }
                             } catch (e: Throwable) {

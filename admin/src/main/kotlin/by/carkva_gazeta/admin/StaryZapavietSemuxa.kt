@@ -280,6 +280,10 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRa
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == R.id.action_glava) {
             val dialogBibleRazdel = DialogBibleRazdel.getInstance(fullglav)
             dialogBibleRazdel.show(supportFragmentManager, "full_glav")

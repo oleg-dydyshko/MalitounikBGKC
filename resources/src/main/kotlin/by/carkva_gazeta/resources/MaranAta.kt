@@ -776,11 +776,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             maranAta.add("<!--no--><!--nazva+++$nazva $e--><br><strong>$nazvaFull $e</strong><br>\n")
                         }
                         val splitline = split2[e].trim().split("\n")
-                        var i3: Int
                         for (i2 in splitline.indices) {
-                            i3 = if (kniga.contains("Сир") && e == 1 && i2 >= 8) i2 - 7 else i2 + 1
-                            if (belarus) maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazvaBel + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
-                            else maranAta.add("<!--" + kniga + "." + e + "." + i3 + "--><!--nazva+++" + nazva + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
+                            if (belarus) maranAta.add("<!--" + kniga + "." + e + "." + (i2 + 1) + "--><!--nazva+++" + nazvaBel + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
+                            else maranAta.add("<!--" + kniga + "." + e + "." + (i2 + 1) + "--><!--nazva+++" + nazva + " " + e + "-->" + splitline[i2] + getParallel(nomer, e, i2) + "\n")
                         }
                     }
                 }
@@ -809,19 +807,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             }
                             ires1 = str1.toInt()
                         }
-                        var parallel = "<!--$kniga.$glava.$i3-->"
-                        var getParallel = getParallel(nomer, glava, i3 - 1)
-                        if (kniga.contains("Сир") && i2 <= 8) {
-                            glava = 1
-                            getParallel = getParallel(nomer, glava, i3 - 1)
-                            parallel = "<!--$kniga.$glava.$i3-->"
-                            if (i2 < 7) {
-                                parallel = "<!--no-->"
-                                getParallel = ""
-                            }
-                        }
-                        if (belarus) maranAta.add("$parallel<!--nazva+++$nazvaBel " + glava + "-->" + res1[i2] + getParallel + "\n")
-                        else maranAta.add("$parallel<!--nazva+++$nazva " + glava + "-->" + res1[i2] + getParallel + "\n")
+                        if (belarus) maranAta.add("<!--$kniga.$glava.$i3--><!--nazva+++$nazvaBel " + glava + "-->" + res1[i2] + getParallel(nomer, glava, i3 - 1) + "\n")
+                        else maranAta.add("<!--$kniga.$glava.$i3--><!--nazva+++$nazva " + glava + "-->" + res1[i2] + getParallel(nomer, glava, i3 - 1) + "\n")
                         i3++
                     }
                     if (konec - nachalo != 0) {

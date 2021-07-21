@@ -1251,6 +1251,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     checkLogin.isCancelable = false
                     checkLogin.show(supportFragmentManager, "checkLogin")
                 }
+                MainActivity.toastView("Гатова")
             }
             when (adminItemCount) {
                 4 -> MainActivity.toastView("3")

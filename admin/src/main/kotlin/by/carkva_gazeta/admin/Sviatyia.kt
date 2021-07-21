@@ -141,6 +141,10 @@ class Sviatyia : AppCompatActivity(), DialogImageFileLoad.DialogFileExplorerList
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == R.id.action_glava) {
             val i = Intent(this, CaliandarMun::class.java)
             val cal = Calendar.getInstance()

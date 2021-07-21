@@ -230,21 +230,12 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogBibleRazdel.DialogBibleRaz
         binding.subtitleToolbar.isSingleLine = true
     }
 
-    /*override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-    }*/
-
-    /*override fun onBackPressed() {
-        super.onBackPressed()
-    }*/
-
-    /*override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
-        return true
-    }*/
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == R.id.action_glava) {
             val dialogBibleRazdel = DialogBibleRazdel.getInstance(fullglav)
             dialogBibleRazdel.show(supportFragmentManager, "full_glav")

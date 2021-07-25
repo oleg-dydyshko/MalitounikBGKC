@@ -80,10 +80,12 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         if (fullscreenPage) hide()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        val tabLayout = (binding.tabLayout.getChildAt(0) as ViewGroup).getChildAt(pasliaPrychascia) as LinearLayout
-        val tabTextView = tabLayout.getChildAt(1) as TextView
-        tabTextView.typeface = MainActivity.createFont(Typeface.BOLD)
-        tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT)
+        malitvy.forEachIndexed { index, _ ->
+            val tabLayout = (binding.tabLayout.getChildAt(0) as ViewGroup).getChildAt(index) as LinearLayout
+            val tabTextView = tabLayout.getChildAt(1) as TextView
+            tabTextView.typeface = MainActivity.createFont(Typeface.BOLD)
+            tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_DEFAULT - 2)
+        }
     }
 
     override fun onDialogFontSize(fontSize: Float) {

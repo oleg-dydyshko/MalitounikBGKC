@@ -820,7 +820,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     }
                 }
             } catch (t: Throwable) {
-                t.printStackTrace()
                 val t1 = fit.lastIndexOf(" ")
                 if (belarus) {
                     maranAta.add("<!--no--><br><strong>$nazvaFullBel ${fit.substring(t1 + 1)}</strong><br>\n")

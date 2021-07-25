@@ -45,7 +45,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
     private var edittext: AppCompatEditText? = null
     private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (it) {
-            val fileExplorer = DialogImageFileExplorer()
+            val fileExplorer = DialogImageFileExplorer.getInstance(true)
             fileExplorer.show(supportFragmentManager, "file_explorer")
         }
     }
@@ -344,7 +344,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
             if (PackageManager.PERMISSION_DENIED == permissionCheck) {
                 mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             } else {
-                val dialogImageFileExplorer = DialogImageFileExplorer()
+                val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(true)
                 dialogImageFileExplorer.show(supportFragmentManager, "dialogImageFileExplorer")
             }
         }

@@ -46,7 +46,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     private var timerTask: TimerTask? = null
     private val mPermissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (it) {
-            val dialogImageFileExplorer = DialogImageFileExplorer()
+            val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(false)
             dialogImageFileExplorer.show(childFragmentManager, "dialogImageFileExplorer")
         }
     }
@@ -264,7 +264,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                 if (PackageManager.PERMISSION_DENIED == permissionCheck) {
                     mPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                 } else {
-                    val dialogImageFileExplorer = DialogImageFileExplorer()
+                    val dialogImageFileExplorer = DialogImageFileExplorer.getInstance(false)
                     dialogImageFileExplorer.show(childFragmentManager, "dialogImageFileExplorer")
                 }
             }

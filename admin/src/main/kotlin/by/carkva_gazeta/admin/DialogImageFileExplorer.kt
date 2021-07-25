@@ -139,7 +139,8 @@ class DialogImageFileExplorer : DialogFragment() {
                         loadFileList()
                         (binding.content.adapter as TitleListAdaprer).notifyDataSetChanged()
                     } else {
-                        val dialogImageFileLoad = DialogImageFileLoad.getInstance(sel.absolutePath)
+                        val isSviaty = arguments?.getBoolean("isSviaty") ?: false
+                        val dialogImageFileLoad = DialogImageFileLoad.getInstance(sel.absolutePath, isSviaty)
                         dialogImageFileLoad.show(childFragmentManager, "dialogImageFileLoad")
                     }
                 }
@@ -167,6 +168,16 @@ class DialogImageFileExplorer : DialogFragment() {
             return rootView
         }
 
+    }
+
+    companion object {
+        fun getInstance(isSviaty: Boolean): DialogImageFileExplorer {
+            val dialogImageFileLoad = DialogImageFileExplorer()
+            val bundle = Bundle()
+            bundle.putBoolean("isSviaty", isSviaty)
+            dialogImageFileLoad.arguments = bundle
+            return dialogImageFileLoad
+        }
     }
 
     private class ViewHolder(var text: TextView, var image: ImageView)

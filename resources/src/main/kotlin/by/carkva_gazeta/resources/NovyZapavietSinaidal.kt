@@ -48,7 +48,6 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
         actionBar?.show()
     }
     private var fullscreenPage = false
-    private var trak = false
     private var paralel = false
     private var fullglav = 0
     private var kniga = 0
@@ -64,6 +63,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
     private var men = true
     private lateinit var binding: ActivityBibleBinding
     private var resetTollbarJob: Job? = null
+    private var bibliaKnigi = ArrayList<BibliaData>()
 
     private fun clearEmptyPosition() {
         val remove = ArrayList<ArrayList<Int>>()
@@ -127,6 +127,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
         resetTollbarJob?.cancel()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onDialogFontSize(fontSize: Float) {
         binding.pager.adapter?.notifyDataSetChanged()
     }
@@ -173,23 +174,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
         glava = intent.extras?.getInt("glava", 0) ?: 0
         if (intent.extras?.containsKey("stix") == true) {
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
-            trak = true
         }
-        BibleGlobalList.mListGlava = 0
-        val adapterViewPager = MyPagerAdapter(this)
-        binding.pager.adapter = adapterViewPager
-        TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
-            tab.text = resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (position + 1)
-        }.attach()
-        binding.pager.offscreenPageLimit = 3
-        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                BibleGlobalList.mListGlava = position
-                men = VybranoeBibleList.checkVybranoe(this@NovyZapavietSinaidal, kniga, position, 2)
-                if (glava != position) fierstPosition = 0
-                invalidateOptionsMenu()
-            }
-        })
         when (kniga) {
             0 -> {
                 title = "От Матфея"
@@ -300,6 +285,25 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
                 fullglav = 22
             }
         }
+        for (i in 0 until fullglav) {
+            val pazicia = if (glava != i) 0 else fierstPosition
+            bibliaKnigi.add(BibliaData(i, kniga, pazicia))
+        }
+        BibleGlobalList.mListGlava = 0
+        val adapterViewPager = MyPagerAdapter(this)
+        binding.pager.adapter = adapterViewPager
+        TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
+            tab.text = resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (position + 1)
+        }.attach()
+        binding.pager.offscreenPageLimit = 3
+        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                BibleGlobalList.mListGlava = position
+                men = VybranoeBibleList.checkVybranoe(this@NovyZapavietSinaidal, kniga, position, 2)
+                if (glava != position) fierstPosition = 0
+                invalidateOptionsMenu()
+            }
+        })
         men = VybranoeBibleList.checkVybranoe(this, kniga, glava, 2)
         if (savedInstanceState != null) {
             dialog = savedInstanceState.getBoolean("dialog")
@@ -544,36 +548,9 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
             fragment?.upDateListView() ?: super.onBindViewHolder(holder, position, payloads)
         }
 
-        override fun getItemCount(): Int {
-            var fullglav = 1
-            when (kniga) {
-                0, 4 -> fullglav = 28
-                1, 13, 12 -> fullglav = 16
-                2 -> fullglav = 24
-                3 -> fullglav = 21
-                5, 19, 8, 6 -> fullglav = 5
-                7, 23, 20 -> fullglav = 3
-                9, 24, 11, 10 -> {
-                }
-                14, 25 -> fullglav = 13
-                15, 21, 16 -> fullglav = 6
-                17, 22, 18 -> fullglav = 4
-                26 -> fullglav = 22
-            }
-            return fullglav
-        }
+        override fun getItemCount() = bibliaKnigi.size
 
-        override fun createFragment(position: Int): BackPressedFragment {
-            for (i in 0 until itemCount) {
-                if (position == i) {
-                    val pazicia: Int = if (trak) {
-                        if (glava != i) 0 else fierstPosition
-                    } else 0
-                    return NovyZapavietSinaidalFragment.newInstance(i, kniga, pazicia)
-                }
-            }
-            return NovyZapavietSinaidalFragment.newInstance(0, kniga, 1)
-        }
+        override fun createFragment(position: Int) = NovyZapavietSinaidalFragment.newInstance(bibliaKnigi[position].glava, bibliaKnigi[position].kniga, bibliaKnigi[position].styx)
     }
 
     companion object {

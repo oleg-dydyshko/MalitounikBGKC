@@ -14,7 +14,6 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
@@ -50,7 +49,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     }
 
     private var fullscreenPage = false
-    private var trak = false
     private var glava = 0
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
@@ -59,6 +57,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     private var men = true
     private lateinit var binding: ActivityBibleBinding
     private var resetTollbarJob: Job? = null
+    private var bibliaKnigi = ArrayList<BibliaData>()
 
     override fun onPause() {
         super.onPause()
@@ -72,6 +71,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         resetTollbarJob?.cancel()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onDialogFontSize(fontSize: Float) {
         binding.pager.adapter?.notifyDataSetChanged()
     }
@@ -103,10 +103,12 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         }
         if (intent.extras?.containsKey("stix") == true) {
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
-            trak = true
         }
-        val adapterViewPager = MyPagerAdapter(this)
-        binding.pager.adapter = adapterViewPager
+        for (i in 0 until 151) {
+            val pazicia = if (glava != i) 0 else fierstPosition
+            bibliaKnigi.add(BibliaData(i, 22, pazicia))
+        }
+        binding.pager.adapter = MyPagerAdapter(this)
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
             tab.text = resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2) + " " + (position + 1)
         }.attach()
@@ -401,13 +403,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
 
         override fun getItemCount() = 151
 
-        override fun createFragment(position: Int): Fragment {
-            val pazicia: Int = if (trak) {
-                if (glava != position) 0
-                else fierstPosition
-            } else 0
-            return NadsanContentPage.newInstance(position, pazicia)
-        }
+        override fun createFragment(position: Int) = NadsanContentPage.newInstance(bibliaKnigi[position].glava, bibliaKnigi[position].styx)
     }
 
     companion object {

@@ -49,7 +49,6 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
         actionBar?.show()
     }
     private var fullscreenPage = false
-    private var trak = false
     private var paralel = false
     private var fullglav = 0
     private var kniga = 0
@@ -65,6 +64,7 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
     private var men = true
     private lateinit var binding: ActivityBibleBinding
     private var resetTollbarJob: Job? = null
+    private var bibliaKnigi = ArrayList<BibliaData>()
 
     private fun clearEmptyPosition() {
         val remove = ArrayList<ArrayList<Int>>()
@@ -129,6 +129,7 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
         resetTollbarJob?.cancel()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onDialogFontSize(fontSize: Float) {
         binding.pager.adapter?.notifyDataSetChanged()
     }
@@ -175,23 +176,7 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
         glava = intent.extras?.getInt("glava", 0) ?: 0
         if (intent.extras?.containsKey("stix") == true) {
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
-            trak = true
         }
-        BibleGlobalList.mListGlava = 0
-        val adapterViewPager = MyPagerAdapter(this)
-        binding.pager.adapter = adapterViewPager
-        TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
-            tab.text = if (kniga == 21) resources.getString(by.carkva_gazeta.malitounik.R.string.psinaidal) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (position + 1)
-        }.attach()
-        binding.pager.offscreenPageLimit = 3
-        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                BibleGlobalList.mListGlava = position
-                men = VybranoeBibleList.checkVybranoe(this@StaryZapavietSinaidal, kniga, position, 2)
-                if (glava != position) fierstPosition = 0
-                invalidateOptionsMenu()
-            }
-        })
         when (kniga) {
             0 -> {
                 title = "Бытие"
@@ -394,6 +379,24 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
                 fullglav = 16
             }
         }
+        for (i in 0 until fullglav) {
+            val pazicia = if (glava != i) 0 else fierstPosition
+            bibliaKnigi.add(BibliaData(i, kniga, pazicia))
+        }
+        BibleGlobalList.mListGlava = 0
+        binding.pager.adapter = MyPagerAdapter(this)
+        TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
+            tab.text = if (kniga == 21) resources.getString(by.carkva_gazeta.malitounik.R.string.psinaidal) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.rsinaidal) + " " + (position + 1)
+        }.attach()
+        binding.pager.offscreenPageLimit = 3
+        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                BibleGlobalList.mListGlava = position
+                men = VybranoeBibleList.checkVybranoe(this@StaryZapavietSinaidal, kniga, position, 2)
+                if (glava != position) fierstPosition = 0
+                invalidateOptionsMenu()
+            }
+        })
         men = VybranoeBibleList.checkVybranoe(this, kniga, glava, 2)
         if (savedInstanceState != null) {
             dialog = savedInstanceState.getBoolean("dialog")
@@ -638,74 +641,9 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
             fragment?.upDateListView() ?: super.onBindViewHolder(holder, position, payloads)
         }
 
-        override fun getItemCount(): Int {
-            var fullglav = 1
-            when (kniga) {
-                0 -> fullglav = 50
-                1 -> fullglav = 40
-                2 -> fullglav = 27
-                3 -> fullglav = 36
-                4 -> fullglav = 34
-                5 -> fullglav = 24
-                6 -> fullglav = 21
-                7 -> fullglav = 4
-                8 -> fullglav = 31
-                9 -> fullglav = 24
-                10 -> fullglav = 22
-                11 -> fullglav = 25
-                12 -> fullglav = 29
-                13 -> fullglav = 37
-                14 -> fullglav = 10
-                15 -> fullglav = 13
-                16 -> fullglav = 9
-                17 -> fullglav = 14
-                18 -> fullglav = 16
-                19 -> fullglav = 10
-                20 -> fullglav = 42
-                21 -> fullglav = 151
-                22 -> fullglav = 31
-                23 -> fullglav = 12
-                24 -> fullglav = 8
-                25 -> fullglav = 19
-                26 -> fullglav = 51
-                27 -> fullglav = 66
-                28 -> fullglav = 52
-                29 -> fullglav = 5
-                30, 37 -> {
-                }
-                31 -> fullglav = 5
-                32 -> fullglav = 48
-                33 -> fullglav = 14
-                34 -> fullglav = 14
-                35 -> fullglav = 3
-                36 -> fullglav = 9
-                38 -> fullglav = 4
-                39 -> fullglav = 7
-                40 -> fullglav = 3
-                41 -> fullglav = 3
-                42 -> fullglav = 3
-                43 -> fullglav = 2
-                44 -> fullglav = 14
-                45 -> fullglav = 4
-                46 -> fullglav = 16
-                47 -> fullglav = 15
-                48 -> fullglav = 7
-                49 -> fullglav = 16
-            }
-            return fullglav
-        }
+        override fun getItemCount() = bibliaKnigi.size
 
-        override fun createFragment(position: Int): BackPressedFragment {
-            for (i in 0 until itemCount) {
-                if (position == i) {
-                    val pazicia: Int = if (trak) {
-                        if (glava != i) 0 else fierstPosition
-                    } else 0
-                    return StaryZapavietSinaidalFragment.newInstance(i, kniga, pazicia)
-                }
-            }
-            return StaryZapavietSinaidalFragment.newInstance(0, kniga, 1)
-        }
+        override fun createFragment(position: Int) = StaryZapavietSinaidalFragment.newInstance(bibliaKnigi[position].glava, bibliaKnigi[position].kniga, bibliaKnigi[position].styx)
     }
 
     companion object {

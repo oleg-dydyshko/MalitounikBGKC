@@ -47,7 +47,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToLong
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, MyNatatki.MyNatatkiListener {
 
     private lateinit var c: GregorianCalendar
     private lateinit var k: SharedPreferences
@@ -127,6 +127,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     override fun onDialogDeliteClick(position: Int, name: String) {
         val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
         menuNatatki?.onDialogDeliteClick(position, name)
+    }
+
+    override fun myNatatkiAdd(isAdd: Boolean) {
+        val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
+        menuNatatki?.myNatatkiAdd(isAdd)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -457,13 +462,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 onClick(binding.label1)
             }
         }
-
         CoroutineScope(Dispatchers.IO).launch {
             if (padzeia.size == 0) setListPadzeia()
-        }
-
-        if (k.getBoolean("setAlarm", true)) {
-            CoroutineScope(Dispatchers.IO).launch {
+            if (k.getBoolean("setAlarm", true)) {
                 val notify = k.getInt("notification", 2)
                 SettingsActivity.setNotifications(this@MainActivity, notify)
                 val edit = k.edit()
@@ -1220,7 +1221,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         const val BIBLENATATKI = "by.carkva_gazeta.resources.BibleNatatki"
         const val SLUGBYVIALIKAGAPOSTUSPIS = "by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"
         const val MALITVYPRYNAGODNYIA = "by.carkva_gazeta.resources.MalitvyPrynagodnyia"
-        const val MYNATATKI = "by.carkva_gazeta.resources.MyNatatki"
         const val PARAFIIBGKC = "by.carkva_gazeta.resources.ParafiiBgkc"
         const val PARAFIIBGKCDEKANAT = "by.carkva_gazeta.resources.ParafiiBgkcDekanat"
         const val NADSANMALITVYIPESNI = "by.carkva_gazeta.resources.NadsanMalitvyIPesni"
@@ -1280,6 +1280,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     }
                 }
             }
+            padzeia.sort()
         }
 
         fun downloadDynamicModule(context: Activity) {

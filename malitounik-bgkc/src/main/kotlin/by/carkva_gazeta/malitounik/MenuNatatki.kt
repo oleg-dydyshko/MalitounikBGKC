@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.*
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.malitounik.databinding.MenuVybranoeBinding
@@ -84,10 +85,10 @@ class MenuNatatki : NatatkiFragment() {
             myNatatkiFilesSort = k.getInt("natatki_sort", 0)
             myNatatkiFiles.sort()
             activity.invalidateOptionsMenu()
-            adapter = ItemAdapter(myNatatkiFiles, R.id.image, false)
+            adapter = ItemAdapter(R.id.image, false)
             binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
             binding.dragListView.setLayoutManager(LinearLayoutManager(activity))
-            binding.dragListView.setAdapter(adapter, false)
+            binding.dragListView.setAdapter(adapter, true)
             binding.dragListView.setCanDragHorizontally(false)
             binding.dragListView.setCanDragVertically(true)
             binding.dragListView.setSwipeListener(object : ListSwipeHelper.OnSwipeListenerAdapter() {
@@ -133,6 +134,24 @@ class MenuNatatki : NatatkiFragment() {
         binding.dragListView.resetSwipedViews(null)
     }
 
+    override fun myNatatkiAdd(isAdd: Boolean) {
+        binding.dragListView.resetSwipedViews(null)
+        if (isAdd) {
+            myNatatkiFilesSort = k.getInt("natatki_sort", 0)
+            if (myNatatkiFilesSort == -1) {
+                activity?.let {
+                    myNatatkiFiles.clear()
+                    val file = File(it.filesDir.toString() + "/Natatki.json")
+                    val gson = Gson()
+                    val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
+                    myNatatkiFiles.addAll(gson.fromJson(file.readText(), type))
+                }
+            }
+            myNatatkiFiles.sort()
+            adapter.updateList(myNatatkiFiles)
+        }
+    }
+
     override fun fileDelite(position: Int) {
         activity?.let { fragmentActivity ->
             val f = adapter.itemList[position]
@@ -144,24 +163,14 @@ class MenuNatatki : NatatkiFragment() {
                 val gson = Gson()
                 it.write(gson.toJson(adapter.itemList))
             }
-            adapter.notifyDataSetChanged()
+            adapter.notifyItemRemoved(position)
         }
     }
 
     override fun onDialogEditClick(position: Int) {
-        if (MainActivity.checkmoduleResources()) {
-            activity?.let {
-                val f = adapter.itemList[position]
-                val intent = Intent()
-                intent.setClassName(it, MainActivity.MYNATATKI)
-                intent.putExtra("filename", "Mae_malitvy_" + f.id)
-                intent.putExtra("redak", 2)
-                startActivity(intent)
-            }
-        } else {
-            val dadatak = DialogInstallDadatak()
-            dadatak.show(childFragmentManager, "dadatak")
-        }
+        val f = adapter.itemList[position]
+        val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 2)
+        myNatatki.show(childFragmentManager, "myNatatki")
     }
 
     override fun onDialogDeliteClick(position: Int, name: String) {
@@ -183,18 +192,8 @@ class MenuNatatki : NatatkiFragment() {
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_add) {
-            if (MainActivity.checkmoduleResources()) {
-                activity?.let {
-                    val intent = Intent()
-                    intent.setClassName(it, MainActivity.MYNATATKI)
-                    intent.putExtra("redak", 1)
-                    intent.putExtra("filename", "")
-                    startActivity(intent)
-                }
-            } else {
-                val dadatak = DialogInstallDadatak()
-                dadatak.show(childFragmentManager, "dadatak")
-            }
+            val myNatatki = MyNatatki.getInstance("", 1)
+            myNatatki.show(childFragmentManager, "myNatatki")
         }
         if (id == R.id.sortdate) {
             activity?.let { activity ->
@@ -216,7 +215,7 @@ class MenuNatatki : NatatkiFragment() {
                 }
                 activity.invalidateOptionsMenu()
                 myNatatkiFiles.sort()
-                adapter.notifyDataSetChanged()
+                adapter.updateList(myNatatkiFiles)
             }
         }
         if (id == R.id.sorttime) {
@@ -239,7 +238,7 @@ class MenuNatatki : NatatkiFragment() {
                 }
                 activity.invalidateOptionsMenu()
                 myNatatkiFiles.sort()
-                adapter.notifyDataSetChanged()
+                adapter.updateList(myNatatkiFiles)
             }
         }
         if (id == R.id.action_carkva) {
@@ -256,7 +255,7 @@ class MenuNatatki : NatatkiFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class ItemAdapter(list: ArrayList<MyNatatkiFiles>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<MyNatatkiFiles, ItemAdapter.ViewHolder>() {
+    private inner class ItemAdapter(private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<MyNatatkiFiles, ItemAdapter.ViewHolder>() {
         private var dzenNoch = false
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -294,19 +293,9 @@ class MenuNatatki : NatatkiFragment() {
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                if (MainActivity.checkmoduleResources()) {
-                    activity?.let {
-                        val f = itemList[adapterPosition]
-                        val intent = Intent()
-                        intent.setClassName(it, MainActivity.MYNATATKI) //intent.setClassName(it, MainActivity.MYNATATKIVIEW)
-                        intent.putExtra("redak", 3)
-                        intent.putExtra("filename", "Mae_malitvy_" + f.id)
-                        startActivity(intent)
-                    }
-                } else {
-                    val dadatak = DialogInstallDadatak()
-                    dadatak.show(childFragmentManager, "dadatak")
-                }
+                val f = itemList[adapterPosition]
+                val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 3)
+                myNatatki.show(childFragmentManager, "myNatatki")
             }
 
             override fun onItemLongClicked(view: View): Boolean {
@@ -316,8 +305,33 @@ class MenuNatatki : NatatkiFragment() {
             }
         }
 
+        fun updateList(newMyNatatkiFiles: ArrayList<MyNatatkiFiles>) {
+            val diffCallback = RecyclerViewDiffCallback(myNatatkiFiles, newMyNatatkiFiles)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(this)
+            itemList = newMyNatatkiFiles
+        }
+
         init {
-            itemList = list
+            itemList = myNatatkiFiles
+        }
+    }
+
+    private class RecyclerViewDiffCallback(private val oldArrayList: ArrayList<MyNatatkiFiles>, private val newArrayList: ArrayList<MyNatatkiFiles>) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int {
+            return oldArrayList.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newArrayList.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
         }
     }
 

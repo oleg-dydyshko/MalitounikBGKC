@@ -24,6 +24,7 @@ import android.widget.AdapterView.OnItemSelectedListener
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.DialogContextMenuSabytie.DialogContextMenuSabytieListener
 import by.carkva_gazeta.malitounik.DialogDelite.DialogDeliteListener
@@ -697,7 +698,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         for (i in 0 until MainActivity.padzeia.size) {
             sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
         }
-        adapter.notifyDataSetChanged()
+        adapter.notifyItemRemoved(position)
         CoroutineScope(Dispatchers.IO).launch {
             if (sab.count == "0") {
                 if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
@@ -1519,7 +1520,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                 }
-                adapter.notifyDataSetChanged()
+                adapter.updateList(sabytie2)
                 binding.editText.setText("")
                 binding.editText2.setText("")
                 MainActivity.toastView(getString(R.string.save))
@@ -2184,7 +2185,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                 }
-                adapter.notifyDataSetChanged()
+                adapter.updateList(sabytie2)
                 binding.editText.setText("")
                 binding.editText2.setText("")
                 binding.spinner3.setSelection(0)
@@ -2387,7 +2388,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
         }
         sabytie2.clear()
-        adapter.notifyDataSetChanged()
+        adapter.updateList(sabytie2)
         MainActivity.toastView(getString(R.string.remove_padzea))
     }
 
@@ -2443,7 +2444,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             for (i in 0 until MainActivity.padzeia.size) {
                 sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
             }
-            adapter.notifyDataSetChanged()
+            adapter.updateList(sabytie2)
             binding.dragListView.recyclerView.scrollToPosition(0)
         }
     }
@@ -2601,8 +2602,33 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
         }
 
+        fun updateList(newSabytieDataAdapter: ArrayList<SabytieDataAdapter>) {
+            val diffCallback = RecyclerViewDiffCallback(sabytie2, newSabytieDataAdapter)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(this)
+            itemList = newSabytieDataAdapter
+        }
+
         init {
             itemList = list
+        }
+    }
+
+    private class RecyclerViewDiffCallback(private val oldArrayList: ArrayList<SabytieDataAdapter>, private val newArrayList: ArrayList<SabytieDataAdapter>) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int {
+            return oldArrayList.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newArrayList.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
         }
     }
 

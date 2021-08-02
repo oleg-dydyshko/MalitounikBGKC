@@ -11,7 +11,10 @@
         <dist:fusing dist:include="true" />
     </dist:module>
 
-    <application>
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor">
         <activity
             android:name="by.carkva_gazeta.biblijateka.BibliotekaView"
             android:label="Бібліятэка Царквы"

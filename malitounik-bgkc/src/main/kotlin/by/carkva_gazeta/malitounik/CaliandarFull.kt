@@ -501,51 +501,50 @@ class CaliandarFull : Fragment(), View.OnClickListener {
     }
 
     fun sabytieView(sabytieTitle: String) {
-        binding.padzei.removeAllViewsInLayout()
-        val gc = Calendar.getInstance() as GregorianCalendar
-        val sabytieList = ArrayList<TextView>()
-        MainActivity.padzeia.sort()
-        for (index in 0 until MainActivity.padzeia.size) {
-            val p = MainActivity.padzeia[index]
-            val r1 = p.dat.split(".")
-            val r2 = p.datK.split(".")
-            gc[r1[2].toInt(), r1[1].toInt() - 1] = r1[0].toInt()
-            val naY = gc[Calendar.YEAR]
-            val na = gc[Calendar.DAY_OF_YEAR]
-            gc[r2[2].toInt(), r2[1].toInt() - 1] = r2[0].toInt()
-            val yaerw = gc[Calendar.YEAR]
-            val kon = gc[Calendar.DAY_OF_YEAR]
-            var rezkK = kon - na + 1
-            if (yaerw > naY) {
-                var leapYear = 365
-                if (gc.isLeapYear(naY)) leapYear = 366
-                rezkK = leapYear - na + kon
-            }
-            gc[r1[2].toInt(), r1[1].toInt() - 1] = r1[0].toInt()
-            for (i in 0 until rezkK) {
-                if (gc[Calendar.DAY_OF_YEAR] == getDayOfYear() && gc[Calendar.YEAR] == getYear()) {
-                    val title = p.padz
-                    val data = p.dat
-                    val time = p.tim
-                    val dataK = p.datK
-                    val timeK = p.timK
-                    val paz = p.paznic
-                    var res = getString(R.string.sabytie_no_pavedam)
-                    val konecSabytie = p.konecSabytie
-                    val realTime = Calendar.getInstance().timeInMillis
-                    var paznicia = false
-                    if (paz != 0L) {
-                        gc.timeInMillis = paz
-                        var nol1 = ""
-                        var nol2 = ""
-                        var nol3 = ""
-                        if (gc[Calendar.DATE] < 10) nol1 = "0"
-                        if (gc[Calendar.MONTH] < 9) nol2 = "0"
-                        if (gc[Calendar.MINUTE] < 10) nol3 = "0"
-                        res = getString(R.string.sabytie_pavedam, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR], gc[Calendar.HOUR_OF_DAY], nol3, gc[Calendar.MINUTE])
-                        if (realTime > paz) paznicia = true
-                    }
-                    activity?.let { activity ->
+        activity?.let { activity ->
+            binding.padzei.removeAllViewsInLayout()
+            val gc = Calendar.getInstance() as GregorianCalendar
+            val sabytieList = ArrayList<TextView>()
+            for (index in 0 until MainActivity.padzeia.size) {
+                val p = MainActivity.padzeia[index]
+                val r1 = p.dat.split(".")
+                val r2 = p.datK.split(".")
+                gc[r1[2].toInt(), r1[1].toInt() - 1] = r1[0].toInt()
+                val naY = gc[Calendar.YEAR]
+                val na = gc[Calendar.DAY_OF_YEAR]
+                gc[r2[2].toInt(), r2[1].toInt() - 1] = r2[0].toInt()
+                val yaerw = gc[Calendar.YEAR]
+                val kon = gc[Calendar.DAY_OF_YEAR]
+                var rezkK = kon - na + 1
+                if (yaerw > naY) {
+                    var leapYear = 365
+                    if (gc.isLeapYear(naY)) leapYear = 366
+                    rezkK = leapYear - na + kon
+                }
+                gc[r1[2].toInt(), r1[1].toInt() - 1] = r1[0].toInt()
+                for (i in 0 until rezkK) {
+                    if (gc[Calendar.DAY_OF_YEAR] == getDayOfYear() && gc[Calendar.YEAR] == getYear()) {
+                        val title = p.padz
+                        val data = p.dat
+                        val time = p.tim
+                        val dataK = p.datK
+                        val timeK = p.timK
+                        val paz = p.paznic
+                        var res = getString(R.string.sabytie_no_pavedam)
+                        val konecSabytie = p.konecSabytie
+                        val realTime = Calendar.getInstance().timeInMillis
+                        var paznicia = false
+                        if (paz != 0L) {
+                            gc.timeInMillis = paz
+                            var nol1 = ""
+                            var nol2 = ""
+                            var nol3 = ""
+                            if (gc[Calendar.DATE] < 10) nol1 = "0"
+                            if (gc[Calendar.MONTH] < 9) nol2 = "0"
+                            if (gc[Calendar.MINUTE] < 10) nol3 = "0"
+                            res = getString(R.string.sabytie_pavedam, nol1, gc[Calendar.DAY_OF_MONTH], nol2, gc[Calendar.MONTH] + 1, gc[Calendar.YEAR], gc[Calendar.HOUR_OF_DAY], nol3, gc[Calendar.MINUTE])
+                            if (realTime > paz) paznicia = true
+                        }
                         val density = resources.displayMetrics.density
                         val realpadding = (5 * density).toInt()
                         val textViewT = TextView(activity)
@@ -652,12 +651,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                             }
                         }
                     }
+                    gc.add(Calendar.DATE, 1)
                 }
-                gc.add(Calendar.DATE, 1)
             }
-        }
-        for (i in sabytieList.indices) {
-            binding.padzei.addView(sabytieList[i])
+            for (i in sabytieList.indices) {
+                binding.padzei.addView(sabytieList[i])
+            }
         }
     }
 

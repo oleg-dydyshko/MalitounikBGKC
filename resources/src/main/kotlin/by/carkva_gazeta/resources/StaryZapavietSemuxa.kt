@@ -52,7 +52,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
     }
 
     private var fullscreenPage = false
-    private var trak = false
     private var paralel = false
     private var fullglav = 0
     private var kniga = 0
@@ -68,6 +67,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
     private var men = true
     private lateinit var binding: ActivityBibleBinding
     private var resetTollbarJob: Job? = null
+    private var bibliaKnigi = ArrayList<BibliaData>()
 
     private fun clearEmptyPosition() {
         val remove = ArrayList<ArrayList<Int>>()
@@ -131,6 +131,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         resetTollbarJob?.cancel()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onDialogFontSize(fontSize: Float) {
         binding.pager.adapter?.notifyDataSetChanged()
     }
@@ -177,23 +178,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         glava = intent.extras?.getInt("glava", 0) ?: 0
         if (intent.extras?.containsKey("stix") == true) {
             fierstPosition = intent.extras?.getInt("stix", 0) ?: 0
-            trak = true
         }
-        BibleGlobalList.mListGlava = 0
-        val adapterViewPager = MyPagerAdapter(this)
-        binding.pager.adapter = adapterViewPager
-        TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
-            tab.text = if (kniga == 18) resources.getString(by.carkva_gazeta.malitounik.R.string.psalom) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
-        }.attach()
-        binding.pager.offscreenPageLimit = 3
-        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                BibleGlobalList.mListGlava = position
-                men = VybranoeBibleList.checkVybranoe(this@StaryZapavietSemuxa, kniga, position)
-                if (glava != position) fierstPosition = 0
-                invalidateOptionsMenu()
-            }
-        })
         when (kniga) {
             0 -> {
                 title = "Быцьцё"
@@ -352,6 +337,24 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
                 fullglav = 4
             }
         }
+        for (i in 0 until fullglav) {
+            val pazicia = if (glava != i) 0 else fierstPosition
+            bibliaKnigi.add(BibliaData(i, kniga, pazicia))
+        }
+        BibleGlobalList.mListGlava = 0
+        binding.pager.adapter = MyPagerAdapter(this)
+        TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
+            tab.text = if (kniga == 18) resources.getString(by.carkva_gazeta.malitounik.R.string.psalom) + " " + (position + 1) else resources.getString(by.carkva_gazeta.malitounik.R.string.razdzel) + " " + (position + 1)
+        }.attach()
+        binding.pager.offscreenPageLimit = 3
+        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                BibleGlobalList.mListGlava = position
+                men = VybranoeBibleList.checkVybranoe(this@StaryZapavietSemuxa, kniga, position)
+                if (glava != position) fierstPosition = 0
+                invalidateOptionsMenu()
+            }
+        })
         men = VybranoeBibleList.checkVybranoe(this, kniga, glava)
         if (savedInstanceState != null) {
             dialog = savedInstanceState.getBoolean("dialog")
@@ -604,62 +607,9 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
             fragment?.upDateListView() ?: super.onBindViewHolder(holder, position, payloads)
         }
 
-        override fun getItemCount(): Int {
-            var fullglav = 1
-            when (kniga) {
-                0 -> fullglav = 50
-                1 -> fullglav = 40
-                2 -> fullglav = 27
-                3, 13 -> fullglav = 36
-                4 -> fullglav = 34
-                5, 9 -> fullglav = 24
-                6 -> fullglav = 21
-                7 -> fullglav = 4
-                8 -> fullglav = 31
-                10 -> fullglav = 22
-                11 -> fullglav = 25
-                12 -> fullglav = 29
-                14 -> fullglav = 10
-                15 -> fullglav = 13
-                16 -> fullglav = 10
-                17 -> fullglav = 42
-                18 -> fullglav = 151
-                19 -> fullglav = 31
-                20 -> fullglav = 12
-                21 -> fullglav = 8
-                22 -> fullglav = 66
-                23 -> fullglav = 52
-                24 -> fullglav = 5
-                25 -> fullglav = 48
-                26 -> fullglav = 12
-                27 -> fullglav = 14
-                28 -> fullglav = 3
-                29 -> fullglav = 9
-                30 -> {
-                }
-                31 -> fullglav = 4
-                32 -> fullglav = 7
-                33 -> fullglav = 3
-                34 -> fullglav = 3
-                35 -> fullglav = 3
-                36 -> fullglav = 2
-                37 -> fullglav = 14
-                38 -> fullglav = 4
-            }
-            return fullglav
-        }
+        override fun getItemCount() = bibliaKnigi.size
 
-        override fun createFragment(position: Int): BackPressedFragment {
-            for (i in 0 until itemCount) {
-                if (position == i) {
-                    val pazicia: Int = if (trak) {
-                        if (glava != i) 0 else fierstPosition
-                    } else 0
-                    return StaryZapavietSemuxaFragment.newInstance(i, kniga, pazicia)
-                }
-            }
-            return StaryZapavietSemuxaFragment.newInstance(0, kniga, 1)
-        }
+        override fun createFragment(position: Int) = StaryZapavietSemuxaFragment.newInstance(bibliaKnigi[position].glava, bibliaKnigi[position].kniga, bibliaKnigi[position].styx)
     }
 
     companion object {

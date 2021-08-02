@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
 import by.carkva_gazeta.malitounik.databinding.MenuVybranoeBinding
@@ -57,7 +58,7 @@ class MenuVybranoe : VybranoeFragment() {
             file.writer().use {
                 it.write(gson.toJson(adapter.itemList))
             }
-            adapter.notifyDataSetChanged()
+            adapter.notifyItemRemoved(position)
         }
     }
 
@@ -152,7 +153,7 @@ class MenuVybranoe : VybranoeFragment() {
             edit.apply()
             adapter.itemList.clear()
             File(activity.filesDir.toString() + "/Vybranoe.json").delete()
-            adapter.notifyDataSetChanged()
+            adapter.updateList(vybranoe)
         }
     }
 
@@ -257,7 +258,7 @@ class MenuVybranoe : VybranoeFragment() {
                     vybranoeSort = 1
                 }
                 vybranoe.sort()
-                adapter.notifyDataSetChanged()
+                adapter.updateList(vybranoe)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -348,8 +349,33 @@ class MenuVybranoe : VybranoeFragment() {
             }
         }
 
+        fun updateList(newVybranoe: ArrayList<VybranoeData>) {
+            val diffCallback = RecyclerViewDiffCallback(vybranoe, newVybranoe)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(this)
+            itemList = newVybranoe
+        }
+
         init {
             itemList = list
+        }
+    }
+
+    private class RecyclerViewDiffCallback(private val oldArrayList: ArrayList<VybranoeData>, private val newArrayList: ArrayList<VybranoeData>) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int {
+            return oldArrayList.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newArrayList.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
         }
     }
 

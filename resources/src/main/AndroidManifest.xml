@@ -11,7 +11,10 @@
         <dist:fusing dist:include="true" />
     </dist:module>
 
-    <application>
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor">
         <activity
             android:name="by.carkva_gazeta.resources.Chytanne"
             android:label="@string/czytanne"
@@ -76,15 +79,6 @@
             android:name="by.carkva_gazeta.resources.MaranAta"
             android:label="@string/maranata"
             android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
-            android:name="by.carkva_gazeta.resources.MyNatatki"
-            android:label="@string/natatka_add"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />

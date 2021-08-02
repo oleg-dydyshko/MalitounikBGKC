@@ -12,7 +12,10 @@
         <dist:fusing dist:include="false" />
     </dist:module>
 
-    <application>
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor" >
         <activity
             android:name="by.carkva_gazeta.admin.AdminMain"
             android:label="@string/site_admin"

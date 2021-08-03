@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.*
@@ -80,13 +79,6 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         } else if (view.id == R.id.search_src_text) {
             editText = view as AutoCompleteTextView
             editText?.setBackgroundResource(R.drawable.underline_white)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                editText?.setTextCursorDrawable(R.color.colorWhite)
-            } else {
-                val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
-                f.isAccessible = true
-                f.set(editText, 0)
-            }
             val chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
             editText?.setText(chin.getString("search_svityx_string", ""))
             editText?.setSelection(editText?.text?.length ?: 0)

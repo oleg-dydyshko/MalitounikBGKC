@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.*
@@ -171,13 +170,6 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             editText = view as AutoCompleteTextView
             editText?.addTextChangedListener(textWatcher)
             editText?.setBackgroundResource(R.drawable.underline_white)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                editText?.setTextCursorDrawable(R.color.colorWhite)
-            } else {
-                val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
-                f.isAccessible = true
-                f.set(editText, 0)
-            }
         }
         if (view is ViewGroup) {
             for (i in 0 until view.childCount) {

@@ -6,12 +6,10 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.MyNatatkiBinding
@@ -90,13 +88,6 @@ class MyNatatki : DialogFragment() {
             binding.file.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
             binding.EditText.tag = binding.EditText.keyListener
             binding.file.tag = binding.file.keyListener
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                binding.file.setTextCursorDrawable(R.color.colorWhite)
-            } else {
-                val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
-                f.isAccessible = true
-                f.set(binding.file, 0)
-            }
             when (redak) {
                 1 -> {
                     edit = false

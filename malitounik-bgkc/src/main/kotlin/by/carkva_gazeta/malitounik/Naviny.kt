@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Message
 import android.text.Spannable
@@ -20,7 +19,6 @@ import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.webkit.*
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
@@ -257,13 +255,6 @@ class Naviny : AppCompatActivity() {
     }
 
     private fun setTollbarTheme() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            binding.titleToolbar.setTextCursorDrawable(R.color.colorWhite)
-        } else {
-            val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
-            f.isAccessible = true
-            f.set(binding.titleToolbar, 0)
-        }
         binding.titleToolbar.setOnClickListener {
             if (binding.titleToolbar.text?.contains("https://") != true) {
                 binding.titleToolbar.setText(binding.viewWeb.url)

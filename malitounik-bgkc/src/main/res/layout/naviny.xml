@@ -37,6 +37,7 @@
                     android:background="@drawable/calendar_mun_red"
                     android:cursorVisible="false"
                     android:imeOptions="actionGo"
+                    android:textCursorDrawable="@drawable/cursor"
                     android:singleLine="true"
                     android:textSize="20sp"
                     android:textStyle="bold" />

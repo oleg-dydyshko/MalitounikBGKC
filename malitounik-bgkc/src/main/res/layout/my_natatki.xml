@@ -22,6 +22,7 @@
             android:singleLine="true"
             android:textColor="@color/colorWhite"
             android:textColorHint="@color/colorDivider2"
+            android:textCursorDrawable="@drawable/cursor"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -34,9 +35,9 @@
             android:layout_marginRight="10dp"
             android:gravity="top|start"
             android:hint="@string/natatka"
-            android:textSize="18sp"
             android:imeOptions="actionDone|flagNoEnterAction"
             android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
-            android:textIsSelectable="true" />
+            android:textIsSelectable="true"
+            android:textSize="18sp" />
     </LinearLayout>
 </ScrollView>

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.*
@@ -272,13 +271,6 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             p.rightMargin = margin
             autoCompleteTextView.layoutParams = p
             autoCompleteTextView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                autoCompleteTextView.setTextCursorDrawable(by.carkva_gazeta.malitounik.R.color.colorWhite)
-            } else {
-                val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
-                f.isAccessible = true
-                f.set(autoCompleteTextView, 0)
-            }
             autoCompleteTextView.addTextChangedListener(MyTextWatcher())
         }
         if (view is ViewGroup) {

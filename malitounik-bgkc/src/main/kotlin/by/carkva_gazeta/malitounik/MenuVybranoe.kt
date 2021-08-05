@@ -314,16 +314,19 @@ class MenuVybranoe : VybranoeFragment() {
                     if (MainActivity.checkmoduleResources()) {
                         when (itemList[adapterPosition].resurs) {
                             "1" -> {
-                                VybranoeBibleList.biblia = 1
-                                startActivity(Intent(activity, VybranoeBibleList::class.java))
+                                DialogVybranoeBibleList.biblia = 1
+                                val dialogVybranoeList = DialogVybranoeBibleList()
+                                dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                             }
                             "2" -> {
-                                VybranoeBibleList.biblia = 2
-                                startActivity(Intent(activity, VybranoeBibleList::class.java))
+                                DialogVybranoeBibleList.biblia = 2
+                                val dialogVybranoeList = DialogVybranoeBibleList()
+                                dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                             }
                             "3" -> {
-                                VybranoeBibleList.biblia = 3
-                                startActivity(Intent(activity, VybranoeBibleList::class.java))
+                                DialogVybranoeBibleList.biblia = 3
+                                val dialogVybranoeList = DialogVybranoeBibleList()
+                                dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                             }
                             else -> {
                                 activity?.let {

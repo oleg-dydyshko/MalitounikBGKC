@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
@@ -37,15 +36,8 @@ class DialogDeliteBibliaVybranoe : DialogFragment() {
         title = arguments?.getString("title") ?: ""
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is Activity) {
-            mListener = try {
-                context as DialogDeliteBibliVybranoeListener
-            } catch (e: ClassCastException) {
-                throw ClassCastException("$activity must implement DialogDeliteBibliVybranoeListener")
-            }
-        }
+    fun setDialogDeliteBibliVybranoeListener(listener: DialogDeliteBibliVybranoeListener) {
+        mListener = listener
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

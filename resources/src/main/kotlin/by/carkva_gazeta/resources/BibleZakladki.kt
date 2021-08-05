@@ -16,6 +16,7 @@ import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
@@ -43,14 +44,14 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
     private lateinit var k: SharedPreferences
     private val novyZapavietSemuxaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            adapter.notifyDataSetChanged()
+            adapter.updateList(data)
         }
     }
 
     override fun fileAllNatatkiAlboZakladki(semuxa: Int) {
         if (semuxa == 1) {
             data.removeAll(data)
-            adapter.notifyDataSetChanged()
+            adapter.updateList(data)
             val fileZakladki = File("$filesDir/BibliaSemuxaZakladki.json")
             if (fileZakladki.exists()) {
                 fileZakladki.delete()
@@ -58,7 +59,7 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
         }
         if (semuxa == 2) {
             data.removeAll(data)
-            adapter.notifyDataSetChanged()
+            adapter.updateList(data)
             val fileZakladki = File("$filesDir/BibliaSinodalZakladki.json")
             if (fileZakladki.exists()) {
                 fileZakladki.delete()
@@ -260,7 +261,7 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
     override fun zakladkadiliteItem(position: Int, semuxa: Int) {
         if (semuxa == 1) {
             data.removeAt(position)
-            adapter.notifyDataSetChanged()
+            adapter.notifyItemRemoved(position)
             val fileZakladki = File("$filesDir/BibliaSemuxaZakladki.json")
             if (data.size == 0) {
                 if (fileZakladki.exists()) {
@@ -277,7 +278,7 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
         }
         if (semuxa == 2) {
             data.removeAt(position)
-            adapter.notifyDataSetChanged()
+            adapter.notifyItemRemoved(position)
             val fileZakladki = File("$filesDir/BibliaSinodalZakladki.json")
             if (data.size == 0) {
                 if (fileZakladki.exists()) {
@@ -544,8 +545,33 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
             }
         }
 
+        fun updateList(newVybranoe: ArrayList<BibleZakladkiData>) {
+            val diffCallback = RecyclerViewDiffCallback(data, newVybranoe)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(this)
+            itemList = newVybranoe
+        }
+
         init {
             itemList = list
+        }
+    }
+
+    private class RecyclerViewDiffCallback(private val oldArrayList: ArrayList<BibleZakladkiData>, private val newArrayList: ArrayList<BibleZakladkiData>) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int {
+            return oldArrayList.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newArrayList.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
         }
     }
 }

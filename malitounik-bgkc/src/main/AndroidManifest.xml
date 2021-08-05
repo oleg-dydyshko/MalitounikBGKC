@@ -262,13 +262,13 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-        <activity
+        <!--<activity
             android:name=".VybranoeBibleList"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
+        </activity>-->
         <activity
             android:name=".NovyZapavietSemuxaList"
             android:theme="@style/AppTheme">

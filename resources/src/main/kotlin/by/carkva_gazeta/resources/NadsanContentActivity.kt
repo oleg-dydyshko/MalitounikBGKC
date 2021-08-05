@@ -119,11 +119,11 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             override fun onPageSelected(position: Int) {
                 if (glava != position) fierstPosition = 0
                 binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.kafizma2, getKafizma(position))
-                men = VybranoeBibleList.checkVybranoe(this@NadsanContentActivity, 0, position, 3)
+                men = DialogVybranoeBibleList.checkVybranoe(this@NadsanContentActivity, 0, position, 3)
                 invalidateOptionsMenu()
             }
         })
-        men = VybranoeBibleList.checkVybranoe(this, 0, glava, 3)
+        men = DialogVybranoeBibleList.checkVybranoe(this, 0, glava, 3)
         if (savedInstanceState != null) {
             dialog = savedInstanceState.getBoolean("dialog")
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
@@ -280,10 +280,10 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             checkSetDzenNoch = true
-            men = VybranoeBibleList.setVybranoe(this, resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2), 0, binding.pager.currentItem, bibleName = 3)
+            men = DialogVybranoeBibleList.setVybranoe(this, resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2), 0, binding.pager.currentItem, bibleName = 3)
             if (men) {
                 MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
-                if (!VybranoeBibleList.checkVybranoe("3")) {
+                if (!DialogVybranoeBibleList.checkVybranoe("3")) {
                     MenuVybranoe.vybranoe.add(0, VybranoeData(Bogashlugbovya.vybranoeIndex(), "3", getString(by.carkva_gazeta.malitounik.R.string.title_psalter)))
                     val gson = Gson()
                     val file = File("$filesDir/Vybranoe.json")

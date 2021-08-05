@@ -128,7 +128,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
                 }
                 MainActivity.toastView(getString(R.string.remove_padzea))
                 Sabytie.editCaliandar = true
-                adapter.notifyDataSetChanged()
+                adapter.notifyItemRemoved(position)
             }
         }
     }

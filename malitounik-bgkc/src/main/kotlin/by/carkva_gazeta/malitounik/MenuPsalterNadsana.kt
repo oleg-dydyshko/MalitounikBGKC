@@ -107,8 +107,9 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
             }
         }
         if (id == R.id.myBible) {
-            VybranoeBibleList.biblia = 3
-            startActivity(Intent(activity, VybranoeBibleList::class.java))
+            DialogVybranoeBibleList.biblia = 3
+            val dialogVybranoeList = DialogVybranoeBibleList()
+            dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
         }
         if (id == R.id.psalter) {
             startActivity(Intent(activity, NadsanContent::class.java))

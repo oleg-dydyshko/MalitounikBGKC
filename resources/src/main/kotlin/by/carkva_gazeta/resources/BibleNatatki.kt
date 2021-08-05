@@ -14,6 +14,7 @@ import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.ListItemBinding
@@ -47,12 +48,12 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
                 binding.help.visibility = View.VISIBLE
                 binding.dragListView.visibility = View.GONE
             }
-            adapter.notifyDataSetChanged()
+            adapter.updateList(data)
         }
     }
 
     override fun setEdit() {
-        adapter.notifyDataSetChanged()
+        adapter.updateList(data)
     }
 
     override fun editCancel() {
@@ -72,7 +73,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
     override fun fileAllNatatkiAlboZakladki(semuxa: Int) {
         if (semuxa == 1) {
             data.removeAll(data)
-            adapter.notifyDataSetChanged()
+            adapter.updateList(data)
             val fileNatatki = File("$filesDir/BibliaSemuxaNatatki.json")
             if (fileNatatki.exists()) {
                 fileNatatki.delete()
@@ -80,7 +81,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
         }
         if (semuxa == 2) {
             data.removeAll(data)
-            adapter.notifyDataSetChanged()
+            adapter.updateList(data)
             val fileNatatki = File("$filesDir/BibliaSinodalNatatki.json")
             if (fileNatatki.exists()) {
                 fileNatatki.delete()
@@ -280,7 +281,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
     override fun natatkidiliteItem(position: Int, semuxa: Int) {
         if (semuxa == 1) {
             data.removeAt(position)
-            adapter.notifyDataSetChanged()
+            adapter.notifyItemRemoved(position)
             val fileNatatki = File("$filesDir/BibliaSemuxaNatatki.json")
             if (data.size == 0) {
                 if (fileNatatki.exists()) {
@@ -297,7 +298,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
         }
         if (semuxa == 2) {
             data.removeAt(position)
-            adapter.notifyDataSetChanged()
+            adapter.notifyItemRemoved(position)
             val fileNatatki = File("$filesDir/BibliaSinodalNatatki.json")
             if (data.size == 0) {
                 if (fileNatatki.exists()) {
@@ -415,8 +416,33 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
             }
         }
 
+        fun updateList(newNatatki: ArrayList<BibleNatatkiData>) {
+            val diffCallback = RecyclerViewDiffCallback(data, newNatatki)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(this)
+            itemList = newNatatki
+        }
+
         init {
             itemList = list
+        }
+    }
+
+    private class RecyclerViewDiffCallback(private val oldArrayList: ArrayList<BibleNatatkiData>, private val newArrayList: ArrayList<BibleNatatkiData>) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int {
+            return oldArrayList.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newArrayList.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldArrayList[oldItemPosition] == newArrayList[newItemPosition]
         }
     }
 }

@@ -41,10 +41,6 @@ class DialogImageFileExplorer : DialogFragment() {
         _binding = null
     }
 
-    fun onCancelDialog() {
-        dialog?.cancel()
-    }
-
     private fun loadFileList() {
         fileList.clear()
         if (path?.exists() == true) {

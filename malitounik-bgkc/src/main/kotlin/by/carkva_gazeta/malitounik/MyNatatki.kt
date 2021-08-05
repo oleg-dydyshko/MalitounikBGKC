@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -73,6 +74,15 @@ class MyNatatki : DialogFragment() {
             val builder = AlertDialog.Builder(it, style)
             builder.setView(binding.root)
             builder.setPositiveButton(it.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setNeutralButton(getString(R.string.share)) { _: DialogInterface, _: Int ->
+                write()
+                prepareSave()
+                val sendIntent = Intent(Intent.ACTION_SEND)
+                sendIntent.putExtra(Intent.EXTRA_TEXT, binding.EditText.text.toString())
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, binding.file.text.toString())
+                sendIntent.type = "text/plain"
+                startActivity(Intent.createChooser(sendIntent, binding.file.text.toString()))
+            }
             alert = builder.create()
             val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             binding.EditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)

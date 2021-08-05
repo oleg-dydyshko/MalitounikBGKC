@@ -46,8 +46,9 @@ class MenuBibleSinoidal : Fragment() {
                     return@setOnClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                VybranoeBibleList.biblia = 2
-                startActivity(Intent(activity, VybranoeBibleList::class.java))
+                DialogVybranoeBibleList.biblia = 2
+                val dialogVybranoeList = DialogVybranoeBibleList()
+                dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
             }
             binding.novyZavet.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {

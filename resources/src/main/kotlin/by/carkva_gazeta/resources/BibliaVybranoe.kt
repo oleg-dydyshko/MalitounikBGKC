@@ -311,7 +311,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
 
     private fun loadBible(savedInstanceState: Bundle?) {
         val ssbTitle = SpannableStringBuilder()
-        VybranoeBibleList.arrayListVybranoe.forEach { VybranoeBibliaData ->
+        DialogVybranoeBibleList.arrayListVybranoe.forEach { VybranoeBibliaData ->
             var inputStream = resources.openRawResource(R.raw.biblias1)
             if (VybranoeBibliaData.bibleName == 1) {
                 if (VybranoeBibliaData.novyZavet) {

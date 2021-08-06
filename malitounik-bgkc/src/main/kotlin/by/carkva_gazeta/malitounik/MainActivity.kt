@@ -47,7 +47,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToLong
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener, MyNatatki.MyNatatkiListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
 
     private lateinit var c: GregorianCalendar
     private lateinit var k: SharedPreferences
@@ -127,11 +127,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     override fun onDialogDeliteClick(position: Int, name: String) {
         val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
         menuNatatki?.onDialogDeliteClick(position, name)
-    }
-
-    override fun myNatatkiAdd(isAdd: Boolean) {
-        val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
-        menuNatatki?.myNatatkiAdd(isAdd)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

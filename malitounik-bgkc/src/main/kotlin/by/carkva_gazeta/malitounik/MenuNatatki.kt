@@ -21,7 +21,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 
-class MenuNatatki : NatatkiFragment() {
+class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
     private lateinit var adapter: ItemAdapter
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
@@ -170,6 +170,7 @@ class MenuNatatki : NatatkiFragment() {
     override fun onDialogEditClick(position: Int) {
         val f = adapter.itemList[position]
         val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 2)
+        myNatatki.setMyNatatkiListener(this)
         myNatatki.show(childFragmentManager, "myNatatki")
     }
 
@@ -193,6 +194,7 @@ class MenuNatatki : NatatkiFragment() {
         val id = item.itemId
         if (id == R.id.action_add) {
             val myNatatki = MyNatatki.getInstance("", 1)
+            myNatatki.setMyNatatkiListener(this)
             myNatatki.show(childFragmentManager, "myNatatki")
         }
         if (id == R.id.sortdate) {
@@ -295,6 +297,7 @@ class MenuNatatki : NatatkiFragment() {
                 mLastClickTime = SystemClock.elapsedRealtime()
                 val f = itemList[adapterPosition]
                 val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 3)
+                myNatatki.setMyNatatkiListener(this@MenuNatatki)
                 myNatatki.show(childFragmentManager, "myNatatki")
             }
 

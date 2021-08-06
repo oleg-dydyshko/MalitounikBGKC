@@ -1,6 +1,5 @@
 package by.carkva_gazeta.malitounik
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
@@ -16,6 +15,7 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.MyNatatkiBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.*
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -34,20 +34,19 @@ class MyNatatki : DialogFragment() {
     private lateinit var k: SharedPreferences
     private var editSettings = false
     private var mListener: MyNatatkiListener? = null
+    private var resetTollbarJob: Job? = null
 
     interface MyNatatkiListener {
         fun myNatatkiAdd(isAdd: Boolean)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is Activity) {
-            mListener = try {
-                context as MyNatatkiListener
-            } catch (e: ClassCastException) {
-                throw ClassCastException("$activity must implement MyNatatkiListener")
-            }
-        }
+    fun setMyNatatkiListener(listener: MyNatatkiListener) {
+        mListener = listener
+    }
+
+    override fun onPause() {
+        super.onPause()
+        resetTollbarJob?.cancel()
     }
 
     override fun onDestroyView() {
@@ -137,7 +136,29 @@ class MyNatatki : DialogFragment() {
                 }
             }
         }
+        binding.file.setOnClickListener {
+            fullTextTollbar()
+        }
         return alert
+    }
+
+    private fun fullTextTollbar() {
+        resetTollbarJob?.cancel()
+        if (binding.file.isSelected) {
+            resetTollbar()
+        } else {
+            binding.file.isSingleLine = false
+            binding.file.isSelected = true
+            resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
+                delay(5000)
+                resetTollbar()
+            }
+        }
+    }
+
+    private fun resetTollbar() {
+        binding.file.isSelected = false
+        binding.file.isSingleLine = true
     }
 
     private fun prepareSave() {

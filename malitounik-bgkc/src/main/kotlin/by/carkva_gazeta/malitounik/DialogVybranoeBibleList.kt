@@ -160,26 +160,21 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
     }
 
     private fun fullTextTollbar() {
-        val layoutParams = binding.appBarLayout2.layoutParams
         resetTollbarJob?.cancel()
         if (binding.titleToolbar.isSelected) {
-            resetTollbar(layoutParams)
+            resetTollbar()
         } else {
-            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
             binding.titleToolbar.isSingleLine = false
             binding.subtitleToolbar.isSingleLine = false
             binding.titleToolbar.isSelected = true
             resetTollbarJob = CoroutineScope(Dispatchers.Main).launch {
                 delay(5000)
-                resetTollbar(layoutParams)
+                resetTollbar()
             }
         }
     }
 
-    private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
-        val tv = TypedValue()
-        val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
-        layoutParams.height = actionBarHeight
+    private fun resetTollbar() {
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
         binding.subtitleToolbar.isSingleLine = true

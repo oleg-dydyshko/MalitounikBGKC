@@ -139,7 +139,6 @@ class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.action_edit).isVisible = false
         menu.findItem(R.id.action_share).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         menu.findItem(R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
         return true

@@ -14,12 +14,16 @@ import by.carkva_gazeta.malitounik.databinding.MenuPsalterBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class MenuPsalterNadsana : Fragment(), View.OnClickListener {
+class MenuPsalterNadsana : Fragment(), View.OnClickListener, DialogVybranoeBibleList.DialogVybranoeBibleListListener {
     private lateinit var k: SharedPreferences
     private var mLastClickTime: Long = 0
     private var bibleTime = ""
     private var _binding: MenuPsalterBinding? = null
     private val binding get() = _binding!!
+
+    override fun onAllDeliteBible() {
+        binding.myBible.visibility = View.GONE
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -109,6 +113,7 @@ class MenuPsalterNadsana : Fragment(), View.OnClickListener {
         if (id == R.id.myBible) {
             DialogVybranoeBibleList.biblia = 3
             val dialogVybranoeList = DialogVybranoeBibleList()
+            dialogVybranoeList.setDialogVybranoeBibleListListener(this)
             dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
         }
         if (id == R.id.psalter) {

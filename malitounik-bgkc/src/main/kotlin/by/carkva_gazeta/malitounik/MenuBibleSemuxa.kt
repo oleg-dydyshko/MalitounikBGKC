@@ -13,10 +13,14 @@ import by.carkva_gazeta.malitounik.databinding.MenuBibleBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class MenuBibleSemuxa : Fragment() {
+class MenuBibleSemuxa : Fragment(), DialogVybranoeBibleList.DialogVybranoeBibleListListener {
     private var mLastClickTime: Long = 0
     private var _binding: MenuBibleBinding? = null
     private val binding get() = _binding!!
+
+    override fun onAllDeliteBible() {
+        binding.myBible.visibility = View.GONE
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -48,6 +52,7 @@ class MenuBibleSemuxa : Fragment() {
                 mLastClickTime = SystemClock.elapsedRealtime()
                 DialogVybranoeBibleList.biblia = 1
                 val dialogVybranoeList = DialogVybranoeBibleList()
+                dialogVybranoeList.setDialogVybranoeBibleListListener(this)
                 dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
             }
             binding.novyZavet.setOnClickListener {

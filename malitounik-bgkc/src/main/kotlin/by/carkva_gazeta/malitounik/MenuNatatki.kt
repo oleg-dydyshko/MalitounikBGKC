@@ -134,6 +134,13 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
         binding.dragListView.resetSwipedViews(null)
     }
 
+    override fun myNatatkiEdit(position: Int) {
+        val f = adapter.itemList[position]
+        val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 2, position)
+        myNatatki.setMyNatatkiListener(this)
+        myNatatki.show(childFragmentManager, "myNatatki")
+    }
+
     override fun myNatatkiAdd(isAdd: Boolean) {
         binding.dragListView.resetSwipedViews(null)
         if (isAdd) {
@@ -169,7 +176,7 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
 
     override fun onDialogEditClick(position: Int) {
         val f = adapter.itemList[position]
-        val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 2)
+        val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 2, position)
         myNatatki.setMyNatatkiListener(this)
         myNatatki.show(childFragmentManager, "myNatatki")
     }
@@ -193,7 +200,7 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_add) {
-            val myNatatki = MyNatatki.getInstance("", 1)
+            val myNatatki = MyNatatki.getInstance("", 1, 0)
             myNatatki.setMyNatatkiListener(this)
             myNatatki.show(childFragmentManager, "myNatatki")
         }
@@ -296,7 +303,7 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 val f = itemList[adapterPosition]
-                val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 3)
+                val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 3, adapterPosition)
                 myNatatki.setMyNatatkiListener(this@MenuNatatki)
                 myNatatki.show(childFragmentManager, "myNatatki")
             }

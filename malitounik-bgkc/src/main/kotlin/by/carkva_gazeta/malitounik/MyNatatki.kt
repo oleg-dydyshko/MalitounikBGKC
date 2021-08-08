@@ -25,6 +25,7 @@ class MyNatatki : DialogFragment() {
     private var filename = ""
     private var redak = 3
     private var edit = true
+    private var position = 0
     private var dzenNoch = false
     private var md5sum = ""
     private var _binding: MyNatatkiBinding? = null
@@ -38,6 +39,7 @@ class MyNatatki : DialogFragment() {
 
     interface MyNatatkiListener {
         fun myNatatkiAdd(isAdd: Boolean)
+        fun myNatatkiEdit(position: Int)
     }
 
     fun setMyNatatkiListener(listener: MyNatatkiListener) {
@@ -72,17 +74,6 @@ class MyNatatki : DialogFragment() {
             _binding = MyNatatkiBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it, style)
             builder.setView(binding.root)
-            builder.setPositiveButton(it.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
-            builder.setNeutralButton(getString(R.string.share)) { _: DialogInterface, _: Int ->
-                write()
-                prepareSave()
-                val sendIntent = Intent(Intent.ACTION_SEND)
-                sendIntent.putExtra(Intent.EXTRA_TEXT, binding.EditText.text.toString())
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, binding.file.text.toString())
-                sendIntent.type = "text/plain"
-                startActivity(Intent.createChooser(sendIntent, binding.file.text.toString()))
-            }
-            alert = builder.create()
             val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
             binding.EditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
             if (savedInstanceState != null) {
@@ -90,9 +81,11 @@ class MyNatatki : DialogFragment() {
                 redak = savedInstanceState.getInt("redak", 2)
                 edit = savedInstanceState.getBoolean("edit", true)
                 editSettings = savedInstanceState.getBoolean("editSettings", false)
+                position = savedInstanceState.getInt("position", 0)
             } else {
                 filename = arguments?.getString("filename") ?: ""
-                redak = arguments?.getInt("redak", 2) ?: 3
+                redak = arguments?.getInt("redak", 3) ?: 3
+                position = arguments?.getInt("position", 0) ?: 0
             }
             binding.file.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
             binding.EditText.tag = binding.EditText.keyListener
@@ -135,6 +128,22 @@ class MyNatatki : DialogFragment() {
                     prepareSave()
                 }
             }
+            builder.setPositiveButton(it.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+            builder.setNeutralButton(getString(R.string.share)) { _: DialogInterface, _: Int ->
+                write()
+                prepareSave()
+                val sendIntent = Intent(Intent.ACTION_SEND)
+                sendIntent.putExtra(Intent.EXTRA_TEXT, binding.EditText.text.toString())
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, binding.file.text.toString())
+                sendIntent.type = "text/plain"
+                startActivity(Intent.createChooser(sendIntent, binding.file.text.toString()))
+            }
+            if (redak == 3) {
+                builder.setNegativeButton(getString(R.string.redagaktirovat)) { _: DialogInterface, _: Int ->
+                    mListener?.myNatatkiEdit(position)
+                }
+            }
+            alert = builder.create()
         }
         binding.file.setOnClickListener {
             fullTextTollbar()
@@ -249,14 +258,16 @@ class MyNatatki : DialogFragment() {
         outState.putInt("redak", redak)
         outState.putBoolean("edit", edit)
         outState.putBoolean("editSettings", editSettings)
+        outState.putInt("position", position)
     }
 
     companion object {
-        fun getInstance(filename: String, redak: Int): MyNatatki {
+        fun getInstance(filename: String, redak: Int, position: Int): MyNatatki {
             val myNatatki = MyNatatki()
             val bundle = Bundle()
             bundle.putString("filename", filename)
             bundle.putInt("redak", redak)
+            bundle.putInt("position", position)
             myNatatki.arguments = bundle
             return myNatatki
         }

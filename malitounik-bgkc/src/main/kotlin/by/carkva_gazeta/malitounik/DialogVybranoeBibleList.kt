@@ -35,6 +35,15 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
     private val binding get() = _binding!!
     private var resetTollbarJob: Job? = null
     private lateinit var alert: AlertDialog
+    private var listener: DialogVybranoeBibleListListener? = null
+
+    interface DialogVybranoeBibleListListener {
+        fun onAllDeliteBible()
+    }
+
+    fun setDialogVybranoeBibleListListener(listener: DialogVybranoeBibleListListener) {
+        this.listener = listener
+    }
 
     override fun onPause() {
         super.onPause()
@@ -57,16 +66,22 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                     2 -> prefEditors.remove("bibleVybranoeSinoidal")
                     3 -> prefEditors.remove("bibleVybranoeNadsan")
                 }
+                var posDelite = -1
                 MenuVybranoe.vybranoe.forEachIndexed { index, it ->
                     if (it.resurs == biblia.toString()) {
-                        MenuVybranoe.vybranoe.removeAt(index)
-                        val file = File("${activity.filesDir}/Vybranoe.json")
-                        file.writer().use {
-                            it.write(gson.toJson(MenuVybranoe.vybranoe))
-                        }
+                        posDelite = index
                         return@forEachIndexed
                     }
                 }
+                if (posDelite != -1) {
+                    MenuVybranoe.vybranoe.removeAt(posDelite)
+                    val file = File("${activity.filesDir}/Vybranoe.json")
+                    file.writer().use {
+                        it.write(gson.toJson(MenuVybranoe.vybranoe))
+                    }
+                }
+                listener?.onAllDeliteBible()
+                dialog?.cancel()
             } else {
                 when (biblia) {
                     1 -> prefEditors.putString("bibleVybranoeSemuxa", gson.toJson(arrayListVybranoe))

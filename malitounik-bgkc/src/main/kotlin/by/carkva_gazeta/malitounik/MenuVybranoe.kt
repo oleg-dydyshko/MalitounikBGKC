@@ -22,12 +22,16 @@ import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
 import java.io.File
 
-class MenuVybranoe : VybranoeFragment() {
+class MenuVybranoe : VybranoeFragment(), DialogVybranoeBibleList.DialogVybranoeBibleListListener {
     private lateinit var adapter: ItemAdapter
     private var mLastClickTime: Long = 0
     private lateinit var k: SharedPreferences
     private var _binding: MenuVybranoeBinding? = null
     private val binding get() = _binding!!
+
+    override fun onAllDeliteBible() {
+        adapter.updateList(vybranoe)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -181,7 +185,7 @@ class MenuVybranoe : VybranoeFragment() {
             checkBibleVybranoe()
             vybranoeSort = k.getInt("vybranoe_sort", 1)
             vybranoe.sort()
-            adapter = ItemAdapter(vybranoe, R.id.image, false)
+            adapter = ItemAdapter(R.id.image, false)
             binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
             binding.dragListView.setLayoutManager(LinearLayoutManager(fragmentActivity))
             binding.dragListView.setAdapter(adapter, false)
@@ -264,7 +268,7 @@ class MenuVybranoe : VybranoeFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class ItemAdapter(list: ArrayList<VybranoeData>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<VybranoeData, ItemAdapter.ViewHolder>() {
+    private inner class ItemAdapter(private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<VybranoeData, ItemAdapter.ViewHolder>() {
         private var dzenNoch = false
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -316,16 +320,19 @@ class MenuVybranoe : VybranoeFragment() {
                             "1" -> {
                                 DialogVybranoeBibleList.biblia = 1
                                 val dialogVybranoeList = DialogVybranoeBibleList()
+                                dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
                                 dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                             }
                             "2" -> {
                                 DialogVybranoeBibleList.biblia = 2
                                 val dialogVybranoeList = DialogVybranoeBibleList()
+                                dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
                                 dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                             }
                             "3" -> {
                                 DialogVybranoeBibleList.biblia = 3
                                 val dialogVybranoeList = DialogVybranoeBibleList()
+                                dialogVybranoeList.setDialogVybranoeBibleListListener(this@MenuVybranoe)
                                 dialogVybranoeList.show(childFragmentManager, "vybranoeBibleList")
                             }
                             else -> {
@@ -360,7 +367,7 @@ class MenuVybranoe : VybranoeFragment() {
         }
 
         init {
-            itemList = list
+            itemList = vybranoe
         }
     }
 

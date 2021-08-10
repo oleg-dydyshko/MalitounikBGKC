@@ -99,7 +99,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             dzenNoch = k.getBoolean("dzen_noch", false)
             var style = R.style.AlertDialogTheme
-            if (dzenNoch) style = R.style.AlertDialogThemeBlack
+            if (dzenNoch) style = R.style.AlertDialogThemeBlackVybranoe
             val builder = AlertDialog.Builder(it, style)
             builder.setView(binding.root)
             binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
@@ -149,10 +149,6 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             })
             setTollbarTheme()
             builder.setPositiveButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
-            builder.setNeutralButton(getString(R.string.help_davedka)) { _: DialogInterface, _: Int ->
-                val dialogHelpListView = DialogHelpListView.getInstance(1)
-                dialogHelpListView.show(parentFragmentManager, "DialogHelpListView")
-            }
             alert = builder.create()
         }
         return alert

@@ -1570,7 +1570,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 }
                 val del = ArrayList<Padzeia>()
                 MainActivity.padzeia.forEach {
-                    if (p.padz.contains(it.padz)) {
+                    if (p.padz == it.padz) {
                         del.add(it)
                         if (it.sec != "-1") {
                             intent = createIntent(it.padz, "Падзея" + " " + it.dat + " у " + it.tim, it.dat, it.tim)

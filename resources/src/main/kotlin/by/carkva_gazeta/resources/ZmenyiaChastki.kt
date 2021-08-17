@@ -15,9 +15,12 @@ internal class ZmenyiaChastki {
 
     fun getData() = arrayData
 
-    fun sviatyia() = arrayData[0][10]
-
-    fun sviatyiaDop() = arrayData[0][11]
+    fun sviatyia(): String {
+        return if (arrayData[0][10] != "")
+            arrayData[0][10]
+        else
+            arrayData[0][11]
+    }
 
     fun sviatyiaView(apostal: Int) = chtenia(sviatyia(), apostal)
 

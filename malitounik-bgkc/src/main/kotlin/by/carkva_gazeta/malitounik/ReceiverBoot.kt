@@ -13,7 +13,7 @@ class ReceiverBoot : BroadcastReceiver() {
             CoroutineScope(Dispatchers.IO).launch {
                 val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
                 val notify = chin.getInt("notification", 2)
-                SettingsActivity.setNotifications(context, notify)
+                SettingsActivity.setNotifications(notify)
             }
         }
     }

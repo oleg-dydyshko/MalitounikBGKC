@@ -43,8 +43,8 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
     private var edit = false
 
     companion object {
-        private const val UPDATE_ALL_WIDGETS = "update_all_widgets"
-        private const val RESET_MAIN = "reset_main"
+        const val UPDATE_ALL_WIDGETS = "update_all_widgets"
+        const val RESET_MAIN = "reset_main"
         const val GET_FONT_SIZE_DEFAULT = 18F
         const val GET_FONT_SIZE_MIN = 14F
         const val GET_FONT_SIZE_MAX = 54F
@@ -75,15 +75,15 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             return calendar[Calendar.YEAR]
         }
 
-        private fun createIntent(context: Context, action: String, extra: String): Intent {
-            val intent = Intent(context, ReceiverBroad::class.java)
+        private fun createIntent(action: String, extra: String): Intent {
+            val intent = Intent(Malitounik.applicationContext(), ReceiverBroad::class.java)
             intent.action = action
             intent.putExtra("extra", extra)
             return intent
         }
 
-        private fun createIntent(context: Context, action: String, extra: String, dayofyear: Int, year: Int): Intent {
-            val intent = Intent(context, ReceiverBroad::class.java)
+        private fun createIntent(action: String, extra: String, dayofyear: Int, year: Int): Intent {
+            val intent = Intent(Malitounik.applicationContext(), ReceiverBroad::class.java)
             intent.action = action
             intent.putExtra("extra", extra)
             intent.putExtra("dayofyear", dayofyear)
@@ -97,8 +97,8 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             return calendar.timeInMillis
         }
 
-        private fun createIntentSabytie(context: Context, action: String, data: String, time: String): Intent {
-            val intent = Intent(context, ReceiverBroad::class.java)
+        private fun createIntentSabytie(action: String, data: String, time: String): Intent {
+            val intent = Intent(Malitounik.applicationContext(), ReceiverBroad::class.java)
             intent.action = action
             intent.putExtra("sabytieSet", true)
             intent.putExtra("extra", "Падзея $data у $time")
@@ -109,7 +109,8 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             return intent
         }
 
-        fun setNotifications(context: Context, notifications: Int) {
+        fun setNotifications(notifications: Int) {
+            val context = Malitounik.applicationContext()
             val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             var intent: Intent
             var pIntent: PendingIntent?
@@ -222,7 +223,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                                 var timerepit = it.paznic
                                 while (true) {
                                     if (timerepit > c.timeInMillis) {
-                                        intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                        intent = createIntentSabytie(it.padz, it.dat, it.tim)
                                         pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 86400000L, pIntent)
                                         break
@@ -234,7 +235,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                                 var timerepit = it.paznic
                                 while (true) {
                                     if (timerepit > c.timeInMillis) {
-                                        intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                        intent = createIntentSabytie(it.padz, it.dat, it.tim)
                                         pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 604800000L, pIntent)
                                         break
@@ -246,7 +247,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                                 var timerepit = it.paznic
                                 while (true) {
                                     if (timerepit > c.timeInMillis) {
-                                        intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                        intent = createIntentSabytie(it.padz, it.dat, it.tim)
                                         pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 1209600000L, pIntent)
                                         break
@@ -258,7 +259,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                                 var timerepit = it.paznic
                                 while (true) {
                                     if (timerepit > c.timeInMillis) {
-                                        intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                        intent = createIntentSabytie(it.padz, it.dat, it.tim)
                                         pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, flags)
                                         am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 2419200000L, pIntent)
                                         break
@@ -267,7 +268,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                                 }
                             }
                             else -> if (it.paznic > c.timeInMillis) {
-                                intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
+                                intent = createIntentSabytie(it.padz, it.dat, it.tim)
                                 pIntent = PendingIntent.getBroadcast(context, (it.paznic / 100000).toInt(), intent, flags)
                                 when {
                                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
@@ -284,7 +285,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         }
                     } else {
                         if (it.paznic > c.timeInMillis) {
-                            intent = createIntentSabytie(context, it.padz, it.dat, it.tim)
+                            intent = createIntentSabytie(it.padz, it.dat, it.tim)
                             pIntent = PendingIntent.getBroadcast(context, (it.paznic / 100000).toInt(), intent, flags)
                             when {
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
@@ -328,7 +329,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                 }
                 if (notifications != 0) {
                     if (c.timeInMillis < mkTime(year, monthP - 1, dataP - 1, 19)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, monthP - 1, dataP), mkTimeYear(year, monthP, dataP - 1)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, monthP - 1, dataP), mkTimeYear(year, monthP, dataP - 1)) // Абавязковае
                         val code = "1$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -344,7 +345,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         }
                     }
                     if (c.timeInMillis < mkTime(year, monthP - 1, dataP, timeNotification)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv4)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "2$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -360,7 +361,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         }
                     }
                     if (c.timeInMillis < mkTime(year, 0, 5, 19)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 0, 6), mkTimeYear(year, 0, 6)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 0, 6), mkTimeYear(year, 0, 6)) // Абавязковае
                         val code = "3$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -376,7 +377,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         }
                     }
                     if (c.timeInMillis < mkTime(year, 0, 6, timeNotification)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv4)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "4$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -395,7 +396,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     cet[year, monthP - 1] = dataP - 1
                     cet.add(Calendar.DATE, -7)
                     if (c.timeInMillis < mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], 19)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1), mkTimeYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1), mkTimeYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1)) // Абавязковае
                         val code = "5$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -412,7 +413,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     }
                     cet.add(Calendar.DATE, 1)
                     if (c.timeInMillis < mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], timeNotification)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv4)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "6$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -430,7 +431,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     cet[year, monthP - 1] = dataP - 1
                     cet.add(Calendar.DATE, +39)
                     if (c.timeInMillis < mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], 19)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1), mkTimeYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1), mkTimeYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1)) // Абавязковае
                         val code = "7$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -447,7 +448,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     }
                     cet.add(Calendar.DATE, 1)
                     if (c.timeInMillis < mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], timeNotification)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv4)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "8$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -465,7 +466,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     cet[year, monthP - 1] = dataP - 1
                     cet.add(Calendar.DATE, +49)
                     if (c.timeInMillis < mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], 19)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1), mkTimeYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1), mkTimeYear(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH] + 1)) // Абавязковае
                         val code = "9$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -482,7 +483,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     }
                     cet.add(Calendar.DATE, 1)
                     if (c.timeInMillis < mkTime(year, cet[Calendar.MONTH], cet[Calendar.DAY_OF_MONTH], timeNotification)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv4)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "10$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -498,7 +499,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         }
                     }
                     if (c.timeInMillis < mkTime(year, 2, 24, 19)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 2, 25), mkTimeYear(year, 2, 25)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 2, 25), mkTimeYear(year, 2, 25)) // Абавязковае
                         val code = "11$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -514,7 +515,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         }
                     }
                     if (c.timeInMillis < mkTime(year, 2, 25, timeNotification)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv4)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "12$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -530,7 +531,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         }
                     }
                     if (c.timeInMillis < mkTime(year, 7, 14, 19)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 7, 15), mkTimeYear(year, 7, 15)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 7, 15), mkTimeYear(year, 7, 15)) // Абавязковае
                         val code = "13$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -546,7 +547,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         }
                     }
                     if (c.timeInMillis < mkTime(year, 7, 15, timeNotification)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv4)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "14$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -562,7 +563,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         }
                     }
                     if (c.timeInMillis < mkTime(year, 11, 24, 19)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 11, 25), mkTimeYear(year, 11, 25)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 11, 25), mkTimeYear(year, 11, 25)) // Абавязковае
                         val code = "15$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -578,7 +579,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         }
                     }
                     if (c.timeInMillis < mkTime(year, 11, 25, timeNotification)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv4)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "16$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -594,7 +595,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         }
                     }
                     if (c.timeInMillis < mkTime(year, 5, 28, 19)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 5, 29), mkTimeYear(year, 5, 29)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv3), mkTimeDayOfYear(year, 5, 29), mkTimeYear(year, 5, 29)) // Абавязковае
                         val code = "17$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -610,7 +611,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         }
                     }
                     if (c.timeInMillis < mkTime(year, 5, 29, timeNotification)) {
-                        intent = createIntent(context, context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv4)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv4)) // Абавязковае
                         val code = "18$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         when {
@@ -627,7 +628,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     }
                     if (notifications == 2) {
                         if (c.timeInMillis < mkTime(year, 1, 1, 19)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 1, 2), mkTimeYear(year, 1, 2))
+                            intent = createIntent(context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 1, 2), mkTimeYear(year, 1, 2))
                             val code = "19$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -643,7 +644,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 1, 2, timeNotification)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv2))
+                            intent = createIntent(context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv2))
                             val code = "20$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -659,7 +660,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 7, 5, 19)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 7, 6), mkTimeYear(year, 7, 6))
+                            intent = createIntent(context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 7, 6), mkTimeYear(year, 7, 6))
                             val code = "21$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -675,7 +676,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 7, 6, timeNotification)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv2))
+                            intent = createIntent(context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv2))
                             val code = "22$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -691,7 +692,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 8, 7, 19)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 8, 8), mkTimeYear(year, 8, 8))
+                            intent = createIntent(context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 8, 8), mkTimeYear(year, 8, 8))
                             val code = "23$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -707,7 +708,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 8, 8, timeNotification)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv2))
+                            intent = createIntent(context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv2))
                             val code = "24$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -723,7 +724,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 8, 13, 19)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 8, 14), mkTimeYear(year, 8, 14))
+                            intent = createIntent(context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 8, 14), mkTimeYear(year, 8, 14))
                             val code = "25$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -739,7 +740,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 8, 14, timeNotification)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv2))
+                            intent = createIntent(context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv2))
                             val code = "26$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -755,7 +756,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 10, 20, 19)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 10, 21), mkTimeYear(year, 10, 21))
+                            intent = createIntent(context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 10, 21), mkTimeYear(year, 10, 21))
                             val code = "27$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -771,7 +772,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 10, 21, timeNotification)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv2))
+                            intent = createIntent(context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv2))
                             val code = "28$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -787,7 +788,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 11, 31, 19)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year + 1, 0, 1), mkTimeYear(year + 1, 0, 1))
+                            intent = createIntent(context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year + 1, 0, 1), mkTimeYear(year + 1, 0, 1))
                             val code = "29$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -803,7 +804,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 0, 1, timeNotification)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv2))
+                            intent = createIntent(context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv2))
                             val code = "30$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -819,7 +820,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 5, 23, 19)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 5, 24), mkTimeYear(year, 5, 24))
+                            intent = createIntent(context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 5, 24), mkTimeYear(year, 5, 24))
                             val code = "31$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -835,7 +836,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 5, 24, timeNotification)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv2))
+                            intent = createIntent(context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv2))
                             val code = "32$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -851,7 +852,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 7, 28, 19)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 7, 29), mkTimeYear(year, 7, 29))
+                            intent = createIntent(context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 7, 29), mkTimeYear(year, 7, 29))
                             val code = "33$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -867,7 +868,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 7, 29, timeNotification)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv2))
+                            intent = createIntent(context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv2))
                             val code = "34$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -883,7 +884,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 8, 30, 19)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 9, 1), mkTimeYear(year, 9, 1))
+                            intent = createIntent(context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv1), mkTimeDayOfYear(year, 9, 1), mkTimeYear(year, 9, 1))
                             val code = "35$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -899,7 +900,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                             }
                         }
                         if (c.timeInMillis < mkTime(year, 9, 1, timeNotification)) {
-                            intent = createIntent(context, context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv2))
+                            intent = createIntent(context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv2))
                             val code = "36$year"
                             pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                             when {
@@ -919,148 +920,148 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                 if (notifications == 1 || notifications == 0) {
                     var code: String
                     if (notifications != 1) {
-                        intent = createIntent(context, context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv1)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "1$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv2)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S1), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "2$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv1)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "3$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv2)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S2), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "4$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv1)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "5$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv2)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S5), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "6$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv1)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "7$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv2)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S6), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "8$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv1)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "9$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv2)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S7), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "10$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv1)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "11$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv2)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S4), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "12$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv1)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "13$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv2)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S9), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "14$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv1)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "15$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv2)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S13), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "16$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv1)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv1)) // Абавязковае
                         code = "17$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
-                        intent = createIntent(context, context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv2)) // Абавязковае
+                        intent = createIntent(context.resources.getString(R.string.S16), context.resources.getString(R.string.Sv2)) // Абавязковае
                         code = "18$year"
                         pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                         am.cancel(pIntent)
                     }
-                    intent = createIntent(context, context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv1))
+                    intent = createIntent(context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv1))
                     code = "19$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv2))
+                    intent = createIntent(context.resources.getString(R.string.S3), context.resources.getString(R.string.Sv2))
                     code = "20$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv1))
+                    intent = createIntent(context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv1))
                     code = "21$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv2))
+                    intent = createIntent(context.resources.getString(R.string.S8), context.resources.getString(R.string.Sv2))
                     code = "22$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv1))
+                    intent = createIntent(context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv1))
                     code = "23$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv2))
+                    intent = createIntent(context.resources.getString(R.string.S10), context.resources.getString(R.string.Sv2))
                     code = "24$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv1))
+                    intent = createIntent(context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv1))
                     code = "25$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv2))
+                    intent = createIntent(context.resources.getString(R.string.S11), context.resources.getString(R.string.Sv2))
                     code = "26$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv1))
+                    intent = createIntent(context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv1))
                     code = "27$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv2))
+                    intent = createIntent(context.resources.getString(R.string.S12), context.resources.getString(R.string.Sv2))
                     code = "28$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv1))
+                    intent = createIntent(context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv1))
                     code = "29$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv2))
+                    intent = createIntent(context.resources.getString(R.string.S14), context.resources.getString(R.string.Sv2))
                     code = "30$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv1))
+                    intent = createIntent(context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv1))
                     code = "31$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv2))
+                    intent = createIntent(context.resources.getString(R.string.S15), context.resources.getString(R.string.Sv2))
                     code = "32$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv1))
+                    intent = createIntent(context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv1))
                     code = "33$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv2))
+                    intent = createIntent(context.resources.getString(R.string.S17), context.resources.getString(R.string.Sv2))
                     code = "34$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv1))
+                    intent = createIntent(context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv1))
                     code = "35$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
-                    intent = createIntent(context, context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv2))
+                    intent = createIntent(context.resources.getString(R.string.S18), context.resources.getString(R.string.Sv2))
                     code = "36$year"
                     pIntent = PendingIntent.getBroadcast(context, code.toInt(), intent, flags)
                     am.cancel(pIntent)
@@ -1069,7 +1070,8 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
-        fun notificationChannel(context: Context, channelID: String = NOTIFICATION_CHANNEL_ID_SVIATY) {
+        fun notificationChannel(channelID: String = NOTIFICATION_CHANNEL_ID_SVIATY) {
+            val context = Malitounik.applicationContext()
             val name = if (channelID == NOTIFICATION_CHANNEL_ID_SVIATY) context.getString(R.string.sviaty)
             else context.getString(R.string.sabytie)
             val vibrate = longArrayOf(0, 1000, 700, 1000, 700, 1000)
@@ -1169,7 +1171,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     itemDefault = i
                     binding.spinnerTime.isEnabled = false
                     CoroutineScope(Dispatchers.IO).launch {
-                        setNotifications(this@SettingsActivity, notification)
+                        setNotifications(notification)
                         withContext(Dispatchers.Main) {
                             binding.spinnerTime.isEnabled = true
                         }
@@ -1197,8 +1199,8 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             binding.vibro.visibility = View.GONE
             binding.guk.visibility = View.GONE
-            notificationChannel(this)
-            notificationChannel(this, channelID = NOTIFICATION_CHANNEL_ID_SABYTIE)
+            notificationChannel()
+            notificationChannel(NOTIFICATION_CHANNEL_ID_SABYTIE)
             if (k.getInt("notification", 2) > 0) binding.notifiSvizta.visibility = View.VISIBLE
             binding.notifiSvizta.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
             binding.notifiSvizta.setOnClickListener {
@@ -1527,7 +1529,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         withContext(Dispatchers.IO) {
-                            setNotifications(this@SettingsActivity, 1)
+                            setNotifications(1)
                         }
                         binding.notificationNon.isClickable = true
                         binding.notificationFull.isClickable = true
@@ -1564,7 +1566,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         binding.notificationNon.isClickable = false
                         binding.notificationNon.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         withContext(Dispatchers.IO) {
-                            setNotifications(this@SettingsActivity, 2)
+                            setNotifications(2)
                         }
                         binding.notificationOnly.isClickable = true
                         binding.notificationNon.isClickable = true
@@ -1590,7 +1592,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         binding.notificationFull.isClickable = false
                         binding.notificationFull.setTextColor(ContextCompat.getColor(this@SettingsActivity, R.color.colorSecondary_text))
                         withContext(Dispatchers.IO) {
-                            setNotifications(this@SettingsActivity, 0)
+                            setNotifications(0)
                         }
                         binding.notificationOnly.isClickable = true
                         binding.notificationFull.isClickable = true

@@ -698,7 +698,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         for (i in 0 until MainActivity.padzeia.size) {
             sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
         }
-        adapter.notifyItemRemoved(position)
+        adapter.updateList(sabytie2)
         CoroutineScope(Dispatchers.IO).launch {
             if (sab.count == "0") {
                 if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
@@ -866,7 +866,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
         if (id == R.id.action_settings) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                SettingsActivity.notificationChannel(this, channelID = SettingsActivity.NOTIFICATION_CHANNEL_ID_SABYTIE)
+                SettingsActivity.notificationChannel(SettingsActivity.NOTIFICATION_CHANNEL_ID_SABYTIE)
                 try {
                     val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
                     intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)

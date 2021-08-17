@@ -66,7 +66,14 @@ class Widget : AppWidgetProvider() {
     override fun onDisabled(context: Context) {
         super.onDisabled(context)
         val sp = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        sp.edit().putBoolean("WIDGET_ENABLED", false).apply()
+        val edit = sp.edit()
+        for ((key) in sp.all) {
+            if (key.contains("dzen_noch_widget_day")) {
+                edit.remove(key)
+            }
+        }
+        edit.putBoolean("WIDGET_ENABLED", false)
+        edit.apply()
         val intent = Intent(context, Widget::class.java)
         intent.action = updateAllWidgets
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

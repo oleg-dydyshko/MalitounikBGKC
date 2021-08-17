@@ -55,10 +55,10 @@ class ReceiverBroad : BroadcastReceiver() {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val builder = if (sabytieSet) {
-                SettingsActivity.notificationChannel(context, SettingsActivity.NOTIFICATION_CHANNEL_ID_SABYTIE)
+                SettingsActivity.notificationChannel(SettingsActivity.NOTIFICATION_CHANNEL_ID_SABYTIE)
                 Notification.Builder(context, SettingsActivity.NOTIFICATION_CHANNEL_ID_SABYTIE)
             } else {
-                SettingsActivity.notificationChannel(context)
+                SettingsActivity.notificationChannel()
                 Notification.Builder(context, SettingsActivity.NOTIFICATION_CHANNEL_ID_SVIATY)
             }
             val notificationManager = context.getSystemService(NotificationManager::class.java)

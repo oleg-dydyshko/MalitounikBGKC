@@ -16,7 +16,6 @@ import java.util.*
 
 class WidgetMun : AppWidgetProvider() {
     private var updateViews: RemoteViews? = null
-    private val updateAllWidgets = "update_all_widgets"
     private val munPlus = "mun_plus"
     private val munMinus = "mun_minus"
     private val reset = "reset"
@@ -93,7 +92,7 @@ class WidgetMun : AppWidgetProvider() {
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         chin.edit().putBoolean("WIDGET_MUN_ENABLED", true).apply()
         val intent = Intent(context, WidgetMun::class.java)
-        intent.action = updateAllWidgets
+        intent.action = SettingsActivity.UPDATE_ALL_WIDGETS
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PendingIntent.FLAG_IMMUTABLE or 0
         } else {
@@ -122,9 +121,18 @@ class WidgetMun : AppWidgetProvider() {
     override fun onDisabled(context: Context) {
         super.onDisabled(context)
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        chin.edit().putBoolean("WIDGET_MUN_ENABLED", false).apply()
+        val edit = chin.edit()
+        for ((key, value) in chin.all) {
+            if (key.contains("WIDGET")) {
+                if (value is Int) {
+                    edit.remove(key)
+                }
+            }
+        }
+        edit.putBoolean("WIDGET_MUN_ENABLED", false)
+        edit.apply()
         val intent = Intent(context, WidgetMun::class.java)
-        intent.action = updateAllWidgets
+        intent.action = SettingsActivity.UPDATE_ALL_WIDGETS
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PendingIntent.FLAG_IMMUTABLE or 0
         } else {
@@ -162,7 +170,7 @@ class WidgetMun : AppWidgetProvider() {
         super.onReceive(context, intent)
         var c = Calendar.getInstance() as GregorianCalendar
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        if (intent.action.equals(updateAllWidgets, ignoreCase = true)) {
+        if (intent.action.equals(SettingsActivity.UPDATE_ALL_WIDGETS, ignoreCase = true)) {
             val thisAppWidget = ComponentName(context.packageName, javaClass.name)
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val ids = appWidgetManager.getAppWidgetIds(thisAppWidget)
@@ -172,7 +180,7 @@ class WidgetMun : AppWidgetProvider() {
             }
             onUpdate(context, appWidgetManager, ids)
             val intentUpdate = Intent(context, WidgetMun::class.java)
-            intentUpdate.action = updateAllWidgets
+            intentUpdate.action = SettingsActivity.UPDATE_ALL_WIDGETS
             c.add(Calendar.DATE, 1)
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -194,7 +202,7 @@ class WidgetMun : AppWidgetProvider() {
             }
         }
         c = Calendar.getInstance() as GregorianCalendar
-        val resetMain = "reset_main"
+        val resetMain = SettingsActivity.RESET_MAIN
         if (intent.action.equals(resetMain, ignoreCase = true)) {
             val thisAppWidget = ComponentName(context.packageName, javaClass.name)
             val appWidgetManager = AppWidgetManager.getInstance(context)

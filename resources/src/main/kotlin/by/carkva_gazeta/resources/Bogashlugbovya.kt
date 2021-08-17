@@ -17,6 +17,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -700,6 +701,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             else "<font color=\"#d00505\">"
             reader.forEachLine {
                 var line = it
+                if (line.contains("Апостал:"))
+                    Log.d("Oleg", "Ok")
                 if (dzenNoch) line = line.replace("#d00505", "#f44336")
                 if (resurs.contains("bogashlugbovya")) {
                     if (line.contains("KANDAK")) {
@@ -761,17 +764,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             if (sv != "") {
                                 val s1 = sv.split(":")
                                 val s2 = s1[1].split(";")
-                                sv = s1[0] + ":" + s2[0]
-                                aliert8 = sv
-                                builder.append(color).append(sv).append("</font>").append("<br><br>\n")
-                            } else builder.append(line)
-                            var svDop = zmenyiaChastki.sviatyiaDop()
-                            if (svDop != "") {
-                                val s1 = svDop.split(":")
-                                val s2 = s1[1].split(";")
-                                svDop = s1[0] + ":" + s2[0]
-                                aliert8 = svDop
-                                builder.append(color).append(svDop).append("</font>").append("<br><br>\n")
+                                sv = if (s1[0].contains("На ютрані")) s2[1]
+                                else s1[0] + ":" + s2[0]
+                                aliert8 = sv.trim()
+                                builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
                             } else builder.append(line)
                             try {
                                 builder.append(zmenyiaChastki.zmenya(1))
@@ -785,17 +781,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             if (sv != "") {
                                 val s1 = sv.split(":")
                                 val s2 = s1[1].split(";")
-                                sv = s1[0] + ":" + s2[1]
-                                aliert9 = sv
-                                builder.append(color).append(sv).append("</font>").append("<br><br>\n")
-                            } else builder.append(line)
-                            var svDop = zmenyiaChastki.sviatyiaDop()
-                            if (svDop != "") {
-                                val s1 = svDop.split(":")
-                                val s2 = s1[1].split(";")
-                                svDop = s1[0] + ":" + s2[1]
-                                aliert9 = svDop
-                                builder.append(color).append(svDop).append("</font>").append("<br><br>\n")
+                                sv = if (s1[0].contains("На ютрані")) s2[2]
+                                else s1[0] + ":" + s2[1]
+                                aliert9 = sv.trim()
+                                builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
                             } else builder.append(line)
                             try {
                                 builder.append(zmenyiaChastki.zmenya(0))
@@ -821,7 +810,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (t1 != -1) {
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(8)
+                    val dialogLiturgia = DialogLiturgia.getInstance(8)
                     dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                 }
             }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -832,7 +821,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (t1 != -1) {
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(9)
+                    val dialogLiturgia = DialogLiturgia.getInstance(9)
                     dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                 }
             }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -871,7 +860,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (t1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(1)
+                        val dialogLiturgia = DialogLiturgia.getInstance(1)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -882,7 +871,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (t1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(2)
+                        val dialogLiturgia = DialogLiturgia.getInstance(2)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -893,7 +882,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (t1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(3)
+                        val dialogLiturgia = DialogLiturgia.getInstance(3)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -904,7 +893,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (t1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(4)
+                        val dialogLiturgia = DialogLiturgia.getInstance(4)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -915,7 +904,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (t1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(10)
+                        val dialogLiturgia = DialogLiturgia.getInstance(10)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -926,7 +915,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (t1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(5)
+                        val dialogLiturgia = DialogLiturgia.getInstance(5)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -937,7 +926,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (t1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(6)
+                        val dialogLiturgia = DialogLiturgia.getInstance(6)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -948,7 +937,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (t1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val dialogLiturgia: DialogLiturgia = DialogLiturgia.getInstance(7)
+                        val dialogLiturgia = DialogLiturgia.getInstance(7)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

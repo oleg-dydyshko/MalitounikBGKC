@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:hint="@string/natatka_name"
-            android:inputType="text|textAutoCorrect"
+            android:inputType="text|textAutoCorrect|textCapSentences"
             android:padding="10dp"
             android:singleLine="true"
             android:textColor="@color/colorWhite"

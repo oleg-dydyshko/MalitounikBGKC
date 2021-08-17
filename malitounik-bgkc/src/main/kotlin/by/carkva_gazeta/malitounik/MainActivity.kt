@@ -461,7 +461,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             if (padzeia.size == 0) setListPadzeia()
             if (k.getBoolean("setAlarm", true)) {
                 val notify = k.getInt("notification", 2)
-                SettingsActivity.setNotifications(this@MainActivity, notify)
+                SettingsActivity.setNotifications(notify)
                 val edit = k.edit()
                 edit.putBoolean("setAlarm", false)
                 edit.apply()

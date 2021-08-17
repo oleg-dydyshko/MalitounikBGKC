@@ -81,12 +81,12 @@ class DialogLiturgia : DialogFragment() {
                     binding.title.setText(by.carkva_gazeta.malitounik.R.string.malitva_za_paclicanyx)
                 }
                 8 -> {
-                    binding.title.text = by.carkva_gazeta.malitounik.R.string.czytanne.toString().uppercase()
+                    binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne).uppercase()
                     val zch = ZmenyiaChastki()
                     builder.append(zch.sviatyiaView(1))
                 }
                 9 -> {
-                    binding.title.text = by.carkva_gazeta.malitounik.R.string.czytanne.toString().uppercase()
+                    binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.czytanne).uppercase()
                     val zch = ZmenyiaChastki()
                     builder.append(zch.sviatyiaView(0))
                 }

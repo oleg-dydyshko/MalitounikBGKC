@@ -11,8 +11,8 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 43897
-        versionName "3.9.9.75"
+        versionCode 43898
+        versionName "3.9.9.76"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {

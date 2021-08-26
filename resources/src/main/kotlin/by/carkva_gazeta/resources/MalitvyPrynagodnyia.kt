@@ -174,6 +174,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         data.add(MenuListData("Малітва да сьв. Язэпа", "prynagodnyia_37"))
         data.add(MenuListData("Малітва мужа і бацькі да сьв. Язэпа", "prynagodnyia_38"))
         data.add(MenuListData("Малітва да сьв. Язэпа за мужчынаў", "prynagodnyia_39"))
+        data.add(MenuListData("Блаславеньне маці (Матчына малітва)", "prynagodnyia_40"))
         data.sort()
         adapter = MenuListAdaprer(this)
         binding.ListView.adapter = adapter

@@ -394,7 +394,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
     }
 
     private inner class MenuListAdaprer(private val context: Activity) : ArrayAdapter<MenuListData?>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, data as List<MenuListData>) {
-        private val origData: ArrayList<MenuListData> = ArrayList(data)
+        private val origData = ArrayList<MenuListData>(data)
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View

@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_seashe_text"
+        android:icon="@drawable/search"
+        android:orderInCategory="100"
+        android:title="@string/poshuk"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
+    <item
         android:id="@+id/action_add"
         android:icon="@drawable/plus"
         android:title="@string/add_sabytie"

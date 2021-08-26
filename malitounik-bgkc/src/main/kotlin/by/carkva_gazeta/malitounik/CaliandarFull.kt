@@ -581,7 +581,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         }
                         val clickableSpanRemove = object : ClickableSpan() {
                             override fun onClick(p0: View) {
-                                val dd = DialogDelite.getInstance(index, "", "з падзей", MainActivity.padzeia[index].dat + " " + MainActivity.padzeia[index].padz)
+                                val dd = DialogDelite.getInstance(index, "", "з падзей", getString(R.string.sabytie_data_name,MainActivity.padzeia[index].dat, MainActivity.padzeia[index].padz))
                                 dd.show(childFragmentManager, "dialig_delite")
                             }
 

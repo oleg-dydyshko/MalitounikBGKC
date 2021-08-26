@@ -23,6 +23,7 @@ import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,7 +44,7 @@ import java.io.FileWriter
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener {
+class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var konec = false
@@ -52,7 +53,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     private var redak = false
     private var save = false
     private lateinit var adapter: SabytieAdapter
-    private val sabytie2 = ArrayList<SabytieDataAdapter>()
     private lateinit var c: GregorianCalendar
     private var timeH = 0
     private var timeM = 0
@@ -89,13 +89,17 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     private var nazvaPadzei = "Назва падзеі"
     private lateinit var binding: SabytieBinding
     private var resetTollbarJob: Job? = null
+    private lateinit var searchView: SearchView
+    private lateinit var autoCompleteTextView: AutoCompleteTextView
+    private var searchViewQwery = ""
+    private var actionExpandOn = false
     private val labelbutton12Launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
             if (intent != null) {
                 val position = intent.getIntExtra("position", 0)
                 val arrayList = MenuCaliandar.getPositionCaliandar(position)
-                val setCal = GregorianCalendar(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0 , 0)
+                val setCal = GregorianCalendar(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0, 0)
                 setCal[Calendar.MILLISECOND] = 0
                 this.result = setCal.timeInMillis
                 var nol1 = ""
@@ -130,7 +134,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             if (intent != null) {
                 val position = intent.getIntExtra("position", 0)
                 val arrayList = MenuCaliandar.getPositionCaliandar(position)
-                val setCal = GregorianCalendar(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0 , 0)
+                val setCal = GregorianCalendar(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0, 0)
                 setCal[Calendar.MILLISECOND] = 0
                 this.result = setCal.timeInMillis
                 var nol1 = ""
@@ -189,7 +193,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             if (intent != null) {
                 val position = intent.getIntExtra("position", 0)
                 val arrayList = MenuCaliandar.getPositionCaliandar(position)
-                val setCal = GregorianCalendar(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0 , 0)
+                val setCal = GregorianCalendar(arrayList[3].toInt(), arrayList[2].toInt(), arrayList[1].toInt(), 0, 0, 0)
                 setCal[Calendar.MILLISECOND] = 0
                 this.result = setCal.timeInMillis
                 var nol1 = ""
@@ -538,11 +542,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         for (i in 0 until MainActivity.padzeia.size) {
             if (initPosition == -1 && daInit == MainActivity.padzeia[i].dat) {
                 initPosition = i
+                break
             }
-            sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
         }
         if (initPosition == -1) initPosition = 0
-        adapter = SabytieAdapter(sabytie2, R.id.image, false)
+        adapter = SabytieAdapter(MainActivity.padzeia, R.id.image, false)
         binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
         binding.dragListView.setLayoutManager(LinearLayoutManager(this))
         binding.dragListView.setAdapter(adapter, false)
@@ -555,7 +559,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
 
             override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: ListSwipeItem.SwipeDirection) {
-                val adapterItem = item.tag as SabytieDataAdapter
+                val adapterItem = item.tag as Padzeia
                 val pos: Int = binding.dragListView.adapter.getPositionForItem(adapterItem)
                 if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
                     onDialogDeliteClick(pos)
@@ -566,6 +570,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
         })
         if (savedInstanceState != null) {
+            searchViewQwery = savedInstanceState.getString("SearchViewQwery", "")
+            actionExpandOn = savedInstanceState.getBoolean("actionExpandOn")
             redak = savedInstanceState.getBoolean("redak")
             back = savedInstanceState.getBoolean("back")
             save = savedInstanceState.getBoolean("save")
@@ -694,11 +700,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         outputStream.write(gson.toJson(MainActivity.padzeia))
         outputStream.close()
         MainActivity.padzeia.sort()
-        sabytie2.clear()
-        for (i in 0 until MainActivity.padzeia.size) {
-            sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
-        }
-        adapter.updateList(sabytie2)
+        adapter.updateList(MainActivity.padzeia)
         CoroutineScope(Dispatchers.IO).launch {
             if (sab.count == "0") {
                 if (sab.repit == 1 || sab.repit == 4 || sab.repit == 5 || sab.repit == 6) {
@@ -753,7 +755,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     }
 
     override fun onDialogDeliteClick(position: Int) {
-        val dd = DialogDelite.getInstance(position, "", "з падзей", sabytie2[position].title)
+        val padzeia = MainActivity.padzeia[position]
+        val dd = DialogDelite.getInstance(position, "", "з падзей", getString(R.string.sabytie_data_name, padzeia.dat, padzeia.padz))
         dd.show(supportFragmentManager, "dialig_delite")
     }
 
@@ -806,11 +809,56 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
+    private fun changeSearchViewElements(view: View?) {
+        if (view == null) return
+        if (view.id == R.id.search_edit_frame || view.id == R.id.search_mag_icon) {
+            val p = view.layoutParams as LinearLayout.LayoutParams
+            p.leftMargin = 0
+            p.rightMargin = 0
+            view.layoutParams = p
+        } else if (view.id == R.id.search_src_text) {
+            autoCompleteTextView = view as AutoCompleteTextView
+            val p = view.layoutParams as LinearLayout.LayoutParams
+            val density = resources.displayMetrics.density
+            val margin = (10 * density).toInt()
+            p.rightMargin = margin
+            autoCompleteTextView.layoutParams = p
+            autoCompleteTextView.setBackgroundResource(R.drawable.underline_white)
+            autoCompleteTextView.addTextChangedListener(SearchViewTextWatcher())
+        }
+        if (view is ViewGroup) {
+            for (i in 0 until view.childCount) {
+                changeSearchViewElements(view.getChildAt(i))
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         this.menu = menu
         super.onCreateOptionsMenu(menu)
-        val infl = menuInflater
-        infl.inflate(R.menu.sabytie, menu)
+        menuInflater.inflate(R.menu.sabytie, menu)
+        val searchViewItem = menu.findItem(R.id.action_seashe_text)
+        searchView = searchViewItem.actionView as SearchView
+        if (actionExpandOn) {
+            searchViewItem.expandActionView()
+        }
+        searchViewItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                actionExpandOn = true
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                actionExpandOn = false
+                return true
+            }
+        })
+        searchView.queryHint = getString(R.string.search_malitv)
+        changeSearchViewElements(searchView)
+        if (searchViewQwery != "") {
+            searchViewItem.expandActionView()
+            autoCompleteTextView.setText(searchViewQwery)
+        }
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -828,10 +876,12 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         menu.findItem(R.id.action_save).isVisible = false
         menu.findItem(R.id.action_save_redak).isVisible = false
         menu.findItem(R.id.action_cansel).isVisible = false
+        menu.findItem(R.id.action_seashe_text).isVisible = false
         when (idMenu) {
             1 -> {
                 menu.findItem(R.id.action_add).isVisible = true
                 menu.findItem(R.id.action_delite).isVisible = true
+                menu.findItem(R.id.action_seashe_text).isVisible = true
             }
             2 -> {
                 menu.findItem(R.id.action_save).isVisible = true
@@ -1510,17 +1560,13 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 outputStream.write(gson.toJson(MainActivity.padzeia))
                 outputStream.close()
                 MainActivity.padzeia.sort()
-                sabytie2.clear()
-                for (i in 0 until MainActivity.padzeia.size) {
-                    sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
-                }
                 if (binding.editText2.text.toString() != "") {
                     if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true)) {
                         val notifi = DialogHelpNotification()
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                 }
-                adapter.updateList(sabytie2)
+                adapter.updateList(MainActivity.padzeia)
                 binding.editText.setText("")
                 binding.editText2.setText("")
                 MainActivity.toastView(getString(R.string.save))
@@ -2175,17 +2221,13 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 outputStream.write(gson.toJson(MainActivity.padzeia))
                 outputStream.close()
                 MainActivity.padzeia.sort()
-                sabytie2.clear()
-                for (i in 0 until MainActivity.padzeia.size) {
-                    sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
-                }
                 if (binding.editText2.text.toString() != "") {
                     if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true)) {
                         val notifi = DialogHelpNotification()
                         notifi.show(supportFragmentManager, "help_notification")
                     }
                 }
-                adapter.updateList(sabytie2)
+                adapter.updateList(MainActivity.padzeia)
                 binding.editText.setText("")
                 binding.editText2.setText("")
                 binding.spinner3.setSelection(0)
@@ -2249,6 +2291,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
         }
         if (id == R.id.action_delite) {
+            if (actionExpandOn) binding.toolbar.collapseActionView()
             val delite = DialogSabytieDelite()
             delite.show(supportFragmentManager, "delite")
         }
@@ -2320,6 +2363,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     }
 
     private fun addSabytie() {
+        if (actionExpandOn) binding.toolbar.collapseActionView()
         c = Calendar.getInstance() as GregorianCalendar
         save = false
         back = true
@@ -2363,33 +2407,34 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
     override fun sabytieDelAll() {
         redak = true
-        CoroutineScope(Dispatchers.IO).launch {
-            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PendingIntent.FLAG_IMMUTABLE or 0
-            } else {
-                0
-            }
-            for (p in MainActivity.padzeia) {
-                if (p.sec != "-1") {
-                    val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
-                    val londs3 = p.paznic / 100000L
-                    val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                    am.cancel(pIntent)
-                    pIntent.cancel()
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    PendingIntent.FLAG_IMMUTABLE or 0
+                } else {
+                    0
+                }
+                for (p in MainActivity.padzeia) {
+                    if (p.sec != "-1") {
+                        val intent = createIntent(p.padz, "Падзея" + " " + p.dat + " у " + p.tim, p.dat, p.tim)
+                        val londs3 = p.paznic / 100000L
+                        val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
+                        am.cancel(pIntent)
+                        pIntent.cancel()
+                    }
+                }
+                MainActivity.padzeia.clear()
+                val file = File("$filesDir/Sabytie.json")
+                val gson = Gson()
+                file.writer().use {
+                    withContext(Dispatchers.IO) {
+                        it.write(gson.toJson(MainActivity.padzeia))
+                    }
                 }
             }
-            MainActivity.padzeia.clear()
-            val file = File("$filesDir/Sabytie.json")
-            val gson = Gson()
-            file.writer().use {
-                withContext(Dispatchers.IO) {
-                    it.write(gson.toJson(MainActivity.padzeia))
-                }
-            }
+            adapter.updateList(MainActivity.padzeia)
+            MainActivity.toastView(getString(R.string.remove_padzea))
         }
-        sabytie2.clear()
-        adapter.updateList(sabytie2)
-        MainActivity.toastView(getString(R.string.remove_padzea))
     }
 
     override fun sabytieDelOld() {
@@ -2440,11 +2485,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             outputStream.write(gson.toJson(MainActivity.padzeia))
             outputStream.close()
             MainActivity.padzeia.sort()
-            sabytie2.clear()
-            for (i in 0 until MainActivity.padzeia.size) {
-                sabytie2.add(SabytieDataAdapter(i.toLong(), MainActivity.padzeia[i].dat + " " + MainActivity.padzeia[i].padz, MainActivity.padzeia[i].color))
-            }
-            adapter.updateList(sabytie2)
+            adapter.updateList(MainActivity.padzeia)
             binding.dragListView.recyclerView.scrollToPosition(0)
         }
     }
@@ -2474,11 +2515,14 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         outState.putString("da", binding.label1.text.toString())
         outState.putString("taK", binding.label22.text.toString())
         outState.putString("daK", binding.label12.text.toString())
+        outState.putString("SearchViewQwery", autoCompleteTextView.text.toString())
+        outState.putBoolean("actionExpandOn", actionExpandOn)
     }
 
-    private inner class SabytieAdapter(list: ArrayList<SabytieDataAdapter>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<SabytieDataAdapter, SabytieAdapter.ViewHolder>() {
+    private inner class SabytieAdapter(list: ArrayList<Padzeia>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<Padzeia, SabytieAdapter.ViewHolder>(), Filterable {
         private var dzenNoch = false
         private val day = Calendar.getInstance() as GregorianCalendar
+        private val origData = ArrayList<Padzeia>(list)
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemSabytieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -2498,26 +2542,23 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             super.onBindViewHolder(holder, position)
-            val text = mItemList[position].title
-            val sab = text.split(" ")
-            val data = sab[0].split(".")
+            val padzeia = mItemList[position]
+            val data = padzeia.dat.split(".")
             val gc = GregorianCalendar(data[2].toInt(), data[1].toInt() - 1, data[0].toInt())
             if (gc[Calendar.DAY_OF_YEAR] == day[Calendar.DAY_OF_YEAR] && gc[Calendar.YEAR] == day[Calendar.YEAR]) {
                 holder.mText.typeface = MainActivity.createFont(Typeface.BOLD)
             } else {
                 holder.mText.typeface = MainActivity.createFont(Typeface.NORMAL)
             }
-            holder.mText.text = text
-            holder.color.setBackgroundColor(Color.parseColor(colors[mItemList[position].color]))
+            holder.mText.text = getString(R.string.sabytie_data_name, padzeia.dat, padzeia.padz)
+            holder.color.setBackgroundColor(Color.parseColor(colors[padzeia.color]))
             holder.buttonPopup.setOnClickListener {
                 showPopupMenu(it, position)
             }
-            holder.itemView.tag = mItemList[position]
+            holder.itemView.tag = padzeia
         }
 
-        override fun getUniqueItemId(position: Int): Long {
-            return mItemList[position].id
-        }
+        override fun getUniqueItemId(position: Int) = position.toLong()
 
         private fun showPopupMenu(view: View, position: Int) {
             val popup = PopupMenu(this@Sabytie, view)
@@ -2541,6 +2582,38 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             popup.show()
         }
 
+        override fun getFilter(): Filter {
+            return object : Filter() {
+                override fun performFiltering(constraint: CharSequence): FilterResults {
+                    var constraint1 = constraint
+                    constraint1 = constraint1.toString()
+                    val result = FilterResults()
+                    if (constraint1.isNotEmpty()) {
+                        val founded = ArrayList<Padzeia>()
+                        for (item in origData) {
+                            if (getString(R.string.sabytie_data_name, item.dat, item.padz).contains(constraint1, true)) {
+                                founded.add(item)
+                            }
+                        }
+                        result.values = founded
+                        result.count = founded.size
+                    } else {
+                        result.values = origData
+                        result.count = origData.size
+                    }
+                    return result
+                }
+
+                override fun publishResults(constraint: CharSequence?, results: FilterResults) {
+                    MainActivity.padzeia.clear()
+                    for (item in results.values as ArrayList<*>) {
+                        MainActivity.padzeia.add(item as Padzeia)
+                    }
+                    updateList(MainActivity.padzeia, false)
+                }
+            }
+        }
+
         private inner class ViewHolder(itemView: ListItemSabytieBinding) : DragItemAdapter.ViewHolder(itemView.root, mGrabHandleId, mDragOnLongPress) {
             var mText = itemView.text
             val color = itemView.color
@@ -2551,7 +2624,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     return true
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                val contextMenuSabytie = DialogContextMenuSabytie.getInstance(adapterPosition, sabytie2[adapterPosition].title)
+                val contextMenuSabytie = DialogContextMenuSabytie.getInstance(adapterPosition, MainActivity.padzeia[adapterPosition].padz)
                 contextMenuSabytie.show(supportFragmentManager, "context_menu_sabytie")
                 return true
             }
@@ -2561,27 +2634,15 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                var title = ""
-                var data = ""
-                var time = ""
-                var dataK = ""
-                var timeK = ""
-                var paz: Long = 0
-                var konecSabytie = false
-                var color = 0
-                for (i in MainActivity.padzeia.indices) {
-                    if (i == adapterPosition) {
-                        val p = MainActivity.padzeia[i]
-                        title = p.padz
-                        data = p.dat
-                        time = p.tim
-                        paz = p.paznic
-                        dataK = p.datK
-                        timeK = p.timK
-                        konecSabytie = p.konecSabytie
-                        color = p.color
-                    }
-                }
+                val p = MainActivity.padzeia[adapterPosition]
+                val title = p.padz
+                val data = p.dat
+                val time = p.tim
+                val dataK = p.datK
+                val timeK = p.timK
+                val paz = p.paznic
+                val konecSabytie = p.konecSabytie
+                val color = p.color
                 var res = getString(R.string.sabytie_no_pavedam)
                 val gc = Calendar.getInstance() as GregorianCalendar
                 val realTime = gc.timeInMillis
@@ -2602,8 +2663,12 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
         }
 
-        fun updateList(newSabytieDataAdapter: ArrayList<SabytieDataAdapter>) {
-            val diffCallback = RecyclerViewDiffCallback(sabytie2, newSabytieDataAdapter)
+        fun updateList(newSabytieDataAdapter: ArrayList<Padzeia>, updateList: Boolean = true) {
+            if (updateList) {
+                origData.clear()
+                origData.addAll(newSabytieDataAdapter)
+            }
+            val diffCallback = RecyclerViewDiffCallback(MainActivity.padzeia, newSabytieDataAdapter)
             val diffResult = DiffUtil.calculateDiff(diffCallback)
             diffResult.dispatchUpdatesTo(this)
             itemList = newSabytieDataAdapter
@@ -2614,7 +2679,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
     }
 
-    private class RecyclerViewDiffCallback(private val oldArrayList: ArrayList<SabytieDataAdapter>, private val newArrayList: ArrayList<SabytieDataAdapter>) : DiffUtil.Callback() {
+    private class RecyclerViewDiffCallback(private val oldArrayList: ArrayList<Padzeia>, private val newArrayList: ArrayList<Padzeia>) : DiffUtil.Callback() {
         override fun getOldListSize(): Int {
             return oldArrayList.size
         }
@@ -2697,6 +2762,18 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
     private class ViewHolderColor(var text: TextView)
 
+    private inner class SearchViewTextWatcher : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+        }
+
+        override fun afterTextChanged(s: Editable) {
+            adapter.filter.filter(s)
+        }
+    }
+
     private inner class MyTextWatcher(private val editTextWatcher: EditText) : TextWatcher {
         private var editPosition = 0
         private var check = 0
@@ -2764,8 +2841,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             }
         }
     }
-
-    private data class SabytieDataAdapter(val id: Long, val title: String, val color: Int)
 
     companion object {
         private val colors = arrayOf("#D00505", "#800080", "#C71585", "#FF00FF", "#F4A460", "#D2691E", "#A52A2A", "#1E90FF", "#6A5ACD", "#228B22", "#9ACD32", "#20B2AA")

@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -67,6 +68,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun delitePadzeia(position: Int) {
         activity?.let {
             val sab = MainActivity.padzeia[position]
@@ -128,7 +130,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
                 }
                 MainActivity.toastView(getString(R.string.remove_padzea))
                 Sabytie.editCaliandar = true
-                adapter.notifyItemRemoved(position)
+                adapter.notifyDataSetChanged()
             }
         }
     }

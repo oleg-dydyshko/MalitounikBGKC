@@ -12,10 +12,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 
-class DialogSabytieDelite : DialogFragment() {
+class DialogSabytieDeliteAll : DialogFragment() {
 
     private lateinit var alert: AlertDialog
-    private var dialogSabytieDeliteListener: DialogSabytieDeliteListener? = null
+    private var dialogSabytieDeliteListener: DialogSabytieDeliteAllListener? = null
     private var _binding: DialogTextviewDisplayBinding? = null
     private val binding get() = _binding!!
 
@@ -24,17 +24,17 @@ class DialogSabytieDelite : DialogFragment() {
         _binding = null
     }
 
-    internal interface DialogSabytieDeliteListener {
-        fun sabytieDelOld()
+    internal interface DialogSabytieDeliteAllListener {
+        fun sabytieDelAll()
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is Activity) {
             dialogSabytieDeliteListener = try {
-                context as DialogSabytieDeliteListener
+                context as DialogSabytieDeliteAllListener
             } catch (e: ClassCastException) {
-                throw ClassCastException("$context must implement DialogSabytieDeliteListener")
+                throw ClassCastException("$context must implement DialogSabytieDeliteAllListener")
             }
         }
     }
@@ -49,18 +49,14 @@ class DialogSabytieDelite : DialogFragment() {
             val ad = AlertDialog.Builder(it, style)
             if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
-            binding.title.text = resources.getString(R.string.remove)
-            binding.content.text = getString(R.string.remove_sabytie_iak)
+            binding.title.text = resources.getString(R.string.trash_sabytie)
+            binding.content.text = getString(R.string.del_all_sabytie)
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
             ad.setView(binding.root)
-            ad.setPositiveButton(getString(R.string.sabytie_del_all)) { _: DialogInterface?, _: Int ->
-                val dialog = DialogSabytieDeliteAll()
-                dialog.show(parentFragmentManager, "dialogSabytieDeliteAll")
-            }
-            ad.setNeutralButton(getString(R.string.sabytie_del_old)) { _: DialogInterface?, _: Int ->
-                dialogSabytieDeliteListener?.sabytieDelOld()
+            ad.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
+                dialogSabytieDeliteListener?.sabytieDelAll()
             }
             ad.setNegativeButton(getString(R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = ad.create()

@@ -572,11 +572,9 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
             } else {
                 saveResult(fileName)
+                val dialodSaveAsHelp = DialogSaveAsHelp.newInstance(fileName)
+                dialodSaveAsHelp.show(supportFragmentManager, "dialodSaveAsHelp")
             }
-        }
-        if (id == R.id.action_save_as) {
-            val dialogSaveAsFileExplorer = DialogSaveAsFileExplorer.getInstance(fileName)
-            dialogSaveAsFileExplorer.show(supportFragmentManager, "dialogSaveAsFileExplorer")
         }
         return super.onOptionsItemSelected(item)
     }

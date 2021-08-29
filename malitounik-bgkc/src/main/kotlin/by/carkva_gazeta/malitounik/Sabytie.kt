@@ -565,7 +565,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     onDialogDeliteClick(pos)
                 }
                 if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
-                    onSabytieRedaktor(pos)
+                    onDialogEditClick(pos)
                 }
             }
         })
@@ -607,7 +607,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
         if (intent.extras?.getBoolean("edit", false) == true) {
             val position = intent.extras?.getInt("position") ?: 0
-            onSabytieRedaktor(position)
+            onDialogEditClick(position)
             editCaliandar = true
         }
         if (k.getBoolean("help_sabytie_list_view", true)) {
@@ -630,6 +630,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     }
 
     override fun onDialogEditClick(position: Int) {
+        binding.dragListView.resetSwipedViews(null)
         save = true
         back = true
         val p = MainActivity.padzeia[position]
@@ -649,8 +650,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         repitSave = p.repit
         colorSave = p.color
         color = p.color
+        konec = p.konecSabytie
+        binding.checkBox2.isChecked = !konec
+        if (konec) binding.linearKonec.visibility = View.VISIBLE
         if (p.repit > 0) binding.radioGroup.visibility = View.VISIBLE else binding.radioGroup.visibility = View.GONE
-        nomer = position
+        nomer = getPadzeaiPosition(position, p.padz, p.dat)
         binding.titleLayout.visibility = View.VISIBLE
         binding.dragListView.visibility = View.GONE
         idMenu = 3
@@ -676,6 +680,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         taKSave = binding.label22.text.toString()
         invalidateOptionsMenu()
         binding.editText.requestFocus()
+        binding.toolbar.collapseActionView()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(binding.editText, InputMethodManager.SHOW_FORCED)
     }
@@ -756,7 +761,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
 
     override fun onDialogDeliteClick(position: Int) {
         val padzeia = MainActivity.padzeia[position]
-        val dd = DialogDelite.getInstance(position, "", "з падзей", getString(R.string.sabytie_data_name, padzeia.dat, padzeia.padz))
+        val pos = getPadzeaiPosition(position, padzeia.padz, padzeia.dat)
+        binding.toolbar.collapseActionView()
+        val dd = DialogDelite.getInstance(pos, "", "з падзей", getString(R.string.sabytie_data_name, padzeia.dat, padzeia.padz))
         dd.show(supportFragmentManager, "dialig_delite")
     }
 
@@ -2305,61 +2312,17 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         return super.onOptionsItemSelected(item)
     }
 
-    private fun onSabytieRedaktor(pos: Int) {
-        binding.dragListView.resetSwipedViews(null)
-        val timeC: String
-        save = true
-        back = true
-        val p = MainActivity.padzeia[pos]
-        binding.editText.setText(p.padz)
-        binding.label1.text = p.dat
-        binding.label2.text = p.tim
-        binding.label12.text = p.datK
-        binding.label22.text = p.timK
-        if (p.sec == "-1") binding.editText2.setText("") else binding.editText2.setText(p.sec)
-        binding.spinner3.setSelection(p.vybtime)
-        binding.spinner4.setSelection(p.repit)
-        binding.spinner5.setSelection(p.color)
-        labelbutton12Save = binding.labelbutton12.text.toString()
-        editText4Save = binding.editText4.text.toString()
-        radioSave = radio
-        vybtimeSave = p.vybtime
-        repitSave = p.repit
-        colorSave = p.color
-        color = p.color
-        konec = p.konecSabytie
-        binding.checkBox2.isChecked = !konec
-        if (konec) binding.linearKonec.visibility = View.VISIBLE
-        if (p.repit > 0) binding.radioGroup.visibility = View.VISIBLE else binding.radioGroup.visibility = View.GONE
-        nomer = pos
-        binding.titleLayout.visibility = View.VISIBLE
-        binding.dragListView.visibility = View.GONE
-        idMenu = 3
-        timeC = p.count
-        val count = timeC.split(".")
-        when {
-            timeC == "0" -> binding.radioButton1.isChecked = true
-            count.size == 1 -> {
-                binding.radioButton2.isChecked = true
-                binding.editText4.setText(timeC)
-            }
-            else -> {
-                binding.radioButton3.isChecked = true
-                binding.labelbutton12.text = timeC
+    private fun getPadzeaiPosition(position: Int, padz: String, dat: String): Int {
+        var pos = position
+        if (actionExpandOn) {
+            adapter.getOpigData().forEachIndexed { index, padzeia ->
+                if (padzeia.padz == padz && padzeia.dat == dat) {
+                    pos = index
+                    return@forEachIndexed
+                }
             }
         }
-        repitL = p.repit
-        time = timeC
-        editSave = binding.editText.text.toString().trim()
-        edit2Save = binding.editText2.text.toString()
-        daSave = binding.label1.text.toString()
-        taSave = binding.label2.text.toString()
-        daKSave = binding.label12.text.toString()
-        taKSave = binding.label22.text.toString()
-        invalidateOptionsMenu()
-        binding.editText.requestFocus()
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(binding.editText, InputMethodManager.SHOW_FORCED)
+        return pos
     }
 
     private fun addSabytie() {
@@ -2424,13 +2387,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     }
                 }
                 MainActivity.padzeia.clear()
-                val file = File("$filesDir/Sabytie.json")
-                val gson = Gson()
-                file.writer().use {
-                    withContext(Dispatchers.IO) {
-                        it.write(gson.toJson(MainActivity.padzeia))
-                    }
-                }
+                File("$filesDir/Sabytie.json").delete()
             }
             adapter.updateList(MainActivity.padzeia)
             MainActivity.toastView(getString(R.string.remove_padzea))
@@ -2523,6 +2480,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         private var dzenNoch = false
         private val day = Calendar.getInstance() as GregorianCalendar
         private val origData = ArrayList<Padzeia>(list)
+
+        fun getOpigData() = origData
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ListItemSabytieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             val k = parent.context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -2574,7 +2534,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             popup.setOnMenuItemClickListener { menuItem: MenuItem ->
                 popup.dismiss()
                 when (menuItem.itemId) {
-                    R.id.menu_redoktor -> onSabytieRedaktor(position)
+                    R.id.menu_redoktor -> onDialogEditClick(position)
                     R.id.menu_remove -> onDialogDeliteClick(position)
                 }
                 true

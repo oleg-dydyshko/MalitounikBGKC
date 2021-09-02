@@ -286,7 +286,7 @@ class DialogCalindarGrid : DialogFragment() {
                                     startActivity(intent)
                                 }
                                 else -> {
-                                    val intent = Intent(activity, ViacherniaList::class.java)
+                                    val intent = Intent(activity, AktoixList::class.java)
                                     startActivity(intent)
                                 }
                             }

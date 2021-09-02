@@ -317,8 +317,24 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".ViacherniaList"
+            android:name=".AktoixList"
             android:label="@string/viachernia"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.SubMenuBogashlugbovyaViachernia" />
+        </activity>
+        <activity
+            android:name=".SubMenuBogashlugbovyaViachernia"
+            android:label="@string/viachernia"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
+            android:name=".SubMenuBogashlugbovyaVialikiPost"
+            android:label="@string/slugby_vialikaga_postu"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -244,8 +244,12 @@ class Naviny : AppCompatActivity() {
         try {
             startActivity(intent)
         } catch (ex: ActivityNotFoundException) {
-            intent.setPackage(null)
-            startActivity(intent)
+            try {
+                intent.setPackage(null)
+                startActivity(intent)
+            } catch (ex: ActivityNotFoundException) {
+                MainActivity.toastView(getString(R.string.error_ch2))
+            }
         }
     }
 

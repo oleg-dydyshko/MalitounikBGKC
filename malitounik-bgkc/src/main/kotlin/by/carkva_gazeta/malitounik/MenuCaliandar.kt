@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -33,6 +34,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
     private var page = 0
     private var _binding: MenuCaliandarBinding? = null
     private val binding get() = _binding!!
+    private var mLastClickTime: Long = 0
     private val caliandarMunLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
@@ -188,6 +190,10 @@ class MenuCaliandar : MenuCaliandarFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return super.onOptionsItemSelected(item)
+        }
+        mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_carkva) {
             activity?.let {

@@ -89,8 +89,8 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     private var nazvaPadzei = "Назва падзеі"
     private lateinit var binding: SabytieBinding
     private var resetTollbarJob: Job? = null
-    private lateinit var searchView: SearchView
-    private lateinit var autoCompleteTextView: AutoCompleteTextView
+    private var searchView: SearchView? = null
+    private var autoCompleteTextView: AutoCompleteTextView? = null
     private var searchViewQwery = ""
     private var actionExpandOn = false
     private val labelbutton12Launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -829,9 +829,9 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val density = resources.displayMetrics.density
             val margin = (10 * density).toInt()
             p.rightMargin = margin
-            autoCompleteTextView.layoutParams = p
-            autoCompleteTextView.setBackgroundResource(R.drawable.underline_white)
-            autoCompleteTextView.addTextChangedListener(SearchViewTextWatcher())
+            autoCompleteTextView?.layoutParams = p
+            autoCompleteTextView?.setBackgroundResource(R.drawable.underline_white)
+            autoCompleteTextView?.addTextChangedListener(SearchViewTextWatcher())
         }
         if (view is ViewGroup) {
             for (i in 0 until view.childCount) {
@@ -860,11 +860,11 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 return true
             }
         })
-        searchView.queryHint = getString(R.string.search_malitv)
+        searchView?.queryHint = getString(R.string.search_malitv)
         changeSearchViewElements(searchView)
         if (searchViewQwery != "") {
             searchViewItem.expandActionView()
-            autoCompleteTextView.setText(searchViewQwery)
+            autoCompleteTextView?.setText(searchViewQwery)
         }
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
@@ -935,7 +935,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
                         startActivity(intent)
                     } catch (ex: ActivityNotFoundException) {
-                        MainActivity.toastView(getString(R.string.error_ch))
+                        MainActivity.toastView(getString(R.string.error_ch2))
                     }
                 }
             } else {
@@ -2472,7 +2472,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         outState.putString("da", binding.label1.text.toString())
         outState.putString("taK", binding.label22.text.toString())
         outState.putString("daK", binding.label12.text.toString())
-        outState.putString("SearchViewQwery", autoCompleteTextView.text.toString())
+        outState.putString("SearchViewQwery", autoCompleteTextView?.text.toString())
         outState.putBoolean("actionExpandOn", actionExpandOn)
     }
 

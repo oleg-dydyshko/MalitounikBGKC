@@ -12,6 +12,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
@@ -25,6 +26,22 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
     private lateinit var binding: AkafistListBibleBinding
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
+    private var result = false
+    private val bogashlugbovyaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == 200) {
+            this.result = true
+            recreate()
+        }
+    }
+
+    override fun onBackPressed() {
+        if (result) onSupportNavigateUp() else super.onBackPressed()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("result", result)
+    }
 
     override fun onPause() {
         super.onPause()
@@ -82,7 +99,10 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
             val intent = Intent(this, Bogashlugbovya::class.java)
             intent.putExtra("resurs", data[position].resource)
             intent.putExtra("title", data[position].title)
-            startActivity(intent)
+            bogashlugbovyaLauncher.launch(intent)
+        }
+        if (savedInstanceState != null) {
+            result = savedInstanceState.getBoolean("result")
         }
     }
 

@@ -1148,7 +1148,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 findRemoveSpan()
                 onFind = true
                 binding.find.visibility = View.GONE
-                val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
             }
             binding.actionMinus.visibility = View.VISIBLE
@@ -1336,7 +1336,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (id == by.carkva_gazeta.malitounik.R.id.action_find) {
             binding.find.visibility = View.VISIBLE
             binding.textSearch.requestFocus()
-            val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
@@ -1408,11 +1408,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             binding.find.visibility = View.GONE
             binding.textSearch.setText("")
             findRemoveSpan()
-            val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
         } else {
-            if (editVybranoe) onSupportNavigateUp()
-            else super.onBackPressed()
+            if (editVybranoe) {
+                setResult(200)
+                finish()
+            } else super.onBackPressed()
         }
     }
 

@@ -32,16 +32,20 @@ class MenuBogashlugbovya : ListFragment() {
                 val intent = Intent(activity, MalitvyPasliaPrychascia::class.java)
                 startActivity(intent)
             }
-            9 -> {
-                val intent = Intent(activity, ViacherniaList::class.java)
+            5 -> {
+                val intent = Intent(activity, SubMenuBogashlugbovyaViachernia::class.java)
                 startActivity(intent)
             }
-            12 -> {
+            8 -> {
                 val intent = Intent(activity, TonNiadzelny::class.java)
                 startActivity(intent)
             }
-            13 -> {
+            9 -> {
                 val intent = Intent(activity, TonNaKoznyDzen::class.java)
+                startActivity(intent)
+            }
+            10 -> {
+                val intent = Intent(activity, SubMenuBogashlugbovyaVialikiPost::class.java)
                 startActivity(intent)
             }
             else -> {
@@ -83,43 +87,7 @@ class MenuBogashlugbovya : ListFragment() {
                                 startActivity(intent)
                             }
                         }
-                        5 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "viachernia_niadzeli")
-                                startActivity(intent)
-                            }
-                        }
                         6 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "viachernia_liccia_i_blaslavenne_xliabou")
-                                startActivity(intent)
-                            }
-                        }
-                        7 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "viachernia_na_kogny_dzen")
-                                startActivity(intent)
-                            }
-                        }
-                        8 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "viachernia_y_vialikim_poste")
-                                startActivity(intent)
-                            }
-                        }
-                        10 -> {
                             activity?.let {
                                 val intent = Intent()
                                 intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
@@ -128,66 +96,12 @@ class MenuBogashlugbovya : ListFragment() {
                                 startActivity(intent)
                             }
                         }
-                        11 -> {
+                        7 -> {
                             activity?.let {
                                 val intent = Intent()
                                 intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("title", data[position])
                                 intent.putExtra("resurs", "bogashlugbovya11")
-                                startActivity(intent)
-                            }
-                        }
-                        14 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTUSPIS)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", 12)
-                                startActivity(intent)
-                            }
-                        }
-                        15 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTUSPIS)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", 13)
-                                startActivity(intent)
-                            }
-                        }
-                        16 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTUSPIS)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", 14)
-                                startActivity(intent)
-                            }
-                        }
-                        17 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTUSPIS)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", 15)
-                                startActivity(intent)
-                            }
-                        }
-                        18 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTUSPIS)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", 16)
-                                startActivity(intent)
-                            }
-                        }
-                        19 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.SLUGBYVIALIKAGAPOSTUSPIS)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", 17)
                                 startActivity(intent)
                             }
                         }

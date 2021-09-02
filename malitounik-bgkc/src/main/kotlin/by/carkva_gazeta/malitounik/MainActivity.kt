@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
     override fun onDialogEditClick(position: Int) {
         val menuNatatki = supportFragmentManager.findFragmentByTag("MenuNatatki") as? MenuNatatki
-        menuNatatki?.onDialogEditClick(position)
+        menuNatatki?.myNatatkiEdit(position)
     }
 
     override fun onDialogDeliteClick(position: Int, name: String) {
@@ -676,13 +676,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                     menu.findItem(R.id.sorttime).isVisible = true
                     menu.findItem(R.id.action_help).isVisible = true
                     when (k.getInt("natatki_sort", 0)) {
-                        0 -> {
-                            menu.findItem(R.id.sortdate).isChecked = false
-                            menu.findItem(R.id.sorttime).isChecked = true
-                        }
                         1 -> {
                             menu.findItem(R.id.sortdate).isChecked = true
                             menu.findItem(R.id.sorttime).isChecked = false
+                        }
+                        2 -> {
+                            menu.findItem(R.id.sortdate).isChecked = false
+                            menu.findItem(R.id.sorttime).isChecked = true
                         }
                         else -> {
                             menu.findItem(R.id.sortdate).isChecked = false
@@ -1569,43 +1569,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         fun toHtml(html: Spannable) = HtmlCompat.toHtml(html, HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL)
 
         @Suppress("DEPRECATION")
-        fun isNetworkAvailable(): Boolean {
+        fun isNetworkAvailable(isTypeMobile: Boolean = false): Boolean {
             val connectivityManager = Malitounik.applicationContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val nw = connectivityManager.activeNetwork ?: return false
                 val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
-                return when {
-                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                    else -> false
-                }
-            } else {
-                val activeNetworkInfo = connectivityManager.activeNetworkInfo ?: return false
-                return activeNetworkInfo.isConnectedOrConnecting
-            }
-        }
-
-        @Suppress("DEPRECATION")
-        fun isIntNetworkAvailable(): Int {
-            val connectivityManager = Malitounik.applicationContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val nw = connectivityManager.activeNetwork ?: return 0
-                val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return 0
-                return when {
-                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> 1
-                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> 2
-                    else -> 0
-                }
-            } else {
-                val activeNetwork = connectivityManager.activeNetworkInfo ?: return 0
-                return if (activeNetwork.isConnectedOrConnecting) {
-                    when (activeNetwork.type) {
-                        ConnectivityManager.TYPE_WIFI -> 1
-                        ConnectivityManager.TYPE_MOBILE -> 2
-                        else -> 0
+                if (isTypeMobile && actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) return true
+                if (!isTypeMobile) {
+                    return when {
+                        actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                        actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                        else -> false
                     }
-                } else 0
+                }
+            } else {
+                val activeNetwork = connectivityManager.activeNetworkInfo ?: return false
+                if (activeNetwork.isConnectedOrConnecting) {
+                    if (isTypeMobile && activeNetwork.type == ConnectivityManager.TYPE_MOBILE) return true
+                    if (!isTypeMobile) {
+                       return when (activeNetwork.type) {
+                            ConnectivityManager.TYPE_WIFI -> true
+                            ConnectivityManager.TYPE_MOBILE -> true
+                            else -> false
+                        }
+                    }
+                }
             }
+            return false
         }
 
         fun createFont(style: Int): Typeface? {

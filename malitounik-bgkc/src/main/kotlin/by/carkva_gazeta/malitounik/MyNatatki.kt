@@ -38,7 +38,7 @@ class MyNatatki : DialogFragment() {
     private var resetTollbarJob: Job? = null
 
     interface MyNatatkiListener {
-        fun myNatatkiAdd(isAdd: Boolean)
+        fun myNatatkiAdd()
         fun myNatatkiEdit(position: Int)
     }
 
@@ -60,8 +60,7 @@ class MyNatatki : DialogFragment() {
         super.onDismiss(dialog)
         val oldredak = redak
         if (redak != 3) write()
-        if (oldredak == 1 || oldredak == 2) mListener?.myNatatkiAdd(true)
-        else mListener?.myNatatkiAdd(false)
+        if (oldredak == 1 || oldredak == 2) mListener?.myNatatkiAdd()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

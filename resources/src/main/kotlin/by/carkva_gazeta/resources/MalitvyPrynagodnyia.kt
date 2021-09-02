@@ -28,10 +28,10 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
 
     private val data = ArrayList<MenuListData>()
     private lateinit var adapter: MenuListAdaprer
-    private lateinit var searchView: SearchView
+    private var searchView: SearchView? = null
     private lateinit var chin: SharedPreferences
     private var mLastClickTime: Long = 0
-    private lateinit var autoCompleteTextView: AutoCompleteTextView
+    private var autoCompleteTextView: AutoCompleteTextView? = null
     private var searchViewQwery = ""
     private var history = ArrayList<String>()
     private lateinit var historyAdapter: HistoryAdapter
@@ -204,7 +204,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             startActivity(intent)
             val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.ListView.windowToken, 0)
-            if (autoCompleteTextView.text.toString() != "") {
+            if (autoCompleteTextView?.text.toString() != "") {
                 addHistory(data[position].data)
                 saveHistopy()
             }
@@ -270,9 +270,9 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             val density = resources.displayMetrics.density
             val margin = (10 * density).toInt()
             p.rightMargin = margin
-            autoCompleteTextView.layoutParams = p
-            autoCompleteTextView.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)
-            autoCompleteTextView.addTextChangedListener(MyTextWatcher())
+            autoCompleteTextView?.layoutParams = p
+            autoCompleteTextView?.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.underline_white)
+            autoCompleteTextView?.addTextChangedListener(MyTextWatcher())
         }
         if (view is ViewGroup) {
             for (i in 0 until view.childCount) {
@@ -320,11 +320,11 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
                 return true
             }
         })
-        searchView.queryHint = getString(by.carkva_gazeta.malitounik.R.string.search_malitv)
+        searchView?.queryHint = getString(by.carkva_gazeta.malitounik.R.string.search_malitv)
         changeSearchViewElements(searchView)
         if (searchViewQwery != "") {
             searchViewItem.expandActionView()
-            autoCompleteTextView.setText(searchViewQwery)
+            autoCompleteTextView?.setText(searchViewQwery)
         }
         for (i in 0 until menu.size()) {
             val item: MenuItem = menu.getItem(i)
@@ -349,7 +349,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("SearchViewQwery", autoCompleteTextView.text.toString())
+        outState.putString("SearchViewQwery", autoCompleteTextView?.text.toString())
         outState.putBoolean("actionExpandOn", actionExpandOn)
     }
 
@@ -377,10 +377,10 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
                 edit = edit.replace("Щ", "Ў")
                 edit = edit.replace("Ъ", "'")
                 if (check != 0) {
-                    autoCompleteTextView.removeTextChangedListener(this)
-                    autoCompleteTextView.setText(edit)
-                    autoCompleteTextView.setSelection(editPosition)
-                    autoCompleteTextView.addTextChangedListener(this)
+                    autoCompleteTextView?.removeTextChangedListener(this)
+                    autoCompleteTextView?.setText(edit)
+                    autoCompleteTextView?.setSelection(editPosition)
+                    autoCompleteTextView?.addTextChangedListener(this)
                 }
             }
             if (editPosition == 0 && actionExpandOn) {

@@ -48,10 +48,10 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
         activity?.let { activity ->
             k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val file = File(activity.filesDir.toString() + "/Natatki.json")
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
             if (file.exists()) {
                 try {
-                    val gson = Gson()
-                    val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
                     myNatatkiFiles = gson.fromJson(file.readText(), type)
                     activity.invalidateOptionsMenu()
                 } catch (t: Throwable) {
@@ -77,12 +77,10 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
                         }
                     }
                     file.writer().use {
-                        val gson = Gson()
                         it.write(gson.toJson(myNatatkiFiles))
                     }
                 }
             }
-            myNatatkiFilesSort = k.getInt("natatki_sort", 0)
             myNatatkiFiles.sort()
             activity.invalidateOptionsMenu()
             adapter = ItemAdapter(R.id.image, false)
@@ -102,29 +100,24 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
                         onDialogDeliteClick(pos, adapter.itemList[pos].title)
                     }
                     if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
-                        onDialogEditClick(pos)
+                        myNatatkiEdit(pos)
                     }
                 }
             })
             binding.dragListView.setDragListListener(object : DragListView.DragListListener {
                 override fun onItemDragStarted(position: Int) {
+                    myNatatkiFiles.clear()
+                    myNatatkiFiles.addAll(gson.fromJson(file.readText(), type))
                 }
 
                 override fun onItemDragging(itemPosition: Int, x: Float, y: Float) {
                 }
 
                 override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
-                    if (fromPosition != toPosition) {
-                        file.writer().use {
-                            val gson = Gson()
-                            it.write(gson.toJson(adapter.itemList))
-                        }
-                        val edit = k.edit()
-                        edit.putInt("natatki_sort", -1)
-                        edit.apply()
-                        myNatatkiFilesSort = -1
-                        activity.invalidateOptionsMenu()
-                    }
+                    val edit = k.edit()
+                    edit.putInt("natatki_sort", 0)
+                    edit.apply()
+                    activity.invalidateOptionsMenu()
                 }
             })
         }
@@ -135,28 +128,26 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
     }
 
     override fun myNatatkiEdit(position: Int) {
+        binding.dragListView.resetSwipedViews(null)
         val f = adapter.itemList[position]
         val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 2, position)
         myNatatki.setMyNatatkiListener(this)
         myNatatki.show(childFragmentManager, "myNatatki")
     }
 
-    override fun myNatatkiAdd(isAdd: Boolean) {
-        binding.dragListView.resetSwipedViews(null)
-        if (isAdd) {
-            myNatatkiFilesSort = k.getInt("natatki_sort", 0)
-            if (myNatatkiFilesSort == -1) {
-                activity?.let {
-                    myNatatkiFiles.clear()
-                    val file = File(it.filesDir.toString() + "/Natatki.json")
-                    val gson = Gson()
-                    val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
-                    myNatatkiFiles.addAll(gson.fromJson(file.readText(), type))
-                }
+    override fun myNatatkiAdd() {
+        val myNatatkiFilesSort = k.getInt("natatki_sort", 0)
+        if (myNatatkiFilesSort == 0) {
+            activity?.let {
+                myNatatkiFiles.clear()
+                val file = File(it.filesDir.toString() + "/Natatki.json")
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
+                myNatatkiFiles.addAll(gson.fromJson(file.readText(), type))
             }
-            myNatatkiFiles.sort()
-            adapter.updateList(myNatatkiFiles)
         }
+        myNatatkiFiles.sort()
+        adapter.updateList(myNatatkiFiles)
     }
 
     override fun fileDelite(position: Int) {
@@ -172,13 +163,6 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
             }
             adapter.notifyItemRemoved(position)
         }
-    }
-
-    override fun onDialogEditClick(position: Int) {
-        val f = adapter.itemList[position]
-        val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 2, position)
-        myNatatki.setMyNatatkiListener(this)
-        myNatatki.show(childFragmentManager, "myNatatki")
     }
 
     override fun onDialogDeliteClick(position: Int, name: String) {
@@ -200,6 +184,7 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
         mLastClickTime = SystemClock.elapsedRealtime()
         val id = item.itemId
         if (id == R.id.action_add) {
+            binding.dragListView.resetSwipedViews(null)
             val myNatatki = MyNatatki.getInstance("", 1, 0)
             myNatatki.setMyNatatkiListener(this)
             myNatatki.show(childFragmentManager, "myNatatki")
@@ -209,9 +194,8 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
                 val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
                 val prefEditors = k.edit()
                 if (item.isChecked) {
-                    prefEditors.putInt("natatki_sort", -1)
+                    prefEditors.putInt("natatki_sort", 0)
                     prefEditors.apply()
-                    myNatatkiFilesSort = -1
                     myNatatkiFiles.clear()
                     val file = File(activity.filesDir.toString() + "/Natatki.json")
                     val gson = Gson()
@@ -220,7 +204,6 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
                 } else {
                     prefEditors.putInt("natatki_sort", 1)
                     prefEditors.apply()
-                    myNatatkiFilesSort = 1
                 }
                 activity.invalidateOptionsMenu()
                 myNatatkiFiles.sort()
@@ -232,18 +215,16 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
                 val k = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
                 val prefEditors = k.edit()
                 if (item.isChecked) {
-                    prefEditors.putInt("natatki_sort", -1)
+                    prefEditors.putInt("natatki_sort", 0)
                     prefEditors.apply()
-                    myNatatkiFilesSort = -1
                     myNatatkiFiles.clear()
                     val file = File(activity.filesDir.toString() + "/Natatki.json")
                     val gson = Gson()
                     val type = object : TypeToken<ArrayList<MyNatatkiFiles>>() {}.type
                     myNatatkiFiles.addAll(gson.fromJson(file.readText(), type))
                 } else {
-                    prefEditors.putInt("natatki_sort", 0)
+                    prefEditors.putInt("natatki_sort", 2)
                     prefEditors.apply()
-                    myNatatkiFilesSort = 0
                 }
                 activity.invalidateOptionsMenu()
                 myNatatkiFiles.sort()
@@ -302,6 +283,7 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
+                binding.dragListView.resetSwipedViews(null)
                 val f = itemList[adapterPosition]
                 val myNatatki = MyNatatki.getInstance("Mae_malitvy_" + f.id, 3, adapterPosition)
                 myNatatki.setMyNatatkiListener(this@MenuNatatki)
@@ -347,6 +329,5 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
 
     companion object {
         var myNatatkiFiles = ArrayList<MyNatatkiFiles>()
-        var myNatatkiFilesSort = 0
     }
 }

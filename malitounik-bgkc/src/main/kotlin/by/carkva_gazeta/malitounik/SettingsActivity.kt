@@ -1219,7 +1219,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                         intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
                         startActivity(intent)
                     } catch (ex: ActivityNotFoundException) {
-                        MainActivity.toastView(getString(R.string.error_ch))
+                        MainActivity.toastView(getString(R.string.error_ch2))
                     }
                 }
             }

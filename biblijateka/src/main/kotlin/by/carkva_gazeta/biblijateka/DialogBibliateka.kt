@@ -105,14 +105,14 @@ class DialogBibliateka : DialogFragment() {
             if (file.exists()) {
                 builder.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             } else {
-                if (MainActivity.isIntNetworkAvailable() != 0) {
-                    builder.setPositiveButton("Спампаваць $izm") { dialog: DialogInterface, _: Int ->
+                if (MainActivity.isNetworkAvailable()) {
+                    builder.setPositiveButton(getString(R.string.download_bibliateka_file, izm)) { dialog: DialogInterface, _: Int ->
                         mListener?.onDialogbibliatekaPositiveClick(listPosition, title)
                         dialog.cancel()
                     }
                     builder.setNegativeButton(R.string.cansel) { dialog: DialogInterface, _: Int -> dialog.cancel() }
                 } else {
-                    builder.setPositiveButton("НЯМА ІНТЭРНЭТ-ЗЛУЧЭНЬНЯ") { dialog: DialogInterface, _: Int -> dialog.cancel() }
+                    builder.setPositiveButton(getString(R.string.no_internet)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
                 }
             }
         }

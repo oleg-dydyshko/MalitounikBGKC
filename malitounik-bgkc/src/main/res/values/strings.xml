@@ -170,6 +170,7 @@
     <string name="chtinia_38">%1$sКніга Прарока Міхея %2$s</string>
     <string name="chtinia_zag">%1$s[&#8230;]</string>
     <string name="error_ch">Памылка, даруйце\n</string>
+    <string name="error_ch2">Памылка, даруйце</string>
     <string name="error_ch_email">carkva@carkva-gazeta.by\nНапішыце пра памылку ў праграме\n\nЗагадзя шчыра дзякуем!</string>
     <string name="Sabytie">%1$s%2$d.%3$s%4$d.%5$d</string>
     <string name="seash">(%1$d)</string>
@@ -230,6 +231,7 @@
     <string name="widget_settings">НАЛАДЫ ВІДЖЭТУ</string>
     <string name="opisanie">Апісаньне</string>
     <string name="download">Спампаваць</string>
+    <string name="download_bibliateka_file">Спампаваць %1$s</string>
     <string name="pkc">Урачыстасьці і сьвяты ў рыма-католікаў Беларусі</string>
     <string name="search_svityia">Пошук сьвятых і сьвятаў</string>
     <string name="inversion">Інверсія</string>
@@ -401,15 +403,21 @@
         <item>Набажэнства ў гонар Маці Божай Нястомнай Дапамогі</item>
         <item>Малітвы пасьля сьвятога прычасьця</item>
         <item>Ютрань нядзельная (у скароце)</item>
+        <item>Вячэрня</item>
+        <item>Абедніца</item>
+        <item>Служба за памерлых — Малая паніхіда</item>
+        <item>Трапары і кандакі нядзельныя васьмі тонаў</item>
+        <item>Трапары і кандакі штодзённыя - на кожны дзень тыдня</item>
+        <item>Службы Вялікага посту</item>
+    </string-array>
+    <string-array name="sub_bogaslugbovuia_vichernia">
         <item>Вячэрня ў нядзелі і сьвяты</item>
         <item>Ліцьця і блаславеньне хлябоў</item>
         <item>Вячэрня ў звычайныя дні</item>
         <item>Вячэрня ў вялікім посьце</item>
         <item>Актоіх</item>
-        <item>Абедніца</item>
-        <item>Служба за памерлых — Малая паніхіда</item>
-        <item>Трапары і кандакі нядзельныя васьмі тонаў</item>
-        <item>Трапары і кандакі штодзённыя - на кожны дзень тыдня</item>
+    </string-array>
+    <string-array name="sub_bogaslugbovuia_vialiki_post">
         <item>Службы 1-га тыдня Вялікага посту</item>
         <item>Службы 2-га тыдня Вялікага посту</item>
         <item>Службы 3-га тыдня Вялікага посту</item>

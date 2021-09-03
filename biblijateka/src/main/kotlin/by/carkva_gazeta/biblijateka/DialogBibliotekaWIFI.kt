@@ -15,7 +15,7 @@ import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 
 class DialogBibliotekaWIFI : DialogFragment() {
-    private var listPosition: String = "0"
+    private var listPosition = "0"
     private var mListener: DialogBibliotekaWIFIListener? = null
     private lateinit var builder: AlertDialog.Builder
     private var _binding: DialogTextviewDisplayBinding? = null

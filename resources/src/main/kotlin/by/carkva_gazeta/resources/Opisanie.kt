@@ -27,7 +27,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
+class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener {
     private var dzenNoch = false
     private var mun = Calendar.getInstance()[Calendar.MONTH] + 1
     private var day = Calendar.getInstance()[Calendar.DATE]
@@ -212,16 +212,25 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             }
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
-            startLoadIconsJob(true)
+            if (MainActivity.isNetworkAvailable(true)) {
+                val dialog = DialogOpisanieWIFI()
+                dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
+            } else {
+                startLoadIconsJob(update = true, true)
+            }
             binding.swipeRefreshLayout.isRefreshing = false
         }
         if (dzenNoch) binding.swipeRefreshLayout.setColorSchemeResources(by.carkva_gazeta.malitounik.R.color.colorPrimary_black)
         else binding.swipeRefreshLayout.setColorSchemeResources(by.carkva_gazeta.malitounik.R.color.colorPrimary)
-        startLoadIconsJob()
+        startLoadIconsJob(loadIcons = !MainActivity.isNetworkAvailable(true))
         setTollbarTheme()
     }
 
-    private fun startLoadIconsJob(update: Boolean = false) {
+    override fun onDialogPositiveOpisanieWIFI() {
+        startLoadIconsJob(update = true, true)
+    }
+
+    private fun startLoadIconsJob(update: Boolean = false, loadIcons: Boolean) {
         loadIconsJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
             startTimer()
@@ -303,7 +312,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                         }
                     }
                 } else {
-                    if (MainActivity.isNetworkAvailable()) {
+                    if (loadIcons && MainActivity.isNetworkAvailable()) {
                         withContext(Dispatchers.IO) {
                             try {
                                 val mURL = if (svity) URL("https://carkva-gazeta.by/chytanne/icons/v_${day}_${mun}.jpg")

@@ -105,6 +105,15 @@ class MenuBogashlugbovya : ListFragment() {
                                 startActivity(intent)
                             }
                         }
+                        11 -> {
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("title", data[position])
+                                intent.putExtra("resurs", "bogashlugbovya9")
+                                startActivity(intent)
+                            }
+                        }
                     }
                 } else {
                     val dadatak = DialogInstallDadatak()

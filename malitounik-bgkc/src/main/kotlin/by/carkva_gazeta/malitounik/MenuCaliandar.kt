@@ -88,7 +88,6 @@ class MenuCaliandar : MenuCaliandarFragment() {
             val gson = Gson()
             outputStream.write(gson.toJson(MainActivity.padzeia))
             outputStream.close()
-            MainActivity.padzeia.sort()
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
                     val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

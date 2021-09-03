@@ -531,7 +531,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             binding.labelbutton12.setBackgroundResource(R.drawable.selector_dark)
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
-        MainActivity.padzeia.sort()
         val c2 = Calendar.getInstance()
         nol1 = ""
         nol2 = ""
@@ -704,7 +703,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         val gson = Gson()
         outputStream.write(gson.toJson(MainActivity.padzeia))
         outputStream.close()
-        MainActivity.padzeia.sort()
         adapter.updateList(MainActivity.padzeia)
         CoroutineScope(Dispatchers.IO).launch {
             if (sab.count == "0") {
@@ -2441,7 +2439,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
             val gson = Gson()
             outputStream.write(gson.toJson(MainActivity.padzeia))
             outputStream.close()
-            MainActivity.padzeia.sort()
             adapter.updateList(MainActivity.padzeia)
             binding.dragListView.recyclerView.scrollToPosition(0)
         }

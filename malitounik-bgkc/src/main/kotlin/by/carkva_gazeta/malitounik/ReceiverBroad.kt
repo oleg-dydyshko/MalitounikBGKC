@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat
 import java.util.*
 
 class ReceiverBroad : BroadcastReceiver() {
-    private var id = 205
     private var sabytieSet = false
     override fun onReceive(ctx: Context, intent: Intent) {
         val g = Calendar.getInstance() as GregorianCalendar
@@ -25,7 +24,9 @@ class ReceiverBroad : BroadcastReceiver() {
         val sabytie = intent.getBooleanExtra("sabytieSet", false)
         if (sabytie) {
             val idString = intent.extras?.getString("dataString", dayofyear.toString() + g[Calendar.MONTH].toString() + g[Calendar.HOUR_OF_DAY] + g[Calendar.MINUTE]) ?: "205"
-            id = idString.toInt()
+            val newId = idString.toInt()
+            id = if (newId <= id) id + 1
+            else newId
             sabytieSet = true
         }
         sendNotif(ctx, intent.action, intent.getStringExtra("extra") ?: "", intent.getIntExtra("dayofyear", dayofyear), intent.getIntExtra("year", year))
@@ -46,7 +47,7 @@ class ReceiverBroad : BroadcastReceiver() {
         } else {
             PendingIntent.FLAG_UPDATE_CURRENT
         }
-        val contentIntent = PendingIntent.getActivity(context, 15, notificationIntent, flags)
+        val contentIntent = PendingIntent.getActivity(context, id, notificationIntent, flags)
         val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val uri: Uri
         var bigIcon = R.drawable.calendar_full
@@ -63,16 +64,8 @@ class ReceiverBroad : BroadcastReceiver() {
             }
             val notificationManager = context.getSystemService(NotificationManager::class.java)
 
-            builder.setContentIntent(contentIntent)
-                    .setWhen(System.currentTimeMillis())
-                    .setShowWhen(true)
-                    .setSmallIcon(R.drawable.krest)
-                    .setLargeIcon(BitmapFactory.decodeResource(context.resources, bigIcon))
-                    .setAutoCancel(true)
-                    .setContentTitle(Name)
-                    .setContentText(Sviata)
-            if (sabytieSet)
-                builder.style = Notification.BigTextStyle().bigText(Sviata)
+            builder.setContentIntent(contentIntent).setWhen(System.currentTimeMillis()).setShowWhen(true).setSmallIcon(R.drawable.krest).setLargeIcon(BitmapFactory.decodeResource(context.resources, bigIcon)).setAutoCancel(true).setContentTitle(Name).setContentText(Sviata)
+            if (sabytieSet) builder.style = Notification.BigTextStyle().bigText(Sviata)
             val notification = builder.build()
             notificationManager?.notify(id, notification)
         } else {
@@ -86,23 +79,17 @@ class ReceiverBroad : BroadcastReceiver() {
                 else -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             }
             val builder = NotificationCompat.Builder(context, "Сьвяты і Падзеі")
-            builder.setContentIntent(contentIntent)
-                    .setWhen(System.currentTimeMillis())
-                    .setShowWhen(true)
-                    .setSmallIcon(R.drawable.krest)
-                    .setLargeIcon(BitmapFactory.decodeResource(context.resources, bigIcon))
-                    .setAutoCancel(true)
-                    .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
-                    .setLights(ContextCompat.getColor(context, R.color.colorPrimary), 1000, 1000)
-                    .setContentTitle(Name)
-                    .setContentText(Sviata)
-            if (sabytieSet)
-                builder.setStyle(NotificationCompat.BigTextStyle().bigText(Sviata))
+            builder.setContentIntent(contentIntent).setWhen(System.currentTimeMillis()).setShowWhen(true).setSmallIcon(R.drawable.krest).setLargeIcon(BitmapFactory.decodeResource(context.resources, bigIcon)).setAutoCancel(true).setPriority(NotificationManagerCompat.IMPORTANCE_HIGH).setLights(ContextCompat.getColor(context, R.color.colorPrimary), 1000, 1000).setContentTitle(Name).setContentText(Sviata)
+            if (sabytieSet) builder.setStyle(NotificationCompat.BigTextStyle().bigText(Sviata))
             if (chin.getInt("guk", 1) == 1) builder.setSound(uri)
             if (chin.getInt("vibra", 1) == 1) builder.setVibrate(vibrate)
             val notification = builder.build()
             val notificationManager = NotificationManagerCompat.from(context)
             notificationManager.notify(id, notification)
         }
+    }
+
+    companion object {
+        private var id = 205
     }
 }

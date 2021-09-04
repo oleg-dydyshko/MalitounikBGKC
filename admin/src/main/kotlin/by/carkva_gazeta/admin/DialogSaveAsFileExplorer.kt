@@ -38,7 +38,9 @@ class DialogSaveAsFileExplorer : DialogFragment() {
     private lateinit var adapter: TitleListAdaprer
     private val fileList = ArrayList<MyNetFile>()
     private var dir = ""
+    private var oldName = ""
     private var fileName = ""
+    private var filenameTitle = ""
     private var _binding: AdminDialigSaveAsBinding? = null
     private val binding get() = _binding!!
 
@@ -72,8 +74,20 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 val dialogPasochnicaMkDir = DialogPasochnicaMkDir.getInstance(dir)
                 dialogPasochnicaMkDir.show(childFragmentManager, "dialogPasochnicaMkDir")
             }
-            fileName = arguments?.getString("oldName", "") ?: ""
+            oldName = arguments?.getString("oldName", "") ?: ""
+            val t1 = oldName.indexOf("(")
+            if (t1 != -1 && t1 == 0) {
+                val t2 = oldName.indexOf(")")
+                val t3 = oldName.lastIndexOf(".")
+                filenameTitle = oldName.substring(t2 + 2, t3)
+                fileName = oldName.substring(1, t2) + oldName.substring(t3)
+            } else {
+                fileName = oldName
+            }
             binding.edittext.setText(fileName)
+            binding.filetitle.text = filenameTitle
+            if (filenameTitle == "")
+                binding.filetitle.visibility = View.GONE
             binding.listView.selector = ContextCompat.getDrawable(fragmentActivity, by.carkva_gazeta.malitounik.R.drawable.selector_default)
             adapter = TitleListAdaprer(fragmentActivity)
             binding.listView.adapter = adapter
@@ -82,8 +96,8 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             binding.listView.setOnItemClickListener { _, _, position, _ ->
                 when (fileList[position].resources) {
                     R.drawable.directory_up -> {
-                        val t1 = dir.lastIndexOf("/")
-                        dir = dir.substring(0, t1)
+                        val t4 = dir.lastIndexOf("/")
+                        dir = dir.substring(0, t4)
                         getDirListRequest(dir)
                     }
                     R.drawable.directory_icon -> {
@@ -177,13 +191,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 viewHolder = rootView.tag as ViewHolder
             }
             viewHolder.text.text = fileList[position].title
-            val t1 = fileName.indexOf("(")
-            val t2 = fileName.indexOf(")")
-            if (t1 != -1 && t2 != -1 && (fileList[position].title.contains(fileName.substring(t1 + 1, t2) + ".html") || fileList[position].title.contains(fileName.substring(t1 + 1, t2) + ".txt"))) {
-                viewHolder.text.background = ContextCompat.getDrawable(mContext, by.carkva_gazeta.malitounik.R.color.colorBezPosta)
-            } else {
-                viewHolder.text.background = ContextCompat.getDrawable(mContext, by.carkva_gazeta.malitounik.R.color.colorWhite)
-            }
+            viewHolder.text.background = ContextCompat.getDrawable(mContext, by.carkva_gazeta.malitounik.R.color.colorWhite)
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val image = ContextCompat.getDrawable(mContext, fileList[position].resources)
             val density = resources.displayMetrics.density.toInt()

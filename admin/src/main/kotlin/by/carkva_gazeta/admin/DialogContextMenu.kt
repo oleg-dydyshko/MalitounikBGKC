@@ -51,6 +51,8 @@ class DialogContextMenu : DialogFragment() {
             binding.title.text = name
             binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.rename_file)
             binding.content2.text = getString(by.carkva_gazeta.malitounik.R.string.delite)
+            binding.content.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+            binding.content2.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
             builder.setView(binding.root)
             dialog = builder.create()
             binding.content.setOnClickListener {

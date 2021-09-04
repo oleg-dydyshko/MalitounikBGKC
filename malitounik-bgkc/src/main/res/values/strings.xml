@@ -635,6 +635,7 @@
     <string name="rename_file">Перайменаваць</string>
     <string name="save_as_up">ЗАХАВАЦЬ ЯК…</string>
     <string name="file_name">Імя файла:</string>
+    <string name="file_name2">Імя файла</string>
     <string name="file_perazapisac">Перазапісаць</string>
     <string name="file_exists">ФАЙЛ ІСНУЕ</string>
     <string name="file_exists_opis">Перазапісаць існуючы файл \"%1$s\"?</string>

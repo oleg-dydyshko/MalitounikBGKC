@@ -1,34 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:padding="10dp"
-        android:text="@string/save_as_up"
-        android:textColor="@color/colorWhite"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/selector_red"
-        android:padding="10dp"
-        android:text="@string/mk_dir"
-        android:textColor="@color/colorWhite"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:padding="10dp"
+            android:text="@string/save_as_up"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_red"
+            android:gravity="right|end"
+            android:padding="10dp"
+            android:text="@string/mk_dir"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,21 +46,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/content">
 
+        <TextView
+            android:id="@+id/filetitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
         <EditText
             android:id="@+id/edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:hint="@string/file_name2"
+            android:inputType="text"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:textSize="14sp" />
 
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edittext" />
+            android:scrollbars="none" />
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

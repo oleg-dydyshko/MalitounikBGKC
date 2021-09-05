@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -190,9 +191,15 @@ class DialogSaveAsFileExplorer : DialogFragment() {
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text.text = fileList[position].title
-            viewHolder.text.background = ContextCompat.getDrawable(mContext, by.carkva_gazeta.malitounik.R.color.colorWhite)
+            val title = fileList[position].title
+            viewHolder.text.text = title
+            if (title == "admin" || title == "bogashlugbovya" || title == "parafii_bgkc" || title == "prynagodnyia" || title == "pesny" || title == "zmenyia_chastki_liturgii") {
+                viewHolder.text.typeface = MainActivity.createFont(Typeface.BOLD)
+            } else {
+                viewHolder.text.typeface = MainActivity.createFont(Typeface.NORMAL)
+            }
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            viewHolder.text.background = ContextCompat.getDrawable(mContext, by.carkva_gazeta.malitounik.R.color.colorWhite)
             val image = ContextCompat.getDrawable(mContext, fileList[position].resources)
             val density = resources.displayMetrics.density.toInt()
             image?.setBounds(0, 0, 48 * density, 48 * density)

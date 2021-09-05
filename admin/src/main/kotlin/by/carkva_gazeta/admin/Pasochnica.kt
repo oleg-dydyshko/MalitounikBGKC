@@ -149,7 +149,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 "($resours) $title.html"
             }
             if (intent.extras?.getBoolean("exits", false) == false) {
-                sendPostRequest(fileName, gson.toJson(text))
+                sendPostRequest(fileName, gson.toJson(text), false)
             } else {
                 getFilePostRequest(fileName)
             }
@@ -372,7 +372,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         }
     }
 
-    private fun sendPostRequest(fileName: String, content: String) {
+    private fun sendPostRequest(fileName: String, content: String, isSaveAs: Boolean = true) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
@@ -392,6 +392,15 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 }
                 if (responseCodeS == 200) {
                     MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
+                    if (isSaveAs) {
+                        if (k.getBoolean("AdminDialogSaveAsHelp", true)) {
+                            val dialodSaveAsHelp = DialogSaveAsHelp.newInstance(fileName)
+                            dialodSaveAsHelp.show(supportFragmentManager, "dialodSaveAsHelp")
+                        } else {
+                            val dialogSaveAsFileExplorer = DialogSaveAsFileExplorer.getInstance(fileName)
+                            dialogSaveAsFileExplorer.show(supportFragmentManager, "dialogSaveAsFileExplorer")
+                        }
+                    }
                 } else {
                     MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
                 }
@@ -572,8 +581,6 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
             } else {
                 saveResult(fileName)
-                val dialodSaveAsHelp = DialogSaveAsHelp.newInstance(fileName)
-                dialodSaveAsHelp.show(supportFragmentManager, "dialodSaveAsHelp")
             }
         }
         return super.onOptionsItemSelected(item)

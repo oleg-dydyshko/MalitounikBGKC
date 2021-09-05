@@ -1454,6 +1454,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             prefEditor.putInt("biblia_seash", 0)
             prefEditor.putBoolean("pegistrbukv", true)
             prefEditor.putInt("slovocalkam", 0)
+            prefEditor.putBoolean("AdminDialogSaveAsHelp", true)
             binding.maranataBel.isClickable = false
             binding.maranataRus.isClickable = false
             binding.maranataBel.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))

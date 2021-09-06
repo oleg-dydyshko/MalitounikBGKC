@@ -1379,6 +1379,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
         }
         bindingappbar.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
+        nameRubrika = getString(by.carkva_gazeta.malitounik.R.string.bibliateka_niadaunia)
+        bindingappbar.titleToolbar.text = nameRubrika
         setSupportActionBar(bindingappbar.toolbar)
         if (dzenNoch) {
             bindingappbar.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark

@@ -603,8 +603,11 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             }
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
-            binding.InteractiveScroll.smoothScrollTo(0, 0)
-            startAutoScroll()
+            val duration: Long = 1000
+            ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY",  0).setDuration(duration).start()
+            binding.InteractiveScroll.postDelayed({
+                startAutoScroll()
+            }, duration)
         }
     }
 

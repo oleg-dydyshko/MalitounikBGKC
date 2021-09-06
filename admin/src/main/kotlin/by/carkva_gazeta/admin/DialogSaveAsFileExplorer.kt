@@ -85,6 +85,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             } else {
                 fileName = oldName
             }
+            fileName = fileName.trim().lowercase().replace(" ", "_")
             binding.edittext.setText(fileName)
             binding.filetitle.text = filenameTitle
             if (filenameTitle == "")

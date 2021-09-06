@@ -1171,8 +1171,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
-            binding.scrollView2.smoothScrollTo(0, 0)
-            startAutoScroll()
+            val duration: Long = 1000
+            ObjectAnimator.ofInt(binding.scrollView2, "scrollY",  0).setDuration(duration).start()
+            binding.scrollView2.postDelayed({
+                startAutoScroll()
+            }, duration)
         }
     }
 

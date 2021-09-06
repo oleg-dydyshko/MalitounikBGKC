@@ -932,8 +932,11 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
             }
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
-            binding.InteractiveScroll.smoothScrollTo(0, 0)
-            startAutoScroll()
+            val duration: Long = 1000
+            ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY",  0).setDuration(duration).start()
+            binding.InteractiveScroll.postDelayed({
+                startAutoScroll()
+            }, duration)
         }
     }
 
@@ -1016,7 +1019,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         dzenNoch = k.getBoolean("dzen_noch", false)
-        val prefEditor: Editor = k.edit()
+        val prefEditor = k.edit()
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             change = true
             item.isChecked = !item.isChecked

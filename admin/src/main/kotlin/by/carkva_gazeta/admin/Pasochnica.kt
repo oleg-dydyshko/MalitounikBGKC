@@ -15,6 +15,7 @@ import android.util.TypedValue
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.core.text.toSpannable
 import by.carkva_gazeta.admin.databinding.AdminPasochnicaBinding
 import by.carkva_gazeta.malitounik.InteractiveScrollView
@@ -358,7 +359,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 }
 
                 if (fileName.contains(".htm")) {
-                    binding.apisanne.setText(MainActivity.fromHtml(result))
+                    binding.apisanne.setText(MainActivity.fromHtml(result, HtmlCompat.FROM_HTML_MODE_COMPACT))
                     binding.actionP.visibility = View.GONE
                     binding.actionBr.visibility = View.GONE
                 } else {

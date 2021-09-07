@@ -90,6 +90,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var onFind = false
     private var chechZmena = false
     private var raznica = 400
+    private var checkDayOfYear = false
     private var sviaty = false
     private var daysv = 1
     private var munsv = 0
@@ -163,6 +164,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["zmenyia_chastki_miranosicay"] = R.raw.zmenyia_chastki_miranosicay
             resursMap["zmenyia_chastki_samaranki"] = R.raw.zmenyia_chastki_samaranki
             resursMap["zmenyia_chastki_slepanarodz"] = R.raw.zmenyia_chastki_slepanarodz
+            resursMap["zmenyia_chastki_pieramianiennie"] = R.raw.zmenyia_chastki_pieramianiennie
             resursMap["akafist0"] = R.raw.akafist0
             resursMap["akafist1"] = R.raw.akafist1
             resursMap["akafist2"] = R.raw.akafist2
@@ -1049,7 +1051,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (dzenNoch) binding.imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_niz_back)
         binding.imageView5.setOnClickListener { findNext() }
         val slugbovyiaTextu = SlugbovyiaTextu()
-        if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (slugbovyiaTextu.checkLiturgia(raznica) || checkDataCalindar(slugbovyiaTextu, zmenyiaChastki.getData()))) {
+        checkDayOfYear = slugbovyiaTextu.checkLiturgia(zmenyiaChastki.dayOfYear())
+        if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica) || checkDataCalindar(slugbovyiaTextu, zmenyiaChastki.getData()))) {
             chechZmena = true
         }
         invalidateOptionsMenu()
@@ -1313,16 +1316,26 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (id == by.carkva_gazeta.malitounik.R.id.action_zmena) {
             val slugba = SlugbovyiaTextu()
             val intent = Intent(this, Ton::class.java)
-            if (sviaty) {
-                intent.putExtra("ton_na_sviaty", true)
-                intent.putExtra("lityrgia", 4)
-                intent.putExtra("day", daysv)
-                intent.putExtra("mun", munsv)
-            } else {
-                val resours = slugba.getResource(raznica, liturgia = true)
-                intent.putExtra("resurs", resours)
-                intent.putExtra("zmena_chastki", true)
-                intent.putExtra("title", slugba.getTitle(resours))
+            when {
+                sviaty -> {
+                    intent.putExtra("ton_na_sviaty", true)
+                    intent.putExtra("lityrgia", 4)
+                    intent.putExtra("day", daysv)
+                    intent.putExtra("mun", munsv)
+                }
+                checkDayOfYear -> {
+                    val zmenyiaChastki = ZmenyiaChastki()
+                    val resours = slugba.getResource(zmenyiaChastki.dayOfYear(), liturgia = true)
+                    intent.putExtra("resurs", resours)
+                    intent.putExtra("zmena_chastki", true)
+                    intent.putExtra("title", slugba.getTitle(resours))
+                }
+                else -> {
+                    val resours = slugba.getResource(raznica, liturgia = true)
+                    intent.putExtra("resurs", resours)
+                    intent.putExtra("zmena_chastki", true)
+                    intent.putExtra("title", slugba.getTitle(resours))
+                }
             }
             startActivity(intent)
         }

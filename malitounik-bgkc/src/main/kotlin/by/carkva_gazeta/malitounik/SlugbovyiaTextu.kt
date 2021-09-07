@@ -15,6 +15,7 @@ class SlugbovyiaTextu {
     private val dat16 = ArrayList<SlugbovyiaTextuData>()
     private val dat17 = ArrayList<SlugbovyiaTextuData>()
     private val dat18 = ArrayList<SlugbovyiaTextuData>()
+    private val dat19 = ArrayList<SlugbovyiaTextuData>()
     private val opisanieSviat = ArrayList<ArrayList<String>>()
     private var loadOpisanieSviatJob: Job? = null
 
@@ -80,9 +81,11 @@ class SlugbovyiaTextu {
         dat17.add(SlugbovyiaTextuData(-7, "Літургія", "bogashlugbovya17_8", liturgia = true))
 
         dat18.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха) - Літургія", "zmenyia_chastki_tamash", liturgia = true))
-        dat18.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў – Літургія", "zmenyia_chastki_miranosicay", liturgia = true))
+        dat18.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў - Літургія", "zmenyia_chastki_miranosicay", liturgia = true))
         dat18.add(SlugbovyiaTextuData(28, "Нядзеля Самаранкі - Літургія", "zmenyia_chastki_samaranki", liturgia = true))
         dat18.add(SlugbovyiaTextuData(35, "Нядзеля Сьлепанароджанага - Літургія", "zmenyia_chastki_slepanarodz", liturgia = true))
+
+        dat19.add(SlugbovyiaTextuData(218, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "zmenyia_chastki_pieramianiennie", liturgia = true))
     }
 
     fun getTydzen1() = dat12
@@ -151,6 +154,18 @@ class SlugbovyiaTextu {
         return resource
     }
 
+    fun getResource(dayOfYear: String, utran: Boolean = false, liturgia: Boolean = false): String {
+        var resource = "0"
+        dat19.forEach {
+            if (dayOfYear.toInt() == it.day) {
+                if (!utran && !liturgia) resource = it.resource
+                if (utran && utran == it.utran) resource = it.resource
+                if (liturgia && liturgia == it.liturgia) resource = it.resource
+            }
+        }
+        return resource
+    }
+
     fun getTitle(resource: String): String {
         dat12.forEach {
             if (resource == it.resource) return it.title
@@ -171,6 +186,9 @@ class SlugbovyiaTextu {
             if (resource == it.resource) return it.title
         }
         dat18.forEach {
+            if (resource == it.resource) return it.title
+        }
+        dat19.forEach {
             if (resource == it.resource) return it.title
         }
         return ""
@@ -322,6 +340,15 @@ class SlugbovyiaTextu {
         }
         dat18.forEach {
             if (day == it.day) {
+                if (it.liturgia) return true
+            }
+        }
+        return false
+    }
+
+    fun checkLiturgia(dayOfYear: String): Boolean {
+        dat19.forEach {
+            if (dayOfYear.toInt() == it.day) {
                 if (it.liturgia) return true
             }
         }

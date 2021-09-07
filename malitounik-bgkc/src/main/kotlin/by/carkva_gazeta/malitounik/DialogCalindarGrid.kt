@@ -23,7 +23,7 @@ import java.util.*
 class DialogCalindarGrid : DialogFragment() {
 
     companion object {
-        fun getInstance(post: Int, ton: Int, denNedzeli: Int, data: Int, mun: Int, raznicia: Int, svityiaName: String, checkSviatyia: Boolean, year: Int, datareal: Int, munreal: Int): DialogCalindarGrid {
+        fun getInstance(post: Int, ton: Int, denNedzeli: Int, data: Int, mun: Int, raznicia: Int, svityiaName: String, checkSviatyia: Boolean, year: Int, datareal: Int, munreal: Int, dayOfYear: String): DialogCalindarGrid {
             val bundle = Bundle()
             bundle.putInt("post", post)
             bundle.putInt("ton", ton)
@@ -36,6 +36,7 @@ class DialogCalindarGrid : DialogFragment() {
             bundle.putBoolean("checkSviatyia", checkSviatyia)
             bundle.putInt("datareal", datareal)
             bundle.putInt("munreal", munreal)
+            bundle.putString("dayOfYear", dayOfYear)
             val dialog = DialogCalindarGrid()
             dialog.arguments = bundle
             return dialog
@@ -54,6 +55,7 @@ class DialogCalindarGrid : DialogFragment() {
     private var datareal = 1
     private var munreal = 1
     private var year = 2020
+    private var dayOfYear = "0"
     private var raznicia = 400
     private var issetSvityia = true
     private var checkSviatyia = false
@@ -145,6 +147,7 @@ class DialogCalindarGrid : DialogFragment() {
             data = arguments?.getInt("data") ?: 1
             mun = arguments?.getInt("mun") ?: 1
             datareal = arguments?.getInt("datareal") ?: 1
+            dayOfYear = arguments?.getString("dayOfYear") ?: "0"
             munreal = arguments?.getInt("munreal") ?: 1
             year = arguments?.getInt("year", year) ?: 2020
             raznicia = arguments?.getInt("raznicia", 400) ?: 400
@@ -313,6 +316,21 @@ class DialogCalindarGrid : DialogFragment() {
                                     } else {
                                         val intent = Intent()
                                         val resours = slugba.getResource(raznicia, liturgia = true)
+                                        intent.setClassName(fragmentActivity, MainActivity.TON)
+                                        intent.putExtra("resurs", resours)
+                                        intent.putExtra("zmena_chastki", true)
+                                        intent.putExtra("title", slugba.getTitle(resours))
+                                        startActivity(intent)
+                                    }
+                                }
+                                slugba.checkLiturgia(dayOfYear) -> {
+                                    if (denNedzeli == Calendar.SUNDAY && ton != 0) {
+                                        val resours = slugba.getResource(dayOfYear, liturgia = true)
+                                        val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton, true, ton_na_sviaty = false, ton_na_viliki_post = true, resurs = resours, sviatyaName, checkSviatyia, year)
+                                        traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
+                                    } else {
+                                        val intent = Intent()
+                                        val resours = slugba.getResource(dayOfYear, liturgia = true)
                                         intent.setClassName(fragmentActivity, MainActivity.TON)
                                         intent.putExtra("resurs", resours)
                                         intent.putExtra("zmena_chastki", true)

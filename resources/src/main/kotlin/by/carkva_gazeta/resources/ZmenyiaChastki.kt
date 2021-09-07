@@ -32,6 +32,8 @@ internal class ZmenyiaChastki {
 
     fun raznica() = arrayData[0][22].toInt()
 
+    fun dayOfYear() = arrayData[0][24]
+
     private fun chtenia(w: String, apostal: Int): String {
         var w1 = w
         val res = StringBuilder()

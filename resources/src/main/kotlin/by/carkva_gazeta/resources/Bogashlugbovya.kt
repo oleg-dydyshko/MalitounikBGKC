@@ -71,6 +71,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var positionY = 0
     private var title = ""
     private var editVybranoe = false
+    private var editDzenNoch = false
     private var mActionDown = false
     private var mAutoScroll = true
     private lateinit var binding: BogasluzbovyaBinding
@@ -528,7 +529,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         bindingprogress = binding.progressView
         setContentView(binding.root)
         resurs = intent?.extras?.getString("resurs") ?: ""
-        if (resurs.contains("pesny")) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         title = intent?.extras?.getString("title") ?: ""
         loadData(savedInstanceState)
         autoscroll = k.getBoolean("autoscroll", false)
@@ -539,6 +539,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             onRestore = true
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             editVybranoe = savedInstanceState.getBoolean("editVybranoe")
+            editDzenNoch = savedInstanceState.getBoolean("editDzenNoch")
             MainActivity.dialogVisable = false
             if (savedInstanceState.getBoolean("seach")) {
                 binding.find.visibility = View.VISIBLE
@@ -1340,7 +1341,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             startActivity(intent)
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            editVybranoe = true
+            editDzenNoch = true
             item.isChecked = !item.isChecked
             if (item.isChecked) {
                 prefEditor.putBoolean("dzen_noch", true)
@@ -1418,20 +1419,30 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     override fun onBackPressed() {
-        if (fullscreenPage) {
-            fullscreenPage = false
-            show()
-        } else if (binding.find.visibility == View.VISIBLE) {
-            binding.find.visibility = View.GONE
-            binding.textSearch.setText("")
-            findRemoveSpan()
-            val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
-        } else {
-            if (editVybranoe) {
-                setResult(200)
-                finish()
-            } else super.onBackPressed()
+        when {
+            fullscreenPage -> {
+                fullscreenPage = false
+                show()
+            }
+            binding.find.visibility == View.VISIBLE -> {
+                binding.find.visibility = View.GONE
+                binding.textSearch.setText("")
+                findRemoveSpan()
+                val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
+            }
+            else -> {
+                when {
+                    editVybranoe -> {
+                        setResult(200)
+                        finish()
+                    }
+                    editDzenNoch -> {
+                        onSupportNavigateUp()
+                    }
+                    else -> super.onBackPressed()
+                }
+            }
         }
     }
 
@@ -1484,6 +1495,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("editVybranoe", editVybranoe)
+        outState.putBoolean("editDzenNoch", editDzenNoch)
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)
         outState.putString("textLine", firstTextPosition)

@@ -12,6 +12,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -38,6 +39,13 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
     private var actionExpandOn = false
     private lateinit var binding: AkafistListBibleBinding
     private var resetTollbarJob: Job? = null
+    private var result = false
+    private val prynagodnyiaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == 200) {
+            this.result = true
+            recreate()
+        }
+    }
 
     private fun addHistory(item: String) {
         val temp = ArrayList<String>()
@@ -77,30 +85,6 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         historyAdapter.notifyDataSetChanged()
     }
 
-    private fun getIdHistory(item: String): Int {
-        var id = R.raw.prynagodnyia_0
-        for (i in 0 until data.size) {
-            if (data[i].data == item) {
-                id = getResourseID(data[i].type)
-                break
-            }
-        }
-        return id
-    }
-
-    private fun getTypeHistory(item: String): String {
-        var type = "prynagodnyia_0"
-        for (i in 0 until data.size) {
-            if (data[i].data == item) {
-                type = data[i].type
-                break
-            }
-        }
-        return type
-    }
-
-    private fun getResourseID(resourse: String) = Bogashlugbovya.resursMap[resourse] ?: R.raw.prynagodnyia_0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         chin = getSharedPreferences("biblia", MODE_PRIVATE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
@@ -113,6 +97,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         if (savedInstanceState != null) {
             searchViewQwery = savedInstanceState.getString("SearchViewQwery", "")
             actionExpandOn = savedInstanceState.getBoolean("actionExpandOn")
+            result = savedInstanceState.getBoolean("result")
         }
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams
@@ -197,11 +182,10 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
                 return@setOnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val intent = Intent(this, Prynagodnyia::class.java)
-            intent.putExtra("prynagodnyia", data[position].data)
-            intent.putExtra("prynagodnyiaID", getResourseID(data[position].type))
-            intent.putExtra("prynagodnyiaType", data[position].type)
-            startActivity(intent)
+            val intent = Intent(this@MalitvyPrynagodnyia, Bogashlugbovya::class.java)
+            intent.putExtra("title", data[position].data)
+            intent.putExtra("resurs", data[position].type)
+            prynagodnyiaLauncher.launch(intent)
             val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.ListView.windowToken, 0)
             if (autoCompleteTextView?.text.toString() != "") {
@@ -225,11 +209,10 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
                 return@setOnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val intent = Intent(this@MalitvyPrynagodnyia, Prynagodnyia::class.java)
-            intent.putExtra("prynagodnyia", history[position])
-            intent.putExtra("prynagodnyiaID", getIdHistory(history[position]))
-            intent.putExtra("prynagodnyiaType", getTypeHistory(history[position]))
-            startActivity(intent)
+            val intent = Intent(this@MalitvyPrynagodnyia, Bogashlugbovya::class.java)
+            intent.putExtra("title", data[position].data)
+            intent.putExtra("resurs", data[position].type)
+            prynagodnyiaLauncher.launch(intent)
             val edit = history[position]
             addHistory(edit)
             saveHistopy()
@@ -255,6 +238,11 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
+    }
+
+    override fun onBackPressed() {
+        if (result) onSupportNavigateUp()
+        else super.onBackPressed()
     }
 
     private fun changeSearchViewElements(view: View?) {
@@ -351,6 +339,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         super.onSaveInstanceState(outState)
         outState.putString("SearchViewQwery", autoCompleteTextView?.text.toString())
         outState.putBoolean("actionExpandOn", actionExpandOn)
+        outState.putBoolean("result", result)
     }
 
     private inner class MyTextWatcher : TextWatcher {

@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +29,11 @@ class MenuVybranoe : VybranoeFragment(), DialogVybranoeBibleList.DialogVybranoeB
     private lateinit var k: SharedPreferences
     private var _binding: MenuVybranoeBinding? = null
     private val binding get() = _binding!!
+    private val menuVybranoeLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == 200) {
+            adapter.updateList(vybranoe)
+        }
+    }
 
     override fun onAllDeliteBible() {
         adapter.updateList(vybranoe)
@@ -341,7 +347,7 @@ class MenuVybranoe : VybranoeFragment(), DialogVybranoeBibleList.DialogVybranoeB
                                     intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                                     intent.putExtra("resurs", itemList[adapterPosition].resurs)
                                     intent.putExtra("title", itemList[adapterPosition].data)
-                                    startActivity(intent)
+                                    menuVybranoeLauncher.launch(intent)
                                 }
                             }
                         }

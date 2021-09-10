@@ -92,8 +92,6 @@ class DialogBibleRazdel : DialogFragment() {
                 false
             }
             binding.content.imeOptions = EditorInfo.IME_ACTION_GO
-            val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             builder.setNegativeButton(resources.getString(R.string.cansel)) { dialog: DialogInterface, _: Int ->
                 val imm12 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(binding.content.windowToken, 0)

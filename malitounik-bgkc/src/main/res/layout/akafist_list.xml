@@ -65,7 +65,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-    <androidx.appcompat.widget.AppCompatEditText
+    <by.carkva_gazeta.malitounik.EditTextCustom
         android:id="@+id/textSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -708,5 +708,7 @@
     <string name="trash_sabytie">ВЫДАЛІЦЬ УСЁ ПАДЗЕІ?</string>
     <string name="del_all_sabytie">Вы сапраўды жадаеце выдаліць усё Падзеі?</string>
     <string name="save_as_help">Для таго каб файл трапіў у Праграму, яго трэба скапіяваць у адпаведную тэчку на сайце Царквы (у тэчцы admin).</string>
+    <string name="help_alarm_title">БУДЗІЛЬНІКІ</string>
+    <string name="help_alarm_content">Праграме патрэбны будзільнікі для паказу апавяшчэньняў пра Сьвяты і Падзеі.</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

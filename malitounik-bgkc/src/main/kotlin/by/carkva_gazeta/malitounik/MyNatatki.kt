@@ -93,8 +93,6 @@ class MyNatatki : DialogFragment() {
                 1 -> {
                     edit = false
                     binding.file.requestFocus()
-                    val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
                 }
                 2 -> {
                     edit = false
@@ -110,8 +108,6 @@ class MyNatatki : DialogFragment() {
                     binding.file.setText(res[0])
                     binding.file.setSelection(binding.file.text.toString().length)
                     binding.EditText.requestFocus()
-                    val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
                 }
                 3 -> {
                     val res = File("${it.filesDir}/Malitva/$filename").readText().split("<MEMA></MEMA>").toTypedArray()

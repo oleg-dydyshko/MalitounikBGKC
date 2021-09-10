@@ -284,8 +284,8 @@ class AktoixList : AppCompatActivity() {
     override fun onBackPressed() {
         if (result) {
             setResult(200)
-            finish()
-        } else super.onBackPressed()
+        }
+        super.onBackPressed()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

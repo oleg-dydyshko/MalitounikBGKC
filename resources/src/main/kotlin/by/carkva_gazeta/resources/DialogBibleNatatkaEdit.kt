@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -79,8 +78,6 @@ class DialogBibleNatatkaEdit : DialogFragment() {
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             binding.content.setText(editText)
             binding.content.requestFocus()
-            val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             ad.setView(binding.root)
             ad.setPositiveButton(resources.getString(R.string.ok)) { _: DialogInterface, _: Int ->
                 if (semuxa == 1) {

@@ -191,7 +191,7 @@ class Chytanny : AppCompatActivity() {
     private fun grateEditView(position: Int, text: String): EditText {
         val density = resources.displayMetrics.density
         val padding = 5 * density
-        val textView = EditText(this)
+        val textView = EditTextCustom(this)
         textView.typeface = MainActivity.createFont(Typeface.NORMAL)
         textView.tag = position
         val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
@@ -204,7 +204,7 @@ class Chytanny : AppCompatActivity() {
     }
 
     private fun grateEditViewHidden(text: String): EditText {
-        val textView = EditText(this)
+        val textView = EditTextCustom(this)
         textView.tag = -1
         textView.setText(text)
         textView.visibility = View.GONE

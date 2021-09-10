@@ -102,8 +102,6 @@ class DialogBibleNatatka : DialogFragment() {
                 binding.content.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.colorPrimary_text))
                 binding.content.setBackgroundResource(R.color.colorWhite)
             }
-            val imm = fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             ad.setView(binding.root)
             ad.setPositiveButton(resources.getString(R.string.ok)) { dialog: DialogInterface, _: Int ->
                 if (semuxa) {

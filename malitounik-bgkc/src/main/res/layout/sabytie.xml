@@ -43,7 +43,7 @@
             android:gravity="center_horizontal|start"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <by.carkva_gazeta.malitounik.EditTextCustom
                 android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -160,7 +160,7 @@
                     android:textSize="15sp"
                     tools:ignore="RtlSymmetry" />
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <by.carkva_gazeta.malitounik.EditTextCustom
                     android:id="@+id/editText2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -243,7 +243,7 @@
                     android:orientation="horizontal"
                     android:visibility="gone">
 
-                    <androidx.appcompat.widget.AppCompatEditText
+                    <by.carkva_gazeta.malitounik.EditTextCustom
                         android:id="@+id/editText4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

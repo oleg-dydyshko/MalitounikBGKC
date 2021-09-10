@@ -31,14 +31,14 @@
             android:layout_margin="10dp"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <by.carkva_gazeta.malitounik.EditTextCustom
                 android:id="@+id/sviaty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/sviatyia"
                 android:singleLine="true" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <by.carkva_gazeta.malitounik.EditTextCustom
                 android:id="@+id/chytanne"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -59,7 +59,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <by.carkva_gazeta.malitounik.EditTextCustom
                 android:id="@+id/apisanne"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

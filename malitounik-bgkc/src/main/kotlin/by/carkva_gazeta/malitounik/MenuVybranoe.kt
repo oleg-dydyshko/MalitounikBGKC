@@ -32,6 +32,8 @@ class MenuVybranoe : VybranoeFragment(), DialogVybranoeBibleList.DialogVybranoeB
     private val menuVybranoeLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 200) {
             adapter.updateList(vybranoe)
+            val editDzenNoch = result.data?.extras?.getBoolean("editDzenNoch", false) ?: false
+            if (editDzenNoch) activity?.recreate()
         }
     }
 

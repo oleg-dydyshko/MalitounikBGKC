@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <by.carkva_gazeta.malitounik.EditTextCustom
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

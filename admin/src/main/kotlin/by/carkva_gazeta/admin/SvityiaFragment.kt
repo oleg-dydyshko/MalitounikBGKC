@@ -190,10 +190,6 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         if (binding.scrollpreView.visibility == View.VISIBLE) {
             binding.scrollpreView.visibility = View.GONE
             binding.scrollView.visibility = View.VISIBLE
-            activity?.let {
-                val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-            }
             return false
         }
         return true
@@ -276,11 +272,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
             if (binding.scrollpreView.visibility == View.VISIBLE) {
                 binding.scrollpreView.visibility = View.GONE
                 binding.scrollView.visibility = View.VISIBLE
-                activity?.let {
-                    val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-                    it.invalidateOptionsMenu()
-                }
+                activity?.invalidateOptionsMenu()
             } else {
                 var textApisanne = binding.apisanne.text.toString()
                 if (textApisanne.contains("<!--image-->")) {
@@ -405,10 +397,6 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                 binding.apisanne.setText(res)
                 binding.progressBar2.visibility = View.GONE
                 binding.sviaty.setSelection(binding.sviaty.text.toString().length)
-                activity?.let {
-                    val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-                }
                 stopTimer()
             }
         }

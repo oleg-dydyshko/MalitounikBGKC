@@ -96,7 +96,7 @@ class DialogPasxa : DialogFragment() {
             }
             binding.content.imeOptions = EditorInfo.IME_ACTION_GO
             val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+            imm.showSoftInput(binding.content, 0)
             builder.setView(binding.root)
             builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                 val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -49,7 +49,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatEditText
+    <by.carkva_gazeta.malitounik.EditTextCustom
         android:id="@+id/add_piarliny"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

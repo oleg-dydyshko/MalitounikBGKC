@@ -66,8 +66,6 @@ class DialogSetPageBiblioteka : DialogFragment() {
             binding.content.setText(page.toString())
             binding.content.inputType = InputType.TYPE_CLASS_NUMBER
             binding.content.requestFocus()
-            val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             builder.setView(binding.root)
             builder.setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int -> // Скрываем клавиатуру
                 val imm1 = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

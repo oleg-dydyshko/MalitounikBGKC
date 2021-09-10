@@ -28,7 +28,7 @@
                 app:contentInsetStartWithNavigation="0dp"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <by.carkva_gazeta.malitounik.EditTextCustom
                     android:id="@+id/titleToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -169,8 +169,6 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
                 binding.spinnerSviaty.setSelection(0)
             }
             binding.progressBar2.visibility = View.GONE
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
             stopTimer()
         }
         setTollbarTheme()
@@ -319,8 +317,6 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
         if (binding.scrollpreView.visibility == View.VISIBLE) {
             binding.scrollpreView.visibility = View.GONE
             binding.scrollView.visibility = View.VISIBLE
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
         } else {
             super.onBackPressed()
         }
@@ -355,8 +351,6 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
             if (binding.scrollpreView.visibility == View.VISIBLE) {
                 binding.scrollpreView.visibility = View.GONE
                 binding.scrollView.visibility = View.VISIBLE
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
                 invalidateOptionsMenu()
             } else {
                 binding.preView.text = MainActivity.fromHtml(binding.sviaty.text.toString()).trim()

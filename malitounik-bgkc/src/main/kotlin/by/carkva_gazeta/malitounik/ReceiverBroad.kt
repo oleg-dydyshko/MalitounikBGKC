@@ -33,7 +33,7 @@ class ReceiverBroad : BroadcastReceiver() {
     }
 
     private fun sendNotif(context: Context, Sviata: String?, Name: String, dayofyear: Int, year: Int) {
-        val notificationIntent = Intent(context, SplashActivity::class.java)
+        val notificationIntent = Intent(context, MainActivity::class.java)
         notificationIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
         notificationIntent.putExtra("data", dayofyear)
         notificationIntent.putExtra("year", year)

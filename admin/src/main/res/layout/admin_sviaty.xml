@@ -72,7 +72,7 @@
                 android:layout_marginBottom="10dp"
                 android:gravity="start|top" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <by.carkva_gazeta.malitounik.EditTextCustom
                 android:id="@+id/sviaty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -84,7 +84,7 @@
                 android:layout_height="3dp"
                 android:background="@color/colorPrimary" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <by.carkva_gazeta.malitounik.EditTextCustom
                 android:id="@+id/utran"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -96,7 +96,7 @@
                 android:layout_height="3dp"
                 android:background="@color/colorPrimary" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <by.carkva_gazeta.malitounik.EditTextCustom
                 android:id="@+id/liturgia"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -108,7 +108,7 @@
                 android:layout_height="3dp"
                 android:background="@color/colorPrimary" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <by.carkva_gazeta.malitounik.EditTextCustom
                 android:id="@+id/viachernia"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

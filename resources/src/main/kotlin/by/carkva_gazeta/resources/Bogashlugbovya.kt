@@ -706,8 +706,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             else "<font color=\"#d00505\">"
             reader.forEachLine {
                 var line = it
-                if (line.contains("Апостал:"))
-                    Log.d("Oleg", "Ok")
+                if (line.contains("Апостал:")) Log.d("Oleg", "Ok")
                 if (dzenNoch) line = line.replace("#d00505", "#f44336")
                 if (resurs.contains("bogashlugbovya")) {
                     if (line.contains("KANDAK")) {
@@ -1176,7 +1175,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
             val duration: Long = 1000
-            ObjectAnimator.ofInt(binding.scrollView2, "scrollY",  0).setDuration(duration).start()
+            ObjectAnimator.ofInt(binding.scrollView2, "scrollY", 0).setDuration(duration).start()
             binding.scrollView2.postDelayed({
                 startAutoScroll()
             }, duration)
@@ -1354,8 +1353,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (id == by.carkva_gazeta.malitounik.R.id.action_find) {
             binding.find.visibility = View.VISIBLE
             binding.textSearch.requestFocus()
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+            EditTextCustom.focusAndShowKeyboard(binding.textSearch)
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_auto) {
             autoscroll = k.getBoolean("autoscroll", false)
@@ -1432,16 +1430,12 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
             }
             else -> {
-                when {
-                    editVybranoe -> {
-                        setResult(200)
-                        finish()
-                    }
-                    editDzenNoch -> {
-                        onSupportNavigateUp()
-                    }
-                    else -> super.onBackPressed()
+                if (editVybranoe || editDzenNoch) {
+                    val intent = Intent()
+                    if (editDzenNoch) intent.putExtra("editDzenNoch", true)
+                    setResult(200, intent)
                 }
+                super.onBackPressed()
             }
         }
     }

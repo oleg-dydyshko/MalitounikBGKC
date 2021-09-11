@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -44,7 +45,7 @@ import java.io.FileWriter
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener {
+class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener, DialogHelpAlarm.DialogHelpAlarmListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var konec = false
@@ -216,6 +217,26 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                     binding.label12.text = da
                 }
             }
+        }
+    }
+    private val settingsAlarmLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            binding.editText2.setText(edit2Save)
+        } else {
+            edit2Save = ""
+            binding.editText2.setText(edit2Save)
+        }
+    }
+
+    override fun onSettingsAlarm(notification: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            edit2Save = notification.toString()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
+            val pkg = "package:$packageName"
+            val pkgUri = Uri.parse(pkg)
+            val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, pkgUri)
+            settingsAlarmLauncher.launch(intent)
         }
     }
 
@@ -2755,6 +2776,15 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 }
                 if (id == R.id.editText2) {
                     if (edit != "") {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            if (!am.canScheduleExactAlarms()) {
+                                edit2Save = ""
+                                binding.editText2.setText(edit2Save)
+                                val dialogHelpAlarm = DialogHelpAlarm.getInstance(edit.toInt())
+                                dialogHelpAlarm.show(supportFragmentManager, "dialogHelpAlarm")
+                                return
+                            }
+                        }
                         val days = binding.label1.text.toString().split(".")
                         val times = binding.label2.text.toString().split(":")
                         val gc = GregorianCalendar(days[2].toInt(), days[1].toInt() - 1, days[0].toInt(), times[0].toInt(), times[1].toInt(), 0)

@@ -1,13 +1,16 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.AlarmManager
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.text.style.StrikethroughSpan
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -67,6 +70,12 @@ class DialogSabytieShow : DialogFragment() {
                 binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
                 if (paz)
                     textR.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary)), t1, textR.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val am = it.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                if (!am.canScheduleExactAlarms() && res != getString(R.string.sabytie_no_pavedam)) {
+                    textR.setSpan(StrikethroughSpan(), t1, textR.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
             }
             binding.content.text = textR
             var style = R.style.AlertDialogTheme

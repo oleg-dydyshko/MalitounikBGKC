@@ -1,15 +1,18 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.AlarmManager
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.text.style.StrikethroughSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.widget.LinearLayout
@@ -132,6 +135,12 @@ class DialogSabytieShowInMun : DialogFragment() {
                             if (paznicia) spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary_black)), t3, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         } else {
                             if (paznicia) spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(it, R.color.colorPrimary)), t3, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            val am = it.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                            if (!am.canScheduleExactAlarms() && res != getString(R.string.sabytie_no_pavedam)) {
+                                spannable.setSpan(StrikethroughSpan(), t3, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            }
                         }
                         val font = MainActivity.createFont(Typeface.NORMAL)
                         spannable.setSpan(CustomTypefaceSpan("", font), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)

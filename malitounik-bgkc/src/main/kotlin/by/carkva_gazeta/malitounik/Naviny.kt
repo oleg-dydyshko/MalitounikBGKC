@@ -305,7 +305,6 @@ class Naviny : AppCompatActivity() {
             } else {
                 binding.toolbarprogress.visibility = View.VISIBLE
             }
-            binding.titleToolbar.requestFocus()
             binding.titleToolbar.isCursorVisible = false
         }
 

@@ -1,5 +1,6 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -7,6 +8,7 @@ import android.graphics.Color
 import android.graphics.Shader
 import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.*
@@ -14,6 +16,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.AlignmentSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.text.style.StrikethroughSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -605,6 +608,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                         } else {
                             spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary)), t1 + 1, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             if (paznicia) spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(activity, R.color.colorPrimary)), t3, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            val am = activity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                            if (!am.canScheduleExactAlarms() && res != getString(R.string.sabytie_no_pavedam)) {
+                                spannable.setSpan(StrikethroughSpan(), t3, t1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            }
                         }
                         val font = MainActivity.createFont(Typeface.NORMAL)
                         spannable.setSpan(clickableSpanEdit, t1 + 1, t2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

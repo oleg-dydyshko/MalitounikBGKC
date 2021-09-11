@@ -1227,8 +1227,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         const val NOVYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.NovyZapavietSinaidal"
         const val STARYZAPAVIETSINAIDAL = "by.carkva_gazeta.resources.StaryZapavietSinaidal"
         const val BIBLIAVYBRANOE = "by.carkva_gazeta.resources.BibliaVybranoe"
-        var back_pressed = 0L
-        var padzeia: ArrayList<Padzeia> = ArrayList()
+        var back_pressed: Long = 0
+        var padzeia = ArrayList<Padzeia>()
         var setDataCalendar = -1
         var checkBrightness = true
         private var SessionId = 0

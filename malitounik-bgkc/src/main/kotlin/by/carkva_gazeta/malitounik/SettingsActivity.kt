@@ -207,68 +207,11 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             }
             MainActivity.padzeia.forEach {
                 if (it.sec != "-1") {
-                    if (it.count == "0") {
-                        when (it.repit) {
-                            1 -> {
-                                var timerepit = it.paznic
-                                while (true) {
-                                    if (timerepit > c.timeInMillis) {
-                                        intent = createIntentSabytie(it.padz, it.dat, it.tim)
-                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, flags)
-                                        am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 86400000L, pIntent)
-                                        break
-                                    }
-                                    timerepit += 86400000L
-                                }
-                            }
-                            4 -> {
-                                var timerepit = it.paznic
-                                while (true) {
-                                    if (timerepit > c.timeInMillis) {
-                                        intent = createIntentSabytie(it.padz, it.dat, it.tim)
-                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, flags)
-                                        am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 604800000L, pIntent)
-                                        break
-                                    }
-                                    timerepit += 604800000L
-                                }
-                            }
-                            5 -> {
-                                var timerepit = it.paznic
-                                while (true) {
-                                    if (timerepit > c.timeInMillis) {
-                                        intent = createIntentSabytie(it.padz, it.dat, it.tim)
-                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, flags)
-                                        am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 1209600000L, pIntent)
-                                        break
-                                    }
-                                    timerepit += 1209600000L
-                                }
-                            }
-                            6 -> {
-                                var timerepit = it.paznic
-                                while (true) {
-                                    if (timerepit > c.timeInMillis) {
-                                        intent = createIntentSabytie(it.padz, it.dat, it.tim)
-                                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, flags)
-                                        am.setRepeating(AlarmManager.RTC_WAKEUP, timerepit, 2419200000L, pIntent)
-                                        break
-                                    }
-                                    timerepit += 2419200000L
-                                }
-                            }
-                            else -> if (it.paznic > c.timeInMillis) {
-                                intent = createIntentSabytie(it.padz, it.dat, it.tim)
-                                pIntent = PendingIntent.getBroadcast(context, (it.paznic / 100000).toInt(), intent, flags)
-                                setAlarm(it.paznic, pIntent, true)
-                            }
-                        }
-                    } else {
-                        if (it.paznic > c.timeInMillis) {
-                            intent = createIntentSabytie(it.padz, it.dat, it.tim)
-                            pIntent = PendingIntent.getBroadcast(context, (it.paznic / 100000).toInt(), intent, flags)
-                            setAlarm(it.paznic, pIntent, true)
-                        }
+                    val timerepit = it.paznic
+                    if (timerepit > c.timeInMillis) {
+                        intent = createIntentSabytie(it.padz, it.dat, it.tim)
+                        pIntent = PendingIntent.getBroadcast(context, (timerepit / 100000).toInt(), intent, flags)
+                        setAlarm(timerepit, pIntent, true)
                     }
                 }
             }

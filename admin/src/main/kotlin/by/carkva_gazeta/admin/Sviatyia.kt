@@ -73,6 +73,7 @@ class Sviatyia : AppCompatActivity(), DialogImageFileLoad.DialogFileExplorerList
         binding.pager.offscreenPageLimit = 3
         adapterViewPager = MyPagerAdapter(this)
         binding.pager.adapter = adapterViewPager
+        binding.pager.isUserInputEnabled = false
         caliandar.set(Calendar.YEAR, VYSOCOSNYI_GOD)
         dayOfYear = intent.extras?.getInt("dayOfYear") ?: caliandar[Calendar.DAY_OF_YEAR] - 1
         binding.pager.setCurrentItem(dayOfYear, false)

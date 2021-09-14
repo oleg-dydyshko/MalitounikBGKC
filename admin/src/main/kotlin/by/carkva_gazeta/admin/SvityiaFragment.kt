@@ -379,6 +379,8 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                 }
                 binding.sviaty.setText(sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][0])
                 binding.chytanne.setText(sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][1])
+                binding.sviaty.setSelection(0)
+                binding.chytanne.setSelection(0)
                 activity?.let {
                     binding.spinnerStyle.adapter = SpinnerAdapter(it, array)
                     var position = 0
@@ -396,7 +398,6 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                 }
                 binding.apisanne.setText(res)
                 binding.progressBar2.visibility = View.GONE
-                binding.sviaty.setSelection(binding.sviaty.text.toString().length)
                 stopTimer()
             }
         }

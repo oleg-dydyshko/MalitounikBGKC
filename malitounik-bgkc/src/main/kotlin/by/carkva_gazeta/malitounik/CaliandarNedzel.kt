@@ -147,7 +147,7 @@ class CaliandarNedzel : Fragment(), AdapterView.OnItemClickListener {
                 viewHolder.textPostS.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorStrogiPost))
                 viewHolder.textPostS.text = mContext.resources.getString(R.string.Strogi_post_n)
                 viewHolder.textPostS.visibility = View.VISIBLE
-            } else if (niadzelia[position][0].contains("6")) { // Пятница
+            } else if (niadzelia[position][0].contains("6") && !(niadzelia[position][5].contains("1") || niadzelia[position][5].contains("2"))) { // Пятница
                 viewHolder.textPostS.visibility = View.VISIBLE
             }
             return view

@@ -1040,6 +1040,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             show()
         } else if (mPedakVisable) {
             mPedakVisable = false
+            bibleCopyList.clear()
             adapter.notifyDataSetChanged()
             if (binding.linearLayout4.visibility == View.VISIBLE) {
                 binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)

@@ -710,5 +710,7 @@
     <string name="save_as_help">Для таго каб файл трапіў у Праграму, яго трэба скапіяваць у адпаведную тэчку на сайце Царквы (у тэчцы admin).</string>
     <string name="help_alarm_title">БУДЗІЛЬНІКІ</string>
     <string name="help_alarm_content">Праграме патрэбны будзільнікі для паказу апавяшчэньняў пра Падзеі.</string>
+    <string name="help_delite_title">СКОНЧЫЛАСЯ ПРАЦА НАД ФАЙЛАМ?</string>
+    <string name="help_delite_content">Лепш выдаліць файл з пясочніцы, калі ён больш не патрэбны.</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

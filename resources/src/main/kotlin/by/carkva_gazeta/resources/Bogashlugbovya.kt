@@ -708,100 +708,114 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 var line = it
                 if (line.contains("Апостал:")) Log.d("Oleg", "Ok")
                 if (dzenNoch) line = line.replace("#d00505", "#f44336")
-                if (resurs.contains("bogashlugbovya")) {
-                    if (line.contains("KANDAK")) {
-                        line = line.replace("KANDAK", "")
+                when {
+                    resurs.contains("ton") -> {
+                        line = line.replace("TRAPARN", "")
+                        line = line.replace("TRAPARK", "")
+                        line = line.replace("PRAKIMENN", "")
+                        line = line.replace("PRAKIMENK", "")
+                        line = line.replace("ALILUIAN", "")
+                        line = line.replace("ALILUIAK", "")
+                        line = line.replace("PRICHASNIKN", "")
+                        line = line.replace("PRICHASNIKK", "")
                         builder.append(line)
-                        try {
-                            if (dayOfWeek == 1) {
-                                builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(1))
-                            } else {
-                                builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 1))
-                            }
-                        } catch (t: Throwable) {
-                            builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
-                        }
                     }
-                    if (line.contains("PRAKIMEN")) {
-                        line = line.replace("PRAKIMEN", "")
-                        builder.append(line)
-                        try {
-                            if (dayOfWeek == 1) {
-                                builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(2))
-                            } else {
-                                builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 2))
-                            }
-                        } catch (t: Throwable) {
-                            builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
-                        }
-                    }
-                    if (line.contains("ALILUIA")) {
-                        line = line.replace("ALILUIA", "")
-                        builder.append(line)
-                        try {
-                            if (dayOfWeek == 1) {
-                                builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(3))
-                            } else {
-                                builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 3))
-                            }
-                        } catch (t: Throwable) {
-                            builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
-                        }
-                    }
-                    if (line.contains("PRICHASNIK")) {
-                        line = line.replace("PRICHASNIK", "")
-                        builder.append(line)
-                        try {
-                            if (dayOfWeek == 1) {
-                                builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(4))
-                            } else {
-                                builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 4))
-                            }
-                        } catch (t: Throwable) {
-                            builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
-                        }
-                    }
-                    when {
-                        line.contains("APCH") -> {
-                            line = line.replace("APCH", "")
-                            var sv = zmenyiaChastki.sviatyia()
-                            if (sv != "") {
-                                val s1 = sv.split(":")
-                                val s2 = s1[1].split(";")
-                                sv = if (s1[0].contains("На ютрані")) s2[1]
-                                else s1[0] + ":" + s2[0]
-                                aliert8 = sv.trim()
-                                builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
-                            } else builder.append(line)
-                            try {
-                                builder.append(zmenyiaChastki.zmenya(1))
-                            } catch (t: Throwable) {
-                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
-                            }
-                        }
-                        line.contains("EVCH") -> {
-                            line = line.replace("EVCH", "")
-                            var sv = zmenyiaChastki.sviatyia()
-                            if (sv != "") {
-                                val s1 = sv.split(":")
-                                val s2 = s1[1].split(";")
-                                sv = if (s1[0].contains("На ютрані")) s2[2]
-                                else s1[0] + ":" + s2[1]
-                                aliert9 = sv.trim()
-                                builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
-                            } else builder.append(line)
-                            try {
-                                builder.append(zmenyiaChastki.zmenya(0))
-                            } catch (t: Throwable) {
-                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
-                            }
-                        }
-                        else -> {
+                    resurs.contains("bogashlugbovya") -> {
+                        if (line.contains("KANDAK")) {
+                            line = line.replace("KANDAK", "")
                             builder.append(line)
+                            try {
+                                if (dayOfWeek == 1) {
+                                    builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(1))
+                                } else {
+                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 1))
+                                }
+                            } catch (t: Throwable) {
+                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                            }
+                        }
+                        if (line.contains("PRAKIMEN")) {
+                            line = line.replace("PRAKIMEN", "")
+                            builder.append(line)
+                            try {
+                                if (dayOfWeek == 1) {
+                                    builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(2))
+                                } else {
+                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 2))
+                                }
+                            } catch (t: Throwable) {
+                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                            }
+                        }
+                        if (line.contains("ALILUIA")) {
+                            line = line.replace("ALILUIA", "")
+                            builder.append(line)
+                            try {
+                                if (dayOfWeek == 1) {
+                                    builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(3))
+                                } else {
+                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 3))
+                                }
+                            } catch (t: Throwable) {
+                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                            }
+                        }
+                        if (line.contains("PRICHASNIK")) {
+                            line = line.replace("PRICHASNIK", "")
+                            builder.append(line)
+                            try {
+                                if (dayOfWeek == 1) {
+                                    builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(4))
+                                } else {
+                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 4))
+                                }
+                            } catch (t: Throwable) {
+                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                            }
+                        }
+                        when {
+                            line.contains("APCH") -> {
+                                line = line.replace("APCH", "")
+                                var sv = zmenyiaChastki.sviatyia()
+                                if (sv != "") {
+                                    val s1 = sv.split(":")
+                                    val s2 = s1[1].split(";")
+                                    sv = if (s1[0].contains("На ютрані")) s2[1]
+                                    else s1[0] + ":" + s2[0]
+                                    aliert8 = sv.trim()
+                                    builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
+                                } else builder.append(line)
+                                try {
+                                    builder.append(zmenyiaChastki.zmenya(1))
+                                } catch (t: Throwable) {
+                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                                }
+                            }
+                            line.contains("EVCH") -> {
+                                line = line.replace("EVCH", "")
+                                var sv = zmenyiaChastki.sviatyia()
+                                if (sv != "") {
+                                    val s1 = sv.split(":")
+                                    val s2 = s1[1].split(";")
+                                    sv = if (s1[0].contains("На ютрані")) s2[2]
+                                    else s1[0] + ":" + s2[1]
+                                    aliert9 = sv.trim()
+                                    builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
+                                } else builder.append(line)
+                                try {
+                                    builder.append(zmenyiaChastki.zmenya(0))
+                                } catch (t: Throwable) {
+                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                                }
+                            }
+                            else -> {
+                                builder.append(line)
+                            }
                         }
                     }
-                } else {
-                    builder.append(line)
+                    else -> {
+                        builder.append(line)
+                    }
                 }
             }
             inputStream.close()
@@ -1238,7 +1252,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         val itemVybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         val find = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find)
-        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("viachernia")) {
+        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("viachernia") || resurs.contains("prynagodnyia")) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
         }
         if (mAutoScroll) {
@@ -1391,7 +1405,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?pub=2&file=$resurs")
+            val rub = if (resurs.contains("prynagodnyia")) "pub=4"
+            else "pub=2"
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://carkva-gazeta.by/share/index.php?$rub&file=$resurs")
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, null))
         }

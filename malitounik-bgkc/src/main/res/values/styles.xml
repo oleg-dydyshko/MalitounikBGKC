@@ -12,8 +12,6 @@
         </item>
         <item name="android:textColorSecondary">@color/colorSecondary_text</item>
         <item name="android:textColor">@color/colorPrimary_text</item>
-        <!--<item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>-->
         <item name="fontFamily">@font/robotocondensedfontfamily</item>
         <item name="autoCompleteTextViewStyle">@style/cursorColor</item>
     </style>

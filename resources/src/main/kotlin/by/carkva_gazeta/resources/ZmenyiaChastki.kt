@@ -16,10 +16,8 @@ internal class ZmenyiaChastki {
     fun getData() = arrayData
 
     fun sviatyia(): String {
-        return if (arrayData[0][10] != "")
-            arrayData[0][10]
-        else
-            arrayData[0][11]
+        return if (arrayData[0][10] != "") arrayData[0][10]
+        else arrayData[0][11]
     }
 
     fun sviatyiaView(apostal: Int) = chtenia(sviatyia(), apostal)
@@ -107,8 +105,7 @@ internal class ZmenyiaChastki {
                 polstixaB = true
                 knigaN = knigaN.replace("б", "")
             }
-            var kniga = 0
-            //if (zagl.equals("Ціт")) kniga = 0;
+            var kniga = 0 //if (zagl.equals("Ціт")) kniga = 0;
             if (zagl == "Езк") kniga = 1
             if (zagl == "Гбр") kniga = 2
             if (zagl == "Гал") kniga = 3
@@ -147,17 +144,17 @@ internal class ZmenyiaChastki {
             val inputStream = r.openRawResource(data.valueAt(kniga))
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
-            var line: String
             val builder = StringBuilder()
-            reader.forEachLine {
-                line = it.trim()
-                if (line.contains("//")) {
-                    val t1 = line.indexOf("//")
-                    line = line.substring(0, t1).trim()
+            reader.use { buffer ->
+                buffer.forEachLine {
+                    var result1 = it.trim()
+                    if (result1.contains("//")) {
+                        val t1 = result1.indexOf("//")
+                        result1 = result1.substring(0, t1).trim()
+                    }
+                    if (result1 != "") builder.append(result1).append("<br>\n")
                 }
-                if (line != "") builder.append(line).append("<br>\n")
             }
-            inputStream.close()
             val split2 = builder.toString().split("===<br>")
             var spl: String
             var desK1: Int
@@ -224,150 +221,156 @@ internal class ZmenyiaChastki {
             if (w.contains("1")) {
                 val res = readFile(R.raw.ton1)
                 if (chast == 1) {
-                    val tfn = res.indexOf("<!--traparn-->")
-                    val tfk = res.indexOf("<!--trapark-->")
+                    val tfn = res.indexOf("TRAPARN")
+                    val tfk = res.indexOf("TRAPARK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 2) {
-                    val tfn = res.indexOf("<!--prakimenn-->")
-                    val tfk = res.indexOf("<!--prakimenk-->")
+                    val tfn = res.indexOf("PRAKIMENN")
+                    val tfk = res.indexOf("PRAKIMENK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 3) {
-                    val tfn = res.indexOf("<!--aliluian-->")
-                    val tfk = res.indexOf("<!--aliluiak-->")
+                    val tfn = res.indexOf("ALILUIAN")
+                    val tfk = res.indexOf("ALILUIAK")
                     result = res.substring(tfn, tfk)
                 }
             }
             if (w.contains("2")) {
                 val res = readFile(R.raw.ton2)
                 if (chast == 1) {
-                    val tfn = res.indexOf("<!--traparn-->")
-                    val tfk = res.indexOf("<!--trapark-->")
+                    val tfn = res.indexOf("TRAPARN")
+                    val tfk = res.indexOf("TRAPARK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 2) {
-                    val tfn = res.indexOf("<!--prakimenn-->")
-                    val tfk = res.indexOf("<!--prakimenk-->")
+                    val tfn = res.indexOf("PRAKIMENN")
+                    val tfk = res.indexOf("PRAKIMENK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 3) {
-                    val tfn = res.indexOf("<!--aliluian-->")
-                    val tfk = res.indexOf("<!--aliluiak-->")
+                    val tfn = res.indexOf("ALILUIAN")
+                    val tfk = res.indexOf("ALILUIAK")
                     result = res.substring(tfn, tfk)
                 }
             }
             if (w.contains("3")) {
                 val res = readFile(R.raw.ton3)
                 if (chast == 1) {
-                    val tfn = res.indexOf("<!--traparn-->")
-                    val tfk = res.indexOf("<!--trapark-->")
+                    val tfn = res.indexOf("TRAPARN")
+                    val tfk = res.indexOf("TRAPARK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 2) {
-                    val tfn = res.indexOf("<!--prakimenn-->")
-                    val tfk = res.indexOf("<!--prakimenk-->")
+                    val tfn = res.indexOf("PRAKIMENN")
+                    val tfk = res.indexOf("PRAKIMENK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 3) {
-                    val tfn = res.indexOf("<!--aliluian-->")
-                    val tfk = res.indexOf("<!--aliluiak-->")
+                    val tfn = res.indexOf("ALILUIAN")
+                    val tfk = res.indexOf("ALILUIAK")
                     result = res.substring(tfn, tfk)
                 }
             }
             if (w.contains("4")) {
                 val res = readFile(R.raw.ton4)
                 if (chast == 1) {
-                    val tfn = res.indexOf("<!--traparn-->")
-                    val tfk = res.indexOf("<!--trapark-->")
+                    val tfn = res.indexOf("TRAPARN")
+                    val tfk = res.indexOf("TRAPARK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 2) {
-                    val tfn = res.indexOf("<!--prakimenn-->")
-                    val tfk = res.indexOf("<!--prakimenk-->")
+                    val tfn = res.indexOf("PRAKIMENN")
+                    val tfk = res.indexOf("PRAKIMENK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 3) {
-                    val tfn = res.indexOf("<!--aliluian-->")
-                    val tfk = res.indexOf("<!--aliluiak-->")
+                    val tfn = res.indexOf("ALILUIAN")
+                    val tfk = res.indexOf("ALILUIAK")
                     result = res.substring(tfn, tfk)
                 }
             }
             if (w.contains("5")) {
                 val res = readFile(R.raw.ton5)
                 if (chast == 1) {
-                    val tfn = res.indexOf("<!--traparn-->")
-                    val tfk = res.indexOf("<!--trapark-->")
+                    val tfn = res.indexOf("TRAPARN")
+                    val tfk = res.indexOf("TRAPARK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 2) {
-                    val tfn = res.indexOf("<!--prakimenn-->")
-                    val tfk = res.indexOf("<!--prakimenk-->")
+                    val tfn = res.indexOf("PRAKIMENN")
+                    val tfk = res.indexOf("PRAKIMENK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 3) {
-                    val tfn = res.indexOf("<!--aliluian-->")
-                    val tfk = res.indexOf("<!--aliluiak-->")
+                    val tfn = res.indexOf("ALILUIAN")
+                    val tfk = res.indexOf("ALILUIAK")
                     result = res.substring(tfn, tfk)
                 }
             }
             if (w.contains("6")) {
                 val res = readFile(R.raw.ton6)
                 if (chast == 1) {
-                    val tfn = res.indexOf("<!--traparn-->")
-                    val tfk = res.indexOf("<!--trapark-->")
+                    val tfn = res.indexOf("TRAPARN")
+                    val tfk = res.indexOf("TRAPARK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 2) {
-                    val tfn = res.indexOf("<!--prakimenn-->")
-                    val tfk = res.indexOf("<!--prakimenk-->")
+                    val tfn = res.indexOf("PRAKIMENN")
+                    val tfk = res.indexOf("PRAKIMENK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 3) {
-                    val tfn = res.indexOf("<!--aliluian-->")
-                    val tfk = res.indexOf("<!--aliluiak-->")
+                    val tfn = res.indexOf("ALILUIAN")
+                    val tfk = res.indexOf("ALILUIAK")
                     result = res.substring(tfn, tfk)
                 }
             }
             if (w.contains("7")) {
                 val res = readFile(R.raw.ton7)
                 if (chast == 1) {
-                    val tfn = res.indexOf("<!--traparn-->")
-                    val tfk = res.indexOf("<!--trapark-->")
+                    val tfn = res.indexOf("TRAPARN")
+                    val tfk = res.indexOf("TRAPARK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 2) {
-                    val tfn = res.indexOf("<!--prakimenn-->")
-                    val tfk = res.indexOf("<!--prakimenk-->")
+                    val tfn = res.indexOf("PRAKIMENN")
+                    val tfk = res.indexOf("PRAKIMENK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 3) {
-                    val tfn = res.indexOf("<!--aliluian-->")
-                    val tfk = res.indexOf("<!--aliluiak-->")
+                    val tfn = res.indexOf("ALILUIAN")
+                    val tfk = res.indexOf("ALILUIAK")
                     result = res.substring(tfn, tfk)
                 }
             }
             if (w.contains("8")) {
                 val res = readFile(R.raw.ton8)
                 if (chast == 1) {
-                    val tfn = res.indexOf("<!--traparn-->")
-                    val tfk = res.indexOf("<!--trapark-->")
+                    val tfn = res.indexOf("TRAPARN")
+                    val tfk = res.indexOf("TRAPARK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 2) {
-                    val tfn = res.indexOf("<!--prakimenn-->")
-                    val tfk = res.indexOf("<!--prakimenk-->")
+                    val tfn = res.indexOf("PRAKIMENN")
+                    val tfk = res.indexOf("PRAKIMENK")
                     result = res.substring(tfn, tfk)
                 }
                 if (chast == 3) {
-                    val tfn = res.indexOf("<!--aliluian-->")
-                    val tfk = res.indexOf("<!--aliluiak-->")
+                    val tfn = res.indexOf("ALILUIAN")
+                    val tfk = res.indexOf("ALILUIAK")
                     result = res.substring(tfn, tfk)
                 }
             }
             if (chast == 4) {
                 result = readFile(R.raw.prichasnik)
             }
+            result = result.replace("TRAPARN", "")
+            result = result.replace("TRAPARK", "")
+            result = result.replace("PRAKIMENN", "")
+            result = result.replace("PRAKIMENK", "")
+            result = result.replace("ALILUIAN", "")
+            result = result.replace("ALILUIAK", "")
             return result
         }
         return ""
@@ -378,141 +381,149 @@ internal class ZmenyiaChastki {
         if (day_of_week == 2) {
             val res = readFile(R.raw.ton1_budni)
             if (chast == 1) {
-                val tfn = res.indexOf("<!--traparn-->")
-                val tfk = res.indexOf("<!--trapark-->")
+                val tfn = res.indexOf("TRAPARN")
+                val tfk = res.indexOf("TRAPARK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 2) {
-                val tfn = res.indexOf("<!--prakimenn-->")
-                val tfk = res.indexOf("<!--prakimenk-->")
+                val tfn = res.indexOf("PRAKIMENN")
+                val tfk = res.indexOf("PRAKIMENK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 3) {
-                val tfn = res.indexOf("<!--aliluian-->")
-                val tfk = res.indexOf("<!--aliluiak-->")
+                val tfn = res.indexOf("ALILUIAN")
+                val tfk = res.indexOf("ALILUIAK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 4) {
-                val tfn = res.indexOf("<!--prichasnikn-->")
-                val tfk = res.indexOf("<!--prichasnikk-->")
+                val tfn = res.indexOf("PRICHASNIKN")
+                val tfk = res.indexOf("PRICHASNIKK")
                 result = res.substring(tfn, tfk)
             }
         }
         if (day_of_week == 3) {
             val res = readFile(R.raw.ton2_budni)
             if (chast == 1) {
-                val tfn = res.indexOf("<!--traparn-->")
-                val tfk = res.indexOf("<!--trapark-->")
+                val tfn = res.indexOf("TRAPARN")
+                val tfk = res.indexOf("TRAPARK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 2) {
-                val tfn = res.indexOf("<!--prakimenn-->")
-                val tfk = res.indexOf("<!--prakimenk-->")
+                val tfn = res.indexOf("PRAKIMENN")
+                val tfk = res.indexOf("PRAKIMENK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 3) {
-                val tfn = res.indexOf("<!--aliluian-->")
-                val tfk = res.indexOf("<!--aliluiak-->")
+                val tfn = res.indexOf("ALILUIAN")
+                val tfk = res.indexOf("ALILUIAK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 4) {
-                val tfn = res.indexOf("<!--prichasnikn-->")
-                val tfk = res.indexOf("<!--prichasnikk-->")
+                val tfn = res.indexOf("PRICHASNIKN")
+                val tfk = res.indexOf("PRICHASNIKK")
                 result = res.substring(tfn, tfk)
             }
         }
         if (day_of_week == 4) {
             val res = readFile(R.raw.ton3_budni)
             if (chast == 1) {
-                val tfn = res.indexOf("<!--traparn-->")
-                val tfk = res.indexOf("<!--trapark-->")
+                val tfn = res.indexOf("TRAPARN")
+                val tfk = res.indexOf("TRAPARK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 2) {
-                val tfn = res.indexOf("<!--prakimenn-->")
-                val tfk = res.indexOf("<!--prakimenk-->")
+                val tfn = res.indexOf("PRAKIMENN")
+                val tfk = res.indexOf("PRAKIMENK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 3) {
-                val tfn = res.indexOf("<!--aliluian-->")
-                val tfk = res.indexOf("<!--aliluiak-->")
+                val tfn = res.indexOf("ALILUIAN")
+                val tfk = res.indexOf("ALILUIAK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 4) {
-                val tfn = res.indexOf("<!--prichasnikn-->")
-                val tfk = res.indexOf("<!--prichasnikk-->")
+                val tfn = res.indexOf("PRICHASNIKN")
+                val tfk = res.indexOf("PRICHASNIKK")
                 result = res.substring(tfn, tfk)
             }
         }
         if (day_of_week == 5) {
             val res = readFile(R.raw.ton4_budni)
             if (chast == 1) {
-                val tfn = res.indexOf("<!--traparn-->")
-                val tfk = res.indexOf("<!--trapark-->")
+                val tfn = res.indexOf("TRAPARN")
+                val tfk = res.indexOf("TRAPARK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 2) {
-                val tfn = res.indexOf("<!--prakimenn-->")
-                val tfk = res.indexOf("<!--prakimenk-->")
+                val tfn = res.indexOf("PRAKIMENN")
+                val tfk = res.indexOf("PRAKIMENK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 3) {
-                val tfn = res.indexOf("<!--aliluian-->")
-                val tfk = res.indexOf("<!--aliluiak-->")
+                val tfn = res.indexOf("ALILUIAN")
+                val tfk = res.indexOf("ALILUIAK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 4) {
-                val tfn = res.indexOf("<!--prichasnikn-->")
-                val tfk = res.indexOf("<!--prichasnikk-->")
+                val tfn = res.indexOf("PRICHASNIKN")
+                val tfk = res.indexOf("PRICHASNIKK")
                 result = res.substring(tfn, tfk)
             }
         }
         if (day_of_week == 6) {
             val res = readFile(R.raw.ton5_budni)
             if (chast == 1) {
-                val tfn = res.indexOf("<!--traparn-->")
-                val tfk = res.indexOf("<!--trapark-->")
+                val tfn = res.indexOf("TRAPARN")
+                val tfk = res.indexOf("TRAPARK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 2) {
-                val tfn = res.indexOf("<!--prakimenn-->")
-                val tfk = res.indexOf("<!--prakimenk-->")
+                val tfn = res.indexOf("PRAKIMENN")
+                val tfk = res.indexOf("PRAKIMENK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 3) {
-                val tfn = res.indexOf("<!--aliluian-->")
-                val tfk = res.indexOf("<!--aliluiak-->")
+                val tfn = res.indexOf("ALILUIAN")
+                val tfk = res.indexOf("ALILUIAK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 4) {
-                val tfn = res.indexOf("<!--prichasnikn-->")
-                val tfk = res.indexOf("<!--prichasnikk-->")
+                val tfn = res.indexOf("PRICHASNIKN")
+                val tfk = res.indexOf("PRICHASNIKK")
                 result = res.substring(tfn, tfk)
             }
         }
         if (day_of_week == 7) {
             val res = readFile(R.raw.ton6_budni)
             if (chast == 1) {
-                val tfn = res.indexOf("<!--traparn-->")
-                val tfk = res.indexOf("<!--trapark-->")
+                val tfn = res.indexOf("TRAPARN")
+                val tfk = res.indexOf("TRAPARK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 2) {
-                val tfn = res.indexOf("<!--prakimenn-->")
-                val tfk = res.indexOf("<!--prakimenk-->")
+                val tfn = res.indexOf("PRAKIMENN")
+                val tfk = res.indexOf("PRAKIMENK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 3) {
-                val tfn = res.indexOf("<!--aliluian-->")
-                val tfk = res.indexOf("<!--aliluiak-->")
+                val tfn = res.indexOf("ALILUIAN")
+                val tfk = res.indexOf("ALILUIAK")
                 result = res.substring(tfn, tfk)
             }
             if (chast == 4) {
-                val tfn = res.indexOf("<!--prichasnikn-->")
-                val tfk = res.indexOf("<!--prichasnikk-->")
+                val tfn = res.indexOf("PRICHASNIKN")
+                val tfk = res.indexOf("PRICHASNIKK")
                 result = res.substring(tfn, tfk)
             }
         }
+        result = result.replace("TRAPARN", "")
+        result = result.replace("TRAPARK", "")
+        result = result.replace("PRAKIMENN", "")
+        result = result.replace("PRAKIMENK", "")
+        result = result.replace("ALILUIAN", "")
+        result = result.replace("ALILUIAK", "")
+        result = result.replace("PRICHASNIKN", "")
+        result = result.replace("PRICHASNIKK", "")
         return result
     }
 
@@ -523,11 +534,11 @@ internal class ZmenyiaChastki {
         val k = Malitounik.applicationContext().getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = k.getBoolean("dzen_noch", false)
         val builder = StringBuilder()
-        var line: String
+        var result: String
         reader.forEachLine {
-            line = it
-            if (dzenNoch) line = line.replace("#d00505", "#f44336")
-            builder.append(line)
+            result = it
+            if (dzenNoch) result = result.replace("#d00505", "#f44336")
+            builder.append(result)
         }
         isr.close()
         return builder.toString()

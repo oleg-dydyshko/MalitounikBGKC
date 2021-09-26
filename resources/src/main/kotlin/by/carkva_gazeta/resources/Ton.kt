@@ -247,7 +247,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
                         builder.append(line)
                     }
                 }
-                val resursOut = builder.toString()
+                val resursOut = removeSlugbovyiaSlovy(builder.toString())
                 binding.TextView.text = MainActivity.fromHtml(resursOut)
             }
             else -> {
@@ -301,7 +301,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
                         builder.append(line)
                     }
                 }
-                val resursOut = builder.toString()
+                val resursOut = removeSlugbovyiaSlovy(builder.toString())
                 binding.TextView.text = MainActivity.fromHtml(resursOut)
             }
         }
@@ -413,6 +413,19 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
+    }
+
+    private fun removeSlugbovyiaSlovy(text: String): String {
+        var result = text
+        result = result.replace("TRAPARN", "")
+        result = result.replace("TRAPARK", "")
+        result = result.replace("PRAKIMENN", "")
+        result = result.replace("PRAKIMENK", "")
+        result = result.replace("ALILUIAN", "")
+        result = result.replace("ALILUIAK", "")
+        result = result.replace("PRICHASNIKN", "")
+        result = result.replace("PRICHASNIKK", "")
+        return result
     }
 
     private fun startProcent() {

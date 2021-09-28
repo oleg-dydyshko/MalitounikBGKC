@@ -697,7 +697,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: R.raw.bogashlugbovya1
             val inputStream = resources.openRawResource(id)
-            raznica = zmenyiaChastki.raznica()
             val gregorian = Calendar.getInstance() as GregorianCalendar
             val dayOfWeek = gregorian.get(Calendar.DAY_OF_WEEK)
             val isr = InputStreamReader(inputStream)
@@ -1066,6 +1065,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         binding.imageView5.setOnClickListener { findNext() }
         val slugbovyiaTextu = SlugbovyiaTextu()
         checkDayOfYear = slugbovyiaTextu.checkLiturgia(zmenyiaChastki.dayOfYear())
+        raznica = zmenyiaChastki.raznica()
         if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica) || checkDataCalindar(slugbovyiaTextu, zmenyiaChastki.getData()))) {
             chechZmena = true
         }

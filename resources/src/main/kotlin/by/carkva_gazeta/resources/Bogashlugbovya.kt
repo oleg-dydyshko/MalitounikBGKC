@@ -870,6 +870,21 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
+        if (resurs == "viachernia_niadzeli") {
+            string = "ліцьця і блаславеньне хлябоў"
+            strLig = string.length
+            t1 = text.indexOf(string)
+            if (t1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
+                        intent.putExtra("title", "Ліцьця і блаславеньне хлябоў")
+                        intent.putExtra("resurs", "viachernia_liccia_i_blaslavenne_xliabou")
+                        startActivity(intent)
+                    }
+                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
         if (resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") {
             string = "Пс 102 (гл. тут)."
             strLig = string.length

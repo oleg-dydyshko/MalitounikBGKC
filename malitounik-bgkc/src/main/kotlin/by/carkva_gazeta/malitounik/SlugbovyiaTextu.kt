@@ -86,6 +86,15 @@ class SlugbovyiaTextu {
         dat18.add(SlugbovyiaTextuData(35, "Нядзеля Сьлепанароджанага - Літургія", "zmenyia_chastki_slepanarodz", liturgia = true))
 
         dat19.add(SlugbovyiaTextuData(218, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "zmenyia_chastki_pieramianiennie", liturgia = true))
+        dat19.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "viachernia_mineia_sviatochnaia1"))
+        dat19.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня", "viachernia_mineia_sviatochnaia2"))
+        dat19.add(SlugbovyiaTextuData(3, "Перадсьвяцьце Богазьяўленьня", "viachernia_mineia_sviatochnaia2"))
+        dat19.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня", "viachernia_mineia_sviatochnaia2"))
+        dat19.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня", "viachernia_mineia_sviatochnaia3"))
+        dat19.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "viachernia_mineia_sviatochnaia4"))
+        dat19.add(SlugbovyiaTextuData(7, "Пасьвяцьце Богазьяўленьня. Сабор сьв. Яна, Прадвесьніка і Хрысьціцеля", "viachernia_mineia_sviatochnaia5"))
+        dat19.add(SlugbovyiaTextuData(16, "Пакланеньне кайданам апостала Пятра", "viachernia_mineia_sviatochnaia6"))
+        dat19.add(SlugbovyiaTextuData(30, "Трох сьвятаначальнікаў: Васіля Вялікага, Рыгора Багаслова і Яна Залатавуснага", "viachernia_mineia_sviatochnaia7"))
     }
 
     fun getTydzen1() = dat12
@@ -298,6 +307,15 @@ class SlugbovyiaTextu {
         return false
     }
 
+    fun checkUtran(dayOfYear: String): Boolean {
+        dat19.forEach {
+            if (dayOfYear.toInt() == it.day) {
+                if (it.utran) return true
+            }
+        }
+        return false
+    }
+
     fun checkLiturgia(day: Int, mun: Int): Boolean {
         opisanieSviat.forEach {
             if (day == it[0].toInt() && mun == it[1].toInt()) {
@@ -397,6 +415,15 @@ class SlugbovyiaTextu {
         }
         dat18.forEach {
             if (day == it.day) {
+                if (!it.utran && !it.liturgia) return true
+            }
+        }
+        return false
+    }
+
+    fun checkViachernia(dayOfYear: String): Boolean {
+        dat19.forEach {
+            if (dayOfYear.toInt() == it.day) {
                 if (!it.utran && !it.liturgia) return true
             }
         }

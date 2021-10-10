@@ -33,8 +33,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class CaliandarFull : Fragment(), View.OnClickListener {
     private var dzenNoch = false
@@ -129,7 +131,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 var dataSviatyia = MenuCaliandar.getPositionCaliandar(position)[4]
                 if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")
                 binding.textSviatyia.text = MainActivity.fromHtml(dataSviatyia)
-                if (!dataSviatyia.contains("<!--no_apisanne-->")) binding.textSviatyia.setOnClickListener(this@CaliandarFull)
+                binding.textSviatyia.setOnClickListener(this@CaliandarFull)
             } else {
                 binding.polosa1.visibility = View.GONE
                 binding.polosa2.visibility = View.GONE
@@ -402,7 +404,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     daysv = -1
                     munsv = 3
                 }
-                val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, MenuCaliandar.getPositionCaliandar(position)[20].toInt(), MenuCaliandar.getPositionCaliandar(position)[0].toInt(), daysv, munsv, MenuCaliandar.getPositionCaliandar(position)[22].toInt(), MenuCaliandar.getPositionCaliandar(position)[4], MenuCaliandar.getPositionCaliandar(position)[23] == "1", MenuCaliandar.getPositionCaliandar(position)[3].toInt(), MenuCaliandar.getPositionCaliandar(position)[1].toInt(), MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1, MenuCaliandar.getPositionCaliandar(position)[24])
+                val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, MenuCaliandar.getPositionCaliandar(position)[20].toInt(), MenuCaliandar.getPositionCaliandar(position)[0].toInt(), daysv, munsv, MenuCaliandar.getPositionCaliandar(position)[22].toInt(), MenuCaliandar.getPositionCaliandar(position)[4], MenuCaliandar.getPositionCaliandar(position)[3].toInt(), MenuCaliandar.getPositionCaliandar(position)[1].toInt(), MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1, MenuCaliandar.getPositionCaliandar(position)[24])
                 dialogCalindarGrid.show(childFragmentManager, "grid")
             }
             R.id.textCviatyGlavnyia -> if (MainActivity.checkmoduleResources()) {

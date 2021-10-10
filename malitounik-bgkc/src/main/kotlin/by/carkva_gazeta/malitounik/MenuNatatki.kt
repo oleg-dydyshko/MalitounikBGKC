@@ -114,6 +114,11 @@ class MenuNatatki : NatatkiFragment(), MyNatatki.MyNatatkiListener {
                 }
 
                 override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
+                    if (fromPosition != toPosition) {
+                        file.writer().use {
+                            it.write(gson.toJson(adapter.itemList))
+                        }
+                    }
                     val edit = k.edit()
                     edit.putInt("natatki_sort", 0)
                     edit.apply()

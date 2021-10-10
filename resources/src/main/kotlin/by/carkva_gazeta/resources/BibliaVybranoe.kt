@@ -101,6 +101,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
         }
         title = intent.extras?.getString("title", "") ?: ""
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+        binding.textView.textSize = fontBiblia
         binding.constraint.setOnTouchListener(this)
         binding.InteractiveScroll.setOnBottomReachedListener(object : OnBottomReachedListener {
             override fun onBottomReached() {

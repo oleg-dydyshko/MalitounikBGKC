@@ -281,7 +281,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
             getData()
             var pos = 0
             data.forEach {
-                if (it[27].toInt() == position) {
+                if (it[23].toInt() == position) {
                     pos = it[25].toInt()
                     return@forEach
                 }

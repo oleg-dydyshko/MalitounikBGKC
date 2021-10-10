@@ -18,12 +18,13 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
+import java.io.File
 import java.util.*
 
 class DialogCalindarGrid : DialogFragment() {
 
     companion object {
-        fun getInstance(post: Int, ton: Int, denNedzeli: Int, data: Int, mun: Int, raznicia: Int, svityiaName: String, checkSviatyia: Boolean, year: Int, datareal: Int, munreal: Int, dayOfYear: String): DialogCalindarGrid {
+        fun getInstance(post: Int, ton: Int, denNedzeli: Int, data: Int, mun: Int, raznicia: Int, svityiaName: String, year: Int, datareal: Int, munreal: Int, dayOfYear: String): DialogCalindarGrid {
             val bundle = Bundle()
             bundle.putInt("post", post)
             bundle.putInt("ton", ton)
@@ -33,7 +34,6 @@ class DialogCalindarGrid : DialogFragment() {
             bundle.putInt("year", year)
             bundle.putInt("raznicia", raznicia)
             bundle.putString("svityiaName", svityiaName)
-            bundle.putBoolean("checkSviatyia", checkSviatyia)
             bundle.putInt("datareal", datareal)
             bundle.putInt("munreal", munreal)
             bundle.putString("dayOfYear", dayOfYear)
@@ -152,8 +152,8 @@ class DialogCalindarGrid : DialogFragment() {
             year = arguments?.getInt("year", year) ?: 2020
             raznicia = arguments?.getInt("raznicia", 400) ?: 400
             sviatyaName = arguments?.getString("svityiaName", "no_sviatyia") ?: "no_sviatyia"
-            issetSvityia = sviatyaName.contains("no_sviatyia") || sviatyaName.contains("<!--no_apisanne-->")
-            checkSviatyia = arguments?.getBoolean("checkSviatyia", false) ?: false
+            issetSvityia = sviatyaName.contains("no_sviatyia")
+            checkSviatyia = checkSviatyiaZmennyiaChastki(data, mun)
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             if (k.getString("caliandarGrid", "") != "") {
                 try {
@@ -198,6 +198,24 @@ class DialogCalindarGrid : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    private fun checkSviatyiaZmennyiaChastki(day: Int, mun: Int): Boolean {
+        var result = false
+        try {
+            val svitya = File("${Malitounik.applicationContext().filesDir}/sviatyja/opisanie$mun.json")
+            val text = svitya.readText()
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<String>>() {}.type
+            val sviaty: ArrayList<String> = gson.fromJson(text, type)
+            val res = sviaty[day - 1].lowercase()
+            if (res.contains("<em>")) {
+                if (res.contains("трапар") || res.contains("кандак")) result = true
+            }
+        } catch (ignored: Throwable) {
+            result = false
+        }
+        return result
     }
 
     private inner class ItemAdapter(list: ArrayList<Int>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<Int, ItemAdapter.ViewHolder>() {

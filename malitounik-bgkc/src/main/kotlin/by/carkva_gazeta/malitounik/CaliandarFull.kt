@@ -148,7 +148,8 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     binding.textCviatyGlavnyia.typeface = MainActivity.createFont(Typeface.NORMAL)
                     binding.textCviatyGlavnyia.isEnabled = false
                 } else {
-                    if (MenuCaliandar.getPositionCaliandar(position)[6].contains("нядзел", true) || MenuCaliandar.getPositionCaliandar(position)[6].contains("сьветл", true)) binding.textCviatyGlavnyia.isEnabled = false
+                    if (MenuCaliandar.getPositionCaliandar(position)[6].contains("Айцоў першых 6-ці Ўсяленскіх сабораў", true)) binding.textCviatyGlavnyia.setOnClickListener(this@CaliandarFull)
+                    else if (MenuCaliandar.getPositionCaliandar(position)[6].contains("нядзел", true) || MenuCaliandar.getPositionCaliandar(position)[6].contains("сьветл", true)) binding.textCviatyGlavnyia.isEnabled = false
                     else binding.textCviatyGlavnyia.setOnClickListener(this@CaliandarFull)
                 }
             }
@@ -404,6 +405,10 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     daysv = -1
                     munsv = 3
                 }
+                if (svity.contains("Айцоў першых 6-ці Ўсяленскіх сабораў", true)) {
+                    daysv = -1
+                    munsv = 4
+                }
                 val dialogCalindarGrid = DialogCalindarGrid.getInstance(colorDialog, MenuCaliandar.getPositionCaliandar(position)[20].toInt(), MenuCaliandar.getPositionCaliandar(position)[0].toInt(), daysv, munsv, MenuCaliandar.getPositionCaliandar(position)[22].toInt(), MenuCaliandar.getPositionCaliandar(position)[4], MenuCaliandar.getPositionCaliandar(position)[3].toInt(), MenuCaliandar.getPositionCaliandar(position)[1].toInt(), MenuCaliandar.getPositionCaliandar(position)[2].toInt() + 1, MenuCaliandar.getPositionCaliandar(position)[24])
                 dialogCalindarGrid.show(childFragmentManager, "grid")
             }
@@ -427,6 +432,10 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                     if (svity.contains("зыход", true)) {
                         daysv = -1
                         munsv = 3
+                    }
+                    if (svity.contains("Айцоў першых 6-ці Ўсяленскіх сабораў", true)) {
+                        daysv = -1
+                        munsv = 4
                     }
                     val i = Intent()
                     i.setClassName(it, MainActivity.OPISANIE)

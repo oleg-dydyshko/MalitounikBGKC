@@ -109,6 +109,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
         sviaty.add(SviatyData(1, 10, "1 Кастрычніка"))
         sviaty.add(SviatyData(21, 11, "21 Лістапада"))
         sviaty.add(SviatyData(25, 12, "25 Сьнежня"))
+        sviaty.add(SviatyData(-1, 4, "Айцоў першых 6-ці Ўсяленскіх сабораў"))
         binding.actionBold.setOnClickListener(this)
         binding.actionEm.setOnClickListener(this)
         binding.actionRed.setOnClickListener(this)

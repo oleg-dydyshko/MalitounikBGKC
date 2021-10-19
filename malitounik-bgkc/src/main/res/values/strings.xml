@@ -712,5 +712,7 @@
     <string name="help_alarm_content">Праграме патрэбны будзільнікі для паказу апавяшчэньняў пра Падзеі.</string>
     <string name="help_delite_title">СКОНЧЫЛАСЯ ПРАЦА НАД ФАЙЛАМ?</string>
     <string name="help_delite_content">Лепш выдаліць файл з пясочніцы, калі ён больш не патрэбны.</string>
+    <string name="update_title">Даступна абнаўленьне праграммы</string>
+    <string name="update_text">Націсьніце каб усталяваць</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

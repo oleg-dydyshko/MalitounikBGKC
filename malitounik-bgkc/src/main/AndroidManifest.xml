@@ -354,6 +354,7 @@
         </provider>
 
         <receiver android:name=".ReceiverBroad" />
+        <receiver android:name=".ReceiverUpdate" />
         <receiver
             android:name=".ReceiverBoot"
             android:exported="false">

@@ -47,6 +47,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToLong
 
+
 class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
 
     private lateinit var c: GregorianCalendar
@@ -1587,7 +1588,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 if (activeNetwork.isConnectedOrConnecting) {
                     if (isTypeMobile && activeNetwork.type == ConnectivityManager.TYPE_MOBILE) return true
                     if (!isTypeMobile) {
-                       return when (activeNetwork.type) {
+                        return when (activeNetwork.type) {
                             ConnectivityManager.TYPE_WIFI -> true
                             ConnectivityManager.TYPE_MOBILE -> true
                             else -> false

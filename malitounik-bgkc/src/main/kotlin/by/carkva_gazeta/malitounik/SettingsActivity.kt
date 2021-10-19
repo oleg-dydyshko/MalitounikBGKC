@@ -129,6 +129,22 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             }
         }
 
+        private fun setAlarmUpdate() {
+            val context = Malitounik.applicationContext()
+            val c = Calendar.getInstance() as GregorianCalendar
+            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_IMMUTABLE or 0
+            } else {
+                0
+            }
+            val repit = 7 * 24 * 60 * 60 * 1000L
+            val timeCheckUpdate = c.timeInMillis + repit
+            val intent = Intent(Malitounik.applicationContext(), ReceiverUpdate::class.java)
+            val pIntent = PendingIntent.getBroadcast(context, 45000, intent, flags)
+            val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            am.setRepeating(AlarmManager.RTC_WAKEUP, timeCheckUpdate, repit, pIntent)
+        }
+
         fun setNotifications(notifications: Int) {
             val context = Malitounik.applicationContext()
             val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -215,6 +231,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     }
                 }
             }
+            setAlarmUpdate()
             var year = c[Calendar.YEAR]
             var dataP: Int
             var monthP: Int

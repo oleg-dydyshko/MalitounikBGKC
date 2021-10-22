@@ -1,6 +1,7 @@
 package by.carkva_gazeta.malitounik
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -32,6 +33,7 @@ import androidx.fragment.app.FragmentTransaction
 import by.carkva_gazeta.malitounik.databinding.ActivityMainBinding
 import by.carkva_gazeta.malitounik.databinding.AppBarMainBinding
 import by.carkva_gazeta.malitounik.databinding.ContentMainBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.splitinstall.*
 import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
@@ -469,6 +471,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }
         }
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
+        val checkUpdate = c.timeInMillis - k.getLong("updateTime", c.timeInMillis)
+        if (checkUpdate == 0L || checkUpdate > 24 * 60 * 60 * 1000) {
+            val edit = k.edit()
+            edit.putLong("updateTime", c.timeInMillis)
+            edit.apply()
+            getVersionCode()
+        }
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
@@ -1192,6 +1201,62 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                             }
                         }
                     } catch (e: Throwable) {
+                    }
+                }
+            }
+        }
+    }
+
+    private fun popupSnackbarForCompleteUpdate() {
+        Snackbar.make(bindingcontent.conteiner, getString(R.string.update_title), Snackbar.LENGTH_INDEFINITE).apply {
+            setAction(getString(R.string.update_text)) {
+                val packageName = context.packageName
+                try {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
+                    intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
+                    intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                }
+            }
+            setActionTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorWhite))
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorWhite))
+            if (dzenNoch) setBackgroundTint(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary_black))
+            else setBackgroundTint(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
+            show()
+        }
+    }
+
+    private fun getVersionCode() {
+        if (isNetworkAvailable()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                val updeteArrayText = withContext(Dispatchers.IO) {
+                    var updeteArrayText = mapOf<String, String>()
+                    try {
+                        val mURL = URL("https://carkva-gazeta.by/updateMalitounikBGKC.json")
+                        val conections = mURL.openConnection() as HttpURLConnection
+                        if (conections.responseCode == 200) {
+                            val gson = Gson()
+                            val type = object : TypeToken<Map<String, String>>() {}.type
+                            updeteArrayText = gson.fromJson(mURL.readText(), type)
+                        }
+                    } catch (e: Throwable) {
+                    }
+                    return@withContext updeteArrayText
+                }
+                val currentVersionName = BuildConfig.VERSION_NAME
+                val currentVersionCode = BuildConfig.VERSION_CODE
+                val versionSize = currentVersionName.split(".")
+                if (versionSize.size == 4) {
+                    if (currentVersionCode < updeteArrayText["devel"]?.toInt() ?: currentVersionCode) {
+                        popupSnackbarForCompleteUpdate()
+                    }
+                }
+                if (versionSize.size == 3) {
+                    if (currentVersionCode < updeteArrayText["release"]?.toInt() ?: currentVersionCode) {
+                        popupSnackbarForCompleteUpdate()
                     }
                 }
             }

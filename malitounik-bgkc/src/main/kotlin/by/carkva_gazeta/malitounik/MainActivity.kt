@@ -65,6 +65,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     private var shortcuts = false
     private var mLastClickTime: Long = 0
     private var resetTollbarJob: Job? = null
+    private var snackbar: Snackbar? = null
 
     private val searchSviatyiaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -463,6 +464,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         CoroutineScope(Dispatchers.IO).launch {
             if (padzeia.size == 0) setListPadzeia()
             if (k.getBoolean("setAlarm", true)) {
+                withContext(Dispatchers.Main) {
+                    getVersionCode()
+                }
                 val notify = k.getInt("notification", 2)
                 SettingsActivity.setNotifications(notify)
                 val edit = k.edit()
@@ -471,13 +475,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             }
         }
         if (scroll) binding.scrollView.post { binding.scrollView.smoothScrollBy(0, binding.scrollView.height) }
-        val checkUpdate = c.timeInMillis - k.getLong("updateTime", c.timeInMillis)
-        if (checkUpdate == 0L || checkUpdate > 24 * 60 * 60 * 1000) {
-            val edit = k.edit()
-            edit.putLong("updateTime", c.timeInMillis)
-            edit.apply()
-            getVersionCode()
-        }
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
@@ -538,7 +535,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }
 
     override fun onBackPressed() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (snackbar?.isShown == true) {
+            snackbar?.dismiss()
+        } else if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             if (back_pressed + 2000 > System.currentTimeMillis()) {
                 moveTaskToBack(true)
                 prefEditors = k.edit()
@@ -1208,7 +1207,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     }
 
     private fun popupSnackbarForCompleteUpdate() {
-        Snackbar.make(bindingcontent.conteiner, getString(R.string.update_title), Snackbar.LENGTH_INDEFINITE).apply {
+        snackbar = Snackbar.make(bindingcontent.conteiner, getString(R.string.update_title), Snackbar.LENGTH_INDEFINITE).apply {
             setAction(getString(R.string.update_text)) {
                 val packageName = context.packageName
                 try {

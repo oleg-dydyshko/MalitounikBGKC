@@ -2,7 +2,6 @@ package by.carkva_gazeta.malitounik
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.util.TypedValue
@@ -49,7 +48,7 @@ class Help : AppCompatActivity() {
                 builder.append(line)
             }
         }
-        binding.textView.text = MainActivity.fromHtml(builder.toString().replace("<!--version-->", "API " + Build.VERSION.SDK_INT))
+        binding.textView.text = MainActivity.fromHtml(builder.toString())
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())

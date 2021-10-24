@@ -33,6 +33,7 @@ import androidx.fragment.app.FragmentTransaction
 import by.carkva_gazeta.malitounik.databinding.ActivityMainBinding
 import by.carkva_gazeta.malitounik.databinding.AppBarMainBinding
 import by.carkva_gazeta.malitounik.databinding.ContentMainBinding
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.splitinstall.*
 import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
@@ -1206,25 +1207,51 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
     }
 
-    private fun popupSnackbarForCompleteUpdate() {
-        snackbar = Snackbar.make(bindingcontent.conteiner, getString(R.string.update_title), Snackbar.LENGTH_INDEFINITE).apply {
-            setAction(getString(R.string.update_text)) {
-                val packageName = context.packageName
-                try {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
-                    intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
-                    intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    startActivity(intent)
+    private fun popupSnackbarForCompleteUpdate(code: Int) {
+        val c = Calendar.getInstance() as GregorianCalendar
+        val updateCode = k.getInt("updateCode", 0)
+        if (updateCode != 0 && updateCode != code) {
+            val edit = k.edit()
+            edit.putInt("updateCount", 0)
+            edit.apply()
+        }
+        var updateCount = k.getInt("updateCount", 0)
+        if (updateCount < 3 || c.timeInMillis > k.getLong("updateTime", c.timeInMillis)) {
+            snackbar = Snackbar.make(bindingcontent.conteiner, getString(R.string.update_title), Snackbar.LENGTH_INDEFINITE).apply {
+                setAction(getString(R.string.update_text)) {
+                    val packageName = context.packageName
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
+                        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
+                        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        startActivity(intent)
+                    }
                 }
-            }
-            setActionTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorWhite))
-            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorWhite))
-            if (dzenNoch) setBackgroundTint(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary_black))
-            else setBackgroundTint(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
-            show()
+                setActionTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorWhite))
+                setTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorWhite))
+                if (dzenNoch) setBackgroundTint(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary_black))
+                else setBackgroundTint(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
+                show()
+            }.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                    super.onDismissed(transientBottomBar, event)
+                    if (event == Snackbar.Callback.DISMISS_EVENT_MANUAL || event == Snackbar.Callback.DISMISS_EVENT_SWIPE) {
+                        updateCount++
+                        val edit = k.edit()
+                        edit.putInt("updateCount", updateCount)
+                        edit.putInt("updateCode", code)
+                        if (updateCount >= 3) {
+                            c.set(Calendar.HOUR_OF_DAY, 8)
+                            c.add(Calendar.DATE, 7)
+                            edit.putLong("updateTime", c.timeInMillis)
+                        }
+                        edit.apply()
+                    }
+                }
+            })
         }
     }
 
@@ -1249,13 +1276,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 val currentVersionCode = BuildConfig.VERSION_CODE
                 val versionSize = currentVersionName.split(".")
                 if (versionSize.size == 4) {
-                    if (currentVersionCode < updeteArrayText["devel"]?.toInt() ?: currentVersionCode) {
-                        popupSnackbarForCompleteUpdate()
+                    val versionCode = updeteArrayText["devel"]?.toInt() ?: currentVersionCode
+                    if (currentVersionCode < versionCode) {
+                        popupSnackbarForCompleteUpdate(versionCode)
                     }
                 }
                 if (versionSize.size == 3) {
-                    if (currentVersionCode < updeteArrayText["release"]?.toInt() ?: currentVersionCode) {
-                        popupSnackbarForCompleteUpdate()
+                    val versionCode = updeteArrayText["release"]?.toInt() ?: currentVersionCode
+                    if (currentVersionCode < versionCode) {
+                        popupSnackbarForCompleteUpdate(versionCode)
                     }
                 }
             }

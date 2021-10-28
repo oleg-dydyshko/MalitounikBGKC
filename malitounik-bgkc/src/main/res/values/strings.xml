@@ -714,5 +714,6 @@
     <string name="help_delite_content">Лепш выдаліць файл з пясочніцы, калі ён больш не патрэбны.</string>
     <string name="update_title">Даступна абнаўленьне праграмы</string>
     <string name="update_text">Абнавіць</string>
+    <string name="admin_set_time_piarlina">Дата: %1$d.%2$d</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

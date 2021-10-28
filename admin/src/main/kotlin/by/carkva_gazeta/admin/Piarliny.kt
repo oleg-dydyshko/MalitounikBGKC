@@ -96,6 +96,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             binding.listView.visibility = View.VISIBLE
             binding.addPiarliny.visibility = View.GONE
             binding.data.visibility = View.GONE
+            invalidateOptionsMenu()
         } else {
             super.onBackPressed()
         }
@@ -111,6 +112,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
         binding.listView.visibility = View.GONE
         binding.addPiarliny.visibility = View.VISIBLE
         binding.data.visibility = View.VISIBLE
+        invalidateOptionsMenu()
     }
 
     override fun onDialogDeliteClick(position: Int, name: String) {
@@ -203,6 +205,23 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
         binding.titleToolbar.isSingleLine = true
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        val plus = menu.findItem(R.id.action_plus)
+        val save = menu.findItem(R.id.action_save)
+        val glava = menu.findItem(R.id.action_glava)
+        if (binding.addPiarliny.visibility == View.VISIBLE) {
+            plus.isVisible = false
+            save.isVisible = true
+            glava.isVisible = true
+        } else {
+            plus.isVisible = true
+            save.isVisible = false
+            glava.isVisible = false
+        }
+        return true
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         val infl = menuInflater
@@ -241,6 +260,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             binding.listView.visibility = View.VISIBLE
             binding.addPiarliny.visibility = View.GONE
             binding.data.visibility = View.GONE
+            invalidateOptionsMenu()
         }
         if (id == R.id.action_glava) {
             val i = Intent(this, CaliandarMun::class.java)
@@ -259,6 +279,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             binding.addPiarliny.setText("")
             val calendar = Calendar.getInstance() as GregorianCalendar
             binding.data.text = getString(by.carkva_gazeta.malitounik.R.string.admin_set_time_piarlina, calendar.get(Calendar.DATE), calendar.get(Calendar.MONTH) + 1)
+            invalidateOptionsMenu()
         }
         return super.onOptionsItemSelected(item)
     }

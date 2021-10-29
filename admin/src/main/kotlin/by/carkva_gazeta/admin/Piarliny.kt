@@ -49,7 +49,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
                 val arrayList = MenuCaliandar.getPositionCaliandar(position)
                 timeListCalendar.set(VYSOCOSNYI_GOD, arrayList[2].toInt(), arrayList[1].toInt(), 0, 0, 0)
                 timeListCalendar.set(Calendar.MILLISECOND, 0)
-                binding.data.text = getString(by.carkva_gazeta.malitounik.R.string.admin_set_time_piarlina, timeListCalendar.get(Calendar.DATE), timeListCalendar.get(Calendar.MONTH) + 1)
+                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, timeListCalendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[timeListCalendar.get(Calendar.MONTH)])
             }
         }
     }
@@ -95,7 +95,8 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
         if (binding.addPiarliny.visibility == View.VISIBLE) {
             binding.listView.visibility = View.VISIBLE
             binding.addPiarliny.visibility = View.GONE
-            binding.data.visibility = View.GONE
+            binding.linearLayout2.visibility = View.GONE
+            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny)
             invalidateOptionsMenu()
         } else {
             super.onBackPressed()
@@ -108,10 +109,10 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
         binding.addPiarliny.setSelection(piarliny[edit][1].length)
         val calendar = GregorianCalendar()
         calendar.timeInMillis = piarliny[edit][0].toLong() * 1000
-        binding.data.text = getString(by.carkva_gazeta.malitounik.R.string.admin_set_time_piarlina, calendar.get(Calendar.DATE), calendar.get(Calendar.MONTH) + 1)
+        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, calendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[calendar.get(Calendar.MONTH)])
         binding.listView.visibility = View.GONE
         binding.addPiarliny.visibility = View.VISIBLE
-        binding.data.visibility = View.VISIBLE
+        binding.linearLayout2.visibility = View.VISIBLE
         invalidateOptionsMenu()
     }
 
@@ -259,7 +260,8 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             }
             binding.listView.visibility = View.VISIBLE
             binding.addPiarliny.visibility = View.GONE
-            binding.data.visibility = View.GONE
+            binding.linearLayout2.visibility = View.GONE
+            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny)
             invalidateOptionsMenu()
         }
         if (id == R.id.action_glava) {
@@ -275,10 +277,10 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             edit = -1
             binding.listView.visibility = View.GONE
             binding.addPiarliny.visibility = View.VISIBLE
-            binding.data.visibility = View.VISIBLE
+            binding.linearLayout2.visibility = View.VISIBLE
             binding.addPiarliny.setText("")
             val calendar = Calendar.getInstance() as GregorianCalendar
-            binding.data.text = getString(by.carkva_gazeta.malitounik.R.string.admin_set_time_piarlina, calendar.get(Calendar.DATE), calendar.get(Calendar.MONTH) + 1)
+            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, calendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[calendar.get(Calendar.MONTH)])
             invalidateOptionsMenu()
         }
         return super.onOptionsItemSelected(item)

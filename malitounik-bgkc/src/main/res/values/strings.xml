@@ -567,6 +567,7 @@
     <string name="liturgia">Літургія</string>
     <string name="jyci">Жыцьці</string>
     <string name="piarliny">Пярліны</string>
+    <string name="piarliny2">Пярліна за %1$d %2$s</string>
     <string name="ustau">Устаў</string>
     <string-array name="dni_nedeli">
         <item />
@@ -653,7 +654,6 @@
     <string name="hint_pesny_title">Імя песьні як у сказах</string>
     <string name="zmena_chastki">Зьменныя часткі</string>
     <string name="add_piarliny">Дадаць пярліну</string>
-    <string name="clear_piarliny">Сьцерці</string>
     <string name="actiox">Актоіх</string>
     <string-array name="viachernia_list">
         <item>Вячэрня Тон 1</item>
@@ -714,6 +714,5 @@
     <string name="help_delite_content">Лепш выдаліць файл з пясочніцы, калі ён больш не патрэбны.</string>
     <string name="update_title">Даступна абнаўленьне праграмы</string>
     <string name="update_text">Абнавіць</string>
-    <string name="admin_set_time_piarlina">Дата: %1$d.%2$d</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

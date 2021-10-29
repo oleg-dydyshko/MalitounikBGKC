@@ -140,6 +140,7 @@ class DialogCalindarGrid : DialogFragment() {
             val builder = AlertDialog.Builder(it)
             builder.setView(binding.root)
             slugba.loadOpisanieSviat()
+            slugba.loadPiarliny()
             alert = builder.create()
             post = arguments?.getInt("post") ?: 0
             ton = arguments?.getInt("ton") ?: 0
@@ -248,13 +249,16 @@ class DialogCalindarGrid : DialogFragment() {
             holder.mText.text = text
             holder.itemView.tag = mItemList[position]
             activity?.let {
-                if (!(slugba.checkUtran(data, mun) || slugba.checkUtran(raznicia) || denNedzeli == 1) && mItemList[position] == 4) {
+                if (mItemList[position] == 4 && !(slugba.checkUtran(data, mun) || slugba.checkUtran(raznicia) || denNedzeli == 1)) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                } else if (issetSvityia && mItemList[position] == 7) {
+                } else if (mItemList[position] == 7 && issetSvityia) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                } else if (mItemList[position] == 2 || mItemList[position] == 3 || mItemList[position] == 5 || mItemList[position] == 8 || mItemList[position] == 9) {
+                } else if (mItemList[position] == 8 && !slugba.checkParliny(data, mun)) {
+                    holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
+                    holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                } else if (mItemList[position] == 2 || mItemList[position] == 3 || mItemList[position] == 5 || mItemList[position] == 9) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                 } else {
@@ -279,6 +283,29 @@ class DialogCalindarGrid : DialogFragment() {
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
+                if (itemList[adapterPosition].toInt() == 7) {
+                    activity?.let {
+                        if (!issetSvityia) {
+                            val i = Intent(it, Opisanie::class.java)
+                            i.putExtra("mun", munreal)
+                            i.putExtra("day", datareal)
+                            i.putExtra("year", year)
+                            startActivity(i)
+                        }
+                    }
+                    return
+                }
+                if (itemList[adapterPosition].toInt() == 8) {
+                    activity?.let {
+                        if (slugba.checkParliny(data, mun)) {
+                            val i = Intent(it, Piarliny::class.java)
+                            i.putExtra("mun", munreal)
+                            i.putExtra("day", datareal)
+                            startActivity(i)
+                        }
+                    }
+                    return
+                }
                 if (!MainActivity.checkmoduleResources()) {
                     val dadatak = DialogInstallDadatak()
                     dadatak.show(childFragmentManager, "dadatak")
@@ -382,18 +409,6 @@ class DialogCalindarGrid : DialogFragment() {
                                         startActivity(intent)
                                     }
                                 }
-                            }
-                        }
-                    }
-                    7 -> {
-                        activity?.let {
-                            if (!issetSvityia) {
-                                val i = Intent()
-                                i.setClassName(it, MainActivity.OPISANIE)
-                                i.putExtra("mun", munreal)
-                                i.putExtra("day", datareal)
-                                i.putExtra("year", year)
-                                startActivity(i)
                             }
                         }
                     }

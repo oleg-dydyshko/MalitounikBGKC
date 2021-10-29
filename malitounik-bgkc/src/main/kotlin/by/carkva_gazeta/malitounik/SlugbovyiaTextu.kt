@@ -6,6 +6,8 @@ import kotlinx.coroutines.*
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SlugbovyiaTextu {
     private val dat12 = ArrayList<SlugbovyiaTextuData>()
@@ -17,7 +19,9 @@ class SlugbovyiaTextu {
     private val dat18 = ArrayList<SlugbovyiaTextuData>()
     private val dat19 = ArrayList<SlugbovyiaTextuData>()
     private val opisanieSviat = ArrayList<ArrayList<String>>()
+    private val piarliny = ArrayList<ArrayList<String>>()
     private var loadOpisanieSviatJob: Job? = null
+    private var loadPiarlinyJob: Job? = null
 
     init {
         dat12.add(SlugbovyiaTextuData(-49, "Вячэрня ў нядзелю сырную вeчарам", "bogashlugbovya12_1"))
@@ -244,6 +248,47 @@ class SlugbovyiaTextu {
         }
     }
 
+    fun loadPiarliny() {
+        if (piarliny.size == 0 && loadPiarlinyJob?.isActive != true) {
+            val fileOpisanieSviat = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
+            if (!fileOpisanieSviat.exists()) {
+                if (MainActivity.isNetworkAvailable()) {
+                    loadPiarlinyJob = CoroutineScope(Dispatchers.Main).launch {
+                        withContext(Dispatchers.IO) {
+                            try {
+                                val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
+                                val conections = mURL.openConnection() as HttpURLConnection
+                                if (conections.responseCode == 200) {
+                                    fileOpisanieSviat.writer().use {
+                                        it.write(mURL.readText())
+                                    }
+                                }
+                            } catch (e: Throwable) {
+                            }
+                        }
+                        try {
+                            val builder = fileOpisanieSviat.readText()
+                            val gson = Gson()
+                            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                            piarliny.addAll(gson.fromJson(builder, type))
+                        } catch (t: Throwable) {
+                            fileOpisanieSviat.delete()
+                        }
+                    }
+                }
+            } else {
+                try {
+                    val builder = fileOpisanieSviat.readText()
+                    val gson = Gson()
+                    val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                    piarliny.addAll(gson.fromJson(builder, type))
+                } catch (t: Throwable) {
+                    fileOpisanieSviat.delete()
+                }
+            }
+        }
+    }
+
     fun getTitleOpisanieSviat(day: Int, mun: Int): String {
         var title = ""
         opisanieSviat.forEach {
@@ -257,6 +302,17 @@ class SlugbovyiaTextu {
             }
         }
         return title
+    }
+
+    fun checkParliny(day: Int, mun: Int): Boolean {
+        val cal = GregorianCalendar()
+        piarliny.forEach {
+            cal.timeInMillis = it[0].toLong() * 1000
+            if (day == cal.get(Calendar.DATE) && mun - 1 == cal.get(Calendar.MONTH)) {
+                return true
+            }
+        }
+        return false
     }
 
     fun checkUtran(day: Int, mun: Int): Boolean {
@@ -432,5 +488,6 @@ class SlugbovyiaTextu {
 
     fun onDestroy() {
         loadOpisanieSviatJob?.cancel()
+        loadPiarlinyJob?.cancel()
     }
 }

@@ -89,8 +89,7 @@ class TraparyAndKandaki : DialogFragment() {
                 mLastClickTime = SystemClock.elapsedRealtime()
                 when {
                     data[position].sviatyia -> {
-                        val i = Intent()
-                        i.setClassName(it, MainActivity.OPISANIE)
+                        val i = Intent(it, Opisanie::class.java)
                         i.putExtra("mun", mun)
                         i.putExtra("day", day)
                         i.putExtra("year", year)

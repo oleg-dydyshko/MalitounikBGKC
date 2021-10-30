@@ -538,7 +538,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     override fun onBackPressed() {
         if (snackbar?.isShown == true) {
             snackbar?.dismiss()
-        } else if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        }
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             if (back_pressed + 2000 > System.currentTimeMillis()) {
                 moveTaskToBack(true)
                 prefEditors = k.edit()

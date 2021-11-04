@@ -306,7 +306,7 @@
     <string name="notifi_fix">Рамонт апавяшчэньняў</string>
     <string name="sviaty_under">ІНШЫЯ СЬВЯТЫ:</string>
     <string name="security_error">Файл ня бясьпечны</string>
-    <string name="pamerlyia">Памінаньне памёрлых</string>
+    <string name="pamerlyia">Памінаньне памерлых</string>
     <string name="bibliateka_carkvy">БІБЛІЯТЭКА ЦАРКВЫ</string>
     <string name="bibliateka_niadaunia">Нядаўнія кнігі</string>
     <string name="bibliateka_gistoryia_carkvy">Гісторыя Царквы</string>
@@ -714,5 +714,10 @@
     <string name="help_delite_content">Лепш выдаліць файл з пясочніцы, калі ён больш не патрэбны.</string>
     <string name="update_title">Даступна абнаўленьне праграмы</string>
     <string name="update_text">Абнавіць</string>
+    <string name="admin_beta">Апублікаваць Beta-версію</string>
+    <string name="admin_release">Апублікаваць Release-версію</string>
+    <string name="admin_update">АБНАЎЛЕНЬНЕ</string>
+    <string name="admin_update_all">Абнаўленьне павінна існаваць у Google Play./nНапішыце нумар %1$s версіі:</string>
+    <string name="admin_update_ok">Апублікаваць</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

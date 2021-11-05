@@ -1,12 +1,23 @@
 package by.carkva_gazeta.admin
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.admin.databinding.DialogEditviewDisplayBinding
+import by.carkva_gazeta.admin.databinding.AdminDialogEditviewDisplayBinding
+import by.carkva_gazeta.malitounik.MainActivity
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -14,8 +25,24 @@ import java.net.URLEncoder
 
 class DialogUpdateHelp : DialogFragment() {
     private lateinit var alert: AlertDialog
-    private var _binding: DialogEditviewDisplayBinding? = null
+    private var _binding: AdminDialogEditviewDisplayBinding? = null
     private val binding get() = _binding!!
+    private var mListener: DialogUpdateHelpListener? = null
+
+    internal interface DialogUpdateHelpListener {
+        fun onUpdate(error: Boolean)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is Activity) {
+            mListener = try {
+                context as DialogUpdateHelpListener
+            } catch (e: ClassCastException) {
+                throw ClassCastException("$context must implement DialogUpdateHelpListener")
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -24,7 +51,7 @@ class DialogUpdateHelp : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         activity?.let {
-            _binding = DialogEditviewDisplayBinding.inflate(LayoutInflater.from(it))
+            _binding = AdminDialogEditviewDisplayBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.admin_update)
             val release = arguments?.getBoolean("release", false) ?: false
@@ -35,31 +62,66 @@ class DialogUpdateHelp : DialogFragment() {
             builder.setPositiveButton(resources.getString(by.carkva_gazeta.malitounik.R.string.admin_update_ok)) { _: DialogInterface, _: Int ->
                 val ver = binding.edittext.text.toString()
                 if (ver != "") {
-                    setViersionApp(ver)
+                    setViersionApp(ver, release)
                 }
             }
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             alert = builder.create()
+            if (MainActivity.isNetworkAvailable()) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val updeteArrayText = withContext(Dispatchers.IO) {
+                        var updeteArrayText = mapOf<String, String>()
+                        try {
+                            val mURL = URL("https://carkva-gazeta.by/updateMalitounikBGKC.json")
+                            val conections = mURL.openConnection() as HttpURLConnection
+                            if (conections.responseCode == 200) {
+                                val gson = Gson()
+                                val type = object : TypeToken<Map<String, String>>() {}.type
+                                updeteArrayText = gson.fromJson(mURL.readText(), type)
+                            }
+                        } catch (e: Throwable) {
+                        }
+                        return@withContext updeteArrayText
+                    }
+                    if (release) binding.edittext.setText(updeteArrayText["release"])
+                    else binding.edittext.setText(updeteArrayText["devel"])
+                }
+            }
         }
         return alert
     }
 
-    private fun setViersionApp(releaseCode: String) {
-        try {
-            val versionCodeDevel = by.carkva_gazeta.malitounik.BuildConfig.VERSION_CODE
-            var reqParam: String = URLEncoder.encode("saveProgram", "UTF-8").toString() + "=" + URLEncoder.encode("1", "UTF-8")
-            reqParam += "&" + URLEncoder.encode("updateCode", "UTF-8").toString() + "=" + URLEncoder.encode("1", "UTF-8")
-            reqParam += "&" + URLEncoder.encode("reliseApp", "UTF-8").toString() + "=" + URLEncoder.encode(releaseCode, "UTF-8")
-            reqParam += "&" + URLEncoder.encode("devApp", "UTF-8").toString() + "=" + URLEncoder.encode(versionCodeDevel.toString(), "UTF-8")
-            val mURL = URL("https://carkva-gazeta.by/admin/android.php")
-            val connection: HttpURLConnection = mURL.openConnection() as HttpURLConnection
-            connection.doOutput = true
-            connection.requestMethod = "POST"
-            val osw = OutputStreamWriter(connection.outputStream)
-            osw.write(reqParam)
-            osw.flush()
-            connection.responseCode
-        } catch (ignored: Throwable) {
+    private fun setViersionApp(releaseCode: String, release: Boolean) {
+        if (MainActivity.isNetworkAvailable()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                var code = 500
+                withContext(Dispatchers.IO) {
+                    try {
+                        var reqParam: String = URLEncoder.encode("saveProgram", "UTF-8").toString() + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("updateCode", "UTF-8").toString() + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += if (release) "&" + URLEncoder.encode("reliseApp", "UTF-8").toString() + "=" + URLEncoder.encode(releaseCode, "UTF-8")
+                        else "&" + URLEncoder.encode("devApp", "UTF-8").toString() + "=" + URLEncoder.encode(releaseCode, "UTF-8")
+                        val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                        val connection: HttpURLConnection = mURL.openConnection() as HttpURLConnection
+                        connection.doOutput = true
+                        connection.requestMethod = "POST"
+                        val osw = OutputStreamWriter(connection.outputStream)
+                        osw.write(reqParam)
+                        osw.flush()
+                        code = connection.responseCode
+                        val sb = StringBuilder()
+                        BufferedReader(InputStreamReader(connection.inputStream)).use {
+                            var inputLine = it.readLine()
+                            while (inputLine != null) {
+                                sb.append(inputLine)
+                                inputLine = it.readLine()
+                            }
+                        }
+                    } catch (ignored: Throwable) {
+                    }
+                }
+                mListener?.onUpdate(code != 200)
+            }
         }
     }
 

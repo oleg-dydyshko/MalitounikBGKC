@@ -19,7 +19,7 @@ import by.carkva_gazeta.malitounik.SettingsActivity
 import com.google.android.play.core.splitcompat.SplitCompat
 import kotlinx.coroutines.*
 
-class AdminMain : AppCompatActivity() {
+class AdminMain : AppCompatActivity(), DialogUpdateHelp.DialogUpdateHelpListener {
     private lateinit var binding: AdminMainBinding
     private var resetTollbarJob: Job? = null
 
@@ -105,6 +105,14 @@ class AdminMain : AppCompatActivity() {
         binding.titleToolbar.isSingleLine = true
     }
 
+    override fun onUpdate(error: Boolean) {
+        if (error) {
+            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
+        } else {
+            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
@@ -112,8 +120,12 @@ class AdminMain : AppCompatActivity() {
             return true
         }
         if (id == R.id.action_beta) {
+            val dialogUpdateHelp = DialogUpdateHelp.newInstance(false)
+            dialogUpdateHelp.show(supportFragmentManager, "dialogUpdateHelp")
         }
         if (id == R.id.action_release) {
+            val dialogUpdateHelp = DialogUpdateHelp.newInstance(true)
+            dialogUpdateHelp.show(supportFragmentManager, "dialogUpdateHelp")
         }
         return super.onOptionsItemSelected(item)
     }

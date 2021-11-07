@@ -1201,6 +1201,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                                 }
                             }
                         }
+                        val piarliny = File("$filesDir/piarliny.json")
+                        try {
+                            val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
+                            val conections = mURL.openConnection() as HttpURLConnection
+                            if (conections.responseCode == 200) {
+                                piarliny.writer().use {
+                                    it.write(mURL.readText())
+                                }
+                            }
+                        } catch (e: Throwable) {
+                        }
                     } catch (e: Throwable) {
                     }
                 }

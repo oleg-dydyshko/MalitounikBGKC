@@ -37,6 +37,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
     private lateinit var chin: SharedPreferences
     private var resetTollbarJob: Job? = null
     private var loadIconsJob: Job? = null
+    private var loadPiarlinyJob: Job? = null
     private var timerCount = 0
     private var timer = Timer()
     private var timerTask: TimerTask? = null
@@ -96,6 +97,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
         stopTimer()
         resetTollbarJob?.cancel()
         loadIconsJob?.cancel()
+        loadPiarlinyJob?.cancel()
     }
 
     override fun onResume() {
@@ -216,6 +218,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
                 dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
             } else {
                 startLoadIconsJob(update = true, true)
+                updatePiarliny()
             }
             binding.swipeRefreshLayout.isRefreshing = false
         }
@@ -372,6 +375,28 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
             }
             binding.progressBar2.visibility = View.GONE
             stopTimer()
+        }
+    }
+
+    private fun updatePiarliny() {
+        if (loadPiarlinyJob?.isActive != true) {
+            val fileOpisanieSviat = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
+            if (MainActivity.isNetworkAvailable()) {
+                loadPiarlinyJob = CoroutineScope(Dispatchers.Main).launch {
+                    withContext(Dispatchers.IO) {
+                        try {
+                            val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
+                            val conections = mURL.openConnection() as HttpURLConnection
+                            if (conections.responseCode == 200) {
+                                fileOpisanieSviat.writer().use {
+                                    it.write(mURL.readText())
+                                }
+                            }
+                        } catch (e: Throwable) {
+                        }
+                    }
+                }
+            }
         }
     }
 

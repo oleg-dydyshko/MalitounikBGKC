@@ -378,6 +378,29 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
         }
     }
 
+    private fun checkParliny(): Boolean {
+        val piarliny = ArrayList<ArrayList<String>>()
+        val fileOpisanieSviat = File("$filesDir/piarliny.json")
+        if (fileOpisanieSviat.exists()) {
+            try {
+                val builder = fileOpisanieSviat.readText()
+                val gson = Gson()
+                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                piarliny.addAll(gson.fromJson(builder, type))
+            } catch (t: Throwable) {
+                fileOpisanieSviat.delete()
+            }
+            val cal = GregorianCalendar()
+            piarliny.forEach {
+                cal.timeInMillis = it[0].toLong() * 1000
+                if (day == cal.get(Calendar.DATE) && mun - 1 == cal.get(Calendar.MONTH)) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     private fun updatePiarliny() {
         if (loadPiarlinyJob?.isActive != true) {
             val fileOpisanieSviat = File("${Malitounik.applicationContext().filesDir}/piarliny.json")
@@ -394,6 +417,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
                             }
                         } catch (e: Throwable) {
                         }
+                        checkParliny()
                     }
                 }
             }
@@ -470,7 +494,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.action_share).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        menu.findItem(R.id.action_piarliny).isVisible = checkParliny()
         menu.findItem(R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
         menu.findItem(R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
         return true
@@ -485,6 +509,12 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (id == R.id.action_piarliny) {
+            val i = Intent(this, Piarliny::class.java)
+            i.putExtra("mun", mun)
+            i.putExtra("day", day)
+            startActivity(i)
+        }
         if (id == R.id.action_carkva) {
             if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()

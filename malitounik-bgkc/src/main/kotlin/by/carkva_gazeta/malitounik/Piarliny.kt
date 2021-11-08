@@ -180,7 +180,7 @@ class Piarliny : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         val infl = menuInflater
-        infl.inflate(R.menu.opisanie, menu)
+        infl.inflate(R.menu.pasxa, menu)
         for (i in 0 until menu.size()) {
             val item: MenuItem = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
@@ -193,7 +193,6 @@ class Piarliny : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.action_share).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         menu.findItem(R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
         menu.findItem(R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
         return true
@@ -206,6 +205,10 @@ class Piarliny : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == R.id.action_carkva) {
             if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()

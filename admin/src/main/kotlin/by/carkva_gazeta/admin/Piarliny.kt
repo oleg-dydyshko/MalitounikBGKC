@@ -167,6 +167,16 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             dialog.show(supportFragmentManager, "DialogPiarlinyContextMenu")
             return@setOnItemLongClickListener true
         }
+        binding.listView.setOnItemClickListener { _, _, position, _ ->
+            val calendar = GregorianCalendar()
+            calendar.timeInMillis = piarliny[position][0].toLong() * 1000
+            val day = calendar[Calendar.DATE]
+            val mun = calendar[Calendar.MONTH] + 1
+            val i = Intent(this, by.carkva_gazeta.malitounik.Piarliny::class.java)
+            i.putExtra("mun", mun)
+            i.putExtra("day", day)
+            startActivity(i)
+        }
         setTollbarTheme()
     }
 
@@ -395,7 +405,8 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             }
             val calendar = GregorianCalendar()
             calendar.timeInMillis = piarliny[position][0].toLong() * 1000
-            viewHolder.text.text = MainActivity.fromHtml(calendar.get(Calendar.DATE).toString() + "." + (calendar.get(Calendar.MONTH) + 1) + "<br>" + piarliny[position][1])
+            val munName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[calendar.get(Calendar.MONTH)]
+            viewHolder.text.text = MainActivity.fromHtml(calendar.get(Calendar.DATE).toString() + " " + munName)
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             return rootView
         }

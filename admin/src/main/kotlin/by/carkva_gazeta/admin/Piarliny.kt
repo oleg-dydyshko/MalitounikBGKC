@@ -417,7 +417,12 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
 
     private data class PiarlinyData(var time: Long, var data: String) : Comparable<PiarlinyData> {
         override fun compareTo(other: PiarlinyData): Int {
-            return this.data.compareTo(other.data, true)
+            if (this.time > other.time) {
+                return 1
+            } else if (this.time < other.time) {
+                return -1
+            }
+            return 0
         }
     }
 

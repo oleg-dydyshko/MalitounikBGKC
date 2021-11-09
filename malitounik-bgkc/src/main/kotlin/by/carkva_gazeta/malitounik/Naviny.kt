@@ -369,6 +369,22 @@ class Naviny : AppCompatActivity() {
                 startActivity(intent)
                 return true
             }
+            if (url.contains("https://carkva-gazeta.by/index.php?ie=14")) {
+                val prefEditors = kq.edit()
+                prefEditors.putInt("id", R.id.label104)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            if (url.contains("https://carkva-gazeta.by/index.php?ie=16")) {
+                val prefEditors = kq.edit()
+                prefEditors.putInt("id", R.id.label102)
+                prefEditors.apply()
+                val intent = Intent(this@Naviny, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
             if (url.contains("https://carkva-gazeta.by/index.php?bib=")) {
                 if (MainActivity.checkmoduleResources()) {
                     val prefEditors = kq.edit()

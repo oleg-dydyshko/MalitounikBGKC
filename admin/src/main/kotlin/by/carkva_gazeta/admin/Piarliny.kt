@@ -15,10 +15,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.admin.databinding.AdminPiarlinyBinding
-import by.carkva_gazeta.malitounik.CaliandarMun
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.MenuCaliandar
-import by.carkva_gazeta.malitounik.SettingsActivity
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -35,7 +32,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
     private lateinit var binding: AdminPiarlinyBinding
     private var urlJob: Job? = null
     private var resetTollbarJob: Job? = null
-    private val piarliny = ArrayList<ArrayList<String>>()
+    private val piarliny = ArrayList<PiarlinyData>()
     private var timerCount = 0
     private var timer = Timer()
     private var timerTask: TimerTask? = null
@@ -105,10 +102,10 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
 
     override fun onDialogEditClick(position: Int) {
         edit = position
-        binding.addPiarliny.setText(piarliny[edit][1])
-        binding.addPiarliny.setSelection(piarliny[edit][1].length)
+        binding.addPiarliny.setText(piarliny[edit].data)
+        binding.addPiarliny.setSelection(piarliny[edit].data.length)
         val calendar = GregorianCalendar()
-        calendar.timeInMillis = piarliny[edit][0].toLong() * 1000
+        calendar.timeInMillis = piarliny[edit].time * 1000
         binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.piarliny2, calendar.get(Calendar.DATE), resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[calendar.get(Calendar.MONTH)])
         binding.listView.visibility = View.GONE
         binding.addPiarliny.visibility = View.VISIBLE
@@ -123,6 +120,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
 
     override fun fileDelite(position: Int) {
         piarliny.removeAt(position)
+        piarliny.sort()
         val gson = Gson()
         sendPostRequest(gson.toJson(piarliny))
     }
@@ -150,7 +148,12 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
                     val builder = mURL.readText()
                     val gson = Gson()
                     val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                    piarliny.addAll(gson.fromJson(builder, type))
+                    val piarlin =  ArrayList<ArrayList<String>>()
+                    piarlin.addAll(gson.fromJson(builder, type))
+                    piarlin.forEach {
+                        piarliny.add(PiarlinyData(it[0].toLong(), it[1]))
+                    }
+                    piarliny.sort()
                 }
             }
             binding.listView.adapter = PiarlinyListAdaprer(this@Piarliny)
@@ -158,7 +161,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             stopTimer()
         }
         binding.listView.setOnItemLongClickListener { _, _, position, _ ->
-            var text = piarliny[position][1]
+            var text = piarliny[position].data
             if (text.length > 30) {
                 text = text.substring(0, 30)
                 text = "$text..."
@@ -169,7 +172,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
         }
         binding.listView.setOnItemClickListener { _, _, position, _ ->
             val calendar = GregorianCalendar()
-            calendar.timeInMillis = piarliny[position][0].toLong() * 1000
+            calendar.timeInMillis = piarliny[position].time * 1000
             val day = calendar[Calendar.DATE]
             val mun = calendar[Calendar.MONTH] + 1
             val i = Intent(this, by.carkva_gazeta.malitounik.Piarliny::class.java)
@@ -257,17 +260,15 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             val text = binding.addPiarliny.text.toString().trim()
             if (text != "") {
                 if (edit != -1) {
-                    piarliny[edit][0] = (timeListCalendar.timeInMillis / 1000).toString()
-                    piarliny[edit][1] = text
+                    piarliny[edit].time = timeListCalendar.timeInMillis / 1000
+                    piarliny[edit].data = text
                 } else {
-                    val arrayList = ArrayList<String>()
-                    arrayList.add((timeListCalendar.timeInMillis / 1000).toString())
-                    arrayList.add(text)
-                    piarliny.add(arrayList)
+                    piarliny.add(PiarlinyData(timeListCalendar.timeInMillis / 1000, text))
                 }
                 val gson = Gson()
                 sendPostRequest(gson.toJson(piarliny))
             }
+            piarliny.sort()
             binding.listView.visibility = View.VISIBLE
             binding.addPiarliny.visibility = View.GONE
             binding.linearLayout2.visibility = View.GONE
@@ -389,7 +390,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
         }
     }
 
-    private inner class PiarlinyListAdaprer(context: Activity) : ArrayAdapter<ArrayList<String>>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, piarliny) {
+    private inner class PiarlinyListAdaprer(context: Activity) : ArrayAdapter<PiarlinyData>(context, by.carkva_gazeta.malitounik.R.layout.simple_list_item_2, by.carkva_gazeta.malitounik.R.id.label, piarliny) {
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
             val rootView: View
@@ -404,7 +405,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
                 viewHolder = rootView.tag as ViewHolder
             }
             val calendar = GregorianCalendar()
-            calendar.timeInMillis = piarliny[position][0].toLong() * 1000
+            calendar.timeInMillis = piarliny[position].time * 1000
             val munName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[calendar.get(Calendar.MONTH)]
             viewHolder.text.text = MainActivity.fromHtml(calendar.get(Calendar.DATE).toString() + " " + munName)
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
@@ -413,6 +414,12 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
     }
 
     private class ViewHolder(var text: TextView)
+
+    private data class PiarlinyData(var time: Long, var data: String) : Comparable<PiarlinyData> {
+        override fun compareTo(other: PiarlinyData): Int {
+            return this.data.compareTo(other.data, true)
+        }
+    }
 
     companion object {
         private const val VYSOCOSNYI_GOD = 2020

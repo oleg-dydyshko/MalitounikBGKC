@@ -24,5 +24,11 @@
         android:icon="@drawable/calendar_full"
         android:orderInCategory="100"
         android:title="@string/vybor_daty"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_bible"
+        android:icon="@drawable/bibliya"
+        android:orderInCategory="100"
+        android:title="@string/title_biblia"
+        app:showAsAction="never" />
 </menu>

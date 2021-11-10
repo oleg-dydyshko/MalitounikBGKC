@@ -146,6 +146,10 @@ class Sviatyia : AppCompatActivity(), DialogImageFileLoad.DialogFileExplorerList
             onBackPressed()
             return true
         }
+        if (id == R.id.action_bible) {
+            val dialogSvityiaBible = DialogSvityiaBible()
+            dialogSvityiaBible.show(supportFragmentManager, "dialogSvityiaBible")
+        }
         if (id == R.id.action_glava) {
             val i = Intent(this, CaliandarMun::class.java)
             val cal = Calendar.getInstance()

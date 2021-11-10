@@ -390,7 +390,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         if (dzenNoch) {
             binding.linearLayout4.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorPrimary_blackMaranAta)
         }
-        val file: File = if (belarus) File("$filesDir/MaranAtaBel/$cytanne.json") else File("$filesDir/MaranAta/$cytanne.json")
+        val file = if (belarus) File("$filesDir/MaranAtaBel/$cytanne.json") else File("$filesDir/MaranAta/$cytanne.json")
         if (file.exists()) {
             val gson = Gson()
             val type = object : TypeToken<ArrayList<ArrayList<Int?>?>?>() {}.type
@@ -398,6 +398,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+                mActionDown = scrollState != 0
             }
 
             override fun onScroll(list: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {

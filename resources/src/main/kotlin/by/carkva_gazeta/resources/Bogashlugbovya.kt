@@ -17,7 +17,6 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -705,7 +704,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             else "<font color=\"#d00505\">"
             reader.forEachLine {
                 var line = it
-                if (line.contains("Апостал:")) Log.d("Oleg", "Ok")
                 if (dzenNoch) line = line.replace("#d00505", "#f44336")
                 when {
                     resurs.contains("ton") -> {

@@ -10,10 +10,25 @@ import android.widget.ScrollView
 class InteractiveScrollView : ScrollView {
     private var mOnScrollChangedCallback: OnScrollChangedCallback? = null
     private var mListener: OnBottomReachedListener? = null
+    private var scrollerTask: Runnable? = null
+    private var initialPosition = 0
+    private val newCheck = 100L
 
     constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?) : super(context)
+
+    init {
+        scrollerTask = Runnable {
+            val newPosition = scrollY
+            if (initialPosition - newPosition == 0) {
+                mListener?.onTouch(false)
+            } else {
+                initialPosition = scrollY
+                this.postDelayed(scrollerTask, newCheck)
+            }
+        }
+    }
 
     override fun computeScrollDeltaToGetChildRectOnScreen(rect: Rect?): Int {
         return 0
@@ -34,9 +49,16 @@ class InteractiveScrollView : ScrollView {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         when (event?.action ?: MotionEvent.ACTION_CANCEL) {
             MotionEvent.ACTION_DOWN -> mListener?.onTouch(true)
-            MotionEvent.ACTION_UP -> mListener?.onTouch(false)
+            MotionEvent.ACTION_UP -> {
+                startScrollerTask()
+            }
         }
         return super.onTouchEvent(event)
+    }
+
+    private fun startScrollerTask() {
+        initialPosition = scrollY
+        this.postDelayed(scrollerTask, newCheck)
     }
 
     fun setOnScrollChangedCallback(onScrollChangedCallback: OnScrollChangedCallback?) {

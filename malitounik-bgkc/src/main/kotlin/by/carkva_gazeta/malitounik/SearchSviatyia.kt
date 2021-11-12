@@ -222,7 +222,7 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             saveHistopy()
             finish()
         }
-        arrayLists = MenuCaliandar.getDataCalaindar(year = SettingsActivity.GET_CALIANDAR_YEAR_MIN)
+        arrayLists = MenuCaliandar.getDataCalaindar(year = c[Calendar.YEAR])
         setTollbarTheme()
     }
 

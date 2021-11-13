@@ -287,6 +287,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["viachernia_mineia_sviatochnaia5"] = R.raw.viachernia_mineia_sviatochnaia5
             resursMap["viachernia_mineia_sviatochnaia6"] = R.raw.viachernia_mineia_sviatochnaia6
             resursMap["viachernia_mineia_sviatochnaia7"] = R.raw.viachernia_mineia_sviatochnaia7
+            resursMap["ju_8_11"] = R.raw.ju_8_11
+            resursMap["v_8_11"] = R.raw.v_8_11
+            resursMap["l_8_11"] = R.raw.l_8_11
             PesnyAll.resursMap.forEach {
                 resursMap[it.key] = it.value
             }

@@ -99,6 +99,9 @@ class SlugbovyiaTextu {
         dat19.add(SlugbovyiaTextuData(7, "Пасьвяцьце Богазьяўленьня. Сабор сьв. Яна, Прадвесьніка і Хрысьціцеля", "viachernia_mineia_sviatochnaia5"))
         dat19.add(SlugbovyiaTextuData(16, "Пакланеньне кайданам апостала Пятра", "viachernia_mineia_sviatochnaia6"))
         dat19.add(SlugbovyiaTextuData(30, "Трох сьвятаначальнікаў: Васіля Вялікага, Рыгора Багаслова і Яна Залатавуснага", "viachernia_mineia_sviatochnaia7"))
+        dat19.add(SlugbovyiaTextuData(312, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "ju_8_11", utran = true))
+        dat19.add(SlugbovyiaTextuData(312, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "v_8_11"))
+        dat19.add(SlugbovyiaTextuData(312, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "l_8_11", liturgia = true))
     }
 
     fun getTydzen1() = dat12
@@ -117,49 +120,49 @@ class SlugbovyiaTextu {
         var resource = "0"
         dat12.forEach {
             if (day == it.day) {
-                if (!utran && !liturgia) resource = it.resource
+                if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat13.forEach {
             if (day == it.day) {
-                if (!utran && !liturgia) resource = it.resource
+                if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat14.forEach {
             if (day == it.day) {
-                if (!utran && !liturgia) resource = it.resource
+                if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat15.forEach {
             if (day == it.day) {
-                if (!utran && !liturgia) resource = it.resource
+                if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat16.forEach {
             if (day == it.day) {
-                if (!utran && !liturgia) resource = it.resource
+                if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat17.forEach {
             if (day == it.day) {
-                if (!utran && !liturgia) resource = it.resource
+                if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat18.forEach {
             if (day == it.day) {
-                if (!utran && !liturgia) resource = it.resource
+                if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
@@ -171,7 +174,7 @@ class SlugbovyiaTextu {
         var resource = "0"
         dat19.forEach {
             if (dayOfYear.toInt() == it.day) {
-                if (!utran && !liturgia) resource = it.resource
+                if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }

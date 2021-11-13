@@ -114,6 +114,12 @@ class MenuBogashlugbovya : ListFragment() {
                                 startActivity(intent)
                             }
                         }
+                        12 -> {
+                            activity?.let {
+                                val intent = Intent(it, ZmennyiaChastkiList::class.java)
+                                startActivity(intent)
+                            }
+                        }
                     }
                 } else {
                     val dadatak = DialogInstallDadatak()

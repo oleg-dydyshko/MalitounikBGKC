@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -32,25 +31,6 @@ import java.io.FileReader
 
 class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NovyZapavietSemuxaFragment.ClicParalelListiner, NovyZapavietSemuxaFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
 
-    @SuppressLint("InlinedApi")
-    @Suppress("DEPRECATION")
-    private fun mHidePart2Runnable() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(false)
-            val controller = window.insetsController
-            controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        } else {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-        }
-    }
-
-    private fun mShowPart2Runnable() {
-        val actionBar = supportActionBar
-        actionBar?.show()
-    }
-
-    private var fullscreenPage = false
     private var paralel = false
     private var fullglav = 0
     private var kniga = 0
@@ -313,7 +293,6 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             paralel = savedInstanceState.getBoolean("paralel")
             cytanneSours = savedInstanceState.getString("cytanneSours") ?: ""
             cytanneParalelnye = savedInstanceState.getString("cytanneParalelnye") ?: ""
-            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             if (paralel) {
                 setOnClic(cytanneParalelnye, cytanneSours)
             }
@@ -328,6 +307,7 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             BibleGlobalList.vydelenie = gson.fromJson(reader.readText(), type)
             inputStream.close()
         }
+        binding.titleToolbar.text = savedInstanceState?.getString("title") ?: getString(by.carkva_gazeta.malitounik.R.string.novy_zapaviet)
     }
 
     private fun setTollbarTheme() {
@@ -340,7 +320,6 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.novy_zapaviet)
         binding.subtitleToolbar.text = title
         if (dzenNoch) {
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
@@ -381,9 +360,9 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
         outState.putBoolean("paralel", paralel)
         outState.putString("cytanneSours", cytanneSours)
         outState.putString("cytanneParalelnye", cytanneParalelnye)
-        outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
         outState.putBoolean("setedit", setedit)
+        outState.putString("title", binding.titleToolbar.text.toString())
     }
 
     override fun onBackPressed() {
@@ -396,9 +375,6 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             binding.subtitleToolbar.text = title
             paralel = false
             invalidateOptionsMenu()
-        } else if (fullscreenPage) {
-            fullscreenPage = false
-            show()
         } else if (BibleGlobalList.mPedakVisable) {
             val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
             fragment.onBackPressedFragment()
@@ -414,6 +390,10 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_glava).isVisible = !paralel
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).isVisible = !paralel
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_font).isVisible = !paralel
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_bright).isVisible = !paralel
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = !paralel
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         val itemVybranoe: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         if (men) {
@@ -475,14 +455,6 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            if (k.getBoolean("FullscreenHelp", true)) {
-                val dialogHelpFullscreen = DialogHelpFullscreen()
-                dialogHelpFullscreen.show(supportFragmentManager, "FullscreenHelp")
-            }
-            fullscreenPage = true
-            hide()
-        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
             val intent = Intent()
             intent.setClassName(this, MainActivity.ADMINNOVYZAPAVIETSEMUXA)
@@ -497,7 +469,6 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
-        if (fullscreenPage) hide()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
@@ -514,28 +485,6 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             item.title = spanString
         }
         return true
-    }
-
-    private fun hide() {
-        val actionBar = supportActionBar
-        actionBar?.hide()
-        CoroutineScope(Dispatchers.Main).launch {
-            mHidePart2Runnable()
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun show() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(true)
-            val controller = window.insetsController
-            controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-        } else {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        }
-        CoroutineScope(Dispatchers.Main).launch {
-            mShowPart2Runnable()
-        }
     }
 
     override fun setOnClic(cytanneParalelnye: String, cytanneSours: String) {

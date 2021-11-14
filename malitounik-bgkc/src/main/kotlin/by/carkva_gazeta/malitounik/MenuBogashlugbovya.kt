@@ -48,6 +48,12 @@ class MenuBogashlugbovya : ListFragment() {
                 val intent = Intent(activity, SubMenuBogashlugbovyaVialikiPost::class.java)
                 startActivity(intent)
             }
+            12 -> {
+                activity?.let {
+                    val intent = Intent(it, MineiaShodzennaiaDzenList::class.java)
+                    startActivity(intent)
+                }
+            }
             else -> {
                 if (MainActivity.checkmoduleResources()) {
                     when (position) {
@@ -111,12 +117,6 @@ class MenuBogashlugbovya : ListFragment() {
                                 intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("title", data[position])
                                 intent.putExtra("resurs", "bogashlugbovya9")
-                                startActivity(intent)
-                            }
-                        }
-                        12 -> {
-                            activity?.let {
-                                val intent = Intent(it, ZmennyiaChastkiList::class.java)
                                 startActivity(intent)
                             }
                         }

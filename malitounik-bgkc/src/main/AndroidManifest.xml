@@ -353,8 +353,16 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".ZmennyiaChastkiList"
-            android:label="@string/zmena_chastki"
+            android:name=".MineiaShodzennaiaList"
+            android:label="@string/mineia_shtodzennaia"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MineiaShodzennaiaDzenList" />
+        </activity>
+        <activity
+            android:name=".MineiaShodzennaiaDzenList"
+            android:label="@string/mineia_shtodzennaia"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

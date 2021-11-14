@@ -306,6 +306,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = false
         if (men) {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)

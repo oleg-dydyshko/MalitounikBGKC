@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -30,25 +29,6 @@ import java.io.File
 
 class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NadsanContentPage.ListPosition {
 
-    @SuppressLint("InlinedApi")
-    @Suppress("DEPRECATION")
-    private fun mHidePart2Runnable() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(false)
-            val controller = window.insetsController
-            controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        } else {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-        }
-    }
-
-    private fun mShowPart2Runnable() {
-        val actionBar = supportActionBar
-        actionBar?.show()
-    }
-
-    private var fullscreenPage = false
     private var glava = 0
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
@@ -126,7 +106,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         men = DialogVybranoeBibleList.checkVybranoe(this, 0, glava, 3)
         if (savedInstanceState != null) {
             dialog = savedInstanceState.getBoolean("dialog")
-            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         binding.pager.setCurrentItem(glava, false)
@@ -231,16 +210,11 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("dialog", dialog)
-        outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
     }
 
     override fun onBackPressed() {
         when {
-            fullscreenPage -> {
-                fullscreenPage = false
-                show()
-            }
             BibleGlobalList.mPedakVisable -> {
                 val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
                 fragment.onBackPressedFragment()
@@ -322,14 +296,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            if (k.getBoolean("FullscreenHelp", true)) {
-                val dialogHelpFullscreen = DialogHelpFullscreen()
-                dialogHelpFullscreen.show(supportFragmentManager, "FullscreenHelp")
-            }
-            fullscreenPage = true
-            hide()
-        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
             if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
@@ -353,7 +319,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
-        if (fullscreenPage) hide()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
@@ -370,28 +335,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             item.title = spanString
         }
         return true
-    }
-
-    private fun hide() {
-        val actionBar = supportActionBar
-        actionBar?.hide()
-        CoroutineScope(Dispatchers.Main).launch {
-            mHidePart2Runnable()
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun show() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(true)
-            val controller = window.insetsController
-            controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-        } else {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        }
-        CoroutineScope(Dispatchers.Main).launch {
-            mShowPart2Runnable()
-        }
     }
 
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {

@@ -410,12 +410,7 @@
         <item>Трапары і кандакі штодзённыя - на кожны дзень тыдня</item>
         <item>Службы Вялікага посту</item>
         <item>Малебны Канон Найсьвяцейшай Багародзіцы</item>
-        <item>Зьменныя часткі</item>
-    </string-array>
-    <string-array name="zmennyia_chastki">
-        <item>Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў - Ютрань</item>
-        <item>Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў - Літургія</item>
-        <item>Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў - Вячэрня</item>
+        <item>Мінэя штодзённая</item>
     </string-array>
     <string-array name="sub_bogaslugbovuia_vichernia">
         <item>Вячэрня ў нядзелі і сьвяты</item>
@@ -725,5 +720,6 @@
     <string name="admin_update">АБНАЎЛЕНЬНЕ</string>
     <string name="admin_update_all">Абнаўленьне павінна існаваць у Google Play.\nНапішыце нумар %1$s версіі:</string>
     <string name="admin_update_ok">Апублікаваць</string>
+    <string name="mineia_shtodzennaia">Мінэя штодзённая</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

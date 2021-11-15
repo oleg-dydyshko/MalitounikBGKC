@@ -594,11 +594,13 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             binding.actionPlus.animation = animation
             stopAutoStartScroll()
             binding.textView.setTextIsSelectable(false)
-            autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                while (isActive) {
-                    delay(spid.toLong())
-                    if (!mActionDown && !MainActivity.dialogVisable) {
-                        binding.InteractiveScroll.smoothScrollBy(0, 2)
+            if (autoScrollJob?.isActive != true) {
+                autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                    while (isActive) {
+                        delay(spid.toLong())
+                        if (!mActionDown && !MainActivity.dialogVisable) {
+                            binding.InteractiveScroll.smoothScrollBy(0, 2)
+                        }
                     }
                 }
             }

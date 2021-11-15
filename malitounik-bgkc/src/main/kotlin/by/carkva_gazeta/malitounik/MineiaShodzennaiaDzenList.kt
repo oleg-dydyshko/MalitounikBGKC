@@ -7,12 +7,13 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
-import android.widget.ArrayAdapter
-import android.widget.TextView
+import android.widget.BaseExpandableListAdapter
+import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
-import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
+import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
+import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
+import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -21,10 +22,10 @@ import kotlin.collections.ArrayList
 class MineiaShodzennaiaDzenList : AppCompatActivity() {
 
     private lateinit var k: SharedPreferences
-    private lateinit var binding: AkafistListBinding
+    private lateinit var binding: ContentBibleBinding
     private var resetTollbarJob: Job? = null
-    private val fileList = ArrayList<MineiaDay>()
-    private lateinit var adapter: ListAdaprer
+    private lateinit var adapter: ExpListAdapterMineiaShodzennaia
+    private val groups = ArrayList<ArrayList<MineiaDay>>()
 
     override fun onPause() {
         super.onPause()
@@ -36,29 +37,31 @@ class MineiaShodzennaiaDzenList : AppCompatActivity() {
         val dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
-        binding = AkafistListBinding.inflate(layoutInflater)
+        binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setTollbarTheme()
         val slugba = SlugbovyiaTextu()
         val c = GregorianCalendar()
         val day = "312"
         c.set(Calendar.DAY_OF_YEAR, day.toInt())
-        fileList.add(MineiaDay(day, c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]], slugba.getTitle(slugba.getResource(day)), slugba.getResource(day), slugba.getResource(day, utran = true), slugba.getResource(day, liturgia = true)))
-
-        binding.ListView.setOnItemClickListener { _, _, position, _ ->
+        val child = ArrayList<MineiaDay>()
+        child.add(MineiaDay(day, c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]], slugba.getTitle(slugba.getResource(day)), slugba.getResource(day), slugba.getResource(day, utran = true), slugba.getResource(day, liturgia = true)))
+        groups.add(child)
+        binding.elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, _: Int, childPosition: Int, _: Long ->
             val intent = Intent(this, MineiaShodzennaiaList::class.java)
-            intent.putExtra("dayOfYear", fileList[position].day)
-            intent.putExtra("titleResource", fileList[position].titleResource)
-            intent.putExtra("resourceUtran", fileList[position].resourceUtran)
-            intent.putExtra("resourceLiturgia", fileList[position].resourceLiturgia)
-            intent.putExtra("resourceViachernia", fileList[position].resourceViachernia)
+            intent.putExtra("dayOfYear", child[childPosition].day)
+            intent.putExtra("titleResource", child[childPosition].titleResource)
+            intent.putExtra("resourceUtran", child[childPosition].resourceUtran)
+            intent.putExtra("resourceLiturgia", child[childPosition].resourceLiturgia)
+            intent.putExtra("resourceViachernia", child[childPosition].resourceViachernia)
             startActivity(intent)
+            false
         }
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
-            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+            binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         } else {
-            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
+            binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         }
     }
 
@@ -69,8 +72,8 @@ class MineiaShodzennaiaDzenList : AppCompatActivity() {
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        adapter = ListAdaprer(this)
-        binding.ListView.adapter = adapter
+        adapter = ExpListAdapterMineiaShodzennaia(this)
+        binding.elvMain.setAdapter(adapter)
         binding.titleToolbar.text = getString(R.string.mineia_shtodzennaia)
     }
 
@@ -121,30 +124,71 @@ class MineiaShodzennaiaDzenList : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class ListAdaprer(context: Activity) : ArrayAdapter<MineiaDay>(context, R.layout.simple_list_item_2, R.id.label, fileList) {
+    private inner class ExpListAdapterMineiaShodzennaia(private val mContext: Activity) : BaseExpandableListAdapter() {
+        override fun getGroupCount(): Int {
+            return groups.size
+        }
 
-        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
-            val rootView: View
-            val viewHolder: ViewHolder
-            if (mView == null) {
-                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
-                rootView = binding.root
-                viewHolder = ViewHolder(binding.label)
-                rootView.tag = viewHolder
-            } else {
-                rootView = mView
-                viewHolder = rootView.tag as ViewHolder
+        override fun getChildrenCount(groupPosition: Int): Int {
+            return groups[groupPosition].size
+        }
+
+        override fun getGroup(groupPosition: Int): Any {
+            return groups[groupPosition]
+        }
+
+        override fun getChild(groupPosition: Int, childPosition: Int): Any {
+            return groups[groupPosition][childPosition]
+        }
+
+        override fun getGroupId(groupPosition: Int): Long {
+            return groupPosition.toLong()
+        }
+
+        override fun getChildId(groupPosition: Int, childPosition: Int): Long {
+            return childPosition.toLong()
+        }
+
+        override fun hasStableIds(): Boolean {
+            return true
+        }
+
+        override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
+            val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            rootView.textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            when (groupPosition) {
+                0 -> rootView.textGroup.text = "Лістапад"
+                1 -> rootView.textGroup.text = "От Марка"
+                2 -> rootView.textGroup.text = "От Луки"
+                3 -> rootView.textGroup.text = "От Иоанна"
+                4 -> rootView.textGroup.text = "Деяния святых апостолов"
+                5 -> rootView.textGroup.text = "Иакова"
+                6 -> rootView.textGroup.text = "1-е Петра"
+                7 -> rootView.textGroup.text = "2-е Петра"
+                8 -> rootView.textGroup.text = "1-е Иоанна"
+                9 -> rootView.textGroup.text = "2-е Иоанна"
+                10 -> rootView.textGroup.text = "3-е Иоанна"
+                11 -> rootView.textGroup.text = "Иуды"
+                12 -> rootView.textGroup.text = "Римлянам"
             }
+            return rootView.root
+        }
+
+        override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
+            val rootView = ChildViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
+            val k = mContext.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            rootView.textChild.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             val dzenNoch = k.getBoolean("dzen_noch", false)
-            viewHolder.text.text = fileList[position].title
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch)
-                viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            return rootView
+                rootView.textChild.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            rootView.textChild.text = groups[groupPosition][childPosition].title
+            return rootView.root
+        }
+
+        override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+            return true
         }
     }
-
-    private class ViewHolder(var text: TextView)
 
     private data class MineiaDay(val day: String, val title: String, val titleResource: String, val resourceViachernia: String, val resourceUtran: String, val resourceLiturgia: String)
 }

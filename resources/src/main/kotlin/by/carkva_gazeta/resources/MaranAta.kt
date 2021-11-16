@@ -67,7 +67,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private val maranAta = ArrayList<String>()
     private var n = 0
     private var spid = 60
-    private var belarus = false
+    private var belarus = true
     private var mActionDown = false
     private var setFont = false
     private var paralel = false
@@ -129,7 +129,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     override fun onCreate(savedInstanceState: Bundle?) {
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
-        belarus = k.getBoolean("belarus", false)
+        belarus = k.getBoolean("belarus", true)
         spid = k.getInt("autoscrollSpid", 60)
         maranAtaScrollPosition = k.getInt("maranAtaScrollPasition", 0)
         super.onCreate(savedInstanceState)
@@ -1061,7 +1061,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         super.onPause()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         clearEmptyPosition()
-        val file: File = if (belarus) {
+        val file = if (belarus) {
             File("$filesDir/MaranAtaBel/$cytanne.json")
         } else {
             File("$filesDir/MaranAta/$cytanne.json")
@@ -1131,7 +1131,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_paralel).isVisible = true
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).isVisible = true
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).isChecked = k.getBoolean("belarus", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_semuxa).isChecked = k.getBoolean("belarus", true)
         return true
     }
 

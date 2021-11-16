@@ -169,7 +169,6 @@ class MineiaShodzennaiaDzenList : AppCompatActivity() {
                 9 -> rootView.textGroup.text = "2-е Иоанна"
                 10 -> rootView.textGroup.text = "3-е Иоанна"
                 11 -> rootView.textGroup.text = "Иуды"
-                12 -> rootView.textGroup.text = "Римлянам"
             }
             return rootView.root
         }

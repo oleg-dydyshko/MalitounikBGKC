@@ -107,8 +107,8 @@ class Chytanny : AppCompatActivity() {
                 monthP = 4
             }
             val fileLine = text.split("\n")
-            val nedelName = arrayOf("нядзеля", "панядзелак", "аўторак", "серада", "чацьвер", "пятніца", "субота")
-            val monName2 = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
+            val nedelName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.dni_nedeli)
+            val monName2 = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
             var countDay = 0
             for (fw in fileLine) {
                 if (fw.contains("\$calendar[]")) {
@@ -118,7 +118,7 @@ class Chytanny : AppCompatActivity() {
                     val t4 = fw.indexOf("</a>\"")
                     val c = GregorianCalendar(year, monthP - 1, dataP + countDay)
                     var data = c[Calendar.DATE]
-                    var ned = c[Calendar.DAY_OF_WEEK] - 1
+                    var ned = c[Calendar.DAY_OF_WEEK]
                     var mon = c[Calendar.MONTH]
                     val data2 = c[Calendar.YEAR]
                     var datefull = SpannableString(nedelName[ned] + ", " + data + " " + monName2[mon] + " " + year)
@@ -132,7 +132,7 @@ class Chytanny : AppCompatActivity() {
                             0
                         }
                         data = c[Calendar.DATE]
-                        ned = c[Calendar.DAY_OF_WEEK] - 1
+                        ned = c[Calendar.DAY_OF_WEEK]
                         mon = c[Calendar.MONTH]
                         datefull = SpannableString(nedelName[ned] + ", " + data + " " + monName2[mon] + " " + year)
                         countDay++

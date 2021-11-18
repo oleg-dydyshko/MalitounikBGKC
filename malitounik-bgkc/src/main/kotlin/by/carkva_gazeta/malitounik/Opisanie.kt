@@ -314,7 +314,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
                         }
                     }
                 } else {
-                    if (loadIcons && MainActivity.isNetworkAvailable()) {
+                    if (MainActivity.isNetworkAvailable()) {
                         withContext(Dispatchers.IO) {
                             try {
                                 val mURL = if (svity) URL("https://carkva-gazeta.by/chytanne/icons/v_${day}_${mun}.jpg")
@@ -322,34 +322,43 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
                                 val file2 = if (svity) File(dir, "v_${day}_${mun}.jpg")
                                 else File(dir, "s_${day}_${mun}$schet.jpg")
                                 val conections = mURL.openConnection() as HttpURLConnection
-                                if (conections.responseCode == 200) {
-                                    val bufferedInputStream = BufferedInputStream(conections.inputStream)
-                                    val byteArrayOut = ByteArrayOutputStream()
-                                    var c2: Int
-                                    while (bufferedInputStream.read().also { c2 = it } != -1) {
-                                        byteArrayOut.write(c2)
-                                    }
-                                    val byteArray = byteArrayOut.toByteArray()
-                                    val bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-                                    val out = FileOutputStream(file2)
-                                    bmp.compress(Bitmap.CompressFormat.JPEG, 90, out)
-                                    out.flush()
-                                    out.close()
+                                if (!loadIcons && MainActivity.isNetworkAvailable(true) && conections.responseCode == 200) {
                                     withContext(Dispatchers.Main) {
-                                        val imageView = when (i) {
-                                            1 -> binding.image2
-                                            2 -> binding.image3
-                                            3 -> binding.image4
-                                            else -> binding.image1
+                                        if (supportFragmentManager.findFragmentByTag("dialogOpisanieWIFI") == null) {
+                                            val dialog = DialogOpisanieWIFI()
+                                            dialog.show(supportFragmentManager, "dialogOpisanieWIFI")
                                         }
-                                        imageView.post {
-                                            imageView.setImageBitmap(resizeImage(bmp))
-                                            imageView.visibility = View.VISIBLE
-                                            imageView.setOnClickListener {
-                                                if (file2.exists()) {
-                                                    val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                                                    binding.imageViewFull.setImageBitmap(bitmap)
-                                                    binding.imageViewFull.visibility = View.VISIBLE
+                                    }
+                                } else {
+                                    if (conections.responseCode == 200) {
+                                        val bufferedInputStream = BufferedInputStream(conections.inputStream)
+                                        val byteArrayOut = ByteArrayOutputStream()
+                                        var c2: Int
+                                        while (bufferedInputStream.read().also { c2 = it } != -1) {
+                                            byteArrayOut.write(c2)
+                                        }
+                                        val byteArray = byteArrayOut.toByteArray()
+                                        val bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                                        val out = FileOutputStream(file2)
+                                        bmp.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                                        out.flush()
+                                        out.close()
+                                        withContext(Dispatchers.Main) {
+                                            val imageView = when (i) {
+                                                1 -> binding.image2
+                                                2 -> binding.image3
+                                                3 -> binding.image4
+                                                else -> binding.image1
+                                            }
+                                            imageView.post {
+                                                imageView.setImageBitmap(resizeImage(bmp))
+                                                imageView.visibility = View.VISIBLE
+                                                imageView.setOnClickListener {
+                                                    if (file2.exists()) {
+                                                        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                                                        binding.imageViewFull.setImageBitmap(bitmap)
+                                                        binding.imageViewFull.visibility = View.VISIBLE
+                                                    }
                                                 }
                                             }
                                         }

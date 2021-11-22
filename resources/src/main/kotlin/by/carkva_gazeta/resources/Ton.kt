@@ -180,11 +180,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
                             if (t1 != -1 && t2 != -1) {
                                 title = res.substring(t1 + 8, t2)
                             }
-                            when (intent.extras?.getInt("lityrgia", 4) ?: 4) {
-                                3 -> res = it[3]
-                                4 -> res = it[4]
-                                5 -> res = it[5]
-                            }
                             if (dzenNoch) res = res.replace("#d00505", "#f44336")
                             binding.TextView.text = MainActivity.fromHtml(res)
                         }
@@ -473,15 +468,16 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
+        val vybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
-        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).isVisible = false
+        vybranoe.isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
-        val item = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
-        val spanString = SpannableString(menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title.toString())
+        val spanString = SpannableString(vybranoe.title.toString())
         val end = spanString.length
         spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        item.title = spanString
+        vybranoe.title = spanString
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = false
         return true
     }
 

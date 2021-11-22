@@ -86,7 +86,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
                     del.add(p)
                 }
             }
-            MainActivity.padzeia.removeAll(del)
+            MainActivity.padzeia.removeAll(del.toSet())
             val am = it.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val filesDir = it.filesDir
             val outputStream = FileWriter("$filesDir/Sabytie.json")

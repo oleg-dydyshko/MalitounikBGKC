@@ -290,6 +290,16 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["ju_8_11"] = R.raw.ju_8_11
             resursMap["v_8_11"] = R.raw.v_8_11
             resursMap["l_8_11"] = R.raw.l_8_11
+            resursMap["ju_trojca_mineia_sviatochnaia"] = R.raw.ju_trojca_mineia_sviatochnaia
+            resursMap["l_trojca_mineia_sviatochnaia"] = R.raw.l_trojca_mineia_sviatochnaia
+            resursMap["v_trojca_mineia_sviatochnaia"] = R.raw.v_trojca_mineia_sviatochnaia
+            resursMap["ju_uzniasenne_mineia_sviatochnaia"] = R.raw.ju_uzniasenne_mineia_sviatochnaia
+            resursMap["l_uzniasenne_mineia_sviatochnaia"] = R.raw.l_uzniasenne_mineia_sviatochnaia
+            resursMap["v_uzniasenne_mineia_sviatochnaia"] = R.raw.v_uzniasenne_mineia_sviatochnaia
+            resursMap["l_1_10"] = R.raw.l_1_10
+            resursMap["l_21_11"] = R.raw.l_21_11
+            resursMap["l_2_2"] = R.raw.l_2_2
+            resursMap["l_ajcy_6_saborau"] = R.raw.l_ajcy_6_saborau
             PesnyAll.resursMap.forEach {
                 resursMap[it.key] = it.value
             }
@@ -1080,37 +1090,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (dzenNoch) binding.imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_niz_back)
         binding.imageView5.setOnClickListener { findNext() }
         val slugbovyiaTextu = SlugbovyiaTextu()
-        checkDayOfYear = slugbovyiaTextu.checkLiturgia(zmenyiaChastki.dayOfYear())
+        val cal = Calendar.getInstance()
+        checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), zmenyiaChastki.dayOfYear())
         raznica = zmenyiaChastki.raznica()
-        if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica) || checkDataCalindar(slugbovyiaTextu, zmenyiaChastki.getData()))) {
+        if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, cal[Calendar.DAY_OF_YEAR].toString()))) {
             chechZmena = true
         }
         invalidateOptionsMenu()
-    }
-
-    private fun checkDataCalindar(slugbovyiaTextu: SlugbovyiaTextu, data: ArrayList<ArrayList<String>>): Boolean {
-        slugbovyiaTextu.loadOpisanieSviat()
-        val svity = data[0][6]
-        daysv = data[0][1].toInt()
-        munsv = data[0][2].toInt() + 1
-        if (svity.contains("уваход у ерусалім", true)) {
-            daysv = -1
-            munsv = 0
-        }
-        if (svity.contains("уваскрасеньне", true)) {
-            daysv = -1
-            munsv = 1
-        }
-        if (svity.contains("узьнясеньне", true)) {
-            daysv = -1
-            munsv = 2
-        }
-        if (svity.contains("зыход", true)) {
-            daysv = -1
-            munsv = 3
-        }
-        sviaty = slugbovyiaTextu.checkLiturgia(daysv, munsv)
-        return sviaty
     }
 
     private fun autoStartScroll() {
@@ -1355,13 +1341,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }
                 checkDayOfYear -> {
                     val zmenyiaChastki = ZmenyiaChastki()
-                    val resours = slugba.getResource(zmenyiaChastki.dayOfYear(), liturgia = true)
+                    val resours = slugba.getResource(raznica, zmenyiaChastki.dayOfYear(), liturgia = true)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))
                 }
                 else -> {
-                    val resours = slugba.getResource(raznica, liturgia = true)
+                    val zmenyiaChastki = ZmenyiaChastki()
+                    val resours = slugba.getResource(raznica, zmenyiaChastki.dayOfYear(), liturgia = true)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))

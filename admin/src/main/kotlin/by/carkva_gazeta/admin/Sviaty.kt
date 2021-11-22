@@ -117,15 +117,6 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
         binding.sviaty.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) edittext = v as? AppCompatEditText
         }
-        binding.utran.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) edittext = v as? AppCompatEditText
-        }
-        binding.liturgia.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) edittext = v as? AppCompatEditText
-        }
-        binding.viachernia.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) edittext = v as? AppCompatEditText
-        }
         urlJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar2.visibility = View.VISIBLE
             startTimer()
@@ -150,9 +141,6 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
             binding.spinnerSviaty.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     binding.sviaty.setText(sviaty[position].opisanie)
-                    binding.utran.setText(sviaty[position].utran)
-                    binding.liturgia.setText(sviaty[position].liturgia)
-                    binding.viachernia.setText(sviaty[position].viachernia)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -346,7 +334,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
             }
         }
         if (id == R.id.action_save) {
-            sendPostRequest(binding.spinnerSviaty.selectedItemPosition, binding.sviaty.text.toString(), binding.utran.text.toString(), binding.liturgia.text.toString(), binding.viachernia.text.toString())
+            sendPostRequest(binding.spinnerSviaty.selectedItemPosition, binding.sviaty.text.toString())
         }
         if (id == R.id.action_preview) {
             if (binding.scrollpreView.visibility == View.VISIBLE) {
@@ -365,7 +353,7 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
         return super.onOptionsItemSelected(item)
     }
 
-    private fun sendPostRequest(position: Int, apisanne: String, utran: String, litur: String, viach: String) {
+    private fun sendPostRequest(position: Int, apisanne: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
@@ -374,9 +362,6 @@ class Sviaty : AppCompatActivity(), View.OnClickListener, DialogImageFileLoad.Di
                     var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("6", "UTF-8")
                     reqParam += "&" + URLEncoder.encode("setsvita", "UTF-8") + "=" + URLEncoder.encode(position.toString(), "UTF-8") //День месяца
                     reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(apisanne, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("utran", "UTF-8") + "=" + URLEncoder.encode(utran, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("linur", "UTF-8") + "=" + URLEncoder.encode(litur, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("viach", "UTF-8") + "=" + URLEncoder.encode(viach, "UTF-8")
                     reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
                     val mURL = URL("https://carkva-gazeta.by/admin/android.php")
                     with(mURL.openConnection() as HttpURLConnection) {

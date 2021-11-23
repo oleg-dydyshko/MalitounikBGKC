@@ -21,6 +21,7 @@ import by.carkva_gazeta.admin.databinding.AdminPasochnicaBinding
 import by.carkva_gazeta.malitounik.InteractiveScrollView
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -276,9 +277,19 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     }
                 }
                 if (responseCodeS == 200) {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
+                    Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {
+                        setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+                        show()
+                    }
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
+                    Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.error), Snackbar.LENGTH_LONG).apply {
+                        setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+                        show()
+                    }
                 }
                 binding.progressBar2.visibility = View.GONE
             }
@@ -343,11 +354,21 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     }
                 }
                 if (responseCodeS == 200) {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
+                    Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {
+                        setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+                        show()
+                    }
                     val dialogDeliteHelp = DialogDeliteHelp.newInstance(fileName)
                     dialogDeliteHelp.show(supportFragmentManager, "dialogDeliteHelp")
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
+                    Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.error), Snackbar.LENGTH_LONG).apply {
+                        setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+                        show()
+                    }
                 }
                 binding.progressBar2.visibility = View.GONE
             }
@@ -792,7 +813,12 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     }
                 }
                 if (responseCodeS == 200) {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.save))
+                    Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {
+                        setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+                        show()
+                    }
                     if (isSaveAs) {
                         if (!findDirAsSave(fileName)) {
                             if (k.getBoolean("AdminDialogSaveAsHelp", true)) {
@@ -805,7 +831,12 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                         }
                     }
                 } else {
-                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error))
+                    Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.error), Snackbar.LENGTH_LONG).apply {
+                        setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+                        show()
+                    }
                 }
                 binding.progressBar2.visibility = View.GONE
             }

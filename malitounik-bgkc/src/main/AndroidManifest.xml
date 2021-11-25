@@ -353,16 +353,16 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".MineiaShodzennaiaList"
+            android:name=".MineiaShodzennaia"
             android:label="@string/mineia_shtodzennaia"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MineiaShodzennaiaDzenList" />
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".MineiaShodzennaiaDzenList"
-            android:label="@string/mineia_shtodzennaia"
+            android:name=".MineiaSviatochnaia"
+            android:label="@string/mineia_sviatochnaia"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.TypedValue
 import android.view.*
 import android.widget.BaseExpandableListAdapter
@@ -22,13 +23,14 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class MineiaShodzennaiaDzenList : AppCompatActivity() {
+class MineiaShodzennaia : AppCompatActivity() {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: ContentBibleBinding
     private var resetTollbarJob: Job? = null
     private lateinit var adapter: ExpListAdapterMineiaShodzennaia
     private val groups = ArrayList<ArrayList<MineiaDay>>()
+    private var mLastClickTime: Long = 0
 
     override fun onPause() {
         super.onPause()
@@ -86,19 +88,21 @@ class MineiaShodzennaiaDzenList : AppCompatActivity() {
             }
             c.set(Calendar.DAY_OF_YEAR, day)
             val id = c.timeInMillis
+            val positionCaliandar = MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt()
+            day = mineiaList[i].day
             when (c[Calendar.MONTH]) {
-                Calendar.JANUARY -> child0.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString()), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), utran = true), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), liturgia = true)))
-                Calendar.FEBRUARY -> child1.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString()), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), utran = true), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), liturgia = true)))
-                Calendar.MARCH -> child2.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString()), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), utran = true), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), liturgia = true)))
-                Calendar.APRIL -> child3.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString()), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), utran = true), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), liturgia = true)))
-                Calendar.MAY -> child4.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString()), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), utran = true), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), liturgia = true)))
-                Calendar.JUNE -> child5.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString()), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), utran = true), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), liturgia = true)))
-                Calendar.JULY -> child6.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString()), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), utran = true), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), liturgia = true)))
-                Calendar.AUGUST -> child7.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString()), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), utran = true), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), liturgia = true)))
-                Calendar.SEPTEMBER -> child8.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString()), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), utran = true), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), liturgia = true)))
-                Calendar.OCTOBER -> child9.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString()), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), utran = true), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), liturgia = true)))
-                Calendar.NOVEMBER -> child10.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString()), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), utran = true), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), liturgia = true)))
-                Calendar.DECEMBER -> child11.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString()), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), utran = true), slugba.getResource(MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt(), day.toString(), liturgia = true)))
+                Calendar.JANUARY -> child0.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
+                Calendar.FEBRUARY -> child1.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
+                Calendar.MARCH -> child2.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
+                Calendar.APRIL -> child3.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
+                Calendar.MAY -> child4.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
+                Calendar.JUNE -> child5.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
+                Calendar.JULY -> child6.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
+                Calendar.AUGUST -> child7.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
+                Calendar.SEPTEMBER -> child8.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
+                Calendar.OCTOBER -> child9.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
+                Calendar.NOVEMBER -> child10.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
+                Calendar.DECEMBER -> child11.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
             }
         }
         for (i in 1..12) {
@@ -182,21 +186,44 @@ class MineiaShodzennaiaDzenList : AppCompatActivity() {
         if (child10.size != 0) groups.add(child10)
         if (child11.size != 0) groups.add(child11)
         binding.elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
-            val intent: Intent
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return@setOnChildClickListener false
+            }
+            mLastClickTime = SystemClock.elapsedRealtime()
+            val resourceUtran = groups[groupPosition][childPosition].resourceUtran
+            val resourceLiturgia = groups[groupPosition][childPosition].resourceLiturgia
+            val resourceViachernia = groups[groupPosition][childPosition].resourceViachernia
             if (groups[groupPosition][childPosition].titleResource == "") {
-                intent = Intent(this, Opisanie::class.java)
+                val intent = Intent(this, Opisanie::class.java)
                 intent.putExtra("mun", groups[groupPosition][childPosition].month + 1)
                 intent.putExtra("day", groups[groupPosition][childPosition].day.toInt())
                 intent.putExtra("year", c[Calendar.YEAR])
+                startActivity(intent)
             } else {
-                intent = Intent(this, MineiaShodzennaiaList::class.java)
-                intent.putExtra("dayOfYear", groups[groupPosition][childPosition].day)
-                intent.putExtra("titleResource", groups[groupPosition][childPosition].titleResource)
-                intent.putExtra("resourceUtran", groups[groupPosition][childPosition].resourceUtran)
-                intent.putExtra("resourceLiturgia", groups[groupPosition][childPosition].resourceLiturgia)
-                intent.putExtra("resourceViachernia", groups[groupPosition][childPosition].resourceViachernia)
+                val arrayList = ArrayList<String>()
+                if (resourceUtran != "0") arrayList.add("1")
+                if (resourceLiturgia != "0") arrayList.add("1")
+                if (resourceViachernia != "0") arrayList.add("1")
+                if (arrayList.size > 1) {
+                    val dialog = DialogMineiaList.getInstance(groups[groupPosition][childPosition].day, groups[groupPosition][childPosition].titleResource, resourceUtran, resourceLiturgia, resourceViachernia, false)
+                    dialog.show(supportFragmentManager, "dialogMineiaList")
+                } else {
+                    if (MainActivity.checkmoduleResources()) {
+                        val intent = Intent()
+                        intent.setClassName(this, MainActivity.TON)
+                        if (resourceUtran != "0") intent.putExtra("resurs", resourceUtran)
+                        if (resourceLiturgia != "0") intent.putExtra("resurs", resourceLiturgia)
+                        if (resourceViachernia != "0") intent.putExtra("resurs", resourceViachernia)
+                        intent.putExtra("zmena_chastki", true)
+                        intent.putExtra("title", groups[groupPosition][childPosition].titleResource)
+                        startActivity(intent)
+
+                    } else {
+                        val dadatak = DialogInstallDadatak()
+                        dadatak.show(supportFragmentManager, "dadatak")
+                    }
+                }
             }
-            startActivity(intent)
             month = groupPosition
             false
         }

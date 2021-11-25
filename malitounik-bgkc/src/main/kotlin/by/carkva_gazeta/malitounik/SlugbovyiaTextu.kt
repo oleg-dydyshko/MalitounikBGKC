@@ -130,6 +130,8 @@ class SlugbovyiaTextu {
 
     fun getMineiaShtodzennia() = dat19
 
+    fun getMineiaSviatochnaia() = dat20
+
     fun getResource(day: Int, dayOfYear: String, utran: Boolean = false, liturgia: Boolean = false): String {
         var resource = "0"
         dat12.forEach {
@@ -182,12 +184,6 @@ class SlugbovyiaTextu {
             }
         }
         dat19.forEach {
-            //Айцоў першых 6-ці Ўсяленскіх сабораў
-            if (it.day == 1000) {
-                if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
-                if (utran && utran == it.utran) resource = it.resource
-                if (liturgia && liturgia == it.liturgia) resource = it.resource
-            }
             if (dayOfYear.toInt() == it.day) {
                 if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource

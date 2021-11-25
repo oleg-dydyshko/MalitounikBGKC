@@ -50,7 +50,13 @@ class MenuBogashlugbovya : ListFragment() {
             }
             12 -> {
                 activity?.let {
-                    val intent = Intent(it, MineiaShodzennaiaDzenList::class.java)
+                    val intent = Intent(it, MineiaSviatochnaia::class.java)
+                    startActivity(intent)
+                }
+            }
+            13 -> {
+                activity?.let {
+                    val intent = Intent(it, MineiaShodzennaia::class.java)
                     startActivity(intent)
                 }
             }

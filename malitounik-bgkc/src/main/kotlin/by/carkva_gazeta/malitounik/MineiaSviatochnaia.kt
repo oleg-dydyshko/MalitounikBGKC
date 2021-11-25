@@ -52,8 +52,18 @@ class MineiaSviatochnaia : AppCompatActivity() {
             }
             c.set(Calendar.DAY_OF_YEAR, day)
             val id = c.timeInMillis
-            val positionCaliandar = MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[22].toInt()
+            val positionCaliandar = MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[24].toInt()
+            if (mineiaList[i].pasxa) {
+                MenuCaliandar.getDataCalaindar(year = c[Calendar.YEAR]).forEach {
+                    if (it[22].toInt() == day) {
+                        c.set(Calendar.DAY_OF_YEAR, it[24].toInt())
+                        day = it[1].toInt()
+                        return@forEach
+                    }
+                }
+            }
             groups.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
+            day = mineiaList[i].day
         }
         binding.ListView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {

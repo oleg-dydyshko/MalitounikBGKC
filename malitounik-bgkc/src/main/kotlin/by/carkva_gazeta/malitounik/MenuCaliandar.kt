@@ -75,8 +75,7 @@ class MenuCaliandar : MenuCaliandarFragment() {
         activity?.let {
             val k = it.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             while (true) {
-                if (!k.getBoolean("setAlarm", true))
-                    break
+                if (!k.getBoolean("setAlarm", true)) break
             }
             val sab = MainActivity.padzeia[position]
             val filen = sab.padz
@@ -246,27 +245,21 @@ class MenuCaliandar : MenuCaliandarFragment() {
     companion object {
         private val data = ArrayList<ArrayList<String>>()
 
-        private fun getData() {
-            if (data.size == 0) {
-                val inputStream = Malitounik.applicationContext().resources.openRawResource(R.raw.caliandar)
-                val isr = InputStreamReader(inputStream)
-                val reader = BufferedReader(isr)
-                val builder = reader.use {
-                    it.readText()
-                }
-                val gson = Gson()
-                val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                data.addAll(gson.fromJson(builder, type))
+        init {
+            val inputStream = Malitounik.applicationContext().resources.openRawResource(R.raw.caliandar)
+            val isr = InputStreamReader(inputStream)
+            val reader = BufferedReader(isr)
+            val builder = reader.use {
+                it.readText()
             }
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+            data.addAll(gson.fromJson(builder, type))
         }
 
-        fun getPositionCaliandar(position: Int): ArrayList<String> {
-            getData()
-            return data[position]
-        }
+        fun getPositionCaliandar(position: Int) = data[position]
 
         fun getPositionCaliandar(day_of_year: Int, year: Int): ArrayList<String> {
-            getData()
             var position = 0
             data.forEach { arrayList ->
                 if (day_of_year == arrayList[24].toInt() && year == arrayList[3].toInt()) {
@@ -278,7 +271,6 @@ class MenuCaliandar : MenuCaliandarFragment() {
         }
 
         fun getPositionCaliandarMun(position: Int): ArrayList<String> {
-            getData()
             var pos = 0
             data.forEach {
                 if (it[23].toInt() == position) {
@@ -290,7 +282,6 @@ class MenuCaliandar : MenuCaliandarFragment() {
         }
 
         fun getPositionCaliandarNiadzel(day: Int, mun: Int, year: Int): Int {
-            getData()
             var position = 0
             data.forEach { arrayList ->
                 if (day == arrayList[1].toInt() && mun == arrayList[2].toInt() && year == arrayList[3].toInt()) {
@@ -302,7 +293,6 @@ class MenuCaliandar : MenuCaliandarFragment() {
         }
 
         fun getFirstPositionNiadzel(position: Int): ArrayList<String> {
-            getData()
             var pos = 0
             data.forEach {
                 if (it[26].toInt() == position && it[0].toInt() == Calendar.SUNDAY) {
@@ -314,7 +304,6 @@ class MenuCaliandar : MenuCaliandarFragment() {
         }
 
         fun getDataCalaindar(day: Int = -1, mun: Int = -1, year: Int = -1): ArrayList<ArrayList<String>> {
-            getData()
             when {
                 day != -1 && mun != -1 && year != -1 -> {
                     val niadzeliaList = ArrayList<ArrayList<String>>()

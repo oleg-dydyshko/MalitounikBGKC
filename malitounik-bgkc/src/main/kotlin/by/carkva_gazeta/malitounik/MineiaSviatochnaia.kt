@@ -62,7 +62,20 @@ class MineiaSviatochnaia : AppCompatActivity() {
                     }
                 }
             }
-            groups.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title, mineiaList[i].title, slugba.getResource(positionCaliandar, day.toString()), slugba.getResource(positionCaliandar, day.toString(), utran = true), slugba.getResource(positionCaliandar, day.toString(), liturgia = true)))
+            val count = ArrayList<String>()
+            val utran = slugba.getResource(positionCaliandar, day.toString(), utran = true)
+            val liturgia = slugba.getResource(positionCaliandar, day.toString(), liturgia = true)
+            val viachernia = slugba.getResource(positionCaliandar, day.toString())
+            if (utran != "0") count.add("1")
+            if (liturgia != "0") count.add("1")
+            if (viachernia != "0") count.add("1")
+            val slujba = when {
+                count.size > 1 -> ""
+                mineiaList[i].utran -> " - Ютрань"
+                mineiaList[i].liturgia -> " - Літургія"
+                else -> " - Вячэрня"
+            }
+            groups.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title + slujba, mineiaList[i].title, viachernia, utran, liturgia))
             day = mineiaList[i].day
         }
         binding.ListView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
@@ -183,8 +196,7 @@ class MineiaSviatochnaia : AppCompatActivity() {
             val dzenNoch = k.getBoolean("dzen_noch", false)
             viewHolder.text.text = strings[position].title
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch)
-                viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView
         }
 

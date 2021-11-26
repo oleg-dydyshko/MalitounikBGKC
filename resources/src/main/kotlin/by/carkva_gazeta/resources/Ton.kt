@@ -60,7 +60,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
     private lateinit var bindingprogress: ProgressBinding
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
-    private var id = R.raw.ton1
     private var resurs = "ton1"
     private var positionY = 0
     private var firstTextPosition = ""
@@ -192,43 +191,35 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
                 when (ton) {
                     1 -> {
                         resurs = "ton1"
-                        id = R.raw.ton1
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton1)
                     }
                     2 -> {
                         resurs = "ton2"
-                        id = R.raw.ton2
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton2)
                     }
                     3 -> {
                         resurs = "ton3"
-                        id = R.raw.ton3
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton3)
                     }
                     4 -> {
                         resurs = "ton4"
-                        id = R.raw.ton4
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton4)
                     }
                     5 -> {
                         resurs = "ton5"
-                        id = R.raw.ton5
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton5)
                     }
                     6 -> {
                         resurs = "ton6"
-                        id = R.raw.ton6
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton6)
                     }
                     7 -> {
                         resurs = "ton7"
-                        id = R.raw.ton7
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton7)
                     }
                     8 -> {
                         resurs = "ton8"
-                        id = R.raw.ton8
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton8)
                     }
                 }
                 val isr = InputStreamReader(inputStream)
@@ -250,38 +241,32 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
                 when (ton) {
                     1 -> {
                         resurs = "ton1_budni"
-                        id = R.raw.ton1_budni
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton1_budni)
                         title = "ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам"
                     }
                     2 -> {
                         resurs = "ton2_budni"
-                        id = R.raw.ton2_budni
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton2_budni)
                         title = "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю"
                     }
                     3 -> {
                         resurs = "ton3_budni"
-                        id = R.raw.ton3_budni
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton3_budni)
                         title = "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу"
                     }
                     4 -> {
                         resurs = "ton4_budni"
-                        id = R.raw.ton4_budni
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton4_budni)
                         title = "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю"
                     }
                     5 -> {
                         resurs = "ton5_budni"
-                        id = R.raw.ton5_budni
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton5_budni)
                         title = "ПЯТНІЦА\nСлужба Крыжу Гасподняму"
                     }
                     6 -> {
                         resurs = "ton6_budni"
-                        id = R.raw.ton6_budni
-                        inputStream = r.openRawResource(id)
+                        inputStream = r.openRawResource(R.raw.ton6_budni)
                         title = "Субота\nСлужба ўсім сьвятым і памёрлым"
                     }
                 }
@@ -536,7 +521,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
             if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
-                val inputStream = resources.openRawResource(this.id)
+                val inputStream = resources.openRawResource(Bogashlugbovya.resursMap[resurs] ?: R.raw.zmenyia_chastki_tamash)
                 val text = inputStream.use {
                     it.reader().readText()
                 }

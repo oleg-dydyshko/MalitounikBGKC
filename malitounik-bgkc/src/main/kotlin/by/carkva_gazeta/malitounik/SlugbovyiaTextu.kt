@@ -94,6 +94,11 @@ class SlugbovyiaTextu {
         dat19.add(SlugbovyiaTextuData(312, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "v_8_11"))
         dat19.add(SlugbovyiaTextuData(312, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "l_8_11", liturgia = true))
         dat19.add(SlugbovyiaTextuData(1000, "Айцы першых 6-ці Ўсяленскіх сабораў", "l_ajcy_6_saborau", liturgia = true))
+        dat19.add(SlugbovyiaTextuData(316, "Сьвятога сьвятамучаніка Язафата, архібіскупа Полацкага", "ju_12_11", utran = true))
+        dat19.add(SlugbovyiaTextuData(316, "Сьвятога сьвятамучаніка Язафата, архібіскупа Полацкага", "v_12_11"))
+        dat19.add(SlugbovyiaTextuData(316, "Сьвятога сьвятамучаніка Язафата, архібіскупа Полацкага", "l_12_11", liturgia = true))
+        dat19.add(SlugbovyiaTextuData(317, "Між сьвятымі айца нашага Яна Залатавуснага", "v_13_11"))
+        dat19.add(SlugbovyiaTextuData(317, "Між сьвятымі айца нашага Яна Залатавуснага", "l_13_11", liturgia = true))
 
         dat20.add(SlugbovyiaTextuData(218, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "zmenyia_chastki_pieramianiennie", liturgia = true))
         dat20.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "viachernia_mineia_sviatochnaia1"))

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Base64
@@ -87,8 +88,27 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         binding.apisanne.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) binding.linearLayout2.visibility = View.VISIBLE
-            else binding.linearLayout2.visibility = View.GONE
+            if (hasFocus) {
+                binding.linearLayout2.visibility = View.VISIBLE
+                activity?.let {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        val imm = it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                        if (!binding.apisanne.showSoftInputOnFocus) {
+                            imm.hideSoftInputFromWindow(binding.apisanne.windowToken, 0)
+                        }
+                    }
+                }
+            } else {
+                binding.linearLayout2.visibility = View.GONE
+                activity?.let {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        val imm = it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                        if (!binding.apisanne.showSoftInputOnFocus) {
+                            imm.hideSoftInputFromWindow(binding.apisanne.windowToken, 0)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -105,6 +125,11 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = AdminSviatyiaPageFragmentBinding.inflate(inflater, container, false)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            binding.actionKeyword.visibility = View.GONE
+        } else {
+            binding.apisanne.showSoftInputOnFocus = false
+        }
         return binding.root
     }
 
@@ -170,6 +195,19 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
         if (id == R.id.action_img) {
             val dialogSviatyiaImageHelp = DialogSviatyiaImageHelp()
             dialogSviatyiaImageHelp.show(childFragmentManager, "dialogSviatyiaImageHelp")
+        }
+        if (id == R.id.action_keyword) {
+            activity?.let {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    val imm = it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                    if (binding.apisanne.showSoftInputOnFocus) {
+                        imm.hideSoftInputFromWindow(binding.apisanne.windowToken, 0)
+                    } else {
+                        imm.showSoftInput(binding.apisanne, 0)
+                    }
+                    binding.apisanne.showSoftInputOnFocus = !binding.apisanne.showSoftInputOnFocus
+                }
+            }
         }
     }
 
@@ -354,6 +392,7 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
             binding.actionRed.setOnClickListener(this)
             binding.actionP.setOnClickListener(this)
             binding.actionImg.setOnClickListener(this)
+            binding.actionKeyword.setOnClickListener(this)
             binding.progressBar2.visibility = View.VISIBLE
             urlJob = CoroutineScope(Dispatchers.Main).launch {
                 startTimer()

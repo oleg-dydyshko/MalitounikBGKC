@@ -184,6 +184,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                 }
                 binding.progressBar2.visibility = View.GONE
                 val intent = Intent(this@PasochnicaList, Pasochnica::class.java)
+                intent.putExtra("isSite", true)
                 intent.putExtra("fileName", fileName)
                 startActivity(intent)
             }

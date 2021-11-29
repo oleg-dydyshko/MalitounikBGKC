@@ -300,6 +300,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["l_21_11"] = R.raw.l_21_11
             resursMap["l_2_2"] = R.raw.l_2_2
             resursMap["l_ajcy_6_saborau"] = R.raw.l_ajcy_6_saborau
+            resursMap["ju_12_11"] = R.raw.ju_12_11
+            resursMap["l_12_11"] = R.raw.l_12_11
+            resursMap["v_12_11"] = R.raw.v_12_11
+            resursMap["l_13_11"] = R.raw.l_13_11
+            resursMap["v_13_11"] = R.raw.v_13_11
             PesnyAll.resursMap.forEach {
                 resursMap[it.key] = it.value
             }

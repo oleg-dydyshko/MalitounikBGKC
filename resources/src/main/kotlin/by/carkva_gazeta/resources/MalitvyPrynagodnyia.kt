@@ -85,6 +85,17 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         historyAdapter.notifyDataSetChanged()
     }
 
+    private fun findTypeResource(findText: String): String {
+        var type = ""
+        for (i in 0 until data.size) {
+            if (data[i].data == findText) {
+                type = data[i].type
+                break
+            }
+        }
+        return type
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         chin = getSharedPreferences("biblia", MODE_PRIVATE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
@@ -210,10 +221,10 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             val intent = Intent(this@MalitvyPrynagodnyia, Bogashlugbovya::class.java)
-            intent.putExtra("title", data[position].data)
-            intent.putExtra("resurs", data[position].type)
-            prynagodnyiaLauncher.launch(intent)
             val edit = history[position]
+            intent.putExtra("title", edit)
+            intent.putExtra("resurs", findTypeResource(edit))
+            prynagodnyiaLauncher.launch(intent)
             addHistory(edit)
             saveHistopy()
             actionExpandOn = false

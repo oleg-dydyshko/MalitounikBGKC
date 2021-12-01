@@ -41,7 +41,7 @@ class MineiaSviatochnaia : AppCompatActivity() {
         setTollbarTheme()
         val slugba = SlugbovyiaTextu()
         val mineiaList = slugba.getMineiaSviatochnaia()
-        val c = GregorianCalendar()
+        val c = Calendar.getInstance()
         var day = 0
         for (i in 0 until mineiaList.size) {
             if (day == mineiaList[i].day) {
@@ -50,22 +50,38 @@ class MineiaSviatochnaia : AppCompatActivity() {
             } else {
                 day = mineiaList[i].day
             }
-            c.set(Calendar.DAY_OF_YEAR, day)
-            val id = c.timeInMillis
-            val positionCaliandar = MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[24].toInt()
             if (mineiaList[i].pasxa) {
                 MenuCaliandar.getDataCalaindar(year = c[Calendar.YEAR]).forEach {
                     if (it[22].toInt() == day) {
-                        c.set(Calendar.DAY_OF_YEAR, it[24].toInt())
-                        day = it[1].toInt()
+                        c.set(it[3].toInt(), it[2].toInt(), it[1].toInt())
+                        day = it[22].toInt()
+                        return@forEach
+                    }
+                }
+            } else {
+                MenuCaliandar.getDataCalaindar(year = c[Calendar.YEAR]).forEach {
+                    if (it[24].toInt() == day) {
+                        c.set(it[3].toInt(), it[2].toInt(), it[1].toInt())
                         return@forEach
                     }
                 }
             }
+
+            //c.set(Calendar.DAY_OF_YEAR, day)
+            val id = c.timeInMillis
+            /*val positionCaliandar = MenuCaliandar.getPositionCaliandar(c[Calendar.DAY_OF_YEAR], c[Calendar.YEAR])[24].toInt()
+            if (mineiaList[i].pasxa) {
+                MenuCaliandar.getDataCalaindar(year = c[Calendar.YEAR]).forEach {
+                    if (it[22].toInt() == day) {
+                        c.set(Calendar.DAY_OF_YEAR, it[24].toInt())
+                        return@forEach
+                    }
+                }
+            }*/
             val count = ArrayList<String>()
-            val utran = slugba.getResource(positionCaliandar, day.toString(), utran = true)
-            val liturgia = slugba.getResource(positionCaliandar, day.toString(), liturgia = true)
-            val viachernia = slugba.getResource(positionCaliandar, day.toString())
+            val utran = slugba.getResource(day, mineiaList[i].pasxa, utran = true)
+            val liturgia = slugba.getResource(day, mineiaList[i].pasxa, liturgia = true)
+            val viachernia = slugba.getResource(day, mineiaList[i].pasxa)
             if (utran != "0") count.add("1")
             if (liturgia != "0") count.add("1")
             if (viachernia != "0") count.add("1")

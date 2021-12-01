@@ -110,7 +110,7 @@
     <string name="novsinaidal">Новый завет</string>
     <string name="maranata">Штодзённае чытаньне Бібліі за год:</string>
     <string name="maranata2">Штодзённае чытаньне Бібліі за год</string>
-    <string name="maranata_opis">Прачытаньне Бібліі за год паводле плану супольнасьці “Maran atha”, выкарыстоўваючы:</string>
+    <string name="maranata_opis">Прачытаньне Бібліі за год паводле плану супольнасьці «Maran atha», выкарыстоўваючы:</string>
     <string name="pasliaPrychscia">Малітвы пасьля сьвятога прычасьця</string>
     <string name="vybranoe">Дадаць у Выбранае</string>
     <string name="vybranoe_del">Выдаліць з Выбранага</string>
@@ -723,5 +723,6 @@
     <string name="admin_update_ok">Апублікаваць</string>
     <string name="mineia_shtodzennaia">Мінэя штодзённая</string>
     <string name="mineia_sviatochnaia">Мінэя сьвяточная</string>
+    <string name="carkva_gazeta">«Царква» — беларуская грэка-каталіцкая газета</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

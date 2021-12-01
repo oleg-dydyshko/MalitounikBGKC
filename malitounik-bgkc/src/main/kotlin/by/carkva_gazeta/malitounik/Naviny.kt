@@ -271,7 +271,7 @@ class Naviny : AppCompatActivity() {
             }
             false
         }
-        binding.titleToolbar.setText("«Царква» — беларуская грэка-каталіцкая газета")
+        binding.titleToolbar.setText(getString(R.string.carkva_gazeta))
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -299,7 +299,7 @@ class Naviny : AppCompatActivity() {
                 val imm12 = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm12.hideSoftInputFromWindow(binding.viewWeb.windowToken, 0)
                 binding.toolbarprogress.visibility = View.INVISIBLE
-                val title = view?.title ?: "«Царква» — беларуская грэка-каталіцкая газета"
+                val title = view?.title ?: getString(R.string.carkva_gazeta)
                 binding.titleToolbar.setText(title)
                 if (binding.viewWeb.settings.cacheMode != WebSettings.LOAD_CACHE_ELSE_NETWORK) binding.viewWeb.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             } else {

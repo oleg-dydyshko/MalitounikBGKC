@@ -137,68 +137,81 @@ class SlugbovyiaTextu {
 
     fun getMineiaSviatochnaia() = dat20
 
-    fun getResource(day: Int, dayOfYear: String, utran: Boolean = false, liturgia: Boolean = false): String {
+    fun isPasxa(day: Int): Boolean {
+        var pasxa = true
+        dat19.forEach {
+            if (it.day == day) {
+                pasxa = it.pasxa
+            }
+        }
+        dat20.forEach {
+            if (it.day == day) {
+                pasxa = it.pasxa
+            }
+        }
+        return pasxa
+    }
+
+    fun getResource(day: Int, pasxa: Boolean, utran: Boolean = false, liturgia: Boolean = false): String {
         var resource = "0"
         dat12.forEach {
-            if (day == it.day) {
+            if (day == it.day && pasxa == it.pasxa) {
                 if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat13.forEach {
-            if (day == it.day) {
+            if (day == it.day && pasxa == it.pasxa) {
                 if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat14.forEach {
-            if (day == it.day) {
+            if (day == it.day && pasxa == it.pasxa) {
                 if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat15.forEach {
-            if (day == it.day) {
+            if (day == it.day && pasxa == it.pasxa) {
                 if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat16.forEach {
-            if (day == it.day) {
+            if (day == it.day && pasxa == it.pasxa) {
                 if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat17.forEach {
-            if (day == it.day) {
+            if (day == it.day && pasxa == it.pasxa) {
                 if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat18.forEach {
-            if (day == it.day) {
+            if (day == it.day && pasxa == it.pasxa) {
                 if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat19.forEach {
-            if (dayOfYear.toInt() == it.day) {
+            if (day == it.day && pasxa == it.pasxa) {
                 if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat20.forEach {
-            val dayR = if (it.pasxa) day
-            else dayOfYear.toInt()
-            if (dayR == it.day) {
+            if (day == it.day && pasxa == it.pasxa) {
                 if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource

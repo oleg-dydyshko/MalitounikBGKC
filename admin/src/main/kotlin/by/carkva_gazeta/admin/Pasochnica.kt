@@ -101,7 +101,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
 
     private fun findResoursNameAndTitle(): String {
         var title = fileName
-        if (findDirAsSave(resours, fileName)) {
+        if (findDirAsSave()) {
             val t3 = fileName.lastIndexOf(".")
             title = if (t3 != -1) {
                 resours = fileName.substring(0, t3)
@@ -173,7 +173,9 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         } else {
             "($resours) $title.html"
         }
-        if (intent.extras?.getBoolean("exits", false) == false) {
+        getOrSendFilePostRequest(text, false)
+        /*if (intent.extras?.getBoolean("exits", false) == false) {
+
             when {
                 isSite -> getFilePostRequest(fileName)
                 !findDirAsSave(resours, fileName) -> getFilePostRequest(fileName)
@@ -181,7 +183,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             }
         } else {
             getFilePostRequest(fileName)
-        }
+        }*/
         positionY = k.getInt("admin" + fileName + "position", 0)
         setTollbarTheme()
     }
@@ -403,7 +405,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         }
     }
 
-    private fun getFilePostRequest(fileName: String) {
+    /*private fun getFilePostRequest(fileName: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 var result = ""
@@ -444,6 +446,121 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 binding.progressBar2.visibility = View.GONE
             }
         }
+    }*/
+
+    private fun getOrSendFilePostRequest(content: String, isSaveAs: Boolean = true) {
+        if (MainActivity.isNetworkAvailable()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                var result = ""
+                var responseCodeS = 500
+                binding.progressBar2.visibility = View.VISIBLE
+                if (findDirAsSave.size == 0) {
+                    withContext(Dispatchers.IO) {
+                        val reqParam = URLEncoder.encode("findDir", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                        with(mURL.openConnection() as HttpURLConnection) {
+                            requestMethod = "POST"
+                            val wr = OutputStreamWriter(outputStream)
+                            wr.write(reqParam)
+                            wr.flush()
+                            val sb = StringBuilder()
+                            BufferedReader(InputStreamReader(inputStream)).use {
+                                var inputLine = it.readLine()
+                                while (inputLine != null) {
+                                    sb.append(inputLine)
+                                    inputLine = it.readLine()
+                                }
+                            }
+                            val gson = Gson()
+                            val type = object : TypeToken<ArrayList<String>>() {}.type
+                            findDirAsSave.addAll(gson.fromJson<ArrayList<String>>(sb.toString(), type))
+                        }
+                    }
+                }
+                val isSite = intent.extras?.getBoolean("isSite", false) ?: false
+                if (isSite || !findDirAsSave()) {
+                    withContext(Dispatchers.IO) {
+                        var reqParam = URLEncoder.encode("get", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
+                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                        with(mURL.openConnection() as HttpURLConnection) {
+                            requestMethod = "POST"
+                            val wr = OutputStreamWriter(outputStream)
+                            wr.write(reqParam)
+                            wr.flush()
+                            val sb = StringBuilder()
+                            BufferedReader(InputStreamReader(inputStream)).use {
+                                var inputLine = it.readLine()
+                                while (inputLine != null) {
+                                    sb.append(inputLine)
+                                    inputLine = it.readLine()
+                                }
+                            }
+                            val gson = Gson()
+                            val type = object : TypeToken<String>() {}.type
+                            result = gson.fromJson(sb.toString(), type)
+                            responseCodeS = responseCode
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.IO) {
+                        result = getTextOnSite(resours)
+                        if (!isSaveAs) {
+                            if (result == "") result = content
+                        } else result = content
+                        val gson = Gson()
+                        var reqParam = URLEncoder.encode("save", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("content", "UTF-8") + "=" + URLEncoder.encode(gson.toJson(result), "UTF-8")
+                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                        with(mURL.openConnection() as HttpURLConnection) {
+                            requestMethod = "POST"
+                            val wr = OutputStreamWriter(outputStream)
+                            wr.write(reqParam)
+                            wr.flush()
+                            responseCodeS = responseCode
+                        }
+                    }
+                }
+                if (responseCodeS == 200) {
+                    if (isSaveAs) {
+                        Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {
+                            setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                            setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                            setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+                            show()
+                        }
+                        if (!findDirAsSave()) {
+                            if (k.getBoolean("AdminDialogSaveAsHelp", true)) {
+                                val dialodSaveAsHelp = DialogSaveAsHelp.newInstance(fileName)
+                                dialodSaveAsHelp.show(supportFragmentManager, "dialodSaveAsHelp")
+                            } else {
+                                val dialogSaveAsFileExplorer = DialogSaveAsFileExplorer.getInstance(fileName)
+                                dialogSaveAsFileExplorer.show(supportFragmentManager, "dialogSaveAsFileExplorer")
+                            }
+                        }
+                    }
+                } else {
+                    Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.error), Snackbar.LENGTH_LONG).apply {
+                        setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
+                        show()
+                    }
+                }
+                if (fileName.contains(".htm")) {
+                    binding.apisanne.setText(MainActivity.fromHtml(result, HtmlCompat.FROM_HTML_MODE_COMPACT))
+                    binding.actionP.visibility = View.GONE
+                    binding.actionBr.visibility = View.GONE
+                } else {
+                    binding.apisanne.setText(result)
+                }
+                binding.apisanne.post {
+                    binding.scrollView.smoothScrollBy(0, positionY)
+                }
+                binding.progressBar2.visibility = View.GONE
+            }
+        }
     }
 
     private fun getTextOnSite(fileName: String): String {
@@ -471,53 +588,25 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         return text
     }
 
-    private fun findDirAsSave() {
-        if (findDirAsSave.size == 0) {
-            CoroutineScope(Dispatchers.IO).launch {
-                withContext(Dispatchers.IO) {
-                    val reqParam = URLEncoder.encode("findDir", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
-                    with(mURL.openConnection() as HttpURLConnection) {
-                        requestMethod = "POST"
-                        val wr = OutputStreamWriter(outputStream)
-                        wr.write(reqParam)
-                        wr.flush()
-                        val sb = StringBuilder()
-                        BufferedReader(InputStreamReader(inputStream)).use {
-                            var inputLine = it.readLine()
-                            while (inputLine != null) {
-                                sb.append(inputLine)
-                                inputLine = it.readLine()
-                            }
-                        }
-                        val gson = Gson()
-                        val type = object : TypeToken<ArrayList<String>>() {}.type
-                        findDirAsSave.addAll(gson.fromJson<ArrayList<String>>(sb.toString(), type))
-                    }
-                }
-            }
-        }
-    }
-
-    private fun findDirAsSave(resours: String, fileName: String): Boolean {
+    private fun findDirAsSave(): Boolean {
         var result = false
         if (resours != "") {
-            var itemList = ""
+            //var itemList = ""
             for (i in 0 until findDirAsSave.size) {
                 if (findDirAsSave[i].contains(resours)) {
                     result = true
-                    itemList = findDirAsSave[i]
+                    //itemList = findDirAsSave[i]
                     break
                 }
             }
-            if (result) {
+            /*if (result) {
                 sendSaveAsPostRequest(itemList, fileName)
-            }
+            }*/
         }
         return result
     }
 
-    private fun sendPostRequest(fileName: String, resours: String, content: String, isSaveAs: Boolean = true) {
+    /*private fun sendPostRequest(fileName: String, resours: String, content: String, isSaveAs: Boolean = true) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 var text = ""
@@ -573,7 +662,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 binding.progressBar2.visibility = View.GONE
             }
         }
-    }
+    }*/
 
     private fun clearColor(text: String): String {
         var result = text
@@ -767,10 +856,10 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 result = clearBold(result)
                 result = clearEm(result)
                 if (!result.contains("<!DOCTYPE HTML>")) result = "<!DOCTYPE HTML>$result"
-                sendPostRequest(fileName, resours, result)
+                getOrSendFilePostRequest(result)
             }
         } else {
-            sendPostRequest(fileName, resours, text.toString())
+            getOrSendFilePostRequest(text.toString())
         }
     }
 

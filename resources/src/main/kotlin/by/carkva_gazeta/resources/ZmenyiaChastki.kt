@@ -13,8 +13,6 @@ internal class ZmenyiaChastki {
     private val data: ArrayMap<String, Int> = ArrayMap()
     private val arrayData = ArrayList<ArrayList<String>>()
 
-    fun getData() = arrayData
-
     fun sviatyia(): String {
         return if (arrayData[0][10] != "") arrayData[0][10]
         else arrayData[0][11]

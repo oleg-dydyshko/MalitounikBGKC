@@ -1345,15 +1345,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     intent.putExtra("mun", munsv)
                 }
                 checkDayOfYear -> {
-                    val zmenyiaChastki = ZmenyiaChastki()
-                    val resours = slugba.getResource(raznica, zmenyiaChastki.dayOfYear(), liturgia = true)
+                    val resours = slugba.getResource(raznica, slugba.isPasxa(raznica), liturgia = true)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))
                 }
                 else -> {
-                    val zmenyiaChastki = ZmenyiaChastki()
-                    val resours = slugba.getResource(raznica, zmenyiaChastki.dayOfYear(), liturgia = true)
+                    val resours = slugba.getResource(raznica, slugba.isPasxa(raznica), liturgia = true)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))

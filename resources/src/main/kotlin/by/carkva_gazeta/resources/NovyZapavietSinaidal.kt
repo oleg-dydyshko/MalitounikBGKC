@@ -61,7 +61,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
                 remove.add(BibleGlobalList.vydelenie[i])
             }
         }
-        BibleGlobalList.vydelenie.removeAll(remove)
+        BibleGlobalList.vydelenie.removeAll(remove.toSet())
     }
 
     override fun onPause() {

@@ -62,7 +62,7 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
                 remove.add(BibleGlobalList.vydelenie[i])
             }
         }
-        BibleGlobalList.vydelenie.removeAll(remove)
+        BibleGlobalList.vydelenie.removeAll(remove.toSet())
     }
 
     override fun onPause() {

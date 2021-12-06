@@ -719,7 +719,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                 del.add(p)
             }
         }
-        MainActivity.padzeia.removeAll(del)
+        MainActivity.padzeia.removeAll(del.toSet())
         val outputStream = FileWriter("$filesDir/Sabytie.json")
         val gson = Gson()
         outputStream.write(gson.toJson(MainActivity.padzeia))
@@ -1577,7 +1577,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                         }
                     }
                 }
-                MainActivity.padzeia.removeAll(del)
+                MainActivity.padzeia.removeAll(del.toSet())
                 when (repitL) {
                     0 -> {
                         time = "0"
@@ -2303,7 +2303,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
         if (del.size != 0) {
             redak = true
-            MainActivity.padzeia.removeAll(del)
+            MainActivity.padzeia.removeAll(del.toSet())
             val outputStream = FileWriter("$filesDir/Sabytie.json")
             val gson = Gson()
             outputStream.write(gson.toJson(MainActivity.padzeia))

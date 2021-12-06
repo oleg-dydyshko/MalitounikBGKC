@@ -72,7 +72,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
 
     override fun fileAllNatatkiAlboZakladki(semuxa: Int) {
         if (semuxa == 1) {
-            data.removeAll(data)
+            data.removeAll(data.toSet())
             adapter.updateList(data)
             val fileNatatki = File("$filesDir/BibliaSemuxaNatatki.json")
             if (fileNatatki.exists()) {
@@ -80,7 +80,7 @@ class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAl
             }
         }
         if (semuxa == 2) {
-            data.removeAll(data)
+            data.removeAll(data.toSet())
             adapter.updateList(data)
             val fileNatatki = File("$filesDir/BibliaSinodalNatatki.json")
             if (fileNatatki.exists()) {

@@ -62,7 +62,7 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
                 remove.add(BibleGlobalList.vydelenie[i])
             }
         }
-        BibleGlobalList.vydelenie.removeAll(remove)
+        BibleGlobalList.vydelenie.removeAll(remove.toSet())
     }
 
     override fun onPause() {

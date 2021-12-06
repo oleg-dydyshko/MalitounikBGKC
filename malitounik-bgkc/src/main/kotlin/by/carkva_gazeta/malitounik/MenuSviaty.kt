@@ -37,9 +37,7 @@ class MenuSviaty : SviatyListFragment() {
         outState.putInt("year", year)
     }
 
-    override fun getCviatyYear(): Int {
-        return year
-    }
+    override fun getCviatyYear() = year
 
     override fun setCviatyYear(year: Int) {
         this.year = year

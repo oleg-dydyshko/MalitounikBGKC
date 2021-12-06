@@ -240,7 +240,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                             val rtemp2: Int = arrayList[i][4].toInt()
                             if (rtemp2 != rub) temp.add(arrayList[i])
                         }
-                        arrayList.removeAll(temp)
+                        arrayList.removeAll(temp.toSet())
                         adapter.notifyDataSetChanged()
                         bindingcontent.progressBar2.visibility = View.GONE
                         MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.bad_internet), Toast.LENGTH_LONG)
@@ -302,7 +302,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         var position1 = -1
         naidaunia.forEachIndexed { index, arrayList1 ->
-            if (arrayList1[0] == arrayList[position][0]) {
+            if (arrayList1[1] == arrayList[position][1]) {
                 position1 = index
             }
         }
@@ -311,9 +311,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 arrayList.removeAt(position)
                 adapter.notifyDataSetChanged()
             }
+            val fileChech = File(naidaunia[position1][1])
+            if (fileChech.exists()) fileChech.delete()
             naidaunia.removeAt(position1)
             val gson = Gson()
-            val prefEditor: SharedPreferences.Editor = k.edit()
+            val prefEditor = k.edit()
             prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
             prefEditor.apply()
         }
@@ -471,32 +473,34 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     override fun loadComplete(nbPages: Int) {
         bookTitle.clear()
         printBookmarksTree(pdfView.tableOfContents)
-        var title: String = pdfView.documentMeta.title
-        if (title == "") {
-            val t1: Int = filePath.lastIndexOf("/")
+        var title = pdfView.documentMeta.title
+        if (title == "" && filePath != "") {
+            val t1 = filePath.lastIndexOf("/")
             title = filePath.substring(t1 + 1)
         }
         bindingappbar.titleToolbar.text = title
-        for (i in 0 until naidaunia.size) {
-            if (naidaunia[i][1].contains(filePath)) {
-                naidaunia.removeAt(i)
-                break
+        if (filePath != "") {
+            for (i in 0 until naidaunia.size) {
+                if (naidaunia[i][1].contains(filePath)) {
+                    naidaunia.removeAt(i)
+                    break
+                }
             }
+            val gson = Gson()
+            val temp = ArrayList<String>()
+            temp.add(title)
+            temp.add(filePath)
+            val t2 = filePath.lastIndexOf("/")
+            val image = filePath.substring(t2 + 1)
+            val t1 = image.lastIndexOf(".")
+            val imageTemp = File("$filesDir/image_temp/" + image.substring(0, t1) + ".png")
+            if (imageTemp.exists()) temp.add("$filesDir/image_temp/" + image.substring(0, t1) + ".png")
+            else temp.add("")
+            naidaunia.add(temp)
+            val prefEditor = k.edit()
+            prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
+            prefEditor.apply()
         }
-        val gson = Gson()
-        val temp: ArrayList<String> = ArrayList()
-        temp.add(title)
-        temp.add(filePath)
-        val t2: Int = filePath.lastIndexOf("/")
-        val image: String = filePath.substring(t2 + 1)
-        val t1 = image.lastIndexOf(".")
-        val imageTemp = File("$filesDir/image_temp/" + image.substring(0, t1) + ".png")
-        if (imageTemp.exists()) temp.add("$filesDir/image_temp/" + image.substring(0, t1) + ".png")
-        else temp.add("")
-        naidaunia.add(temp)
-        val prefEditor: SharedPreferences.Editor = k.edit()
-        prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
-        prefEditor.apply()
         pdfView.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorSecondary_text)
     }
 
@@ -778,6 +782,16 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
         val gson = Gson()
         val json = k.getString("bibliateka_naidaunia", "")
+        if (json == "") {
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    val dir = File("$filesDir/Book")
+                    if (dir.exists()) dir.deleteRecursively()
+                    val dirChesh = File(cacheDir.absolutePath + "/Biblijateka")
+                    if (dirChesh.exists()) dirChesh.deleteRecursively()
+                }
+            }
+        }
         var savedInstance = -1
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
@@ -818,18 +832,35 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             invalidateOptionsMenu()
             if (fullscreenPage) hide()
         } else {
-            intent.data?.let {
-                if (it.toString().contains("root")) {
-                    val t1 = it.toString().indexOf("root")
-                    filePath = it.toString().substring(t1 + 4)
+            intent.data?.let { uri ->
+                if (uri.toString().contains("root")) {
+                    val t1 = uri.toString().indexOf("root")
+                    filePath = uri.toString().substring(t1 + 4)
                 } else {
                     var cursor: Cursor? = null
                     try {
                         val proj = arrayOf(MediaStore.Images.Media.DATA)
-                        cursor = contentResolver.query(it, proj, null, null, null)
-                        val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                        cursor = contentResolver.query(uri, proj, null, null, null)
+                        val columnIndex = cursor?.getColumnIndex(MediaStore.Images.Media.DATA) ?: 0
                         cursor?.moveToFirst()
-                        filePath = cursor?.getString(columnIndex ?: 0) ?: ""
+                        filePath = cursor?.getString(columnIndex) ?: ""
+                        //val mimeType = contentResolver.getType(uri) ?: "-1"
+                        fileName = cursor?.getString(0) ?: ""
+                        if (filePath == "") {
+                            val dir = File(cacheDir.absolutePath + "/Biblijateka")
+                            if (!dir.exists()) dir.mkdir()
+                            cursor = contentResolver.query(uri, null, null, null, null)
+                            cursor?.moveToFirst()
+                            fileName = cursor?.getString(0) ?: ""
+                            filePath = cacheDir.absolutePath + "/Biblijateka/" + fileName
+                            val inputStream = contentResolver.openInputStream(uri)
+                            inputStream?.let {
+                                val file = File(filePath)
+                                file.outputStream().use { fileOut ->
+                                    it.copyTo(fileOut)
+                                }
+                            }
+                        }
                     } catch (t: Throwable) {
                     } finally {
                         cursor?.close()
@@ -915,9 +946,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     private fun loadFilePDF() {
-        val file = File(filePath)
         bindingcontent.progressBar2.visibility = View.GONE
         pdfView.visibility = View.VISIBLE
+        val file = File(filePath)
         val allEntries: Map<String, *> = k.all
         for ((key) in allEntries) {
             if (key.contains(fileName)) {
@@ -929,9 +960,9 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
     }
 
     private fun loadFileTXT() {
-        val file = File(filePath)
         bindingcontent.progressBar2.visibility = View.GONE
         bindingcontent.scrollViewB.visibility = View.VISIBLE
+        val file = File(filePath)
         bindingcontent.textViewB.text = file.readText()
         val t1 = file.name.lastIndexOf(".")
         bindingappbar.titleToolbar.text = file.name.substring(0, t1)
@@ -947,15 +978,15 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         temp.add(filePath)
         temp.add("")
         naidaunia.add(temp)
-        val prefEditor: SharedPreferences.Editor = k.edit()
+        val prefEditor = k.edit()
         prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
         prefEditor.apply()
     }
 
     private fun loadFileHTML() {
-        val file = File(filePath)
         bindingcontent.progressBar2.visibility = View.GONE
         bindingcontent.webView.visibility = View.VISIBLE
+        val file = File(filePath)
         bindingcontent.webView.loadUrl("file://" + file.absolutePath)
         val t1 = file.name.lastIndexOf(".")
         bindingappbar.titleToolbar.text = file.name.substring(0, t1)
@@ -971,7 +1002,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         temp.add(filePath)
         temp.add("")
         naidaunia.add(temp)
-        val prefEditor: SharedPreferences.Editor = k.edit()
+        val prefEditor = k.edit()
         prefEditor.putString("bibliateka_naidaunia", gson.toJson(naidaunia))
         prefEditor.apply()
     }
@@ -1651,7 +1682,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         val rtemp2: Int = arrayList[i][4].toInt()
                         if (rtemp2 != rub) temp.add(arrayList[i])
                     }
-                    arrayList.removeAll(temp)
+                    arrayList.removeAll(temp.toSet())
                     adapter.notifyDataSetChanged()
                 }
             } else {

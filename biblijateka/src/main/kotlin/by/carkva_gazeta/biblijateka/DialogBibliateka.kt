@@ -40,7 +40,7 @@ class DialogBibliateka : DialogFragment() {
     }
 
     internal interface DialogBibliatekaListener {
-        fun onDialogbibliatekaPositiveClick(listPosition: String, title: String) //void onDialogbibliatekaNeutralClick(String listPosition, String title);
+        fun onDialogbibliatekaPositiveClick(listPosition: String, title: String)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

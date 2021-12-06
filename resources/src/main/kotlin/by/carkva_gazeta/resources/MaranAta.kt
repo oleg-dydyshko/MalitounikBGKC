@@ -122,7 +122,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 remove.add(vydelenie[i])
             }
         }
-        vydelenie.removeAll(remove)
+        vydelenie.removeAll(remove.toSet())
     }
 
     @SuppressLint("ClickableViewAccessibility")

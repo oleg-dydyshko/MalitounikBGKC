@@ -99,6 +99,9 @@ class SlugbovyiaTextu {
         dat19.add(SlugbovyiaTextuData(316, "Сьвятога сьвятамучаніка Язафата, архібіскупа Полацкага", "l_12_11", liturgia = true))
         dat19.add(SlugbovyiaTextuData(317, "Між сьвятымі айца нашага Яна Залатавуснага", "v_13_11"))
         dat19.add(SlugbovyiaTextuData(317, "Між сьвятымі айца нашага Яна Залатавуснага", "l_13_11", liturgia = true))
+        dat19.add(SlugbovyiaTextuData(340, "Між сьвятымі айца нашага Міколы Цудатворца, архібіскупа Мірлікійскага", "ju_6_12", utran = true))
+        dat19.add(SlugbovyiaTextuData(340, "Між сьвятымі айца нашага Міколы Цудатворца, архібіскупа Мірлікійскага", "v_6_12"))
+        dat19.add(SlugbovyiaTextuData(340, "Між сьвятымі айца нашага Міколы Цудатворца, архібіскупа Мірлікійскага", "l_6_12", liturgia = true))
 
         dat20.add(SlugbovyiaTextuData(218, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "zmenyia_chastki_pieramianiennie", liturgia = true))
         dat20.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "viachernia_mineia_sviatochnaia1"))

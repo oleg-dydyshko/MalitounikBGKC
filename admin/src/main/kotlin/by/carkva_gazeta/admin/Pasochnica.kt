@@ -37,7 +37,7 @@ import java.net.URL
 import java.net.URLEncoder
 
 
-class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner, InteractiveScrollView.OnScrollChangedCallback, DialogDeliteHelp.DialogDeliteHelpListener {
+class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner, InteractiveScrollView.OnScrollChangedCallback {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
@@ -254,28 +254,6 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         sendSaveAsAddNewPesnyPostRequest(title, pesny, fileName)
     }
 
-    override fun onFileDelite(fileName: String) {
-        if (MainActivity.isNetworkAvailable()) {
-            CoroutineScope(Dispatchers.Main).launch {
-                binding.progressBar2.visibility = View.VISIBLE
-                withContext(Dispatchers.IO) {
-                    var reqParam = URLEncoder.encode("unlink", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
-                    val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
-                    with(mURL.openConnection() as HttpURLConnection) {
-                        requestMethod = "POST"
-                        val wr = OutputStreamWriter(outputStream)
-                        wr.write(reqParam)
-                        wr.flush()
-                        inputStream
-                    }
-                }
-                binding.progressBar2.visibility = View.GONE
-                onBackPressed()
-            }
-        }
-    }
-
     private fun sendSaveAsAddNewPesnyPostRequest(title: String, pesny: String, fileName: String) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -379,8 +357,6 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                         setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
                         show()
                     }
-                    val dialogDeliteHelp = DialogDeliteHelp.newInstance(fileName)
-                    dialogDeliteHelp.show(supportFragmentManager, "dialogDeliteHelp")
                 } else {
                     Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.error), Snackbar.LENGTH_LONG).apply {
                         setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
@@ -478,8 +454,6 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                             setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
                             show()
                         }
-                        val dialogDeliteHelp = DialogDeliteHelp.newInstance(fileName)
-                        dialogDeliteHelp.show(supportFragmentManager, "dialogDeliteHelp")
                         if (!findDirAsSave()) {
                             if (k.getBoolean("AdminDialogSaveAsHelp", true)) {
                                 val dialodSaveAsHelp = DialogSaveAsHelp.newInstance(fileName)

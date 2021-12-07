@@ -844,7 +844,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         val columnIndex = cursor?.getColumnIndex(MediaStore.Images.Media.DATA) ?: 0
                         cursor?.moveToFirst()
                         filePath = cursor?.getString(columnIndex) ?: ""
-                        //val mimeType = contentResolver.getType(uri) ?: "-1"
                         fileName = cursor?.getString(0) ?: ""
                         if (filePath == "") {
                             val dir = File(cacheDir.absolutePath + "/Biblijateka")

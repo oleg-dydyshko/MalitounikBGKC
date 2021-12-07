@@ -424,7 +424,8 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     }
                 }
                 val isSite = intent.extras?.getBoolean("isSite", false) ?: false
-                if (isSite || !findDirAsSave()) {
+                if (isSite) {
+                    intent.removeExtra("isSite")
                     withContext(Dispatchers.IO) {
                         var reqParam = URLEncoder.encode("get", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
                         reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
@@ -477,6 +478,8 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                             setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
                             show()
                         }
+                        val dialogDeliteHelp = DialogDeliteHelp.newInstance(fileName)
+                        dialogDeliteHelp.show(supportFragmentManager, "dialogDeliteHelp")
                         if (!findDirAsSave()) {
                             if (k.getBoolean("AdminDialogSaveAsHelp", true)) {
                                 val dialodSaveAsHelp = DialogSaveAsHelp.newInstance(fileName)

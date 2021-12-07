@@ -88,6 +88,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
 
         binding.listView.setOnItemClickListener { _, _, position, _ ->
             val intent = Intent(this, Pasochnica::class.java)
+            intent.putExtra("isSite", true)
             intent.putExtra("fileName", fileList[position])
             startActivity(intent)
         }

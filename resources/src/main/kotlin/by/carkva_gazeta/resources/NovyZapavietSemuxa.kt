@@ -492,7 +492,7 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
         this.cytanneParalelnye = cytanneParalelnye
         this.cytanneSours = cytanneSours
         val pm = ParalelnyeMesta()
-        binding.conteiner.text = pm.paralel(this@NovyZapavietSemuxa, this.cytanneSours, this.cytanneParalelnye, true).trim()
+        binding.conteiner.text = pm.paralel(this.cytanneParalelnye, true).trim()
         binding.scroll.visibility = View.VISIBLE
         binding.pager.visibility = View.GONE
         binding.tabLayout.visibility = View.GONE

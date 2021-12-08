@@ -483,7 +483,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
         this.cytanneParalelnye = cytanneParalelnye ?: ""
         this.cytanneSours = cytanneSours ?: ""
         val pm = ParalelnyeMesta()
-        binding.conteiner.text = pm.paralel(this@NovyZapavietSinaidal, this.cytanneSours, this.cytanneParalelnye, false).trim()
+        binding.conteiner.text = pm.paralel(this.cytanneParalelnye, false).trim()
         binding.scroll.visibility = View.VISIBLE
         binding.pager.visibility = View.GONE
         binding.tabLayout.visibility = View.GONE

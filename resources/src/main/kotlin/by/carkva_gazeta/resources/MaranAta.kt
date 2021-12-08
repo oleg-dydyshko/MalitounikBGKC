@@ -1297,7 +1297,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     val t3 = maranAta[position].indexOf("<!--")
                     val ch = maranAta[position].substring(t3 + 4, t2)
                     val biblia = ch.split(".")
-                    binding.conteiner.text = pm.paralel(this, biblia[0] + " " + biblia[1] + "." + biblia[2], maranAta[position].substring(t1 + 1).trim(), belarus).trim()
+                    binding.conteiner.text = pm.paralel(maranAta[position].substring(t1 + 1).trim(), belarus).trim()
                     binding.scroll.visibility = View.VISIBLE
                     binding.ListView.visibility = View.GONE
                     binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, biblia[0] + " " + biblia[1] + "." + biblia[2])

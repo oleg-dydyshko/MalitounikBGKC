@@ -1,175 +1,19 @@
 package by.carkva_gazeta.resources
 
-import android.content.Context
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import androidx.core.text.toSpannable
+import by.carkva_gazeta.malitounik.Malitounik
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
 class ParalelnyeMesta {
-    fun paralel(context: Context, cytanneSours: String, cytanneParalelnye: String, semuxa: Boolean): Spannable {
-        var cytanneSours1 = cytanneSours
+    fun paralel(cytanneParalelnye: String, semuxa: Boolean): Spannable {
         val stringBuilder = SpannableStringBuilder()
-        if (semuxa) {
-            if (cytanneSours1 == "Быт") {
-                cytanneSours1 = cytanneSours1.replace("Быт", "Быц")
-            }
-            if (cytanneSours1 == "Исх") {
-                cytanneSours1 = cytanneSours1.replace("Исх", "Вых")
-            }
-            if (cytanneSours1 == "Лев") {
-                cytanneSours1 = cytanneSours1.replace("Лев", "Ляв")
-            }
-            if (cytanneSours1 == "Числа") {
-                cytanneSours1 = cytanneSours1.replace("Числа", "Лікі")
-            }
-            if (cytanneSours1 == "Втор") {
-                cytanneSours1 = cytanneSours1.replace("Втор", "Дрг")
-            }
-            if (cytanneSours1 == "Руфь") {
-                cytanneSours1 = cytanneSours1.replace("Руфь", "Рут")
-            }
-            if (cytanneSours1 == "1 Пар") {
-                cytanneSours1 = cytanneSours1.replace("1 Пар", "1 Лет")
-            }
-            if (cytanneSours1 == "2 Пар") {
-                cytanneSours1 = cytanneSours1.replace("2 Пар", "2 Лет")
-            }
-            if (cytanneSours1 == "1 Езд") {
-                cytanneSours1 = cytanneSours1.replace("1 Езд", "1 Эзд")
-            }
-            if (cytanneSours1 == "Неем") {
-                cytanneSours1 = cytanneSours1.replace("Неем", "Нээм")
-            }
-            if (cytanneSours1 == "Есф") {
-                cytanneSours1 = cytanneSours1.replace("Есф", "Эст")
-            }
-            if (cytanneSours1 == "Иов") {
-                cytanneSours1 = cytanneSours1.replace("Иов", "Ёва")
-            }
-            if (cytanneSours1 == "Притч") {
-                cytanneSours1 = cytanneSours1.replace("Притч", "Высл")
-            }
-            if (cytanneSours1 == "Еккл") {
-                cytanneSours1 = cytanneSours1.replace("Еккл", "Экл")
-            }
-            if (cytanneSours1 == "Песн") {
-                cytanneSours1 = cytanneSours1.replace("Песн", "Псн")
-            }
-            if (cytanneSours1 == "Ис") {
-                cytanneSours1 = cytanneSours1.replace("Ис", "Іс")
-            }
-            if (cytanneSours1 == "Посл Иер") {
-                cytanneSours1 = cytanneSours1.replace("Посл Иер", "Пасл Ер")
-            }
-            if (cytanneSours1 == "Иер") {
-                cytanneSours1 = cytanneSours1.replace("Иер", "Ер")
-            }
-            if (cytanneSours1 == "Иез") {
-                cytanneSours1 = cytanneSours1.replace("Иез", "Езк")
-            }
-            if (cytanneSours1 == "Ос") {
-                cytanneSours1 = cytanneSours1.replace("Ос", "Ас")
-            }
-            if (cytanneSours1 == "Иоиль") {
-                cytanneSours1 = cytanneSours1.replace("Иоиль", "Ёіл")
-            }
-            if (cytanneSours1 == "Авдий") {
-                cytanneSours1 = cytanneSours1.replace("Авдий", "Аўдз")
-            }
-            if (cytanneSours1 == "Иона") {
-                cytanneSours1 = cytanneSours1.replace("Иона", "Ёны")
-            }
-            if (cytanneSours1 == "Мих") {
-                cytanneSours1 = cytanneSours1.replace("Мих", "Міх")
-            }
-            if (cytanneSours1 == "Наум") {
-                cytanneSours1 = cytanneSours1.replace("Наум", "Нвм")
-            }
-            if (cytanneSours1 == "Аввакум") {
-                cytanneSours1 = cytanneSours1.replace("Аввакум", "Абк")
-            }
-            if (cytanneSours1 == "Сафония") {
-                cytanneSours1 = cytanneSours1.replace("Сафония", "Саф")
-            }
-            if (cytanneSours1 == "Аггей") {
-                cytanneSours1 = cytanneSours1.replace("Аггей", "Аг")
-            }
-            if (cytanneSours1 == "Мф") {
-                cytanneSours1 = cytanneSours1.replace("Мф", "Мц")
-            }
-            if (cytanneSours1 == "Лк") {
-                cytanneSours1 = cytanneSours1.replace("Лк", "Лук")
-            }
-            if (cytanneSours1 == "Ин") {
-                cytanneSours1 = cytanneSours1.replace("Ин", "Ян")
-            }
-            if (cytanneSours1 == "Деян") {
-                cytanneSours1 = cytanneSours1.replace("Деян", "Дз")
-            }
-            if (cytanneSours1 == "Иак") {
-                cytanneSours1 = cytanneSours1.replace("Иак", "Як")
-            }
-            if (cytanneSours1 == "1 Пет") {
-                cytanneSours1 = cytanneSours1.replace("1 Пет", "1 Пт")
-            }
-            if (cytanneSours1 == "2 Пет") {
-                cytanneSours1 = cytanneSours1.replace("2 Пет", "2 Пт")
-            }
-            if (cytanneSours1 == "1 Ин") {
-                cytanneSours1 = cytanneSours1.replace("1 Ин", "1 Ян")
-            }
-            if (cytanneSours1 == "2 Ин") {
-                cytanneSours1 = cytanneSours1.replace("2 Ин", "2 Ян")
-            }
-            if (cytanneSours1 == "3 Ин") {
-                cytanneSours1 = cytanneSours1.replace("3 Ин", "3 Ян")
-            }
-            if (cytanneSours1 == "Иуд") {
-                cytanneSours1 = cytanneSours1.replace("Иуд", "Юд")
-            }
-            if (cytanneSours1 == "Рим") {
-                cytanneSours1 = cytanneSours1.replace("Рим", "Рым")
-            }
-            if (cytanneSours1 == "1 Кор") {
-                cytanneSours1 = cytanneSours1.replace("1 Кор", "1 Кар")
-            }
-            if (cytanneSours1 == "2 Кор") {
-                cytanneSours1 = cytanneSours1.replace("2 Кор", "2 Кар")
-            }
-            if (cytanneSours1 == "Еф") {
-                cytanneSours1 = cytanneSours1.replace("Еф", "Эф")
-            }
-            if (cytanneSours1 == "Флп") {
-                cytanneSours1 = cytanneSours1.replace("Флп", "Плп")
-            }
-            if (cytanneSours1 == "Кол") {
-                cytanneSours1 = cytanneSours1.replace("Кол", "Клс")
-            }
-            if (cytanneSours1 == "1 Тим") {
-                cytanneSours1 = cytanneSours1.replace("1 Тим", "1 Цім")
-            }
-            if (cytanneSours1 == "2 Тим") {
-                cytanneSours1 = cytanneSours1.replace("2 Тим", "2 Цім")
-            }
-            if (cytanneSours1 == "Тит") {
-                cytanneSours1 = cytanneSours1.replace("Тит", "Ціт")
-            }
-            if (cytanneSours1 == "Евр") {
-                cytanneSours1 = cytanneSours1.replace("Евр", "Гбр")
-            }
-            if (cytanneSours1 == "Откр") {
-                cytanneSours1 = cytanneSours1.replace("Откр", "Адкр")
-            }
-        }
         val chten = cytanneParalelnye.split(";")
-        var src = context.resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours1).toSpannable()
-        src.setSpan(StyleSpan(Typeface.BOLD_ITALIC), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        stringBuilder.append(src).append("\n\n")
         var knigaName = "Быт"
         for (aChten in chten) {
             var nomerglavy = 1
@@ -228,7 +72,7 @@ class ParalelnyeMesta {
                 }
                 try {
                     var noKnigaSemuxi = false
-                    val r = context.resources
+                    val r = Malitounik.applicationContext().resources
                     var inputStream: InputStream? = null
                     if (semuxa) {
                         inputStream = when (nomer) {
@@ -444,15 +288,15 @@ class ParalelnyeMesta {
                             }
                         }
                         if (noKnigaSemuxi) {
-                            src = context.resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error).toSpannable()
+                            val src = Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error).toSpannable()
                             src.setSpan(StyleSpan(Typeface.ITALIC), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                             stringBuilder.append(src).append("\n")
                         }
 
-                        src = kon.toSpannable()
+                        val src = kon.toSpannable()
                         src.setSpan(StyleSpan(Typeface.BOLD), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                         stringBuilder.append(src).append("\n")
-                        stringBuilder.append(context.resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_opis, r2)).append("\n")
+                        stringBuilder.append(Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_opis, r2)).append("\n")
                     }
                 } catch (t: Throwable) {
                     if (semuxa) nazva = nazvaBel
@@ -467,10 +311,10 @@ class ParalelnyeMesta {
                             "$nazva $nomerglavy.$nachalo-$konec"
                         }
                     }
-                    src = kon.toSpannable()
+                    var src = kon.toSpannable()
                     src.setSpan(StyleSpan(Typeface.BOLD), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     stringBuilder.append(src).append("\n\n")
-                    src = context.resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch).toSpannable()
+                    src = Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch).toSpannable()
                     src.setSpan(StyleSpan(Typeface.ITALIC), 0, src.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     stringBuilder.append(src)
                 }

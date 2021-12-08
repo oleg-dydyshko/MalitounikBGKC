@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:scrollbarStyle="insideOverlay"
-    android:scrollbars="none">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <by.carkva_gazeta.malitounik.EditTextCustom
+        android:id="@+id/file"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="@color/colorPrimary"
+        android:hint="@string/natatka_name"
+        android:inputType="text|textAutoCorrect|textCapSentences"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorDivider2"
+        android:textCursorDrawable="@drawable/cursor"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <by.carkva_gazeta.malitounik.EditTextCustom
-            android:id="@+id/file"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:hint="@string/natatka_name"
-            android:inputType="text|textAutoCorrect|textCapSentences"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textColor="@color/colorWhite"
-            android:textColorHint="@color/colorDivider2"
-            android:textCursorDrawable="@drawable/cursor"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="none">
 
         <by.carkva_gazeta.malitounik.EditTextCustom
             android:id="@+id/EditText"
@@ -39,5 +39,5 @@
             android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
             android:textIsSelectable="true"
             android:textSize="18sp" />
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

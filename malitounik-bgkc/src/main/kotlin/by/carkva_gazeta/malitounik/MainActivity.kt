@@ -1530,6 +1530,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             cytanne = cytanne.replace("Тон 6.", "")
             cytanne = cytanne.replace("Тон 7.", "")
             cytanne = cytanne.replace("Тон 8.", "")
+            cytanne = cytanne.replace("Ганьне", "")
             cytanne = cytanne.replace("Вялікія гадзіны", "")
             cytanne = cytanne.replace("На асьвячэньне вады", "")
             cytanne = cytanne.replace("Багародзіцы", "")
@@ -1583,7 +1584,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             cytanne = cytanne.replace("Першамуч.", "")
             cytanne = cytanne.replace("Суб.", "")
             cytanne = cytanne.replace("Нядз.", "")
-            cytanne = cytanne.replace("Ганне", "")
             cytanne = cytanne.trim()
             return cytanne
         }

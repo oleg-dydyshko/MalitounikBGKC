@@ -127,6 +127,7 @@
                 android:id="@+id/t5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="horizontal"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp">
 
@@ -154,6 +155,7 @@
                 android:id="@+id/t6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="horizontal"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp">
 
@@ -181,6 +183,7 @@
                 android:id="@+id/t7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="horizontal"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp">
 
@@ -208,6 +211,7 @@
                 android:id="@+id/t8"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="horizontal"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp">
 
@@ -235,6 +239,7 @@
                 android:id="@+id/t9"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="horizontal"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp">
 

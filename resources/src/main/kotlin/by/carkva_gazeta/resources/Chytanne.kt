@@ -806,10 +806,10 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                             }
                             ssbTitle.append("\n").append(textBiblia).append("\n")
                         } else {
-                            error()
+                            ssbTitle.append("\n").append(error())
                         }
                     } catch (t: Throwable) {
-                        error()
+                        ssbTitle.append("\n").append(error())
                     }
                     if (i == 1 && e == 0) titleTwo = title
                 }
@@ -844,14 +844,14 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                 }
             }
         } catch (t: Throwable) {
-            error()
+            binding.textView.text = error()
         }
     }
 
-    private fun error() {
-        val ssb = SpannableStringBuilder(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch))
+    private fun error(): SpannableString {
+        val ssb = SpannableString(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch))
         ssb.setSpan(StyleSpan(Typeface.BOLD), 0, resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch).length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        binding.textView.text = ssb
+        return ssb
     }
 
     private fun autoStartScroll() {

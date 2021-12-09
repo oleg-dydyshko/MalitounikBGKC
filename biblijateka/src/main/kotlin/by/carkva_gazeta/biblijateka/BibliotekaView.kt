@@ -851,12 +851,14 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                             cursor = contentResolver.query(uri, null, null, null, null)
                             cursor?.moveToFirst()
                             fileName = cursor?.getString(0) ?: ""
-                            filePath = cacheDir.absolutePath + "/Biblijateka/" + fileName
-                            val inputStream = contentResolver.openInputStream(uri)
-                            inputStream?.let {
-                                val file = File(filePath)
-                                file.outputStream().use { fileOut ->
-                                    it.copyTo(fileOut)
+                            if (fileName != "") {
+                                filePath = cacheDir.absolutePath + "/Biblijateka/" + fileName
+                                val inputStream = contentResolver.openInputStream(uri)
+                                inputStream?.let {
+                                    val file = File(filePath)
+                                    file.outputStream().use { fileOut ->
+                                        it.copyTo(fileOut)
+                                    }
                                 }
                             }
                         }

@@ -4,31 +4,20 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.ScrollView
+import kotlinx.coroutines.*
 
 class InteractiveScrollView : ScrollView {
-    private var mOnScrollChangedCallback: OnScrollChangedCallback? = null
+    private var mOnInteractiveScrollChangedCallback: OnInteractiveScrollChangedCallback? = null
     private var mListener: OnBottomReachedListener? = null
-    private var scrollerTask: Runnable? = null
     private var initialPosition = 0
-    private val newCheck = 100L
+    private var scrollJob: Job? = null
 
     constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?) : super(context)
-
-    init {
-        scrollerTask = Runnable {
-            val newPosition = scrollY
-            if (initialPosition - newPosition == 0) {
-                mListener?.onTouch(false)
-            } else {
-                initialPosition = scrollY
-                this.postDelayed(scrollerTask, newCheck)
-            }
-        }
-    }
 
     override fun computeScrollDeltaToGetChildRectOnScreen(rect: Rect?): Int {
         return 0
@@ -42,13 +31,16 @@ class InteractiveScrollView : ScrollView {
             mListener?.onBottomReached()
         }
         super.onScrollChanged(l, t, oldl, oldt)
-        mOnScrollChangedCallback?.onScroll(t, oldt)
+        mOnInteractiveScrollChangedCallback?.onScroll(t, oldt)
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         when (event?.action ?: MotionEvent.ACTION_CANCEL) {
-            MotionEvent.ACTION_DOWN -> mListener?.onTouch(true)
+            MotionEvent.ACTION_DOWN -> {
+                mListener?.onTouch(true)
+                scrollJob?.cancel()
+            }
             MotionEvent.ACTION_UP -> {
                 startScrollerTask()
             }
@@ -58,18 +50,35 @@ class InteractiveScrollView : ScrollView {
 
     private fun startScrollerTask() {
         initialPosition = scrollY
-        this.postDelayed(scrollerTask, newCheck)
+        if (scrollJob?.isActive != true) {
+            scrollJob = CoroutineScope(Dispatchers.IO).launch {
+                var run = true
+                while (run) {
+                    delay(100L)
+                    val newPosition = scrollY
+                    Log.d("Oleg", "$initialPosition <-> $newPosition")
+                    if (initialPosition - newPosition == 0) {
+                        Log.d("Oleg2", "onTouch")
+                        mListener?.onTouch(false)
+                        run = false
+                    } else {
+                        Log.d("Oleg2", "else onTouch")
+                        initialPosition = scrollY
+                    }
+                }
+            }
+        }
     }
 
-    fun setOnScrollChangedCallback(onScrollChangedCallback: OnScrollChangedCallback?) {
-        mOnScrollChangedCallback = onScrollChangedCallback
+    fun setOnScrollChangedCallback(onInteractiveScrollChangedCallback: OnInteractiveScrollChangedCallback?) {
+        mOnInteractiveScrollChangedCallback = onInteractiveScrollChangedCallback
     }
 
     fun setOnBottomReachedListener(onBottomReachedListener: OnBottomReachedListener?) {
         mListener = onBottomReachedListener
     }
 
-    interface OnScrollChangedCallback {
+    interface OnInteractiveScrollChangedCallback {
         fun onScroll(t: Int, oldt: Int)
     }
 

@@ -31,7 +31,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
 
-class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnScrollChangedCallback {
+class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback {
 
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")

@@ -17,6 +17,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -39,7 +40,7 @@ import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnScrollChangedCallback {
+class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback {
 
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")
@@ -671,6 +672,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             override fun onTouch(action: Boolean) {
                 stopAutoStartScroll()
                 mActionDown = action
+                Log.d("Oleg3", "$mActionDown")
             }
         })
         binding.textView.movementMethod = LinkMovementMethod.getInstance()
@@ -1184,6 +1186,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
+            binding.textView.clearFocus()
             binding.textView.setTextIsSelectable(false)
             stopAutoStartScroll()
             if (autoScrollJob?.isActive != true) {

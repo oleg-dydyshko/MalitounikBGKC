@@ -32,7 +32,7 @@ import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnScrollChangedCallback {
+class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback {
 
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")
@@ -919,6 +919,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
             stopAutoStartScroll()
+            binding.textView.clearFocus()
             binding.textView.setTextIsSelectable(false)
             if (autoScrollJob?.isActive != true) {
                 autoScrollJob = CoroutineScope(Dispatchers.Main).launch {

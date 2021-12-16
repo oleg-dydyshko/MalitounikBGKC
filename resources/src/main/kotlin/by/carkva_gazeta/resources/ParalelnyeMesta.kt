@@ -280,6 +280,7 @@ class ParalelnyeMesta {
                         }
                         if (semuxa && nomer == 22) {
                             r2 = r2.replace("<br>", "\n")
+                            r2 = r2.replace("\n\n", "\n")
                             r2 = r2.replace("<strong>", "")
                             r2 = r2.replace("</strong>", "")
                             val t1 = r2.indexOf("</em>")

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.widget.ScrollView
 import kotlinx.coroutines.*
@@ -56,13 +55,10 @@ class InteractiveScrollView : ScrollView {
                 while (run) {
                     delay(100L)
                     val newPosition = scrollY
-                    Log.d("Oleg", "$initialPosition <-> $newPosition")
                     if (initialPosition - newPosition == 0) {
-                        Log.d("Oleg2", "onTouch")
                         mListener?.onTouch(false)
                         run = false
                     } else {
-                        Log.d("Oleg2", "else onTouch")
                         initialPosition = scrollY
                     }
                 }

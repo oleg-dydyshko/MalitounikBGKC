@@ -279,13 +279,14 @@ class ParalelnyeMesta {
                             }
                         }
                         if (semuxa && nomer == 22) {
-                            r2 = r2.replace("<br>", "")
+                            r2 = r2.replace("<br>", "\n")
                             r2 = r2.replace("<strong>", "")
                             r2 = r2.replace("</strong>", "")
                             val t1 = r2.indexOf("</em>")
                             if (t1 != -1) {
                                 r2 = r2.substring(t1 + 5)
                             }
+                            r2 = r2.trim()
                         }
                         if (noKnigaSemuxi) {
                             val src = Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error).toSpannable()

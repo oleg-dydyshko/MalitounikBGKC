@@ -157,7 +157,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         data.add(MenuListData("Малітвы за сьвятароў і сьвятарскія пакліканьні", "prynagodnyia_24"))
         data.add(MenuListData("Малітвы ў часе хваробы і за хворых", "prynagodnyia_25"))
         data.add(MenuListData("Намер ісьці за Хрыстом", "prynagodnyia_26"))
-        data.add(MenuListData("Цябе, Бога, хвалім", "prynagodnyia_27"))
+        data.add(MenuListData("Цябе, Бога, хвалім", "pesny_prasl_70"))
         data.add(MenuListData("Малітва падчас згубнай пошасьці", "prynagodnyia_28"))
         data.add(MenuListData("Малітва вучняў перад навучаньнем", "prynagodnyia_29"))
         data.add(MenuListData("Малітва да Маці Божай Берасьцейскай", "prynagodnyia_30"))

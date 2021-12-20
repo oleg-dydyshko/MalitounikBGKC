@@ -209,7 +209,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["prynagodnyia_24"] = R.raw.prynagodnyia_24
             resursMap["prynagodnyia_25"] = R.raw.prynagodnyia_25
             resursMap["prynagodnyia_26"] = R.raw.prynagodnyia_26
-            resursMap["prynagodnyia_27"] = R.raw.prynagodnyia_27
             resursMap["prynagodnyia_28"] = R.raw.prynagodnyia_28
             resursMap["prynagodnyia_29"] = R.raw.prynagodnyia_29
             resursMap["prynagodnyia_30"] = R.raw.prynagodnyia_30

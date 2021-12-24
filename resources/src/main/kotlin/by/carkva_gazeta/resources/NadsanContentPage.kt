@@ -127,7 +127,6 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.listView.setSelection(NadsanContentActivity.fierstPosition)
         binding.listView.onItemLongClickListener = this
         binding.listView.onItemClickListener = this
         binding.listView.setOnScrollListener(object : AbsListView.OnScrollListener {

@@ -126,7 +126,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             binding.textDenNedeli.text = nedelName[MenuCaliandar.getPositionCaliandar(position)[0].toInt()]
             binding.textChislo.text = MenuCaliandar.getPositionCaliandar(position)[1]
             if (MenuCaliandar.getPositionCaliandar(position)[3].toInt() != c[Calendar.YEAR]) binding.textMesiac.text = getString(R.string.mesiach, monthName[MenuCaliandar.getPositionCaliandar(position)[2].toInt()], MenuCaliandar.getPositionCaliandar(position)[3])
-            else binding.textMesiac.text = monthName[MenuCaliandar.getPositionCaliandar(position)[2].toInt()]
+            else binding.textMesiac.text = monthName[MenuCaliandar.getPositionCaliandar(position)[2].toInt()] //MenuCaliandar.getPositionCaliandar(position)[24]
             if (!MenuCaliandar.getPositionCaliandar(position)[4].contains("no_sviatyia")) {
                 var dataSviatyia = MenuCaliandar.getPositionCaliandar(position)[4]
                 if (dzenNoch) dataSviatyia = dataSviatyia.replace("#d00505", "#f44336")

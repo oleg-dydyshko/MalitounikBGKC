@@ -360,7 +360,6 @@ class NovyZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListene
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         BibleGlobalList.bibleCopyList.clear()
-        binding.listView.setSelection(NovyZapavietSemuxa.fierstPosition)
         binding.listView.onItemLongClickListener = this
         binding.listView.onItemClickListener = this
         binding.listView.setOnScrollListener(object : AbsListView.OnScrollListener {

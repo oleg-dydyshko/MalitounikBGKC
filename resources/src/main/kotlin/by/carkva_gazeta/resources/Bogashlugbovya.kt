@@ -70,7 +70,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var men = true
     private var positionY = 0
     private var title = ""
-    private var editVybranoe = false
     private var editDzenNoch = false
     private var mActionDown = false
     private var mAutoScroll = true
@@ -308,6 +307,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["ju_6_12"] = R.raw.ju_6_12
             resursMap["v_6_12"] = R.raw.v_6_12
             resursMap["l_6_12"] = R.raw.l_6_12
+            resursMap["l_naradzennie_chrystova"] = R.raw.l_naradzennie_chrystova
+            resursMap["v_rastvo_peradsviaccie_20_12"] = R.raw.v_rastvo_peradsviaccie_20_12
+            resursMap["l_rastvo_peradsviaccie_20_12"] = R.raw.l_rastvo_peradsviaccie_20_12
+            resursMap["v_rastvo_sv_vieczar_24_12"] = R.raw.v_rastvo_sv_vieczar_24_12
+            resursMap["abed_rastvo_sv_vieczar_24_12"] = R.raw.abed_rastvo_sv_vieczar_24_12
+            resursMap["ju_rastvo_sv_vieczar_24_12"] = R.raw.ju_rastvo_sv_vieczar_24_12
+            resursMap["vgad_rastvo_sv_vieczar_24_12"] = R.raw.vgad_rastvo_sv_vieczar_24_12
             PesnyAll.resursMap.forEach {
                 resursMap[it.key] = it.value
             }
@@ -558,7 +564,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (savedInstanceState != null) {
             onRestore = true
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            editVybranoe = savedInstanceState.getBoolean("editVybranoe")
             editDzenNoch = savedInstanceState.getBoolean("editDzenNoch")
             MainActivity.dialogVisable = false
             if (savedInstanceState.getBoolean("seach")) {
@@ -1390,7 +1395,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             invalidateOptionsMenu()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            editVybranoe = true
             men = setVybranoe(this, resurs, title)
             if (men) {
                 MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
@@ -1457,7 +1461,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
             }
             else -> {
-                if (editVybranoe || editDzenNoch) {
+                if (editDzenNoch) {
                     val intent = Intent()
                     if (editDzenNoch) intent.putExtra("editDzenNoch", true)
                     setResult(200, intent)
@@ -1515,7 +1519,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
-        outState.putBoolean("editVybranoe", editVybranoe)
         outState.putBoolean("editDzenNoch", editDzenNoch)
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)

@@ -63,6 +63,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
     private var resurs = "ton1"
     private var positionY = 0
     private var firstTextPosition = ""
+    private var men = true
 
     override fun onScroll(t: Int, oldt: Int) {
         positionY = t
@@ -285,6 +286,7 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
                 binding.TextView.text = MainActivity.fromHtml(resursOut)
             }
         }
+        men = Bogashlugbovya.checkVybranoe(this, resurs)
         bindingprogress.fontSizePlus.setOnClickListener {
             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
@@ -455,7 +457,6 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
         super.onPrepareOptionsMenu(menu)
         val vybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).isVisible = false
-        vybranoe.isVisible = false
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = chin.getBoolean("dzen_noch", false)
         val spanString = SpannableString(vybranoe.title.toString())
         val end = spanString.length
@@ -463,6 +464,13 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
         vybranoe.title = spanString
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_carkva).isVisible = chin.getBoolean("admin", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find).isVisible = false
+        if (men) {
+            vybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)
+            vybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe_del)
+        } else {
+            vybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_off)
+            vybranoe.title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
+        }
         return true
     }
 
@@ -516,6 +524,13 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
             fullscreenPage = true
             hide()
         }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
+            men = Bogashlugbovya.setVybranoe(this, resurs, title)
+            if (men) {
+                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
+            }
+            invalidateOptionsMenu()
+        }
         prefEditor.apply()
         if (id == by.carkva_gazeta.malitounik.R.id.action_carkva) {
             if (MainActivity.checkmodulesAdmin()) {
@@ -541,7 +556,8 @@ class Ton : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, Intera
             fullscreenPage = false
             show()
         } else {
-            if (checkSetDzenNoch) onSupportNavigateUp() else super.onBackPressed()
+            if (checkSetDzenNoch) onSupportNavigateUp()
+            else super.onBackPressed()
         }
     }
 

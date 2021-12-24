@@ -433,7 +433,6 @@ class StaryZapavietSemuxaFragment : BackPressedFragment(), OnItemLongClickListen
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.listView.setSelection(StaryZapavietSemuxa.fierstPosition)
         binding.listView.onItemLongClickListener = this
         binding.listView.onItemClickListener = this
         binding.listView.setOnScrollListener(object : AbsListView.OnScrollListener {

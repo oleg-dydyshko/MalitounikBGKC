@@ -46,6 +46,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
     private lateinit var binding: ActivityBibleBinding
     private var resetTollbarJob: Job? = null
     private var bibliaKnigi = ArrayList<BibliaData>()
+    private var fierstPosition = 0
 
     private fun clearEmptyPosition() {
         val remove = ArrayList<ArrayList<Int>>()
@@ -502,9 +503,5 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
         override fun getItemCount() = bibliaKnigi.size
 
         override fun createFragment(position: Int) = NovyZapavietSinaidalFragment.newInstance(bibliaKnigi[position].glava, bibliaKnigi[position].kniga, bibliaKnigi[position].styx)
-    }
-
-    companion object {
-        var fierstPosition = 0
     }
 }

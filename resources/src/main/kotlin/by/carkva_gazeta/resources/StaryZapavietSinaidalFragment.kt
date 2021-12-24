@@ -497,7 +497,6 @@ class StaryZapavietSinaidalFragment : BackPressedFragment(), OnItemLongClickList
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.listView.setSelection(StaryZapavietSinaidal.fierstPosition)
         binding.listView.onItemLongClickListener = this
         binding.listView.onItemClickListener = this
         binding.listView.setOnScrollListener(object : AbsListView.OnScrollListener {

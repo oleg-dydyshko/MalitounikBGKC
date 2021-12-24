@@ -122,6 +122,11 @@ class SlugbovyiaTextu {
         dat20.add(SlugbovyiaTextuData(274, "Покрыва Найсьвяцейшай Багародзіцы", "l_1_10", liturgia = true))
         dat20.add(SlugbovyiaTextuData(325, "Уваход у храм Найсьвяцейшай Багародзіцы", "l_21_11", liturgia = true))
         dat20.add(SlugbovyiaTextuData(33, "Сустрэча Госпада нашага Ісуса Хрыста (ГРАМНІЦЫ)", "l_2_2", liturgia = true))
+        dat20.add(SlugbovyiaTextuData(354, "Перадсьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста і сьв. сьвятамучаніка Ігната Баганосца", "l_rastvo_peradsviaccie_20_12", liturgia = true))
+        dat20.add(SlugbovyiaTextuData(354, "Перадсьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста і сьв. сьвятамучаніка Ігната Баганосца", "v_rastvo_peradsviaccie_20_12"))
+        dat20.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "ju_rastvo_sv_vieczar_24_12", utran = true))
+        dat20.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "v_rastvo_sv_vieczar_24_12"))
+        dat20.add(SlugbovyiaTextuData(359, "Нараджэньне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "l_naradzennie_chrystova", liturgia = true))
     }
 
     fun getTydzen1() = dat12

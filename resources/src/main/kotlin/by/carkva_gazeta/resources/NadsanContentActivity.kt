@@ -37,6 +37,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     private lateinit var binding: ActivityBibleBinding
     private var resetTollbarJob: Job? = null
     private var bibliaKnigi = ArrayList<BibliaData>()
+    private var fierstPosition = 0
 
     override fun onPause() {
         super.onPause()
@@ -330,9 +331,5 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         override fun getItemCount() = 151
 
         override fun createFragment(position: Int) = NadsanContentPage.newInstance(bibliaKnigi[position].glava, bibliaKnigi[position].styx)
-    }
-
-    companion object {
-        var fierstPosition = 0
     }
 }

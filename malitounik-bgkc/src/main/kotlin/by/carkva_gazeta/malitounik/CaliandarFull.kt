@@ -374,9 +374,11 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             R.id.textPost -> {
                 activity?.let {
                     val intent = Intent()
-                    intent.setClassName(it, MainActivity.TON)
-                    intent.putExtra("ton", MenuCaliandar.getPositionCaliandar(position)[20].toInt())
-                    intent.putExtra("ton_naidzelny", true)
+                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                    val ton = MenuCaliandar.getPositionCaliandar(position)[20].toInt()
+                    intent.putExtra("resurs", "ton$ton")
+                    intent.putExtra("zmena_chastki", true)
+                    intent.putExtra("title", "Тон $ton")
                     startActivity(intent)
                 }
             }

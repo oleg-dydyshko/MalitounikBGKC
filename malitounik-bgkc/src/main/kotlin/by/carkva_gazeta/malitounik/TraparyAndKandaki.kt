@@ -97,7 +97,7 @@ class TraparyAndKandaki : DialogFragment() {
                     }
                     data[position].post -> {
                         val intent = Intent()
-                        intent.setClassName(it, MainActivity.TON)
+                        intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                         intent.putExtra("resurs", resurs)
                         intent.putExtra("zmena_chastki", true)
                         intent.putExtra("title", title)
@@ -105,13 +105,10 @@ class TraparyAndKandaki : DialogFragment() {
                     }
                     else -> {
                         val intent = Intent()
-                        intent.setClassName(it, MainActivity.TON)
-                        intent.putExtra("lityrgia", lityrgia)
-                        intent.putExtra("mun", mun)
-                        intent.putExtra("day", day)
-                        intent.putExtra("ton_na_sviaty", data[position].sviata)
-                        intent.putExtra("ton", ton)
-                        intent.putExtra("ton_naidzelny", tonNadzelny)
+                        intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                        intent.putExtra("resurs", "ton$ton")
+                        intent.putExtra("title", "Тон $ton")
+                        intent.putExtra("zmena_chastki", true)
                         startActivity(intent)
                     }
                 }

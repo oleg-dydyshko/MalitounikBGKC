@@ -319,7 +319,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 slugba.checkViachernia(raznicia, dayOfYear) -> {
                                     val intent = Intent()
                                     val resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()))
-                                    intent.setClassName(it, MainActivity.TON)
+                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                                     intent.putExtra("resurs", resours)
                                     intent.putExtra("zmena_chastki", true)
                                     intent.putExtra("title", slugba.getTitle(resours))
@@ -349,7 +349,7 @@ class DialogCalindarGrid : DialogFragment() {
                                     } else {
                                         val intent = Intent()
                                         val resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), liturgia = true)
-                                        intent.setClassName(fragmentActivity, MainActivity.TON)
+                                        intent.setClassName(fragmentActivity, MainActivity.BOGASHLUGBOVYA)
                                         intent.putExtra("resurs", resours)
                                         intent.putExtra("zmena_chastki", true)
                                         intent.putExtra("title", slugba.getTitle(resours))
@@ -363,14 +363,23 @@ class DialogCalindarGrid : DialogFragment() {
                                         traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                     } else {
                                         val intent = Intent()
-                                        intent.setClassName(fragmentActivity, MainActivity.TON)
+                                        intent.setClassName(fragmentActivity, MainActivity.BOGASHLUGBOVYA)
                                         if (ton != 0) {
-                                            intent.putExtra("ton", ton)
-                                            intent.putExtra("ton_naidzelny", true)
+                                            intent.putExtra("resurs", "ton$ton")
+                                            intent.putExtra("title", "Тон $ton")
                                         } else {
-                                            intent.putExtra("ton", denNedzeli - 1)
-                                            intent.putExtra("ton_naidzelny", false)
+                                            intent.putExtra("resurs", "ton${denNedzeli - 1}_budni")
+                                            val title = when (denNedzeli - 1) {
+                                                1 -> "ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам"
+                                                2 -> "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю"
+                                                3 -> "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу"
+                                                4 -> "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю"
+                                                5 -> "ПЯТНІЦА\nСлужба Крыжу Гасподняму"
+                                                else -> "Субота\nСлужба ўсім сьвятым і памёрлым"
+                                            }
+                                            intent.putExtra("title", title)
                                         }
+                                        intent.putExtra("zmena_chastki", true)
                                         startActivity(intent)
                                     }
                                 }
@@ -383,7 +392,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 slugba.checkUtran(raznicia, dayOfYear) -> {
                                     val intent = Intent()
                                     val resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), utran = true)
-                                    intent.setClassName(it, MainActivity.TON)
+                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                                     intent.putExtra("resurs", resours)
                                     intent.putExtra("zmena_chastki", true)
                                     intent.putExtra("title", slugba.getTitle(resours))
@@ -392,7 +401,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 denNedzeli == 1 -> {
                                     val data = resources.getStringArray(R.array.bogaslugbovuia)
                                     val intent = Intent()
-                                    intent.setClassName(it, MainActivity.TON)
+                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                                     intent.putExtra("title", data[3])
                                     intent.putExtra("zmena_chastki", true)
                                     intent.putExtra("resurs", "bogashlugbovya6")

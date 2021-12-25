@@ -58,7 +58,7 @@ class DialogMineiaList : DialogFragment() {
             binding.content.setOnItemClickListener { _, _, position, _ ->
                 if (MainActivity.checkmoduleResources()) {
                     val intent = Intent()
-                    intent.setClassName(it, MainActivity.TON)
+                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                     intent.putExtra("resurs", fileList[position].resource)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", fileList[position].titleResource)

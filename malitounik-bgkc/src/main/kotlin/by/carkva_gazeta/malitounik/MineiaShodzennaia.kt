@@ -223,7 +223,7 @@ class MineiaShodzennaia : AppCompatActivity() {
                 } else {
                     if (MainActivity.checkmoduleResources()) {
                         val intent = Intent()
-                        intent.setClassName(this, MainActivity.TON)
+                        intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
                         if (resourceUtran != "0") intent.putExtra("resurs", resourceUtran)
                         if (resourceLiturgia != "0") intent.putExtra("resurs", resourceLiturgia)
                         if (resourceViachernia != "0") intent.putExtra("resurs", resourceViachernia)

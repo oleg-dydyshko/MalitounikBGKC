@@ -59,10 +59,8 @@ class TonNaKoznyDzen : AppCompatActivity() {
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
-        if (dzenNoch)
-            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
-        else
-            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
+        if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        else binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         val adapter = MenuListAdaprer(this, data)
         binding.ListView.adapter = adapter
         binding.ListView.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
@@ -72,9 +70,18 @@ class TonNaKoznyDzen : AppCompatActivity() {
             mLastClickTime = SystemClock.elapsedRealtime()
             if (MainActivity.checkmoduleResources()) {
                 val intent = Intent()
-                intent.setClassName(this, MainActivity.TON)
-                intent.putExtra("ton", position + 1)
-                intent.putExtra("ton_naidzelny", false)
+                intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
+                intent.putExtra("resurs", "ton${position + 1}_budni")
+                val title = when (position + 1) {
+                    1 -> "ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам"
+                    2 -> "АЎТОРАК\nСлужба сьвятому Яну Хрысьціцелю"
+                    3 -> "СЕРАДА\nСлужба Найсьвяцейшай Багародзіцы і Крыжу"
+                    4 -> "ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю"
+                    5 -> "ПЯТНІЦА\nСлужба Крыжу Гасподняму"
+                    else -> "Субота\nСлужба ўсім сьвятым і памёрлым"
+                }
+                intent.putExtra("title", title)
+                intent.putExtra("zmena_chastki", true)
                 startActivity(intent)
             } else {
                 val dadatak = DialogInstallDadatak()

@@ -111,14 +111,6 @@
                 android:value="by.carkva_gazeta.malitounik.MalitvyPasliaPrychascia" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.Ton"
-            android:label="@string/ton_n"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
             android:name="by.carkva_gazeta.resources.ParafiiBgkcDekanat"
             android:label="@string/parafii"
             android:theme="@style/AppTheme">

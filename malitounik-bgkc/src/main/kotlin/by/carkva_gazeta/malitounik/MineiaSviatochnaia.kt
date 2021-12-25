@@ -109,7 +109,7 @@ class MineiaSviatochnaia : AppCompatActivity() {
             } else {
                 if (MainActivity.checkmoduleResources()) {
                     val intent = Intent()
-                    intent.setClassName(this, MainActivity.TON)
+                    intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
                     if (groups[position].resourceOther != "") {
                         intent.putExtra("resurs", groups[position].resourceOther)
                     } else {

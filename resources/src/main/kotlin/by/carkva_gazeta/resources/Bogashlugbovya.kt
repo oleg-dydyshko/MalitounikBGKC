@@ -90,6 +90,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var onFind = false
     private var chechZmena = false
     private var raznica = 400
+    private var dayOfYear = "1"
     private var checkDayOfYear = false
     private var sviaty = false
     private var daysv = 1
@@ -1012,7 +1013,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
-        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("viachernia")) {
+        if (!resurs.contains("pesny")) {
             if (savedInstanceState == null) {
                 if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
                     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -1105,8 +1106,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         binding.imageView5.setOnClickListener { findNext() }
         val slugbovyiaTextu = SlugbovyiaTextu()
         val cal = Calendar.getInstance()
-        checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), zmenyiaChastki.dayOfYear())
         raznica = zmenyiaChastki.raznica()
+        dayOfYear = zmenyiaChastki.dayOfYear()
+            checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), dayOfYear)
         if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, cal[Calendar.DAY_OF_YEAR].toString()))) {
             chechZmena = true
         }
@@ -1346,16 +1348,17 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_zmena) {
             val slugba = SlugbovyiaTextu()
-            val intent = Intent(this, Ton::class.java)
+            val intent = Intent(this, Bogashlugbovya::class.java)
             when {
                 sviaty -> {
-                    intent.putExtra("ton_na_sviaty", true)
-                    intent.putExtra("lityrgia", 4)
                     intent.putExtra("day", daysv)
                     intent.putExtra("mun", munsv)
+                    intent.putExtra("year", Calendar.getInstance()[Calendar.YEAR])
                 }
                 checkDayOfYear -> {
-                    val resours = slugba.getResource(raznica, slugba.isPasxa(raznica), liturgia = true)
+                    var resours = slugba.getResource(raznica, slugba.isPasxa(raznica), liturgia = true)
+                    if (resours == "0")
+                        resours = slugba.getResource(dayOfYear.toInt(), slugba.isPasxa(dayOfYear.toInt()), liturgia = true)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))

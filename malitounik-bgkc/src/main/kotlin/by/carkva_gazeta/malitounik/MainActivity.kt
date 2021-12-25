@@ -1314,7 +1314,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         const val BIBLIOTEKAVIEW = "by.carkva_gazeta.biblijateka.BibliotekaView"
         const val CHYTANNE = "by.carkva_gazeta.resources.Chytanne"
         const val MARANATA = "by.carkva_gazeta.resources.MaranAta"
-        const val TON = "by.carkva_gazeta.resources.Ton"
         const val SEARCHBIBLIA = "by.carkva_gazeta.resources.SearchBiblia"
         const val PASLIAPRYCHASCIA = "by.carkva_gazeta.resources.PasliaPrychascia"
         const val BOGASHLUGBOVYA = "by.carkva_gazeta.resources.Bogashlugbovya"

@@ -53,8 +53,12 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
                     CoroutineScope(Dispatchers.Main).launch {
                         val fileOpisanie = File("$filesDir/sviatyja/opisanie$mun.json")
                         var builder = ""
-                        if (fileOpisanie.exists()) builder = fileOpisanie.readText()
-                        loadOpisanieSviatyia(builder)
+                        if (svity) {
+                            loadOpisanieSviat()
+                        } else {
+                            if (fileOpisanie.exists()) builder = fileOpisanie.readText()
+                            loadOpisanieSviatyia(builder)
+                        }
                         for (i in 0..3) {
                             var schet = ""
                             if (i > 0) schet = "_${i + 1}"
@@ -169,18 +173,20 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
 
     private fun loadOpisanieSviat() {
         val fileOpisanieSviat = File("$filesDir/opisanie_sviat.json")
-        val builder = fileOpisanieSviat.readText()
-        val gson = Gson()
-        val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-        val arrayList: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
-        arrayList.forEach {
-            if (day == it[0].toInt() && mun == it[1].toInt()) {
-                var res = it[2]
-                if (dzenNoch) res = res.replace("#d00505", "#f44336")
-                val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-                val spanned = MainActivity.fromHtml(res)
-                binding.TextView1.textSize = fontBiblia
-                binding.TextView1.text = spanned.trim()
+        if (fileOpisanieSviat.exists()) {
+            val builder = fileOpisanieSviat.readText()
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+            val arrayList: ArrayList<ArrayList<String>> = gson.fromJson(builder, type)
+            arrayList.forEach {
+                if (day == it[0].toInt() && mun == it[1].toInt()) {
+                    var res = it[2]
+                    if (dzenNoch) res = res.replace("#d00505", "#f44336")
+                    val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
+                    val spanned = MainActivity.fromHtml(res)
+                    binding.TextView1.textSize = fontBiblia
+                    binding.TextView1.text = spanned.trim()
+                }
             }
         }
     }

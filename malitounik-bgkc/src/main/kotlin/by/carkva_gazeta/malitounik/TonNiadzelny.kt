@@ -74,9 +74,10 @@ class TonNiadzelny : AppCompatActivity() {
             mLastClickTime = SystemClock.elapsedRealtime()
             if (MainActivity.checkmoduleResources()) {
                 val intent = Intent()
-                intent.setClassName(this, MainActivity.TON)
-                intent.putExtra("ton", position + 1)
-                intent.putExtra("ton_naidzelny", true)
+                intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
+                intent.putExtra("resurs", "ton${position + 1}")
+                intent.putExtra("title", "Тон ${position + 1}")
+                intent.putExtra("zmena_chastki", true)
                 startActivity(intent)
             } else {
                 val dadatak = DialogInstallDadatak()

@@ -68,29 +68,25 @@ class MineiaSviatochnaia : AppCompatActivity() {
             }
             val id = c.timeInMillis
             val count = ArrayList<String>()
+            val other = slugba.getResource(day, mineiaList[i].pasxa, other = true)
             val utran = slugba.getResource(day, mineiaList[i].pasxa, utran = true)
             val liturgia = slugba.getResource(day, mineiaList[i].pasxa, liturgia = true)
             val viachernia = slugba.getResource(day, mineiaList[i].pasxa)
+            if (other != "0") count.add("1")
             if (utran != "0") count.add("1")
             if (liturgia != "0") count.add("1")
             if (viachernia != "0") count.add("1")
             val slujba = when {
                 count.size > 1 -> ""
+                mineiaList[i].other && other.contains("vgad_") -> " - Вялікія гадзіны"
+                mineiaList[i].other && other.contains("abed_") -> " - Абедніца"
                 mineiaList[i].utran -> " - Ютрань"
                 mineiaList[i].liturgia -> " - Літургія"
                 else -> " - Вячэрня"
             }
-            groups.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title + slujba, mineiaList[i].title, viachernia, utran, liturgia))
+            groups.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title + slujba, mineiaList[i].title, viachernia, utran, liturgia, other))
             day = mineiaList[i].day
         }
-        MenuCaliandar.getDataCalaindar(year = c[Calendar.YEAR]).forEach {
-            if (it[24].toInt() == 358) {
-                c.set(it[3].toInt(), it[2].toInt(), it[1].toInt())
-                return@forEach
-            }
-        }
-        groups.add(MineiaDay(c.timeInMillis, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгені - Абедніца", "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "", "", "", "abed_rastvo_sv_vieczar_24_12"))
-        groups.add(MineiaDay(c.timeInMillis, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгені - Вялікія гадзіны", "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "", "", "", "vgad_rastvo_sv_vieczar_24_12"))
         binding.ListView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnItemClickListener
@@ -99,24 +95,34 @@ class MineiaSviatochnaia : AppCompatActivity() {
             val resourceUtran = groups[position].resourceUtran
             val resourceLiturgia = groups[position].resourceLiturgia
             val resourceViachernia = groups[position].resourceViachernia
+            val resourceOther = groups[position].resourceOther
             val arrayList = ArrayList<String>()
+            if (resourceOther != "0") arrayList.add("1")
             if (resourceUtran != "0") arrayList.add("1")
             if (resourceLiturgia != "0") arrayList.add("1")
             if (resourceViachernia != "0") arrayList.add("1")
-            if (arrayList.size > 1 && groups[position].resourceOther == "") {
-                val dialog = DialogMineiaList.getInstance(groups[position].day, groups[position].titleResource, resourceUtran, resourceLiturgia, resourceViachernia, true)
+            if (arrayList.size > 1) {
+                val resourceArrayList = ArrayList<String>()
+                for (i in 0 until mineiaList.size) {
+                    if (groups[position].day.toInt() == mineiaList[i].day) {
+                        when {
+                            mineiaList[i].other -> resourceArrayList.add(mineiaList[i].resource)
+                            mineiaList[i].utran -> resourceArrayList.add(mineiaList[i].resource)
+                            mineiaList[i].liturgia -> resourceArrayList.add(mineiaList[i].resource)
+                            !mineiaList[i].utran && !mineiaList[i].liturgia -> resourceArrayList.add(mineiaList[i].resource)
+                        }
+                    }
+                }
+                val dialog = DialogMineiaList.getInstance(groups[position].day, groups[position].titleResource, resourceArrayList, true)
                 dialog.show(supportFragmentManager, "dialogMineiaList")
             } else {
                 if (MainActivity.checkmoduleResources()) {
                     val intent = Intent()
                     intent.setClassName(this, MainActivity.BOGASHLUGBOVYA)
-                    if (groups[position].resourceOther != "") {
-                        intent.putExtra("resurs", groups[position].resourceOther)
-                    } else {
-                        if (resourceUtran != "0") intent.putExtra("resurs", resourceUtran)
-                        if (resourceLiturgia != "0") intent.putExtra("resurs", resourceLiturgia)
-                        if (resourceViachernia != "0") intent.putExtra("resurs", resourceViachernia)
-                    }
+                    if (resourceOther != "0") intent.putExtra("resurs", resourceOther)
+                    if (resourceUtran != "0") intent.putExtra("resurs", resourceUtran)
+                    if (resourceLiturgia != "0") intent.putExtra("resurs", resourceLiturgia)
+                    if (resourceViachernia != "0") intent.putExtra("resurs", resourceViachernia)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", groups[position].titleResource)
                     startActivity(intent)
@@ -219,7 +225,7 @@ class MineiaSviatochnaia : AppCompatActivity() {
         private class ViewHolder(var text: TextView)
     }
 
-    private data class MineiaDay(val id: Long, val month: Int, val day: String, val title: String, val titleResource: String, var resourceViachernia: String, var resourceUtran: String, var resourceLiturgia: String, var resourceOther: String = "") : Comparable<MineiaDay> {
+    private data class MineiaDay(val id: Long, val month: Int, val day: String, val title: String, val titleResource: String, var resourceViachernia: String, var resourceUtran: String, var resourceLiturgia: String, var resourceOther: String) : Comparable<MineiaDay> {
         override fun compareTo(other: MineiaDay): Int {
             if (this.id > other.id) {
                 return 1

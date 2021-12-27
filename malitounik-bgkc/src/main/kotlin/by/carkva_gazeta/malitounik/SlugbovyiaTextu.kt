@@ -102,6 +102,7 @@ class SlugbovyiaTextu {
         dat19.add(SlugbovyiaTextuData(340, "Між сьвятымі айца нашага Міколы Цудатворца, архібіскупа Мірлікійскага", "ju_6_12", utran = true))
         dat19.add(SlugbovyiaTextuData(340, "Між сьвятымі айца нашага Міколы Цудатворца, архібіскупа Мірлікійскага", "v_6_12"))
         dat19.add(SlugbovyiaTextuData(340, "Між сьвятымі айца нашага Міколы Цудатворца, архібіскупа Мірлікійскага", "l_6_12", liturgia = true))
+        dat19.add(SlugbovyiaTextuData(360, "Сабор Найсьвяцейшай Багародзіцы", "l_12_26_sabor_baharodzicy", liturgia = true))
 
         dat20.add(SlugbovyiaTextuData(218, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "zmenyia_chastki_pieramianiennie", liturgia = true))
         dat20.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "viachernia_mineia_sviatochnaia1"))
@@ -126,6 +127,8 @@ class SlugbovyiaTextu {
         dat20.add(SlugbovyiaTextuData(354, "Перадсьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста і сьв. сьвятамучаніка Ігната Баганосца", "v_rastvo_peradsviaccie_20_12"))
         dat20.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "ju_rastvo_sv_vieczar_24_12", utran = true))
         dat20.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "v_rastvo_sv_vieczar_24_12"))
+        dat20.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "vgad_rastvo_sv_vieczar_24_12", other = true))
+        dat20.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "abed_rastvo_sv_vieczar_24_12", other = true))
         dat20.add(SlugbovyiaTextuData(359, "Нараджэньне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "l_naradzennie_chrystova", liturgia = true))
     }
 
@@ -160,7 +163,7 @@ class SlugbovyiaTextu {
         return pasxa
     }
 
-    fun getResource(day: Int, pasxa: Boolean, utran: Boolean = false, liturgia: Boolean = false): String {
+    fun getResource(day: Int, pasxa: Boolean, utran: Boolean = false, liturgia: Boolean = false, other: Boolean = false): String {
         var resource = "0"
         dat12.forEach {
             if (day == it.day && pasxa == it.pasxa) {
@@ -220,9 +223,12 @@ class SlugbovyiaTextu {
         }
         dat20.forEach {
             if (day == it.day && pasxa == it.pasxa) {
-                if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
-                if (utran && utran == it.utran) resource = it.resource
-                if (liturgia && liturgia == it.liturgia) resource = it.resource
+                when {
+                    other && other == it.other -> resource = it.resource
+                    (!utran && !liturgia && !other) && (!it.utran && !it.liturgia && !it.other) -> resource = it.resource
+                    utran && utran == it.utran -> resource = it.resource
+                    liturgia && liturgia == it.liturgia -> resource = it.resource
+                }
             }
         }
         return resource

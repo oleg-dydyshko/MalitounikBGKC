@@ -344,7 +344,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 slugba.checkLiturgia(raznicia, dayOfYear) -> {
                                     if (denNedzeli == Calendar.SUNDAY && ton != 0) {
                                         val resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), liturgia = true)
-                                        val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton, true, ton_na_sviaty = false, ton_na_viliki_post = true, resurs = resours, sviatyaName, checkSviatyia, year)
+                                        val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton, true, ton_na_sviaty = false, ton_na_viliki_post = true, resurs = resours, sviatyaName, checkSviatyia, year)
                                         traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                     } else {
                                         val intent = Intent()
@@ -359,7 +359,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 else -> {
                                     if (checkSviatyia) {
                                         val resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), liturgia = true)
-                                        val traparyAndKandaki = TraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton1, tonNaidzelny, ton_na_sviaty = false, ton_na_viliki_post = false, resurs = resours, sviatyaName, checkSviatyia, year)
+                                        val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton1, tonNaidzelny, ton_na_sviaty = false, ton_na_viliki_post = false, resurs = resours, sviatyaName, checkSviatyia, year)
                                         traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                     } else {
                                         val intent = Intent()

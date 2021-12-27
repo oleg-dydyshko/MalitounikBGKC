@@ -29,9 +29,7 @@ class DialogMineiaList : DialogFragment() {
     private var resetTollbarJob: Job? = null
     private val fileList = ArrayList<MineiaDay>()
     private lateinit var adapter: ListAdaprer
-    private var resourceUtran = "0"
-    private var resourceLiturgia = "0"
-    private var resourceViachernia = "0"
+    private var resourceArrayList = ArrayList<String>()
 
     override fun onPause() {
         super.onPause()
@@ -49,12 +47,17 @@ class DialogMineiaList : DialogFragment() {
             builder.setView(binding.root)
             val dayOfYear = arguments?.getString("dayOfYear") ?: "1"
             val titleResource = arguments?.getString("titleResource") ?: "0"
-            resourceUtran = arguments?.getString("resourceUtran") ?: "0"
-            resourceLiturgia = arguments?.getString("resourceLiturgia") ?: "0"
-            resourceViachernia = arguments?.getString("resourceViachernia") ?: "0"
-            if (resourceUtran != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource - Ютрань", resourceUtran))
-            if (resourceLiturgia != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource - Літургія", resourceLiturgia))
-            if (resourceViachernia != "0") fileList.add(MineiaDay(dayOfYear, "$titleResource - Вячэрня", resourceViachernia))
+            resourceArrayList = arguments?.getStringArrayList("resourceArrayList") ?: ArrayList()
+            for (i in 0 until resourceArrayList.size) {
+                val slujba = when {
+                    resourceArrayList[i].contains("vgad_") -> " - Вялікія гадзіны"
+                    resourceArrayList[i].contains("abed_") -> " - Абедніца"
+                    resourceArrayList[i].contains("ju_") -> " - Ютрань"
+                    resourceArrayList[i].contains("l_") -> " - Літургія"
+                    else -> " - Вячэрня"
+                }
+                fileList.add(MineiaDay(dayOfYear, "$titleResource $slujba", resourceArrayList[i]))
+            }
             binding.content.setOnItemClickListener { _, _, position, _ ->
                 if (MainActivity.checkmoduleResources()) {
                     val intent = Intent()
@@ -111,13 +114,11 @@ class DialogMineiaList : DialogFragment() {
     private data class MineiaDay(val dayOfYear: String, val titleResource: String, val resource: String)
 
     companion object {
-        fun getInstance(dayOfYear: String, titleResource: String, resourceUtran: String, resourceLiturgia: String, resourceViachernia: String, isSvity: Boolean): DialogMineiaList {
+        fun getInstance(dayOfYear: String, titleResource: String, resourceArrayList: ArrayList<String>, isSvity: Boolean): DialogMineiaList {
             val bundle = Bundle()
+            bundle.putStringArrayList("resourceArrayList", resourceArrayList)
             bundle.putString("dayOfYear", dayOfYear)
             bundle.putString("titleResource", titleResource)
-            bundle.putString("resourceUtran", resourceUtran)
-            bundle.putString("resourceLiturgia", resourceLiturgia)
-            bundle.putString("resourceViachernia", resourceViachernia)
             bundle.putBoolean("isSvity", isSvity)
             val dialog = DialogMineiaList()
             dialog.arguments = bundle

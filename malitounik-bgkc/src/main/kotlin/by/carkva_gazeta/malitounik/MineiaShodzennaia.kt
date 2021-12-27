@@ -218,7 +218,17 @@ class MineiaShodzennaia : AppCompatActivity() {
                 if (resourceLiturgia != "0") arrayList.add("1")
                 if (resourceViachernia != "0") arrayList.add("1")
                 if (arrayList.size > 1) {
-                    val dialog = DialogMineiaList.getInstance(groups[groupPosition][childPosition].day, groups[groupPosition][childPosition].titleResource, resourceUtran, resourceLiturgia, resourceViachernia, false)
+                    val resourceArrayList = ArrayList<String>()
+                    for (i in 0 until mineiaList.size) {
+                        if (groups[groupPosition][childPosition].day.toInt() == mineiaList[i].day) {
+                            when {
+                                mineiaList[i].utran -> resourceArrayList.add(mineiaList[i].resource)
+                                mineiaList[i].liturgia -> resourceArrayList.add(mineiaList[i].resource)
+                                !mineiaList[i].utran && !mineiaList[i].liturgia -> resourceArrayList.add(mineiaList[i].resource)
+                            }
+                        }
+                    }
+                    val dialog = DialogMineiaList.getInstance(groups[groupPosition][childPosition].day, groups[groupPosition][childPosition].titleResource, resourceArrayList, false)
                     dialog.show(supportFragmentManager, "dialogMineiaList")
                 } else {
                     if (MainActivity.checkmoduleResources()) {

@@ -72,6 +72,20 @@ class Piarliny : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
                     } catch (t: Throwable) {
                         fileOpisanieSviat.delete()
                     }
+                    val cal = GregorianCalendar()
+                    val sb = StringBuilder()
+                    var i = 0
+                    piarliny.forEach {
+                        cal.timeInMillis = it[0].toLong() * 1000
+                        if (day == cal.get(Calendar.DATE) && mun - 1 == cal.get(Calendar.MONTH)) {
+                            if (i > 0) sb.append("<p>\n")
+                            sb.append(it[1])
+                            i++
+                        }
+                    }
+                    withContext(Dispatchers.Main) {
+                        binding.textView.text = MainActivity.fromHtml(sb.toString())
+                    }
                 }
             }
         } else {
@@ -83,13 +97,18 @@ class Piarliny : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
             } catch (t: Throwable) {
                 fileOpisanieSviat.delete()
             }
-        }
-        val cal = GregorianCalendar()
-        piarliny.forEach {
-            cal.timeInMillis = it[0].toLong() * 1000
-            if (day == cal.get(Calendar.DATE) && mun - 1 == cal.get(Calendar.MONTH)) {
-                binding.textView.text = MainActivity.fromHtml(it[1])
+            val cal = GregorianCalendar()
+            val sb = StringBuilder()
+            var i = 0
+            piarliny.forEach {
+                cal.timeInMillis = it[0].toLong() * 1000
+                if (day == cal.get(Calendar.DATE) && mun - 1 == cal.get(Calendar.MONTH)) {
+                    if (i > 0) sb.append("<p>\n")
+                    sb.append(it[1])
+                    i++
+                }
             }
+            binding.textView.text = MainActivity.fromHtml(sb.toString())
         }
     }
 

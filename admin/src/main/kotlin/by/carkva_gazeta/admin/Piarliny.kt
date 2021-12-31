@@ -122,7 +122,14 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
         piarliny.removeAt(position)
         piarliny.sort()
         val gson = Gson()
-        sendPostRequest(gson.toJson(piarliny))
+        val resultArray = ArrayList<ArrayList<String>>()
+        for (i in 0 until piarliny.size) {
+            val resultArray2 = ArrayList<String>()
+            resultArray2.add(piarliny[i].time.toString())
+            resultArray2.add(piarliny[i].data)
+            resultArray.add(resultArray2)
+        }
+        sendPostRequest(gson.toJson(resultArray))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -266,7 +273,14 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
                     piarliny.add(PiarlinyData(timeListCalendar.timeInMillis / 1000, text))
                 }
                 val gson = Gson()
-                sendPostRequest(gson.toJson(piarliny))
+                val resultArray = ArrayList<ArrayList<String>>()
+                for (i in 0 until piarliny.size) {
+                    val resultArray2 = ArrayList<String>()
+                    resultArray2.add(piarliny[i].time.toString())
+                    resultArray2.add(piarliny[i].data)
+                    resultArray.add(resultArray2)
+                }
+                sendPostRequest(gson.toJson(resultArray))
             }
             piarliny.sort()
             binding.listView.visibility = View.VISIBLE
@@ -407,7 +421,7 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             val calendar = GregorianCalendar()
             calendar.timeInMillis = piarliny[position].time * 1000
             val munName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)[calendar.get(Calendar.MONTH)]
-            viewHolder.text.text = MainActivity.fromHtml(calendar.get(Calendar.DATE).toString() + " " + munName)
+            viewHolder.text.text = MainActivity.fromHtml(calendar.get(Calendar.DATE).toString() + " " + munName + " " + calendar[Calendar.YEAR])
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             return rootView
         }

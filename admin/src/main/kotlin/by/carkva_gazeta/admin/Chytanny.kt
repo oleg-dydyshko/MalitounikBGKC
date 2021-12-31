@@ -78,12 +78,12 @@ class Chytanny : AppCompatActivity() {
             binding.progressBar2.visibility = View.VISIBLE
             binding.linear.removeAllViewsInLayout()
             startTimer()
-            val text: String = withContext(Dispatchers.IO) {
+            val text = withContext(Dispatchers.IO) {
                 val url = "https://carkva-gazeta.by/admin/getFilesCaliandar.php?year=$year"
                 val builder = URL(url).readText()
                 val gson = Gson()
-                val type = object : TypeToken<String>() {}.type
-                return@withContext gson.fromJson(builder, type)
+                val type = object : TypeToken<ArrayList<String>>() {}.type
+                return@withContext gson.fromJson<ArrayList<String>>(builder, type)
             }
             val a: Int = year % 19
             val b: Int = year % 4
@@ -106,7 +106,7 @@ class Chytanny : AppCompatActivity() {
                 if (d == 28 && ex == 6) dataP = 18
                 monthP = 4
             }
-            val fileLine = text.split("\n")
+            val fileLine = text[0].split("\n")
             val nedelName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.dni_nedeli)
             val monName2 = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
             var countDay = 0

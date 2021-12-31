@@ -68,10 +68,10 @@ class MineiaSviatochnaia : AppCompatActivity() {
             }
             val id = c.timeInMillis
             val count = ArrayList<String>()
-            val other = slugba.getResource(day, mineiaList[i].pasxa, other = true)
-            val utran = slugba.getResource(day, mineiaList[i].pasxa, utran = true)
-            val liturgia = slugba.getResource(day, mineiaList[i].pasxa, liturgia = true)
-            val viachernia = slugba.getResource(day, mineiaList[i].pasxa)
+            val other = slugba.getResource(day, mineiaList[i].pasxa, other = true, isSviaty = true)
+            val utran = slugba.getResource(day, mineiaList[i].pasxa, utran = true, isSviaty = true)
+            val liturgia = slugba.getResource(day, mineiaList[i].pasxa, liturgia = true, isSviaty = true)
+            val viachernia = slugba.getResource(day, mineiaList[i].pasxa, isSviaty = true)
             if (other != "0") count.add("1")
             if (utran != "0") count.add("1")
             if (liturgia != "0") count.add("1")

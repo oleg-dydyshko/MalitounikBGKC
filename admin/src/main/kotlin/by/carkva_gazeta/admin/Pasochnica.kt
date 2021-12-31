@@ -37,12 +37,7 @@ import java.net.URL
 import java.net.URLEncoder
 
 
-class Pasochnica : AppCompatActivity(), View.OnClickListener,
-    DialogPasochnicaFileName.DialogPasochnicaFileNameListener,
-    DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener,
-    DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener,
-    DialogAddPesny.DialogAddPesnyListiner,
-    InteractiveScrollView.OnInteractiveScrollChangedCallback {
+class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner, InteractiveScrollView.OnInteractiveScrollChangedCallback {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
@@ -91,10 +86,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
         positionY = t
         val laneLayout = binding.apisanne.layout
         laneLayout?.let { layout ->
-            val textForVertical = binding.apisanne.text.toString().substring(
-                layout.getLineStart(layout.getLineForVertical(positionY)),
-                layout.getLineEnd(layout.getLineForVertical(positionY))
-            ).trim()
+            val textForVertical = binding.apisanne.text.toString().substring(layout.getLineStart(layout.getLineForVertical(positionY)), layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
             if (textForVertical != "") firstTextPosition = textForVertical
         }
     }
@@ -151,7 +143,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
         fileName = intent.extras?.getString("fileName", "") ?: "newFile.html"
         resours = intent.extras?.getString("resours", "") ?: ""
         var title = intent.extras?.getString("title", "") ?: ""
-        if (resours == "") {
+        if (resours == "" && title == "") {
             title = findResoursNameAndTitle()
         }
         val text = intent.extras?.getString("text", "") ?: ""
@@ -174,7 +166,11 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
         fileName = if (resours == "") {
             title
         } else {
-            "($resours) $title.html"
+            val t3 = fileName.lastIndexOf(".")
+            val end = if (t3 != -1) {
+                fileName.substring(t3)
+            } else ".html"
+            "($resours) $title$end"
         }
         getOrSendFilePostRequest(text, false)
         positionY = k.getInt("admin" + fileName + "position", 0)
@@ -192,10 +188,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
         binding.titleToolbar.setOnClickListener {
             fullTextTollbar()
         }
-        binding.titleToolbar.setTextSize(
-            TypedValue.COMPLEX_UNIT_SP,
-            SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat()
-        )
+        binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.pasochnica)
@@ -220,8 +213,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
         val tv = TypedValue()
         if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            val actionBarHeight =
-                TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+            val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
             layoutParams.height = actionBarHeight
         }
         binding.titleToolbar.isSelected = false
@@ -232,15 +224,8 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
         super.onResume()
         findDirAsSave()
         setTollbarTheme()
-        overridePendingTransition(
-            by.carkva_gazeta.malitounik.R.anim.alphain,
-            by.carkva_gazeta.malitounik.R.anim.alphaout
-        )
-        if (k.getBoolean(
-                "scrinOn",
-                false
-            )
-        ) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onBackPressed() {
@@ -261,8 +246,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
     }
 
     override fun setDir(oldDir: String) {
-        val dialogSaveAsFileExplorer =
-            supportFragmentManager.findFragmentByTag("dialogSaveAsFileExplorer") as? DialogSaveAsFileExplorer
+        val dialogSaveAsFileExplorer = supportFragmentManager.findFragmentByTag("dialogSaveAsFileExplorer") as? DialogSaveAsFileExplorer
         dialogSaveAsFileExplorer?.mkDir(oldDir)
     }
 
@@ -276,22 +260,10 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
                 withContext(Dispatchers.IO) {
-                    var reqParam = URLEncoder.encode("NewPesny", "UTF-8") + "=" + URLEncoder.encode(
-                        "1",
-                        "UTF-8"
-                    )
-                    reqParam += "&" + URLEncoder.encode("title", "UTF-8") + "=" + URLEncoder.encode(
-                        title,
-                        "UTF-8"
-                    )
-                    reqParam += "&" + URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode(
-                        pesny,
-                        "UTF-8"
-                    )
-                    reqParam += "&" + URLEncoder.encode(
-                        "fileName",
-                        "UTF-8"
-                    ) + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
+                    var reqParam = URLEncoder.encode("NewPesny", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("title", "UTF-8") + "=" + URLEncoder.encode(title, "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode(pesny, "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
                     val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
                     with(mURL.openConnection() as HttpURLConnection) {
                         requestMethod = "POST"
@@ -302,55 +274,17 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
                     }
                 }
                 if (responseCodeS == 200) {
-                    Snackbar.make(
-                        binding.scrollView,
-                        getString(by.carkva_gazeta.malitounik.R.string.save),
-                        Snackbar.LENGTH_LONG
-                    ).apply {
-                        setActionTextColor(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorWhite
-                            )
-                        )
-                        setTextColor(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorWhite
-                            )
-                        )
-                        setBackgroundTint(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorPrimary
-                            )
-                        )
+                    Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {
+                        setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
                         show()
                     }
                 } else {
-                    Snackbar.make(
-                        binding.scrollView,
-                        getString(by.carkva_gazeta.malitounik.R.string.error),
-                        Snackbar.LENGTH_LONG
-                    ).apply {
-                        setActionTextColor(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorWhite
-                            )
-                        )
-                        setTextColor(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorWhite
-                            )
-                        )
-                        setBackgroundTint(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorPrimary
-                            )
-                        )
+                    Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.error), Snackbar.LENGTH_LONG).apply {
+                        setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
                         show()
                     }
                 }
@@ -365,16 +299,9 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
                 var result = ""
                 binding.progressBar2.visibility = View.VISIBLE
                 withContext(Dispatchers.IO) {
-                    var reqParam =
-                        URLEncoder.encode("isset", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("dir", "UTF-8") + "=" + URLEncoder.encode(
-                        dir,
-                        "UTF-8"
-                    )
-                    reqParam += "&" + URLEncoder.encode(
-                        "fileName",
-                        "UTF-8"
-                    ) + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
+                    var reqParam = URLEncoder.encode("isset", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("dir", "UTF-8") + "=" + URLEncoder.encode(dir, "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
                     val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
                     with(mURL.openConnection() as HttpURLConnection) {
                         requestMethod = "POST"
@@ -411,19 +338,9 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
                 withContext(Dispatchers.IO) {
-                    var reqParam =
-                        URLEncoder.encode("saveas", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    reqParam += "&" + URLEncoder.encode(
-                        "dirToFile",
-                        "UTF-8"
-                    ) + "=" + URLEncoder.encode(dirToFile, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode(
-                        "fileName",
-                        "UTF-8"
-                    ) + "=" + URLEncoder.encode(
-                        fileName.replace("\n", " ").replace(".txt", ".html", ignoreCase = true),
-                        "UTF-8"
-                    )
+                    var reqParam = URLEncoder.encode("saveas", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("dirToFile", "UTF-8") + "=" + URLEncoder.encode(dirToFile, "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " ").replace(".txt", ".html", ignoreCase = true), "UTF-8")
                     val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
                     with(mURL.openConnection() as HttpURLConnection) {
                         requestMethod = "POST"
@@ -434,55 +351,17 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
                     }
                 }
                 if (responseCodeS == 200) {
-                    Snackbar.make(
-                        binding.scrollView,
-                        getString(by.carkva_gazeta.malitounik.R.string.save),
-                        Snackbar.LENGTH_LONG
-                    ).apply {
-                        setActionTextColor(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorWhite
-                            )
-                        )
-                        setTextColor(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorWhite
-                            )
-                        )
-                        setBackgroundTint(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorPrimary
-                            )
-                        )
+                    Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {
+                        setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
                         show()
                     }
                 } else {
-                    Snackbar.make(
-                        binding.scrollView,
-                        getString(by.carkva_gazeta.malitounik.R.string.error),
-                        Snackbar.LENGTH_LONG
-                    ).apply {
-                        setActionTextColor(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorWhite
-                            )
-                        )
-                        setTextColor(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorWhite
-                            )
-                        )
-                        setBackgroundTint(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorPrimary
-                            )
-                        )
+                    Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.error), Snackbar.LENGTH_LONG).apply {
+                        setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
                         show()
                     }
                 }
@@ -499,11 +378,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
                 binding.progressBar2.visibility = View.VISIBLE
                 if (findDirAsSave.size == 0) {
                     withContext(Dispatchers.IO) {
-                        val reqParam =
-                            URLEncoder.encode("findDir", "UTF-8") + "=" + URLEncoder.encode(
-                                "1",
-                                "UTF-8"
-                            )
+                        val reqParam = URLEncoder.encode("findDir", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
                         val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
                         with(mURL.openConnection() as HttpURLConnection) {
                             requestMethod = "POST"
@@ -520,12 +395,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
                             }
                             val gson = Gson()
                             val type = object : TypeToken<ArrayList<String>>() {}.type
-                            findDirAsSave.addAll(
-                                gson.fromJson<ArrayList<String>>(
-                                    sb.toString(),
-                                    type
-                                )
-                            )
+                            findDirAsSave.addAll(gson.fromJson<ArrayList<String>>(sb.toString(), type))
                         }
                     }
                 }
@@ -533,14 +403,11 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
                 if (isSite) {
                     intent.removeExtra("isSite")
                     withContext(Dispatchers.IO) {
-                        var reqParam = URLEncoder.encode("get", "UTF-8") + "=" + URLEncoder.encode(
-                            "1",
-                            "UTF-8"
-                        )
-                        reqParam += "&" + URLEncoder.encode(
-                            "fileName",
-                            "UTF-8"
-                        ) + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
+                        val t1 = fileName.indexOf(")")
+                        val fileNameIsSite = if (t1 != -1) fileName.substring(t1 + 2)
+                        else fileName
+                        var reqParam = URLEncoder.encode("get", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileNameIsSite.trim(), "UTF-8")
                         val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
                         with(mURL.openConnection() as HttpURLConnection) {
                             requestMethod = "POST"
@@ -569,18 +436,9 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
                             if (result == "") result = content
                         } else result = content
                         val gson = Gson()
-                        var reqParam = URLEncoder.encode("save", "UTF-8") + "=" + URLEncoder.encode(
-                            "1",
-                            "UTF-8"
-                        )
-                        reqParam += "&" + URLEncoder.encode(
-                            "fileName",
-                            "UTF-8"
-                        ) + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
-                        reqParam += "&" + URLEncoder.encode(
-                            "content",
-                            "UTF-8"
-                        ) + "=" + URLEncoder.encode(gson.toJson(result), "UTF-8")
+                        var reqParam = URLEncoder.encode("save", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("content", "UTF-8") + "=" + URLEncoder.encode(gson.toJson(result), "UTF-8")
                         val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
                         with(mURL.openConnection() as HttpURLConnection) {
                             requestMethod = "POST"
@@ -593,29 +451,10 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
                 }
                 if (responseCodeS == 200) {
                     if (isSaveAs) {
-                        Snackbar.make(
-                            binding.scrollView,
-                            getString(by.carkva_gazeta.malitounik.R.string.save),
-                            Snackbar.LENGTH_LONG
-                        ).apply {
-                            setActionTextColor(
-                                ContextCompat.getColor(
-                                    this@Pasochnica,
-                                    by.carkva_gazeta.malitounik.R.color.colorWhite
-                                )
-                            )
-                            setTextColor(
-                                ContextCompat.getColor(
-                                    this@Pasochnica,
-                                    by.carkva_gazeta.malitounik.R.color.colorWhite
-                                )
-                            )
-                            setBackgroundTint(
-                                ContextCompat.getColor(
-                                    this@Pasochnica,
-                                    by.carkva_gazeta.malitounik.R.color.colorPrimary
-                                )
-                            )
+                        Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {
+                            setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                            setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                            setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
                             show()
                         }
                         if (!findDirAsSave()) {
@@ -623,51 +462,23 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
                                 val dialodSaveAsHelp = DialogSaveAsHelp.newInstance(fileName)
                                 dialodSaveAsHelp.show(supportFragmentManager, "dialodSaveAsHelp")
                             } else {
-                                val dialogSaveAsFileExplorer =
-                                    DialogSaveAsFileExplorer.getInstance(fileName)
-                                dialogSaveAsFileExplorer.show(
-                                    supportFragmentManager,
-                                    "dialogSaveAsFileExplorer"
-                                )
+                                val dialogSaveAsFileExplorer = DialogSaveAsFileExplorer.getInstance(fileName)
+                                dialogSaveAsFileExplorer.show(supportFragmentManager, "dialogSaveAsFileExplorer")
                             }
                         } else {
                             sendSaveAsPostRequest(getDirAsSave(), fileName)
                         }
                     }
                 } else {
-                    Snackbar.make(
-                        binding.scrollView,
-                        getString(by.carkva_gazeta.malitounik.R.string.error),
-                        Snackbar.LENGTH_LONG
-                    ).apply {
-                        setActionTextColor(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorWhite
-                            )
-                        )
-                        setTextColor(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorWhite
-                            )
-                        )
-                        setBackgroundTint(
-                            ContextCompat.getColor(
-                                this@Pasochnica,
-                                by.carkva_gazeta.malitounik.R.color.colorPrimary
-                            )
-                        )
+                    Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.error), Snackbar.LENGTH_LONG).apply {
+                        setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                        setBackgroundTint(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorPrimary))
                         show()
                     }
                 }
                 if (fileName.contains(".htm")) {
-                    binding.apisanne.setText(
-                        MainActivity.fromHtml(
-                            result,
-                            HtmlCompat.FROM_HTML_MODE_COMPACT
-                        )
-                    )
+                    binding.apisanne.setText(MainActivity.fromHtml(result, HtmlCompat.FROM_HTML_MODE_COMPACT))
                     binding.actionP.visibility = View.GONE
                     binding.actionBr.visibility = View.GONE
                 } else {
@@ -684,10 +495,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
     private fun getTextOnSite(fileName: String): String {
         var text: String
         var reqParam = URLEncoder.encode("getFile", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-        reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(
-            fileName,
-            "UTF-8"
-        )
+        reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName, "UTF-8")
         val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
         with(mURL.openConnection() as HttpURLConnection) {
             requestMethod = "POST"
@@ -956,11 +764,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
             if (fileName.contains(".htm")) {
                 val text = binding.apisanne.text
                 text?.let { editable ->
-                    val subtext = editable.getSpans(
-                        startSelect,
-                        endSelect,
-                        StyleSpan(Typeface.BOLD)::class.java
-                    )
+                    val subtext = editable.getSpans(startSelect, endSelect, StyleSpan(Typeface.BOLD)::class.java)
                     var check = false
                     subtext.forEach {
                         if (it.style == Typeface.BOLD) {
@@ -968,12 +772,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
                             editable.removeSpan(it)
                         }
                     }
-                    if (!check) editable.setSpan(
-                        StyleSpan(Typeface.BOLD),
-                        startSelect,
-                        endSelect,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
+                    if (!check) editable.setSpan(StyleSpan(Typeface.BOLD), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             } else {
                 val text = binding.apisanne.text.toString()
@@ -996,11 +795,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
             if (fileName.contains(".htm")) {
                 val text = binding.apisanne.text
                 text?.let { editable ->
-                    val subtext = editable.getSpans(
-                        startSelect,
-                        endSelect,
-                        StyleSpan(Typeface.ITALIC)::class.java
-                    )
+                    val subtext = editable.getSpans(startSelect, endSelect, StyleSpan(Typeface.ITALIC)::class.java)
                     var check = false
                     subtext.forEach {
                         if (it.style == Typeface.ITALIC) {
@@ -1008,12 +803,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
                             editable.removeSpan(it)
                         }
                     }
-                    if (!check) editable.setSpan(
-                        StyleSpan(Typeface.ITALIC),
-                        startSelect,
-                        endSelect,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
+                    if (!check) editable.setSpan(StyleSpan(Typeface.ITALIC), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             } else {
                 val text = binding.apisanne.text.toString()
@@ -1036,27 +826,15 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
             if (fileName.contains(".htm")) {
                 val text = binding.apisanne.text
                 text?.let { editable ->
-                    val subtext =
-                        editable.getSpans(startSelect, endSelect, ForegroundColorSpan::class.java)
+                    val subtext = editable.getSpans(startSelect, endSelect, ForegroundColorSpan::class.java)
                     var check = false
                     subtext.forEach {
-                        if (it.foregroundColor == ContextCompat.getColor(
-                                this,
-                                by.carkva_gazeta.malitounik.R.color.colorPrimary
-                            )
-                        ) {
+                        if (it.foregroundColor == ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)) {
                             check = true
                             editable.removeSpan(it)
                         }
                     }
-                    if (!check) editable.setSpan(
-                        ForegroundColorSpan(
-                            ContextCompat.getColor(
-                                this,
-                                by.carkva_gazeta.malitounik.R.color.colorPrimary
-                            )
-                        ), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
+                    if (!check) editable.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary)), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             } else {
                 val text = binding.apisanne.text.toString()
@@ -1120,12 +898,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener,
             val item = menu.getItem(i)
             val spanString = SpannableString(menu.getItem(i).title.toString())
             val end = spanString.length
-            spanString.setSpan(
-                AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true),
-                0,
-                end,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+            spanString.setSpan(AbsoluteSizeSpan(SettingsActivity.GET_FONT_SIZE_MIN.toInt(), true), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             item.title = spanString
         }
         return true

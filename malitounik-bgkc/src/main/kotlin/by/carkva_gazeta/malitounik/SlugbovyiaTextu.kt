@@ -103,6 +103,7 @@ class SlugbovyiaTextu {
         dat19.add(SlugbovyiaTextuData(340, "Між сьвятымі айца нашага Міколы Цудатворца, архібіскупа Мірлікійскага", "v_6_12"))
         dat19.add(SlugbovyiaTextuData(340, "Між сьвятымі айца нашага Міколы Цудатворца, архібіскупа Мірлікійскага", "l_6_12", liturgia = true))
         dat19.add(SlugbovyiaTextuData(360, "Сабор Найсьвяцейшай Багародзіцы", "l_12_26_sabor_baharodzicy", liturgia = true))
+        dat19.add(SlugbovyiaTextuData(1, "Малебен на Новы год", "maleben_new_year_01_01", liturgia = true))
 
         dat20.add(SlugbovyiaTextuData(218, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "zmenyia_chastki_pieramianiennie", liturgia = true))
         dat20.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "viachernia_mineia_sviatochnaia1"))
@@ -163,7 +164,7 @@ class SlugbovyiaTextu {
         return pasxa
     }
 
-    fun getResource(day: Int, pasxa: Boolean, utran: Boolean = false, liturgia: Boolean = false, other: Boolean = false): String {
+    fun getResource(day: Int, pasxa: Boolean, utran: Boolean = false, liturgia: Boolean = false, other: Boolean = false, isSviaty: Boolean = false): String {
         var resource = "0"
         dat12.forEach {
             if (day == it.day && pasxa == it.pasxa) {
@@ -215,14 +216,14 @@ class SlugbovyiaTextu {
             }
         }
         dat19.forEach {
-            if (day == it.day && pasxa == it.pasxa) {
+            if (day == it.day && pasxa == it.pasxa && !isSviaty) {
                 if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         dat20.forEach {
-            if (day == it.day && pasxa == it.pasxa) {
+            if (day == it.day && pasxa == it.pasxa && isSviaty) {
                 when {
                     other && other == it.other -> resource = it.resource
                     (!utran && !liturgia && !other) && (!it.utran && !it.liturgia && !it.other) -> resource = it.resource

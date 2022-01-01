@@ -317,6 +317,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["vgad_rastvo_sv_vieczar_24_12"] = R.raw.vgad_rastvo_sv_vieczar_24_12
             resursMap["l_12_26_sabor_baharodzicy"] = R.raw.l_12_26_sabor_baharodzicy
             resursMap["maleben_new_year_01_01"] = R.raw.maleben_new_year_01_01
+            resursMap["l_12_28"] = R.raw.l_12_28
+            resursMap["l_vasila_vialikaha"] = R.raw.l_vasila_vialikaha
             PesnyAll.resursMap.forEach {
                 resursMap[it.key] = it.value
             }

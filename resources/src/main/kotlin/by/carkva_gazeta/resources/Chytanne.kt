@@ -415,6 +415,8 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                         if (zagl == "Дан") kniga = 36
                         if (zagl == "Лікі") kniga = 37
                         if (zagl == "Міх") kniga = 38
+                        if (zagl == "Дрг") kniga = 39
+                        if (zagl == "Мдр") kniga = 40
                         val r = resources
                         var inputStream = r.openRawResource(R.raw.biblian1)
                         var errorChytanne = false
@@ -731,6 +733,22 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                                     resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim())
                                 }
                             }
+                            39 -> {
+                                inputStream = r.openRawResource(R.raw.biblias5)
+                                title = if (e == 0) {
+                                    resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_39, spln, zaglavieName)
+                                } else {
+                                    resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim())
+                                }
+                            }
+                            40 -> {
+                                inputStream = r.openRawResource(R.raw.sinaidals26)
+                                title = if (e == 0) {
+                                    resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_40, spln, zaglavieName)
+                                } else {
+                                    resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_zag, spln.trim())
+                                }
+                            }
                             else -> {
                                 errorChytanne = true
                             }
@@ -759,10 +777,12 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                             var desN: Int
                             spl = split2[zaglnum].trim()
                             desN = spl.indexOf("$knigaN.")
+                            if (desN == -1) desN = spl.indexOf(knigaN)
                             if (knigaN == knigaK && zag3 == -1) {
                                 desK1 = desN
                             } else {
                                 desK1 = spl.indexOf("$knigaK.")
+                                if (desK1 == -1) desK1 = spl.indexOf(knigaK)
                                 if (desK1 == -1) {
                                     val splAll = spl.split("\n").size
                                     desK1 = spl.indexOf("$splAll.")
@@ -772,8 +792,10 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                                     val spl2 = split2[zaglnum + 1].trim()
                                     val des1 = spl1.length
                                     desN = spl1.indexOf("$knigaN.")
+                                    if (desN == -1) desN = spl.indexOf(knigaN)
                                     desK1 = spl2.indexOf("$knigaK.")
-                                    var desN1: Int = spl2.indexOf((knigaK.toInt() + 1).toString().plus("."), desK1)
+                                    if (desK1 == -1) desK1 = spl.indexOf(knigaK)
+                                    var desN1 = spl2.indexOf((knigaK.toInt() + 1).toString().plus("."), desK1)
                                     if (desN1 == -1) {
                                         desN1 = spl1.length
                                     }
@@ -788,7 +810,8 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                             }
                             val textBiblia = spl.substring(desN, desK).toSpannable()
                             if (polstixaA) {
-                                val t2 = textBiblia.indexOf("$knigaK.")
+                                var t2 = textBiblia.indexOf("$knigaK.")
+                                if (t2 == -1) t2 = textBiblia.indexOf(knigaK)
                                 val t3 = textBiblia.indexOf(".", t2)
                                 var t1 = textBiblia.indexOf(":", t2)
                                 if (t1 == -1) t1 = textBiblia.indexOf(";", t3 + 1)

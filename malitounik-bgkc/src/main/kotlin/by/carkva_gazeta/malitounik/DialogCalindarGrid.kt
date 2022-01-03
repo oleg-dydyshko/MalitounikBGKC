@@ -345,9 +345,9 @@ class DialogCalindarGrid : DialogFragment() {
                             when {
                                 slugba.checkLiturgia(raznicia, dayOfYear) -> {
                                     if (denNedzeli == Calendar.SUNDAY && ton != 0) {
-                                        val resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), liturgia = true, isSviaty = true)
+                                        var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), liturgia = true, isSviaty = true)
                                         if (resours == "0")
-                                            slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), liturgia = true)
+                                            resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), liturgia = true)
                                         val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton, true, ton_na_sviaty = false, ton_na_viliki_post = true, resurs = resours, sviatyaName, checkSviatyia, year)
                                         traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                     } else {

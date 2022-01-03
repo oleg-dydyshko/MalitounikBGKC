@@ -700,7 +700,7 @@ class ParalelnyeMesta {
             bible[2] = "Якава"
             bible[3] = "56"
         }
-        if (kniga == "1 Пет" || kniga == "1 Птр") {
+        if (kniga == "1 Пет" || kniga == "1 Пт") {
             bible[0] = "1 Петр"
             bible[1] = "1 Петра"
             bible[2] = "1 Пятра"
@@ -708,7 +708,7 @@ class ParalelnyeMesta {
             bible[4] = "1-е Петра"
             bible[5] = "1-е Пятра"
         }
-        if (kniga == "2 Пет" || kniga == "2 Птр") {
+        if (kniga == "2 Пет" || kniga == "2 Пт") {
             bible[0] = "2 Петр"
             bible[1] = "2 Петра"
             bible[2] = "2 Пятра"

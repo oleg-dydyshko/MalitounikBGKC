@@ -75,6 +75,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        getFindFileListAsSave()
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
@@ -348,4 +349,38 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     }
 
     private class ViewHolder(var text: TextView)
+
+    companion object {
+        val findDirAsSave = ArrayList<String>()
+        fun getFindFileListAsSave() {
+            if (MainActivity.isNetworkAvailable()) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.IO) {
+                        val reqParam = URLEncoder.encode("findDir", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                        with(mURL.openConnection() as HttpURLConnection) {
+                            requestMethod = "POST"
+                            val wr = OutputStreamWriter(outputStream)
+                            wr.write(reqParam)
+                            wr.flush()
+                            val sb = StringBuilder()
+                            BufferedReader(InputStreamReader(inputStream)).use {
+                                var inputLine = it.readLine()
+                                while (inputLine != null) {
+                                    sb.append(inputLine)
+                                    inputLine = it.readLine()
+                                }
+                            }
+                            if (responseCode == 200) {
+                                findDirAsSave.clear()
+                                val gson = Gson()
+                                val type = object : TypeToken<ArrayList<String>>() {}.type
+                                findDirAsSave.addAll(gson.fromJson<ArrayList<String>>(sb.toString(), type))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

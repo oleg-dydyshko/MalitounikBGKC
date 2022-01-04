@@ -743,6 +743,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                             }
                             40 -> {
                                 inputStream = r.openRawResource(R.raw.sinaidals26)
+                                val er = SpannableString(getString(by.carkva_gazeta.malitounik.R.string.semuxa_maran_ata_error))
+                                er.setSpan(StyleSpan(Typeface.ITALIC), 0, er.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                ssbTitle.append("\n").append(er)
                                 title = if (e == 0) {
                                     resources.getString(by.carkva_gazeta.malitounik.R.string.chtinia_40, spln, zaglavieName)
                                 } else {

@@ -47,7 +47,6 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     private var history = ArrayList<History>()
     private var positionY = 0
     private var firstTextPosition = ""
-    private val findDirAsSave = ArrayList<String>()
     private val textWatcher = object : TextWatcher {
         var editPosition = 0
 
@@ -103,8 +102,17 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         var title: String
         val t3 = fileName.lastIndexOf(".")
         title = if (t3 != -1) {
-            resours = fileName.substring(0, t3)
-            fileName.substring(0, t3)
+            var findResours = false
+            for (i in 0 until PasochnicaList.findDirAsSave.size) {
+                if (fileName.substring(0, t3) == PasochnicaList.findDirAsSave[i]) {
+                    findResours = true
+                    break
+                }
+            }
+            if (findResours) {
+                resours = fileName.substring(0, t3)
+                fileName.substring(0, t3)
+            } else fileName
         } else fileName
         val t1 = fileName.indexOf("(")
         if (t1 != -1 && t1 == 0) {
@@ -340,7 +348,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 withContext(Dispatchers.IO) {
                     var reqParam = URLEncoder.encode("saveas", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
                     reqParam += "&" + URLEncoder.encode("dirToFile", "UTF-8") + "=" + URLEncoder.encode(dirToFile, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " ").replace(".txt", ".html", ignoreCase = true), "UTF-8")
+                    reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
                     val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
                     with(mURL.openConnection() as HttpURLConnection) {
                         requestMethod = "POST"
@@ -376,38 +384,12 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 var result = ""
                 var responseCodeS = 500
                 binding.progressBar2.visibility = View.VISIBLE
-                if (findDirAsSave.size == 0) {
-                    withContext(Dispatchers.IO) {
-                        val reqParam = URLEncoder.encode("findDir", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
-                        with(mURL.openConnection() as HttpURLConnection) {
-                            requestMethod = "POST"
-                            val wr = OutputStreamWriter(outputStream)
-                            wr.write(reqParam)
-                            wr.flush()
-                            val sb = StringBuilder()
-                            BufferedReader(InputStreamReader(inputStream)).use {
-                                var inputLine = it.readLine()
-                                while (inputLine != null) {
-                                    sb.append(inputLine)
-                                    inputLine = it.readLine()
-                                }
-                            }
-                            val gson = Gson()
-                            val type = object : TypeToken<ArrayList<String>>() {}.type
-                            findDirAsSave.addAll(gson.fromJson<ArrayList<String>>(sb.toString(), type))
-                        }
-                    }
-                }
                 val isSite = intent.extras?.getBoolean("isSite", false) ?: false
                 if (isSite) {
                     intent.removeExtra("isSite")
                     withContext(Dispatchers.IO) {
-                        val t1 = fileName.indexOf(")")
-                        val fileNameIsSite = if (t1 != -1) fileName.substring(t1 + 2)
-                        else fileName
                         var reqParam = URLEncoder.encode("get", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                        reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileNameIsSite.trim(), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName, "UTF-8")
                         val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
                         with(mURL.openConnection() as HttpURLConnection) {
                             requestMethod = "POST"
@@ -450,6 +432,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     }
                 }
                 if (responseCodeS == 200) {
+                    PasochnicaList.getFindFileListAsSave()
                     if (isSaveAs) {
                         Snackbar.make(binding.scrollView, getString(by.carkva_gazeta.malitounik.R.string.save), Snackbar.LENGTH_LONG).apply {
                             setActionTextColor(ContextCompat.getColor(this@Pasochnica, by.carkva_gazeta.malitounik.R.color.colorWhite))
@@ -520,8 +503,8 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     private fun findDirAsSave(): Boolean {
         var result = false
         if (resours != "") {
-            for (i in 0 until findDirAsSave.size) {
-                if (findDirAsSave[i].contains(resours)) {
+            for (i in 0 until PasochnicaList.findDirAsSave.size) {
+                if (PasochnicaList.findDirAsSave[i].contains(resours)) {
                     result = true
                     break
                 }
@@ -533,9 +516,9 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     private fun getDirAsSave(): String {
         var result = ""
         if (resours != "") {
-            for (i in 0 until findDirAsSave.size) {
-                if (findDirAsSave[i].contains(resours)) {
-                    result = findDirAsSave[i]
+            for (i in 0 until PasochnicaList.findDirAsSave.size) {
+                if (PasochnicaList.findDirAsSave[i].contains(resours)) {
+                    result = PasochnicaList.findDirAsSave[i]
                     break
                 }
             }

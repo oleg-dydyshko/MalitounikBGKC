@@ -106,6 +106,7 @@ class SlugbovyiaTextu {
         dat19.add(SlugbovyiaTextuData(1, "Малебен на Новы год", "maleben_new_year_01_01", liturgia = true))
         dat19.add(SlugbovyiaTextuData(362, "20 тысячаў мучанікаў Нікамедыйскіх", "l_12_28", liturgia = true))
         dat19.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня; сьвятаначальніка Сільвестра, папы Рымскага", "l_1_2", liturgia = true))
+        dat19.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня; Сабор 70-ці апосталаў, пачэснага Тэактыста", "l_01_04_pieradsv_bohazjaulennia", liturgia = true))
 
         dat20.add(SlugbovyiaTextuData(218, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "zmenyia_chastki_pieramianiennie", liturgia = true))
         dat20.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "viachernia_mineia_sviatochnaia1"))

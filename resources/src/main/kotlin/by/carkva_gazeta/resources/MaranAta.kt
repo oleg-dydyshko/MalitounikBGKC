@@ -83,6 +83,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var autoStartScrollJob: Job? = null
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
+    private var resetScreenJob: Job? = null
     private var diffScroll = -1
     private var scrolltosatrt = false
     private var vydelenie = ArrayList<ArrayList<Int>>()
@@ -932,7 +933,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private fun stopAutoScroll(delayDisplayOff: Boolean = true, saveAutoScroll: Boolean = true) {
         if (autoScrollJob?.isActive == true) {
             if (saveAutoScroll) {
-                val prefEditor: Editor = k.edit()
+                val prefEditor = k.edit()
                 prefEditor.putBoolean("autoscroll", false)
                 prefEditor.apply()
             }
@@ -943,7 +944,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             binding.actionPlus.animation = animation
             autoScrollJob?.cancel()
             if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
-                CoroutineScope(Dispatchers.Main).launch {
+                resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
                     window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 }
@@ -953,25 +954,27 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     private fun startAutoScroll() {
         if (diffScroll != 0) {
-            val prefEditor: Editor = k.edit()
-            prefEditor.putBoolean("autoscroll", true)
-            prefEditor.apply()
-            binding.actionMinus.visibility = View.VISIBLE
-            binding.actionPlus.visibility = View.VISIBLE
-            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-            binding.actionMinus.animation = animation
-            binding.actionPlus.animation = animation
-            stopAutoStartScroll()
-            autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                while (isActive) {
-                    delay(spid.toLong())
-                    forceScroll()
-                    if (!mActionDown && !MainActivity.dialogVisable) {
-                        binding.ListView.smoothScrollBy(2, 0)
+            if (autoScrollJob?.isActive != true) {
+                val prefEditor = k.edit()
+                prefEditor.putBoolean("autoscroll", true)
+                prefEditor.apply()
+                binding.actionMinus.visibility = View.VISIBLE
+                binding.actionPlus.visibility = View.VISIBLE
+                val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+                binding.actionMinus.animation = animation
+                binding.actionPlus.animation = animation
+                resetScreenJob?.cancel()
+                autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                    while (isActive) {
+                        delay(spid.toLong())
+                        forceScroll()
+                        if (!mActionDown && !MainActivity.dialogVisable) {
+                            binding.ListView.smoothScrollBy(2, 0)
+                        }
                     }
                 }
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
             binding.ListView.smoothScrollToPosition(0)
             scrolltosatrt = true
@@ -1085,6 +1088,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         stopAutoStartScroll()
         procentJob?.cancel()
         resetTollbarJob?.cancel()
+        resetScreenJob?.cancel()
     }
 
     override fun onResume() {

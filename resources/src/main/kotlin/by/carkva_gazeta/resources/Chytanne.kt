@@ -67,6 +67,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
     private var autoStartScrollJob: Job? = null
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
+    private var resetScreenJob: Job? = null
     private var diffScroll = -1
     private var titleTwo = ""
     private var firstTextPosition = ""
@@ -926,7 +927,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
             autoScrollJob?.cancel()
             binding.textView.setTextIsSelectable(true)
             if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
-                CoroutineScope(Dispatchers.Main).launch {
+                resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
                     window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 }
@@ -936,28 +937,30 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
 
     private fun startAutoScroll() {
         if (diffScroll != 0) {
-            val prefEditor: Editor = k.edit()
-            prefEditor.putBoolean("autoscroll", true)
-            prefEditor.apply()
-            binding.actionMinus.visibility = View.VISIBLE
-            binding.actionPlus.visibility = View.VISIBLE
-            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-            binding.actionMinus.animation = animation
-            binding.actionPlus.animation = animation
-            stopAutoStartScroll()
-            binding.textView.clearFocus()
-            binding.textView.setTextIsSelectable(false)
             if (autoScrollJob?.isActive != true) {
-                autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                    while (isActive) {
-                        delay(spid.toLong())
-                        if (!mActionDown && !MainActivity.dialogVisable) {
-                            binding.InteractiveScroll.smoothScrollBy(0, 2)
+                val prefEditor = k.edit()
+                prefEditor.putBoolean("autoscroll", true)
+                prefEditor.apply()
+                binding.actionMinus.visibility = View.VISIBLE
+                binding.actionPlus.visibility = View.VISIBLE
+                val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+                binding.actionMinus.animation = animation
+                binding.actionPlus.animation = animation
+                resetScreenJob?.cancel()
+                binding.textView.clearFocus()
+                binding.textView.setTextIsSelectable(false)
+                if (autoScrollJob?.isActive != true) {
+                    autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                        while (isActive) {
+                            delay(spid.toLong())
+                            if (!mActionDown && !MainActivity.dialogVisable) {
+                                binding.InteractiveScroll.smoothScrollBy(0, 2)
+                            }
                         }
                     }
                 }
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
             val duration: Long = 1000
             ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY",  0).setDuration(duration).start()
@@ -1028,6 +1031,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
         stopAutoStartScroll()
         procentJob?.cancel()
         resetTollbarJob?.cancel()
+        resetScreenJob?.cancel()
     }
 
     override fun onResume() {

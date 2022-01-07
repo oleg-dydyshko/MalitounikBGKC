@@ -315,13 +315,16 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["v_rastvo_sv_vieczar_24_12"] = R.raw.v_rastvo_sv_vieczar_24_12
             resursMap["abed_rastvo_sv_vieczar_24_12"] = R.raw.abed_rastvo_sv_vieczar_24_12
             resursMap["ju_rastvo_sv_vieczar_24_12"] = R.raw.ju_rastvo_sv_vieczar_24_12
-            resursMap["vgad_rastvo_sv_vieczar_24_12"] = R.raw.vgad_rastvo_sv_vieczar_24_12
+            resursMap["vial_hadziny_rastvo_sv_vieczar_24_12"] = R.raw.vial_hadziny_rastvo_sv_vieczar_24_12
             resursMap["l_12_26_sabor_baharodzicy"] = R.raw.l_12_26_sabor_baharodzicy
             resursMap["maleben_new_year_01_01"] = R.raw.maleben_new_year_01_01
             resursMap["l_12_28"] = R.raw.l_12_28
             resursMap["l_vasila_vialikaha"] = R.raw.l_vasila_vialikaha
             resursMap["l_1_2"] = R.raw.l_1_2
             resursMap["l_01_04_pieradsv_bohazjaulennia"] = R.raw.l_01_04_pieradsv_bohazjaulennia
+            resursMap["l_1_6_bohazjaulennie"] = R.raw.l_1_6_bohazjaulennie
+            resursMap["abed_sv_vieczar_bohazjaulennia"] = R.raw.abed_sv_vieczar_bohazjaulennia
+            resursMap["vial_hadziny_sv_vieczar_bohazjaulennia"] = R.raw.vial_hadziny_sv_vieczar_bohazjaulennia
             PesnyAll.resursMap.forEach {
                 resursMap[it.key] = it.value
             }

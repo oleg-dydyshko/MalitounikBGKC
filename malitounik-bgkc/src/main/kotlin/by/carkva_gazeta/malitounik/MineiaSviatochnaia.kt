@@ -19,6 +19,13 @@ import kotlin.collections.ArrayList
 
 class MineiaSviatochnaia : AppCompatActivity() {
 
+    companion object {
+        const val VIALIKIA_GADZINY = "vial_hadziny_"
+        const val ABEDNICA = "abed_"
+        const val UTRAN = "ju_"
+        const val LINURGIA = "l_"
+    }
+
     private lateinit var k: SharedPreferences
     private lateinit var binding: AkafistListBinding
     private var resetTollbarJob: Job? = null
@@ -41,6 +48,7 @@ class MineiaSviatochnaia : AppCompatActivity() {
         setTollbarTheme()
         val slugba = SlugbovyiaTextu()
         val mineiaList = slugba.getMineiaSviatochnaia()
+        mineiaList.sort()
         val c = Calendar.getInstance()
         var day = 0
         for (i in 0 until mineiaList.size) {
@@ -78,8 +86,8 @@ class MineiaSviatochnaia : AppCompatActivity() {
             if (viachernia != "0") count.add("1")
             val slujba = when {
                 count.size > 1 -> ""
-                mineiaList[i].other && other.contains("vgad_") -> " - Вялікія гадзіны"
-                mineiaList[i].other && other.contains("abed_") -> " - Абедніца"
+                mineiaList[i].other && other.contains(VIALIKIA_GADZINY) -> " - Вялікія гадзіны"
+                mineiaList[i].other && other.contains(ABEDNICA) -> " - Абедніца"
                 mineiaList[i].utran -> " - Ютрань"
                 mineiaList[i].liturgia -> " - Літургія"
                 else -> " - Вячэрня"

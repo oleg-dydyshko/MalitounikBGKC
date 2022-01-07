@@ -50,10 +50,10 @@ class DialogMineiaList : DialogFragment() {
             resourceArrayList = arguments?.getStringArrayList("resourceArrayList") ?: ArrayList()
             for (i in 0 until resourceArrayList.size) {
                 val slujba = when {
-                    resourceArrayList[i].contains("vgad_") -> " - Вялікія гадзіны"
-                    resourceArrayList[i].contains("abed_") -> " - Абедніца"
-                    resourceArrayList[i].contains("ju_") -> " - Ютрань"
-                    resourceArrayList[i].contains("l_") -> " - Літургія"
+                    resourceArrayList[i].contains(MineiaSviatochnaia.VIALIKIA_GADZINY) -> " - Вялікія гадзіны"
+                    resourceArrayList[i].contains(MineiaSviatochnaia.ABEDNICA) -> " - Абедніца"
+                    resourceArrayList[i].contains(MineiaSviatochnaia.UTRAN) -> " - Ютрань"
+                    resourceArrayList[i].contains(MineiaSviatochnaia.LINURGIA) -> " - Літургія"
                     else -> " - Вячэрня"
                 }
                 fileList.add(MineiaDay(dayOfYear, "$titleResource $slujba", resourceArrayList[i]))

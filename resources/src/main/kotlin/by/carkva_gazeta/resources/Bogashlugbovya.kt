@@ -17,7 +17,6 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -687,7 +686,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             override fun onTouch(action: Boolean) {
                 stopAutoStartScroll()
                 mActionDown = action
-                Log.d("Oleg3", "$mActionDown")
             }
         })
         binding.textView.movementMethod = LinkMovementMethod.getInstance()
@@ -1118,8 +1116,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val cal = Calendar.getInstance()
         raznica = zmenyiaChastki.raznica()
         dayOfYear = zmenyiaChastki.dayOfYear()
-            checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), dayOfYear)
-        if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, cal[Calendar.DAY_OF_YEAR].toString()))) {
+            checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), dayOfYear, slugbovyiaTextu.isPasxa(dayOfYear.toInt()))
+        if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
             chechZmena = true
         }
         invalidateOptionsMenu()
@@ -1283,9 +1281,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         val itemVybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         val find = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find)
-        if (resurs.contains("bogashlugbovya") || resurs.contains("akafist") || resurs.contains("malitvy") || resurs.contains("ruzanec") || resurs.contains("viachernia") || resurs.contains("prynagodnyia")) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
-        }
+        menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
         if (mAutoScroll) {
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {

@@ -250,7 +250,7 @@ class DialogCalindarGrid : DialogFragment() {
             holder.mText.text = text
             holder.itemView.tag = mItemList[position]
             activity?.let {
-                if (mItemList[position] == 4 && !(slugba.checkUtran(raznicia, dayOfYear) || denNedzeli == 1)) {
+                if (mItemList[position] == 4 && !(slugba.checkUtran(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) || denNedzeli == 1)) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                 } else if (mItemList[position] == 7 && issetSvityia) {
@@ -316,7 +316,7 @@ class DialogCalindarGrid : DialogFragment() {
                     1 -> {
                         activity?.let {
                             when {
-                                slugba.checkViachernia(raznicia, dayOfYear) -> {
+                                slugba.checkViachernia(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) -> {
                                     val intent = Intent()
                                     var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), isSviaty = true)
                                     if (resours == "0")
@@ -343,7 +343,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 tonNaidzelny = true
                             }
                             when {
-                                slugba.checkLiturgia(raznicia, dayOfYear) -> {
+                                slugba.checkLiturgia(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) -> {
                                     if (denNedzeli == Calendar.SUNDAY && ton != 0) {
                                         var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), liturgia = true, isSviaty = true)
                                         if (resours == "0")
@@ -397,7 +397,7 @@ class DialogCalindarGrid : DialogFragment() {
                     4 -> {
                         activity?.let {
                             when {
-                                slugba.checkUtran(raznicia, dayOfYear) -> {
+                                slugba.checkUtran(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) -> {
                                     val intent = Intent()
                                     var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), utran = true, isSviaty = true)
                                     if (resours == "0")

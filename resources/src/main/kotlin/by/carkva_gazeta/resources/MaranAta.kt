@@ -802,12 +802,12 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             val tr2 = str1.indexOf(".")
                             if (tr2 != -1) {
                                 str1 = res1[i2].substring(0, tr2)
+                                if (ires1 > str1.toInt()) {
+                                    glava++
+                                    i3 = 1
+                                }
+                                ires1 = str1.toInt()
                             }
-                            if (ires1 > str1.toInt()) {
-                                glava++
-                                i3 = 1
-                            }
-                            ires1 = str1.toInt()
                         }
                         if (belarus) maranAta.add("<!--$kniga.$glava.$i3--><!--nazva+++$nazvaBel " + glava + "-->" + res1[i2] + getParallel(nomer, glava, i3 - 1) + "\n")
                         else maranAta.add("<!--$kniga.$glava.$i3--><!--nazva+++$nazva " + glava + "-->" + res1[i2] + getParallel(nomer, glava, i3 - 1) + "\n")

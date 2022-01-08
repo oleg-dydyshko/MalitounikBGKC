@@ -966,6 +966,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
             ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY",  0).setDuration(duration).start()
             binding.InteractiveScroll.postDelayed({
                 startAutoScroll()
+                invalidateOptionsMenu()
             }, duration)
         }
     }

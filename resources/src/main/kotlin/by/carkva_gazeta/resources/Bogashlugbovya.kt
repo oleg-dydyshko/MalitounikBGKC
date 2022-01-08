@@ -803,7 +803,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                                     builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 4))
                                 }
                             } catch (t: Throwable) {
-                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br><br>\n")
                             }
                         }
                         when {
@@ -821,7 +821,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                                 try {
                                     builder.append(zmenyiaChastki.zmenya(1))
                                 } catch (t: Throwable) {
-                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br><br>\n")
                                 }
                             }
                             line.contains("EVCH") -> {
@@ -838,6 +838,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                                 try {
                                     builder.append(zmenyiaChastki.zmenya(0))
                                 } catch (t: Throwable) {
+                                    t.printStackTrace()
                                     builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                                 }
                             }
@@ -1221,6 +1222,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             ObjectAnimator.ofInt(binding.scrollView2, "scrollY", 0).setDuration(duration).start()
             binding.scrollView2.postDelayed({
                 startAutoScroll()
+                invalidateOptionsMenu()
             }, duration)
         }
     }

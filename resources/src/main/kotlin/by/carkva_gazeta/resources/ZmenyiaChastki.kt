@@ -22,7 +22,7 @@ internal class ZmenyiaChastki {
 
     fun zmenya(apostal: Int): String {
         val data = arrayData[0][9]
-        return if (data.contains(Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em>"
+        return if (data == "" || data.contains(Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx))) "<em>" + Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
         else chtenia(arrayData[0][9], apostal)
     }
 
@@ -35,6 +35,7 @@ internal class ZmenyiaChastki {
         val res = StringBuilder()
         w1 = MainActivity.removeZnakiAndSlovy(w1)
         val split = w1.split(";")
+        if (split.size == 1) return "<em>" + Malitounik.applicationContext().resources.getString(by.carkva_gazeta.malitounik.R.string.no_danyx) + "</em><br><br>"
         var knigaN: String
         var knigaK = "0"
         var zaglnum = 0

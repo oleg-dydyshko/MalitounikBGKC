@@ -94,32 +94,32 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
             startActivity(intent)
         }
         binding.listView.setOnItemLongClickListener { _, _, position, _ ->
-            val contextMenu = DialogContextMenu.getInstance(position, fileList[position])
+            val contextMenu = DialogContextMenu.getInstance(position, fileList[position], false)
             contextMenu.show(supportFragmentManager, "contextMenu")
             return@setOnItemLongClickListener true
         }
         getDirPostRequest()
     }
 
-    override fun onDialogRenameClick(position: Int) {
-        val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance(fileList[position])
+    override fun onDialogRenameClick(position: Int, title: String, isSite: Boolean) {
+        val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance(title, isSite)
         dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
     }
 
-    override fun onDialogDeliteClick(position: Int, title: String) {
-        val dialogDelite = DialogDelite.getInstance(position, title)
+    override fun onDialogDeliteClick(position: Int, title: String, isSite: Boolean) {
+        val dialogDelite = DialogDelite.getInstance(position, title, isSite)
         dialogDelite.show(supportFragmentManager, "dialogDelite")
     }
 
-    override fun fileDelite(position: Int) {
-        getFileUnlinkPostRequest(fileList[position])
+    override fun fileDelite(position: Int, title: String, isSite: Boolean) {
+        getFileUnlinkPostRequest(title, isSite)
         val prefEditor = k.edit()
-        prefEditor.remove("admin" + fileList[position] + "position")
+        prefEditor.remove("admin" + title + "position")
         prefEditor.apply()
     }
 
-    override fun setFileName(oldFileName: String, fileName: String) {
-        getFileRenamePostRequest(oldFileName, fileName)
+    override fun setFileName(oldFileName: String, fileName: String, isSite: Boolean) {
+        getFileRenamePostRequest(oldFileName, fileName, isSite)
     }
 
     private fun setTollbarTheme() {
@@ -193,12 +193,15 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
         }
     }
 
-    private fun getFileUnlinkPostRequest(fileName: String) {
+    private fun getFileUnlinkPostRequest(fileName: String, isSite: Boolean) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 withContext(Dispatchers.IO) {
                     var reqParam = URLEncoder.encode("unlink", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    if (isSite) {
+                        reqParam += "&" + URLEncoder.encode("isSite", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    }
                     reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
                     val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
                     with(mURL.openConnection() as HttpURLConnection) {
@@ -210,17 +213,22 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                     }
                 }
                 binding.progressBar2.visibility = View.GONE
+                val dialogNetFileExplorer = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
+                dialogNetFileExplorer?.getDirListRequest()
                 getDirPostRequest()
             }
         }
     }
 
-    private fun getFileRenamePostRequest(oldFileName: String, fileName: String) {
+    private fun getFileRenamePostRequest(oldFileName: String, fileName: String, isSite: Boolean) {
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
                 withContext(Dispatchers.IO) {
                     var reqParam = URLEncoder.encode("rename", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    if (isSite) {
+                        reqParam += "&" + URLEncoder.encode("isSite", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                    }
                     reqParam += "&" + URLEncoder.encode("oldFileName", "UTF-8") + "=" + URLEncoder.encode(oldFileName.replace("\n", " "), "UTF-8")
                     reqParam += "&" + URLEncoder.encode("fileName", "UTF-8") + "=" + URLEncoder.encode(fileName.replace("\n", " "), "UTF-8")
                     val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
@@ -233,6 +241,8 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                     }
                 }
                 binding.progressBar2.visibility = View.GONE
+                val dialogNetFileExplorer = supportFragmentManager.findFragmentByTag("dialogNetFileExplorer") as? DialogNetFileExplorer
+                dialogNetFileExplorer?.getDirListRequest()
                 getDirPostRequest()
             }
         }
@@ -295,6 +305,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
         val id = item.itemId
         if (id == R.id.action_plus) {
             val intent = Intent(this, Pasochnica::class.java)
+            intent.putExtra("newFile", true)
             intent.putExtra("fileName", "newFile.html")
             startActivity(intent)
         }

@@ -180,7 +180,12 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             } else ".html"
             "($resours) $title$end"
         }
-        getOrSendFilePostRequest(text, false)
+        val newFile = intent.extras?.getBoolean("newFile", false)?: false
+        if (!newFile) {
+            getOrSendFilePostRequest(text, false)
+        } else {
+            intent.removeExtra("newFile")
+        }
         positionY = k.getInt("admin" + fileName + "position", 0)
         setTollbarTheme()
     }
@@ -244,7 +249,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         getFileIssetPostRequest(dir, oldFileName, fileName)
     }
 
-    override fun setFileName(oldFileName: String, fileName: String) {
+    override fun setFileName(oldFileName: String, fileName: String, isSite: Boolean) {
         this.fileName = fileName
         saveResult(fileName)
     }
@@ -694,7 +699,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         val id = item.itemId
         if (id == R.id.action_save) {
             if (fileName == "newFile.html") {
-                val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance("newFile.html")
+                val dialogPasochnicaFileName = DialogPasochnicaFileName.getInstance("newFile.html", false)
                 dialogPasochnicaFileName.show(supportFragmentManager, "dialogPasochnicaFileName")
             } else {
                 saveResult(fileName)

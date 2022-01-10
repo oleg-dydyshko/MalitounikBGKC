@@ -16,6 +16,7 @@ class DialogDelite : DialogFragment() {
     private var mListener: DialogDeliteListener? = null
     private var position = 0
     private var title = ""
+    private var isSite = false
     private lateinit var alert: AlertDialog
     private var _binding: DialogTextviewDisplayBinding? = null
     private val binding get() = _binding!!
@@ -26,13 +27,14 @@ class DialogDelite : DialogFragment() {
     }
 
     interface DialogDeliteListener {
-        fun fileDelite(position: Int)
+        fun fileDelite(position: Int, title: String, isSite: Boolean)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         position = arguments?.getInt("position") ?: 0
         title = arguments?.getString("title") ?: ""
+        isSite = arguments?.getBoolean("isSite") ?: false
     }
 
     override fun onAttach(context: Context) {
@@ -53,7 +55,7 @@ class DialogDelite : DialogFragment() {
             binding.title.text = resources.getString(by.carkva_gazeta.malitounik.R.string.remove)
             binding.content.text = getString(by.carkva_gazeta.malitounik.R.string.vybranoe_biblia_delite, title)
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            builder.setPositiveButton(resources.getText(by.carkva_gazeta.malitounik.R.string.ok)) { _: DialogInterface?, _: Int -> mListener?.fileDelite(position) }
+            builder.setPositiveButton(resources.getText(by.carkva_gazeta.malitounik.R.string.ok)) { _: DialogInterface?, _: Int -> mListener?.fileDelite(position, title, isSite) }
             builder.setNegativeButton(resources.getString(by.carkva_gazeta.malitounik.R.string.cansel)) { dialog: DialogInterface, _: Int -> dialog.cancel() }
             builder.setView(binding.root)
             alert = builder.create()
@@ -62,11 +64,12 @@ class DialogDelite : DialogFragment() {
     }
 
     companion object {
-        fun getInstance(position: Int, title: String): DialogDelite {
+        fun getInstance(position: Int, title: String, isSite: Boolean): DialogDelite {
             val dialogDelite = DialogDelite()
             val bundle = Bundle()
             bundle.putInt("position", position)
             bundle.putString("title", title)
+            bundle.putBoolean("isSite", isSite)
             dialogDelite.arguments = bundle
             return dialogDelite
         }

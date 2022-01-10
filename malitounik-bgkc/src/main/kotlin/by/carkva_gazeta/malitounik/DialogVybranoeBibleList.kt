@@ -123,7 +123,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
                 override fun onItemSwipeEnded(item: ListSwipeItem, swipedDirection: SwipeDirection) {
                     if (swipedDirection == SwipeDirection.LEFT) {
                         val adapterItem = item.tag as VybranoeBibliaData
-                        val pos: Int = binding.dragListView.adapter.getPositionForItem(adapterItem)
+                        val pos = binding.dragListView.adapter.getPositionForItem(adapterItem)
                         val dialog = DialogDeliteBibliaVybranoe.getInstance(pos, arrayListVybranoe[pos].title)
                         dialog.setDialogDeliteBibliVybranoeListener(this@DialogVybranoeBibleList)
                         dialog.show(childFragmentManager, "DialogDeliteBibliaVybranoe")

@@ -71,6 +71,13 @@ class DialogNetFileExplorer : DialogFragment() {
             binding.content.adapter = adapter
             builder.setView(binding.root)
             getDirListRequest("")
+            binding.content.setOnItemLongClickListener {_, _, position, _ ->
+                if (!(fileList[position].resources == R.drawable.directory_up || fileList[position].resources == R.drawable.directory_icon)) {
+                    val contextMenu = DialogContextMenu.getInstance(position, dir + "/" + fileList[position].title, true)
+                    contextMenu.show(childFragmentManager, "contextMenu")
+                }
+                return@setOnItemLongClickListener true
+            }
             binding.content.setOnItemClickListener { _, _, position, _ ->
                 when (fileList[position].resources) {
                     R.drawable.directory_up -> {
@@ -92,6 +99,10 @@ class DialogNetFileExplorer : DialogFragment() {
             alert = builder.create()
         }
         return alert
+    }
+
+    fun getDirListRequest() {
+        getDirListRequest(dir)
     }
 
     private fun getDirListRequest(dir: String) {

@@ -114,11 +114,11 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
     }
 
     override fun onDialogDeliteClick(position: Int, name: String) {
-        val dialogDelite = DialogDelite.getInstance(position, name)
+        val dialogDelite = DialogDelite.getInstance(position, name, false)
         dialogDelite.show(supportFragmentManager, "DialogDelite")
     }
 
-    override fun fileDelite(position: Int) {
+    override fun fileDelite(position: Int, title: String, isSite: Boolean) {
         piarliny.removeAt(position)
         piarliny.sort()
         val gson = Gson()

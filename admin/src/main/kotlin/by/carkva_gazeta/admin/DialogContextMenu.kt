@@ -11,7 +11,8 @@ import by.carkva_gazeta.malitounik.databinding.DialogContextDisplayBinding
 
 class DialogContextMenu : DialogFragment() {
     private var position = 0
-    private var name: String = ""
+    private var name = ""
+    private var isSite = false
     private lateinit var mListener: DialogContextMenuListener
     private lateinit var dialog: AlertDialog
     private var _binding: DialogContextDisplayBinding? = null
@@ -23,14 +24,15 @@ class DialogContextMenu : DialogFragment() {
     }
 
     interface DialogContextMenuListener {
-        fun onDialogRenameClick(position: Int)
-        fun onDialogDeliteClick(position: Int, title: String)
+        fun onDialogRenameClick(position: Int, title: String, isSite: Boolean)
+        fun onDialogDeliteClick(position: Int, title: String, isSite: Boolean)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         position = arguments?.getInt("position") ?: 0
         name = arguments?.getString("name") ?: ""
+        isSite = arguments?.getBoolean("isSite") ?: false
     }
 
     override fun onAttach(context: Context) {
@@ -57,22 +59,23 @@ class DialogContextMenu : DialogFragment() {
             dialog = builder.create()
             binding.content.setOnClickListener {
                 dialog.cancel()
-                mListener.onDialogRenameClick(position)
+                mListener.onDialogRenameClick(position, name, isSite)
             }
             binding.content2.setOnClickListener {
                 dialog.cancel()
-                mListener.onDialogDeliteClick(position, name)
+                mListener.onDialogDeliteClick(position, name, isSite)
             }
         }
         return dialog
     }
 
     companion object {
-        fun getInstance(position: Int, name: String): DialogContextMenu {
+        fun getInstance(position: Int, name: String, isSite: Boolean): DialogContextMenu {
             val dialogContextMenu = DialogContextMenu()
             val args = Bundle()
             args.putInt("position", position)
             args.putString("name", name)
+            args.putBoolean("isSite", isSite)
             dialogContextMenu.arguments = args
             return dialogContextMenu
         }

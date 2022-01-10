@@ -17,6 +17,8 @@ import by.carkva_gazeta.malitounik.databinding.DialogEditviewDisplayBinding
 import java.util.*
 
 class DialogPasochnicaFileName : DialogFragment() {
+    private var oldFileName = ""
+    private var isSite = false
     private var mListener: DialogPasochnicaFileNameListener? = null
     private lateinit var builder: AlertDialog.Builder
     private var _binding: DialogEditviewDisplayBinding? = null
@@ -28,7 +30,7 @@ class DialogPasochnicaFileName : DialogFragment() {
     }
 
     internal interface DialogPasochnicaFileNameListener {
-        fun setFileName(oldFileName: String, fileName: String)
+        fun setFileName(oldFileName: String, fileName: String, isSite: Boolean)
     }
 
     override fun onAttach(context: Context) {
@@ -45,6 +47,12 @@ class DialogPasochnicaFileName : DialogFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("fileName", binding.content.text.toString())
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        oldFileName = arguments?.getString("oldFileName") ?: "newFile.html"
+        isSite = arguments?.getBoolean("isSite") ?: false
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -80,7 +88,6 @@ class DialogPasochnicaFileName : DialogFragment() {
                 imm12.hideSoftInputFromWindow(binding.content.windowToken, 0)
                 dialog.cancel()
             }
-            val oldFileName = arguments?.getString("oldFileName") ?: "newFile.html"
             val textNetral = if (oldFileName.contains(".htm")) {
                 resources.getString(by.carkva_gazeta.malitounik.R.string.set_file_txt)
             } else {
@@ -91,7 +98,7 @@ class DialogPasochnicaFileName : DialogFragment() {
                 val t1 = fileName.lastIndexOf(".")
                 if (fileName == "") {
                     val gc = Calendar.getInstance()
-                    val mun = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
+                    val mun = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
                     fileName = gc[Calendar.DATE].toString() + "_" + mun[gc[Calendar.MONTH]] + "_" + gc[Calendar.YEAR] + "_" + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
                 }
                 fileName = if (oldFileName.contains(".htm")) {
@@ -107,7 +114,7 @@ class DialogPasochnicaFileName : DialogFragment() {
                         "$fileName.html"
                     }
                 }
-                mListener?.setFileName(oldFileName, fileName)
+                mListener?.setFileName(oldFileName, fileName, isSite)
             }
             builder.setPositiveButton(resources.getString(by.carkva_gazeta.malitounik.R.string.ok)) { _: DialogInterface?, _: Int ->
                 setFileName()
@@ -121,18 +128,18 @@ class DialogPasochnicaFileName : DialogFragment() {
         var fileName = binding.content.text.toString()
         if (fileName == "") {
             val gc = Calendar.getInstance()
-            val mun = arrayOf("студзеня", "лютага", "сакавіка", "красавіка", "траўня", "чэрвеня", "ліпеня", "жніўня", "верасьня", "кастрычніка", "лістапада", "сьнежня")
+            val mun = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
             fileName = gc[Calendar.DATE].toString() + "_" + mun[gc[Calendar.MONTH]] + "_" + gc[Calendar.YEAR] + "_" + gc[Calendar.HOUR_OF_DAY] + ":" + gc[Calendar.MINUTE]
         }
-        val oldFileName = arguments?.getString("oldFileName") ?: "newFile.html"
-        mListener?.setFileName(oldFileName, fileName)
+        mListener?.setFileName(oldFileName, fileName, isSite)
     }
 
     companion object {
-        fun getInstance(oldFileName: String): DialogPasochnicaFileName {
+        fun getInstance(oldFileName: String, isSite: Boolean): DialogPasochnicaFileName {
             val instance = DialogPasochnicaFileName()
             val args = Bundle()
             args.putString("oldFileName", oldFileName)
+            args.putBoolean("isSite", isSite)
             instance.arguments = args
             return instance
         }

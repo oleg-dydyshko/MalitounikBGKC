@@ -517,7 +517,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             }
         } else {
             binding.InteractiveScroll.post {
-                val strPosition = binding.textView.text.indexOf(title, ignoreCase = true)
+                val strPosition = binding.textView.text.indexOf(title + "\n", ignoreCase = true)
                 val line = binding.textView.layout.getLineForOffset(strPosition)
                 val y = binding.textView.layout.getLineTop(line)
                 val anim = ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", binding.InteractiveScroll.scrollY, y)
@@ -614,6 +614,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY",  0).setDuration(duration).start()
             binding.InteractiveScroll.postDelayed({
                 startAutoScroll()
+                invalidateOptionsMenu()
             }, duration)
         }
     }

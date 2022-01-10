@@ -198,14 +198,18 @@ class SlugbovyiaTextu {
         var resource = "0"
         datMinVP.forEach {
             if (day == it.day && pasxa == it.pasxa) {
-                if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
+                if (abednica && abednica == it.abednica) resource = it.resource
+                if (vialikiaGadziny && vialikiaGadziny == it.vialikiaGadziny) resource = it.resource
+                if ((!utran && !liturgia && !abednica && !vialikiaGadziny) && (!it.utran && !it.liturgia && !it.abednica && !it.vialikiaGadziny)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }
         }
         datMinSH.forEach {
             if (day == it.day && pasxa == it.pasxa && !isSviaty) {
-                if ((!utran && !liturgia) && (!it.utran && !it.liturgia)) resource = it.resource
+                if (abednica && abednica == it.abednica) resource = it.resource
+                if (vialikiaGadziny && vialikiaGadziny == it.vialikiaGadziny) resource = it.resource
+                if ((!utran && !liturgia && !abednica && !vialikiaGadziny) && (!it.utran && !it.liturgia && !it.abednica && !it.vialikiaGadziny)) resource = it.resource
                 if (utran && utran == it.utran) resource = it.resource
                 if (liturgia && liturgia == it.liturgia) resource = it.resource
             }

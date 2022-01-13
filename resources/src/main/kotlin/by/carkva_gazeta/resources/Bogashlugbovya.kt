@@ -838,7 +838,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                                 try {
                                     builder.append(zmenyiaChastki.zmenya(0))
                                 } catch (t: Throwable) {
-                                    t.printStackTrace()
                                     builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                                 }
                             }

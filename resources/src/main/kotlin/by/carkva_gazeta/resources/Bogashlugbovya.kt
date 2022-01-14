@@ -1021,16 +1021,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
-        if (!resurs.contains("pesny")) {
-            if (savedInstanceState == null) {
-                if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
-                    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                    autoStartScroll()
-                }
-            }
-        } else {
-            mAutoScroll = false
-        }
         binding.textView.text = text
         if (savedInstanceState != null) {
             binding.textView.post {
@@ -1051,6 +1041,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }
             }
         } else {
+            if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                autoStartScroll()
+            }
             if (resurs.contains("viachernia_ton")) {
                 binding.textView.post {
                     val cal = Calendar.getInstance()
@@ -1068,6 +1062,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         startAutoScroll()
                     }
                 }
+            }
+        }
+        binding.textView.post {
+            if (binding.textView.bottom <= binding.scrollView2.height) {
+                stopAutoStartScroll()
+                mAutoScroll = false
+                invalidateOptionsMenu()
             }
         }
         positionY = k.getInt(resurs + "Scroll", 0)
@@ -1116,7 +1117,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val cal = Calendar.getInstance()
         raznica = zmenyiaChastki.raznica()
         dayOfYear = zmenyiaChastki.dayOfYear()
-            checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), dayOfYear, slugbovyiaTextu.isPasxa(dayOfYear.toInt()))
+        checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), dayOfYear, slugbovyiaTextu.isPasxa(dayOfYear.toInt()))
         if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
             chechZmena = true
         }
@@ -1207,6 +1208,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 if (autoScrollJob?.isActive != true) {
                     autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
                         while (isActive) {
+                            if (binding.textView.bottom <= binding.scrollView2.height) {
+                                stopAutoScroll()
+                                invalidateOptionsMenu()
+                            }
                             delay(spid.toLong())
                             if (!mActionDown && !MainActivity.dialogVisable) {
                                 binding.scrollView2.smoothScrollBy(0, 2)
@@ -1366,8 +1371,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }
                 checkDayOfYear -> {
                     var resours = slugba.getResource(raznica, slugba.isPasxa(raznica), liturgia = true)
-                    if (resours == "0")
-                        resours = slugba.getResource(dayOfYear.toInt(), slugba.isPasxa(dayOfYear.toInt()), liturgia = true)
+                    if (resours == "0") resours = slugba.getResource(dayOfYear.toInt(), slugba.isPasxa(dayOfYear.toInt()), liturgia = true)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))

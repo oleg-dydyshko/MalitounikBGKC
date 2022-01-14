@@ -194,7 +194,7 @@ class DialogSaveAsFileExplorer : DialogFragment() {
             }
             val title = fileList[position].title
             viewHolder.text.text = title
-            if (title == "admin" || title == "bogashlugbovya" || title == "parafii_bgkc" || title == "prynagodnyia" || title == "pesny" || title == "zmenyia_chastki_liturgii") {
+            if (title == "admin" || title == "bogashlugbovya" || title == "parafii_bgkc" || title == "prynagodnyia" || title == "pesny") {
                 viewHolder.text.typeface = MainActivity.createFont(Typeface.BOLD)
             } else {
                 viewHolder.text.typeface = MainActivity.createFont(Typeface.NORMAL)

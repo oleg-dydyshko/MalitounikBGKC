@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.ListViewCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemMaranataBinding
@@ -93,11 +94,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         fontBiblia = fontSize
         setFont = true
         adapter.notifyDataSetChanged()
-    }
-
-    private fun forceScroll() {
-        val event = MotionEvent.obtain(System.currentTimeMillis(), System.currentTimeMillis(), MotionEvent.ACTION_MOVE, binding.ListView.x, -1f, 0)
-        onTouch(binding.ListView, event)
     }
 
     private fun checkPosition(position: Int): Int {
@@ -967,9 +963,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
                     while (isActive) {
                         delay(spid.toLong())
-                        forceScroll()
                         if (!mActionDown && !MainActivity.dialogVisable) {
-                            binding.ListView.smoothScrollBy(2, 0)
+                            ListViewCompat.scrollListBy(binding.ListView, 2)
                         }
                     }
                 }

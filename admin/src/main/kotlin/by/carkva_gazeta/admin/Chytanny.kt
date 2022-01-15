@@ -85,10 +85,10 @@ class Chytanny : AppCompatActivity() {
                 val type = object : TypeToken<ArrayList<String>>() {}.type
                 return@withContext gson.fromJson<ArrayList<String>>(builder, type)
             }
-            val a: Int = year % 19
-            val b: Int = year % 4
-            val cx: Int = year % 7
-            val k: Int = year / 100
+            val a = year % 19
+            val b = year % 4
+            val cx = year % 7
+            val k = year / 100
             val p = (13 + 8 * k) / 25
             val q = k / 4
             val m = (15 - p + k - q) % 30
@@ -255,7 +255,7 @@ class Chytanny : AppCompatActivity() {
                 if (view is EditText) {
                     when (view.tag as Int) {
                         -1 -> {
-                            sb.append(view.text.toString())
+                            sb.append(view.text.toString()+ "\n")
                         }
                         1 -> {
                             sb.append("\$calendar[]=array(\"cviaty\"=>\"${view.text}\", \"cytanne\"=>\"\".\$ahref.\"")

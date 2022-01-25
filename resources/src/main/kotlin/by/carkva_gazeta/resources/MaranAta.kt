@@ -288,11 +288,19 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 val copyString = StringBuilder()
                 bibleCopyList.sort()
                 bibleCopyList.forEach {
-                    copyString.append("${maranAta[it]}<br>")
+                    var textView = maranAta[it]
+                    textView = textView.replace("+-+", "")
+                    val t1 = textView.indexOf("$")
+                    if (t1 != -1) textView = textView.substring(0, t1)
+                    copyString.append("$textView<br>")
                 }
                 val share = MainActivity.fromHtml(copyString.toString()).toString().trim()
                 val clip = ClipData.newPlainText("", share)
                 clipboard.setPrimaryClip(clip)
+                binding.linearLayout4.visibility = View.GONE
+                binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                mPedakVisable = false
+                bibleCopyList.clear()
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
                 sendIntent.putExtra(Intent.EXTRA_TEXT, share)

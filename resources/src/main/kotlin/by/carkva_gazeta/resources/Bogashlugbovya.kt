@@ -324,6 +324,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["l_1_6_bohazjaulennie"] = R.raw.l_1_6_bohazjaulennie
             resursMap["abed_sv_vieczar_bohazjaulennia"] = R.raw.abed_sv_vieczar_bohazjaulennia
             resursMap["vial_hadziny_sv_vieczar_bohazjaulennia"] = R.raw.vial_hadziny_sv_vieczar_bohazjaulennia
+            resursMap["pesny_prasl_70"] = PesnyAll.resursMap["pesny_prasl_70"]
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {

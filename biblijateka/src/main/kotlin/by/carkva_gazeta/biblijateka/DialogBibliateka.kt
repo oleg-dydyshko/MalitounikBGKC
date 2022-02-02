@@ -11,7 +11,7 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.R
 import by.carkva_gazeta.malitounik.databinding.DialogTextviewDisplayBinding
 import kotlinx.coroutines.CoroutineScope
@@ -22,7 +22,6 @@ import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import java.util.*
 
 class DialogBibliateka : DialogFragment() {
     private var listPosition: String = "0"

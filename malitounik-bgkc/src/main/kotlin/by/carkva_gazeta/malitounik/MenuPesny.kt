@@ -7,7 +7,10 @@ import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.*
+import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
@@ -25,8 +28,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     private var mLastClickTime: Long = 0

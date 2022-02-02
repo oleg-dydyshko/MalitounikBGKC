@@ -13,7 +13,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.graphics.drawable.Drawable
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
+import android.os.SystemClock
 import android.provider.MediaStore
 import android.text.Spannable
 import android.text.SpannableString
@@ -61,7 +64,6 @@ import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import javax.xml.parsers.ParserConfigurationException
-import kotlin.collections.ArrayList
 
 class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
 
@@ -845,6 +847,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                         cursor?.moveToFirst()
                         filePath = cursor?.getString(columnIndex) ?: ""
                         fileName = cursor?.getString(0) ?: ""
+                        cursor?.close()
                         if (filePath == "") {
                             val dir = File(cacheDir.absolutePath + "/Biblijateka")
                             if (!dir.exists()) dir.mkdir()

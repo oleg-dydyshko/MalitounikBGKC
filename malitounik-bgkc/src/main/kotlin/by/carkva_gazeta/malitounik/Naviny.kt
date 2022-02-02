@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.NavinyBinding
-import java.util.*
 
 
 class Naviny : AppCompatActivity() {

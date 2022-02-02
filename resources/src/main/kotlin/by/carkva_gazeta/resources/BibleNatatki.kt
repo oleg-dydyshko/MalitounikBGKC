@@ -30,8 +30,6 @@ import com.woxthebox.draglistview.swipe.ListSwipeItem
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileWriter
-import java.util.*
-import kotlin.collections.ArrayList
 
 class BibleNatatki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakladkiINatatkiListener, BibleNatatkaEditlistiner, DialogContextMenu.DialogContextMenuListener {
     private var data = ArrayList<BibleNatatkiData>()

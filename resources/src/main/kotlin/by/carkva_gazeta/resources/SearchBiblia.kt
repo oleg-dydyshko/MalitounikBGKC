@@ -8,7 +8,10 @@ import android.content.SharedPreferences.Editor
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.*
+import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
@@ -35,8 +38,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.*
-import kotlin.collections.ArrayList
 
 class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHishory.DialogClearHistoryListener {
     private var seash = ArrayList<Spannable>()

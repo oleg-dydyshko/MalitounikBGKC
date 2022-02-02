@@ -6,7 +6,10 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.*
+import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
@@ -22,8 +25,6 @@ import by.carkva_gazeta.resources.databinding.AkafistListBibleBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearHistoryListener {
 

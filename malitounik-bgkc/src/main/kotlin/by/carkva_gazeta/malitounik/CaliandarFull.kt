@@ -33,9 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.io.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class CaliandarFull : Fragment(), View.OnClickListener {

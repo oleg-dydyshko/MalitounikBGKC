@@ -30,8 +30,6 @@ import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
 import kotlinx.coroutines.*
 import java.io.File
-import java.util.*
-import kotlin.collections.ArrayList
 
 class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakladkiINatatkiListener {
     private lateinit var adapter: ItemAdapter

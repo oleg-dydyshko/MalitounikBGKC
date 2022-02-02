@@ -8,7 +8,9 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.text.Spanned
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -18,10 +20,8 @@ import androidx.core.text.toSpanned
 import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.malitounik.databinding.TraparyAndKandakiBinding
-import kotlinx.coroutines.*
-import java.io.*
+import kotlinx.coroutines.Job
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class DialogTraparyAndKandaki : DialogFragment() {

@@ -16,7 +16,6 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -31,8 +30,6 @@ import by.carkva_gazeta.resources.databinding.AkafistActivityPasliaPrichBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSizeListener {

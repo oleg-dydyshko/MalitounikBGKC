@@ -19,11 +19,13 @@ import by.carkva_gazeta.malitounik.databinding.OpisanieBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener {
@@ -81,7 +83,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
                                 }
                             }
                         }
-                        binding.progressBar2.visibility = View.GONE
+                        binding.progressBar2.visibility = View.INVISIBLE
                         MainActivity.toastView(getString(R.string.bad_internet), Toast.LENGTH_LONG)
                     }
                 }
@@ -388,7 +390,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
                     }
                 }
             }
-            binding.progressBar2.visibility = View.GONE
+            binding.progressBar2.visibility = View.INVISIBLE
             stopTimer()
         }
     }

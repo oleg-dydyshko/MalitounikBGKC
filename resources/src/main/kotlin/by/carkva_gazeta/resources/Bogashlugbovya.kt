@@ -11,7 +11,10 @@ import android.content.SharedPreferences.Editor
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.text.*
+import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
@@ -37,7 +40,6 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
 import java.util.*
-import kotlin.collections.ArrayList
 
 class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback {
 
@@ -324,6 +326,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["l_1_6_bohazjaulennie"] = R.raw.l_1_6_bohazjaulennie
             resursMap["abed_sv_vieczar_bohazjaulennia"] = R.raw.abed_sv_vieczar_bohazjaulennia
             resursMap["vial_hadziny_sv_vieczar_bohazjaulennia"] = R.raw.vial_hadziny_sv_vieczar_bohazjaulennia
+            resursMap["mltv_paciarpieli_za_bielarus"] = R.raw.mltv_paciarpieli_za_bielarus
+            resursMap["mltv_pierad_jadoj_i_pasla"] = R.raw.mltv_pierad_jadoj_i_pasla
+            resursMap["mltv_za_backou"] = R.raw.mltv_za_backou
             resursMap["pesny_prasl_70"] = PesnyAll.resursMap["pesny_prasl_70"]
         }
 

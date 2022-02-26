@@ -61,22 +61,28 @@ class StaryZapavietSemuxaFragment : Fragment() {
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
                 withContext(Dispatchers.IO) {
-                    var zag = "Разьдзел"
-                    if (id == 19) zag = "Псальма"
-                    var reqParam = URLEncoder.encode("z", "UTF-8") + "=" + URLEncoder.encode("s", "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode(id.toString(), "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("save", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(spaw, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("zag", "UTF-8") + "=" + URLEncoder.encode(zag, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("sv", "UTF-8") + "=" + URLEncoder.encode(sv.toString(), "UTF-8")
-                    val mURL = URL("https://carkva-gazeta.by/biblija/index.php")
-                    with(mURL.openConnection() as HttpURLConnection) {
-                        requestMethod = "POST"
-                        val wr = OutputStreamWriter(outputStream)
-                        wr.write(reqParam)
-                        wr.flush()
-                        responseCodeS = responseCode
+                    try {
+                        var zag = "Разьдзел"
+                        if (id == 19) zag = "Псальма"
+                        var reqParam = URLEncoder.encode("z", "UTF-8") + "=" + URLEncoder.encode("s", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode(id.toString(), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("save", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(spaw, "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("zag", "UTF-8") + "=" + URLEncoder.encode(zag, "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("sv", "UTF-8") + "=" + URLEncoder.encode(sv.toString(), "UTF-8")
+                        val mURL = URL("https://carkva-gazeta.by/biblija/index.php")
+                        with(mURL.openConnection() as HttpURLConnection) {
+                            requestMethod = "POST"
+                            val wr = OutputStreamWriter(outputStream)
+                            wr.write(reqParam)
+                            wr.flush()
+                            responseCodeS = responseCode
+                        }
+                    } catch (e: Throwable) {
+                        withContext(Dispatchers.Main) {
+                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        }
                     }
                 }
                 activity?.let {
@@ -139,17 +145,23 @@ class StaryZapavietSemuxaFragment : Fragment() {
             urlJob = CoroutineScope(Dispatchers.Main).launch {
                 val sb = StringBuilder()
                 withContext(Dispatchers.IO) {
-                    val inputStream = URL(url)
-                    val text = inputStream.readText()
-                    val split = text.split("===")
-                    val knig = split[page + 1]
-                    val split2 = knig.split("\n")
-                    split2.forEach {
-                        val t1 = it.indexOf("//")
-                        if (t1 != -1) {
-                            sb.append(it.substring(0, t1)).append("\n")
-                        } else {
-                            sb.append(it).append("\n")
+                    try {
+                        val inputStream = URL(url)
+                        val text = inputStream.readText()
+                        val split = text.split("===")
+                        val knig = split[page + 1]
+                        val split2 = knig.split("\n")
+                        split2.forEach {
+                            val t1 = it.indexOf("//")
+                            if (t1 != -1) {
+                                sb.append(it.substring(0, t1)).append("\n")
+                            } else {
+                                sb.append(it).append("\n")
+                            }
+                        }
+                    } catch (e: Throwable) {
+                        withContext(Dispatchers.Main) {
+                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
                         }
                     }
                 }

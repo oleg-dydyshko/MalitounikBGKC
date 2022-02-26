@@ -28,7 +28,6 @@ import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
-import java.util.*
 
 class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener {
 
@@ -564,7 +563,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         dzenNoch = k.getBoolean("dzen_noch", false)
-        val prefEditor: Editor = k.edit()
+        val prefEditor = k.edit()
         val id = item.itemId
         if (id == R.id.action_dzen_noch) {
             checkSetDzenNoch = true
@@ -582,6 +581,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             return true
         }
         if (id == R.id.action_vybranoe) {
+            checkSetDzenNoch = true
             men = setVybranoe(this, resurs, title)
             if (men) {
                 MainActivity.toastView(getString(R.string.addVybranoe))

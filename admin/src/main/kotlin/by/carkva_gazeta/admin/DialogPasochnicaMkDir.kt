@@ -99,15 +99,21 @@ class DialogPasochnicaMkDir : DialogFragment() {
                 if (MainActivity.isNetworkAvailable()) {
                     CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
-                            var reqParam = URLEncoder.encode("mkdir", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                            reqParam += "&" + URLEncoder.encode("dir", "UTF-8") + "=" + URLEncoder.encode("$dir/$dirName", "UTF-8")
-                            val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
-                            with(mURL.openConnection() as HttpURLConnection) {
-                                requestMethod = "POST"
-                                val wr = OutputStreamWriter(outputStream)
-                                wr.write(reqParam)
-                                wr.flush()
-                                inputStream
+                            try {
+                                var reqParam = URLEncoder.encode("mkdir", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                                reqParam += "&" + URLEncoder.encode("dir", "UTF-8") + "=" + URLEncoder.encode("$dir/$dirName", "UTF-8")
+                                val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                                with(mURL.openConnection() as HttpURLConnection) {
+                                    requestMethod = "POST"
+                                    val wr = OutputStreamWriter(outputStream)
+                                    wr.write(reqParam)
+                                    wr.flush()
+                                    inputStream
+                                }
+                            } catch (e: Throwable) {
+                                withContext(Dispatchers.Main) {
+                                    MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                                }
                             }
                         }
                         mListener?.setDir(dir)

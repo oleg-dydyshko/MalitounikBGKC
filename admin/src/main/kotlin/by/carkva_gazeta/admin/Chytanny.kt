@@ -15,7 +15,10 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEachIndexed
 import by.carkva_gazeta.admin.databinding.AdminChytannyBinding
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.CustomTypefaceSpan
+import by.carkva_gazeta.malitounik.EditTextCustom
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -25,7 +28,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import java.util.*
-import kotlin.collections.ArrayList
 
 class Chytanny : AppCompatActivity() {
     private lateinit var binding: AdminChytannyBinding
@@ -79,11 +81,21 @@ class Chytanny : AppCompatActivity() {
             binding.linear.removeAllViewsInLayout()
             startTimer()
             val text = withContext(Dispatchers.IO) {
-                val url = "https://carkva-gazeta.by/admin/getFilesCaliandar.php?year=$year"
-                val builder = URL(url).readText()
-                val gson = Gson()
-                val type = object : TypeToken<ArrayList<String>>() {}.type
-                return@withContext gson.fromJson<ArrayList<String>>(builder, type)
+                try {
+                    val url = "https://carkva-gazeta.by/admin/getFilesCaliandar.php?year=$year"
+                    val builder = URL(url).readText()
+                    val gson = Gson()
+                    val type = object : TypeToken<ArrayList<String>>() {}.type
+                    return@withContext gson.fromJson<ArrayList<String>>(builder, type)
+                } catch (e: Throwable) {
+                    return@withContext ArrayList<String>()
+                }
+            }
+            if (text.isEmpty()) {
+                stopTimer()
+                binding.progressBar2.visibility = View.GONE
+                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                return@launch
             }
             val a = year % 19
             val b = year % 4
@@ -278,17 +290,23 @@ class Chytanny : AppCompatActivity() {
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
                 withContext(Dispatchers.IO) {
-                    var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("4", "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("cytanni", "UTF-8") + "=" + URLEncoder.encode(cytanni, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("year", "UTF-8") + "=" + URLEncoder.encode(year.toString(), "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    val mURL = URL("https://carkva-gazeta.by/admin/android.php")
-                    with(mURL.openConnection() as HttpURLConnection) {
-                        requestMethod = "POST"
-                        val wr = OutputStreamWriter(outputStream)
-                        wr.write(reqParam)
-                        wr.flush()
-                        responseCodeS = responseCode
+                    try {
+                        var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("4", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("cytanni", "UTF-8") + "=" + URLEncoder.encode(cytanni, "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("year", "UTF-8") + "=" + URLEncoder.encode(year.toString(), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                        with(mURL.openConnection() as HttpURLConnection) {
+                            requestMethod = "POST"
+                            val wr = OutputStreamWriter(outputStream)
+                            wr.write(reqParam)
+                            wr.flush()
+                            responseCodeS = responseCode
+                        }
+                    } catch (e: Throwable) {
+                        withContext(Dispatchers.Main) {
+                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        }
                     }
                 }
                 if (responseCodeS == 200) {

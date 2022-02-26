@@ -15,7 +15,10 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.admin.databinding.AdminPiarlinyBinding
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.CaliandarMun
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.MenuCaliandar
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -25,7 +28,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import java.util.*
-import kotlin.collections.ArrayList
 
 class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContextMenu.DialogPiarlinyContextMenuListener, DialogDelite.DialogDeliteListener {
 
@@ -145,22 +147,28 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
             binding.progressBar2.visibility = View.VISIBLE
             startTimer()
             withContext(Dispatchers.IO) {
-                var responseCodeS: Int
-                val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
-                with(mURL.openConnection() as HttpURLConnection) {
-                    requestMethod = "POST"
-                    responseCodeS = responseCode
-                }
-                if (responseCodeS == 200) {
-                    val builder = mURL.readText()
-                    val gson = Gson()
-                    val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
-                    val piarlin =  ArrayList<ArrayList<String>>()
-                    piarlin.addAll(gson.fromJson(builder, type))
-                    piarlin.forEach {
-                        piarliny.add(PiarlinyData(it[0].toLong(), it[1]))
+                try {
+                    var responseCodeS: Int
+                    val mURL = URL("https://carkva-gazeta.by/chytanne/piarliny.json")
+                    with(mURL.openConnection() as HttpURLConnection) {
+                        requestMethod = "POST"
+                        responseCodeS = responseCode
                     }
-                    piarliny.sort()
+                    if (responseCodeS == 200) {
+                        val builder = mURL.readText()
+                        val gson = Gson()
+                        val type = object : TypeToken<ArrayList<ArrayList<String>>>() {}.type
+                        val piarlin = ArrayList<ArrayList<String>>()
+                        piarlin.addAll(gson.fromJson(builder, type))
+                        piarlin.forEach {
+                            piarliny.add(PiarlinyData(it[0].toLong(), it[1]))
+                        }
+                        piarliny.sort()
+                    }
+                } catch (e: Throwable) {
+                    withContext(Dispatchers.Main) {
+                        MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                    }
                 }
             }
             binding.listView.adapter = PiarlinyListAdaprer(this@Piarliny)
@@ -378,16 +386,22 @@ class Piarliny : AppCompatActivity(), View.OnClickListener, DialogPiarlinyContex
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
                 withContext(Dispatchers.IO) {
-                    var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("5", "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("piarliny", "UTF-8") + "=" + URLEncoder.encode(piarliny, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    val mURL = URL("https://carkva-gazeta.by/admin/android.php")
-                    with(mURL.openConnection() as HttpURLConnection) {
-                        requestMethod = "POST"
-                        val wr = OutputStreamWriter(outputStream)
-                        wr.write(reqParam)
-                        wr.flush()
-                        responseCodeS = responseCode
+                    try {
+                        var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("5", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("piarliny", "UTF-8") + "=" + URLEncoder.encode(piarliny, "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                        with(mURL.openConnection() as HttpURLConnection) {
+                            requestMethod = "POST"
+                            val wr = OutputStreamWriter(outputStream)
+                            wr.write(reqParam)
+                            wr.flush()
+                            responseCodeS = responseCode
+                        }
+                    } catch (e: Throwable) {
+                        withContext(Dispatchers.Main) {
+                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        }
                     }
                 }
                 if (responseCodeS == 200) {

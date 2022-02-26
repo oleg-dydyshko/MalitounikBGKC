@@ -80,6 +80,9 @@ class DialogUpdateHelp : DialogFragment() {
                                 updeteArrayText = gson.fromJson(mURL.readText(), type)
                             }
                         } catch (e: Throwable) {
+                            withContext(Dispatchers.Main) {
+                                MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                            }
                         }
                         return@withContext updeteArrayText
                     }
@@ -117,7 +120,10 @@ class DialogUpdateHelp : DialogFragment() {
                                 inputLine = it.readLine()
                             }
                         }
-                    } catch (ignored: Throwable) {
+                    } catch (e: Throwable) {
+                        withContext(Dispatchers.Main) {
+                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        }
                     }
                 }
                 mListener?.onUpdate(code != 200)

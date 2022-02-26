@@ -30,7 +30,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
@@ -40,7 +39,8 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
     private var urlJob: Job? = null
     private val sviatyiaNew1 = ArrayList<ArrayList<String>>()
     private val cal = GregorianCalendar()
-    private val array = arrayOf("Чырвоны", "Чырвоны тоўсты", "Нармальны")
+    private val array: Array<String>
+        get() = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.admin_svity)
     private val arrayList = ArrayList<Tipicon>()
     private var timerCount = 0
     private var timer = Timer()
@@ -255,18 +255,24 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                 val base64 = Base64.encodeToString(ba, Base64.DEFAULT)
                 var responseCodeS = 500
                 withContext(Dispatchers.IO) {
-                    var reqParam = URLEncoder.encode("image", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("base64", "UTF-8") + "=" + URLEncoder.encode(base64, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(cal[Calendar.DATE].toString(), "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode((cal[Calendar.MONTH] + 1).toString(), "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("numar", "UTF-8") + "=" + URLEncoder.encode(image.toString(), "UTF-8")
-                    val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
-                    with(mURL.openConnection() as HttpURLConnection) {
-                        requestMethod = "POST"
-                        val wr = OutputStreamWriter(outputStream)
-                        wr.write(reqParam)
-                        wr.flush()
-                        responseCodeS = responseCode
+                    try {
+                        var reqParam = URLEncoder.encode("image", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("base64", "UTF-8") + "=" + URLEncoder.encode(base64, "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(cal[Calendar.DATE].toString(), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode((cal[Calendar.MONTH] + 1).toString(), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("numar", "UTF-8") + "=" + URLEncoder.encode(image.toString(), "UTF-8")
+                        val mURL = URL("https://carkva-gazeta.by/admin/piasochnica.php")
+                        with(mURL.openConnection() as HttpURLConnection) {
+                            requestMethod = "POST"
+                            val wr = OutputStreamWriter(outputStream)
+                            wr.write(reqParam)
+                            wr.flush()
+                            responseCodeS = responseCode
+                        }
+                    } catch (e: Throwable) {
+                        withContext(Dispatchers.Main) {
+                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        }
                     }
                 }
                 if (responseCodeS == 200) {
@@ -341,29 +347,30 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                 binding.progressBar2.visibility = View.VISIBLE
                 var responseCodeS = 500
                 withContext(Dispatchers.IO) {
-                    var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("0", "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(data.toString(), "UTF-8") //День месяца
-                    reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode(mun.toString(), "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("nomerdny", "UTF-8") + "=" + URLEncoder.encode(dayOfYear.toString(), "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("addksave", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("chtenie", "UTF-8") + "=" + URLEncoder.encode(chtenie, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("bold", "UTF-8") + "=" + URLEncoder.encode(style.toString(), "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("tipicon", "UTF-8") + "=" + URLEncoder.encode(tipicon, "UTF-8")
-                    reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(spaw, "UTF-8")
-                    val mURL = URL("https://carkva-gazeta.by/admin/android.php")
-                    with(mURL.openConnection() as HttpURLConnection) {
-                        requestMethod = "POST"
-                        val wr = OutputStreamWriter(outputStream)
-                        wr.write(reqParam)
-                        wr.flush()
-                        responseCodeS = responseCode/*BufferedReader(InputStreamReader(inputStream)).use {
-                            val inputLine = it.readLine()
-                            if (inputLine != null) {
-                                response.append(inputLine)
-                            }
-                        }*/
+                    try {
+                        var reqParam = URLEncoder.encode("pesny", "UTF-8") + "=" + URLEncoder.encode("0", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("data", "UTF-8") + "=" + URLEncoder.encode(data.toString(), "UTF-8") //День месяца
+                        reqParam += "&" + URLEncoder.encode("mun", "UTF-8") + "=" + URLEncoder.encode(mun.toString(), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("nomerdny", "UTF-8") + "=" + URLEncoder.encode(dayOfYear.toString(), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("addksave", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("saveProgram", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("chtenie", "UTF-8") + "=" + URLEncoder.encode(chtenie, "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("bold", "UTF-8") + "=" + URLEncoder.encode(style.toString(), "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("tipicon", "UTF-8") + "=" + URLEncoder.encode(tipicon, "UTF-8")
+                        reqParam += "&" + URLEncoder.encode("spaw", "UTF-8") + "=" + URLEncoder.encode(spaw, "UTF-8")
+                        val mURL = URL("https://carkva-gazeta.by/admin/android.php")
+                        with(mURL.openConnection() as HttpURLConnection) {
+                            requestMethod = "POST"
+                            val wr = OutputStreamWriter(outputStream)
+                            wr.write(reqParam)
+                            wr.flush()
+                            responseCodeS = responseCode
+                        }
+                    } catch (e: Throwable) {
+                        withContext(Dispatchers.Main) {
+                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        }
                     }
                 }
                 if (responseCodeS == 200) {
@@ -398,22 +405,28 @@ class SvityiaFragment : BackPressedFragment(), View.OnClickListener {
                 startTimer()
                 var res = ""
                 withContext(Dispatchers.IO) {
-                    var url = "https://carkva-gazeta.by/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json"
-                    val builder = URL(url).readText()
-                    val gson = Gson()
-                    val type = object : TypeToken<ArrayList<String>>() {}.type
-                    val arrayList: ArrayList<String> = gson.fromJson(builder, type)
-                    res = arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
-                    url = "https://carkva-gazeta.by/calendarsviatyia.txt"
-                    val textfile = URL(url).readText().trim()
-                    val line = textfile.split("\n")
-                    for (element in line) {
-                        val reg = element.split("<>")
-                        val list = ArrayList<String>()
-                        for (element2 in reg) {
-                            list.add(element2)
+                    try {
+                        var url = "https://carkva-gazeta.by/chytanne/sviatyja/opisanie" + (cal[Calendar.MONTH] + 1) + ".json"
+                        val builder = URL(url).readText()
+                        val gson = Gson()
+                        val type = object : TypeToken<ArrayList<String>>() {}.type
+                        val arrayList: ArrayList<String> = gson.fromJson(builder, type)
+                        res = arrayList[cal[Calendar.DAY_OF_MONTH] - 1]
+                        url = "https://carkva-gazeta.by/calendarsviatyia.txt"
+                        val textfile = URL(url).readText().trim()
+                        val line = textfile.split("\n")
+                        for (element in line) {
+                            val reg = element.split("<>")
+                            val list = ArrayList<String>()
+                            for (element2 in reg) {
+                                list.add(element2)
+                            }
+                            sviatyiaNew1.add(list)
                         }
-                        sviatyiaNew1.add(list)
+                    } catch (e: Throwable) {
+                        withContext(Dispatchers.Main) {
+                            MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.error_ch2))
+                        }
                     }
                 }
                 binding.sviaty.setText(sviatyiaNew1[cal[Calendar.DAY_OF_YEAR] - 1][0])

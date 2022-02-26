@@ -725,5 +725,10 @@
     <string name="mineia_shtodzennaia">Мінэя штодзённая</string>
     <string name="mineia_sviatochnaia">Мінэя сьвяточная</string>
     <string name="carkva_gazeta">«Царква» — беларуская грэка-каталіцкая газета</string>
+    <string-array name="admin_svity">
+        <item>Чырвоны</item>
+        <item>Чырвоны тоўсты</item>
+        <item>Нармальны</item>
+    </string-array>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

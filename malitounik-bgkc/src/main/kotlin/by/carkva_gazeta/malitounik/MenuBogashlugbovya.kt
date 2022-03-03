@@ -48,13 +48,13 @@ class MenuBogashlugbovya : ListFragment() {
                 val intent = Intent(activity, SubMenuBogashlugbovyaVialikiPost::class.java)
                 startActivity(intent)
             }
-            13 -> {
+            14 -> {
                 activity?.let {
                     val intent = Intent(it, MineiaSviatochnaia::class.java)
                     startActivity(intent)
                 }
             }
-            14 -> {
+            15 -> {
                 activity?.let {
                     val intent = Intent(it, MineiaShodzennaia::class.java)
                     startActivity(intent)
@@ -132,6 +132,15 @@ class MenuBogashlugbovya : ListFragment() {
                                 intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                                 intent.putExtra("title", data[position])
                                 intent.putExtra("resurs", "bogashlugbovya9")
+                                startActivity(intent)
+                            }
+                        }
+                        13 -> {
+                            activity?.let {
+                                val intent = Intent()
+                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                intent.putExtra("title", data[position])
+                                intent.putExtra("resurs", "kanon_a_kryckaha")
                                 startActivity(intent)
                             }
                         }

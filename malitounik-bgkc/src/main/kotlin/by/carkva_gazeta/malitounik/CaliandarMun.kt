@@ -123,13 +123,22 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
         val c = Calendar.getInstance() as GregorianCalendar
-        posMun1 = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
-        posMun2 = posMun1
-        yearG1 = intent.extras?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
-        if (yearG1 > SettingsActivity.GET_CALIANDAR_YEAR_MAX) yearG1 = SettingsActivity.GET_CALIANDAR_YEAR_MAX
-        yearG2 = yearG1
-        day1 = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
-        day2 = day1
+        if (savedInstanceState != null) {
+            day1 = savedInstanceState.getInt("day")
+            posMun1 = savedInstanceState.getInt("mun")
+            yearG1 = savedInstanceState.getInt("year")
+            day2 = savedInstanceState.getInt("day2")
+            posMun2 = savedInstanceState.getInt("mun2")
+            yearG2 = savedInstanceState.getInt("year2")
+        } else {
+            posMun1 = intent.extras?.getInt("mun", c[Calendar.MONTH]) ?: c[Calendar.MONTH]
+            yearG1 = intent.extras?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
+            day1 = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
+            posMun2 = posMun1
+            if (yearG1 > SettingsActivity.GET_CALIANDAR_YEAR_MAX) yearG1 = SettingsActivity.GET_CALIANDAR_YEAR_MAX
+            yearG2 = yearG1
+            day2 = day1
+        }
         val nedelia = chin.getInt("nedelia", 0)
         binding.tabLayout.getTabAt(nedelia)?.select()
         if (nedelia == 0) {
@@ -212,6 +221,16 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("day", day1)
+        outState.putInt("mun", posMun1)
+        outState.putInt("year", yearG1)
+        outState.putInt("day2", day2)
+        outState.putInt("mun2", posMun2)
+        outState.putInt("year2", yearG1)
     }
 
     companion object {

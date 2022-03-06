@@ -502,9 +502,6 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 } else {
                     binding.apisanne.setText(result)
                 }
-                binding.apisanne.post {
-                    binding.scrollView.smoothScrollBy(0, positionY)
-                }
                 binding.progressBar2.visibility = View.GONE
             }
         }

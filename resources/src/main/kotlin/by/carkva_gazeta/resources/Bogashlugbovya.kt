@@ -15,7 +15,6 @@ import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextWatcher
-import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
 import android.text.style.ClickableSpan
@@ -41,7 +40,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.util.*
 
-class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback {
+class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener {
 
     @SuppressLint("InlinedApi")
     @Suppress("DEPRECATION")
@@ -97,6 +96,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var sviaty = false
     private var daysv = 1
     private var munsv = 0
+    private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
 
     companion object {
         val resursMap = ArrayMap<String, Int>()
@@ -527,6 +527,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     override fun onScroll(t: Int, oldt: Int) {
         positionY = t
+        setMovementMethodscrollY()
         val laneLayout = binding.textView.layout
         laneLayout?.let { layout ->
             val textForVertical = binding.textView.text.substring(layout.getLineStart(layout.getLineForVertical(positionY)), layout.getLineEnd(layout.getLineForVertical(positionY))).trim()
@@ -692,7 +693,21 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 mActionDown = action
             }
         })
-        binding.textView.movementMethod = LinkMovementMethod.getInstance()
+        binding.textView.movementMethod = setLinkMovementMethodCheck()
+    }
+
+    override fun linkMovementMethodCheckOnTouch(onTouch: Boolean) {
+        mActionDown = onTouch
+    }
+
+    private fun setMovementMethodscrollY() {
+        linkMovementMethodCheck?.getScrollY(positionY)
+    }
+
+    private fun setLinkMovementMethodCheck(): LinkMovementMethodCheck? {
+        linkMovementMethodCheck = LinkMovementMethodCheck()
+        linkMovementMethodCheck?.setLinkMovementMethodCheckListener(this)
+        return linkMovementMethodCheck
     }
 
     private fun setTollbarTheme() {
@@ -1172,7 +1187,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
             binding.textView.setTextIsSelectable(true)
-            binding.textView.movementMethod = LinkMovementMethod.getInstance()
+            binding.textView.movementMethod = setLinkMovementMethodCheck()
             autoScrollJob?.cancel()
             if (onFind) {
                 onFind = false
@@ -1208,6 +1223,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 binding.actionPlus.animation = animation
                 binding.textView.clearFocus()
                 binding.textView.setTextIsSelectable(false)
+                binding.textView.movementMethod = setLinkMovementMethodCheck()
+                mActionDown = false
                 resetScreenJob?.cancel()
                 if (autoScrollJob?.isActive != true) {
                     autoScrollJob = CoroutineScope(Dispatchers.Main).launch {

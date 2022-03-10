@@ -475,7 +475,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
                     }
                 }
             } else if (VybranoeBibliaData.bibleName == 3) {
-                inputStream = resources.openRawResource(R.raw.nadsan_psaltyr)
+                inputStream = resources.openRawResource(R.raw.psaltyr_nadsan)
             }
             val builder = StringBuilder()
             InputStreamReader(inputStream).use { inputStreamReader ->

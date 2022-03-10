@@ -136,7 +136,7 @@ class NadsanContentPage : BackPressedFragment(), OnItemLongClickListener, Adapte
 
             override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {}
         })
-        val inputStream = resources.openRawResource(R.raw.nadsan_psaltyr)
+        val inputStream = resources.openRawResource(R.raw.psaltyr_nadsan)
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         val split = reader.readText().split("===")

@@ -102,13 +102,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val resursMap = ArrayMap<String, Int>()
 
         init {
-            resursMap["bogashlugbovya1"] = R.raw.bogashlugbovya1
-            resursMap["bogashlugbovya2"] = R.raw.bogashlugbovya2
-            resursMap["bogashlugbovya4"] = R.raw.bogashlugbovya4
-            resursMap["bogashlugbovya6"] = R.raw.bogashlugbovya6
-            resursMap["bogashlugbovya8"] = R.raw.bogashlugbovya8
-            resursMap["bogashlugbovya9"] = R.raw.bogashlugbovya9
-            resursMap["bogashlugbovya11"] = R.raw.bogashlugbovya11
+            resursMap["bogashlugbovya1"] = R.raw.lit_jan_zalat
+            resursMap["bogashlugbovya2"] = R.raw.lit_jan_zalat_vielikodn
+            resursMap["bogashlugbovya4"] = R.raw.nabazenstva_maci_bozaj_niast_dap
+            resursMap["bogashlugbovya6"] = R.raw.jutran_niadzelnaja
+            resursMap["abiednica"] = R.raw.abiednica
+            resursMap["bogashlugbovya9"] = R.raw.kanon_malebny_baharodzicy
+            resursMap["bogashlugbovya11"] = R.raw.panichida_mal
             resursMap["bogashlugbovya12_1"] = R.raw.bogashlugbovya12_1
             resursMap["bogashlugbovya12_2"] = R.raw.bogashlugbovya12_2
             resursMap["bogashlugbovya12_3"] = R.raw.bogashlugbovya12_3
@@ -177,8 +177,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["akafist6"] = R.raw.akafist6
             resursMap["akafist7"] = R.raw.akafist7
             resursMap["akafist8"] = R.raw.akafist8
-            resursMap["malitvy1"] = R.raw.malitvy1
-            resursMap["malitvy2"] = R.raw.malitvy2
+            resursMap["malitvy1"] = R.raw.malitvy_ran
+            resursMap["malitvy2"] = R.raw.malitvy_viaczernija
             resursMap["paslia_prychascia1"] = R.raw.paslia_prychascia1
             resursMap["paslia_prychascia2"] = R.raw.paslia_prychascia2
             resursMap["paslia_prychascia3"] = R.raw.paslia_prychascia3
@@ -247,8 +247,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["ton8"] = R.raw.ton8
             resursMap["viachernia_niadzeli"] = R.raw.viachernia_niadzeli
             resursMap["viachernia_liccia_i_blaslavenne_xliabou"] = R.raw.viachernia_liccia_i_blaslavenne_xliabou
-            resursMap["viachernia_na_kogny_dzen"] = R.raw.viachernia_na_kogny_dzen
-            resursMap["viachernia_y_vialikim_poste"] = R.raw.viachernia_y_vialikim_poste
+            resursMap["viachernia_na_kogny_dzen"] = R.raw.viachernia_na_kozny_dzen
+            resursMap["viachernia_y_vialikim_poste"] = R.raw.viachernia_u_vialikim_poscie
             resursMap["viachernia_ton1"] = R.raw.viachernia_ton1
             resursMap["viachernia_ton2"] = R.raw.viachernia_ton2
             resursMap["viachernia_ton3"] = R.raw.viachernia_ton3
@@ -749,7 +749,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val zmenyiaChastki = ZmenyiaChastki()
         val res = withContext(Dispatchers.IO) {
             val builder = StringBuilder()
-            val id = resursMap[resurs] ?: R.raw.bogashlugbovya1
+            val id = resursMap[resurs] ?: R.raw.lit_jan_zalat
             val inputStream = resources.openRawResource(id)
             val gregorian = Calendar.getInstance() as GregorianCalendar
             val dayOfWeek = gregorian.get(Calendar.DAY_OF_WEEK)
@@ -1468,7 +1468,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
-                val idres = resursMap[resurs] ?: R.raw.bogashlugbovya1
+                val idres = resursMap[resurs] ?: R.raw.lit_jan_zalat
                 val inputStream = resources.openRawResource(idres)
                 val text = inputStream.use {
                     it.reader().readText()

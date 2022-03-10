@@ -1265,7 +1265,7 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 poshuk1 = " $poshuk1 "
             }
             val nazva = getString(by.carkva_gazeta.malitounik.R.string.psalter)
-            val inputStream = resources.openRawResource(R.raw.nadsan_psaltyr)
+            val inputStream = resources.openRawResource(R.raw.psaltyr_nadsan)
             val isr = InputStreamReader(inputStream)
             val reader = BufferedReader(isr)
             val split = reader.use {

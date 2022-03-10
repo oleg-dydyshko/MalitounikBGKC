@@ -102,13 +102,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val resursMap = ArrayMap<String, Int>()
 
         init {
-            resursMap["bogashlugbovya1"] = R.raw.lit_jan_zalat
-            resursMap["bogashlugbovya2"] = R.raw.lit_jan_zalat_vielikodn
-            resursMap["bogashlugbovya4"] = R.raw.nabazenstva_maci_bozaj_niast_dap
-            resursMap["bogashlugbovya6"] = R.raw.jutran_niadzelnaja
+            resursMap["lit_jan_zalat"] = R.raw.lit_jan_zalat
+            resursMap["lit_jan_zalat_vielikodn"] = R.raw.lit_jan_zalat_vielikodn
+            resursMap["nabazenstva_maci_bozaj_niast_dap"] = R.raw.nabazenstva_maci_bozaj_niast_dap
+            resursMap["jutran_niadzelnaja"] = R.raw.jutran_niadzelnaja
             resursMap["abiednica"] = R.raw.abiednica
-            resursMap["bogashlugbovya9"] = R.raw.kanon_malebny_baharodzicy
-            resursMap["bogashlugbovya11"] = R.raw.panichida_mal
+            resursMap["kanon_malebny_baharodzicy"] = R.raw.kanon_malebny_baharodzicy
+            resursMap["panichida_mal"] = R.raw.panichida_mal
             resursMap["bogashlugbovya12_1"] = R.raw.bogashlugbovya12_1
             resursMap["bogashlugbovya12_2"] = R.raw.bogashlugbovya12_2
             resursMap["bogashlugbovya12_3"] = R.raw.bogashlugbovya12_3
@@ -177,8 +177,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["akafist6"] = R.raw.akafist6
             resursMap["akafist7"] = R.raw.akafist7
             resursMap["akafist8"] = R.raw.akafist8
-            resursMap["malitvy1"] = R.raw.malitvy_ran
-            resursMap["malitvy2"] = R.raw.malitvy_viaczernija
+            resursMap["malitvy_ran"] = R.raw.malitvy_ran
+            resursMap["malitvy_viaczernija"] = R.raw.malitvy_viaczernija
             resursMap["paslia_prychascia1"] = R.raw.paslia_prychascia1
             resursMap["paslia_prychascia2"] = R.raw.paslia_prychascia2
             resursMap["paslia_prychascia3"] = R.raw.paslia_prychascia3
@@ -247,8 +247,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["ton8"] = R.raw.ton8
             resursMap["viachernia_niadzeli"] = R.raw.viachernia_niadzeli
             resursMap["viachernia_liccia_i_blaslavenne_xliabou"] = R.raw.viachernia_liccia_i_blaslavenne_xliabou
-            resursMap["viachernia_na_kogny_dzen"] = R.raw.viachernia_na_kozny_dzen
-            resursMap["viachernia_y_vialikim_poste"] = R.raw.viachernia_u_vialikim_poscie
+            resursMap["viachernia_na_kozny_dzen"] = R.raw.viachernia_na_kozny_dzen
+            resursMap["viachernia_u_vialikim_poscie"] = R.raw.viachernia_u_vialikim_poscie
             resursMap["viachernia_ton1"] = R.raw.viachernia_ton1
             resursMap["viachernia_ton2"] = R.raw.viachernia_ton2
             resursMap["viachernia_ton3"] = R.raw.viachernia_ton3

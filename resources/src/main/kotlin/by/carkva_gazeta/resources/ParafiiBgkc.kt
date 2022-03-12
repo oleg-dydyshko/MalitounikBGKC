@@ -72,10 +72,10 @@ class ParafiiBgkc : AppCompatActivity() {
         webSettings.defaultFontSize = fontBiblia.toInt()
         val prynagodnyia = intent.extras?.getInt("bgkc_parafii", 0) ?: 0
         bgkc = intent.extras?.getInt("bgkc", 0) ?: 0
-        var inputStream = resources.openRawResource(R.raw.dzie_kuryia)
+        var inputStream = resources.openRawResource(R.raw.dzie_kuryja)
         when (bgkc) {
             0 -> {
-                if (prynagodnyia == 0) inputStream = resources.openRawResource(R.raw.dzie_kuryia)
+                if (prynagodnyia == 0) inputStream = resources.openRawResource(R.raw.dzie_kuryja)
                 if (prynagodnyia == 1) inputStream = resources.openRawResource(R.raw.dzie_centr_dekan)
                 if (prynagodnyia == 2) inputStream = resources.openRawResource(R.raw.dzie_usxod_dekan)
                 if (prynagodnyia == 3) inputStream = resources.openRawResource(R.raw.dzie_zaxod_dekan)
@@ -84,16 +84,16 @@ class ParafiiBgkc : AppCompatActivity() {
                 if (prynagodnyia == 0) inputStream = resources.openRawResource(R.raw.dzie_centr_dekan)
                 if (prynagodnyia == 1) inputStream = resources.openRawResource(R.raw.dzie_barysau)
                 if (prynagodnyia == 2) inputStream = resources.openRawResource(R.raw.dzie_zodzina)
-                if (prynagodnyia == 3) inputStream = resources.openRawResource(R.raw.dzie_zaslaue)
+                if (prynagodnyia == 3) inputStream = resources.openRawResource(R.raw.dzie_zaslauje)
                 if (prynagodnyia == 4) inputStream = resources.openRawResource(R.raw.dzie_maladechna)
-                if (prynagodnyia == 5) inputStream = resources.openRawResource(R.raw.dzie_marenagorka)
-                if (prynagodnyia == 6) inputStream = resources.openRawResource(R.raw.dzie_mensk)
+                if (prynagodnyia == 5) inputStream = resources.openRawResource(R.raw.dzie_marjinahorka)
+                if (prynagodnyia == 6) inputStream = resources.openRawResource(R.raw.dzie_miensk)
             }
             2 -> {
                 if (prynagodnyia == 0) inputStream = resources.openRawResource(R.raw.dzie_usxod_dekan)
-                if (prynagodnyia == 1) inputStream = resources.openRawResource(R.raw.dzie_vitebsk)
+                if (prynagodnyia == 1) inputStream = resources.openRawResource(R.raw.dzie_viciebsk)
                 if (prynagodnyia == 2) inputStream = resources.openRawResource(R.raw.dzie_orsha)
-                if (prynagodnyia == 3) inputStream = resources.openRawResource(R.raw.dzie_gomel)
+                if (prynagodnyia == 3) inputStream = resources.openRawResource(R.raw.dzie_homel)
                 if (prynagodnyia == 4) inputStream = resources.openRawResource(R.raw.dzie_polacak)
                 if (prynagodnyia == 5) inputStream = resources.openRawResource(R.raw.dzie_mahilou)
             }
@@ -101,23 +101,23 @@ class ParafiiBgkc : AppCompatActivity() {
                 if (prynagodnyia == 0) inputStream = resources.openRawResource(R.raw.dzie_zaxod_dekan)
                 if (prynagodnyia == 1) inputStream = resources.openRawResource(R.raw.dzie_baranavichy)
                 if (prynagodnyia == 2) inputStream = resources.openRawResource(R.raw.dzie_bierascie)
-                if (prynagodnyia == 3) inputStream = resources.openRawResource(R.raw.dzie_grodno)
+                if (prynagodnyia == 3) inputStream = resources.openRawResource(R.raw.dzie_horadnia)
                 if (prynagodnyia == 4) inputStream = resources.openRawResource(R.raw.dzie_ivacevichy)
                 if (prynagodnyia == 5) inputStream = resources.openRawResource(R.raw.dzie_lida)
-                if (prynagodnyia == 6) inputStream = resources.openRawResource(R.raw.dzie_navagrudak)
+                if (prynagodnyia == 6) inputStream = resources.openRawResource(R.raw.dzie_navahradak)
                 if (prynagodnyia == 7) inputStream = resources.openRawResource(R.raw.dzie_pinsk)
                 if (prynagodnyia == 8) inputStream = resources.openRawResource(R.raw.dzie_slonim)
             }
             4 -> {
                 if (prynagodnyia == 0) inputStream = resources.openRawResource(R.raw.dzie_antverpan)
                 if (prynagodnyia == 1) inputStream = resources.openRawResource(R.raw.dzie_londan)
-                if (prynagodnyia == 2) inputStream = resources.openRawResource(R.raw.dzie_warshava)
+                if (prynagodnyia == 2) inputStream = resources.openRawResource(R.raw.dzie_varshava)
                 if (prynagodnyia == 3) inputStream = resources.openRawResource(R.raw.dzie_vilnia)
-                if (prynagodnyia == 4) inputStream = resources.openRawResource(R.raw.dzie_vena)
-                if (prynagodnyia == 5) inputStream = resources.openRawResource(R.raw.dzie_kaliningrad)
+                if (prynagodnyia == 4) inputStream = resources.openRawResource(R.raw.dzie_viena)
+                if (prynagodnyia == 5) inputStream = resources.openRawResource(R.raw.dzie_kalininhrad)
                 if (prynagodnyia == 6) inputStream = resources.openRawResource(R.raw.dzie_praha)
                 if (prynagodnyia == 7) inputStream = resources.openRawResource(R.raw.dzie_rym)
-                if (prynagodnyia == 8) inputStream = resources.openRawResource(R.raw.dzie_sanktpeterburg)
+                if (prynagodnyia == 8) inputStream = resources.openRawResource(R.raw.dzie_sanktpieciarburg)
             }
         }
         val inputStreamReader = InputStreamReader(inputStream)

@@ -102,11 +102,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val resursMap = ArrayMap<String, Int>()
 
         init {
-            resursMap["lit_jan_zalat"] = R.raw.lit_jan_zalat
-            resursMap["lit_jan_zalat_vielikodn"] = R.raw.lit_jan_zalat_vielikodn
-            resursMap["nabazenstva_maci_bozaj_niast_dap"] = R.raw.nabazenstva_maci_bozaj_niast_dap
-            resursMap["jutran_niadzelnaja"] = R.raw.jutran_niadzelnaja
-            resursMap["abiednica"] = R.raw.abiednica
+            resursMap["bogashlugbovya1"] = R.raw.lit_jan_zalat
+            resursMap["bogashlugbovya2"] = R.raw.lit_jan_zalat_vielikodn
+            resursMap["bogashlugbovya4"] = R.raw.nabazenstva_maci_bozaj_niast_dap
+            resursMap["bogashlugbovya6"] = R.raw.jutran_niadzelnaja
+            resursMap["bogashlugbovya8"] = R.raw.abiednica
             resursMap["kanon_malebny_baharodzicy"] = R.raw.kanon_malebny_baharodzicy
             resursMap["panichida_mal"] = R.raw.panichida_mal
             resursMap["bogashlugbovya12_1"] = R.raw.bogashlugbovya12_1
@@ -177,8 +177,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["akafist6"] = R.raw.akafist6
             resursMap["akafist7"] = R.raw.akafist7
             resursMap["akafist8"] = R.raw.akafist8
-            resursMap["malitvy_ran"] = R.raw.malitvy_ran
-            resursMap["malitvy_viaczernija"] = R.raw.malitvy_viaczernija
+            resursMap["malitvy1"] = R.raw.malitvy_ran
+            resursMap["malitvy2"] = R.raw.malitvy_viaczernija
             resursMap["paslia_prychascia1"] = R.raw.paslia_prychascia1
             resursMap["paslia_prychascia2"] = R.raw.paslia_prychascia2
             resursMap["paslia_prychascia3"] = R.raw.paslia_prychascia3
@@ -247,8 +247,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["ton8"] = R.raw.ton8
             resursMap["viachernia_niadzeli"] = R.raw.viachernia_niadzeli
             resursMap["viachernia_liccia_i_blaslavenne_xliabou"] = R.raw.viachernia_liccia_i_blaslavenne_xliabou
-            resursMap["viachernia_na_kozny_dzen"] = R.raw.viachernia_na_kozny_dzen
-            resursMap["viachernia_u_vialikim_poscie"] = R.raw.viachernia_u_vialikim_poscie
+            resursMap["viachernia_na_kogny_dzen"] = R.raw.viachernia_na_kozny_dzen
+            resursMap["viachernia_y_vialikim_poste"] = R.raw.viachernia_u_vialikim_poscie
             resursMap["viachernia_ton1"] = R.raw.viachernia_ton1
             resursMap["viachernia_ton2"] = R.raw.viachernia_ton2
             resursMap["viachernia_ton3"] = R.raw.viachernia_ton3
@@ -330,6 +330,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["mltv_pierad_jadoj_i_pasla"] = R.raw.mltv_pierad_jadoj_i_pasla
             resursMap["mltv_za_backou"] = R.raw.mltv_za_backou
             resursMap["kanon_a_kryckaha"] = R.raw.kanon_a_kryckaha
+            resursMap["lit_ran_asv_dar"] = R.raw.lit_ran_asv_dar
             resursMap["pesny_prasl_70"] = PesnyAll.resursMap["pesny_prasl_70"]
         }
 
@@ -1027,18 +1028,18 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            string = "Малітвы пасьля сьвятога прычасьця"
-            strLig = string.length
-            t1 = text.indexOf(string)
-            if (t1 != -1) {
-                text.setSpan(object : ClickableSpan() {
-                    override fun onClick(widget: View) {
-                        val intent = Intent(this@Bogashlugbovya, MalitvyPasliaPrychascia::class.java)
-                        startActivity(intent)
-                        positionY = 0
-                    }
-                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            }
+        }
+        string = "Малітвы пасьля сьвятога прычасьця"
+        strLig = string.length
+        t1 = text.indexOf(string)
+        if (t1 != -1) {
+            text.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val intent = Intent(this@Bogashlugbovya, MalitvyPasliaPrychascia::class.java)
+                    startActivity(intent)
+                    positionY = 0
+                }
+            }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         binding.textView.text = text
         if (savedInstanceState != null) {

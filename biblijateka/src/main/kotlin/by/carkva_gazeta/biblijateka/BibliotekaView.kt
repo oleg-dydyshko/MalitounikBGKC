@@ -314,7 +314,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 adapter.notifyDataSetChanged()
             }
             val fileChech = File(naidaunia[position1][1])
-            if (fileChech.exists()) fileChech.delete()
+            if (fileChech.exists() && !naidaunia[position1][1].contains("PiasochnicaBackCopy")) fileChech.delete()
             naidaunia.removeAt(position1)
             val gson = Gson()
             val prefEditor = k.edit()

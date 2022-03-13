@@ -30,6 +30,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import org.apache.commons.text.StringEscapeUtils
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -170,6 +171,13 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     binding.scrollView.smoothScrollBy(0, positionY)
                 }
             }
+        } else {
+            val newFile = intent.extras?.getBoolean("newFile", false)?: false
+            if (!newFile) {
+                getOrSendFilePostRequest(text, false)
+            } else {
+                intent.removeExtra("newFile")
+            }
         }
         fileName = if (resours == "") {
             title
@@ -179,12 +187,6 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 fileName.substring(t3)
             } else ".html"
             "($resours) $title$end"
-        }
-        val newFile = intent.extras?.getBoolean("newFile", false)?: false
-        if (!newFile) {
-            getOrSendFilePostRequest(text, false)
-        } else {
-            intent.removeExtra("newFile")
         }
         positionY = k.getInt("admin" + fileName + "position", 0)
         setTollbarTheme()
@@ -402,6 +404,17 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
     }
 
     private fun getOrSendFilePostRequest(content: String, isSaveAs: Boolean = true) {
+        if (isSaveAs) {
+            val dir = getExternalFilesDir("PiasochnicaBackCopy")
+            dir?.let {
+                if (!dir.exists())
+                    dir.mkdir()
+            }
+            val file = File(getExternalFilesDir("PiasochnicaBackCopy"), fileName)
+            file.writer().use {
+                it.write(content)
+            }
+        }
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 var result = ""

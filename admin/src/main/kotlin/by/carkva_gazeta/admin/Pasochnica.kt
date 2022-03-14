@@ -172,7 +172,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 }
             }
         } else {
-            val newFile = intent.extras?.getBoolean("newFile", false)?: false
+            val newFile = intent.extras?.getBoolean("newFile", false) ?: false
             if (!newFile) {
                 getOrSendFilePostRequest(text, false)
             } else {
@@ -407,8 +407,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         if (isSaveAs) {
             val dir = getExternalFilesDir("PiasochnicaBackCopy")
             dir?.let {
-                if (!dir.exists())
-                    dir.mkdir()
+                if (!dir.exists()) dir.mkdir()
             }
             val file = File(getExternalFilesDir("PiasochnicaBackCopy"), fileName)
             file.writer().use {
@@ -516,6 +515,14 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                     binding.apisanne.setText(result)
                 }
                 binding.progressBar2.visibility = View.GONE
+            }
+        } else {
+            if (fileName.contains(".htm")) {
+                binding.apisanne.setText(MainActivity.fromHtml(content, HtmlCompat.FROM_HTML_MODE_COMPACT))
+                binding.actionP.visibility = View.GONE
+                binding.actionBr.visibility = View.GONE
+            } else {
+                binding.apisanne.setText(content)
             }
         }
     }

@@ -331,6 +331,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["mltv_za_backou"] = R.raw.mltv_za_backou
             resursMap["kanon_a_kryckaha"] = R.raw.kanon_a_kryckaha
             resursMap["lit_ran_asv_dar"] = R.raw.lit_ran_asv_dar
+            resursMap["viaczernia_bierascie"] = R.raw.viaczernia_bierascie
             resursMap["pesny_prasl_70"] = PesnyAll.resursMap["pesny_prasl_70"]
         }
 

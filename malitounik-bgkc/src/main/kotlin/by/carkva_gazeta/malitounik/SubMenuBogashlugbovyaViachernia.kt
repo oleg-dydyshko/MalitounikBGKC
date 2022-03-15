@@ -85,7 +85,7 @@ class SubMenuBogashlugbovyaViachernia : AppCompatActivity() {
             mLastClickTime = SystemClock.elapsedRealtime()
             if (MainActivity.checkmoduleResources()) {
                 val intent: Intent
-                if (position == 4) {
+                if (position == 5) {
                     intent = Intent(this, AktoixList::class.java)
                 } else {
                     intent = Intent()
@@ -106,6 +106,10 @@ class SubMenuBogashlugbovyaViachernia : AppCompatActivity() {
                         3 -> {
                             intent.putExtra("title", data[position])
                             intent.putExtra("resurs", "viachernia_y_vialikim_poste")
+                        }
+                        4 -> {
+                            intent.putExtra("title", data[position])
+                            intent.putExtra("resurs", "viaczernia_bierascie")
                         }
                     }
                 }

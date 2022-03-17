@@ -90,8 +90,32 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
 
         binding.listView.setOnItemClickListener { _, _, position, _ ->
             val intent = Intent(this, Pasochnica::class.java)
-            intent.putExtra("isSite", true)
-            intent.putExtra("fileName", fileList[position])
+            var fileName = fileList[position]
+            if (fileName.contains("(BackCopy)")) {
+                fileName = fileName.replace("(BackCopy)", "")
+                val file = File(getExternalFilesDir("PiasochnicaBackCopy"), fileName.replace("(BackCopy)", ""))
+                if (file.exists()) {
+                    val t1 = fileName.indexOf(")")
+                    val t2 = fileName.lastIndexOf(".")
+                    val resours = if (t1 != -1) {
+                        fileName.substring(1, t1)
+                    } else {
+                        ""
+                    }
+                    val title = if (t1 != -1 && t2 != -1) {
+                        fileName.substring(t1 + 1, t2).trim()
+                    } else {
+                        ""
+                    }
+                    intent.putExtra("text", file.readText())
+                    intent.putExtra("resours", resours)
+                    intent.putExtra("exits", true)
+                    intent.putExtra("title", title)
+                }
+            } else {
+                intent.putExtra("isSite", true)
+                intent.putExtra("fileName", fileName)
+            }
             startActivity(intent)
         }
         binding.listView.setOnItemLongClickListener { _, _, position, _ ->
@@ -113,14 +137,29 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     }
 
     override fun fileDelite(position: Int, title: String, isSite: Boolean) {
-        getFileUnlinkPostRequest(title, isSite)
+        if (title.contains("(BackCopy")) {
+            val fileNameold = title.replace("(BackCopy)", "")
+            val fileOld = File(getExternalFilesDir("PiasochnicaBackCopy"), fileNameold)
+            if (fileOld.exists()) fileOld.delete()
+            getDirPostRequest()
+        } else {
+            getFileUnlinkPostRequest(title, isSite)
+        }
         val prefEditor = k.edit()
         prefEditor.remove("admin" + title + "position")
         prefEditor.apply()
     }
 
     override fun setFileName(oldFileName: String, fileName: String, isSite: Boolean) {
-        getFileRenamePostRequest(oldFileName, fileName, isSite)
+        if (oldFileName.contains("(BackCopy")) {
+            val fileNameold = oldFileName.replace("(BackCopy)", "")
+            val fileOld = File(getExternalFilesDir("PiasochnicaBackCopy"), fileNameold)
+            val fileNew = File(getExternalFilesDir("PiasochnicaBackCopy"), fileName.replace("(BackCopy)", ""))
+            fileOld.renameTo(fileNew)
+            getDirPostRequest()
+        } else {
+            getFileRenamePostRequest(oldFileName, fileName, isSite)
+        }
     }
 
     private fun setTollbarTheme() {
@@ -268,6 +307,20 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     }
 
     private fun getDirPostRequest() {
+        val backCopy = ArrayList<String>()
+        val dir = getExternalFilesDir("PiasochnicaBackCopy")
+        dir?.let { dir1 ->
+            if (dir1.exists()) {
+                val list = dir1.list()
+                list?.forEach {
+                    val t1 = it.lastIndexOf(".")
+                    val fileName = if (t1 != -1) it.substring(0, t1) + "(BackCopy)" + it.substring(t1)
+                    else "$it(BackCopy)"
+                    backCopy.add(fileName)
+                }
+                backCopy.sort()
+            }
+        }
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar2.visibility = View.VISIBLE
@@ -295,6 +348,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                                 val type = object : TypeToken<ArrayList<String>>() {}.type
                                 fileList.addAll(gson.fromJson(result, type))
                                 fileList.sort()
+                                fileList.addAll(backCopy)
                             }
                         }
                     } catch (e: Throwable) {

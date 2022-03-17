@@ -189,7 +189,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["prynagodnyia_2"] = R.raw.prynagodnyia_2
             resursMap["prynagodnyia_3"] = R.raw.prynagodnyia_3
             resursMap["prynagodnyia_4"] = R.raw.prynagodnyia_4
-            resursMap["prynagodnyia_5"] = R.raw.prynagodnyia_5
+            resursMap["prynagodnyia_5"] = R.raw.mltv_kiroucy
             resursMap["prynagodnyia_6"] = R.raw.prynagodnyia_6
             resursMap["prynagodnyia_7"] = R.raw.prynagodnyia_7
             resursMap["prynagodnyia_8"] = R.raw.prynagodnyia_8
@@ -320,7 +320,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["l_12_26_sabor_baharodzicy"] = R.raw.l_12_26_sabor_baharodzicy
             resursMap["maleben_new_year_01_01"] = R.raw.maleben_new_year_01_01
             resursMap["l_12_28"] = R.raw.l_12_28
-            resursMap["l_vasila_vialikaha"] = R.raw.l_vasila_vialikaha
+            resursMap["l_vasila_vialikaha"] = R.raw.lit_vasila_vialikaha
             resursMap["l_1_2"] = R.raw.l_1_2
             resursMap["l_01_04_pieradsv_bohazjaulennia"] = R.raw.l_01_04_pieradsv_bohazjaulennia
             resursMap["l_1_6_bohazjaulennie"] = R.raw.l_1_6_bohazjaulennie

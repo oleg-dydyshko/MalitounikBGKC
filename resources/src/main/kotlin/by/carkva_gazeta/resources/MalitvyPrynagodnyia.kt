@@ -136,7 +136,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         data.add(MenuListData("Малітва аб еднасьці", "prynagodnyia_2"))
         data.add(MenuListData("Малітва бацькоў за дзяцей 2", "prynagodnyia_3"))
         data.add(MenuListData("Малітва бацькоў за дзяцей", "prynagodnyia_4"))
-        data.add(MenuListData("Малітва вадзіцеля", "prynagodnyia_5"))
+        data.add(MenuListData("Малітва кіроўцы", "prynagodnyia_5"))
         data.add(MenuListData("Малітва вучня", "prynagodnyia_6"))
         data.add(MenuListData("Малітва да Маці Божай Браслаўскай, Валадаркі Азёраў", "prynagodnyia_7"))
         data.add(MenuListData("Малітва да Маці Божай Будслаўскай, Апякункі Беларусі", "prynagodnyia_8"))

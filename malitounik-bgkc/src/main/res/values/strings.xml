@@ -733,8 +733,8 @@
         <item>Чырвоны тоўсты</item>
         <item>Нармальны</item>
     </string-array>
-    <string name="viaczernia_bierascie_1">Сьпяваюцца наступныя выбраныя вершы з псалмаў 1–3</string>
-    <string name="viaczernia_bierascie_2">Звычайна чытаюцца або зусім прапускацца</string>
+    <string name="viaczernia_bierascie_1">Выбраныя вершы з псалмаў 1–3</string>
+    <string name="viaczernia_bierascie_2">Вершы Пс 140</string>
     <string name="viaczernia_bierascie_3">Вячэрні вершапесьні сьпяваюцца з наступнымі вершамі</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

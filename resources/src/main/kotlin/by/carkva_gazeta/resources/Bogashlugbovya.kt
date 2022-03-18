@@ -90,6 +90,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var onRestore = false
     private var onFind = false
     private var chechZmena = false
+    private var checkLiturgia = 0
     private var raznica = 400
     private var dayOfYear = "1"
     private var checkDayOfYear = false
@@ -941,7 +942,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
         }
         if (resurs == "viaczernia_bierascie") {
-            var stringVB = "сьпяваюцца наступныя выбраныя вершы з псалмаў 1-3"
+            var stringVB = "выбраныя вершы з псалмаў 1-3"
             var strLigVB = stringVB.length
             var vbt1 = text.indexOf(stringVB)
             if (vbt1 != -1) {
@@ -952,7 +953,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                 }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            stringVB = "звычайна чытаюцца або зусім прапускацца"
+            stringVB = "вершы Пс 140"
             strLigVB = stringVB.length
             vbt1 = text.indexOf(stringVB)
             if (vbt1 != -1) {
@@ -963,7 +964,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                 }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            stringVB = "вячэрні вершапесьні сьпяваюцца з наступнымі вершамі"
+            stringVB = "гл. тут."
             strLigVB = stringVB.length
             vbt1 = text.indexOf(stringVB)
             if (vbt1 != -1) {
@@ -1190,6 +1191,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), dayOfYear, slugbovyiaTextu.isPasxa(dayOfYear.toInt()))
         if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
             chechZmena = true
+        }
+        if (resurs == "lit_ran_asv_dar" && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
+            chechZmena = true
+            checkLiturgia = 1
         }
         invalidateOptionsMenu()
     }
@@ -1449,7 +1454,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     intent.putExtra("title", slugba.getTitle(resours))
                 }
                 else -> {
-                    val resours = slugba.getResource(raznica, slugba.isPasxa(raznica), liturgia = true)
+                    val resours = if (checkLiturgia == 0) slugba.getResource(raznica, slugba.isPasxa(raznica), liturgia = true)
+                    else slugba.getResource(raznica, slugba.isPasxa(raznica))
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))

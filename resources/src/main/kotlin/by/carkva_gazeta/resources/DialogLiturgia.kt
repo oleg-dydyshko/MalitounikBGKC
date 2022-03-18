@@ -94,6 +94,18 @@ class DialogLiturgia : DialogFragment() {
                     inputStream = r.openRawResource(R.raw.bogashlugbovya1_8)
                     binding.title.setText(by.carkva_gazeta.malitounik.R.string.ps_94)
                 }
+                11 -> {
+                    inputStream = r.openRawResource(R.raw.viaczernia_bierascie_1)
+                    binding.title.setText(by.carkva_gazeta.malitounik.R.string.viaczernia_bierascie_1)
+                }
+                12 -> {
+                    inputStream = r.openRawResource(R.raw.viaczernia_bierascie_2)
+                    binding.title.setText(by.carkva_gazeta.malitounik.R.string.viaczernia_bierascie_2)
+                }
+                13 -> {
+                    inputStream = r.openRawResource(R.raw.viaczernia_bierascie_3)
+                    binding.title.setText(by.carkva_gazeta.malitounik.R.string.viaczernia_bierascie_3)
+                }
             }
             if (!(chast == 8 || chast == 9)) {
                 val isr = InputStreamReader(inputStream)
@@ -107,6 +119,7 @@ class DialogLiturgia : DialogFragment() {
                 inputStream.close()
             }
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT))
+            binding.title.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT))
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             binding.content.text = MainActivity.fromHtml(builder.toString())

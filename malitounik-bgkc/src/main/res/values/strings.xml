@@ -413,7 +413,7 @@
         <item>Трапары і кандакі нядзельныя васьмі тонаў</item>
         <item>Трапары і кандакі штодзённыя - на кожны дзень тыдня</item>
         <item>Службы Вялікага посту</item>
-        <item>Малебны Канон Найсьвяцейшай Багародзіцы</item>
+        <item>Малебны канон Найсьвяцейшай Багародзіцы</item>
         <item>Вялікі пакаянны канон сьвятога Андрэя Крыцкага</item>
         <item>Мінэя сьвяточная</item>
         <item>Мінэя штодзённая</item>
@@ -733,5 +733,8 @@
         <item>Чырвоны тоўсты</item>
         <item>Нармальны</item>
     </string-array>
+    <string name="viaczernia_bierascie_1">Сьпяваюцца наступныя выбраныя вершы з псалмаў 1–3</string>
+    <string name="viaczernia_bierascie_2">Звычайна чытаюцца або зусім прапускацца</string>
+    <string name="viaczernia_bierascie_3">Вячэрні вершапесьні сьпяваюцца з наступнымі вершамі</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

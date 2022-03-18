@@ -107,8 +107,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["bogashlugbovya4"] = R.raw.nabazenstva_maci_bozaj_niast_dap
             resursMap["bogashlugbovya6"] = R.raw.jutran_niadzelnaja
             resursMap["bogashlugbovya8"] = R.raw.abiednica
-            resursMap["kanon_malebny_baharodzicy"] = R.raw.kanon_malebny_baharodzicy
-            resursMap["panichida_mal"] = R.raw.panichida_mal
+            resursMap["bogashlugbovya9"] = R.raw.kanon_malebny_baharodzicy
+            resursMap["bogashlugbovya11"] = R.raw.panichida_mal
             resursMap["bogashlugbovya12_1"] = R.raw.bogashlugbovya12_1
             resursMap["bogashlugbovya12_2"] = R.raw.bogashlugbovya12_2
             resursMap["bogashlugbovya12_3"] = R.raw.bogashlugbovya12_3
@@ -910,19 +910,19 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         if (resurs == "bogashlugbovya8") {
-            string = "Заканчэньне ў час Вялікага посту гл. ніжэй"
-            strLig = string.length
-            t1 = text.indexOf(string)
-            if (t1 != -1) {
+            val stringBSA = "Заканчэньне ў час Вялікага посту гл. ніжэй"
+            val strLigBSA = stringBSA.length
+            val bsat1 = text.indexOf(stringBSA)
+            if (bsat1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val strPosition = text.indexOf("Заканчэньне абедніцы", t1 + strLig, true)
+                        val strPosition = text.indexOf("Заканчэньне абедніцы", bsat1 + strLigBSA, true)
                         val line = binding.textView.layout.getLineForOffset(strPosition)
                         val y = binding.textView.layout.getLineTop(line)
                         val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
                         anim.setDuration(1500).start()
                     }
-                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }, bsat1, bsat1 + strLigBSA, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
         if (resurs == "viachernia_niadzeli") {
@@ -940,94 +940,143 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
+        if (resurs == "viaczernia_bierascie") {
+            var stringVB = "сьпяваюцца наступныя выбраныя вершы з псалмаў 1-3"
+            var strLigVB = stringVB.length
+            var vbt1 = text.indexOf(stringVB)
+            if (vbt1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia = DialogLiturgia.getInstance(11)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            stringVB = "звычайна чытаюцца або зусім прапускацца"
+            strLigVB = stringVB.length
+            vbt1 = text.indexOf(stringVB)
+            if (vbt1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia = DialogLiturgia.getInstance(12)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            stringVB = "вячэрні вершапесьні сьпяваюцца з наступнымі вершамі"
+            strLigVB = stringVB.length
+            vbt1 = text.indexOf(stringVB)
+            if (vbt1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia = DialogLiturgia.getInstance(13)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            stringVB = "гл. ніжэй."
+            strLigVB = stringVB.length
+            vbt1 = text.indexOf(stringVB)
+            if (vbt1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val strPosition = text.indexOf("ЗАКАНЧЭНЬНЕ ВЯЧЭРНІ Ў ВЯЛІКІ ПОСТ", vbt1 + strLigVB, true)
+                        val line = binding.textView.layout.getLineForOffset(strPosition)
+                        val y = binding.textView.layout.getLineTop(line)
+                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                        anim.setDuration(1500).start()
+                    }
+                }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
         if (resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") {
-            string = "Пс 102 (гл. тут)."
-            strLig = string.length
-            t1 = text.indexOf(string)
-            if (t1 != -1) {
+            var stringBS = "Пс 102 (гл. тут)."
+            var strLigBS = stringBS.length
+            var bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         val dialogLiturgia = DialogLiturgia.getInstance(1)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
-                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            string = "Пс 91. (Гл. тут)."
-            strLig = string.length
-            t1 = text.indexOf(string)
-            if (t1 != -1) {
+            stringBS = "Пс 91. (Гл. тут)."
+            strLigBS = stringBS.length
+            bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         val dialogLiturgia = DialogLiturgia.getInstance(2)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
-                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            string = "(Пс 145). (Гл. тут)."
-            strLig = string.length
-            t1 = text.indexOf(string)
-            if (t1 != -1) {
+            stringBS = "(Пс 145). (Гл. тут)."
+            strLigBS = stringBS.length
+            bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         val dialogLiturgia = DialogLiturgia.getInstance(3)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
-                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            string = "Пс 92. (Гл. тут)."
-            strLig = string.length
-            t1 = text.indexOf(string)
-            if (t1 != -1) {
+            stringBS = "Пс 92. (Гл. тут)."
+            strLigBS = stringBS.length
+            bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         val dialogLiturgia = DialogLiturgia.getInstance(4)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
-                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            string = "Пс 94. (Гл. тут)."
-            strLig = string.length
-            t1 = text.indexOf(string)
-            if (t1 != -1) {
+            stringBS = "Пс 94. (Гл. тут)."
+            strLigBS = stringBS.length
+            bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         val dialogLiturgia = DialogLiturgia.getInstance(10)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
-                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            string = "Іншы антыфон сьвяточны і нядзельны (Мц 5:3-12):"
-            strLig = string.length
-            t1 = text.indexOf(string)
-            if (t1 != -1) {
+            stringBS = "Іншы антыфон сьвяточны і нядзельны (Мц 5:3-12):"
+            strLigBS = stringBS.length
+            bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         val dialogLiturgia = DialogLiturgia.getInstance(5)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
-                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            string = "Малітва за памерлых"
-            strLig = string.length
-            t1 = text.indexOf(string)
-            if (t1 != -1) {
+            stringBS = "Малітва за памерлых"
+            strLigBS = stringBS.length
+            bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         val dialogLiturgia = DialogLiturgia.getInstance(6)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
-                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            string = "Малітва за пакліканых"
-            strLig = string.length
-            t1 = text.indexOf(string)
-            if (t1 != -1) {
+            stringBS = "Малітва за пакліканых"
+            strLigBS = stringBS.length
+            bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         val dialogLiturgia = DialogLiturgia.getInstance(7)
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
-                }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
         string = "Малітвы пасьля сьвятога прычасьця"

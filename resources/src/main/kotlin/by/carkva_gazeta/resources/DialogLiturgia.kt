@@ -119,7 +119,6 @@ class DialogLiturgia : DialogFragment() {
                 inputStream.close()
             }
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT))
-            binding.title.setTextSize(TypedValue.COMPLEX_UNIT_SP, k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT))
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorPrimary_text))
             binding.content.text = MainActivity.fromHtml(builder.toString())

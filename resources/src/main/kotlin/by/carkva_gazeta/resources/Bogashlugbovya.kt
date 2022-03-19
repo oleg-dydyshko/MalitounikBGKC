@@ -990,7 +990,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
-        if (resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") {
+        if (resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2" || resurs == "l_vasila_vialikaha") {
             var stringBS = "Пс 102 (гл. тут)."
             var strLigBS = stringBS.length
             var bst1 = text.indexOf(stringBS)

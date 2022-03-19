@@ -775,7 +775,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         line = line.replace("PRICHASNIKK", "")
                         builder.append(line)
                     }
-                    resurs.contains("bogashlugbovya") -> {
+                    resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2" || resurs == "l_vasila_vialikaha" -> {
                         if (line.contains("KANDAK")) {
                             line = line.replace("KANDAK", "")
                             builder.append(line)

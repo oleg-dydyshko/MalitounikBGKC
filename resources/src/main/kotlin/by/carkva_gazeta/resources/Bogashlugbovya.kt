@@ -975,20 +975,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     }
                 }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            stringVB = "гл. ніжэй."
-            strLigVB = stringVB.length
-            vbt1 = text.indexOf(stringVB)
-            if (vbt1 != -1) {
-                text.setSpan(object : ClickableSpan() {
-                    override fun onClick(widget: View) {
-                        val strPosition = text.indexOf("ЗАКАНЧЭНЬНЕ ВЯЧЭРНІ Ў ВЯЛІКІ ПОСТ", vbt1 + strLigVB, true)
-                        val line = binding.textView.layout.getLineForOffset(strPosition)
-                        val y = binding.textView.layout.getLineTop(line)
-                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
-                        anim.setDuration(1500).start()
-                    }
-                }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            }
             stringVB = "«Госпадзе, Цябе клічу»"
             strLigVB = stringVB.length
             vbt1 = text.indexOf(stringVB)
@@ -1002,6 +988,20 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         anim.setDuration(1500).start()
                     }
                 }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            val stringVB2 = "гл. ніжэй."
+            val strLigVB2 = stringVB2.length
+            val vbt2 = text.indexOf(stringVB2)
+            if (vbt2 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val strPosition = text.indexOf("ЗАКАНЧЭНЬНЕ ВЯЧЭРНІ Ў ВЯЛІКІ ПОСТ", vbt2 + strLigVB2, true)
+                        val line = binding.textView.layout.getLineForOffset(strPosition)
+                        val y = binding.textView.layout.getLineTop(line)
+                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                        anim.setDuration(1500).start()
+                    }
+                }, vbt2, vbt2 + strLigVB2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
         if (resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2" || resurs == "l_vasila_vialikaha") {

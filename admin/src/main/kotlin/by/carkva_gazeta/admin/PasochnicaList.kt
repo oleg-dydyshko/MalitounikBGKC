@@ -6,10 +6,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.*
 import android.widget.ArrayAdapter
@@ -32,9 +35,10 @@ import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
+import java.util.*
 
 
-class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogFileExplorer.DialogFileExplorerListener, DialogNetFileExplorer.DialogNetFileExplorerListener {
+class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogContextMenu.DialogContextMenuListener, DialogDelite.DialogDeliteListener, DialogFileExplorer.DialogFileExplorerListener, DialogNetFileExplorer.DialogNetFileExplorerListener, DialogDeliteAllBackCopy.DialogDeliteAllBackCopyListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaListBinding
@@ -62,9 +66,8 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                 break
             }
         }
-        val text = file.readText()
         val intent = Intent(this, Pasochnica::class.java)
-        intent.putExtra("text", text)
+        intent.putExtra("text", file.readText())
         intent.putExtra("resours", "")
         intent.putExtra("exits", exits)
         intent.putExtra("title", title)
@@ -73,6 +76,14 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
 
     override fun onDialogNetFile(dirToFile: String, fileName: String) {
         getFileCopyPostRequest(dirToFile, fileName)
+    }
+
+    override fun deliteAllBackCopy() {
+        val dir = getExternalFilesDir("PiasochnicaBackCopy")
+        if (dir?.exists() == true) {
+            dir.deleteRecursively()
+            getDirPostRequest()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,6 +122,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                     intent.putExtra("resours", resours)
                     intent.putExtra("exits", true)
                     intent.putExtra("title", title)
+                    intent.putExtra("backcopy", true)
                 }
             } else {
                 intent.putExtra("isSite", true)
@@ -309,17 +321,26 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
     private fun getDirPostRequest() {
         val backCopy = ArrayList<String>()
         val dir = getExternalFilesDir("PiasochnicaBackCopy")
-        dir?.let { dir1 ->
-            if (dir1.exists()) {
-                val list = dir1.list()
-                list?.forEach {
-                    val t1 = it.lastIndexOf(".")
-                    val fileName = if (t1 != -1) it.substring(0, t1) + "(BackCopy)" + it.substring(t1)
-                    else "$it(BackCopy)"
-                    backCopy.add(fileName)
+        if (dir?.exists() == true) {
+            var list = dir.list()
+            list?.forEach {
+                val file = File("$dir/$it")
+                val systemTime = System.currentTimeMillis()
+                val lastModified = GregorianCalendar()
+                lastModified.timeInMillis = file.lastModified()
+                lastModified.add(Calendar.DATE, 7)
+                if (lastModified.timeInMillis < systemTime) {
+                    file.delete()
                 }
-                backCopy.sort()
             }
+            list = dir.list()
+            list?.forEach {
+                val t1 = it.lastIndexOf(".")
+                val fileName = if (t1 != -1) it.substring(0, t1) + "(BackCopy)" + it.substring(t1)
+                else "$it(BackCopy)"
+                backCopy.add(fileName)
+            }
+            backCopy.sort()
         }
         if (MainActivity.isNetworkAvailable()) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -377,6 +398,10 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                 binding.listView.invalidate()
                 binding.progressBar2.visibility = View.GONE
             }
+        } else {
+            fileList.addAll(backCopy)
+            adapter.notifyDataSetChanged()
+            binding.listView.invalidate()
         }
     }
 
@@ -400,6 +425,10 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                 val fileExplorer = DialogFileExplorer()
                 fileExplorer.show(supportFragmentManager, "file_explorer")
             }
+        }
+        if (id == R.id.action_delite_all) {
+            val dialogDeliteAllBackCopy = DialogDeliteAllBackCopy()
+            dialogDeliteAllBackCopy.show(supportFragmentManager, "dialogDeliteAllBackCopy")
         }
         return super.onOptionsItemSelected(item)
     }
@@ -432,7 +461,12 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                 rootView = mView
                 viewHolder = rootView.tag as ViewHolder
             }
-            viewHolder.text.text = fileList[position]
+            val posFileList = SpannableString(fileList[position])
+            if (fileList[position].contains(("BackCopy"))) {
+                posFileList.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, by.carkva_gazeta.malitounik.R.color.colorPrimary)), 0, posFileList.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                posFileList.setSpan(StyleSpan(Typeface.ITALIC), 0, posFileList.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            viewHolder.text.text = posFileList
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             return rootView
         }

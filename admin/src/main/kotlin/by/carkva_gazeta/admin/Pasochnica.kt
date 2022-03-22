@@ -156,6 +156,15 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             title = findResoursNameAndTitle()
         }
         val text = intent.extras?.getString("text", "") ?: ""
+        fileName = if (resours == "") {
+            title
+        } else {
+            val t3 = fileName.lastIndexOf(".")
+            val end = if (t3 != -1) {
+                fileName.substring(t3)
+            } else ".html"
+            "($resours) $title$end"
+        }
         if (savedInstanceState != null) {
             fileName = savedInstanceState.getString("fileName", "")
             resours = savedInstanceState.getString("resours", "")
@@ -173,20 +182,23 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             }
         } else {
             val newFile = intent.extras?.getBoolean("newFile", false) ?: false
-            if (!newFile) {
-                getOrSendFilePostRequest(text, false)
-            } else {
-                intent.removeExtra("newFile")
+            when {
+                intent.extras?.getBoolean("backcopy", false) == true -> {
+                    if (fileName.contains(".htm")) {
+                        binding.apisanne.setText(MainActivity.fromHtml(text, HtmlCompat.FROM_HTML_MODE_COMPACT))
+                        binding.actionP.visibility = View.GONE
+                        binding.actionBr.visibility = View.GONE
+                    } else {
+                        binding.apisanne.setText(text)
+                    }
+                }
+                !newFile -> {
+                    getOrSendFilePostRequest(text, false)
+                }
+                else -> {
+                    intent.removeExtra("newFile")
+                }
             }
-        }
-        fileName = if (resours == "") {
-            title
-        } else {
-            val t3 = fileName.lastIndexOf(".")
-            val end = if (t3 != -1) {
-                fileName.substring(t3)
-            } else ".html"
-            "($resours) $title$end"
         }
         positionY = k.getInt("admin" + fileName + "position", 0)
         setTollbarTheme()

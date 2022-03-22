@@ -1206,7 +1206,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
             chechZmena = true
         }
-        if (resurs == "lit_ran_asv_dar" && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
+        if ((resurs == "lit_ran_asv_dar" || resurs == "viaczernia_bierascie") && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
             chechZmena = true
             checkLiturgia = 1
         }

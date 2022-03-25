@@ -523,6 +523,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         val heightConstraintLayout = binding.constraint.height
         val widthConstraintLayout = binding.constraint.width
         val otstup = (10 * resources.displayMetrics.density).toInt()
+        val otstup2 = if (autoscroll) (50 * resources.displayMetrics.density).toInt()
+        else 0
         val y = event?.y?.toInt() ?: 0
         val x = event?.x?.toInt() ?: 0
         val id = v?.id ?: 0
@@ -549,7 +551,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                         bindingprogress.brighess.visibility = View.VISIBLE
                         startProcent(3000)
                     }
-                    if (x > widthConstraintLayout - otstup) {
+                    if (x > widthConstraintLayout - otstup && y < heightConstraintLayout - otstup2) {
                         bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
                         bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.font_size)
                         bindingprogress.progress.visibility = View.VISIBLE

@@ -84,6 +84,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
             dir.deleteRecursively()
             getDirPostRequest()
         }
+        invalidateOptionsMenu()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -160,6 +161,7 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
         val prefEditor = k.edit()
         prefEditor.remove("admin" + title + "position")
         prefEditor.apply()
+        invalidateOptionsMenu()
     }
 
     override fun setFileName(oldFileName: String, fileName: String, isSite: Boolean) {
@@ -403,6 +405,17 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
             adapter.notifyDataSetChanged()
             binding.listView.invalidate()
         }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        val itemDelite = menu.findItem(R.id.action_delite_all)
+        val dir = getExternalFilesDir("PiasochnicaBackCopy")
+        if (dir?.exists() == true) {
+            val list = dir.list()
+            itemDelite.isVisible = list?.isNotEmpty() ?: true
+        }
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

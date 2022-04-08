@@ -165,7 +165,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
         } else {
             if (k.getBoolean("autoscrollAutostart", false)) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 autoStartScroll()
             }
         }
@@ -529,7 +528,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         val x = event?.x?.toInt() ?: 0
         val id = v?.id ?: 0
         if (id == R.id.ListView) {
-            stopAutoStartScroll()
             when (event?.action ?: MotionEvent.ACTION_CANCEL) {
                 MotionEvent.ACTION_DOWN -> mActionDown = true
                 MotionEvent.ACTION_UP -> mActionDown = false
@@ -949,6 +947,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
             autoScrollJob?.cancel()
+            stopAutoStartScroll()
             if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
@@ -960,45 +959,54 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     private fun startAutoScroll() {
         if (diffScroll != 0) {
-            if (autoScrollJob?.isActive != true) {
-                val prefEditor = k.edit()
-                prefEditor.putBoolean("autoscroll", true)
-                prefEditor.apply()
-                binding.actionMinus.visibility = View.VISIBLE
-                binding.actionPlus.visibility = View.VISIBLE
-                val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-                binding.actionMinus.animation = animation
-                binding.actionPlus.animation = animation
-                resetScreenJob?.cancel()
-                autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                    while (isActive) {
-                        delay(spid.toLong())
-                        if (!mActionDown && !MainActivity.dialogVisable) {
-                            ListViewCompat.scrollListBy(binding.ListView, 2)
-                        }
-                    }
-                }
-                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            }
+            spid = k.getInt("autoscrollSpid", 60)
+            binding.actionMinus.visibility = View.VISIBLE
+            binding.actionPlus.visibility = View.VISIBLE
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+            binding.actionMinus.animation = animation
+            binding.actionPlus.animation = animation
+            resetScreenJob?.cancel()
+            stopAutoStartScroll()
+            autoScroll()
         } else {
             binding.ListView.smoothScrollToPosition(0)
             scrolltosatrt = true
         }
     }
 
-    private fun autoStartScroll() {
+    private fun autoScroll() {
         if (autoScrollJob?.isActive != true) {
-            var autoTime: Long = 10000
-            for (i in 0..15) {
-                if (i == k.getInt("autoscrollAutostartTime", 5)) {
-                    autoTime = (i + 5) * 1000L
-                    break
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            autoscroll = true
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("autoscroll", true)
+            prefEditor.apply()
+            invalidateOptionsMenu()
+            autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                while (isActive) {
+                    delay(spid.toLong())
+                    if (!mActionDown && !MainActivity.dialogVisable) {
+                        ListViewCompat.scrollListBy(binding.ListView, 2)
+                    }
                 }
             }
-            autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                delay(autoTime)
-                startAutoScroll()
-                invalidateOptionsMenu()
+        }
+    }
+
+    private fun autoStartScroll() {
+        if (autoScrollJob?.isActive != true) {
+            val autoTime = (230 - spid) / 10
+            if (autoStartScrollJob?.isActive != true) {
+                autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(1000L)
+                    spid = 230
+                    autoScroll()
+                    for (i in 0..9) {
+                        delay(1500L)
+                        spid -= autoTime
+                    }
+                    startAutoScroll()
+                }
             }
         }
     }
@@ -1100,9 +1108,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         super.onResume()
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
-        spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
-            startAutoScroll()
+            autoStartScroll()
         }
         bindingprogress.progress.visibility = View.GONE
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)

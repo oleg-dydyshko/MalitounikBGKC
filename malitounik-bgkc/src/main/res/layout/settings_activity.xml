@@ -117,13 +117,6 @@
                 android:text="@string/autoprag"
                 android:textSize="12sp" />
 
-            <Spinner
-                android:id="@+id/spinnerAutoPrag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp" />
-
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/checkBox7"
                 android:layout_width="match_parent"

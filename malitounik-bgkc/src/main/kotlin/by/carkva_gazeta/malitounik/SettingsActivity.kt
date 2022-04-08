@@ -28,7 +28,6 @@ import kotlinx.coroutines.*
 import java.io.File
 import java.text.DecimalFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
     private lateinit var k: SharedPreferences
@@ -734,21 +733,6 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
 
             override fun onNothingSelected(adapterView: AdapterView<*>?) {}
         }
-        val autoPrag = ArrayList<String>()
-        for (i in 0..15) {
-            autoPrag.add(getString(R.string.autoprag_time, i + 5))
-        }
-        binding.spinnerAutoPrag.adapter = AutoPragortkaAdapter(this, autoPrag)
-        binding.spinnerAutoPrag.setSelection(k.getInt("autoscrollAutostartTime", 5))
-        binding.spinnerAutoPrag.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                prefEditor.putInt("autoscrollAutostartTime", p2)
-                prefEditor.apply()
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-            }
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             binding.vibro.visibility = View.GONE
             binding.guk.visibility = View.GONE
@@ -948,8 +932,6 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         binding.checkBox6.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (autoscrollAutostart) {
             binding.checkBox6.isChecked = true
-        } else {
-            binding.spinnerAutoPrag.visibility = View.GONE
         }
         val scrinOn = k.getBoolean("scrinOn", false)
         if (dzenNoch) binding.checkBox7.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -1033,7 +1015,6 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             binding.vibro.isChecked = true
             binding.guk.isChecked = true
             binding.spinnerTime.setSelection(2)
-            binding.spinnerAutoPrag.setSelection(5)
             binding.pkc.isChecked = false
             binding.prav.isChecked = false
             binding.dzair.isChecked = false
@@ -1132,11 +1113,6 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         }
         binding.checkBox6.setOnCheckedChangeListener { _, isChecked: Boolean ->
             prefEditor.putBoolean("autoscrollAutostart", isChecked)
-            if (isChecked) {
-                binding.spinnerAutoPrag.visibility = View.VISIBLE
-            } else {
-                binding.spinnerAutoPrag.visibility = View.GONE
-            }
             prefEditor.apply()
         }
         binding.checkBox7.setOnCheckedChangeListener { _, isChecked: Boolean ->
@@ -1356,45 +1332,6 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
             return rootView
         }
-
-    }
-
-    private class AutoPragortkaAdapter(activity: Activity, private val dataTimes: ArrayList<String>) : ArrayAdapter<String>(activity, R.layout.simple_list_item_1, dataTimes) {
-        private val k: SharedPreferences = activity.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        private val dzenNoch = k.getBoolean("dzen_noch", false)
-        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val v = super.getDropDownView(position, convertView, parent)
-            val textView = v as TextView
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-            textView.text = dataTimes[position]
-            if (dzenNoch) textView.setBackgroundResource(R.drawable.selector_dark)
-            else textView.setBackgroundResource(R.drawable.selector_default)
-            return v
-        }
-
-        override fun getCount(): Int {
-            return dataTimes.size
-        }
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val rootView: View
-            val viewHolder: ViewHolder
-            if (convertView == null) {
-                val binding = SimpleListItem1Binding.inflate(LayoutInflater.from(context), parent, false)
-                rootView = binding.root
-                viewHolder = ViewHolder(binding.text1)
-                rootView.tag = viewHolder
-            } else {
-                rootView = convertView
-                viewHolder = rootView.tag as ViewHolder
-            }
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-            viewHolder.text.text = dataTimes[position]
-            if (dzenNoch) viewHolder.text.setBackgroundResource(R.drawable.selector_dark)
-            else viewHolder.text.setBackgroundResource(R.drawable.selector_default)
-            return rootView
-        }
-
     }
 
     private class ViewHolder(var text: TextView)

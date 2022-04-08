@@ -71,7 +71,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
     private var diffScroll = -1
     private var titleTwo = ""
     private var firstTextPosition = ""
-    private var onRestore = false
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -96,11 +95,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             change = savedInstanceState.getBoolean("change")
-        } else {
-            if (k.getBoolean("autoscrollAutostart", false)) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                autoStartScroll()
-            }
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
@@ -117,7 +111,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
             }
 
             override fun onTouch(action: Boolean) {
-                stopAutoStartScroll()
                 mActionDown = action
             }
         })
@@ -131,7 +124,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
         autoscroll = k.getBoolean("autoscroll", false)
         setChtenia(savedInstanceState)
         bindingprogress.fontSizePlus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
                 bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
@@ -145,7 +138,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
             startProcent(3000)
         }
         bindingprogress.fontSizeMinus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN)  bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.min_font)
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.min_font)
             if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
                 fontBiblia -= 4
                 bindingprogress.progressText.text = getString(by.carkva_gazeta.malitounik.R.string.get_font, fontBiblia.toInt())
@@ -852,7 +845,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                 }
             }
             if (savedInstanceState != null) {
-                onRestore = true
                 binding.textView.post {
                     val textline = savedInstanceState.getString("textLine", "")
                     if (textline != "") {
@@ -861,13 +853,10 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                         val y = binding.textView.layout.getLineTop(line)
                         binding.InteractiveScroll.scrollY = y
                     }
-                    if (autoscroll) {
-                        startAutoScroll()
-                    }
                 }
             } else {
-                if (autoscroll) {
-                    startAutoScroll()
+                if (k.getBoolean("autoscrollAutostart", false)) {
+                    autoStartScroll()
                 }
             }
         } catch (t: Throwable) {
@@ -883,17 +872,18 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
 
     private fun autoStartScroll() {
         if (autoScrollJob?.isActive != true) {
-            var autoTime: Long = 10000
-            for (i in 0..15) {
-                if (i == k.getInt("autoscrollAutostartTime", 5)) {
-                    autoTime = (i + 5) * 1000L
-                    break
+            val autoTime = (230 - spid) / 10
+            if (autoStartScrollJob?.isActive != true) {
+                autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(1000L)
+                    spid = 230
+                    autoScroll()
+                    for (i in 0..9) {
+                        delay(1500L)
+                        spid -= autoTime
+                    }
+                    startAutoScroll()
                 }
-            }
-            autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                delay(autoTime)
-                startAutoScroll()
-                invalidateOptionsMenu()
             }
         }
     }
@@ -937,37 +927,43 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
 
     private fun startAutoScroll() {
         if (diffScroll != 0) {
-            if (autoScrollJob?.isActive != true) {
-                val prefEditor = k.edit()
-                prefEditor.putBoolean("autoscroll", true)
-                prefEditor.apply()
-                binding.actionMinus.visibility = View.VISIBLE
-                binding.actionPlus.visibility = View.VISIBLE
-                val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-                binding.actionMinus.animation = animation
-                binding.actionPlus.animation = animation
-                resetScreenJob?.cancel()
-                binding.textView.clearFocus()
-                binding.textView.setTextIsSelectable(false)
-                if (autoScrollJob?.isActive != true) {
-                    autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                        while (isActive) {
-                            delay(spid.toLong())
-                            if (!mActionDown && !MainActivity.dialogVisable) {
-                                binding.InteractiveScroll.smoothScrollBy(0, 2)
-                            }
-                        }
-                    }
-                }
-                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            }
+            spid = k.getInt("autoscrollSpid", 60)
+            binding.actionMinus.visibility = View.VISIBLE
+            binding.actionPlus.visibility = View.VISIBLE
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+            binding.actionMinus.animation = animation
+            binding.actionPlus.animation = animation
+            resetScreenJob?.cancel()
+            stopAutoStartScroll()
+            autoScroll()
         } else {
             val duration: Long = 1000
-            ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY",  0).setDuration(duration).start()
+            ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", 0).setDuration(duration).start()
             binding.InteractiveScroll.postDelayed({
                 startAutoScroll()
                 invalidateOptionsMenu()
             }, duration)
+        }
+    }
+
+    private fun autoScroll() {
+        if (autoScrollJob?.isActive != true) {
+            binding.textView.clearFocus()
+            binding.textView.setTextIsSelectable(false)
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            autoscroll = true
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("autoscroll", true)
+            prefEditor.apply()
+            invalidateOptionsMenu()
+            autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                while (isActive) {
+                    delay(spid.toLong())
+                    if (!mActionDown && !MainActivity.dialogVisable) {
+                        binding.InteractiveScroll.smoothScrollBy(0, 2)
+                    }
+                }
+            }
         }
     }
 
@@ -1040,8 +1036,8 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
         setTollbarTheme()
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
-        if (autoscroll && !onRestore) {
-            startAutoScroll()
+        if (autoscroll) {
+            autoStartScroll()
         }
         spid = k.getInt("autoscrollSpid", 60)
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)

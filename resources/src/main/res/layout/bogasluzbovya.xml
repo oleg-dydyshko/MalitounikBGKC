@@ -146,6 +146,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
+    <ImageView
+        android:id="@+id/action_fullscreen"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/selector_red_maran_ata"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/find"
+        app:layout_constraintEnd_toStartOf="@+id/action_minus"
+        app:srcCompat="@drawable/full_screen" />
+
     <TextView
         android:id="@+id/action_minus"
         android:layout_width="40dp"

@@ -16,6 +16,7 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -24,8 +25,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
 import androidx.viewpager2.widget.ViewPager2
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.DialogBrightness
+import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.AkafistActivityPasliaPrichBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -191,6 +195,10 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             }
             startProcent()
         }
+        binding.actionFullscreen.setOnClickListener {
+            fullscreenPage = false
+            show()
+        }
     }
 
     private fun setTollbarTheme() {
@@ -273,10 +281,6 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            if (k.getBoolean("FullscreenHelp", true)) {
-                val dialogHelpFullscreen = DialogHelpFullscreen()
-                dialogHelpFullscreen.show(supportFragmentManager, "FullscreenHelp")
-            }
             fullscreenPage = true
             hide()
         }
@@ -384,6 +388,9 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         CoroutineScope(Dispatchers.Main).launch {
             mHidePart2Runnable()
         }
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+        binding.actionFullscreen.visibility = View.VISIBLE
+        binding.actionFullscreen.animation = animation
     }
 
     @Suppress("DEPRECATION")
@@ -398,6 +405,9 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         CoroutineScope(Dispatchers.Main).launch {
             mShowPart2Runnable()
         }
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        binding.actionFullscreen.visibility = View.GONE
+        binding.actionFullscreen.animation = animation
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

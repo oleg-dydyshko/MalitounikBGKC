@@ -248,6 +248,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 prefEditors.apply()
             }
         }
+        binding.actionFullscreen.setOnClickListener {
+            fullscreenPage = false
+            show()
+        }
         binding.constraint.setOnTouchListener(this)
         if (dzenNoch) {
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
@@ -1148,7 +1152,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
-        stopAutoStartScroll()
         if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
             MainActivity.dialogVisable = true
         }
@@ -1223,10 +1226,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            if (k.getBoolean("FullscreenHelp", true)) {
-                val dialogHelpFullscreen = DialogHelpFullscreen()
-                dialogHelpFullscreen.show(supportFragmentManager, "FullscreenHelp")
-            }
             fullscreenPage = true
             hide()
         }
@@ -1240,6 +1239,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         CoroutineScope(Dispatchers.Main).launch {
             mHidePart2Runnable()
         }
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+        binding.actionFullscreen.visibility = View.VISIBLE
+        binding.actionFullscreen.animation = animation
     }
 
     @Suppress("DEPRECATION")
@@ -1254,6 +1256,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         CoroutineScope(Dispatchers.Main).launch {
             mShowPart2Runnable()
         }
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        binding.actionFullscreen.visibility = View.GONE
+        binding.actionFullscreen.animation = animation
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

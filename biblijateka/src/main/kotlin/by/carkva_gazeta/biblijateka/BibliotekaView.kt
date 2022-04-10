@@ -13,7 +13,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.SystemClock
@@ -67,26 +66,8 @@ import javax.xml.parsers.ParserConfigurationException
 
 class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
 
-    @SuppressLint("InlinedApi")
-    @Suppress("DEPRECATION")
-    private fun mHidePart2Runnable() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(false)
-            val controller = window.insetsController
-            controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        } else {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-        }
-    }
-
-    private fun mShowPart2Runnable() {
-        supportActionBar?.show()
-    }
-
     private lateinit var pdfView: PDFView
     private var mLastClickTime: Long = 0
-    private var fullscreenPage = false
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var filePath = ""
@@ -796,7 +777,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         var savedInstance = -1
         if (savedInstanceState != null) {
-            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             defaultPage = savedInstanceState.getInt("page")
             filePath = savedInstanceState.getString("filePath") ?: ""
             fileName = savedInstanceState.getString("fileName") ?: ""
@@ -832,7 +812,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
             if (idSelect != R.id.label6) onClick(findViewById(idSelect))
             invalidateOptionsMenu()
-            if (fullscreenPage) hide()
         } else {
             intent.data?.let { uri ->
                 if (uri.toString().contains("root")) {
@@ -1335,7 +1314,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         bindingcontent.swipeRefreshLayout.isEnabled = bindingcontent.swipeRefreshLayout.visibility == View.VISIBLE && (idSelect == R.id.label2 || idSelect == R.id.label3 || idSelect == R.id.label4 || idSelect == R.id.label5)
         itemAuto.isVisible = false
         if (bindingcontent.swipeRefreshLayout.visibility == View.GONE) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).isVisible = true
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_set_page).isVisible = true
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_bright).isVisible = true
             if (pdfView.visibility == View.VISIBLE) {
@@ -1374,7 +1352,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
         } else {
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_title).isVisible = false
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_fullscreen).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_set_page).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_bright).isVisible = false
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_inversion).isVisible = false
@@ -1478,14 +1455,6 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             }
             pdfView.loadPages()
         }
-        if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            if (k.getBoolean("FullscreenHelp", true)) {
-                val dialogHelpFullscreen = DialogHelpFullscreen()
-                dialogHelpFullscreen.show(supportFragmentManager, "FullscreenHelp")
-            }
-            fullscreenPage = true
-            hide()
-        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_bright) {
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
@@ -1532,10 +1501,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
             prefEditor.putInt(fileName, defaultPage)
         }
         prefEditor.apply()
-        if (fullscreenPage) {
-            fullscreenPage = false
-            show()
-        } else if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             super.onBackPressed()
         } else if (bindingcontent.swipeRefreshLayout.visibility == View.GONE) {
             invalidateOptionsMenu()
@@ -1791,33 +1757,11 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    private fun hide() {
-        supportActionBar?.hide()
-        CoroutineScope(Dispatchers.Main).launch {
-            mHidePart2Runnable()
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun show() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(true)
-            val controller = window.insetsController
-            controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-        } else {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        }
-        CoroutineScope(Dispatchers.Main).launch {
-            mShowPart2Runnable()
-        }
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         val prefEditor: SharedPreferences.Editor = k.edit()
         if (pdfView.visibility == View.VISIBLE) prefEditor.putInt(fileName, pdfView.currentPage) else prefEditor.putInt(fileName, defaultPage)
         prefEditor.apply()
-        outState.putBoolean("fullscreen", fullscreenPage)
         when {
             pdfView.visibility == View.VISIBLE -> {
                 outState.putInt("page", pdfView.currentPage)

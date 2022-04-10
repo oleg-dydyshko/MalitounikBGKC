@@ -91,7 +91,7 @@ class DialogCalindarGrid : DialogFragment() {
         }
         if (id == 6) {
             if (imageWhite) return R.drawable.carkva_white
-            if (imageSecondary) return 0
+            if (imageSecondary) return R.drawable.carkva_secondary
             return R.drawable.carkva_black
         }
         if (id == 7) {
@@ -262,6 +262,9 @@ class DialogCalindarGrid : DialogFragment() {
                 } else if (mItemList[position] == 2 || mItemList[position] == 3 || mItemList[position] == 5 || mItemList[position] == 9) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                } else if (mItemList[position] == 6 && !(slugba.checkLiturgia(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())))) {
+                    holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
+                    holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                 } else {
                     if (post == 3 || post == 4) {
                         holder.mImage.setImageResource(getImage(mItemList[position], imageWhite = true))
@@ -370,12 +373,16 @@ class DialogCalindarGrid : DialogFragment() {
                                         val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton1, tonNaidzelny, ton_na_sviaty = false, ton_na_viliki_post = false, resurs = resours, sviatyaName, checkSviatyia, year)
                                         traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                     } else {
-                                        val intent = Intent()
-                                        intent.setClassName(fragmentActivity, MainActivity.BOGASHLUGBOVYA)
                                         if (ton != 0) {
+                                            val intent = Intent()
+                                            intent.setClassName(fragmentActivity, MainActivity.BOGASHLUGBOVYA)
                                             intent.putExtra("resurs", "ton$ton")
                                             intent.putExtra("title", "Тон $ton")
-                                        } else {
+                                            intent.putExtra("zmena_chastki", true)
+                                            startActivity(intent)
+                                        } else if (denNedzeli != 1) {
+                                            val intent = Intent()
+                                            intent.setClassName(fragmentActivity, MainActivity.BOGASHLUGBOVYA)
                                             intent.putExtra("resurs", "ton${denNedzeli - 1}_budni")
                                             val title = when (denNedzeli - 1) {
                                                 1 -> "ПАНЯДЗЕЛАК\nСлужба сьвятым анёлам"
@@ -386,9 +393,9 @@ class DialogCalindarGrid : DialogFragment() {
                                                 else -> "Субота\nСлужба ўсім сьвятым і памёрлым"
                                             }
                                             intent.putExtra("title", title)
+                                            intent.putExtra("zmena_chastki", true)
+                                            startActivity(intent)
                                         }
-                                        intent.putExtra("zmena_chastki", true)
-                                        startActivity(intent)
                                     }
                                 }
                             }

@@ -87,7 +87,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var firstTextPosition = ""
     private val findListSpans = ArrayList<SpanStr>()
     private var animatopRun = false
-    private var onRestore = false
     private var onFind = false
     private var chechZmena = false
     private var checkLiturgia = 0
@@ -164,6 +163,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["bogashlugbovya17_6"] = R.raw.bogashlugbovya17_6
             resursMap["bogashlugbovya17_7"] = R.raw.bogashlugbovya17_7
             resursMap["bogashlugbovya17_8"] = R.raw.bogashlugbovya17_8
+            resursMap["bogashlugbovya17_9"] = R.raw.bogashlugbovya17_9
             resursMap["zmenyia_chastki_tamash"] = R.raw.zmenyia_chastki_tamash
             resursMap["zmenyia_chastki_miranosicay"] = R.raw.zmenyia_chastki_miranosicay
             resursMap["zmenyia_chastki_samaranki"] = R.raw.zmenyia_chastki_samaranki
@@ -580,7 +580,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         binding.scrollView2.setOnScrollChangedCallback(this)
         binding.constraint.setOnTouchListener(this)
         if (savedInstanceState != null) {
-            onRestore = true
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             editDzenNoch = savedInstanceState.getBoolean("editDzenNoch")
             MainActivity.dialogVisable = false
@@ -679,6 +678,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 prefEditors.putInt("autoscrollSpid", spid)
                 prefEditors.apply()
             }
+        }
+        binding.actionFullscreen.setOnClickListener {
+            fullscreenPage = false
+            show()
         }
         binding.scrollView2.setOnBottomReachedListener(object : InteractiveScrollView.OnBottomReachedListener {
             override fun onBottomReached() {
@@ -1121,13 +1124,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 if (!autoscroll && savedInstanceState.getBoolean("seach")) {
                     findAllAsanc()
                 }
-                if (autoscroll) {
-                    startAutoScroll()
-                }
             }
         } else {
             if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 autoStartScroll()
             }
             if (resurs.contains("viachernia_ton")) {
@@ -1144,7 +1143,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 binding.scrollView2.post {
                     binding.scrollView2.smoothScrollBy(0, positionY)
                     if (autoscroll) {
-                        startAutoScroll()
+                        autoStartScroll()
                     }
                 }
             }
@@ -1215,17 +1214,18 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     private fun autoStartScroll() {
         if (autoScrollJob?.isActive != true) {
-            var autoTime: Long = 10000
-            for (i in 0..15) {
-                if (i == k.getInt("autoscrollAutostartTime", 5)) {
-                    autoTime = (i + 5) * 1000L
-                    break
+            val autoTime = (230 - spid) / 10
+            if (autoStartScrollJob?.isActive != true) {
+                autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(1000L)
+                    spid = 230
+                    autoScroll()
+                    for (i in 0..9) {
+                        delay(1500L)
+                        spid -= autoTime
+                    }
+                    startAutoScroll()
                 }
-            }
-            autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                delay(autoTime)
-                startAutoScroll()
-                invalidateOptionsMenu()
             }
         }
     }
@@ -1259,6 +1259,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             binding.textView.setTextIsSelectable(true)
             binding.textView.movementMethod = setLinkMovementMethodCheck()
             autoScrollJob?.cancel()
+            stopAutoStartScroll()
             if (onFind) {
                 onFind = false
                 findAllAsanc(false)
@@ -1275,50 +1276,55 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     private fun startAutoScroll() {
         if (diffScroll !in 0..1) {
-            if (autoScrollJob?.isActive != true) {
-                val prefEditors = k.edit()
-                prefEditors.putBoolean("autoscroll", true)
-                prefEditors.apply()
-                if (binding.find.visibility == View.VISIBLE) {
-                    findRemoveSpan()
-                    onFind = true
-                    binding.find.visibility = View.GONE
-                    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
-                }
-                binding.actionMinus.visibility = View.VISIBLE
-                binding.actionPlus.visibility = View.VISIBLE
-                val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-                binding.actionMinus.animation = animation
-                binding.actionPlus.animation = animation
-                binding.textView.clearFocus()
-                binding.textView.setTextIsSelectable(false)
-                binding.textView.movementMethod = setLinkMovementMethodCheck()
-                mActionDown = false
-                resetScreenJob?.cancel()
-                if (autoScrollJob?.isActive != true) {
-                    autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                        while (isActive) {
-                            if (binding.textView.bottom <= binding.scrollView2.height) {
-                                stopAutoScroll()
-                                invalidateOptionsMenu()
-                            }
-                            delay(spid.toLong())
-                            if (!mActionDown && !MainActivity.dialogVisable) {
-                                binding.scrollView2.smoothScrollBy(0, 2)
-                            }
-                        }
-                    }
-                }
-                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            }
+            binding.actionMinus.visibility = View.VISIBLE
+            binding.actionPlus.visibility = View.VISIBLE
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+            binding.actionMinus.animation = animation
+            binding.actionPlus.animation = animation
+            mActionDown = false
+            resetScreenJob?.cancel()
+            stopAutoStartScroll()
+            autoScroll()
         } else {
             val duration: Long = 1000
             ObjectAnimator.ofInt(binding.scrollView2, "scrollY", 0).setDuration(duration).start()
             binding.scrollView2.postDelayed({
-                startAutoScroll()
+                autoStartScroll()
                 invalidateOptionsMenu()
             }, duration)
+        }
+    }
+
+    private fun autoScroll() {
+        if (autoScrollJob?.isActive != true) {
+            if (binding.find.visibility == View.VISIBLE) {
+                findRemoveSpan()
+                onFind = true
+                binding.find.visibility = View.GONE
+                val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
+            }
+            binding.textView.clearFocus()
+            binding.textView.setTextIsSelectable(false)
+            binding.textView.movementMethod = setLinkMovementMethodCheck()
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            autoscroll = true
+            val prefEditor = k.edit()
+            prefEditor.putBoolean("autoscroll", true)
+            prefEditor.apply()
+            invalidateOptionsMenu()
+            autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                while (isActive) {
+                    if (binding.textView.bottom <= binding.scrollView2.height) {
+                        stopAutoScroll()
+                        invalidateOptionsMenu()
+                    }
+                    delay(spid.toLong())
+                    if (!mActionDown && !MainActivity.dialogVisable) {
+                        binding.scrollView2.smoothScrollBy(0, 2)
+                    }
+                }
+            }
         }
     }
 
@@ -1418,7 +1424,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
-        stopAutoStartScroll()
         if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
             MainActivity.dialogVisable = true
         }
@@ -1520,10 +1525,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            if (k.getBoolean("FullscreenHelp", true)) {
-                val dialogHelpFullscreen = DialogHelpFullscreen()
-                dialogHelpFullscreen.show(supportFragmentManager, "FullscreenHelp")
-            }
             fullscreenPage = true
             hide()
         }
@@ -1598,10 +1599,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         setTollbarTheme()
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
-        if (autoscroll && !onRestore) {
-            startAutoScroll()
-        }
         spid = k.getInt("autoscrollSpid", 60)
+        if (autoscroll) {
+            autoStartScroll()
+        }
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
@@ -1611,6 +1612,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         CoroutineScope(Dispatchers.Main).launch {
             mHidePart2Runnable()
         }
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+        binding.actionFullscreen.visibility = View.VISIBLE
+        binding.actionFullscreen.animation = animation
     }
 
     @Suppress("DEPRECATION")
@@ -1625,6 +1629,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         CoroutineScope(Dispatchers.Main).launch {
             mShowPart2Runnable()
         }
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        binding.actionFullscreen.visibility = View.GONE
+        binding.actionFullscreen.animation = animation
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

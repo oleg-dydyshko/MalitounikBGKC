@@ -203,6 +203,10 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                 prefEditors.apply()
             }
         }
+        binding.actionFullscreen.setOnClickListener {
+            fullscreenPage = false
+            show()
+        }
         binding.InteractiveScroll.setOnScrollChangedCallback(this)
     }
 
@@ -983,7 +987,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
-        stopAutoStartScroll()
         if (featureId == AppCompatDelegate.FEATURE_SUPPORT_ACTION_BAR && autoscroll) {
             MainActivity.dialogVisable = true
         }
@@ -1086,10 +1089,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            if (k.getBoolean("FullscreenHelp", true)) {
-                val dialogHelpFullscreen = DialogHelpFullscreen()
-                dialogHelpFullscreen.show(supportFragmentManager, "FullscreenHelp")
-            }
             fullscreenPage = true
             hide()
         }
@@ -1103,6 +1102,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
         CoroutineScope(Dispatchers.Main).launch {
             mHidePart2Runnable()
         }
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+        binding.actionFullscreen.visibility = View.VISIBLE
+        binding.actionFullscreen.animation = animation
     }
 
     @Suppress("DEPRECATION")
@@ -1117,6 +1119,9 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
         CoroutineScope(Dispatchers.Main).launch {
             mShowPart2Runnable()
         }
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        binding.actionFullscreen.visibility = View.GONE
+        binding.actionFullscreen.animation = animation
     }
 
     override fun onScroll(t: Int, oldt: Int) {

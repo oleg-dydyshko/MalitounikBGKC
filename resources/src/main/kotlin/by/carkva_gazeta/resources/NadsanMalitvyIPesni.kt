@@ -11,9 +11,13 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
-import by.carkva_gazeta.malitounik.*
+import by.carkva_gazeta.malitounik.DialogBrightness
+import by.carkva_gazeta.malitounik.DialogFontSize
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
+import by.carkva_gazeta.malitounik.MainActivity
+import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.NadsanMalitvyIPesnyBinding
 import kotlinx.coroutines.*
 import java.io.BufferedReader
@@ -101,6 +105,10 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.malitvyIPesny.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+        binding.actionFullscreen.setOnClickListener {
+            fullscreenPage = false
+            show()
+        }
         setTollbarTheme()
     }
 
@@ -200,10 +208,6 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            if (k.getBoolean("FullscreenHelp", true)) {
-                val dialogHelpFullscreen = DialogHelpFullscreen()
-                dialogHelpFullscreen.show(supportFragmentManager, "FullscreenHelp")
-            }
             fullscreenPage = true
             hide()
         }
@@ -237,6 +241,9 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         CoroutineScope(Dispatchers.Main).launch {
             mHidePart2Runnable()
         }
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+        binding.actionFullscreen.visibility = View.VISIBLE
+        binding.actionFullscreen.animation = animation
     }
 
     @Suppress("DEPRECATION")
@@ -251,6 +258,9 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         CoroutineScope(Dispatchers.Main).launch {
             mShowPart2Runnable()
         }
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        binding.actionFullscreen.visibility = View.GONE
+        binding.actionFullscreen.animation = animation
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

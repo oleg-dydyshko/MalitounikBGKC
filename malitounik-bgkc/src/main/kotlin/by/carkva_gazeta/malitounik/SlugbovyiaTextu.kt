@@ -7,7 +7,6 @@ import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
-import kotlin.collections.ArrayList
 
 class SlugbovyiaTextu {
     private val datMinVP = ArrayList<SlugbovyiaTextuData>()
@@ -77,7 +76,8 @@ class SlugbovyiaTextu {
         datMinVP.add(SlugbovyiaTextuData(-10, "Чацьвер 6-га тыдня посту ўвечары", "bogashlugbovya17_5", pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-9, "Пятніца 6-га тыдня посту ўвечары", "bogashlugbovya17_6", pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-8, "Субота Лазара Ютрань", "bogashlugbovya17_7", utran = true, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(-7, "Літургія", "bogashlugbovya17_8", liturgia = true, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-8, "Літургія", "bogashlugbovya17_8", liturgia = true, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-7, "Уваход у Ерусалім Госпада, Бога і Збаўцы нашага Ісуса Хрыста (Вербніца) - Літургія", "bogashlugbovya17_9", liturgia = true, pasxa = true))
 
         datMinVP.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха) - Літургія", "zmenyia_chastki_tamash", liturgia = true, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў - Літургія", "zmenyia_chastki_miranosicay", liturgia = true, pasxa = true))
@@ -170,7 +170,7 @@ class SlugbovyiaTextu {
 
     fun getTydzen6(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
-        for (i in 46..53)
+        for (i in 46..54)
             list.add(datMinVP[i])
         return list
     }

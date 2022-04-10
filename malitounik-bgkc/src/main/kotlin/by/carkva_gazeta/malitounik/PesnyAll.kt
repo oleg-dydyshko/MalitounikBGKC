@@ -17,6 +17,7 @@ import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
@@ -45,8 +46,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     }
 
     private fun mShowPart2Runnable() {
-        val actionBar = supportActionBar
-        actionBar?.show()
+        supportActionBar?.show()
     }
 
     private var fullscreenPage = false
@@ -444,6 +444,10 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             }
             startProcent()
         }
+        binding.actionFullscreen.setOnClickListener {
+            fullscreenPage = false
+            show()
+        }
     }
 
     private fun setTollbarTheme() {
@@ -597,10 +601,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == R.id.action_fullscreen) {
-            if (k.getBoolean("FullscreenHelp", true)) {
-                val dialogHelpFullscreen = DialogHelpFullscreen()
-                dialogHelpFullscreen.show(supportFragmentManager, "FullscreenHelp")
-            }
             fullscreenPage = true
             hide()
         }
@@ -646,6 +646,9 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         CoroutineScope(Dispatchers.Main).launch {
             mHidePart2Runnable()
         }
+        val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
+        binding.actionFullscreen.visibility = View.VISIBLE
+        binding.actionFullscreen.animation = animation
     }
 
     @Suppress("DEPRECATION")
@@ -660,6 +663,9 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         CoroutineScope(Dispatchers.Main).launch {
             mShowPart2Runnable()
         }
+        val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
+        binding.actionFullscreen.visibility = View.GONE
+        binding.actionFullscreen.animation = animation
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

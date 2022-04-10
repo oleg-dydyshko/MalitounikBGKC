@@ -952,7 +952,6 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             noDelite.add("history")
             noDelite.add("Vybranoe")
             noDelite.add("help_")
-            noDelite.add("FullscreenHelp")
             noDelite.add("bible_time")
             noDelite.add("admin")
             for ((key) in k.all) {

@@ -410,7 +410,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 val position = list.firstVisiblePosition
                 maranAtaScrollPosition = position
                 if (position == 0 && scrolltosatrt) {
-                    startAutoScroll()
+                    autoStartScroll()
                     scrolltosatrt = false
                     invalidateOptionsMenu()
                 }
@@ -428,10 +428,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 }
                 val scroll = if (mPosition == position && mOffset == offset) {
                     0
-                } else if (mPosition > position && mOffset > offset) {
-                    1
-                } else if (mPosition == position && mOffset < offset) {
-                    1
                 } else {
                     1
                 }
@@ -451,7 +447,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                             binding.subtitleToolbar.text = tollBarText
                         }
                     }
-                    if (!nazva.contains(tollBarText) && scroll != 0) {
+                    if (!nazva.contains(tollBarText) && scroll == 1) {
                         if (nazva.contains("nazva+++")) {
                             val t1 = nazva.indexOf("nazva+++")
                             val t2 = nazva.indexOf("-->", t1 + 8)

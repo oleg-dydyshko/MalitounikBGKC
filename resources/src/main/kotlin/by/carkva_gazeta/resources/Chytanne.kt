@@ -915,6 +915,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
             autoScrollJob?.cancel()
+            stopAutoStartScroll()
             binding.textView.setTextIsSelectable(true)
             if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
@@ -940,7 +941,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
             val duration: Long = 1000
             ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", 0).setDuration(duration).start()
             binding.InteractiveScroll.postDelayed({
-                startAutoScroll()
+                autoStartScroll()
                 invalidateOptionsMenu()
             }, duration)
         }

@@ -612,7 +612,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             val duration: Long = 1000
             ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", 0).setDuration(duration).start()
             binding.InteractiveScroll.postDelayed({
-                startAutoScroll()
+                autoStartScroll()
                 invalidateOptionsMenu()
             }, duration)
         }

@@ -163,7 +163,7 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/find"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/action_minus"
         app:srcCompat="@drawable/full_screen" />
 

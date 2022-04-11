@@ -83,11 +83,11 @@ class SlugbovyiaTextu {
         datMinVP.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў - Літургія", "zmenyia_chastki_miranosicay", liturgia = true, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(28, "Нядзеля Самаранкі - Літургія", "zmenyia_chastki_samaranki", liturgia = true, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(35, "Нядзеля Сьлепанароджанага - Літургія", "zmenyia_chastki_slepanarodz", liturgia = true, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(98, "Айцы першых 6-ці Ўсяленскіх сабораў", "l_ajcy_6_saborau", liturgia = true, pasxa = true))
 
         datMinSH.add(SlugbovyiaTextuData(312, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "ju_8_11", utran = true))
         datMinSH.add(SlugbovyiaTextuData(312, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "v_8_11"))
         datMinSH.add(SlugbovyiaTextuData(312, "Сабор сьвятога арханёла Міхаіла і ўсіх анёльскіх сілаў", "l_8_11", liturgia = true))
-        datMinSH.add(SlugbovyiaTextuData(1000, "Айцы першых 6-ці Ўсяленскіх сабораў", "l_ajcy_6_saborau", liturgia = true))
         datMinSH.add(SlugbovyiaTextuData(316, "Сьвятога сьвятамучаніка Язафата, архібіскупа Полацкага", "ju_12_11", utran = true))
         datMinSH.add(SlugbovyiaTextuData(316, "Сьвятога сьвятамучаніка Язафата, архібіскупа Полацкага", "v_12_11"))
         datMinSH.add(SlugbovyiaTextuData(316, "Сьвятога сьвятамучаніка Язафата, архібіскупа Полацкага", "l_12_11", liturgia = true))
@@ -362,17 +362,6 @@ class SlugbovyiaTextu {
             }
         }
         datMinSH.forEach {
-            //Айцоў першых 6-ці Ўсяленскіх сабораў
-            if (it.day == 1000) {
-                val pasha = Calendar.getInstance()
-                for (dny in 13..19) {
-                    pasha.set(pasha[Calendar.YEAR], Calendar.JULY, dny)
-                    val wik = pasha.get(Calendar.DAY_OF_WEEK)
-                    if (wik == Calendar.SUNDAY && pasha.get(Calendar.DAY_OF_YEAR) == dayOfYear.toInt()) {
-                        if (it.liturgia) return true
-                    }
-                }
-            }
             if (dayOfYear.toInt() == it.day && pasxa == it.pasxa) {
                 if (it.liturgia) return true
             }

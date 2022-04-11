@@ -250,7 +250,7 @@ class DialogCalindarGrid : DialogFragment() {
             holder.mText.text = text
             holder.itemView.tag = mItemList[position]
             activity?.let {
-                if (mItemList[position] == 4 && !(slugba.checkUtran(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) || denNedzeli == 1)) {
+                if (mItemList[position] == 4 && !(slugba.checkUtran(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) || denNedzeli == Calendar.SUNDAY)) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                 } else if (mItemList[position] == 7 && issetSvityia) {
@@ -262,7 +262,7 @@ class DialogCalindarGrid : DialogFragment() {
                 } else if (mItemList[position] == 2 || mItemList[position] == 3 || mItemList[position] == 5 || mItemList[position] == 9) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                } else if (mItemList[position] == 6 && !(slugba.checkLiturgia(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())))) {
+                } else if (mItemList[position] == 6 && !(slugba.checkLiturgia(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) || (ton == 0 && denNedzeli != Calendar.SUNDAY) || ton != 0)) {
                     holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
                     holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
                 } else {

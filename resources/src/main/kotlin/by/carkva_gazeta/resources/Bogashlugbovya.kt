@@ -333,6 +333,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["kanon_a_kryckaha"] = R.raw.kanon_a_kryckaha
             resursMap["lit_ran_asv_dar"] = R.raw.lit_ran_asv_dar
             resursMap["viaczernia_bierascie"] = R.raw.viaczernia_bierascie
+            resursMap["jutran_vial_piatn_12jevanhellau"] = R.raw.jutran_vial_piatn_12jevanhellau
+            resursMap["vialikaja_piatnica_mal_paviaczernica"] = R.raw.vialikaja_piatnica_mal_paviaczernica
+            resursMap["vialikaja_piatnica_viaczernia"] = R.raw.vialikaja_piatnica_viaczernia
+            resursMap["vialiki_czacvier"] = R.raw.vialiki_czacvier
+            resursMap["vialikaja_sierada"] = R.raw.vialikaja_sierada
+            resursMap["vialiki_autorak"] = R.raw.vialiki_autorak
+            resursMap["vialiki_paniadzielak"] = R.raw.vialiki_paniadzielak
             resursMap["pesny_prasl_70"] = PesnyAll.resursMap["pesny_prasl_70"]
         }
 

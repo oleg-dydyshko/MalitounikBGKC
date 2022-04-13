@@ -18,6 +18,7 @@
         android:name=".Malitounik"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
+        android:dataExtractionRules="@xml/backup_descriptor"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:installLocation="internalOnly"
@@ -26,7 +27,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:targetApi="m">
+        tools:targetApi="m"
+        tools:ignore="UnusedAttribute">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -331,6 +333,14 @@
         <activity
             android:name=".SubMenuBogashlugbovyaVialikiPost"
             android:label="@string/slugby_vialikaga_postu"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
+        </activity>
+        <activity
+            android:name=".SubMenuBogashlugbovyaVialikiTydzen"
+            android:label="@string/slugby_vialikaga_tydna"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

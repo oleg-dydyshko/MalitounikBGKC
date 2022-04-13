@@ -79,6 +79,14 @@ class SlugbovyiaTextu {
         datMinVP.add(SlugbovyiaTextuData(-8, "Літургія", "bogashlugbovya17_8", liturgia = true, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-7, "Уваход у Ерусалім Госпада, Бога і Збаўцы нашага Ісуса Хрыста (Вербніца) - Літургія", "bogashlugbovya17_9", liturgia = true, pasxa = true))
 
+        datMinVP.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak", utran = true, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-5, "Вялікі аўторак", "vialiki_autorak", utran = true, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-4, "Вялікая серада", "vialikaja_sierada", utran = true, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-3, "Вялікі чацьвер", "vialiki_czacvier", utran = true, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-2, "Ютрань Вялікай пятніцы", "jutran_vial_piatn_12jevanhellau", utran = true, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-2, "Вялікая пятніца. Малая павячэрніца", "vialikaja_piatnica_mal_paviaczernica", paviachernica = true, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_viaczernia", pasxa = true))
+
         datMinVP.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха) - Літургія", "zmenyia_chastki_tamash", liturgia = true, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў - Літургія", "zmenyia_chastki_miranosicay", liturgia = true, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(28, "Нядзеля Самаранкі - Літургія", "zmenyia_chastki_samaranki", liturgia = true, pasxa = true))
@@ -135,43 +143,43 @@ class SlugbovyiaTextu {
 
     fun getTydzen1(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
-        for (i in 0..8)
-            list.add(datMinVP[i])
+        for (i in 0..8) list.add(datMinVP[i])
         return list
     }
 
     fun getTydzen2(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
-        for (i in 9..16)
-            list.add(datMinVP[i])
+        for (i in 9..16) list.add(datMinVP[i])
         return list
     }
 
     fun getTydzen3(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
-        for (i in 17..25)
-            list.add(datMinVP[i])
+        for (i in 17..25) list.add(datMinVP[i])
         return list
     }
 
     fun getTydzen4(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
-        for (i in 26..34)
-            list.add(datMinVP[i])
+        for (i in 26..34) list.add(datMinVP[i])
         return list
     }
 
     fun getTydzen5(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
-        for (i in 35..45)
-            list.add(datMinVP[i])
+        for (i in 35..45) list.add(datMinVP[i])
         return list
     }
 
     fun getTydzen6(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
-        for (i in 46..54)
-            list.add(datMinVP[i])
+        for (i in 46..54) list.add(datMinVP[i])
+        return list
+    }
+
+    fun getVilikiTydzen(): ArrayList<SlugbovyiaTextuData> {
+        val list = ArrayList<SlugbovyiaTextuData>()
+        for (i in 55..61) list.add(datMinVP[i])
         return list
     }
 

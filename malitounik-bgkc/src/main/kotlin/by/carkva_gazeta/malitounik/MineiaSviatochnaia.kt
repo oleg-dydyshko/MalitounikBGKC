@@ -8,13 +8,15 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
 import android.view.*
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.databinding.*
+import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import kotlinx.coroutines.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MineiaSviatochnaia : AppCompatActivity() {
@@ -69,11 +71,11 @@ class MineiaSviatochnaia : AppCompatActivity() {
             }
             val id = c.timeInMillis
             val count = ArrayList<String>()
-            val abednica = slugba.getResource(day, mineiaList[i].pasxa, abednica = true, isSviaty = true)
-            val vialikiaGadziny = slugba.getResource(day, mineiaList[i].pasxa, vialikiaGadziny = true, isSviaty = true)
-            val utran = slugba.getResource(day, mineiaList[i].pasxa, utran = true, isSviaty = true)
-            val liturgia = slugba.getResource(day, mineiaList[i].pasxa, liturgia = true, isSviaty = true)
-            val viachernia = slugba.getResource(day, mineiaList[i].pasxa, isSviaty = true)
+            val abednica = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABEDNICA, isSviaty = true)
+            val vialikiaGadziny = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALIKIAGADZINY, isSviaty = true)
+            val utran = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.UTRAN, isSviaty = true)
+            val liturgia = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURGIA, isSviaty = true)
+            val viachernia = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACHERNIA, isSviaty = true)
             if (abednica != "0") count.add("1")
             if (vialikiaGadziny != "0") count.add("1")
             if (utran != "0") count.add("1")
@@ -81,10 +83,10 @@ class MineiaSviatochnaia : AppCompatActivity() {
             if (viachernia != "0") count.add("1")
             val slujba = when {
                 count.size > 1 -> ""
-                mineiaList[i].vialikiaGadziny -> " - Вялікія гадзіны"
-                mineiaList[i].abednica -> " - Абедніца"
-                mineiaList[i].utran -> " - Ютрань"
-                mineiaList[i].liturgia -> " - Літургія"
+                mineiaList[i].sluzba == SlugbovyiaTextu.VIALIKIAGADZINY -> " - Вялікія гадзіны"
+                mineiaList[i].sluzba == SlugbovyiaTextu.ABEDNICA -> " - Абедніца"
+                mineiaList[i].sluzba == SlugbovyiaTextu.UTRAN -> " - Ютрань"
+                mineiaList[i].sluzba == SlugbovyiaTextu.LITURGIA -> " - Літургія"
                 else -> " - Вячэрня"
             }
             groups.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title + slujba, mineiaList[i].title, viachernia, utran, liturgia, vialikiaGadziny, abednica))

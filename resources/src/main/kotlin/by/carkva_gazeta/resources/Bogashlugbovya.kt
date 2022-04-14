@@ -340,6 +340,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["vialikaja_sierada"] = R.raw.vialikaja_sierada
             resursMap["vialiki_autorak"] = R.raw.vialiki_autorak
             resursMap["vialiki_paniadzielak"] = R.raw.vialiki_paniadzielak
+            resursMap["mltv_za_pamierlych"] = R.raw.mltv_za_pamierlych
+            resursMap["vialikaja_subota_jutran"] = R.raw.vialikaja_subota_jutran
             resursMap["pesny_prasl_70"] = PesnyAll.resursMap["pesny_prasl_70"]
         }
 
@@ -1475,15 +1477,15 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     intent.putExtra("year", Calendar.getInstance()[Calendar.YEAR])
                 }
                 checkDayOfYear -> {
-                    var resours = slugba.getResource(raznica, slugba.isPasxa(raznica), liturgia = true)
-                    if (resours == "0") resours = slugba.getResource(dayOfYear.toInt(), slugba.isPasxa(dayOfYear.toInt()), liturgia = true)
+                    var resours = slugba.getResource(raznica, slugba.isPasxa(raznica), SlugbovyiaTextu.LITURGIA)
+                    if (resours == "0") resours = slugba.getResource(dayOfYear.toInt(), slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))
                 }
                 else -> {
-                    val resours = if (checkLiturgia == 0) slugba.getResource(raznica, slugba.isPasxa(raznica), liturgia = true)
-                    else slugba.getResource(raznica, slugba.isPasxa(raznica))
+                    val resours = if (checkLiturgia == 0) slugba.getResource(raznica, slugba.isPasxa(raznica), SlugbovyiaTextu.LITURGIA)
+                    else slugba.getResource(raznica, slugba.isPasxa(raznica), SlugbovyiaTextu.VIACHERNIA)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))

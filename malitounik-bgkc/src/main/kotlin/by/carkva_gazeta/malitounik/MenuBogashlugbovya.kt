@@ -1,16 +1,23 @@
 package by.carkva_gazeta.malitounik
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.TextView
 import androidx.fragment.app.ListFragment
+import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 
 class MenuBogashlugbovya : ListFragment() {
     private var mLastClickTime: Long = 0
-    private val data: Array<out String>
-        get() = resources.getStringArray(R.array.bogaslugbovuia)
+    private val data = ArrayList<MenuListData>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +25,28 @@ class MenuBogashlugbovya : ListFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        activity?.let { listAdapter = MenuListAdaprer(it, data) }
+        activity?.let {
+            data.add(MenuListData("Боская Літургія між сьвятымі айца нашага Яна Залатавуснага", "bogashlugbovya1"))
+            data.add(MenuListData("Боская Літургія ў Велікодны перыяд", "bogashlugbovya2"))
+            data.add(MenuListData("Боская Літургія між сьвятымі айца нашага Базыля Вялікага", "l_vasila_vialikaha"))
+            data.add(MenuListData("Літургія раней асьвячаных дароў", "lit_ran_asv_dar"))
+            data.add(MenuListData("Набажэнства ў гонар Маці Божай Нястомнай Дапамогі", "bogashlugbovya4"))
+            data.add(MenuListData("Малітвы пасьля сьвятога прычасьця", "1"))
+            data.add(MenuListData("Ютрань нядзельная (у скароце)", "bogashlugbovya6"))
+            data.add(MenuListData("Вячэрня", "2"))
+            data.add(MenuListData("Абедніца", "bogashlugbovya8"))
+            data.add(MenuListData("Служба за памерлых — Малая паніхіда", "bogashlugbovya11"))
+            data.add(MenuListData("Трапары і кандакі нядзельныя васьмі тонаў", "3"))
+            data.add(MenuListData("Трапары і кандакі штодзённыя - на кожны дзень тыдня", "4"))
+            data.add(MenuListData("Службы Вялікага посту", "5"))
+            data.add(MenuListData("Службы Вялікага тыдня", "6"))
+            data.add(MenuListData("Малебны канон Найсьвяцейшай Багародзіцы", "bogashlugbovya9"))
+            data.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага", "kanon_a_kryckaha"))
+            data.add(MenuListData("Мінэя сьвяточная", "7"))
+            data.add(MenuListData("Мінэя штодзённая", "8"))
+            data.sort()
+            listAdapter = MenuListAdaprer(it)
+        }
         listView.isVerticalScrollBarEnabled = false
     }
 
@@ -27,38 +55,38 @@ class MenuBogashlugbovya : ListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        when (position) {
-            5 -> {
+        when (data[position].type) {
+            "1" -> {
                 val intent = Intent(activity, MalitvyPasliaPrychascia::class.java)
                 startActivity(intent)
             }
-            7 -> {
+            "2" -> {
                 val intent = Intent(activity, SubMenuBogashlugbovyaViachernia::class.java)
                 startActivity(intent)
             }
-            10 -> {
+            "3" -> {
                 val intent = Intent(activity, TonNiadzelny::class.java)
                 startActivity(intent)
             }
-            11 -> {
+            "4" -> {
                 val intent = Intent(activity, TonNaKoznyDzen::class.java)
                 startActivity(intent)
             }
-            12 -> {
+            "5" -> {
                 val intent = Intent(activity, SubMenuBogashlugbovyaVialikiPost::class.java)
                 startActivity(intent)
             }
-            13 -> {
+            "6" -> {
                 val intent = Intent(activity, SubMenuBogashlugbovyaVialikiTydzen::class.java)
                 startActivity(intent)
             }
-            16 -> {
+            "7" -> {
                 activity?.let {
                     val intent = Intent(it, MineiaSviatochnaia::class.java)
                     startActivity(intent)
                 }
             }
-            17 -> {
+            "8" -> {
                 activity?.let {
                     val intent = Intent(it, MineiaShodzennaia::class.java)
                     startActivity(intent)
@@ -66,97 +94,12 @@ class MenuBogashlugbovya : ListFragment() {
             }
             else -> {
                 if (MainActivity.checkmoduleResources()) {
-                    when (position) {
-                        0 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "bogashlugbovya1")
-                                startActivity(intent)
-                            }
-                        }
-                        1 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "bogashlugbovya2")
-                                startActivity(intent)
-                            }
-                        }
-                        2 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "l_vasila_vialikaha")
-                                startActivity(intent)
-                            }
-                        }
-                        3 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "lit_ran_asv_dar")
-                                startActivity(intent)
-                            }
-                        }
-                        4 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "bogashlugbovya4")
-                                startActivity(intent)
-                            }
-                        }
-                        6 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "bogashlugbovya6")
-                                startActivity(intent)
-                            }
-                        }
-                        8 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "bogashlugbovya8")
-                                startActivity(intent)
-                            }
-                        }
-                        9 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "bogashlugbovya11")
-                                startActivity(intent)
-                            }
-                        }
-                        14 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "bogashlugbovya9")
-                                startActivity(intent)
-                            }
-                        }
-                        15 -> {
-                            activity?.let {
-                                val intent = Intent()
-                                intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                                intent.putExtra("title", data[position])
-                                intent.putExtra("resurs", "kanon_a_kryckaha")
-                                startActivity(intent)
-                            }
-                        }
+                    activity?.let {
+                        val intent = Intent()
+                        intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                        intent.putExtra("title", data[position].data)
+                        intent.putExtra("resurs", data[position].type)
+                        startActivity(intent)
                     }
                 } else {
                     val dadatak = DialogInstallDadatak()
@@ -165,4 +108,28 @@ class MenuBogashlugbovya : ListFragment() {
             }
         }
     }
+    private inner class MenuListAdaprer(private val context: Activity) : ArrayAdapter<MenuListData?>(context, R.layout.simple_list_item_2, R.id.label, data as List<MenuListData>) {
+
+        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
+            val rootView: View
+            val viewHolder: ViewHolder
+            if (mView == null) {
+                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
+                rootView = binding.root
+                viewHolder = ViewHolder(binding.label)
+                rootView.tag = viewHolder
+            } else {
+                rootView = mView
+                viewHolder = rootView.tag as ViewHolder
+            }
+            val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
+            val dzenNoch = chin.getBoolean("dzen_noch", false)
+            viewHolder.text.text = data[position].data
+            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
+            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+            return rootView
+        }
+    }
+
+    private class ViewHolder(var text: TextView)
 }

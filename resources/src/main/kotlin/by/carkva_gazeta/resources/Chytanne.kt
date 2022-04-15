@@ -876,18 +876,22 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
 
     private fun autoStartScroll() {
         if (autoScrollJob?.isActive != true) {
-            val autoTime = (230 - spid) / 10
-            if (autoStartScrollJob?.isActive != true) {
-                autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                    delay(1000L)
-                    spid = 230
-                    autoScroll()
-                    for (i in 0..9) {
-                        delay(1500L)
-                        spid -= autoTime
+            if (spid < 166) {
+                val autoTime = (230 - spid) / 10
+                if (autoStartScrollJob?.isActive != true) {
+                    autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                        delay(1000L)
+                        spid = 230
+                        autoScroll()
+                        for (i in 0..9) {
+                            delay(1000L)
+                            spid -= autoTime
+                        }
+                        startAutoScroll()
                     }
-                    startAutoScroll()
                 }
+            } else {
+                startAutoScroll()
             }
         }
     }
@@ -1039,11 +1043,11 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
         super.onResume()
         setTollbarTheme()
         if (fullscreenPage) hide()
+        spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
         if (autoscroll) {
             autoStartScroll()
         }
-        spid = k.getInt("autoscrollSpid", 60)
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }

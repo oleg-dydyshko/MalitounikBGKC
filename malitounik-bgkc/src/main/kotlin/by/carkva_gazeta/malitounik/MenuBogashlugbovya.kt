@@ -55,7 +55,7 @@ class MenuBogashlugbovya : ListFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        when (data[position].type) {
+        when (data[position].resurs) {
             "1" -> {
                 val intent = Intent(activity, MalitvyPasliaPrychascia::class.java)
                 startActivity(intent)
@@ -97,8 +97,8 @@ class MenuBogashlugbovya : ListFragment() {
                     activity?.let {
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                        intent.putExtra("title", data[position].data)
-                        intent.putExtra("resurs", data[position].type)
+                        intent.putExtra("title", data[position].title)
+                        intent.putExtra("resurs", data[position].resurs)
                         startActivity(intent)
                     }
                 } else {
@@ -124,7 +124,7 @@ class MenuBogashlugbovya : ListFragment() {
             }
             val chin = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            viewHolder.text.text = data[position].data
+            viewHolder.text.text = data[position].title
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView

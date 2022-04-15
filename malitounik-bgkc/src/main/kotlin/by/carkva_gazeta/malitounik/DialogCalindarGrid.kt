@@ -250,26 +250,41 @@ class DialogCalindarGrid : DialogFragment() {
             holder.mText.text = text
             holder.itemView.tag = mItemList[position]
             activity?.let {
-                if (mItemList[position] == 4 && !(slugba.checkUtran(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) || denNedzeli == Calendar.SUNDAY)) {
-                    holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
-                    holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                } else if (mItemList[position] == 7 && issetSvityia) {
-                    holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
-                    holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                } else if (mItemList[position] == 8 && !slugba.checkParliny(data, mun)) {
-                    holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
-                    holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                } else if (mItemList[position] == 2 || mItemList[position] == 3 || mItemList[position] == 5 || mItemList[position] == 9) {
-                    holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
-                    holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                } else if (mItemList[position] == 6 && !(slugba.checkLiturgia(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) || (ton == 0 && denNedzeli != Calendar.SUNDAY) || ton != 0)) {
-                    holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
-                    holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
-                } else {
-                    if (post == 3 || post == 4) {
-                        holder.mImage.setImageResource(getImage(mItemList[position], imageWhite = true))
-                    } else {
-                        holder.mImage.setImageResource(getImage(mItemList[position]))
+                when {
+                    mItemList[position] == 4 && !(slugba.checkUtran(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) || denNedzeli == Calendar.SUNDAY) -> {
+                        holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
+                        holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                    }
+                    mItemList[position] == 7 && issetSvityia -> {
+                        holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
+                        holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                    }
+                    mItemList[position] == 8 && !slugba.checkParliny(data, mun) -> {
+                        holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
+                        holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                    }
+                    mItemList[position] == 2 && !(slugba.checkPavichrrnica(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt()))) -> {
+                        holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
+                        holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                    }
+                    mItemList[position] == 5 && !(slugba.checkVialikiaGadziny(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt()))) -> {
+                        holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
+                        holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                    }
+                    mItemList[position] == 3 || mItemList[position] == 9 -> {
+                        holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
+                        holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                    }
+                    mItemList[position] == 6 && !(slugba.checkLiturgia(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) || (ton == 0 && denNedzeli != Calendar.SUNDAY) || ton != 0) -> {
+                        holder.mImage.setImageResource(getImage(mItemList[position], imageSecondary = true))
+                        holder.mText.setTextColor(ContextCompat.getColor(it, R.color.colorSecondary_text))
+                    }
+                    else -> {
+                        if (post == 3 || post == 4) {
+                            holder.mImage.setImageResource(getImage(mItemList[position], imageWhite = true))
+                        } else {
+                            holder.mImage.setImageResource(getImage(mItemList[position]))
+                        }
                     }
                 }
             }
@@ -322,8 +337,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 slugba.checkViachernia(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) -> {
                                     val intent = Intent()
                                     var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.VIACHERNIA, isSviaty = true)
-                                    if (resours == "0")
-                                        resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.VIACHERNIA)
+                                    if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.VIACHERNIA)
                                     intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                                     intent.putExtra("resurs", resours)
                                     intent.putExtra("zmena_chastki", true)
@@ -332,6 +346,38 @@ class DialogCalindarGrid : DialogFragment() {
                                 }
                                 else -> {
                                     val intent = Intent(activity, SubMenuBogashlugbovyaViachernia::class.java)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+                    }
+                    2 -> {
+                        activity?.let {
+                            when {
+                                slugba.checkViachernia(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) -> {
+                                    val intent = Intent()
+                                    var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.PAVIACHERNICA, isSviaty = true)
+                                    if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.PAVIACHERNICA)
+                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                    intent.putExtra("resurs", resours)
+                                    intent.putExtra("zmena_chastki", true)
+                                    intent.putExtra("title", slugba.getTitle(resours))
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+                    }
+                    5 -> {
+                        activity?.let {
+                            when {
+                                slugba.checkVialikiaGadziny(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) -> {
+                                    val intent = Intent()
+                                    var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.VIALIKIAGADZINY, isSviaty = true)
+                                    if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.VIALIKIAGADZINY)
+                                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                                    intent.putExtra("resurs", resours)
+                                    intent.putExtra("zmena_chastki", true)
+                                    intent.putExtra("title", slugba.getTitle(resours))
                                     startActivity(intent)
                                 }
                             }
@@ -349,15 +395,13 @@ class DialogCalindarGrid : DialogFragment() {
                                 slugba.checkLiturgia(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) -> {
                                     if (denNedzeli == Calendar.SUNDAY && ton != 0) {
                                         var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA, isSviaty = true)
-                                        if (resours == "0")
-                                            resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
+                                        if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
                                         val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton, true, ton_na_sviaty = false, ton_na_viliki_post = true, resurs = resours, sviatyaName, checkSviatyia, year)
                                         traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                     } else {
                                         val intent = Intent()
                                         var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA, isSviaty = true)
-                                        if (resours == "0")
-                                            resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
+                                        if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
                                         intent.setClassName(fragmentActivity, MainActivity.BOGASHLUGBOVYA)
                                         intent.putExtra("resurs", resours)
                                         intent.putExtra("zmena_chastki", true)
@@ -368,8 +412,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 else -> {
                                     if (checkSviatyia) {
                                         var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA, isSviaty = true)
-                                        if (resours == "0")
-                                            resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
+                                        if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
                                         val traparyAndKandaki = DialogTraparyAndKandaki.getInstance(4, slugba.getTitle(resours), mun, data, ton1, tonNaidzelny, ton_na_sviaty = false, ton_na_viliki_post = false, resurs = resours, sviatyaName, checkSviatyia, year)
                                         traparyAndKandaki.show(childFragmentManager, "traparyAndKandaki")
                                     } else {
@@ -407,8 +450,7 @@ class DialogCalindarGrid : DialogFragment() {
                                 slugba.checkUtran(raznicia, dayOfYear, slugba.isPasxa(dayOfYear.toInt())) -> {
                                     val intent = Intent()
                                     var resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.UTRAN, isSviaty = true)
-                                    if (resours == "0")
-                                        resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.UTRAN)
+                                    if (resours == "0") resours = slugba.getResource(raznicia, slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.UTRAN)
                                     intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                                     intent.putExtra("resurs", resours)
                                     intent.putExtra("zmena_chastki", true)

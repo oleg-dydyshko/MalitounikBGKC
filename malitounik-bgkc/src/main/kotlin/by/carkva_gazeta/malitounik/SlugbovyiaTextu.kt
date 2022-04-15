@@ -401,6 +401,48 @@ class SlugbovyiaTextu {
         return false
     }
 
+    fun checkPavichrrnica(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
+        datMinVP.forEach {
+            if (day == it.day && pasxa == it.pasxa) {
+                if (it.sluzba == PAVIACHERNICA) return true
+            }
+        }
+        datMinSH.forEach {
+            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa) {
+                if (it.sluzba == PAVIACHERNICA) return true
+            }
+        }
+        datMinSV.forEach {
+            val dayR = if (it.pasxa) day
+            else dayOfYear.toInt()
+            if (dayR == it.day && pasxa == it.pasxa) {
+                if (it.sluzba == PAVIACHERNICA) return true
+            }
+        }
+        return false
+    }
+
+    fun checkVialikiaGadziny(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
+        datMinVP.forEach {
+            if (day == it.day && pasxa == it.pasxa) {
+                if (it.sluzba == VIALIKIAGADZINY) return true
+            }
+        }
+        datMinSH.forEach {
+            if (dayOfYear.toInt() == it.day && pasxa == it.pasxa) {
+                if (it.sluzba == VIALIKIAGADZINY) return true
+            }
+        }
+        datMinSV.forEach {
+            val dayR = if (it.pasxa) day
+            else dayOfYear.toInt()
+            if (dayR == it.day && pasxa == it.pasxa) {
+                if (it.sluzba == VIALIKIAGADZINY) return true
+            }
+        }
+        return false
+    }
+
     fun onDestroy() {
         loadOpisanieSviatJob?.cancel()
         loadPiarlinyJob?.cancel()

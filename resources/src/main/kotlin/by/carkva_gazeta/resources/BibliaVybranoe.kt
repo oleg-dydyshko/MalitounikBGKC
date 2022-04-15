@@ -527,6 +527,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
     private fun autoScroll() {
         if (autoScrollJob?.isActive != true) {
             autoscroll = true
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             val prefEditor = k.edit()
             prefEditor.putBoolean("autoscroll", true)
             prefEditor.apply()
@@ -546,19 +547,22 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
         if (autoScrollJob?.isActive != true) {
             binding.textView.clearFocus()
             binding.textView.setTextIsSelectable(false)
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            val autoTime = (230 - spid) / 10
-            if (autoStartScrollJob?.isActive != true) {
-                autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                    delay(1000L)
-                    spid = 230
-                    autoScroll()
-                    for (i in 0..9) {
-                        delay(1500L)
-                        spid -= autoTime
+            if (spid < 166) {
+                val autoTime = (230 - spid) / 10
+                if (autoStartScrollJob?.isActive != true) {
+                    autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                        delay(1000L)
+                        spid = 230
+                        autoScroll()
+                        for (i in 0..9) {
+                            delay(1000L)
+                            spid -= autoTime
+                        }
+                        startAutoScroll()
                     }
-                    startAutoScroll()
                 }
+            } else {
+                startAutoScroll()
             }
         }
     }

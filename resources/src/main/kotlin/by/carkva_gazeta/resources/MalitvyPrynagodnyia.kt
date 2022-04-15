@@ -89,8 +89,8 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
     private fun findTypeResource(findText: String): String {
         var type = ""
         for (i in 0 until data.size) {
-            if (data[i].data == findText) {
-                type = data[i].type
+            if (data[i].title == findText) {
+                type = data[i].resurs
                 break
             }
         }
@@ -199,13 +199,13 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             }
             mLastClickTime = SystemClock.elapsedRealtime()
             val intent = Intent(this@MalitvyPrynagodnyia, Bogashlugbovya::class.java)
-            intent.putExtra("title", data[position].data)
-            intent.putExtra("resurs", data[position].type)
+            intent.putExtra("title", data[position].title)
+            intent.putExtra("resurs", data[position].resurs)
             prynagodnyiaLauncher.launch(intent)
             val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.ListView.windowToken, 0)
             if (autoCompleteTextView?.text.toString() != "") {
-                addHistory(data[position].data)
+                addHistory(data[position].title)
                 saveHistopy()
             }
             actionExpandOn = false
@@ -415,7 +415,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            viewHolder.text.text = data[position].data
+            viewHolder.text.text = data[position].title
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(by.carkva_gazeta.malitounik.R.drawable.stiker_black, 0, 0, 0)
             return rootView
@@ -430,7 +430,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
                     if (constraint1.isNotEmpty()) {
                         val founded: ArrayList<MenuListData> = ArrayList()
                         for (item in origData) {
-                            if (item.data.contains(constraint1, true)) {
+                            if (item.title.contains(constraint1, true)) {
                                 founded.add(item)
                             }
                         }

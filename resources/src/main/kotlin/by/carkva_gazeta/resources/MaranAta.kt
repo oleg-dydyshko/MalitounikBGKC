@@ -995,18 +995,22 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     private fun autoStartScroll() {
         if (autoScrollJob?.isActive != true) {
-            val autoTime = (230 - spid) / 10
-            if (autoStartScrollJob?.isActive != true) {
-                autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                    delay(1000L)
-                    spid = 230
-                    autoScroll()
-                    for (i in 0..9) {
-                        delay(1500L)
-                        spid -= autoTime
+            if (spid < 166) {
+                val autoTime = (230 - spid) / 10
+                if (autoStartScrollJob?.isActive != true) {
+                    autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                        delay(1000L)
+                        spid = 230
+                        autoScroll()
+                        for (i in 0..9) {
+                            delay(1000L)
+                            spid -= autoTime
+                        }
+                        startAutoScroll()
                     }
-                    startAutoScroll()
                 }
+            } else {
+                startAutoScroll()
             }
         }
     }
@@ -1108,6 +1112,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         super.onResume()
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
+        spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
             autoStartScroll()
         }

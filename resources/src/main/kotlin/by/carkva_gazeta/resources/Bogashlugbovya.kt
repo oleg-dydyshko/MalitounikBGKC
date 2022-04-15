@@ -704,7 +704,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
 
             override fun onTouch(action: Boolean) {
-                stopAutoStartScroll()
                 mActionDown = action
             }
         })
@@ -953,6 +952,22 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
+        if (resurs == "lit_ran_asv_dar") {
+            val stringVB = "зусім прапускаюцца"
+            val strLigVB = stringVB.length
+            val vbt1 = text.indexOf(stringVB)
+            if (vbt1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val strPosition = text.indexOf("Калі ёсьць 10 песьняў", vbt1 + strLigVB, true)
+                        val line = binding.textView.layout.getLineForOffset(strPosition)
+                        val y = binding.textView.layout.getLineTop(line)
+                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                        anim.setDuration(1500).start()
+                    }
+                }, vbt1, vbt1 + strLigVB, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
         if (resurs == "viaczernia_bierascie") {
             var stringVB = "выбраныя вершы з псалмаў 1-3"
             var strLigVB = stringVB.length
@@ -1118,6 +1133,48 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }
             }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
+        val string3 = "[3]"
+        val strLig3 = string3.length
+        val t3 = text.indexOf(string3)
+        if (t3 != -1) {
+            text.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val strPosition = text.indexOf("ТРЭЦЯЯ ГАДЗІНА", t3 + strLig3, true)
+                    val line = binding.textView.layout.getLineForOffset(strPosition)
+                    val y = binding.textView.layout.getLineTop(line)
+                    val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                    anim.setDuration(1500).start()
+                }
+            }, t3, t3 + strLig3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val string6 = "[6]"
+        val strLig6 = string6.length
+        val t6 = text.indexOf(string6)
+        if (t6 != -1) {
+            text.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val strPosition = text.indexOf("ШОСТАЯ ГАДЗІНА", t6 + strLig6, true)
+                    val line = binding.textView.layout.getLineForOffset(strPosition)
+                    val y = binding.textView.layout.getLineTop(line)
+                    val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                    anim.setDuration(1500).start()
+                }
+            }, t6, t6 + strLig6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val string9 = "[9]"
+        val strLig9 = string9.length
+        val t9 = text.indexOf(string9)
+        if (t9 != -1) {
+            text.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val strPosition = text.indexOf("ДЗЕВЯТАЯ ГАДЗІНА", t9 + strLig9, true)
+                    val line = binding.textView.layout.getLineForOffset(strPosition)
+                    val y = binding.textView.layout.getLineTop(line)
+                    val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                    anim.setDuration(1500).start()
+                }
+            }, t9, t9 + strLig9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
         binding.textView.text = text
         if (savedInstanceState != null) {
             binding.textView.post {
@@ -1126,7 +1183,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     val index = binding.textView.text.indexOf(textline)
                     val line = binding.textView.layout.getLineForOffset(index)
                     val y = binding.textView.layout.getLineTop(line)
-                    binding.scrollView2.scrollY = y
+                    binding.scrollView2.smoothScrollBy(0, y)
                 } else {
                     binding.scrollView2.smoothScrollBy(0, positionY)
                 }
@@ -1155,13 +1212,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         autoStartScroll()
                     }
                 }
-            }
-        }
-        binding.textView.post {
-            if (binding.textView.bottom <= binding.scrollView2.height) {
-                stopAutoStartScroll()
-                mAutoScroll = false
-                invalidateOptionsMenu()
             }
         }
         positionY = k.getInt(resurs + "Scroll", 0)
@@ -1223,18 +1273,22 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     private fun autoStartScroll() {
         if (autoScrollJob?.isActive != true) {
-            val autoTime = (230 - spid) / 10
-            if (autoStartScrollJob?.isActive != true) {
-                autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
-                    delay(1000L)
-                    spid = 230
-                    autoScroll()
-                    for (i in 0..9) {
-                        delay(1500L)
-                        spid -= autoTime
+            if (spid < 166) {
+                val autoTime = (230 - spid) / 10
+                if (autoStartScrollJob?.isActive != true) {
+                    autoStartScrollJob = CoroutineScope(Dispatchers.Main).launch {
+                        delay(1000L)
+                        spid = 230
+                        autoScroll()
+                        for (i in 0..9) {
+                            delay(1000L)
+                            spid -= autoTime
+                        }
+                        startAutoScroll()
                     }
-                    startAutoScroll()
                 }
+            } else {
+                startAutoScroll()
             }
         }
     }
@@ -1315,8 +1369,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
             binding.textView.clearFocus()
             binding.textView.setTextIsSelectable(false)
-            binding.textView.movementMethod = setLinkMovementMethodCheck()
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            binding.textView.movementMethod = setLinkMovementMethodCheck()
             autoscroll = true
             val prefEditor = k.edit()
             prefEditor.putBoolean("autoscroll", true)
@@ -1324,10 +1378,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             invalidateOptionsMenu()
             autoScrollJob = CoroutineScope(Dispatchers.Main).launch {
                 while (isActive) {
-                    if (binding.textView.bottom <= binding.scrollView2.height) {
-                        stopAutoScroll()
-                        invalidateOptionsMenu()
-                    }
                     delay(spid.toLong())
                     if (!mActionDown && !MainActivity.dialogVisable) {
                         binding.scrollView2.smoothScrollBy(0, 2)

@@ -276,11 +276,11 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         editText?.removeTextChangedListener(textWatcher)
         val intent = Intent(activity, PesnyAll::class.java)
         if (parent?.id == R.id.ListView) {
-            intent.putExtra("pesny", menuList[position].data)
-            intent.putExtra("type", menuList[position].type)
+            intent.putExtra("pesny", menuList[position].title)
+            intent.putExtra("type", menuList[position].resurs)
             if (search) {
                 intent.putExtra("search", searchViewQwery)
-                addHistory(menuList[position].data)
+                addHistory(menuList[position].title)
                 saveHistopy()
             }
         } else {
@@ -295,8 +295,8 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
     private fun getTypeHistory(item: String): String {
         var type = "pesny_prasl_0"
         for (i in 0 until menuList.size) {
-            if (menuList[i].data == item) {
-                type = menuList[i].type
+            if (menuList[i].title == item) {
+                type = menuList[i].resurs
                 break
             }
         }
@@ -388,7 +388,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
             searchViewQwery = poshuk1
             val menuListData = getMenuListData()
             for (i in menuListData.indices) {
-                val inputStream = resources.openRawResource(PesnyAll.listRaw(activity, menuListData[i].type))
+                val inputStream = resources.openRawResource(PesnyAll.listRaw(activity, menuListData[i].resurs))
                 val isr = InputStreamReader(inputStream)
                 val reader = BufferedReader(isr)
                 var line: String
@@ -432,7 +432,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
         }
         if (pesny != "no_filter") {
             menuListData = menuListData.filter {
-                it.type.contains(pesny)
+                it.resurs.contains(pesny)
             } as ArrayList<MenuListData>
         }
         return menuListData
@@ -504,7 +504,7 @@ class MenuPesny : MenuPesnyHistory(), AdapterView.OnItemClickListener {
                 viewHolder = rootView.tag as ViewHolder
             }
             val dzenNoch = chin.getBoolean("dzen_noch", false)
-            viewHolder.text.text = menuList[position].data
+            viewHolder.text.text = menuList[position].title
             viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
             return rootView

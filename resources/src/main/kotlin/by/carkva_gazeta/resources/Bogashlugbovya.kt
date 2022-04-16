@@ -87,7 +87,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var firstTextPosition = ""
     private val findListSpans = ArrayList<SpanStr>()
     private var animatopRun = false
-    private var onFind = false
     private var chechZmena = false
     private var checkLiturgia = 0
     private var raznica = 400
@@ -1339,8 +1338,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             binding.textView.movementMethod = setLinkMovementMethodCheck()
             autoScrollJob?.cancel()
             stopAutoStartScroll()
-            if (onFind) {
-                onFind = false
+            if (binding.find.visibility == View.GONE) {
                 findAllAsanc(false)
                 binding.find.visibility = View.VISIBLE
             }
@@ -1378,7 +1376,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (autoScrollJob?.isActive != true) {
             if (binding.find.visibility == View.VISIBLE) {
                 findRemoveSpan()
-                onFind = true
                 binding.find.visibility = View.GONE
                 val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
@@ -1460,15 +1457,12 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         super.onPrepareOptionsMenu(menu)
         val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
         val itemVybranoe = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
-        val find = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_find)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
         if (mAutoScroll) {
             autoscroll = k.getBoolean("autoscroll", false)
             if (autoscroll) {
-                find.isVisible = false
                 itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
             } else {
-                find.isVisible = true
                 itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
             }
         } else {
@@ -1571,6 +1565,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             recreate()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_find) {
+            stopAutoScroll()
+            invalidateOptionsMenu()
             binding.find.visibility = View.VISIBLE
             binding.textSearch.requestFocus()
             EditTextCustom.focusAndShowKeyboard(binding.textSearch)

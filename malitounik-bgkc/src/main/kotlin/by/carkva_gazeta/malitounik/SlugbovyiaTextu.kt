@@ -86,7 +86,7 @@ class SlugbovyiaTextu {
         datMinVP.add(SlugbovyiaTextuData(-10, "Чацьвер 6-га тыдня посту ўвечары", "bogashlugbovya17_5", VIACHERNIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-9, "Пятніца 6-га тыдня посту ўвечары", "bogashlugbovya17_6", VIACHERNIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-8, "Субота Лазара Ютрань", "bogashlugbovya17_7", UTRAN, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(-8, "Літургія", "bogashlugbovya17_8", LITURGIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-8, "Субота Лазара - Літургія", "bogashlugbovya17_8", LITURGIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-7, "Уваход у Ерусалім Госпада, Бога і Збаўцы нашага Ісуса Хрыста (Вербніца) - Літургія", "bogashlugbovya17_9", LITURGIA, pasxa = true))
 
         datMinVP.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak", UTRAN, pasxa = true, checkVialikiaGadziny = true))
@@ -96,9 +96,9 @@ class SlugbovyiaTextu {
         datMinVP.add(SlugbovyiaTextuData(-2, "Ютрань Вялікай пятніцы", "jutran_vial_piatn_12jevanhellau", UTRAN, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_viaczernia", VIACHERNIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-2, "Вялікая пятніца. Малая павячэрніца", "vialikaja_piatnica_mal_paviaczernica", PAVIACHERNICA, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_jutran", UTRAN, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_paunocznica", PAUNOCHNICA, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_viaczernia_liturhija", LITURGIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-1, "Ютрань Вялікай суботы", "vialikaja_subota_jutran", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-1, "Вялікая субота. Паўночніца", "vialikaja_subota_paunocznica", PAUNOCHNICA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-1, "Вялікая субота - Літургія", "vialikaja_subota_viaczernia_liturhija", LITURGIA, pasxa = true))
 
         datMinVP.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха) - Літургія", "zmenyia_chastki_tamash", LITURGIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў - Літургія", "zmenyia_chastki_miranosicay", LITURGIA, pasxa = true))

@@ -333,7 +333,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["kanon_a_kryckaha"] = R.raw.kanon_a_kryckaha
             resursMap["lit_ran_asv_dar"] = R.raw.lit_ran_asv_dar
             resursMap["viaczernia_bierascie"] = R.raw.viaczernia_bierascie
-            resursMap["jutran_vial_piatn_12jevanhellau"] = R.raw.jutran_vial_piatn_12jevanhellau
+            resursMap["jutran_vial_piatn_12jevanhellau"] = R.raw.vialikaja_piatnica_jutran_12jevanhellau
             resursMap["vialikaja_piatnica_mal_paviaczernica"] = R.raw.vialikaja_piatnica_mal_paviaczernica
             resursMap["vialikaja_piatnica_viaczernia"] = R.raw.vialikaja_piatnica_viaczernia
             resursMap["vialiki_czacvier"] = R.raw.vialiki_czacvier
@@ -342,6 +342,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["vialiki_paniadzielak"] = R.raw.vialiki_paniadzielak
             resursMap["mltv_za_pamierlych"] = R.raw.mltv_za_pamierlych
             resursMap["vialikaja_subota_jutran"] = R.raw.vialikaja_subota_jutran
+            resursMap["vialikaja_subota_paunocznica"] = R.raw.vialikaja_subota_paunocznica
+            resursMap["vialikaja_subota_viaczernia_liturhija"] = R.raw.vialikaja_subota_viaczernia_liturhija
             resursMap["pesny_prasl_70"] = PesnyAll.resursMap["pesny_prasl_70"]
         }
 
@@ -1132,6 +1134,20 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     positionY = 0
                 }
             }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val string11 = "[1]"
+        val strLig11 = string11.length
+        val t11 = text.indexOf(string11)
+        if (t11 != -1) {
+            text.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val strPosition = text.indexOf("ПЕРШАЯ ГАДЗІНА", t11 + strLig11, true)
+                    val line = binding.textView.layout.getLineForOffset(strPosition)
+                    val y = binding.textView.layout.getLineTop(line)
+                    val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                    anim.setDuration(1500).start()
+                }
+            }, t11, t11 + strLig11, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         val string3 = "[3]"
         val strLig3 = string3.length

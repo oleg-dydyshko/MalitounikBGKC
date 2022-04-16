@@ -24,6 +24,7 @@ class SlugbovyiaTextu {
         const val PAVIACHERNICA = 4
         const val ABEDNICA = 5
         const val VIALIKIAGADZINY = 6
+        const val PAUNOCHNICA = 7
     }
 
     init {
@@ -88,14 +89,16 @@ class SlugbovyiaTextu {
         datMinVP.add(SlugbovyiaTextuData(-8, "Літургія", "bogashlugbovya17_8", LITURGIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-7, "Уваход у Ерусалім Госпада, Бога і Збаўцы нашага Ісуса Хрыста (Вербніца) - Літургія", "bogashlugbovya17_9", LITURGIA, pasxa = true))
 
-        datMinVP.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak", UTRAN, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(-5, "Вялікі аўторак", "vialiki_autorak", UTRAN, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(-4, "Вялікая серада", "vialikaja_sierada", UTRAN, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(-3, "Вялікі чацьвер", "vialiki_czacvier", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-6, "Вялікі панядзелак", "vialiki_paniadzielak", UTRAN, pasxa = true, checkVialikiaGadziny = true))
+        datMinVP.add(SlugbovyiaTextuData(-5, "Вялікі аўторак", "vialiki_autorak", UTRAN, pasxa = true, checkVialikiaGadziny = true))
+        datMinVP.add(SlugbovyiaTextuData(-4, "Вялікая серада", "vialikaja_sierada", UTRAN, pasxa = true, checkVialikiaGadziny = true))
+        datMinVP.add(SlugbovyiaTextuData(-3, "Вялікі чацьвер", "vialiki_czacvier", UTRAN, pasxa = true, checkVialikiaGadziny = true))
         datMinVP.add(SlugbovyiaTextuData(-2, "Ютрань Вялікай пятніцы", "jutran_vial_piatn_12jevanhellau", UTRAN, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-2, "Вялікая пятніца", "vialikaja_piatnica_viaczernia", VIACHERNIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-2, "Вялікая пятніца. Малая павячэрніца", "vialikaja_piatnica_mal_paviaczernica", PAVIACHERNICA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_jutran", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_paunocznica", PAUNOCHNICA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(-1, "Вялікая субота", "vialikaja_subota_viaczernia_liturhija", LITURGIA, pasxa = true))
 
         datMinVP.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха) - Літургія", "zmenyia_chastki_tamash", LITURGIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў - Літургія", "zmenyia_chastki_miranosicay", LITURGIA, pasxa = true))
@@ -143,11 +146,11 @@ class SlugbovyiaTextu {
         datMinSV.add(SlugbovyiaTextuData(354, "Перадсьвяцьце Нараджэньня Госпада нашага Ісуса Хрыста і сьв. сьвятамучаніка Ігната Баганосца", "v_rastvo_peradsviaccie_20_12", VIACHERNIA))
         datMinSV.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "ju_rastvo_sv_vieczar_24_12", UTRAN))
         datMinSV.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "v_rastvo_sv_vieczar_24_12", VIACHERNIA))
-        datMinSV.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "vial_hadziny_rastvo_sv_vieczar_24_12", VIALIKIAGADZINY))
+        datMinSV.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "vial_hadziny_rastvo_sv_vieczar_24_12", VIALIKIAGADZINY, checkVialikiaGadziny = true))
         datMinSV.add(SlugbovyiaTextuData(358, "Чаканьне (Сьвяты вечар) Нараджэньня Госпада нашага Ісуса Хрыста і сьв. мучаніцы Яўгеніі", "abed_rastvo_sv_vieczar_24_12", ABEDNICA))
         datMinSV.add(SlugbovyiaTextuData(359, "Нараджэньне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "l_naradzennie_chrystova", LITURGIA))
         datMinSV.add(SlugbovyiaTextuData(6, "Богазьяўленьне Збаўцы нашага Ісуса Хрыста", "l_1_6_bohazjaulennie", LITURGIA))
-        datMinSV.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "vial_hadziny_sv_vieczar_bohazjaulennia", VIALIKIAGADZINY))
+        datMinSV.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "vial_hadziny_sv_vieczar_bohazjaulennia", VIALIKIAGADZINY, checkVialikiaGadziny = true))
         datMinSV.add(SlugbovyiaTextuData(5, "Чаканьне Богазьяўленьня (Сьвяты вечар перад Богазьяўленьнем)", "abed_sv_vieczar_bohazjaulennia", ABEDNICA))
     }
 
@@ -189,7 +192,7 @@ class SlugbovyiaTextu {
 
     fun getVilikiTydzen(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
-        for (i in 55..62) list.add(datMinVP[i])
+        for (i in 55..64) list.add(datMinVP[i])
         return list
     }
 
@@ -217,16 +220,19 @@ class SlugbovyiaTextu {
         datMinVP.forEach {
             if (day == it.day && pasxa == it.pasxa) {
                 if (it.sluzba == sluzba) resource = it.resource
+                if (it.checkVialikiaGadziny) resource = it.resource
             }
         }
         datMinSH.forEach {
             if (day == it.day && pasxa == it.pasxa && !isSviaty) {
                 if (it.sluzba == sluzba) resource = it.resource
+                if (it.checkVialikiaGadziny) resource = it.resource
             }
         }
         datMinSV.forEach {
             if (day == it.day && pasxa == it.pasxa && isSviaty) {
                 if (it.sluzba == sluzba) resource = it.resource
+                if (it.checkVialikiaGadziny) resource = it.resource
             }
         }
         return resource
@@ -422,23 +428,30 @@ class SlugbovyiaTextu {
         return false
     }
 
-    fun checkVialikiaGadziny(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
+    fun checkPaunochnica(day: Int, dayOfYear: String, pasxa: Boolean): Boolean {
         datMinVP.forEach {
             if (day == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == VIALIKIAGADZINY) return true
+                if (it.sluzba == PAUNOCHNICA) return true
             }
         }
         datMinSH.forEach {
             if (dayOfYear.toInt() == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == VIALIKIAGADZINY) return true
+                if (it.sluzba == PAUNOCHNICA) return true
             }
         }
         datMinSV.forEach {
             val dayR = if (it.pasxa) day
             else dayOfYear.toInt()
             if (dayR == it.day && pasxa == it.pasxa) {
-                if (it.sluzba == VIALIKIAGADZINY) return true
+                if (it.sluzba == PAUNOCHNICA) return true
             }
+        }
+        return false
+    }
+
+    fun checkVialikiaGadziny(day: Int): Boolean {
+        datMinVP.forEach {
+            if (day == it.day && it.checkVialikiaGadziny) return true
         }
         return false
     }

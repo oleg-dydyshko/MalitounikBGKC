@@ -1191,6 +1191,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }, t9, t9 + strLig9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         binding.textView.text = text
+        positionY = k.getInt(resurs + "Scroll", 0)
         if (savedInstanceState != null) {
             binding.textView.post {
                 val textline = savedInstanceState.getString("textLine", "")
@@ -1198,18 +1199,16 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     val index = binding.textView.text.indexOf(textline)
                     val line = binding.textView.layout.getLineForOffset(index)
                     val y = binding.textView.layout.getLineTop(line)
-                    binding.scrollView2.smoothScrollBy(0, y)
+                    binding.scrollView2.scrollY = y
                 } else {
                     binding.scrollView2.smoothScrollBy(0, positionY)
                 }
                 if (!autoscroll && savedInstanceState.getBoolean("seach")) {
                     findAllAsanc()
                 }
-            }
-        } else {
-            if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
                 autoStartScroll()
             }
+        } else {
             if (resurs.contains("viachernia_ton")) {
                 binding.textView.post {
                     val cal = Calendar.getInstance()
@@ -1219,17 +1218,19 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     val line = binding.textView.layout.getLineForOffset(index)
                     val y = binding.textView.layout.getLineTop(line)
                     binding.scrollView2.scrollY = y
+                    if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
+                        autoStartScroll()
+                    }
                 }
             } else {
                 binding.scrollView2.post {
                     binding.scrollView2.smoothScrollBy(0, positionY)
-                    if (autoscroll) {
+                    if ((k.getBoolean("autoscrollAutostart", false) && mAutoScroll) || autoscroll) {
                         autoStartScroll()
                     }
                 }
             }
         }
-        positionY = k.getInt(resurs + "Scroll", 0)
         if (dzenNoch) binding.imageView6.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_up_black)
         binding.imageView6.setOnClickListener { findNext(previous = true) }
         binding.textSearch.addTextChangedListener(object : TextWatcher {
@@ -1338,10 +1339,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             binding.textView.movementMethod = setLinkMovementMethodCheck()
             autoScrollJob?.cancel()
             stopAutoStartScroll()
-            if (binding.find.visibility == View.GONE) {
-                findAllAsanc(false)
-                binding.find.visibility = View.VISIBLE
-            }
             if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
                 resetScreenJob = CoroutineScope(Dispatchers.Main).launch {
                     delay(60000)
@@ -1376,6 +1373,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (autoScrollJob?.isActive != true) {
             if (binding.find.visibility == View.VISIBLE) {
                 findRemoveSpan()
+                binding.textSearch.setText("")
                 binding.find.visibility = View.GONE
                 val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)

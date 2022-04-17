@@ -81,15 +81,14 @@ class MineiaSviatochnaia : AppCompatActivity() {
             if (utran != "0") count.add("1")
             if (liturgia != "0") count.add("1")
             if (viachernia != "0") count.add("1")
-            val slujba = when {
-                count.size > 1 -> ""
-                mineiaList[i].sluzba == SlugbovyiaTextu.VIALIKIAGADZINY -> " - Вялікія гадзіны"
-                mineiaList[i].sluzba == SlugbovyiaTextu.ABEDNICA -> " - Абедніца"
-                mineiaList[i].sluzba == SlugbovyiaTextu.UTRAN -> " - Ютрань"
-                mineiaList[i].sluzba == SlugbovyiaTextu.LITURGIA -> " - Літургія"
-                else -> " - Вячэрня"
+            var title = mineiaList[i].title
+            if (count.size > 1) {
+                val t1 = title.indexOf("-")
+                if (t1 != -1) {
+                    title = title.substring(0, t1).trim()
+                }
             }
-            groups.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + mineiaList[i].title + slujba, mineiaList[i].title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+            groups.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
             day = mineiaList[i].day
         }
         binding.ListView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->

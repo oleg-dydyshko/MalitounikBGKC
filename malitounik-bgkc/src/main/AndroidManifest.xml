@@ -339,7 +339,7 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".SubMenuBogashlugbovyaVialikiTydzen"
+            android:name=".SubMenuBogashlugbovyaTryjodz"
             android:label="@string/slugby_vialikaga_tydna"
             android:theme="@style/AppTheme">
             <meta-data

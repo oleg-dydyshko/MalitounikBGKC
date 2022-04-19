@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Spannable
@@ -21,6 +20,9 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
@@ -31,24 +33,6 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback {
-
-    @SuppressLint("InlinedApi")
-    @Suppress("DEPRECATION")
-    private fun mHidePart2Runnable() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(false)
-            val controller = window.insetsController
-            controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        } else {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-        }
-    }
-
-    private fun mShowPart2Runnable() {
-        val actionBar = supportActionBar
-        actionBar?.show()
-    }
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -741,28 +725,21 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
     }
 
     private fun hide() {
-        val actionBar = supportActionBar
-        actionBar?.hide()
-        CoroutineScope(Dispatchers.Main).launch {
-            mHidePart2Runnable()
+        supportActionBar?.hide()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, binding.constraint).let { controller ->
+            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller.hide(WindowInsetsCompat.Type.systemBars())
         }
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
     }
 
-    @Suppress("DEPRECATION")
     private fun show() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(true)
-            val controller = window.insetsController
-            controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-        } else {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        }
-        CoroutineScope(Dispatchers.Main).launch {
-            mShowPart2Runnable()
-        }
+        supportActionBar?.show()
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowInsetsControllerCompat(window, binding.constraint).show(WindowInsetsCompat.Type.systemBars())
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
         binding.actionFullscreen.visibility = View.GONE
         binding.actionFullscreen.animation = animation

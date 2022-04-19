@@ -44,6 +44,7 @@ class MenuBogashlugbovya : ListFragment() {
             data.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага", "kanon_a_kryckaha"))
             data.add(MenuListData("Мінэя сьвяточная", "7"))
             data.add(MenuListData("Мінэя штодзённая", "8"))
+            data.add(MenuListData("Службы Сьветлага тыдня", "9"))
             data.sort()
             listAdapter = MenuListAdaprer(it)
         }
@@ -77,7 +78,8 @@ class MenuBogashlugbovya : ListFragment() {
                 startActivity(intent)
             }
             "6" -> {
-                val intent = Intent(activity, SubMenuBogashlugbovyaVialikiTydzen::class.java)
+                val intent = Intent(activity, SubMenuBogashlugbovyaTryjodz::class.java)
+                intent.putExtra("svetly", false)
                 startActivity(intent)
             }
             "7" -> {
@@ -89,6 +91,13 @@ class MenuBogashlugbovya : ListFragment() {
             "8" -> {
                 activity?.let {
                     val intent = Intent(it, MineiaShodzennaia::class.java)
+                    startActivity(intent)
+                }
+            }
+            "9" -> {
+                activity?.let {
+                    val intent = Intent(it, SubMenuBogashlugbovyaTryjodz::class.java)
+                    intent.putExtra("svetly", true)
                     startActivity(intent)
                 }
             }

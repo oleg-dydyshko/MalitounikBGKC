@@ -100,6 +100,11 @@ class SlugbovyiaTextu {
         datMinVP.add(SlugbovyiaTextuData(-1, "Вялікая субота. Паўночніца", "vialikaja_subota_paunocznica", PAUNOCHNICA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(-1, "Вялікая субота - Літургія", "vialikaja_subota_viaczernia_liturhija", LITURGIA, pasxa = true))
 
+        datMinVP.add(SlugbovyiaTextuData(0, "Уваскрасеньне Госпада Бога і Збаўцы нашага Ісуса Хрыста (Вялікдзень) - Ютрань", "vialikdzien_jutran", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(0, "Уваскрасеньне Госпада Бога і Збаўцы нашага Ісуса Хрыста (Вялікдзень) - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
+        datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак - Ютрань", "svietly_paniadzielak", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(2, "Сьветлы аўторак - Ютрань", "svietly_autorak", UTRAN, pasxa = true))
+
         datMinVP.add(SlugbovyiaTextuData(7, "Нядзеля Тамаша (Антыпасха) - Літургія", "zmenyia_chastki_tamash", LITURGIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў - Літургія", "zmenyia_chastki_miranosicay", LITURGIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(28, "Нядзеля Самаранкі - Літургія", "zmenyia_chastki_samaranki", LITURGIA, pasxa = true))
@@ -196,6 +201,12 @@ class SlugbovyiaTextu {
         return list
     }
 
+    fun getSvetlyTydzen(): ArrayList<SlugbovyiaTextuData> {
+        val list = ArrayList<SlugbovyiaTextuData>()
+        for (i in 65..68) list.add(datMinVP[i])
+        return list
+    }
+
     fun getMineiaShtodzennia() = datMinSH
 
     fun getMineiaSviatochnaia() = datMinSV
@@ -220,19 +231,16 @@ class SlugbovyiaTextu {
         datMinVP.forEach {
             if (day == it.day && pasxa == it.pasxa) {
                 if (it.sluzba == sluzba) resource = it.resource
-                if (it.checkVialikiaGadziny) resource = it.resource
             }
         }
         datMinSH.forEach {
             if (day == it.day && pasxa == it.pasxa && !isSviaty) {
                 if (it.sluzba == sluzba) resource = it.resource
-                if (it.checkVialikiaGadziny) resource = it.resource
             }
         }
         datMinSV.forEach {
             if (day == it.day && pasxa == it.pasxa && isSviaty) {
                 if (it.sluzba == sluzba) resource = it.resource
-                if (it.checkVialikiaGadziny) resource = it.resource
             }
         }
         return resource

@@ -1,4 +1,5 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scroll"
     android:layout_width="match_parent"
@@ -21,89 +22,84 @@
             android:foregroundGravity="left"
             android:singleLine="false" />
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp">
-
 
             <TextView
                 android:id="@+id/textDenNedeli"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/textChislo"
-                android:layout_alignLeft="@+id/textChislo"
-                android:layout_alignEnd="@+id/textChislo"
-                android:layout_alignRight="@+id/textChislo"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:gravity="center"
+                android:minWidth="190dp"
                 android:paddingLeft="5dp"
                 android:paddingTop="5dp"
                 android:paddingRight="5dp"
                 android:singleLine="false"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/textChislo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/textChislo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textDenNedeli"
-                android:layout_alignStart="@+id/textMesiac"
-                android:layout_alignLeft="@+id/textMesiac"
-                android:layout_alignEnd="@+id/textMesiac"
-                android:layout_alignRight="@+id/textMesiac"
-                android:layout_gravity="center_horizontal"
                 android:gravity="center_vertical|center_horizontal"
+                android:minWidth="190dp"
                 android:minHeight="110dp"
                 android:singleLine="false"
                 android:textSize="80sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/textMesiac"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
                 android:id="@+id/znakTipicona"
                 android:layout_width="27dp"
                 android:layout_height="27dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentBottom="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:contentDescription="@string/empty"
                 android:src="@drawable/znaki_krest"
-                android:visibility="invisible" />
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
                 android:id="@+id/kniga"
                 android:layout_width="27dp"
                 android:layout_height="27dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:contentDescription="@string/liturgikon2"
                 android:src="@drawable/book_divider"
-                android:visibility="visible" />
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageView
                 android:id="@+id/PostFish"
                 android:layout_width="27dp"
                 android:layout_height="13dp"
-                android:layout_alignStart="@+id/znakTipicona"
-                android:layout_alignLeft="@+id/znakTipicona"
-                android:layout_alignParentTop="true"
+                android:layout_marginTop="5dp"
                 android:contentDescription="@string/empty"
                 android:src="@drawable/fishe"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/textPost"
+                app:layout_constraintStart_toStartOf="@+id/textPost"
+                app:layout_constraintTop_toBottomOf="@+id/textPost" />
 
             <TextView
                 android:id="@+id/textMesiac"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textChislo"
                 android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:minWidth="190dp"
                 android:paddingLeft="5dp"
@@ -111,22 +107,39 @@
                 android:paddingBottom="5dp"
                 android:singleLine="false"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/textPost"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/PostFish"
-                android:layout_alignStart="@+id/PostFish"
-                android:layout_alignLeft="@+id/PostFish"
                 android:layout_gravity="start|bottom"
-                android:layout_marginTop="5dp"
-                android:gravity="start"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
                 android:text="@string/Post"
                 android:textSize="18sp"
-                android:visibility="gone" />
-        </RelativeLayout>
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textTon" />
+
+            <TextView
+                android:id="@+id/textTon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start|bottom"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="start"
+                android:text="Тон 8"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/textCviatyGlavnyia"

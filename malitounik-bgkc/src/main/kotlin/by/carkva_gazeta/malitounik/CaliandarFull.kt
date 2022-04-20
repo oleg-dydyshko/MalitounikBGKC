@@ -73,17 +73,17 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             if (dzenNoch) rColorColorprimary = R.drawable.selector_red_dark
             val tileMe = BitmapDrawable(it.resources, BitmapFactory.decodeResource(resources, R.drawable.calendar_fon))
             tileMe.tileModeX = Shader.TileMode.REPEAT
-            if (MenuCaliandar.getPositionCaliandar(position)[20].toInt() != 0 && MenuCaliandar.getPositionCaliandar(position)[0].toInt() == 1) {
-                binding.textPost.text = getString(R.string.ton, MenuCaliandar.getPositionCaliandar(position)[20])
+            if (MenuCaliandar.getPositionCaliandar(position)[20].toInt() != 0) {
+                binding.textTon.text = getString(R.string.ton, MenuCaliandar.getPositionCaliandar(position)[20])
                 if (dzenNoch) {
-                    binding.textPost.setBackgroundResource(R.drawable.selector_dark)
-                    binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
+                    binding.textTon.setBackgroundResource(R.drawable.selector_dark)
+                    binding.textTon.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                 } else {
-                    binding.textPost.setBackgroundResource(R.drawable.selector_default)
-                    binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary))
+                    binding.textTon.setBackgroundResource(R.drawable.selector_default)
+                    binding.textTon.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary))
                 }
-                binding.textPost.visibility = View.VISIBLE
-                binding.textPost.setOnClickListener(this@CaliandarFull)
+                binding.textTon.visibility = View.VISIBLE
+                binding.textTon.setOnClickListener(this@CaliandarFull)
             }
             TooltipCompat.setTooltipText(binding.kniga, getString(R.string.liturgikon2))
             binding.kniga.setOnClickListener(this@CaliandarFull)
@@ -115,7 +115,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 it.let {
                     binding.textSviatyia.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     binding.textSviatyia.setBackgroundResource(R.drawable.selector_dark)
-                    if (!(MenuCaliandar.getPositionCaliandar(position)[20].toInt() != 0 && MenuCaliandar.getPositionCaliandar(position)[0].toInt() == 1)) binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
+                    if (MenuCaliandar.getPositionCaliandar(position)[20].toInt() == 0) binding.textPost.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
                     binding.textCviatyGlavnyia.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
                     binding.textCviatyGlavnyia.setBackgroundResource(R.drawable.selector_dark)
                     binding.textPredsviaty.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
@@ -369,7 +369,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         when (v?.id ?: 0) {
-            R.id.textPost -> {
+            R.id.textTon -> {
                 activity?.let {
                     val intent = Intent()
                     intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)

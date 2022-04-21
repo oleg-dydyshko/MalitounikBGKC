@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Spannable
@@ -21,6 +20,10 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import by.carkva_gazeta.malitounik.databinding.PesnyBinding
 import by.carkva_gazeta.malitounik.databinding.ProgressPesnyAllBinding
 import com.google.gson.Gson
@@ -31,23 +34,6 @@ import java.io.File
 import java.io.InputStreamReader
 
 class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener {
-
-    @SuppressLint("InlinedApi")
-    @Suppress("DEPRECATION")
-    private fun mHidePart2Runnable() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(false)
-            val controller = window.insetsController
-            controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        } else {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-        }
-    }
-
-    private fun mShowPart2Runnable() {
-        supportActionBar?.show()
-    }
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -640,29 +626,29 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         }
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (fullscreenPage && hasFocus) hide()
+    }
+
     private fun hide() {
-        val actionBar = supportActionBar
-        actionBar?.hide()
-        CoroutineScope(Dispatchers.Main).launch {
-            mHidePart2Runnable()
+        supportActionBar?.hide()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val controller = ViewCompat.getWindowInsetsController(binding.constraint)
+        controller?.let {
+            it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            it.hide(WindowInsetsCompat.Type.systemBars())
         }
         val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
     }
 
-    @Suppress("DEPRECATION")
     private fun show() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(true)
-            val controller = window.insetsController
-            controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-        } else {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        }
-        CoroutineScope(Dispatchers.Main).launch {
-            mShowPart2Runnable()
-        }
+        supportActionBar?.show()
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        val controller = ViewCompat.getWindowInsetsController(binding.constraint)
+        controller?.show(WindowInsetsCompat.Type.systemBars())
         val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
         binding.actionFullscreen.visibility = View.GONE
         binding.actionFullscreen.animation = animation

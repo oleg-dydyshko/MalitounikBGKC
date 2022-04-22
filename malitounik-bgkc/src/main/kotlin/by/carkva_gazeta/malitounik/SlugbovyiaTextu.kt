@@ -104,6 +104,7 @@ class SlugbovyiaTextu {
         datMinVP.add(SlugbovyiaTextuData(0, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
         datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак - Ютрань", "svietly_paniadzielak", UTRAN, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(2, "Сьветлы аўторак - Ютрань", "svietly_autorak", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(5, "Сьветлая пятніца - Ютрань", "svietlaja_piatnica", UTRAN, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
         datMinVP.add(SlugbovyiaTextuData(2, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
         datMinVP.add(SlugbovyiaTextuData(3, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
@@ -209,7 +210,7 @@ class SlugbovyiaTextu {
 
     fun getSvetlyTydzen(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
-        for (i in 65..68) list.add(datMinVP[i])
+        for (i in 65..69) list.add(datMinVP[i])
         return list
     }
 

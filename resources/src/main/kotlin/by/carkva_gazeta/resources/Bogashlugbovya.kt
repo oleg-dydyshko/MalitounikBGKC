@@ -331,9 +331,25 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["vialikaja_subota_viaczernia_liturhija"] = R.raw.vialikaja_subota_viaczernia_liturhija
             resursMap["vialikdzien_jutran"] = R.raw.vialikdzien_jutran
             resursMap["vielikodnyja_hadziny"] = R.raw.vielikodnyja_hadziny
-            resursMap["svietly_paniadzielak"] = R.raw.svietly_paniadzielak
-            resursMap["svietly_autorak"] = R.raw.svietly_autorak
-            resursMap["svietlaja_piatnica"] = R.raw.svietlaja_piatnica
+            resursMap["u_svietly_paniadzielak"] = R.raw.u_svietly_paniadzielak
+            resursMap["l_svietly_paniadzielak"] = R.raw.l_svietly_paniadzielak
+            resursMap["v_svietly_paniadzielak"] = R.raw.v_svietly_paniadzielak
+            resursMap["u_svietly_autorak"] = R.raw.u_svietly_autorak
+            resursMap["l_svietly_autorak"] = R.raw.l_svietly_autorak
+            resursMap["v_svietly_autorak"] = R.raw.v_svietly_autorak
+            resursMap["u_svietlaja_sierada"] = R.raw.u_svietlaja_sierada
+            resursMap["l_svietlaja_sierada"] = R.raw.l_svietlaja_sierada
+            resursMap["v_svietlaja_sierada"] = R.raw.v_svietlaja_sierada
+            resursMap["u_svietly_czacvier"] = R.raw.u_svietly_czacvier
+            resursMap["l_svietly_czacvier"] = R.raw.l_svietly_czacvier
+            resursMap["v_svietly_czacvier"] = R.raw.v_svietly_czacvier
+            resursMap["u_svietlaja_piatnica"] = R.raw.u_svietlaja_piatnica
+            resursMap["l_svietlaja_piatnica"] = R.raw.l_svietlaja_piatnica
+            resursMap["v_svietlaja_piatnica"] = R.raw.v_svietlaja_piatnica
+            resursMap["u_svietlaja_subota"] = R.raw.u_svietlaja_subota
+            resursMap["l_svietlaja_subota"] = R.raw.l_svietlaja_subota
+            resursMap["viaczernia_vialikdzien"] = R.raw.viaczernia_vialikdzien
+            resursMap["ndz_tamasza_viaczernia_subota"] = R.raw.ndz_tamasza_viaczernia_subota
             resursMap["pesny_prasl_70"] = PesnyAll.resursMap["pesny_prasl_70"]
         }
 

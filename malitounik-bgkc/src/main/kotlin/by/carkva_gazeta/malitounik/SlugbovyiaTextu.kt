@@ -102,9 +102,24 @@ class SlugbovyiaTextu {
 
         datMinVP.add(SlugbovyiaTextuData(0, "Уваскрасеньне Госпада Бога і Збаўцы нашага Ісуса Хрыста (Вялікдзень) - Ютрань", "vialikdzien_jutran", UTRAN, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(0, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
-        datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак - Ютрань", "svietly_paniadzielak", UTRAN, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(2, "Сьветлы аўторак - Ютрань", "svietly_autorak", UTRAN, pasxa = true))
-        datMinVP.add(SlugbovyiaTextuData(5, "Сьветлая пятніца - Ютрань", "svietlaja_piatnica", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак - Ютрань", "u_svietly_paniadzielak", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак - Літургія", "l_svietly_paniadzielak", LITURGIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы панядзелак - Вячэрня", "v_svietly_paniadzielak", VIACHERNIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(2, "Сьветлы аўторак - Ютрань", "u_svietly_autorak", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(2, "Сьветлы аўторак - Літургія", "l_svietly_autorak", LITURGIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(2, "Сьветлы аўторак - Вячэрня", "v_svietly_autorak", VIACHERNIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(3, "Сьветлая серада - Ютрань", "u_svietlaja_sierada", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(3, "Сьветлая серада - Літургія", "l_svietlaja_sierada", LITURGIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(3, "Сьветлая серада - Вячэрня", "v_svietlaja_sierada", VIACHERNIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(4, "Сьветлы чацьвер - Ютрань", "u_svietly_czacvier", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(4, "Сьветлы чацьвер - Літургія", "l_svietly_czacvier", LITURGIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(4, "Сьветлы чацьвер - Вячэрня", "v_svietly_czacvier", VIACHERNIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(5, "Сьветлая пятніца - Ютрань", "u_svietlaja_piatnica", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(5, "Сьветлая пятніца - Літургія", "l_svietlaja_piatnica", LITURGIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(5, "Сьветлая пятніца - Вячэрня", "v_svietlaja_piatnica", VIACHERNIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(6, "Сьветлая субота - Ютрань", "u_svietlaja_subota", UTRAN, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(6, "Сьветлая субота - Літургія", "l_svietlaja_subota", LITURGIA, pasxa = true))
+        datMinVP.add(SlugbovyiaTextuData(6, "Нядзеля Тамаша (Антыпасха) вячэрня ў суботу", "ndz_tamasza_viaczernia_subota", VIACHERNIA, pasxa = true))
         datMinVP.add(SlugbovyiaTextuData(1, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
         datMinVP.add(SlugbovyiaTextuData(2, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
         datMinVP.add(SlugbovyiaTextuData(3, "Сьветлы тыдзень - Велікодныя гадзіны", "vielikodnyja_hadziny", VIALIKIAGADZINY, pasxa = true, checkVialikiaGadziny = true))
@@ -210,7 +225,7 @@ class SlugbovyiaTextu {
 
     fun getSvetlyTydzen(): ArrayList<SlugbovyiaTextuData> {
         val list = ArrayList<SlugbovyiaTextuData>()
-        for (i in 65..69) list.add(datMinVP[i])
+        for (i in 65..84) list.add(datMinVP[i])
         return list
     }
 

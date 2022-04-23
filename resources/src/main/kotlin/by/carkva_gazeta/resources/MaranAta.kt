@@ -821,6 +821,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
         }
         adapter.notifyDataSetChanged()
+        binding.ListView.post {
+            if (fullscreenPage) hide()
+        }
     }
 
     private fun getSinoidalGlavas(nomer: Int, konec: Int): String {
@@ -1221,11 +1224,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         prefEditor.apply()
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (fullscreenPage && hasFocus) hide()
     }
 
     private fun hide() {

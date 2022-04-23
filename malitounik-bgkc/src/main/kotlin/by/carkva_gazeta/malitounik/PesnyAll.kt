@@ -372,6 +372,9 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         } else {
             builder.append(getString(R.string.error_ch))
         }
+        binding.textView.post {
+            if (fullscreenPage) hide()
+        }
         binding.textView.text = MainActivity.fromHtml(builder.toString())
         val search = intent.extras?.getString("search", "") ?: ""
         if (search != "") findAllAsanc(search)
@@ -624,11 +627,6 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         } else {
             if (checkSetDzenNoch) onSupportNavigateUp() else super.onBackPressed()
         }
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (fullscreenPage && hasFocus) hide()
     }
 
     private fun hide() {

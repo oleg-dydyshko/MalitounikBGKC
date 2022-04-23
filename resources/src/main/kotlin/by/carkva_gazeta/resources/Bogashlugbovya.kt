@@ -1201,9 +1201,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     stopAutoStartScroll()
                     mAutoScroll = false
                     invalidateOptionsMenu()
-                } else {
+                } else if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
                     autoStartScroll()
                 }
+                if (fullscreenPage) hide()
             }
         } else {
             if (resurs.contains("viachernia_ton")) {
@@ -1236,6 +1237,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         mAutoScroll = false
                         invalidateOptionsMenu()
                     }
+                    if (fullscreenPage) hide()
                 }
             }
         }
@@ -1682,11 +1684,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (fullscreenPage && hasFocus) hide()
     }
 
     private fun hide() {

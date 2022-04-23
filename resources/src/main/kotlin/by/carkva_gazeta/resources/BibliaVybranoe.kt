@@ -494,6 +494,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
                     val y = binding.textView.layout.getLineTop(line)
                     binding.InteractiveScroll.scrollY = y
                 }
+                if (fullscreenPage) hide()
             }
         } else {
             binding.InteractiveScroll.post {
@@ -505,6 +506,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
                 if (k.getBoolean("autoscrollAutostart", false)) {
                     autoStartScroll()
                 }
+                if (fullscreenPage) hide()
             }
         }
     }
@@ -723,11 +725,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
         }
         prefEditor.apply()
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (fullscreenPage && hasFocus) hide()
     }
 
     private fun hide() {

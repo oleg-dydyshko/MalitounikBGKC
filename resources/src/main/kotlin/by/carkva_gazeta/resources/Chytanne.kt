@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Spannable
@@ -832,6 +831,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                     val y = binding.textView.layout.getLineTop(line)
                     val anim = ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", binding.InteractiveScroll.scrollY, y)
                     anim.setDuration(1000).start()
+                    if (fullscreenPage) hide()
                 }
             }
             if (savedInstanceState != null) {
@@ -843,10 +843,14 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                         val y = binding.textView.layout.getLineTop(line)
                         binding.InteractiveScroll.scrollY = y
                     }
+                    if (fullscreenPage) hide()
                 }
             } else {
                 if (k.getBoolean("autoscrollAutostart", false)) {
                     autoStartScroll()
+                }
+                binding.textView.post {
+                    if (fullscreenPage) hide()
                 }
             }
         } catch (t: Throwable) {
@@ -1084,11 +1088,6 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
         }
         prefEditor.apply()
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (fullscreenPage && hasFocus) hide()
     }
 
     private fun hide() {

@@ -591,9 +591,12 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         setContentView(binding.root)
         resurs = intent?.extras?.getString("resurs") ?: ""
         title = intent?.extras?.getString("title") ?: ""
-        loadData(savedInstanceState)
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
+        if (intent?.extras?.getBoolean("autoscrollOFF", false) == true) {
+            mAutoScroll = false
+        }
+        loadData(savedInstanceState)
         binding.scrollView2.setOnScrollChangedCallback(this)
         binding.constraint.setOnTouchListener(this)
         if (savedInstanceState != null) {
@@ -779,6 +782,19 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             val reader = BufferedReader(isr)
             val color = if (dzenNoch) "<font color=\"#f44336\">"
             else "<font color=\"#d00505\">"
+            val slugbovyiaTextu = SlugbovyiaTextu()
+            val cal = Calendar.getInstance()
+            raznica = zmenyiaChastki.raznica()
+            dayOfYear = zmenyiaChastki.dayOfYear()
+            checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), dayOfYear, slugbovyiaTextu.isPasxa(dayOfYear.toInt()))
+            if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
+                chechZmena = true
+            }
+            if ((resurs == "lit_ran_asv_dar" || resurs == "viaczernia_bierascie") && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
+                chechZmena = true
+                checkLiturgia = 1
+            }
+            invalidateOptionsMenu()
             reader.forEachLine {
                 var line = it
                 if (dzenNoch) line = line.replace("#d00505", "#f44336")
@@ -798,94 +814,119 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         if (line.contains("KANDAK")) {
                             line = line.replace("KANDAK", "")
                             builder.append(line)
-                            try {
-                                if (dayOfWeek == 1) {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(1))
-                                } else {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 1))
+                            if (chechZmena) {
+                                builder.append("Глядзіце тут").append("<br>\n")
+                            } else {
+                                try {
+                                    if (dayOfWeek == 1) {
+                                        builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(1))
+                                    } else {
+                                        builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 1))
+                                    }
+                                } catch (t: Throwable) {
+                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                                 }
-                            } catch (t: Throwable) {
-                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                             }
                         }
                         if (line.contains("PRAKIMEN")) {
                             line = line.replace("PRAKIMEN", "")
                             builder.append(line)
-                            try {
-                                if (dayOfWeek == 1) {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(2))
-                                } else {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 2))
+                            if (chechZmena) {
+                                builder.append("Глядзіце тут").append("<br>\n")
+                            } else {
+                                try {
+                                    if (dayOfWeek == 1) {
+                                        builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(2))
+                                    } else {
+                                        builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 2))
+                                    }
+                                } catch (t: Throwable) {
+                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                                 }
-                            } catch (t: Throwable) {
-                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                             }
                         }
                         if (line.contains("ALILUIA")) {
                             line = line.replace("ALILUIA", "")
                             builder.append(line)
-                            try {
-                                if (dayOfWeek == 1) {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(3))
-                                } else {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 3))
+                            if (chechZmena) {
+                                builder.append("Глядзіце тут").append("<br>\n")
+                            } else {
+                                try {
+                                    if (dayOfWeek == 1) {
+                                        builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(3))
+                                    } else {
+                                        builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 3))
+                                    }
+                                } catch (t: Throwable) {
+                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                                 }
-                            } catch (t: Throwable) {
-                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
                             }
                         }
                         if (line.contains("PRICHASNIK")) {
                             line = line.replace("PRICHASNIK", "")
                             builder.append(line)
-                            try {
-                                if (dayOfWeek == 1) {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(4))
-                                } else {
-                                    builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 4))
+                            if (chechZmena) {
+                                builder.append("Глядзіце тут").append("<br>\n")
+                            } else {
+                                try {
+                                    if (dayOfWeek == 1) {
+                                        builder.append(zmenyiaChastki.traparyIKandakiNiadzelnyia(4))
+                                    } else {
+                                        builder.append(zmenyiaChastki.traparyIKandakiNaKognyDzen(dayOfWeek, 4))
+                                    }
+                                } catch (t: Throwable) {
+                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br><br>\n")
                                 }
-                            } catch (t: Throwable) {
-                                builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br><br>\n")
                             }
                         }
                         when {
                             line.contains("APCH") -> {
                                 line = line.replace("APCH", "")
-                                var sv = zmenyiaChastki.sviatyia()
-                                if (sv != "") {
-                                    val s1 = sv.split(":")
-                                    val s2 = s1[1].split(";")
-                                    sv = if (s1[0].contains("На ютрані")) s2[1]
-                                    else s1[0] + ":" + s2[0]
-                                    aliert8 = sv.trim()
-                                    builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
-                                } else builder.append(line)
-                                try {
-                                    builder.append(zmenyiaChastki.zmenya(1))
-                                } catch (t: Throwable) {
-                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br><br>\n")
+                                if (chechZmena) {
+                                    builder.append("<br>").append("Глядзіце тут").append("<br><br>\n")
+                                } else {
+                                    var sv = zmenyiaChastki.sviatyia()
+                                    if (sv != "") {
+                                        val s1 = sv.split(":")
+                                        val s2 = s1[1].split(";")
+                                        sv = if (s1[0].contains("На ютрані")) s2[1]
+                                        else s1[0] + ":" + s2[0]
+                                        aliert8 = sv.trim()
+                                        builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
+                                    } else builder.append(line)
+                                    try {
+                                        builder.append(zmenyiaChastki.zmenya(1))
+                                    } catch (t: Throwable) {
+                                        builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br><br>\n")
+                                    }
                                 }
                             }
                             line.contains("EVCH") -> {
                                 line = line.replace("EVCH", "")
-                                var sv = zmenyiaChastki.sviatyia()
-                                if (sv != "") {
-                                    val s1 = sv.split(":")
-                                    val s2 = s1[1].split(";")
-                                    sv = if (s1[0].contains("На ютрані")) s2[2]
-                                    else s1[0] + ":" + s2[1]
-                                    aliert9 = sv.trim()
-                                    builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
-                                } else builder.append(line)
-                                try {
-                                    builder.append(zmenyiaChastki.zmenya(0))
-                                } catch (t: Throwable) {
-                                    builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                                if (chechZmena) {
+                                    builder.append("<br>").append("Глядзіце тут").append("<br><br>\n")
+                                } else {
+                                    var sv = zmenyiaChastki.sviatyia()
+                                    if (sv != "") {
+                                        val s1 = sv.split(":")
+                                        val s2 = s1[1].split(";")
+                                        sv = if (s1[0].contains("На ютрані")) s2[2]
+                                        else s1[0] + ":" + s2[1]
+                                        aliert9 = sv.trim()
+                                        builder.append(color).append("<br>").append(sv).append("</font>").append("<br><br>\n")
+                                    } else builder.append(line)
+                                    try {
+                                        builder.append(zmenyiaChastki.zmenya(0))
+                                    } catch (t: Throwable) {
+                                        builder.append(resources.getString(by.carkva_gazeta.malitounik.R.string.error_ch)).append("<br>\n")
+                                    }
                                 }
                             }
                             else -> {
                                 builder.append(line)
                             }
                         }
+
                     }
                     else -> {
                         builder.append(line)
@@ -896,6 +937,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             return@withContext builder.toString()
         }
         val text = MainActivity.fromHtml(res).toSpannable()
+        if (resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2" || resurs == "l_vasila_vialikaha") {
+            val ch1 = runZmennyiaChastki(text, 0)
+            val ch2 = runZmennyiaChastki(text, ch1)
+            val ch3 = runZmennyiaChastki(text, ch2)
+            val ch4 = runZmennyiaChastki(text, ch3)
+            val ch5 = runZmennyiaChastki(text, ch4)
+            runZmennyiaChastki(text, ch5)
+        }
         var string = aliert8
         var strLig = string.length
         var t1 = text.indexOf(string)
@@ -953,6 +1002,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
+                        intent.putExtra("autoscrollOFF", true)
                         intent.putExtra("title", "Ліцьця і блаславеньне хлябоў")
                         intent.putExtra("resurs", "viachernia_liccia_i_blaslavenne_xliabou")
                         startActivity(intent)
@@ -1298,19 +1348,29 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         })
         if (dzenNoch) binding.imageView5.setImageResource(by.carkva_gazeta.malitounik.R.drawable.find_niz_back)
         binding.imageView5.setOnClickListener { findNext() }
-        val slugbovyiaTextu = SlugbovyiaTextu()
-        val cal = Calendar.getInstance()
-        raznica = zmenyiaChastki.raznica()
-        dayOfYear = zmenyiaChastki.dayOfYear()
-        checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), dayOfYear, slugbovyiaTextu.isPasxa(dayOfYear.toInt()))
-        if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
-            chechZmena = true
+    }
+
+    private fun runZmennyiaChastki(text: Spannable, index: Int): Int {
+        val stringGTA1 = "Глядзіце тут"
+        val strLigGTA1 = stringGTA1.length
+        val bsatGTA1 = text.indexOf(stringGTA1, index)
+        if (bsatGTA1 != -1) {
+            text.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val slugbovyiaTextu = SlugbovyiaTextu()
+                    val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
+                    var resours = slugbovyiaTextu.getResource(raznica, slugbovyiaTextu.isPasxa(raznica), SlugbovyiaTextu.LITURGIA)
+                    if (resours == "0") resours = slugbovyiaTextu.getResource(dayOfYear.toInt(), slugbovyiaTextu.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
+                    intent.putExtra("autoscrollOFF", true)
+                    intent.putExtra("resurs", resours)
+                    intent.putExtra("zmena_chastki", true)
+                    intent.putExtra("title", slugbovyiaTextu.getTitle(resours))
+                    startActivity(intent)
+                }
+            }, bsatGTA1, bsatGTA1 + strLigGTA1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            return bsatGTA1 + strLigGTA1
         }
-        if ((resurs == "lit_ran_asv_dar" || resurs == "viaczernia_bierascie") && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
-            chechZmena = true
-            checkLiturgia = 1
-        }
-        invalidateOptionsMenu()
+        return 0
     }
 
     private fun autoStartScroll() {
@@ -1563,6 +1623,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 checkDayOfYear -> {
                     var resours = slugba.getResource(raznica, slugba.isPasxa(raznica), SlugbovyiaTextu.LITURGIA)
                     if (resours == "0") resours = slugba.getResource(dayOfYear.toInt(), slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
+                    intent.putExtra("autoscrollOFF", true)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))
@@ -1570,6 +1631,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 else -> {
                     val resours = if (checkLiturgia == 0) slugba.getResource(raznica, slugba.isPasxa(raznica), SlugbovyiaTextu.LITURGIA)
                     else slugba.getResource(raznica, slugba.isPasxa(raznica), SlugbovyiaTextu.VIACHERNIA)
+                    intent.putExtra("autoscrollOFF", true)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))

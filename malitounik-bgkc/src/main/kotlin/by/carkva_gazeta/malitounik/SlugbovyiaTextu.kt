@@ -234,18 +234,22 @@ class SlugbovyiaTextu {
     fun getMineiaSviatochnaia() = datMinSV
 
     fun isPasxa(day: Int): Boolean {
-        var pasxa = true
+        datMinVP.forEach {
+            if (it.day == day) {
+                return it.pasxa
+            }
+        }
         datMinSH.forEach {
             if (it.day == day) {
-                pasxa = it.pasxa
+                return it.pasxa
             }
         }
         datMinSV.forEach {
             if (it.day == day) {
-                pasxa = it.pasxa
+                return it.pasxa
             }
         }
-        return pasxa
+        return true
     }
 
     fun getResource(day: Int, pasxa: Boolean, sluzba: Int, isSviaty: Boolean = false): String {

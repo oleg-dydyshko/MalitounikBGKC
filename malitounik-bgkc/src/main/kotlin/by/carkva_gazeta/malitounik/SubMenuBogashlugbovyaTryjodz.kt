@@ -78,12 +78,19 @@ class SubMenuBogashlugbovyaTryjodz : AppCompatActivity() {
             binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         }
         val sluzba = SlugbovyiaTextu()
-        data = if (intent?.extras?.getBoolean("svetly", false) == true) {
-            binding.titleToolbar.text = resources.getText(R.string.slugby_svetlaga_tydna)
-            sluzba.getSvetlyTydzen()
-        } else {
-            binding.titleToolbar.text = resources.getText(R.string.slugby_vialikaga_tydna)
-            sluzba.getVilikiTydzen()
+        data = when (intent?.extras?.getInt("tryjodz", 1) ?: 1) {
+            2 -> {
+                binding.titleToolbar.text = resources.getText(R.string.slugby_svetlaga_tydna)
+                sluzba.getSvetlyTydzen()
+            }
+            3 -> {
+                binding.titleToolbar.text = resources.getText(R.string.slugby_niadzeli_tamasha)
+                sluzba.getNiadzeliaTamasha()
+            }
+            else -> {
+                binding.titleToolbar.text = resources.getText(R.string.slugby_vialikaga_tydna)
+                sluzba.getVilikiTydzen()
+            }
         }
         binding.ListView.adapter = ListAdaprer(this)
         binding.ListView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->

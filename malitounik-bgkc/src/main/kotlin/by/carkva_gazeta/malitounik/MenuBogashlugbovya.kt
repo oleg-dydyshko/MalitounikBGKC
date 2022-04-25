@@ -45,6 +45,7 @@ class MenuBogashlugbovya : ListFragment() {
             data.add(MenuListData("Мінэя сьвяточная", "7"))
             data.add(MenuListData("Мінэя штодзённая", "8"))
             data.add(MenuListData("Службы Сьветлага тыдня", "9"))
+            data.add(MenuListData("Службы нядзелі Тамаша", "10"))
             data.sort()
             listAdapter = MenuListAdaprer(it)
         }
@@ -79,7 +80,7 @@ class MenuBogashlugbovya : ListFragment() {
             }
             "6" -> {
                 val intent = Intent(activity, SubMenuBogashlugbovyaTryjodz::class.java)
-                intent.putExtra("svetly", false)
+                intent.putExtra("tryjodz", 1)
                 startActivity(intent)
             }
             "7" -> {
@@ -97,7 +98,14 @@ class MenuBogashlugbovya : ListFragment() {
             "9" -> {
                 activity?.let {
                     val intent = Intent(it, SubMenuBogashlugbovyaTryjodz::class.java)
-                    intent.putExtra("svetly", true)
+                    intent.putExtra("tryjodz", 2)
+                    startActivity(intent)
+                }
+            }
+            "10" -> {
+                activity?.let {
+                    val intent = Intent(it, SubMenuBogashlugbovyaTryjodz::class.java)
+                    intent.putExtra("tryjodz", 3)
                     startActivity(intent)
                 }
             }

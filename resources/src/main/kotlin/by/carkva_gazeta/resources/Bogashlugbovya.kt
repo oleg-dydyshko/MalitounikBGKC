@@ -350,6 +350,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["l_svietlaja_subota"] = R.raw.l_svietlaja_subota
             resursMap["viaczernia_vialikdzien"] = R.raw.viaczernia_vialikdzien
             resursMap["ndz_tamasza_viaczernia_subota"] = R.raw.ndz_tamasza_viaczernia_subota
+            resursMap["ndz_tamasza_paniadzielak"] = R.raw.ndz_tamasza_paniadzielak
+            resursMap["ndz_tamasza_autorak"] = R.raw.ndz_tamasza_autorak
+            resursMap["ndz_tamasza_sierada"] = R.raw.ndz_tamasza_sierada
+            resursMap["ndz_tamasza_czacvier"] = R.raw.ndz_tamasza_czacvier
+            resursMap["ndz_tamasza_piatnica"] = R.raw.ndz_tamasza_piatnica
+            resursMap["ndz_tamasza_jutran"] = R.raw.ndz_tamasza_jutran
+            resursMap["ndz_tamasza_uvieczary"] = R.raw.ndz_tamasza_uvieczary
             resursMap["pesny_prasl_70"] = PesnyAll.resursMap["pesny_prasl_70"]
         }
 

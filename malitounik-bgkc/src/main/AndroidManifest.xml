@@ -339,8 +339,16 @@
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
-            android:name=".SubMenuBogashlugbovyaTryjodz"
-            android:label="@string/slugby_vialikaga_tydna"
+            android:name=".BogashlugbovyaTryjodz"
+            android:label="@string/tryjodz"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="by.carkva_gazeta.malitounik.BogashlugbovyaTryjodzList" />
+        </activity>
+        <activity
+            android:name=".BogashlugbovyaTryjodzList"
+            android:label="@string/tryjodz"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

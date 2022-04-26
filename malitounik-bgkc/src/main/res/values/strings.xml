@@ -318,9 +318,6 @@
     <string name="del_all_vybranoe">Вы сапраўды жадаеце выдаліць усё Выбранае?</string>
     <string name="share">Падзяліцца&#8230;</string>
     <string name="slugby_vialikaga_postu">Службы Вялікага посту</string>
-    <string name="slugby_vialikaga_tydna">Службы Вялікага тыдня</string>
-    <string name="slugby_svetlaga_tydna">Службы Сьветлага тыдня</string>
-    <string name="slugby_niadzeli_tamasha">Службы нядзелі Тамаша</string>
     <string name="bad_internet">ДРЭННАЕ ІНТЭРНЭТ ЗЛУЧЭНЬНЕ\nПраверце якасьць сігналу</string>
     <string name="copy_big">Cкапіяваць</string>
     <string name="copy_big_full">Вылучыць усё</string>
@@ -415,6 +412,11 @@
         <item>Службы 4-га тыдня Вялікага посту</item>
         <item>Службы 5-га тыдня Вялікага посту</item>
         <item>Службы 6-га тыдня Вялікага посту</item>
+    </string-array>
+    <string-array name="bogaslugbovuia_tryjodz">
+        <item>Службы Вялікага тыдня</item>
+        <item>Службы Сьветлага тыдня</item>
+        <item>Службы нядзелі Тамаша</item>
     </string-array>
     <string-array name="galounae">
         <item>Апошнія навіны</item>
@@ -719,5 +721,6 @@
     <string name="viaczernia_bierascie_2">Вершы з Пс 140–141</string>
     <string name="viaczernia_bierascie_3">На нядзельнай вячэрні вершапесьні сьпяваюцца з наступнымі вершамі:</string>
     <string name="del_all_back_copy">Вы сапраўды жадаеце выдаліць усё рэзервовыя копіі?</string>
+    <string name="tryjodz">Трыёдзь</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

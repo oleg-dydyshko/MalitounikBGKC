@@ -39,13 +39,11 @@ class MenuBogashlugbovya : ListFragment() {
             data.add(MenuListData("Трапары і кандакі нядзельныя васьмі тонаў", "3"))
             data.add(MenuListData("Трапары і кандакі штодзённыя - на кожны дзень тыдня", "4"))
             data.add(MenuListData("Службы Вялікага посту", "5"))
-            data.add(MenuListData("Службы Вялікага тыдня", "6"))
+            data.add(MenuListData("Мінэя штодзённая", "6"))
             data.add(MenuListData("Малебны канон Найсьвяцейшай Багародзіцы", "bogashlugbovya9"))
             data.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага", "kanon_a_kryckaha"))
             data.add(MenuListData("Мінэя сьвяточная", "7"))
-            data.add(MenuListData("Мінэя штодзённая", "8"))
-            data.add(MenuListData("Службы Сьветлага тыдня", "9"))
-            data.add(MenuListData("Службы нядзелі Тамаша", "10"))
+            data.add(MenuListData("Трыёдзь", "8"))
             data.sort()
             listAdapter = MenuListAdaprer(it)
         }
@@ -79,9 +77,10 @@ class MenuBogashlugbovya : ListFragment() {
                 startActivity(intent)
             }
             "6" -> {
-                val intent = Intent(activity, SubMenuBogashlugbovyaTryjodz::class.java)
-                intent.putExtra("tryjodz", 1)
-                startActivity(intent)
+                activity?.let {
+                    val intent = Intent(it, MineiaShodzennaia::class.java)
+                    startActivity(intent)
+                }
             }
             "7" -> {
                 activity?.let {
@@ -91,21 +90,7 @@ class MenuBogashlugbovya : ListFragment() {
             }
             "8" -> {
                 activity?.let {
-                    val intent = Intent(it, MineiaShodzennaia::class.java)
-                    startActivity(intent)
-                }
-            }
-            "9" -> {
-                activity?.let {
-                    val intent = Intent(it, SubMenuBogashlugbovyaTryjodz::class.java)
-                    intent.putExtra("tryjodz", 2)
-                    startActivity(intent)
-                }
-            }
-            "10" -> {
-                activity?.let {
-                    val intent = Intent(it, SubMenuBogashlugbovyaTryjodz::class.java)
-                    intent.putExtra("tryjodz", 3)
+                    val intent = Intent(it, BogashlugbovyaTryjodz::class.java)
                     startActivity(intent)
                 }
             }

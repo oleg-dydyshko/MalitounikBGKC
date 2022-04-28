@@ -37,6 +37,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
     private var itemDefault = 0
     private lateinit var binding: SettingsActivityBinding
     private var resetTollbarJob: Job? = null
+    private var adminResetJob: Job? = null
     private var adminClickTime: Long = 0
     private var adminItemCount = 0
     private var edit = false
@@ -782,7 +783,9 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                 adminItemCount++
             } else {
                 adminItemCount = 1
+                binding.titleToolbar.text = resources.getString(R.string.tools_item)
             }
+            adminResetJob?.cancel()
             adminClickTime = SystemClock.elapsedRealtime()
             if (adminItemCount == 7) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -790,12 +793,16 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                     checkLogin.isCancelable = false
                     checkLogin.show(supportFragmentManager, "checkLogin")
                 }
-                MainActivity.toastView("Гатова")
+                binding.titleToolbar.text = resources.getString(R.string.tools_admin_item, ": Гатова")
             }
             when (adminItemCount) {
-                4 -> MainActivity.toastView("3")
-                5 -> MainActivity.toastView("2")
-                6 -> MainActivity.toastView("1")
+                4 -> binding.titleToolbar.text = resources.getString(R.string.tools_admin_item, ": 3")
+                5 -> binding.titleToolbar.text = resources.getString(R.string.tools_admin_item, ": 2")
+                6 -> binding.titleToolbar.text = resources.getString(R.string.tools_admin_item, ": 1")
+            }
+            adminResetJob = CoroutineScope(Dispatchers.Main).launch {
+                delay(3000L)
+                binding.titleToolbar.text = resources.getString(R.string.tools_item)
             }
         }
         binding.cheshe.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
@@ -1270,7 +1277,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.titleToolbar.text = resources.getText(R.string.tools_item)
+        binding.titleToolbar.text = resources.getString(R.string.tools_item)
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }

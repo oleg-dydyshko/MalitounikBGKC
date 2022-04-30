@@ -778,6 +778,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
+        val liturgia = resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2" || resurs == "l_vasila_vialikaha" || resurs == "bogashlugbovya8"
         val zmenyiaChastki = ZmenyiaChastki()
         val res = withContext(Dispatchers.IO) {
             val builder = StringBuilder()
@@ -794,7 +795,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             raznica = zmenyiaChastki.raznica()
             dayOfYear = zmenyiaChastki.dayOfYear()
             checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), dayOfYear, slugbovyiaTextu.isPasxa(dayOfYear.toInt()))
-            if ((resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2") && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
+            if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
                 chechZmena = true
             }
             if ((resurs == "lit_ran_asv_dar" || resurs == "viaczernia_bierascie") && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
@@ -817,7 +818,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         line = line.replace("PRICHASNIKK", "")
                         builder.append(line)
                     }
-                    resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2" || resurs == "l_vasila_vialikaha" -> {
+                    liturgia -> {
                         if (line.contains("KANDAK")) {
                             line = line.replace("KANDAK", "")
                             builder.append(line)
@@ -944,7 +945,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             return@withContext builder.toString()
         }
         val text = MainActivity.fromHtml(res).toSpannable()
-        if (resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2" || resurs == "l_vasila_vialikaha") {
+        if (liturgia) {
             val ch1 = runZmennyiaChastki(text, 0)
             val ch2 = runZmennyiaChastki(text, ch1)
             val ch3 = runZmennyiaChastki(text, ch2)
@@ -1096,7 +1097,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }, vbt2, vbt2 + strLigVB2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
-        if (resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2" || resurs == "l_vasila_vialikaha") {
+        if (liturgia) {
             var stringBS = "Пс 102 (гл. тут)."
             var strLigBS = stringBS.length
             var bst1 = text.indexOf(stringBS)

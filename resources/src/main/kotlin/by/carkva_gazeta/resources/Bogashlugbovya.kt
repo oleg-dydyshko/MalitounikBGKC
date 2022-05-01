@@ -22,6 +22,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
@@ -82,6 +83,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var daysv = 1
     private var munsv = 0
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
+    private val bogashlugbovyaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == 200) {
+            startAutoScroll()
+        }
+    }
 
     companion object {
         val resursMap = ArrayMap<String, Int>()
@@ -600,8 +606,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         title = intent?.extras?.getString("title") ?: ""
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
-        if (intent?.extras?.getBoolean("autoscrollOFF", false) == true) {
+        val autoscrollOFF = intent?.extras?.containsKey("autoscrollOFF") ?: false
+        if (autoscrollOFF) {
             mAutoScroll = false
+            editDzenNoch = intent?.extras?.getBoolean("autoscrollOFF") ?: false
         }
         loadData(savedInstanceState)
         binding.scrollView2.setOnScrollChangedCallback(this)
@@ -1010,10 +1018,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
-                        intent.putExtra("autoscrollOFF", true)
+                        intent.putExtra("autoscrollOFF", autoscroll)
                         intent.putExtra("title", "Ліцьця і блаславеньне хлябоў")
                         intent.putExtra("resurs", "viachernia_liccia_i_blaslavenne_xliabou")
-                        startActivity(intent)
+                        bogashlugbovyaLauncher.launch(intent)
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
@@ -1369,11 +1377,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     val intent = Intent(this@Bogashlugbovya, Bogashlugbovya::class.java)
                     var resours = slugbovyiaTextu.getResource(raznica, slugbovyiaTextu.isPasxa(raznica), SlugbovyiaTextu.LITURGIA)
                     if (resours == "0") resours = slugbovyiaTextu.getResource(dayOfYear.toInt(), slugbovyiaTextu.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
-                    intent.putExtra("autoscrollOFF", true)
+                    intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugbovyiaTextu.getTitle(resours))
-                    startActivity(intent)
+                    bogashlugbovyaLauncher.launch(intent)
                 }
             }, bsatGTA1, bsatGTA1 + strLigGTA1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             return bsatGTA1 + strLigGTA1
@@ -1631,7 +1639,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 checkDayOfYear -> {
                     var resours = slugba.getResource(raznica, slugba.isPasxa(raznica), SlugbovyiaTextu.LITURGIA)
                     if (resours == "0") resours = slugba.getResource(dayOfYear.toInt(), slugba.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
-                    intent.putExtra("autoscrollOFF", true)
+                    intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))
@@ -1639,13 +1647,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 else -> {
                     val resours = if (checkLiturgia == 0) slugba.getResource(raznica, slugba.isPasxa(raznica), SlugbovyiaTextu.LITURGIA)
                     else slugba.getResource(raznica, slugba.isPasxa(raznica), SlugbovyiaTextu.VIACHERNIA)
-                    intent.putExtra("autoscrollOFF", true)
+                    intent.putExtra("autoscrollOFF", autoscroll)
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugba.getTitle(resours))
                 }
             }
-            startActivity(intent)
+            bogashlugbovyaLauncher.launch(intent)
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             editDzenNoch = true

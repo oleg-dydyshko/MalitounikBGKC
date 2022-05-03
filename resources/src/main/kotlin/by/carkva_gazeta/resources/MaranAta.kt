@@ -390,6 +390,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             vydelenie = gson.fromJson(file.readText(), type)
         }
         binding.ListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            private var checkDiff = false
+
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
                 mActionDown = scrollState != 0
             }
@@ -405,7 +407,12 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 }
                 diffScroll = if (list.lastVisiblePosition == list.adapter.count - 1) list.getChildAt(list.childCount - 1).bottom - list.height
                 else -1
+                if (checkDiff && diffScroll > 0) {
+                    checkDiff = false
+                    invalidateOptionsMenu()
+                }
                 if (list.lastVisiblePosition == list.adapter.count - 1 && list.getChildAt(list.childCount - 1).bottom <= list.height) {
+                    checkDiff = true
                     autoscroll = false
                     stopAutoScroll()
                     invalidateOptionsMenu()
@@ -929,6 +936,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 prefEditor.putBoolean("autoscroll", false)
                 prefEditor.apply()
             }
+            spid = k.getInt("autoscrollSpid", 60)
             binding.actionMinus.visibility = View.GONE
             binding.actionPlus.visibility = View.GONE
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -1125,10 +1133,10 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
             mActionDown = false
         }
-        if (autoscroll) {
-            itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
-        } else {
-            itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
+        when {
+            autoscroll -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
+            diffScroll == 0 -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_up)
+            else -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
         }
 
         val spanString = SpannableString(itemAuto.title.toString())

@@ -53,7 +53,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
     private var resetScreenJob: Job? = null
-    private var diffScroll = -1
+    private var diffScroll = false
     private var titleTwo = ""
     private var firstTextPosition = ""
 
@@ -85,14 +85,11 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         binding.constraint.setOnTouchListener(this)
         binding.InteractiveScroll.setOnBottomReachedListener(object : OnBottomReachedListener {
-            override fun onBottomReached() {
+            override fun onBottomReached(checkDiff: Boolean) {
+                diffScroll = checkDiff
                 autoscroll = false
                 stopAutoScroll()
                 invalidateOptionsMenu()
-            }
-
-            override fun onScrollDiff(diff: Int) {
-                diffScroll = diff
             }
 
             override fun onTouch(action: Boolean) {
@@ -907,6 +904,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                 prefEditor.putBoolean("autoscroll", false)
                 prefEditor.apply()
             }
+            spid = k.getInt("autoscrollSpid", 60)
             binding.actionMinus.visibility = View.GONE
             binding.actionPlus.visibility = View.GONE
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -925,7 +923,7 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
     }
 
     private fun startAutoScroll() {
-        if (diffScroll != 0) {
+        if (!diffScroll) {
             spid = k.getInt("autoscrollSpid", 60)
             binding.actionMinus.visibility = View.VISIBLE
             binding.actionPlus.visibility = View.VISIBLE
@@ -996,10 +994,11 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         autoscroll = k.getBoolean("autoscroll", false)
-        if (autoscroll) {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
-        } else {
-            menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto).setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
+        val itemAuto = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_auto)
+        when {
+            autoscroll -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
+            diffScroll -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_up)
+            else -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_utran).isChecked = k.getBoolean("utran", true)

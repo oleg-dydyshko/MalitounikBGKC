@@ -67,7 +67,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var procentJob: Job? = null
     private var resetTollbarJob: Job? = null
     private var resetScreenJob: Job? = null
-    private var diffScroll = -1
+    private var diffScroll = false
     private var aliert8 = ""
     private var aliert9 = ""
     private var findPosition = 0
@@ -719,14 +719,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             show()
         }
         binding.scrollView2.setOnBottomReachedListener(object : InteractiveScrollView.OnBottomReachedListener {
-            override fun onBottomReached() {
+            override fun onBottomReached(checkDiff: Boolean) {
+                diffScroll = checkDiff
                 autoscroll = false
                 stopAutoScroll()
                 invalidateOptionsMenu()
-            }
-
-            override fun onScrollDiff(diff: Int) {
-                diffScroll = diff
             }
 
             override fun onTouch(action: Boolean) {
@@ -1308,8 +1305,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }
             } else {
                 binding.scrollView2.post {
-                    binding.scrollView2.smoothScrollBy(0, positionY)
-                    if ((k.getBoolean("autoscrollAutostart", false) && mAutoScroll) || autoscroll) {
+                    binding.scrollView2.scrollBy(0, positionY)
+                    if (((k.getBoolean("autoscrollAutostart", false) && mAutoScroll) || autoscroll) && !diffScroll) {
                         autoStartScroll()
                     }
                 }
@@ -1432,6 +1429,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 prefEditors.putBoolean("autoscroll", false)
                 prefEditors.apply()
             }
+            spid = k.getInt("autoscrollSpid", 60)
             binding.actionMinus.visibility = View.GONE
             binding.actionPlus.visibility = View.GONE
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -1451,7 +1449,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun startAutoScroll() {
-        if (diffScroll !in 0..1) {
+        if (!diffScroll) {
             binding.actionMinus.visibility = View.VISIBLE
             binding.actionPlus.visibility = View.VISIBLE
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
@@ -1560,10 +1558,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_share).isVisible = true
         if (mAutoScroll) {
             autoscroll = k.getBoolean("autoscroll", false)
-            if (autoscroll) {
-                itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
-            } else {
-                itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
+            when {
+                autoscroll -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_on)
+                diffScroll -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon_up)
+                else -> itemAuto.setIcon(by.carkva_gazeta.malitounik.R.drawable.scroll_icon)
             }
         } else {
             itemAuto.isVisible = false

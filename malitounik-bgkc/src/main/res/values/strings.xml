@@ -723,5 +723,7 @@
     <string name="viaczernia_bierascie_3">На нядзельнай вячэрні вершапесьні сьпяваюцца з наступнымі вершамі:</string>
     <string name="del_all_back_copy">Вы сапраўды жадаеце выдаліць усё рэзервовыя копіі?</string>
     <string name="tryjodz">Трыёдзь</string>
+    <string name="admin_day_in_year">Паказваць нумар дня ў годзе</string>
+    <string name="admin_show_day_in_year">Дзень у годзе: %1$s</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

@@ -157,6 +157,7 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(362, "20 тысячаў мучанікаў Нікамедыйскіх - Літургія", "l_12_28", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня; сьвятаначальніка Сільвестра, папы Рымскага - Літургія", "l_1_2", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня; Сабор 70-ці апосталаў, пачэснага Тэактыста - Літургія", "l_01_04_pieradsv_bohazjaulennia", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(127, "Жырoвiцкaй iкoны Maцi Бoжae - Літургія", "mm_07_05_liturhija", LITURGIA))
 
         datMinSV.add(SlugbovyiaTextuData(218, "Перамяненьне Госпада, Бога і Збаўцы нашага Ісуса Хрыста", "zmenyia_chastki_pieramianiennie", LITURGIA))
         datMinSV.add(SlugbovyiaTextuData(1, "Абрэзаньне Гасподняе; сьвятаначальніка Васіля Вялікага, архібіск. Кесарыі Кападакійскай", "viachernia_mineia_sviatochnaia1", VIACHERNIA))

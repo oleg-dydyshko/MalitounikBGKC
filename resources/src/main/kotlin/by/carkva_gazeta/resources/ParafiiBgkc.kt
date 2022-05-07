@@ -92,7 +92,7 @@ class ParafiiBgkc : AppCompatActivity() {
             2 -> {
                 if (prynagodnyia == 0) inputStream = resources.openRawResource(R.raw.dzie_usxod_dekan)
                 if (prynagodnyia == 1) inputStream = resources.openRawResource(R.raw.dzie_viciebsk)
-                if (prynagodnyia == 2) inputStream = resources.openRawResource(R.raw.dzie_orsha)
+                if (prynagodnyia == 2) inputStream = resources.openRawResource(R.raw.dzie_vorsha)
                 if (prynagodnyia == 3) inputStream = resources.openRawResource(R.raw.dzie_homel)
                 if (prynagodnyia == 4) inputStream = resources.openRawResource(R.raw.dzie_polacak)
                 if (prynagodnyia == 5) inputStream = resources.openRawResource(R.raw.dzie_mahilou)

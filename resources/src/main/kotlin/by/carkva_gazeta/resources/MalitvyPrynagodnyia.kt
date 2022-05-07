@@ -176,6 +176,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         data.add(MenuListData("Малітвы перад ядою і пасьля яды", "mltv_pierad_jadoj_i_pasla"))
         data.add(MenuListData("Малітва за бацькоў", "mltv_za_backou"))
         data.add(MenuListData("Малітвы за памерлых", "mltv_za_pamierlych"))
+        data.add(MenuListData("Малітва да Багародзіцы, праслаўленай у цудатворнай Жыровіцкай іконе", "mltv_mb_zyrovickaja"))
         data.sort()
         adapter = MenuListAdaprer(this)
         binding.ListView.adapter = adapter

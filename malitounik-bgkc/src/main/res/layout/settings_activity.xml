@@ -131,6 +131,21 @@
                 android:text="@string/ekpan_on"
                 android:textSize="12sp" />
 
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/checkBox8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:drawableStart="@drawable/stiker"
+                android:drawableLeft="@drawable/stiker"
+                android:drawablePadding="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="@string/admin_day_in_year"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/admin"
                 android:layout_width="wrap_content"

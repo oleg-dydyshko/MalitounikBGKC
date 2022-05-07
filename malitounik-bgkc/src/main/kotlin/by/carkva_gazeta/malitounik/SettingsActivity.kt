@@ -828,6 +828,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
 
         if (k.getBoolean("admin", false)) {
             binding.admin.visibility = View.VISIBLE
+            binding.checkBox8.visibility = View.VISIBLE
         }
         binding.admin.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.admin.setOnClickListener {
@@ -946,6 +947,12 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         if (scrinOn) {
             binding.checkBox7.isChecked = true
         }
+        val adminDayInYear = k.getBoolean("adminDayInYear", false)
+        if (dzenNoch) binding.checkBox8.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.checkBox8.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        if (adminDayInYear) {
+            binding.checkBox8.isChecked = true
+        }
         if (dzenNoch) binding.reset.setBackgroundResource(R.drawable.knopka_red_black)
         binding.reset.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.reset.setOnClickListener {
@@ -1003,6 +1010,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             prefEditor.putInt("trafic", 0)
             prefEditor.putBoolean("admin", false)
+            prefEditor.putBoolean("adminDayInYear", false)
             prefEditor.apply()
             binding.vibro.isClickable = true
             binding.vibro.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
@@ -1011,6 +1019,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             binding.checkBox5.isChecked = false
             binding.checkBox6.isChecked = false
             binding.checkBox7.isChecked = false
+            binding.checkBox8.isChecked = false
             binding.maranata.isChecked = false
             binding.maranataRus.isChecked = false
             binding.maranataBel.isChecked = true
@@ -1129,6 +1138,10 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             } else {
                 window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
+            prefEditor.apply()
+        }
+        binding.checkBox8.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            prefEditor.putBoolean("adminDayInYear", isChecked)
             prefEditor.apply()
         }
         binding.vibro.typeface = MainActivity.createFont(Typeface.NORMAL)
@@ -1297,6 +1310,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         prefEditor.putBoolean("admin", true)
         prefEditor.apply()
         binding.admin.visibility = View.VISIBLE
+        binding.checkBox8.visibility = View.VISIBLE
         if (!MainActivity.checkmodulesAdmin()) {
             MainActivity.moduleName = "admin"
             MainActivity.downloadDynamicModule(this)

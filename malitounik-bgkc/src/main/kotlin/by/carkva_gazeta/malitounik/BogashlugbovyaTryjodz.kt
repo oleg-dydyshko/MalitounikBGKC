@@ -83,9 +83,14 @@ class BogashlugbovyaTryjodz : AppCompatActivity() {
                 return@OnItemClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val intent = Intent(this, BogashlugbovyaTryjodzList::class.java)
-            intent.putExtra("tryjodz", position)
-            intent.putExtra("title", data[position])
+            val intent: Intent
+            if (position == 0) {
+                intent = Intent(this, MineiaSviatochnaia::class.java)
+            } else {
+                intent = Intent(this, BogashlugbovyaTryjodzList::class.java)
+                intent.putExtra("tryjodz", position)
+                intent.putExtra("title", data[position])
+            }
             bogashlugbovyaLauncher.launch(intent)
         }
         if (savedInstanceState != null) {

@@ -366,6 +366,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["mm_15_08_uspiennie_liturhija"] = R.raw.mm_15_08_uspiennie_liturhija
             resursMap["mltv_mb_zyrovickaja"] = R.raw.mltv_mb_zyrovickaja
             resursMap["mm_07_05_liturhija"] = R.raw.mm_07_05_liturhija
+            resursMap["ndz_rasslablenaha_liturhija"] = R.raw.ndz_rasslablenaha_liturhija
             resursMap["pesny_prasl_70"] = PesnyAll.resursMap["pesny_prasl_70"]
         }
 
@@ -1453,6 +1454,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
 
     private fun startAutoScroll() {
         if (!diffScroll) {
+            spid = k.getInt("autoscrollSpid", 60)
             binding.actionMinus.visibility = View.VISIBLE
             binding.actionPlus.visibility = View.VISIBLE
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)

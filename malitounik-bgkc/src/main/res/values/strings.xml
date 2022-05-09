@@ -318,7 +318,7 @@
     <string name="bibliateka_file">Выбраць файл</string>
     <string name="del_all_vybranoe">Вы сапраўды жадаеце выдаліць усё Выбранае?</string>
     <string name="share">Падзяліцца&#8230;</string>
-    <string name="slugby_vialikaga_postu">Службы Вялікага посту</string>
+    <string name="slugby_vialikaga_postu">Мінэя Вялікага посту</string>
     <string name="bad_internet">ДРЭННАЕ ІНТЭРНЭТ ЗЛУЧЭНЬНЕ\nПраверце якасьць сігналу</string>
     <string name="copy_big">Cкапіяваць</string>
     <string name="copy_big_full">Вылучыць усё</string>
@@ -415,6 +415,7 @@
         <item>Службы 6-га тыдня Вялікага посту</item>
     </string-array>
     <string-array name="bogaslugbovuia_tryjodz">
+        <item>Трыёдзь Сьвяточная</item>
         <item>Службы Вялікага тыдня</item>
         <item>Службы Сьветлага тыдня</item>
         <item>Службы нядзелі Тамаша</item>
@@ -710,8 +711,8 @@
     <string name="admin_update">АБНАЎЛЕНЬНЕ</string>
     <string name="admin_update_all">Абнаўленьне павінна існаваць у Google Play.\nНапішыце нумар %1$s версіі:</string>
     <string name="admin_update_ok">Апублікаваць</string>
-    <string name="mineia_shtodzennaia">Мінэя штодзённая</string>
-    <string name="mineia_sviatochnaia">Мінэя сьвяточная</string>
+    <string name="mineia_shtodzennaia">Мінэя месячная</string>
+    <string name="mineia_sviatochnaia">Трыёдзь Сьвяточная</string>
     <string name="carkva_gazeta">«Царква» — беларуская грэка-каталіцкая газета</string>
     <string-array name="admin_svity">
         <item>Чырвоны</item>
@@ -723,7 +724,7 @@
     <string name="viaczernia_bierascie_3">На нядзельнай вячэрні вершапесьні сьпяваюцца з наступнымі вершамі:</string>
     <string name="del_all_back_copy">Вы сапраўды жадаеце выдаліць усё рэзервовыя копіі?</string>
     <string name="tryjodz">Трыёдзь</string>
-    <string name="admin_day_in_year">Паказваць нумар дня ў годзе</string>
-    <string name="admin_show_day_in_year">Дзень у годзе: %1$s</string>
+    <string name="admin_day_in_year">Дзень ад пачатку года(до і пасля Пасxi)</string>
+    <string name="admin_show_day_in_year">Год(Пасха): %1$s(%2$s)</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

@@ -127,7 +127,7 @@ class CaliandarFull : Fragment(), View.OnClickListener {
             else binding.textMesiac.text = monthName[MenuCaliandar.getPositionCaliandar(position)[2].toInt()]
             if (k.getBoolean("adminDayInYear", false)) {
                 binding.textDayInYear.visibility = View.VISIBLE
-                binding.textDayInYear.text = getString(R.string.admin_show_day_in_year, MenuCaliandar.getPositionCaliandar(position)[24])
+                binding.textDayInYear.text = getString(R.string.admin_show_day_in_year, MenuCaliandar.getPositionCaliandar(position)[24], MenuCaliandar.getPositionCaliandar(position)[22])
             }
             if (!MenuCaliandar.getPositionCaliandar(position)[4].contains("no_sviatyia")) {
                 var dataSviatyia = MenuCaliandar.getPositionCaliandar(position)[4]

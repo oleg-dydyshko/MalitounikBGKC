@@ -38,12 +38,11 @@ class MenuBogashlugbovya : ListFragment() {
             data.add(MenuListData("Служба за памерлых — Малая паніхіда", "bogashlugbovya11"))
             data.add(MenuListData("Трапары і кандакі нядзельныя васьмі тонаў", "3"))
             data.add(MenuListData("Трапары і кандакі штодзённыя - на кожны дзень тыдня", "4"))
-            data.add(MenuListData("Службы Вялікага посту", "5"))
-            data.add(MenuListData("Мінэя штодзённая", "6"))
+            data.add(MenuListData("Мінэя Вялікага посту", "5"))
+            data.add(MenuListData("Мінэя месячная", "6"))
             data.add(MenuListData("Малебны канон Найсьвяцейшай Багародзіцы", "bogashlugbovya9"))
             data.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага", "kanon_a_kryckaha"))
-            data.add(MenuListData("Мінэя сьвяточная", "7"))
-            data.add(MenuListData("Трыёдзь", "8"))
+            data.add(MenuListData("Трыёдзь", "7"))
             data.sort()
             listAdapter = MenuListAdaprer(it)
         }
@@ -83,12 +82,6 @@ class MenuBogashlugbovya : ListFragment() {
                 }
             }
             "7" -> {
-                activity?.let {
-                    val intent = Intent(it, MineiaSviatochnaia::class.java)
-                    startActivity(intent)
-                }
-            }
-            "8" -> {
                 activity?.let {
                     val intent = Intent(it, BogashlugbovyaTryjodz::class.java)
                     startActivity(intent)

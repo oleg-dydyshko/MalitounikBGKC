@@ -81,13 +81,13 @@ class BogashlugbovyaTryjodzList : AppCompatActivity() {
         val sluzba = SlugbovyiaTextu()
         data = when (intent?.extras?.getInt("tryjodz", 0) ?: 0) {
             1 -> {
-                sluzba.getSvetlyTydzen()
+                sluzba.getVilikiTydzen()
             }
             2 -> {
-                sluzba.getNiadzeliaTamasha()
+                sluzba.getSvetlyTydzen()
             }
             else -> {
-                sluzba.getVilikiTydzen()
+                sluzba.getNiadzeliaTamasha()
             }
         }
         binding.ListView.adapter = ListAdaprer(this)

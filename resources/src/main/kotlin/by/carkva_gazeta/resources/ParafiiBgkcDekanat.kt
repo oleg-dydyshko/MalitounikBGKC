@@ -21,7 +21,7 @@ import by.carkva_gazeta.resources.databinding.BgkcListBinding
 import kotlinx.coroutines.*
 
 class ParafiiBgkcDekanat : AppCompatActivity() {
-    private var bgkc = 0
+    private var bgkc = 1
     private var mLastClickTime: Long = 0
     private lateinit var binding: BgkcListBinding
     private var resetTollbarJob: Job? = null
@@ -29,7 +29,7 @@ class ParafiiBgkcDekanat : AppCompatActivity() {
     private val parafiiBgkcLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
-            if (intent != null) bgkc = intent.getIntExtra("bgkc", 1)
+            bgkc = intent?.getIntExtra("bgkc", 1) ?: 1
         }
     }
 

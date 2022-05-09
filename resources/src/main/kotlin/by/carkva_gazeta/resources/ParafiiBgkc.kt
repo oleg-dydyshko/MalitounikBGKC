@@ -118,6 +118,7 @@ class ParafiiBgkc : AppCompatActivity() {
                 if (prynagodnyia == 6) inputStream = resources.openRawResource(R.raw.dzie_praha)
                 if (prynagodnyia == 7) inputStream = resources.openRawResource(R.raw.dzie_rym)
                 if (prynagodnyia == 8) inputStream = resources.openRawResource(R.raw.dzie_sanktpieciarburg)
+                if (prynagodnyia == 9) inputStream = resources.openRawResource(R.raw.dzie_bielastok)
             }
         }
         val inputStreamReader = InputStreamReader(inputStream)

@@ -11,8 +11,8 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 16
         targetSdkVersion 31
-        versionCode 44061
-        versionName "4.0.5.31"
+        versionCode 44062
+        versionName "4.0.5.32"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -51,6 +51,7 @@ android {
     }
 
     dynamicFeatures = [':resources', ':biblijateka', ':admin']
+    namespace 'by.carkva_gazeta.malitounik'
 }
 
 dependencies {

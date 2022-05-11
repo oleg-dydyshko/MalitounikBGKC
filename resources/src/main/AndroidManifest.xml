@@ -110,20 +110,12 @@
                 android:value="by.carkva_gazeta.malitounik.MalitvyPasliaPrychascia" />
         </activity>
         <activity
-            android:name="by.carkva_gazeta.resources.ParafiiBgkcDekanat"
-            android:label="@string/parafii"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>
-        <activity
             android:name="by.carkva_gazeta.resources.ParafiiBgkc"
             android:label="@string/parafii"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.resources.ParafiiBgkcDekanat" />
+                android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity android:name="by.carkva_gazeta.resources.BibleZakladki"
             android:theme="@style/AppTheme">

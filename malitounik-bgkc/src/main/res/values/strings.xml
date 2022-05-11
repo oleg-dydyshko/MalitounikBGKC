@@ -435,13 +435,6 @@
         <item>Вячэрнія малітвы</item>
         <item>Прынагодныя малітвы</item>
     </string-array>
-    <string-array name="parafii_bgkc">
-        <item>Курыя Апостальскай Візітатуры БГКЦ</item>
-        <item>Цэнтральны дэканат</item>
-        <item>Усходні дэканат</item>
-        <item>Заходні дэканат</item>
-        <item>Замежжа</item>
-    </string-array>
     <string-array name="ruzanec">
         <item>Малітвы на вяровіцы</item>
         <item>Молімся на ружанцы</item>
@@ -458,46 +451,6 @@
         <item>ЧАЦЬВЕР\nСлужба апосталам і сьвятому Мікалаю</item>
         <item>ПЯТНІЦА\nСлужба Крыжу Гасподняму</item>
         <item>СУБОТА\nСлужба ўсім сьвятым і памёрлым</item>
-    </string-array>
-    <string-array name="parafii_bgkc_1">
-        <item>Цэнтральны дэканат</item>
-        <item>Барысаў</item>
-        <item>Жодзіна</item>
-        <item>Заслаўе</item>
-        <item>Маладэчна</item>
-        <item>Мар\'іна Горка</item>
-        <item>Менск</item>
-    </string-array>
-    <string-array name="parafii_bgkc_2">
-        <item>Усходні дэканат</item>
-        <item>Віцебск</item>
-        <item>Ворша</item>
-        <item>Гомель</item>
-        <item>Полацак</item>
-        <item>Магілёў</item>
-    </string-array>
-    <string-array name="parafii_bgkc_3">
-        <item>Заходні дэканат</item>
-        <item>Баранавічы</item>
-        <item>Берасьце</item>
-        <item>Горадня</item>
-        <item>Івацэвічы</item>
-        <item>Ліда</item>
-        <item>Наваградак</item>
-        <item>Пінск</item>
-        <item>Слонім</item>
-    </string-array>
-    <string-array name="parafii_bgkc_4">
-        <item>Антвэрпан (Бельгія)</item>
-        <item>Лондан (Вялікабрытанія)</item>
-        <item>Варшава (Польшча)</item>
-        <item>Вільня (Літва)</item>
-        <item>Вена (Аўстрыя)</item>
-        <item>Калінінград (Расея)</item>
-        <item>Прага (Чэхія)</item>
-        <item>Рым (Італія)</item>
-        <item>Санкт-Пецярбург (Расея)</item>
-        <item>Беласток (Польшча)</item>
     </string-array>
     <string-array name="serche_bible">
         <item>Уся Біблія</item>

@@ -368,6 +368,39 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["mm_07_05_liturhija"] = R.raw.mm_07_05_liturhija
             resursMap["ndz_rasslablenaha_liturhija"] = R.raw.ndz_rasslablenaha_liturhija
             resursMap["pesny_prasl_70"] = PesnyAll.resursMap["pesny_prasl_70"]
+            resursMap["dzie_kuryja"] = R.raw.dzie_kuryja
+            resursMap["dzie_centr_dekan"] = R.raw.dzie_centr_dekan
+            resursMap["dzie_barysau"] = R.raw.dzie_barysau
+            resursMap["dzie_zodzina"] = R.raw.dzie_zodzina
+            resursMap["dzie_zaslauje"] = R.raw.dzie_zaslauje
+            resursMap["dzie_maladechna"] = R.raw.dzie_maladechna
+            resursMap["dzie_marjinahorka"] = R.raw.dzie_marjinahorka
+            resursMap["dzie_miensk"] = R.raw.dzie_miensk
+            resursMap["dzie_usxod_dekan"] = R.raw.dzie_usxod_dekan
+            resursMap["dzie_viciebsk"] = R.raw.dzie_viciebsk
+            resursMap["dzie_vorsha"] = R.raw.dzie_vorsha
+            resursMap["dzie_homel"] = R.raw.dzie_homel
+            resursMap["dzie_polacak"] = R.raw.dzie_polacak
+            resursMap["dzie_mahilou"] = R.raw.dzie_mahilou
+            resursMap["dzie_zaxod_dekan"] = R.raw.dzie_zaxod_dekan
+            resursMap["dzie_baranavichy"] = R.raw.dzie_baranavichy
+            resursMap["dzie_bierascie"] = R.raw.dzie_bierascie
+            resursMap["dzie_horadnia"] = R.raw.dzie_horadnia
+            resursMap["dzie_ivacevichy"] = R.raw.dzie_ivacevichy
+            resursMap["dzie_lida"] = R.raw.dzie_lida
+            resursMap["dzie_navahradak"] = R.raw.dzie_navahradak
+            resursMap["dzie_pinsk"] = R.raw.dzie_pinsk
+            resursMap["dzie_slonim"] = R.raw.dzie_slonim
+            resursMap["dzie_antverpan"] = R.raw.dzie_antverpan
+            resursMap["dzie_londan"] = R.raw.dzie_londan
+            resursMap["dzie_varshava"] = R.raw.dzie_varshava
+            resursMap["dzie_vilnia"] = R.raw.dzie_vilnia
+            resursMap["dzie_viena"] = R.raw.dzie_viena
+            resursMap["dzie_kalininhrad"] = R.raw.dzie_kalininhrad
+            resursMap["dzie_praha"] = R.raw.dzie_praha
+            resursMap["dzie_rym"] = R.raw.dzie_rym
+            resursMap["dzie_sanktpieciarburg"] = R.raw.dzie_sanktpieciarburg
+            resursMap["dzie_bielastok"] = R.raw.dzie_bielastok
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -1749,11 +1782,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
             else -> {
                 if (editDzenNoch) {
-                    val intent = Intent()
-                    if (editDzenNoch) intent.putExtra("editDzenNoch", true)
-                    setResult(200, intent)
+                    onSupportNavigateUp()
+                } else {
+                    super.onBackPressed()
                 }
-                super.onBackPressed()
             }
         }
     }

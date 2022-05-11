@@ -85,6 +85,7 @@ class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         val isr = InputStreamReader(inputStream)
         val reader = BufferedReader(isr)
         val builder = StringBuilder()
+        if (dzenNoch) builder.append("<html><head><style type=\"text/css\">a {color:#f44336;} body{color: #fff; background-color: #303030;}</style></head><body>\n") else builder.append("<html><head><style type=\"text/css\">a {color:#d00505;} body{color: #000; background-color: #fff;}</style></head><body>\n")
         reader.use { bufferedReader ->
             bufferedReader.forEachLine {
                 var line = it
@@ -92,11 +93,12 @@ class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                 builder.append(line)
             }
         }
+        builder.append("</body></html>")
         val webSettings = binding.pasxa.settings
         webSettings.standardFontFamily = "sans-serif-condensed"
         webSettings.defaultFontSize = fontBiblia.toInt()
         webSettings.domStorageEnabled = true
-        binding.pasxa.loadDataWithBaseURL("malitounikApp-app//carkva-gazeta.by/", builder.toString(), "text/html", "utf-8", null)
+        binding.pasxa.loadDataWithBaseURL(null, builder.toString(), "text/html", "utf-8", null)
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {

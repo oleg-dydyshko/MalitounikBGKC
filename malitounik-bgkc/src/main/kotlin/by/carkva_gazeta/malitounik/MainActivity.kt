@@ -12,9 +12,12 @@ import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.SystemClock
 import android.provider.Settings
-import android.text.*
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
@@ -47,7 +50,6 @@ import java.io.FileReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.roundToLong
 
 
@@ -1322,7 +1324,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         const val SLUGBYVIALIKAGAPOSTUSPIS = "by.carkva_gazeta.resources.SlugbyVialikagaPostuSpis"
         const val MALITVYPRYNAGODNYIA = "by.carkva_gazeta.resources.MalitvyPrynagodnyia"
         const val PARAFIIBGKC = "by.carkva_gazeta.resources.ParafiiBgkc"
-        const val PARAFIIBGKCDEKANAT = "by.carkva_gazeta.resources.ParafiiBgkcDekanat"
         const val NADSANMALITVYIPESNI = "by.carkva_gazeta.resources.NadsanMalitvyIPesni"
         const val NADSANMALITVYIPESNILIST = "by.carkva_gazeta.resources.NadsanMalitvyIPesniList"
         const val PSALTERNADSANA = "by.carkva_gazeta.resources.PsalterNadsana"

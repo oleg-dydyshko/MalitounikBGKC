@@ -401,6 +401,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["dzie_rym"] = R.raw.dzie_rym
             resursMap["dzie_sanktpieciarburg"] = R.raw.dzie_sanktpieciarburg
             resursMap["dzie_bielastok"] = R.raw.dzie_bielastok
+            resursMap["mm_11_05_liturhija"] = R.raw.mm_11_05_liturhija
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -646,7 +647,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val autoscrollOFF = intent?.extras?.containsKey("autoscrollOFF") ?: false
         if (autoscrollOFF) {
             mAutoScroll = false
-            editDzenNoch = intent?.extras?.getBoolean("autoscrollOFF") ?: false
         }
         loadData(savedInstanceState)
         binding.scrollView2.setOnScrollChangedCallback(this)

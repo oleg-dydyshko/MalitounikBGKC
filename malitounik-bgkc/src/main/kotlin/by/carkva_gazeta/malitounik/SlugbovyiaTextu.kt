@@ -156,6 +156,7 @@ class SlugbovyiaTextu {
         datMinSH.add(SlugbovyiaTextuData(2, "Перадсьвяцьце Богазьяўленьня; сьвятаначальніка Сільвестра, папы Рымскага - Літургія", "l_1_2", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(4, "Перадсьвяцьце Богазьяўленьня; Сабор 70-ці апосталаў, пачэснага Тэактыста - Літургія", "l_01_04_pieradsv_bohazjaulennia", LITURGIA))
         datMinSH.add(SlugbovyiaTextuData(127, "Жырoвiцкaй iкoны Maцi Бoжae - Літургія", "mm_07_05_liturhija", LITURGIA))
+        datMinSH.add(SlugbovyiaTextuData(131, "Сьвятых і роўных апосталам настаўнікаў славянскіх Кірылы і Мятода - Літургія", "mm_11_05_liturhija", LITURGIA))
 
         datMinSV.add(SlugbovyiaTextuData(14, "Нядзеля міраносіцаў - Літургія", "zmenyia_chastki_miranosicay", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(21, "Нядзеля Расслабленага - Літургія", "ndz_rasslablenaha_liturhija", LITURGIA, pasxa = true))

@@ -56,7 +56,8 @@ class MenuParafiiBgkc : Fragment() {
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (MainActivity.checkmoduleResources()) {
                     val intent = Intent()
-                    intent.setClassName(activity, MainActivity.PARAFIIBGKC)
+                    intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
+                    intent.putExtra("autoscrollOFF", true)
                     intent.putExtra("title", binding.label.text)
                     intent.putExtra("resurs", "dzie_kuryja")
                     startActivity(intent)
@@ -118,7 +119,8 @@ class MenuParafiiBgkc : Fragment() {
                 mLastClickTime = SystemClock.elapsedRealtime()
                 if (MainActivity.checkmoduleResources()) {
                     val intent = Intent()
-                    intent.setClassName(activity, MainActivity.PARAFIIBGKC)
+                    intent.setClassName(activity, MainActivity.BOGASHLUGBOVYA)
+                    intent.putExtra("autoscrollOFF", true)
                     intent.putExtra("title", groups[groupPosition][childPosition].title)
                     intent.putExtra("resurs", groups[groupPosition][childPosition].resurs)
                     startActivity(intent)

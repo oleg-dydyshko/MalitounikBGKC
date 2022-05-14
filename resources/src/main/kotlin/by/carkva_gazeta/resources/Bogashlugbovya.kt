@@ -287,9 +287,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["ju_trojca_mineia_sviatochnaia"] = R.raw.zychod_sv_ducha_jutran
             resursMap["l_trojca_mineia_sviatochnaia"] = R.raw.zychod_sv_ducha_liturhija
             resursMap["v_trojca_mineia_sviatochnaia"] = R.raw.paniadzielak_sv_ducha_ndz_viaczaram
-            resursMap["ju_uzniasenne_mineia_sviatochnaia"] = R.raw.uzniasenne_jutran
-            resursMap["l_uzniasenne_mineia_sviatochnaia"] = R.raw.uzniasenne_liturhija
-            resursMap["v_uzniasenne_mineia_sviatochnaia"] = R.raw.uzniasenne_viaczernia
+            resursMap["ju_uzniasenne_mineia_sviatochnaia"] = R.raw.uzniasienne_jutran
+            resursMap["l_uzniasenne_mineia_sviatochnaia"] = R.raw.uzniasienne_liturhija
+            resursMap["v_uzniasenne_mineia_sviatochnaia"] = R.raw.uzniasienne_viaczernia
             resursMap["l_1_10"] = R.raw.mm_01_10_liturhija
             resursMap["l_21_11"] = R.raw.mm_21_11_liturhija
             resursMap["l_2_2"] = R.raw.mm_02_02_liturhija
@@ -402,6 +402,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["dzie_sanktpieciarburg"] = R.raw.dzie_sanktpieciarburg
             resursMap["dzie_bielastok"] = R.raw.dzie_bielastok
             resursMap["mm_11_05_liturhija"] = R.raw.mm_11_05_liturhija
+            resursMap["mltv_za_carkvu"] = R.raw.mltv_za_carkvu
+            resursMap["malebien_kiryla_miatod"] = R.raw.malebien_kiryla_miatod
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {

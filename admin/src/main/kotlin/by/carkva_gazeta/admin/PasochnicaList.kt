@@ -371,8 +371,8 @@ class PasochnicaList : AppCompatActivity(), DialogPasochnicaFileName.DialogPasoc
                                 val type = object : TypeToken<ArrayList<String>>() {}.type
                                 fileList.addAll(gson.fromJson(result, type))
                                 fileList.sort()
-                                fileList.addAll(backCopy)
                             }
+                            fileList.addAll(backCopy)
                         }
                     } catch (e: Throwable) {
                         withContext(Dispatchers.Main) {

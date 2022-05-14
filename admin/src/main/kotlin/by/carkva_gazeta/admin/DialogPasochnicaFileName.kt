@@ -65,8 +65,8 @@ class DialogPasochnicaFileName : DialogFragment() {
                 binding.content.setText(savedInstanceState.getString("fileName"))
                 savedInstanceState.getString("fileName") ?: "newFile.html"
             } else {
-                binding.content.setText(arguments?.getString("oldFileName") ?: "newFile.html")
-                arguments?.getString("oldFileName") ?: "newFile.html"
+                binding.content.setText(oldFileName)
+                oldFileName
             }
             val t2 = text.lastIndexOf(".")
             if (t2 != -1) {

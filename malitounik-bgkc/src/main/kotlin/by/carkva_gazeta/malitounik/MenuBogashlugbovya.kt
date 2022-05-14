@@ -43,6 +43,7 @@ class MenuBogashlugbovya : ListFragment() {
             data.add(MenuListData("Малебны канон Найсьвяцейшай Багародзіцы", "bogashlugbovya9"))
             data.add(MenuListData("Вялікі пакаянны канон сьвятога Андрэя Крыцкага", "kanon_a_kryckaha"))
             data.add(MenuListData("Трыёдзь", "7"))
+            data.add(MenuListData("Малебен сьвятым айцам нашым, роўным апосталам Кірылу і Мятоду, настаўнікам славянскім", "malebien_kiryla_miatod"))
             data.sort()
             listAdapter = MenuListAdaprer(it)
         }

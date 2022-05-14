@@ -6,16 +6,15 @@ import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.TextWatcher
+import android.text.*
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.text.style.URLSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
@@ -38,7 +37,7 @@ import java.net.URL
 import java.net.URLEncoder
 
 
-class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner, InteractiveScrollView.OnInteractiveScrollChangedCallback {
+class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFileName.DialogPasochnicaFileNameListener, DialogSaveAsFileExplorer.DialogSaveAsFileExplorerListener, DialogFileExists.DialogFileExistsListener, DialogPasochnicaMkDir.DialogPasochnicaMkDirListener, DialogAddPesny.DialogAddPesnyListiner, InteractiveScrollView.OnInteractiveScrollChangedCallback, DialogPasochnicaAHref.DialogPasochnicaAHrefListener {
 
     private lateinit var k: SharedPreferences
     private lateinit var binding: AdminPasochnicaBinding
@@ -66,6 +65,38 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
                 binding.actionBack.visibility = View.GONE
             }
         }
+    }
+
+    override fun setUrl(url: String, titleUrl: String) {
+        val startSelect = binding.apisanne.selectionStart
+        val endSelect = binding.apisanne.selectionEnd
+        if (fileName.contains(".htm")) {
+            val text = SpannableStringBuilder(binding.apisanne.text)
+            val subtext = text.getSpans(startSelect, endSelect, URLSpan::class.java)
+            subtext.forEach {
+                if (it.url.contains(url)) {
+                    text.removeSpan(it)
+                }
+            }
+            text.setSpan(URLSpan(url), startSelect, endSelect, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            text.append(text.substring(0, startSelect))
+            text.append(titleUrl)
+            text.append(text.substring(endSelect))
+            binding.apisanne.text = text
+        } else {
+            val text = binding.apisanne.text.toString()
+            val build = with(StringBuilder()) {
+                append(text.substring(0, startSelect))
+                append("<a href=\"$url\">")
+                append(titleUrl)
+                append("</a>")
+                append(text.substring(endSelect))
+                toString()
+            }
+            binding.apisanne.setText(build)
+            binding.apisanne.setSelection(endSelect + 29)
+        }
+        addHistory(binding.apisanne.text, binding.apisanne.selectionEnd)
     }
 
     private fun addHistory(s: Editable?, editPosition: Int) {
@@ -140,6 +171,7 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
         binding.actionEm.setOnClickListener(this)
         binding.actionRed.setOnClickListener(this)
         binding.actionP.setOnClickListener(this)
+        binding.actionA.setOnClickListener(this)
         binding.actionBr.setOnClickListener(this)
         binding.actionBack.setOnClickListener(this)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -930,6 +962,22 @@ class Pasochnica : AppCompatActivity(), View.OnClickListener, DialogPasochnicaFi
             binding.apisanne.setText(build)
             binding.apisanne.setSelection(endSelect + 3)
             addHistory(binding.apisanne.text, binding.apisanne.selectionEnd)
+        }
+        if (id == R.id.action_a) {
+            val startSelect = binding.apisanne.selectionStart
+            val endSelect = binding.apisanne.selectionEnd
+            if (startSelect == endSelect) {
+                MainActivity.toastView("Памылка. Абярыце тэкст", Toast.LENGTH_LONG)
+            } else {
+                val text = binding.apisanne.text
+                val urlSpan = text?.getSpans(startSelect, endSelect, URLSpan::class.java)
+                var url = ""
+                urlSpan?.forEach {
+                    url = it.url
+                }
+                val dialogPasochnicaAHref = DialogPasochnicaAHref.getInstance(url, text?.substring(startSelect, endSelect) ?: "")
+                dialogPasochnicaAHref.show(supportFragmentManager, "dialogPasochnicaAHref")
+            }
         }
         if (id == R.id.action_keyword) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

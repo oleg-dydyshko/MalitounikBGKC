@@ -57,7 +57,7 @@ class DialogPasochnicaAHref : DialogFragment() {
         activity?.let {
             _binding = DialogTwoEditviewDisplayBinding.inflate(LayoutInflater.from(it))
             builder = AlertDialog.Builder(it, by.carkva_gazeta.malitounik.R.style.AlertDialogTheme)
-            binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.set_file_name)
+            binding.title.text = getString(by.carkva_gazeta.malitounik.R.string.admin_set_name_link)
             if (savedInstanceState != null) {
                 binding.url.setText(savedInstanceState.getString("url"))
                 binding.titleUrl.setText(savedInstanceState.getString("titleUrl"))

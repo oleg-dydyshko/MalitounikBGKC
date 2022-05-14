@@ -680,6 +680,7 @@
     <string name="tryjodz">Трыёдзь</string>
     <string name="admin_day_in_year">Дзень ад пачатку года(до і пасля Пасxi)</string>
     <string name="admin_show_day_in_year">Год(Пасха): %1$s(%2$s)</string>
+    <string name="admin_set_name_link">СПАСЫЛКА</string>
     <string name="admin_link">Спасылка:</string>
     <string name="admin_title_link">Імя спасылкі:</string>
     <!--%1$s is a string and %2$d is a decimal number-->

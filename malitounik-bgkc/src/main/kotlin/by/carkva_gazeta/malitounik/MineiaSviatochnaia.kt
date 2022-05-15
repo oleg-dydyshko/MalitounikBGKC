@@ -71,11 +71,11 @@ class MineiaSviatochnaia : AppCompatActivity() {
             }
             val id = c.timeInMillis
             val count = ArrayList<String>()
-            val abednica = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABEDNICA, isSviaty = true)
-            val vialikiaGadziny = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALIKIAGADZINY, isSviaty = true)
-            val utran = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.UTRAN, isSviaty = true)
-            val liturgia = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURGIA, isSviaty = true)
-            val viachernia = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACHERNIA, isSviaty = true)
+            val abednica = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.ABEDNICA)
+            val vialikiaGadziny = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIALIKIAGADZINY)
+            val utran = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.UTRAN)
+            val liturgia = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.LITURGIA)
+            val viachernia = slugba.getResource(day, mineiaList[i].pasxa, SlugbovyiaTextu.VIACHERNIA)
             if (abednica != "0") count.add("1")
             if (vialikiaGadziny != "0") count.add("1")
             if (utran != "0") count.add("1")

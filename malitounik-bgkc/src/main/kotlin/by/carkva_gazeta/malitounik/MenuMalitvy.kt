@@ -34,14 +34,14 @@ class MenuMalitvy : ListFragment() {
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "malitvy1")
+                        intent.putExtra("resurs", "malitvy_ran")
                         startActivity(intent)
                     }
                     1 -> {
                         val intent = Intent()
                         intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                         intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "malitvy2")
+                        intent.putExtra("resurs", "malitvy_viaczernija")
                         startActivity(intent)
                     }
                     2 -> {

@@ -683,5 +683,6 @@
     <string name="admin_set_name_link">СПАСЫЛКА</string>
     <string name="admin_link">Спасылка:</string>
     <string name="admin_title_link">Імя спасылкі:</string>
+    <string name="malitva_za_paclicanyx_i_jyvyx">УСПАМІН ПАМЕРЛЫХ І ЖЫВЫХ</string>
     <!--%1$s is a string and %2$d is a decimal number-->
 </resources>

@@ -106,6 +106,10 @@ class DialogLiturgia : DialogFragment() {
                     inputStream = r.openRawResource(R.raw.viaczernia_bierascie_3)
                     binding.title.setText(by.carkva_gazeta.malitounik.R.string.viaczernia_bierascie_3)
                 }
+                14 -> {
+                    inputStream = r.openRawResource(R.raw.bogashlugbovya1_9)
+                    binding.title.setText(by.carkva_gazeta.malitounik.R.string.malitva_za_paclicanyx_i_jyvyx)
+                }
             }
             if (!(chast == 8 || chast == 9)) {
                 val isr = InputStreamReader(inputStream)

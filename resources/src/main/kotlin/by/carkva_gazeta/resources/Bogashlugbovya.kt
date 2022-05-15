@@ -93,13 +93,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val resursMap = ArrayMap<String, Int>()
 
         init {
-            resursMap["bogashlugbovya1"] = R.raw.lit_jan_zalat
-            resursMap["bogashlugbovya2"] = R.raw.lit_jan_zalat_vielikodn
-            resursMap["bogashlugbovya4"] = R.raw.nabazenstva_maci_bozaj_niast_dap
-            resursMap["bogashlugbovya6"] = R.raw.jutran_niadzelnaja
-            resursMap["bogashlugbovya8"] = R.raw.abiednica
-            resursMap["bogashlugbovya9"] = R.raw.kanon_malebny_baharodzicy
-            resursMap["bogashlugbovya11"] = R.raw.panichida_mal
+            resursMap["lit_jan_zalat"] = R.raw.lit_jan_zalat
+            resursMap["lit_jan_zalat_vielikodn"] = R.raw.lit_jan_zalat_vielikodn
+            resursMap["nabazenstva_maci_bozaj_niast_dap"] = R.raw.nabazenstva_maci_bozaj_niast_dap
+            resursMap["jutran_niadzelnaja"] = R.raw.jutran_niadzelnaja
+            resursMap["abiednica"] = R.raw.abiednica
+            resursMap["kanon_malebny_baharodzicy"] = R.raw.kanon_malebny_baharodzicy
+            resursMap["panichida_mal"] = R.raw.panichida_mal
             resursMap["bogashlugbovya12_1"] = R.raw.bogashlugbovya12_1
             resursMap["bogashlugbovya12_2"] = R.raw.bogashlugbovya12_2
             resursMap["bogashlugbovya12_3"] = R.raw.bogashlugbovya12_3
@@ -155,11 +155,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["bogashlugbovya17_7"] = R.raw.bogashlugbovya17_7
             resursMap["bogashlugbovya17_8"] = R.raw.bogashlugbovya17_8
             resursMap["bogashlugbovya17_9"] = R.raw.bogashlugbovya17_9
-            resursMap["zmenyia_chastki_tamash"] = R.raw.ndz_tamasza_liturhija
-            resursMap["zmenyia_chastki_miranosicay"] = R.raw.ndz_miranosic_liturhija
-            resursMap["zmenyia_chastki_samaranki"] = R.raw.ndz_samaranki_liturhija
-            resursMap["zmenyia_chastki_slepanarodz"] = R.raw.ndz_slepanarodz_liturhija
-            resursMap["zmenyia_chastki_pieramianiennie"] = R.raw.mm_06_08_pieramianiennie_liturhija
+            resursMap["ndz_tamasza_liturhija"] = R.raw.ndz_tamasza_liturhija
+            resursMap["ndz_miranosic_liturhija"] = R.raw.ndz_miranosic_liturhija
+            resursMap["ndz_samaranki_liturhija"] = R.raw.ndz_samaranki_liturhija
+            resursMap["ndz_slepanarodz_liturhija"] = R.raw.ndz_slepanarodz_liturhija
+            resursMap["mm_06_08_pieramianiennie_liturhija"] = R.raw.mm_06_08_pieramianiennie_liturhija
             resursMap["akafist0"] = R.raw.akafist0
             resursMap["akafist1"] = R.raw.akafist1
             resursMap["akafist2"] = R.raw.akafist2
@@ -169,8 +169,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["akafist6"] = R.raw.akafist6
             resursMap["akafist7"] = R.raw.akafist7
             resursMap["akafist8"] = R.raw.akafist8
-            resursMap["malitvy1"] = R.raw.malitvy_ran
-            resursMap["malitvy2"] = R.raw.malitvy_viaczernija
+            resursMap["malitvy_ran"] = R.raw.malitvy_ran
+            resursMap["malitvy_viaczernija"] = R.raw.malitvy_viaczernija
             resursMap["paslia_prychascia1"] = R.raw.paslia_prychascia1
             resursMap["paslia_prychascia2"] = R.raw.paslia_prychascia2
             resursMap["paslia_prychascia3"] = R.raw.paslia_prychascia3
@@ -181,7 +181,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["prynagodnyia_2"] = R.raw.prynagodnyia_2
             resursMap["prynagodnyia_3"] = R.raw.prynagodnyia_3
             resursMap["prynagodnyia_4"] = R.raw.prynagodnyia_4
-            resursMap["prynagodnyia_5"] = R.raw.mltv_kiroucy
+            resursMap["mltv_kiroucy"] = R.raw.mltv_kiroucy
             resursMap["prynagodnyia_6"] = R.raw.prynagodnyia_6
             resursMap["prynagodnyia_7"] = R.raw.prynagodnyia_7
             resursMap["prynagodnyia_8"] = R.raw.prynagodnyia_8
@@ -281,24 +281,24 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["viachernia_mineia_sviatochnaia5"] = R.raw.viachernia_mineia_sviatochnaia5
             resursMap["viachernia_mineia_sviatochnaia6"] = R.raw.viachernia_mineia_sviatochnaia6
             resursMap["viachernia_mineia_sviatochnaia7"] = R.raw.viachernia_mineia_sviatochnaia7
-            resursMap["ju_8_11"] = R.raw.mm_08_11_jutran
-            resursMap["v_8_11"] = R.raw.mm_08_11_viaczernia
-            resursMap["l_8_11"] = R.raw.mm_08_11_liturhija
-            resursMap["ju_trojca_mineia_sviatochnaia"] = R.raw.zychod_sv_ducha_jutran
-            resursMap["l_trojca_mineia_sviatochnaia"] = R.raw.zychod_sv_ducha_liturhija
-            resursMap["v_trojca_mineia_sviatochnaia"] = R.raw.paniadzielak_sv_ducha_ndz_viaczaram
-            resursMap["ju_uzniasenne_mineia_sviatochnaia"] = R.raw.uzniasienne_jutran
-            resursMap["l_uzniasenne_mineia_sviatochnaia"] = R.raw.uzniasienne_liturhija
-            resursMap["v_uzniasenne_mineia_sviatochnaia"] = R.raw.uzniasienne_viaczernia
-            resursMap["l_1_10"] = R.raw.mm_01_10_liturhija
-            resursMap["l_21_11"] = R.raw.mm_21_11_liturhija
-            resursMap["l_2_2"] = R.raw.mm_02_02_liturhija
+            resursMap["mm_08_11_jutran"] = R.raw.mm_08_11_jutran
+            resursMap["mm_08_11_viaczernia"] = R.raw.mm_08_11_viaczernia
+            resursMap["mm_08_11_liturhija"] = R.raw.mm_08_11_liturhija
+            resursMap["zychod_sv_ducha_jutran"] = R.raw.zychod_sv_ducha_jutran
+            resursMap["zychod_sv_ducha_liturhija"] = R.raw.zychod_sv_ducha_liturhija
+            resursMap["paniadzielak_sv_ducha_ndz_viaczaram"] = R.raw.paniadzielak_sv_ducha_ndz_viaczaram
+            resursMap["uzniasienne_jutran"] = R.raw.uzniasienne_jutran
+            resursMap["uzniasienne_liturhija"] = R.raw.uzniasienne_liturhija
+            resursMap["uzniasienne_viaczernia"] = R.raw.uzniasienne_viaczernia
+            resursMap["mm_01_10_liturhija"] = R.raw.mm_01_10_liturhija
+            resursMap["mm_21_11_liturhija"] = R.raw.mm_21_11_liturhija
+            resursMap["mm_02_02_liturhija"] = R.raw.mm_02_02_liturhija
             resursMap["l_ajcy_6_saborau"] = R.raw.l_ajcy_6_saborau
             resursMap["ju_12_11"] = R.raw.ju_12_11
             resursMap["l_12_11"] = R.raw.l_12_11
             resursMap["v_12_11"] = R.raw.v_12_11
-            resursMap["l_13_11"] = R.raw.mm_13_11_liturhija
-            resursMap["v_13_11"] = R.raw.mm_13_11_viaczernia
+            resursMap["mm_13_11_liturhija"] = R.raw.mm_13_11_liturhija
+            resursMap["mm_13_11_viaczernia"] = R.raw.mm_13_11_viaczernia
             resursMap["ju_6_12"] = R.raw.ju_6_12
             resursMap["v_6_12"] = R.raw.v_6_12
             resursMap["l_6_12"] = R.raw.l_6_12
@@ -310,14 +310,14 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["ju_rastvo_sv_vieczar_24_12"] = R.raw.ju_rastvo_sv_vieczar_24_12
             resursMap["vial_hadziny_rastvo_sv_vieczar_24_12"] = R.raw.vial_hadziny_rastvo_sv_vieczar_24_12
             resursMap["l_12_26_sabor_baharodzicy"] = R.raw.l_12_26_sabor_baharodzicy
-            resursMap["maleben_new_year_01_01"] = R.raw.mm_01_01_malebien_novy_hod
+            resursMap["mm_01_01_malebien_novy_hod"] = R.raw.mm_01_01_malebien_novy_hod
             resursMap["l_12_28"] = R.raw.l_12_28
             resursMap["l_vasila_vialikaha"] = R.raw.lit_vasila_vialikaha
-            resursMap["l_1_2"] = R.raw.mm_02_01_liturhija
-            resursMap["l_01_04_pieradsv_bohazjaulennia"] = R.raw.mm_04_01_pieradsv_bohazjaulennia_liturhija
-            resursMap["l_1_6_bohazjaulennie"] = R.raw.mm_06_01_bohazjaulennie_liturhija
-            resursMap["abed_sv_vieczar_bohazjaulennia"] = R.raw.mm_05_01_sv_vieczar_bohazjaulennia_abiednica
-            resursMap["vial_hadziny_sv_vieczar_bohazjaulennia"] = R.raw.mm_05_01_sv_vieczar_bohazjaulennia_vial_hadziny
+            resursMap["mm_02_01_liturhija"] = R.raw.mm_02_01_liturhija
+            resursMap["mm_04_01_pieradsv_bohazjaulennia_liturhija"] = R.raw.mm_04_01_pieradsv_bohazjaulennia_liturhija
+            resursMap["mm_06_01_bohazjaulennie_liturhija"] = R.raw.mm_06_01_bohazjaulennie_liturhija
+            resursMap["mm_05_01_sv_vieczar_bohazjaulennia_abiednica"] = R.raw.mm_05_01_sv_vieczar_bohazjaulennia_abiednica
+            resursMap["mm_05_01_sv_vieczar_bohazjaulennia_vial_hadziny"] = R.raw.mm_05_01_sv_vieczar_bohazjaulennia_vial_hadziny
             resursMap["mltv_paciarpieli_za_bielarus"] = R.raw.mltv_paciarpieli_za_bielarus
             resursMap["mltv_pierad_jadoj_i_pasla"] = R.raw.mltv_pierad_jadoj_i_pasla
             resursMap["mltv_za_backou"] = R.raw.mltv_za_backou
@@ -822,11 +822,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     private fun loadData(savedInstanceState: Bundle?) = CoroutineScope(Dispatchers.Main).launch {
-        val liturgia = resurs == "bogashlugbovya1" || resurs == "bogashlugbovya2" || resurs == "l_vasila_vialikaha" || resurs == "bogashlugbovya8"
+        val liturgia = resurs == "lit_jan_zalat" || resurs == "lit_jan_zalat_vielikodn" || resurs == "l_vasila_vialikaha" || resurs == "abiednica"
         val zmenyiaChastki = ZmenyiaChastki()
         val res = withContext(Dispatchers.IO) {
             val builder = StringBuilder()
-            val id = resursMap[resurs] ?: R.raw.lit_jan_zalat
+            val id = resursMap[resurs] ?: R.raw.bogashlugbovya_error
             val inputStream = resources.openRawResource(id)
             val gregorian = Calendar.getInstance() as GregorianCalendar
             val dayOfWeek = gregorian.get(Calendar.DAY_OF_WEEK)
@@ -1030,7 +1030,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 }
             }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
-        if (resurs == "bogashlugbovya8") {
+        if (resurs == "abiednica") {
             val stringBSA = "Заканчэньне ў час Вялікага посту гл. ніжэй"
             val strLigBSA = stringBSA.length
             val bsat1 = text.indexOf(stringBSA)
@@ -1229,6 +1229,31 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
                     }
                 }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            stringBS = "Успамін памерлых і жывых"
+            strLigBS = stringBS.length
+            bst1 = text.indexOf(stringBS)
+            if (bst1 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val dialogLiturgia = DialogLiturgia.getInstance(14)
+                        dialogLiturgia.show(supportFragmentManager, "dialog_liturgia")
+                    }
+                }, bst1, bst1 + strLigBS, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            val stringBS2 = "Адзінародны Сыне (гл. тут)"
+            val strLigBS2 = stringBS2.length
+            val bst2 = text.indexOf(stringBS2)
+            if (bst2 != -1) {
+                text.setSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val strPosition = text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
+                        val line = binding.textView.layout.getLineForOffset(strPosition)
+                        val y = binding.textView.layout.getLineTop(line)
+                        val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
+                        anim.setDuration(1500).start()
+                    }
+                }, bst2, bst2 + strLigBS2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
         string = "Малітвы пасьля сьвятога прычасьця"

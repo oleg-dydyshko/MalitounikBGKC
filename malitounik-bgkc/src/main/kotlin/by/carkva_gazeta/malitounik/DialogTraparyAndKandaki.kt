@@ -21,7 +21,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.malitounik.databinding.TraparyAndKandakiBinding
 import kotlinx.coroutines.Job
-import java.util.*
 
 
 class DialogTraparyAndKandaki : DialogFragment() {
@@ -34,20 +33,15 @@ class DialogTraparyAndKandaki : DialogFragment() {
     private lateinit var chin: SharedPreferences
 
     companion object {
-        fun getInstance(lityrgia: Int, title: String, mun: Int, day: Int, ton: Int, ton_naidzelny: Boolean, ton_na_sviaty: Boolean, ton_na_viliki_post: Boolean, resurs: String, sviatyiaName: String, checkSviatyia: Boolean, year: Int): DialogTraparyAndKandaki {
+        fun getInstance(lityrgia: Int, title: String, ton: Int, ton_naidzelny: Boolean, ton_na_sviaty: Boolean, ton_na_viliki_post: Boolean, resurs: String): DialogTraparyAndKandaki {
             val bundle = Bundle()
             bundle.putInt("lityrgia", lityrgia)
             bundle.putString("title", title)
-            bundle.putInt("mun", mun)
-            bundle.putInt("day", day)
-            bundle.putInt("year", year)
             bundle.putInt("ton", ton)
             bundle.putBoolean("ton_naidzelny", ton_naidzelny)
             bundle.putBoolean("ton_na_sviaty", ton_na_sviaty)
             bundle.putBoolean("ton_na_viliki_post", ton_na_viliki_post)
             bundle.putString("resurs", resurs)
-            bundle.putString("sviatyiaName", sviatyiaName)
-            bundle.putBoolean("checkSviatyia", checkSviatyia)
             val trapary = DialogTraparyAndKandaki()
             trapary.arguments = bundle
             return trapary
@@ -69,48 +63,32 @@ class DialogTraparyAndKandaki : DialogFragment() {
             builder.setView(binding.root)
             if (dzenNoch) binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_dark)
             else binding.listView.selector = ContextCompat.getDrawable(it, R.drawable.selector_default)
-            val c = Calendar.getInstance()
             val lityrgia = arguments?.getInt("lityrgia", 4) ?: 4
             val title = arguments?.getString("title", "") ?: ""
-            val mun = arguments?.getInt("mun", c[Calendar.MONTH] + 1) ?: c[Calendar.MONTH] + 1
-            val day = arguments?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
-            val year = arguments?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
             val ton = arguments?.getInt("ton", 1) ?: 1
             val tonNadzelny = arguments?.getBoolean("ton_naidzelny", true) ?: true
             val tonNaSviaty = arguments?.getBoolean("ton_na_sviaty", false) ?: false
             val tonNaVilikiPost = arguments?.getBoolean("ton_na_viliki_post", false) ?: false
             val resurs = arguments?.getString("resurs") ?: ""
-            val sviatyiaName = arguments?.getString("sviatyiaName", "no_sviatyia") ?: "no_sviatyia"
-            val checkSviatyia = arguments?.getBoolean("checkSviatyia", false) ?: false
             binding.listView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return@OnItemClickListener
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                when {
-                    data[position].sviatyia -> {
-                        val i = Intent(it, Opisanie::class.java)
-                        i.putExtra("mun", mun)
-                        i.putExtra("day", day)
-                        i.putExtra("year", year)
-                        startActivity(i)
-                    }
-                    data[position].post -> {
-                        val intent = Intent()
-                        intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                        intent.putExtra("resurs", resurs)
-                        intent.putExtra("zmena_chastki", true)
-                        intent.putExtra("title", title)
-                        startActivity(intent)
-                    }
-                    else -> {
-                        val intent = Intent()
-                        intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
-                        intent.putExtra("resurs", "ton$ton")
-                        intent.putExtra("title", "Тон $ton")
-                        intent.putExtra("zmena_chastki", true)
-                        startActivity(intent)
-                    }
+                if (data[position].post) {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                    intent.putExtra("resurs", resurs)
+                    intent.putExtra("zmena_chastki", true)
+                    intent.putExtra("title", title)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent()
+                    intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
+                    intent.putExtra("resurs", "ton$ton")
+                    intent.putExtra("title", "Тон $ton")
+                    intent.putExtra("zmena_chastki", true)
+                    startActivity(intent)
                 }
             }
             if (tonNaSviaty) {
@@ -143,9 +121,6 @@ class DialogTraparyAndKandaki : DialogFragment() {
                         data.add(Bogaslujbovyia("Субота\nСлужба ўсім сьвятым і памёрлым".toSpanned(), lityrgia))
                     }
                 }
-            }
-            if (checkSviatyia) {
-                data.add(Bogaslujbovyia(MainActivity.fromHtml(sviatyiaName), lityrgia, sviatyia = true))
             }
             val adapter = TraparyAndKandakiAdaprer(it, data)
             binding.listView.adapter = adapter
@@ -180,5 +155,5 @@ class DialogTraparyAndKandaki : DialogFragment() {
 
     private class ViewHolder(var text: TextView)
 
-    private data class Bogaslujbovyia(val title: Spanned, val lityrgia: Int, val sviata: Boolean = false, val post: Boolean = false, val sviatyia: Boolean = false)
+    private data class Bogaslujbovyia(val title: Spanned, val lityrgia: Int, val sviata: Boolean = false, val post: Boolean = false)
 }

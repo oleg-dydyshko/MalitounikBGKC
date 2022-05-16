@@ -42,7 +42,7 @@ class MenuParafiiBgkc : Fragment() {
             dzenNoch = k.getBoolean("dzen_noch", false)
             if (dzenNoch) binding.elvMain.selector = ContextCompat.getDrawable(activity, R.drawable.selector_dark)
             else binding.elvMain.selector = ContextCompat.getDrawable(activity, R.drawable.selector_default)
-            binding.label.text = "Курыя Апостальскай Візітатуры БГКЦ"
+            binding.label.text = getString(R.string.bgkc_kuryia)
             binding.label.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) {
                 binding.label.setTextColor(ContextCompat.getColor(activity, R.color.colorWhite))
@@ -110,7 +110,7 @@ class MenuParafiiBgkc : Fragment() {
             children4.add(MenuListData("Беласток (Польшча)", "dzie_bielastok"))
             children4.sort()
             groups.add(children4)
-            val adapter = ExpListAdapterNovyZapaviet(activity)
+            val adapter = ExpListAdapterPrafiiBgkc(activity)
             binding.elvMain.setAdapter(adapter)
             binding.elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -133,7 +133,7 @@ class MenuParafiiBgkc : Fragment() {
         }
     }
 
-    private inner class ExpListAdapterNovyZapaviet(private val mContext: Activity) : BaseExpandableListAdapter() {
+    private inner class ExpListAdapterPrafiiBgkc(private val mContext: Activity) : BaseExpandableListAdapter() {
         override fun getGroupCount(): Int {
             return groups.size
         }
@@ -165,12 +165,8 @@ class MenuParafiiBgkc : Fragment() {
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
             val rootView = GroupViewBinding.inflate(LayoutInflater.from(mContext), parent, false)
             rootView.textGroup.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            when (groupPosition) {
-                0 -> rootView.textGroup.text = "Цэнтральны дэканат"
-                1 -> rootView.textGroup.text = "Усходні дэканат"
-                2 -> rootView.textGroup.text = "Заходні дэканат"
-                3 -> rootView.textGroup.text = "Замежжа"
-            }
+            val bgkc = mContext.resources.getStringArray(R.array.bgkc)
+            rootView.textGroup.text = bgkc[groupPosition]
             return rootView.root
         }
 

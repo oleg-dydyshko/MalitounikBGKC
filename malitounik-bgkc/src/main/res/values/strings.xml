@@ -555,6 +555,27 @@
         <item>ЛІСТАПАД</item>
         <item>СЬНЕЖАНЬ</item>
     </string-array>
+    <string name="bgkc_kuryia">Курыя Апостальскай Візітатуры БГКЦ</string>
+    <string-array name="bgkc">
+        <item>Цэнтральны дэканат</item>
+        <item>Усходні дэканат</item>
+        <item>Заходні дэканат</item>
+        <item>Замежжа</item>
+    </string-array>
+    <string-array name="meciac3">
+        <item>Студзень</item>
+        <item>Люты</item>
+        <item>Сакавік</item>
+        <item>Красавік</item>
+        <item>Травень</item>
+        <item>Чэрвень</item>
+        <item>Ліпень</item>
+        <item>Жнівень</item>
+        <item>Верасень</item>
+        <item>Кастрычнік</item>
+        <item>Лістапад</item>
+        <item>Сьнежань</item>
+    </string-array>
     <string-array name="meciac_smoll">
         <item>студзеня</item>
         <item>лютага</item>

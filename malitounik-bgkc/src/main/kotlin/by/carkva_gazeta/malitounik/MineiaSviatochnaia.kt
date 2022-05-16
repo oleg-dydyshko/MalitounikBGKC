@@ -1,20 +1,19 @@
 package by.carkva_gazeta.malitounik
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
-import android.view.*
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.TextView
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
-import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
+import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -22,11 +21,12 @@ import java.util.*
 class MineiaSviatochnaia : AppCompatActivity() {
 
     private lateinit var k: SharedPreferences
-    private lateinit var binding: AkafistListBinding
+    private lateinit var binding: ContentBibleBinding
     private var resetTollbarJob: Job? = null
-    private lateinit var adapter: MenuListAdaprer
-    private val groups = ArrayList<MineiaDay>()
+    private lateinit var adapter: MineiaExpListAdapter
+    private val groups = ArrayList<ArrayList<MineiaDay>>()
     private var mLastClickTime: Long = 0
+    private var dzenNoch = false
 
     override fun onPause() {
         super.onPause()
@@ -35,10 +35,10 @@ class MineiaSviatochnaia : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
-        val dzenNoch = k.getBoolean("dzen_noch", false)
+        dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
-        binding = AkafistListBinding.inflate(layoutInflater)
+        binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setTollbarTheme()
         val slugba = SlugbovyiaTextu()
@@ -46,6 +46,18 @@ class MineiaSviatochnaia : AppCompatActivity() {
         mineiaList.sort()
         val c = Calendar.getInstance()
         var day = 0
+        val children0 = ArrayList<MineiaDay>()
+        val children1 = ArrayList<MineiaDay>()
+        val children2 = ArrayList<MineiaDay>()
+        val children3 = ArrayList<MineiaDay>()
+        val children4 = ArrayList<MineiaDay>()
+        val children5 = ArrayList<MineiaDay>()
+        val children6 = ArrayList<MineiaDay>()
+        val children7 = ArrayList<MineiaDay>()
+        val children8 = ArrayList<MineiaDay>()
+        val children9 = ArrayList<MineiaDay>()
+        val children10 = ArrayList<MineiaDay>()
+        val children11 = ArrayList<MineiaDay>()
         for (i in 0 until mineiaList.size) {
             if (day == mineiaList[i].day) {
                 day = mineiaList[i].day
@@ -88,19 +100,56 @@ class MineiaSviatochnaia : AppCompatActivity() {
                     title = title.substring(0, t1).trim()
                 }
             }
-            groups.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+            when (c[Calendar.MONTH]) {
+                Calendar.JANUARY -> children0.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+                Calendar.FEBRUARY -> children1.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+                Calendar.MARCH -> children2.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+                Calendar.APRIL -> children3.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+                Calendar.MAY -> children4.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+                Calendar.JUNE -> children5.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+                Calendar.JULY -> children6.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+                Calendar.AUGUST -> children7.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+                Calendar.SEPTEMBER -> children8.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+                Calendar.OCTOBER -> children9.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+                Calendar.NOVEMBER -> children10.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+                Calendar.DECEMBER -> children11.add(MineiaDay(id, c[Calendar.MONTH], day.toString(), c[Calendar.DATE].toString() + " " + resources.getStringArray(R.array.meciac_smoll)[c[Calendar.MONTH]] + ": " + title, title, viachernia, utran, liturgia, vialikiaGadziny, abednica))
+            }
             day = mineiaList[i].day
         }
-        binding.ListView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
+        children0.sort()
+        children1.sort()
+        children2.sort()
+        children3.sort()
+        children4.sort()
+        children5.sort()
+        children6.sort()
+        children7.sort()
+        children8.sort()
+        children9.sort()
+        children10.sort()
+        children11.sort()
+        if (children0.size != 0) groups.add(children0)
+        if (children1.size != 0) groups.add(children1)
+        if (children2.size != 0) groups.add(children2)
+        if (children3.size != 0) groups.add(children3)
+        if (children4.size != 0) groups.add(children4)
+        if (children5.size != 0) groups.add(children5)
+        if (children6.size != 0) groups.add(children6)
+        if (children7.size != 0) groups.add(children7)
+        if (children8.size != 0) groups.add(children8)
+        if (children9.size != 0) groups.add(children9)
+        if (children10.size != 0) groups.add(children10)
+        if (children11.size != 0) groups.add(children11)
+        binding.elvMain.setOnChildClickListener { _: ExpandableListView?, _: View?, groupPosition: Int, childPosition: Int, _: Long ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@OnItemClickListener
+                return@setOnChildClickListener false
             }
             mLastClickTime = SystemClock.elapsedRealtime()
-            val resourceUtran = groups[position].resourceUtran
-            val resourceLiturgia = groups[position].resourceLiturgia
-            val resourceViachernia = groups[position].resourceViachernia
-            val resourceAbednica = groups[position].resourceAbednica
-            val resourceVialikiaGadziny = groups[position].resourceVialikiaGadziny
+            val resourceUtran = groups[groupPosition][childPosition].resourceUtran
+            val resourceLiturgia = groups[groupPosition][childPosition].resourceLiturgia
+            val resourceViachernia = groups[groupPosition][childPosition].resourceViachernia
+            val resourceAbednica = groups[groupPosition][childPosition].resourceAbednica
+            val resourceVialikiaGadziny = groups[groupPosition][childPosition].resourceVialikiaGadziny
             var count = 0
             if (resourceAbednica != "0") count++
             if (resourceVialikiaGadziny != "0") count++
@@ -108,7 +157,7 @@ class MineiaSviatochnaia : AppCompatActivity() {
             if (resourceLiturgia != "0") count++
             if (resourceViachernia != "0") count++
             if (count > 1) {
-                val dialog = DialogMineiaList.getInstance(groups[position].day, groups[position].titleResource, resourceUtran, resourceLiturgia, resourceViachernia, resourceAbednica, resourceVialikiaGadziny, true)
+                val dialog = DialogMineiaList.getInstance(groups[groupPosition][childPosition].day, groups[groupPosition][childPosition].titleResource, resourceUtran, resourceLiturgia, resourceViachernia, resourceAbednica, resourceVialikiaGadziny, true)
                 dialog.show(supportFragmentManager, "dialogMineiaList")
             } else {
                 if (MainActivity.checkmoduleResources()) {
@@ -120,20 +169,21 @@ class MineiaSviatochnaia : AppCompatActivity() {
                     if (resourceLiturgia != "0") intent.putExtra("resurs", resourceLiturgia)
                     if (resourceViachernia != "0") intent.putExtra("resurs", resourceViachernia)
                     intent.putExtra("zmena_chastki", true)
-                    intent.putExtra("title", groups[position].titleResource)
+                    intent.putExtra("title", groups[groupPosition][childPosition].titleResource)
                     startActivity(intent)
                 } else {
                     val dadatak = DialogInstallDadatak()
                     dadatak.show(supportFragmentManager, "dadatak")
                 }
             }
+            month = groupPosition
+            false
         }
-        groups.sort()
         if (dzenNoch) {
             binding.toolbar.popupTheme = R.style.AppCompatDark
-            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+            binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         } else {
-            binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
+            binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
         }
     }
 
@@ -144,8 +194,8 @@ class MineiaSviatochnaia : AppCompatActivity() {
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        adapter = MenuListAdaprer(this, groups)
-        binding.ListView.adapter = adapter
+        adapter = MineiaExpListAdapter(this, groups)
+        binding.elvMain.setAdapter(adapter)
         binding.titleToolbar.text = getString(R.string.mineia_sviatochnaia)
     }
 
@@ -183,6 +233,15 @@ class MineiaSviatochnaia : AppCompatActivity() {
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
+        val cal = Calendar.getInstance()
+        if (month == null) {
+            for (i in 0 until groups.size) {
+                for (e in 0 until groups[i].size) {
+                    if (cal[Calendar.MONTH] == groups[i][e].month) month = i
+                }
+            }
+        }
+        binding.elvMain.expandGroup(month ?: 0)
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
@@ -196,39 +255,12 @@ class MineiaSviatochnaia : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private class MenuListAdaprer(context: Activity, val strings: ArrayList<MineiaDay>) : ArrayAdapter<MineiaDay>(context, R.layout.simple_list_item_2, R.id.label, strings) {
-
-        override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
-            val rootView: View
-            val viewHolder: ViewHolder
-            if (mView == null) {
-                val binding = SimpleListItem2Binding.inflate(LayoutInflater.from(context), parent, false)
-                rootView = binding.root
-                viewHolder = ViewHolder(binding.label)
-                rootView.tag = viewHolder
-            } else {
-                rootView = mView
-                viewHolder = rootView.tag as ViewHolder
-            }
-            val k = context.getSharedPreferences("biblia", Context.MODE_PRIVATE)
-            val dzenNoch = k.getBoolean("dzen_noch", false)
-            viewHolder.text.text = strings[position].title
-            viewHolder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
-            if (dzenNoch) viewHolder.text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
-            return rootView
-        }
-
-        private class ViewHolder(var text: TextView)
+    override fun onBackPressed() {
+        super.onBackPressed()
+        month = null
     }
 
-    private data class MineiaDay(val id: Long, val month: Int, val day: String, val title: String, val titleResource: String, var resourceViachernia: String, var resourceUtran: String, var resourceLiturgia: String, var resourceVialikiaGadziny: String, var resourceAbednica: String) : Comparable<MineiaDay> {
-        override fun compareTo(other: MineiaDay): Int {
-            if (this.id > other.id) {
-                return 1
-            } else if (this.id < other.id) {
-                return -1
-            }
-            return 0
-        }
+    companion object {
+        private var month: Int? = null
     }
 }

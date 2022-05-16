@@ -404,6 +404,11 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             resursMap["mm_11_05_liturhija"] = R.raw.mm_11_05_liturhija
             resursMap["mltv_za_carkvu"] = R.raw.mltv_za_carkvu
             resursMap["malebien_kiryla_miatod"] = R.raw.malebien_kiryla_miatod
+            resursMap["mm_21_05_liturhija"] = R.raw.mm_21_05_liturhija
+            resursMap["mm_21_05_viaczernia"] = R.raw.mm_21_05_viaczernia
+            resursMap["mm_23_05_jutran"] = R.raw.mm_23_05_jutran
+            resursMap["mm_23_05_liturhija"] = R.raw.mm_23_05_liturhija
+            resursMap["mm_23_05_viaczernia"] = R.raw.mm_23_05_viaczernia
         }
 
         fun setVybranoe(context: Context, resurs: String, title: String): Boolean {
@@ -1247,7 +1252,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             if (bst2 != -1) {
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        val strPosition = text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
+                        var strPosition = text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
+                        if (resurs == "lit_jan_zalat")
+                            strPosition = text.indexOf("Адзінародны Сыне", strPosition + 16, true)
                         val line = binding.textView.layout.getLineForOffset(strPosition)
                         val y = binding.textView.layout.getLineTop(line)
                         val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)

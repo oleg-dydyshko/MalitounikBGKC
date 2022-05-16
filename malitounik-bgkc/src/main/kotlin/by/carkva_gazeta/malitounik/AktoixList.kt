@@ -220,34 +220,6 @@ class AktoixList : AppCompatActivity() {
                         intent.putExtra("title", data[position])
                         intent.putExtra("resurs", "viachernia_mineia_agulnaia24")
                     }
-                    33 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia1")
-                    }
-                    34 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia2")
-                    }
-                    35 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia3")
-                    }
-                    36 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia4")
-                    }
-                    37 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia5")
-                    }
-                    38 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia6")
-                    }
-                    39 -> {
-                        intent.putExtra("title", data[position])
-                        intent.putExtra("resurs", "viachernia_mineia_sviatochnaia7")
-                    }
                 }
                 bogashlugbovyaLauncher.launch(intent)
             } else {

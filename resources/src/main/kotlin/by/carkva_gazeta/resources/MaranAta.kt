@@ -237,6 +237,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             fullscreenPage = false
             show()
         }
+        binding.actionBack.setOnClickListener {
+            onBackPressed()
+        }
         binding.constraint.setOnTouchListener(this)
         if (dzenNoch) {
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
@@ -1051,6 +1054,9 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             binding.ListView.visibility = View.VISIBLE
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
             paralel = false
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+            binding.actionBack.visibility = View.GONE
+            binding.actionBack.animation = animation
             invalidateOptionsMenu()
         } else if (fullscreenPage) {
             fullscreenPage = false
@@ -1315,6 +1321,11 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                     binding.ListView.visibility = View.GONE
                     binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, biblia[0] + " " + biblia[1] + "." + biblia[2])
                     invalidateOptionsMenu()
+                    if (fullscreenPage) {
+                        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+                        binding.actionBack.visibility = View.VISIBLE
+                        binding.actionBack.animation = animation
+                    }
                 }
             }
         }

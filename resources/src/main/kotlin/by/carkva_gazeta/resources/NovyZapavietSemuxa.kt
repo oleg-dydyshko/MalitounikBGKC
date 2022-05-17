@@ -317,6 +317,9 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             fullscreenPage = false
             show()
         }
+        binding.actionBack.setOnClickListener {
+            onBackPressed()
+        }
         binding.titleToolbar.text = savedInstanceState?.getString("title") ?: getString(by.carkva_gazeta.malitounik.R.string.novy_zapaviet)
     }
 
@@ -385,6 +388,9 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.novy_zapaviet)
             binding.subtitleToolbar.text = title
             paralel = false
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+            binding.actionBack.visibility = View.GONE
+            binding.actionBack.animation = animation
             invalidateOptionsMenu()
         } else if (fullscreenPage) {
             fullscreenPage = false
@@ -518,6 +524,11 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
         binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)
         binding.subtitleToolbar.visibility = View.GONE
         invalidateOptionsMenu()
+        if (fullscreenPage) {
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+            binding.actionBack.visibility = View.VISIBLE
+            binding.actionBack.animation = animation
+        }
     }
 
     private fun hide() {
@@ -541,6 +552,8 @@ class NovyZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogBi
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
         binding.actionFullscreen.visibility = View.GONE
         binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.GONE
+        binding.actionBack.animation = animation
     }
 
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {

@@ -365,6 +365,9 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
             fullscreenPage = false
             show()
         }
+        binding.actionBack.setOnClickListener {
+            onBackPressed()
+        }
         binding.titleToolbar.text = savedInstanceState?.getString("title") ?: getString(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
     }
 
@@ -433,6 +436,9 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
             binding.subtitleToolbar.text = title
             paralel = false
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+            binding.actionBack.visibility = View.GONE
+            binding.actionBack.animation = animation
             invalidateOptionsMenu()
         } else if (fullscreenPage) {
             fullscreenPage = false
@@ -565,6 +571,11 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         binding.tabLayout.visibility = View.GONE
         binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)
         binding.subtitleToolbar.visibility = View.GONE
+        if (fullscreenPage) {
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+            binding.actionBack.visibility = View.VISIBLE
+            binding.actionBack.animation = animation
+        }
         invalidateOptionsMenu()
     }
 
@@ -579,6 +590,10 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.VISIBLE
+        binding.actionBack.animation = animation
+        binding.actionBack.visibility = View.GONE
+        binding.actionBack.animation = animation
     }
 
     private fun show() {

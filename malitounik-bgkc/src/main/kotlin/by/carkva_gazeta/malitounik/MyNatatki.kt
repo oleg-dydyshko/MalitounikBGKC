@@ -8,7 +8,7 @@ import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -85,6 +85,9 @@ class MyNatatki : DialogFragment() {
                 filename = arguments?.getString("filename") ?: ""
                 redak = arguments?.getInt("redak", 3) ?: 3
                 position = arguments?.getInt("position", 0) ?: 0
+            }
+            if (dzenNoch) {
+                binding.file.setBackgroundResource(R.color.colorPrimary_black)
             }
             binding.file.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
             binding.EditText.tag = binding.EditText.keyListener

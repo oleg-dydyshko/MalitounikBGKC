@@ -1600,7 +1600,11 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     private inner class MaranAtaListAdaprer(private val activity: Activity) : ArrayAdapter<String>(activity, by.carkva_gazeta.malitounik.R.layout.simple_list_item_maranata, maranAta) {
         override fun isEnabled(position: Int): Boolean {
-            return if (maranAta[position].contains("<!--no-->")) false else if (!autoscroll) super.isEnabled(position) else false
+            return when {
+                maranAta[position].contains("<!--no-->") -> false
+                !autoscroll -> super.isEnabled(position)
+                else -> false
+            }
         }
 
         override fun getView(position: Int, mView: View?, parent: ViewGroup): View {
@@ -1673,15 +1677,16 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
                 }
             } else {
                 if (dzenNoch) {
-                    viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
                     viewHolder.text.setTextColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                    if (!maranAta[position].contains("$")) viewHolder.text.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark))
+                    else viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_dark)
                 } else {
-                    viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
+                    if (!maranAta[position].contains("$")) viewHolder.text.setBackgroundColor(ContextCompat.getColor(activity, by.carkva_gazeta.malitounik.R.color.colorWhite))
+                    else viewHolder.text.setBackgroundResource(by.carkva_gazeta.malitounik.R.drawable.selector_default)
                 }
             }
             return rootView
         }
-
     }
 
     private class ViewHolder(var text: TextView)

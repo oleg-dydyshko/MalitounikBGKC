@@ -286,15 +286,13 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             if (mPerevod == 1) {
                 res = MainActivity.translateToBelarus(res)
                 zakladka = setZakladkiSemuxa(position)
-                if (zakladka != null)
-                    space = 2
+                if (zakladka != null) space = 2
             }
             if (mPerevod == 2) {
                 zakladka = setZakladkiSinoidal(position)
-                if (zakladka != null)
-                    space = 2
+                if (zakladka != null) space = 2
             }
-            val ssb = SpannableStringBuilder(ea.textView.text).append(zakladka?: "").append("\n").append(res)
+            val ssb = SpannableStringBuilder(ea.textView.text).append(zakladka ?: "").append("\n").append(res)
             val start = ea.textView.text?.length ?: 0
             val end = start + space + res.length
             ssb.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorSecondary_text)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -312,10 +310,10 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
         } else {
             var zakladka: SpannableStringBuilder? = null
             if (mPerevod == 1) {
-                zakladka = setZakladkiSemuxa(position)?: SpannableStringBuilder("")
+                zakladka = setZakladkiSemuxa(position) ?: SpannableStringBuilder("")
             }
             if (mPerevod == 2) {
-                zakladka = setZakladkiSinoidal(position)?: SpannableStringBuilder("")
+                zakladka = setZakladkiSinoidal(position) ?: SpannableStringBuilder("")
             }
             val ssb = SpannableStringBuilder(ea.textView.text).append(zakladka)
             val end = ea.textView.length()
@@ -339,10 +337,12 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
             }
         } else {
             if (k.getBoolean("dzen_noch", false)) {
-                ea.textView.setBackgroundResource(R.drawable.selector_dark)
                 ea.textView.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
+                if (res == "+-+") ea.textView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorbackground_material_dark))
+                else ea.textView.setBackgroundResource(R.drawable.selector_dark)
             } else {
-                ea.textView.setBackgroundResource(R.drawable.selector_default)
+                if (res == "+-+") ea.textView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite))
+                else ea.textView.setBackgroundResource(R.drawable.selector_default)
             }
         }
         if (mPerevod == 1) {
@@ -474,11 +474,9 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                     ssb = SpannableStringBuilder(".")
                     var d: Drawable? = null
                     val t5 = knigaName.lastIndexOf("<!--")
-                    val color = if (t5 != -1)
-                        knigaName.substring(t5 + 4).toInt()
-                    else
-                        0
-                    when(color) {
+                    val color = if (t5 != -1) knigaName.substring(t5 + 4).toInt()
+                    else 0
+                    when (color) {
                         0 -> {
                             d = if (k.getBoolean("dzen_noch", false)) ContextCompat.getDrawable(context, R.drawable.bookmark)
                             else ContextCompat.getDrawable(context, R.drawable.bookmark_black)
@@ -617,11 +615,9 @@ internal class BibleArrayAdapterParallel(private val context: Activity, private 
                     ssb = SpannableStringBuilder(".")
                     var d: Drawable? = null
                     val t5 = knigaName.lastIndexOf("<!--")
-                    val color = if (t5 != -1)
-                        knigaName.substring(t5 + 4).toInt()
-                    else
-                        0
-                    when(color) {
+                    val color = if (t5 != -1) knigaName.substring(t5 + 4).toInt()
+                    else 0
+                    when (color) {
                         0 -> {
                             d = if (k.getBoolean("dzen_noch", false)) ContextCompat.getDrawable(context, R.drawable.bookmark)
                             else ContextCompat.getDrawable(context, R.drawable.bookmark_black)

@@ -9,9 +9,14 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
@@ -28,6 +33,7 @@ import java.io.File
 
 class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NadsanContentPage.ListPosition {
 
+    private var fullscreenPage = false
     private var glava = 0
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
@@ -105,8 +111,13 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         })
         men = DialogVybranoeBibleList.checkVybranoe(this, 0, glava, 3)
         if (savedInstanceState != null) {
+            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             dialog = savedInstanceState.getBoolean("dialog")
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
+        }
+        binding.actionFullscreen.setOnClickListener {
+            fullscreenPage = false
+            show()
         }
         binding.pager.setCurrentItem(glava, false)
     }
@@ -209,6 +220,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("dialog", dialog)
         outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
     }
@@ -218,6 +230,10 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             BibleGlobalList.mPedakVisable -> {
                 val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
                 fragment.onBackPressedFragment()
+            }
+            fullscreenPage -> {
+                fullscreenPage = false
+                show()
             }
             checkSetDzenNoch -> {
                 onSupportNavigateUp()
@@ -296,12 +312,17 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
+            fullscreenPage = true
+            hide()
+        }
         prefEditors.apply()
         return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
         super.onResume()
+        if (fullscreenPage) hide()
         setTollbarTheme()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -319,6 +340,29 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             item.title = spanString
         }
         return true
+    }
+
+    private fun hide() {
+        supportActionBar?.hide()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val controller = ViewCompat.getWindowInsetsController(binding.linealLayoutTitle)
+        controller?.let {
+            it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            it.hide(WindowInsetsCompat.Type.systemBars())
+        }
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+        binding.actionFullscreen.visibility = View.VISIBLE
+        binding.actionFullscreen.animation = animation
+    }
+
+    private fun show() {
+        supportActionBar?.show()
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        val controller = ViewCompat.getWindowInsetsController(binding.linealLayoutTitle)
+        controller?.show(WindowInsetsCompat.Type.systemBars())
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        binding.actionFullscreen.visibility = View.GONE
+        binding.actionFullscreen.animation = animation
     }
 
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {

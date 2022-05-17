@@ -9,9 +9,14 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
@@ -30,6 +35,7 @@ import java.io.FileReader
 
 class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NovyZapavietSinaidalFragment.ClicParalelListiner, NovyZapavietSinaidalFragment.ListPositionListiner, DialogBibleNatatka.DialogBibleNatatkaListiner, DialogAddZakladka.DialogAddZakladkiListiner {
 
+    private var fullscreenPage = false
     private var paralel = false
     private var fullglav = 0
     private var kniga = 0
@@ -143,10 +149,6 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
-        }
-        if (savedInstanceState != null) {
-            checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
-            setedit = savedInstanceState.getBoolean("setedit")
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
@@ -289,6 +291,9 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
         })
         men = DialogVybranoeBibleList.checkVybranoe(this, kniga, glava, 2)
         if (savedInstanceState != null) {
+            checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
+            setedit = savedInstanceState.getBoolean("setedit")
+            fullscreenPage = savedInstanceState.getBoolean("fullscreen")
             dialog = savedInstanceState.getBoolean("dialog")
             paralel = savedInstanceState.getBoolean("paralel")
             cytanneSours = savedInstanceState.getString("cytanneSours") ?: ""
@@ -306,6 +311,10 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
             val type = object : TypeToken<ArrayList<ArrayList<Int?>?>?>() {}.type
             BibleGlobalList.vydelenie = gson.fromJson(reader.readText(), type)
             inputStream.close()
+        }
+        binding.actionFullscreen.setOnClickListener {
+            fullscreenPage = false
+            show()
         }
         binding.titleToolbar.text = savedInstanceState?.getString("title") ?: getString(by.carkva_gazeta.malitounik.R.string.novsinaidal)
     }
@@ -356,6 +365,7 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putBoolean("fullscreen", fullscreenPage)
         outState.putBoolean("dialog", dialog)
         outState.putBoolean("paralel", paralel)
         outState.putString("cytanneSours", cytanneSours)
@@ -375,6 +385,9 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
             binding.subtitleToolbar.text = title
             paralel = false
             invalidateOptionsMenu()
+        } else if (fullscreenPage) {
+            fullscreenPage = false
+            show()
         } else if (BibleGlobalList.mPedakVisable) {
             val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
             fragment.onBackPressedFragment()
@@ -454,12 +467,17 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
             val dialogBrightness = DialogBrightness()
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
+        if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
+            fullscreenPage = true
+            hide()
+        }
         prefEditors.apply()
         return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
         super.onResume()
+        if (fullscreenPage) hide()
         setTollbarTheme()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -491,6 +509,29 @@ class NovyZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialog
         binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)
         binding.subtitleToolbar.visibility = View.GONE
         invalidateOptionsMenu()
+    }
+
+    private fun hide() {
+        supportActionBar?.hide()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val controller = ViewCompat.getWindowInsetsController(binding.linealLayoutTitle)
+        controller?.let {
+            it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            it.hide(WindowInsetsCompat.Type.systemBars())
+        }
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+        binding.actionFullscreen.visibility = View.VISIBLE
+        binding.actionFullscreen.animation = animation
+    }
+
+    private fun show() {
+        supportActionBar?.show()
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        val controller = ViewCompat.getWindowInsetsController(binding.linealLayoutTitle)
+        controller?.show(WindowInsetsCompat.Type.systemBars())
+        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        binding.actionFullscreen.visibility = View.GONE
+        binding.actionFullscreen.animation = animation
     }
 
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {

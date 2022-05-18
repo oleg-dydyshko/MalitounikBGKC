@@ -1610,7 +1610,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.speed_auto_scroll)
                             bindingprogress.progress.visibility = View.VISIBLE
                             startProcent()
-                            autoscroll = k.getBoolean("autoscroll", false)
                             startAutoScroll()
                             invalidateOptionsMenu()
                         }

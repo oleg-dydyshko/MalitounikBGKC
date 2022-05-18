@@ -265,10 +265,8 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
                         bindingprogress.progress.visibility = View.VISIBLE
                         startProcent()
                         autoscroll = k.getBoolean("autoscroll", false)
-                        if (!autoscroll) {
-                            startAutoScroll()
-                            invalidateOptionsMenu()
-                        }
+                        startAutoScroll()
+                        invalidateOptionsMenu()
                     }
                 }
             }

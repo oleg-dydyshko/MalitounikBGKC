@@ -281,10 +281,8 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
                         bindingprogress.progress.visibility = View.VISIBLE
                         startProcent()
                         autoscroll = k.getBoolean("autoscroll", false)
-                        if (!autoscroll) {
-                            startAutoScroll()
-                            invalidateOptionsMenu()
-                        }
+                        startAutoScroll()
+                        invalidateOptionsMenu()
                     }
                 }
             }

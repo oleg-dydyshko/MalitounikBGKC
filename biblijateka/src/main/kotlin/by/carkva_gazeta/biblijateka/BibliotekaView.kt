@@ -140,7 +140,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
                 val dirName = if (t1 != -1) fileName.substring(0, t1)
                 else fileName
                 val dir = File("$filesDir/Book/$dirName/")
-                if (defaultPage + 1 < biblioteka?.content?.size ?: 0) {
+                if (defaultPage + 1 < (biblioteka?.content?.size ?: 0)) {
                     defaultPage++
                     bindingcontent.webView.loadUrl("file://" + dir.absolutePath + "/" + biblioteka?.getPageName(defaultPage))
                 }
@@ -668,7 +668,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
             override fun onSwipeLeft() {
                 if (biblioteka != null) {
-                    if (defaultPage + 1 < biblioteka?.content?.size ?: 0) {
+                    if (defaultPage + 1 < (biblioteka?.content?.size ?: 0)) {
                         stopAutoScroll()
                         animationStoronaLeft = true
                         bindingcontent.webView.startAnimation(animOutLeft)
@@ -1032,7 +1032,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         biblioteka = BibliotekaEpub(dir.absolutePath)
         bindingcontent.webView.visibility = View.VISIBLE
-        if (defaultPage >= biblioteka?.content?.size ?: 0) {
+        if (defaultPage >= (biblioteka?.content?.size ?: 0)) {
             defaultPage = 0
             positionY = 0
         }

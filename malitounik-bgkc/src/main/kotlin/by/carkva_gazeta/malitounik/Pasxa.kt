@@ -14,6 +14,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.webkit.WebSettings
 import androidx.appcompat.app.AppCompatActivity
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.PasxaBinding
 import kotlinx.coroutines.*
 import java.io.BufferedReader
@@ -79,6 +81,9 @@ class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
+            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                WebSettingsCompat.setForceDark(binding.pasxa.settings, WebSettingsCompat.FORCE_DARK_ON)
+            }
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
         val inputStream = resources.openRawResource(R.raw.pasxa)

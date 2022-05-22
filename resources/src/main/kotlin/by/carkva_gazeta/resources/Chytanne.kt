@@ -922,11 +922,13 @@ class Chytanne : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, I
     private fun startAutoScroll() {
         if (!diffScroll) {
             spid = k.getInt("autoscrollSpid", 60)
-            binding.actionMinus.visibility = View.VISIBLE
-            binding.actionPlus.visibility = View.VISIBLE
-            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-            binding.actionMinus.animation = animation
-            binding.actionPlus.animation = animation
+            if (binding.actionMinus.visibility == View.GONE) {
+                binding.actionMinus.visibility = View.VISIBLE
+                binding.actionPlus.visibility = View.VISIBLE
+                val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+                binding.actionMinus.animation = animation
+                binding.actionPlus.animation = animation
+            }
             resetScreenJob?.cancel()
             stopAutoStartScroll()
             autoScroll()

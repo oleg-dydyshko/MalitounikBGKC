@@ -22,7 +22,6 @@ import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
@@ -83,11 +82,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var daysv = 1
     private var munsv = 0
     private var linkMovementMethodCheck: LinkMovementMethodCheck? = null
-    private val bogashlugbovyaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == 200) {
-            startAutoScroll()
-        }
-    }
 
     companion object {
         val resursMap = ArrayMap<String, Int>()
@@ -832,6 +826,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         val res = withContext(Dispatchers.IO) {
             val builder = StringBuilder()
             val id = resursMap[resurs] ?: R.raw.bogashlugbovya_error
+            var nochenia = false
             val inputStream = resources.openRawResource(id)
             val gregorian = Calendar.getInstance() as GregorianCalendar
             val dayOfWeek = gregorian.get(Calendar.DAY_OF_WEEK)
@@ -846,6 +841,10 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             checkDayOfYear = slugbovyiaTextu.checkLiturgia(MenuCaliandar.getPositionCaliandar(cal[Calendar.DAY_OF_YEAR], cal[Calendar.YEAR])[22].toInt(), dayOfYear, slugbovyiaTextu.isPasxa(dayOfYear.toInt()))
             if (liturgia && (checkDayOfYear || slugbovyiaTextu.checkLiturgia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
                 chechZmena = true
+                var resours = slugbovyiaTextu.getResource(raznica, slugbovyiaTextu.isPasxa(raznica), SlugbovyiaTextu.LITURGIA)
+                if (resours == "0") resours = slugbovyiaTextu.getResource(dayOfYear.toInt(), slugbovyiaTextu.isPasxa(dayOfYear.toInt()), SlugbovyiaTextu.LITURGIA)
+                val idZmenyiaChastki = resursMap[resours] ?: R.raw.bogashlugbovya_error
+                nochenia = slugbovyiaTextu.checkFullChtenia(idZmenyiaChastki)
             }
             if ((resurs == "lit_ran_asv_dar" || resurs == "viaczernia_bierascie") && (checkDayOfYear || slugbovyiaTextu.checkViachernia(raznica, cal[Calendar.DAY_OF_YEAR].toString(), slugbovyiaTextu.isPasxa(dayOfYear.toInt())))) {
                 chechZmena = true
@@ -855,6 +854,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             reader.forEachLine {
                 var line = it
                 if (dzenNoch) line = line.replace("#d00505", "#f44336")
+                line = line.replace("NOCH", "")
                 when {
                     resurs.contains("ton") -> {
                         line = line.replace("TRAPARN", "")
@@ -939,7 +939,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         when {
                             line.contains("APCH") -> {
                                 line = line.replace("APCH", "")
-                                if (chechZmena) {
+                                if (chechZmena && !nochenia) {
                                     builder.append("<br>").append("Глядзіце тут").append("<br><br>\n")
                                 } else {
                                     var sv = zmenyiaChastki.sviatyia()
@@ -960,7 +960,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                             }
                             line.contains("EVCH") -> {
                                 line = line.replace("EVCH", "")
-                                if (chechZmena) {
+                                if (chechZmena && !nochenia) {
                                     builder.append("<br>").append("Глядзіце тут").append("<br><br>\n")
                                 } else {
                                     var sv = zmenyiaChastki.sviatyia()
@@ -1062,7 +1062,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                         intent.putExtra("autoscrollOFF", autoscroll)
                         intent.putExtra("title", "Ліцьця і блаславеньне хлябоў")
                         intent.putExtra("resurs", "viachernia_liccia_i_blaslavenne_xliabou")
-                        bogashlugbovyaLauncher.launch(intent)
+                        startActivity(intent)
                     }
                 }, t1, t1 + strLig, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
@@ -1449,7 +1449,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     intent.putExtra("resurs", resours)
                     intent.putExtra("zmena_chastki", true)
                     intent.putExtra("title", slugbovyiaTextu.getTitle(resours))
-                    bogashlugbovyaLauncher.launch(intent)
+                    startActivity(intent)
                 }
             }, bsatGTA1, bsatGTA1 + strLigGTA1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             return bsatGTA1 + strLigGTA1
@@ -1522,11 +1522,13 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private fun startAutoScroll() {
         if (!diffScroll) {
             spid = k.getInt("autoscrollSpid", 60)
-            binding.actionMinus.visibility = View.VISIBLE
-            binding.actionPlus.visibility = View.VISIBLE
-            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-            binding.actionMinus.animation = animation
-            binding.actionPlus.animation = animation
+            if (binding.actionMinus.visibility == View.GONE) {
+                binding.actionMinus.visibility = View.VISIBLE
+                binding.actionPlus.visibility = View.VISIBLE
+                val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+                binding.actionMinus.animation = animation
+                binding.actionPlus.animation = animation
+            }
             mActionDown = false
             resetScreenJob?.cancel()
             stopAutoStartScroll()
@@ -1634,7 +1636,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             }
         } else {
             itemAuto.isVisible = false
-            stopAutoScroll()
+            stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
         }
         var spanString = SpannableString(itemAuto.title.toString())
         var end = spanString.length
@@ -1720,7 +1722,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                     intent.putExtra("title", slugba.getTitle(resours))
                 }
             }
-            bogashlugbovyaLauncher.launch(intent)
+            startActivity(intent)
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
             editDzenNoch = true

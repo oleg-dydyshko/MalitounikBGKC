@@ -3,7 +3,9 @@ package by.carkva_gazeta.malitounik
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
@@ -511,6 +513,14 @@ class SlugbovyiaTextu {
             if (day == it.day && it.checkVialikiaGadziny) return true
         }
         return false
+    }
+
+    fun checkFullChtenia(resource: Int): Boolean {
+        val inputStream = Malitounik.applicationContext().resources.openRawResource(resource)
+        val isr = InputStreamReader(inputStream)
+        val reader = BufferedReader(isr)
+        val text = reader.readText()
+        return text.contains("NOCH")
     }
 
     fun onDestroy() {

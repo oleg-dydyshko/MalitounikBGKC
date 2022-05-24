@@ -23,7 +23,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:checked="false"
-        android:drawableLeft="@drawable/stiker"
         android:drawablePadding="10dp"
         android:drawableStart="@drawable/stiker"
         android:paddingBottom="5dp"

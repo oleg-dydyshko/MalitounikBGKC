@@ -63,7 +63,6 @@
                 android:layout_width="27dp"
                 android:layout_height="27dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
                 android:contentDescription="@string/empty"
                 android:src="@drawable/znaki_krest"
                 android:visibility="gone"

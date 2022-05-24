@@ -1,5 +1,4 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:initialLayout="@layout/widget_mun"
     android:minHeight="180dp"
     android:minWidth="250dp"
@@ -8,5 +7,4 @@
     android:updatePeriodMillis="0"
     android:previewImage="@drawable/screenshot_mun"
     android:widgetCategory="home_screen|keyguard"
-    android:resizeMode="horizontal|vertical"
-    tools:targetApi="jelly_bean_mr1" />
+    android:resizeMode="horizontal|vertical" />

@@ -20,7 +20,6 @@ import androidx.fragment.app.DialogFragment
 import by.carkva_gazeta.malitounik.databinding.DialogSpinnerDisplayBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import java.util.*
-import kotlin.collections.ArrayList
 
 class DialogPrazdnik : DialogFragment() {
     private var setid = 10
@@ -81,7 +80,7 @@ class DialogPrazdnik : DialogFragment() {
             val arrayAdapter = ListAdapter(it)
             binding.content.adapter = arrayAdapter
             for (i in arrayList.indices) {
-                if (arrayList[i] == arguments?.getInt("year")?: c[Calendar.YEAR]) {
+                if (arrayList[i] == (arguments?.getInt("year") ?: c[Calendar.YEAR])) {
                     setid = i
                 }
             }

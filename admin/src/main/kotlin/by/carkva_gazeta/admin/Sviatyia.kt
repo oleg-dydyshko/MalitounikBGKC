@@ -75,7 +75,7 @@ class Sviatyia : AppCompatActivity(), DialogImageFileLoad.DialogFileExplorerList
         binding.pager.adapter = adapterViewPager
         binding.pager.isUserInputEnabled = false
         caliandar.set(Calendar.YEAR, VYSOCOSNYI_GOD)
-        dayOfYear = intent.extras?.getInt("dayOfYear") ?: caliandar[Calendar.DAY_OF_YEAR] - 1
+        dayOfYear = intent.extras?.getInt("dayOfYear") ?: (caliandar[Calendar.DAY_OF_YEAR] - 1)
         binding.pager.setCurrentItem(dayOfYear, false)
         val munName = resources.getStringArray(by.carkva_gazeta.malitounik.R.array.meciac_smoll)
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->

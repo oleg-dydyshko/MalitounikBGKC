@@ -50,14 +50,14 @@ class DialogClearHishory : DialogFragment() {
             if (dzenNoch) binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             else binding.title.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary))
             binding.title.text = resources.getString(R.string.clean_histopy_title)
-            if (arguments?.getString("itemName")?: "" == "")
+            if ((arguments?.getString("itemName") ?: "") == "")
                 binding.content.text = getString(R.string.all_clean_histopy)
             else
                 binding.content.text = getString(R.string.all_clean_item_histopy, arguments?.getString("itemName")?: "")
             binding.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN)
             if (dzenNoch) binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorWhite))
             else binding.content.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary_text))
-            if (arguments?.getInt("position")?: -1 == -1)
+            if ((arguments?.getInt("position") ?: -1) == -1)
                 builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener.cleanFullHistory() }
             else
                 builder.setPositiveButton(resources.getText(R.string.ok)) { _: DialogInterface?, _: Int -> mListener.cleanHistory(arguments?.getInt("position")?: -1) }

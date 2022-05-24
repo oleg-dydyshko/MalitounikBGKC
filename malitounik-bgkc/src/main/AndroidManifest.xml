@@ -173,7 +173,7 @@
         <activity
             android:name=".CaliandarMun"
             android:label="@string/kaliandar"
-            android:theme="@style/AppThemeSlider" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".Pasxa"
             android:label="@string/pascha_kaliandar_bel"
@@ -185,7 +185,7 @@
         <activity
             android:name=".Sabytie"
             android:label="@string/sabytie"
-            android:theme="@style/AppThemeSlider"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

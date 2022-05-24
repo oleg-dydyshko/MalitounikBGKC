@@ -773,7 +773,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             }
         }
         binding.actionFullscreen.setOnClickListener {
-            fullscreenPage = false
             show()
         }
         binding.scrollView2.setOnBottomReachedListener(object : InteractiveScrollView.OnBottomReachedListener {
@@ -1784,7 +1783,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            fullscreenPage = true
             hide()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_share) {
@@ -1801,7 +1799,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             if (MainActivity.checkmodulesAdmin()) {
                 val intent = Intent()
                 intent.setClassName(this, MainActivity.PASOCHNICALIST)
-                val idres = resursMap[resurs] ?: R.raw.lit_jan_zalat
+                val idres = resursMap[resurs] ?: R.raw.bogashlugbovya_error
                 val inputStream = resources.openRawResource(idres)
                 val text = inputStream.use {
                     it.reader().readText()
@@ -1819,10 +1817,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
 
     override fun onBackPressed() {
         when {
-            fullscreenPage -> {
-                fullscreenPage = false
-                show()
-            }
             binding.find.visibility == View.VISIBLE -> {
                 binding.find.visibility = View.GONE
                 binding.textSearch.setText("")
@@ -1830,7 +1824,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
             }
-            intent.extras?.getBoolean("chekVybranoe", false) ?: false && men != checkVybranoe -> {
+            intent.extras?.getBoolean("chekVybranoe", false) == true && men != checkVybranoe -> {
                 setResult(200)
                 finish()
             }
@@ -1855,6 +1849,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
+        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
@@ -1864,6 +1859,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private fun hide() {
+        fullscreenPage = true
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", true)
+        prefEditor.apply()
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)
@@ -1877,6 +1876,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
     }
 
     private fun show() {
+        fullscreenPage = false
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", false)
+        prefEditor.apply()
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)

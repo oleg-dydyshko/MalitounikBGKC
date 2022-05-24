@@ -62,6 +62,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
+        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) hide()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -107,7 +108,10 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         TabLayoutMediator(binding.tabLayout, binding.pager, false) { tab, position ->
             tab.text = malitvy[position].title
         }.attach()
-        if (dzenNoch) binding.tabLayout.setTabTextColors(Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorSecondary_text))), Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))))
+        if (dzenNoch) {
+            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
+            binding.tabLayout.setTabTextColors(Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorSecondary_text))), Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))))
+        }
         binding.pager.offscreenPageLimit = 3
         binding.pager.setCurrentItem(pasliaPrychascia, false)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
@@ -181,7 +185,6 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             startProcent()
         }
         binding.actionFullscreen.setOnClickListener {
-            fullscreenPage = false
             show()
         }
     }
@@ -236,8 +239,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        val prefEditor: Editor = k.edit()
+        val prefEditor = k.edit()
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
@@ -270,7 +272,6 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            fullscreenPage = true
             hide()
         }
         prefEditor.apply()
@@ -358,24 +359,18 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     }
 
     override fun onBackPressed() {
-        if (fullscreenPage) {
-            fullscreenPage = false
-            show()
+        if (checkSetDzenNoch != dzenNoch) {
+            onSupportNavigateUp()
         } else {
-            if (checkSetDzenNoch != dzenNoch) {
-                onSupportNavigateUp()
-            } else {
-                super.onBackPressed()
-            }
+            super.onBackPressed()
         }
     }
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (fullscreenPage && hasFocus) hide()
-    }
-
     private fun hide() {
+        fullscreenPage = true
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", true)
+        prefEditor.apply()
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)
@@ -389,6 +384,10 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     }
 
     private fun show() {
+        fullscreenPage = false
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", false)
+        prefEditor.apply()
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)

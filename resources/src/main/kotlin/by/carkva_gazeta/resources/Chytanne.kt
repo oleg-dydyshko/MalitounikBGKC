@@ -204,7 +204,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             }
         }
         binding.actionFullscreen.setOnClickListener {
-            fullscreenPage = false
             show()
         }
         binding.InteractiveScroll.setOnScrollChangedCallback(this)
@@ -1023,15 +1022,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         return true
     }
 
-    override fun onBackPressed() {
-        if (fullscreenPage) {
-            fullscreenPage = false
-            show()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
@@ -1044,6 +1034,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
+        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) hide()
         spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
@@ -1095,13 +1086,16 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            fullscreenPage = true
             hide()
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun hide() {
+        fullscreenPage = true
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", true)
+        prefEditor.apply()
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)
@@ -1115,6 +1109,10 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
     }
 
     private fun show() {
+        fullscreenPage = false
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", false)
+        prefEditor.apply()
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)

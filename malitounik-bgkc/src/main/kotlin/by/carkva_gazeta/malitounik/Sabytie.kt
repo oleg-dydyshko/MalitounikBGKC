@@ -26,6 +26,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -38,7 +39,6 @@ import by.carkva_gazeta.malitounik.databinding.SabytieBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemColorBinding
 import com.google.gson.Gson
-import com.r0adkll.slidr.Slidr
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
@@ -47,7 +47,7 @@ import java.io.File
 import java.io.FileWriter
 import java.util.*
 
-class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener, DialogHelpAlarm.DialogHelpAlarmListener {
+class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener, DialogHelpAlarm.DialogHelpAlarmListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var konec = false
@@ -316,12 +316,12 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) {
+            setTheme(R.style.AppCompatDark)
             colors[0] = "#f44336"
         }
         super.onCreate(savedInstanceState)
         binding = SabytieBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
         binding.labelbutton12.setOnClickListener(View.OnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnClickListener
@@ -534,7 +534,6 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         binding.titleToolbar.text = resources.getString(R.string.sabytie)
         if (dzenNoch) {
-            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.pacatak.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
             binding.kanec.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
             binding.pavedamic.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
@@ -830,6 +829,12 @@ class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSaby
             val item = it.findItem(R.id.action_cansel)
             onOptionsItemSelected(item)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun changeSearchViewElements(view: View?) {

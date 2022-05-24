@@ -254,7 +254,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
         }
         binding.actionFullscreen.setOnClickListener {
-            fullscreenPage = false
             show()
         }
         binding.actionBack.setOnClickListener {
@@ -1069,30 +1068,29 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     }
 
     override fun onBackPressed() {
-        if (paralel) {
-            slidr.unlock()
-            binding.scroll.visibility = View.GONE
-            binding.ListView.visibility = View.VISIBLE
-            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
-            paralel = false
-            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
-            binding.actionBack.visibility = View.GONE
-            binding.actionBack.animation = animation
-            invalidateOptionsMenu()
-        } else if (fullscreenPage) {
-            fullscreenPage = false
-            show()
-        } else if (mPedakVisable) {
-            mPedakVisable = false
-            bibleCopyList.clear()
-            adapter.notifyDataSetChanged()
-            if (binding.linearLayout4.visibility == View.VISIBLE) {
-                binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
-                binding.linearLayout4.visibility = View.GONE
+        when {
+            paralel -> {
+                slidr.unlock()
+                binding.scroll.visibility = View.GONE
+                binding.ListView.visibility = View.VISIBLE
+                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
+                paralel = false
+                val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+                binding.actionBack.visibility = View.GONE
+                binding.actionBack.animation = animation
+                invalidateOptionsMenu()
             }
-            invalidateOptionsMenu()
-        } else {
-            super.onBackPressed()
+            mPedakVisable -> {
+                mPedakVisable = false
+                bibleCopyList.clear()
+                adapter.notifyDataSetChanged()
+                if (binding.linearLayout4.visibility == View.VISIBLE) {
+                    binding.linearLayout4.animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.slide_in_buttom)
+                    binding.linearLayout4.visibility = View.GONE
+                }
+                invalidateOptionsMenu()
+            }
+            else -> super.onBackPressed()
         }
     }
 
@@ -1129,6 +1127,7 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
 
     override fun onResume() {
         super.onResume()
+        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
@@ -1245,7 +1244,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            fullscreenPage = true
             hide()
         }
         prefEditor.apply()
@@ -1253,6 +1251,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     }
 
     private fun hide() {
+        fullscreenPage = true
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", true)
+        prefEditor.apply()
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)
@@ -1266,6 +1268,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     }
 
     private fun show() {
+        fullscreenPage = false
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", false)
+        prefEditor.apply()
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)

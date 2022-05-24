@@ -117,7 +117,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         binding.actionFullscreen.setOnClickListener {
-            fullscreenPage = false
             show()
         }
         binding.pager.setCurrentItem(glava, false)
@@ -232,10 +231,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
                 val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
                 fragment.onBackPressedFragment()
             }
-            fullscreenPage -> {
-                fullscreenPage = false
-                show()
-            }
             checkSetDzenNoch != dzenNoch -> {
                 onSupportNavigateUp()
             }
@@ -243,9 +238,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
                 MenuBibleSemuxa.bible_time = false
                 onSupportNavigateUp()
             }
-            else -> {
-                super.onBackPressed()
-            }
+            else -> super.onBackPressed()
         }
     }
 
@@ -313,7 +306,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            fullscreenPage = true
             hide()
         }
         prefEditors.apply()
@@ -322,6 +314,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
 
     override fun onResume() {
         super.onResume()
+        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) hide()
         setTollbarTheme()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -343,6 +336,10 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     }
 
     private fun hide() {
+        fullscreenPage = true
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", true)
+        prefEditor.apply()
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = ViewCompat.getWindowInsetsController(binding.linealLayoutTitle)
@@ -356,6 +353,10 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     }
 
     private fun show() {
+        fullscreenPage = false
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", false)
+        prefEditor.apply()
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = ViewCompat.getWindowInsetsController(binding.linealLayoutTitle)

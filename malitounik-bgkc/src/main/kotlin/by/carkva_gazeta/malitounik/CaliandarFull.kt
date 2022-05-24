@@ -322,12 +322,12 @@ class CaliandarFull : Fragment(), View.OnClickListener {
                 }
             }
             val svityDrugasnuia = SpannableStringBuilder()
-            if (k.getInt("pravas", 0) == 1 && MenuCaliandar.getPositionCaliandar(position)[14] != "") {
-                svityDrugasnuia.append(MenuCaliandar.getPositionCaliandar(position)[14])
-            }
             if (k.getInt("pkc", 0) == 1 && MenuCaliandar.getPositionCaliandar(position)[19] != "") {
-                if (svityDrugasnuia.isNotEmpty()) svityDrugasnuia.append("\n\n")
                 svityDrugasnuia.append(MenuCaliandar.getPositionCaliandar(position)[19])
+            }
+            if (k.getInt("pravas", 0) == 1 && MenuCaliandar.getPositionCaliandar(position)[14] != "") {
+                if (svityDrugasnuia.isNotEmpty()) svityDrugasnuia.append("\n\n")
+                svityDrugasnuia.append(MenuCaliandar.getPositionCaliandar(position)[14])
             }
             if (k.getInt("gosud", 0) == 1) {
                 if (MenuCaliandar.getPositionCaliandar(position)[16] != "") {

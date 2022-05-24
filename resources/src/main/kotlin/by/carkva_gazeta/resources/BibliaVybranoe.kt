@@ -203,7 +203,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             }
         }
         binding.actionFullscreen.setOnClickListener {
-            fullscreenPage = false
             show()
         }
         binding.InteractiveScroll.setOnScrollChangedCallback(this)
@@ -668,15 +667,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         return true
     }
 
-    override fun onBackPressed() {
-        if (fullscreenPage) {
-            fullscreenPage = false
-            show()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         stopAutoScroll(delayDisplayOff = false, saveAutoScroll = false)
@@ -689,6 +679,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
+        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) hide()
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
@@ -732,7 +723,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            fullscreenPage = true
             hide()
         }
         prefEditor.apply()
@@ -740,6 +730,10 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     }
 
     private fun hide() {
+        fullscreenPage = true
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", true)
+        prefEditor.apply()
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)
@@ -753,6 +747,10 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
     }
 
     private fun show() {
+        fullscreenPage = false
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", false)
+        prefEditor.apply()
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)

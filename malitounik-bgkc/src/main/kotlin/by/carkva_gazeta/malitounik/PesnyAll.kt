@@ -317,6 +317,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
 
     override fun onResume() {
         super.onResume()
+        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) hide()
     }
 
@@ -433,7 +434,6 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             startProcent()
         }
         binding.actionFullscreen.setOnClickListener {
-            fullscreenPage = false
             show()
         }
         setTollbarTheme()
@@ -586,7 +586,6 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == R.id.action_fullscreen) {
-            fullscreenPage = true
             hide()
         }
         if (id == R.id.action_share) {
@@ -617,22 +616,19 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
     }
 
     override fun onBackPressed() {
-        when {
-            fullscreenPage -> {
-                fullscreenPage = false
-                show()
-            }
-            intent.extras?.getBoolean("chekVybranoe", false) ?: false && men != checkVybranoe -> {
-                setResult(200)
-                finish()
-            }
-            else -> {
-                super.onBackPressed()
-            }
+        if (intent.extras?.getBoolean("chekVybranoe", false) == true && men != checkVybranoe) {
+            setResult(200)
+            finish()
+        } else {
+            super.onBackPressed()
         }
     }
 
     private fun hide() {
+        fullscreenPage = true
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", true)
+        prefEditor.apply()
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)
@@ -646,6 +642,10 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
     }
 
     private fun show() {
+        fullscreenPage = false
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", false)
+        prefEditor.apply()
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)

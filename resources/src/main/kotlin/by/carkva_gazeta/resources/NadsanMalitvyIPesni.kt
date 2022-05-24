@@ -7,10 +7,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AnimationUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -89,7 +86,6 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.malitvyIPesny.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         binding.actionFullscreen.setOnClickListener {
-            fullscreenPage = false
             show()
         }
         setTollbarTheme()
@@ -191,32 +187,24 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
             dialogBrightness.show(supportFragmentManager, "brightness")
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            fullscreenPage = true
             hide()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        if (fullscreenPage) {
-            fullscreenPage = false
-            show()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun onResume() {
         super.onResume()
+        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) hide()
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (fullscreenPage && hasFocus) hide()
+        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
+        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun hide() {
+        fullscreenPage = true
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", true)
+        prefEditor.apply()
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)
@@ -230,6 +218,10 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
     }
 
     private fun show() {
+        fullscreenPage = false
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", false)
+        prefEditor.apply()
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = ViewCompat.getWindowInsetsController(binding.constraint)

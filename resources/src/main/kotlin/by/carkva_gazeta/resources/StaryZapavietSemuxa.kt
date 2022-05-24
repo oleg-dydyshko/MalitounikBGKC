@@ -363,7 +363,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
             inputStream.close()
         }
         binding.actionFullscreen.setOnClickListener {
-            fullscreenPage = false
             show()
         }
         binding.actionBack.setOnClickListener {
@@ -429,30 +428,26 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
     }
 
     override fun onBackPressed() {
-        if (paralel) {
-            binding.scroll.visibility = View.GONE
-            binding.pager.visibility = View.VISIBLE
-            binding.tabLayout.visibility = View.VISIBLE
-            binding.subtitleToolbar.visibility = View.VISIBLE
-            binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
-            binding.subtitleToolbar.text = title
-            paralel = false
-            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
-            binding.actionBack.visibility = View.GONE
-            binding.actionBack.animation = animation
-            invalidateOptionsMenu()
-        } else if (fullscreenPage) {
-            fullscreenPage = false
-            show()
-        } else if (BibleGlobalList.mPedakVisable) {
-            val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
-            fragment.onBackPressedFragment()
-        } else {
-            if (setedit || checkSetDzenNoch != dzenNoch) {
-                onSupportNavigateUp()
-            } else {
-                super.onBackPressed()
+        when {
+            paralel -> {
+                binding.scroll.visibility = View.GONE
+                binding.pager.visibility = View.VISIBLE
+                binding.tabLayout.visibility = View.VISIBLE
+                binding.subtitleToolbar.visibility = View.VISIBLE
+                binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
+                binding.subtitleToolbar.text = title
+                paralel = false
+                val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+                binding.actionBack.visibility = View.GONE
+                binding.actionBack.animation = animation
+                invalidateOptionsMenu()
             }
+            BibleGlobalList.mPedakVisable -> {
+                val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
+                fragment.onBackPressedFragment()
+            }
+            setedit || checkSetDzenNoch != dzenNoch -> onSupportNavigateUp()
+            else -> super.onBackPressed()
         }
     }
 
@@ -479,7 +474,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         val prefEditors = k.edit()
-        dzenNoch = k.getBoolean("dzen_noch", false)
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
             men = DialogVybranoeBibleList.setVybranoe(this, title, kniga, BibleGlobalList.mListGlava)
             if (men) {
@@ -531,7 +525,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
             startActivity(intent)
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_fullscreen) {
-            fullscreenPage = true
             hide()
         }
         prefEditors.apply()
@@ -540,6 +533,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
 
     override fun onResume() {
         super.onResume()
+        fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) hide()
         setTollbarTheme()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
@@ -580,6 +574,10 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
     }
 
     private fun hide() {
+        fullscreenPage = true
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", true)
+        prefEditor.apply()
         supportActionBar?.hide()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = ViewCompat.getWindowInsetsController(binding.linealLayoutTitle)
@@ -597,6 +595,10 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
     }
 
     private fun show() {
+        fullscreenPage = false
+        val prefEditor = k.edit()
+        prefEditor.putBoolean("fullscreenPage", false)
+        prefEditor.apply()
         supportActionBar?.show()
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = ViewCompat.getWindowInsetsController(binding.linealLayoutTitle)

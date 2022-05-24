@@ -7,15 +7,19 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import by.carkva_gazeta.malitounik.BaseActivity
 import by.carkva_gazeta.malitounik.DialogNadsanPravila
 import by.carkva_gazeta.malitounik.MainActivity
 import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.NadsanPravilaBinding
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
-class PsalterNadsana : AppCompatActivity(), View.OnClickListener {
+class PsalterNadsana : BaseActivity(), View.OnClickListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private lateinit var binding: NadsanPravilaBinding
@@ -35,9 +39,9 @@ class PsalterNadsana : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         binding = NadsanPravilaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         val pNadsana = k.getInt("pravalaNadsana", 1)
         binding.buttonleft.setOnClickListener(this)
         binding.buttonrighth.setOnClickListener(this)
@@ -135,6 +139,7 @@ class PsalterNadsana : AppCompatActivity(), View.OnClickListener {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setText(by.carkva_gazeta.malitounik.R.string.title_psalter_privila)
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
@@ -169,11 +174,5 @@ class PsalterNadsana : AppCompatActivity(), View.OnClickListener {
             item.title = spanString
         }
         return true
-    }
-
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 }

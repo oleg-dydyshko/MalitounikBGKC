@@ -17,7 +17,6 @@ import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
 import android.view.animation.AnimationUtils
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -29,11 +28,14 @@ import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
 import by.carkva_gazeta.malitounik.InteractiveScrollView.OnBottomReachedListener
 import by.carkva_gazeta.resources.databinding.AkafistChytanneBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
+import com.r0adkll.slidr.Slidr
+import com.r0adkll.slidr.model.SlidrConfig
+import com.r0adkll.slidr.model.SlidrListener
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback {
+class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -43,7 +45,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
     private var n = 0
     private var spid = 60
     private var mActionDown = false
-    private var change = false
     private lateinit var binding: AkafistChytanneBinding
     private lateinit var bindingprogress: ProgressBinding
     private var autoScrollJob: Job? = null
@@ -69,15 +70,31 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             window.attributes = lp
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = AkafistChytanneBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
+        val config = SlidrConfig.Builder().listener(object : SlidrListener {
+            override fun onSlideStateChanged(state: Int) {
+                mActionDown = true
+            }
+
+            override fun onSlideChange(percent: Float) {
+            }
+
+            override fun onSlideOpened() {
+                mActionDown = false
+            }
+
+            override fun onSlideClosed(): Boolean {
+                onBackPressed()
+                return false
+            }
+        }).build()
+        Slidr.attach(this, config)
         if (savedInstanceState != null) {
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            change = savedInstanceState.getBoolean("change")
         }
         title = intent.extras?.getString("title", "") ?: ""
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
@@ -96,6 +113,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             }
         })
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
@@ -655,11 +673,7 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
             fullscreenPage = false
             show()
         } else {
-            if (change) {
-                onSupportNavigateUp()
-            } else {
-                super.onBackPressed()
-            }
+            super.onBackPressed()
         }
     }
 
@@ -681,16 +695,16 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
         if (autoscroll) {
             autoStartScroll()
         }
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        val prefEditor: Editor = k.edit()
+        val prefEditor = k.edit()
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            change = true
             item.isChecked = !item.isChecked
             if (item.isChecked) {
                 prefEditor.putBoolean("dzen_noch", true)
@@ -759,7 +773,6 @@ class BibliaVybranoe : AppCompatActivity(), OnTouchListener, DialogFontSizeListe
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
-        outState.putBoolean("change", change)
         outState.putString("textLine", firstTextPosition)
     }
 }

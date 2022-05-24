@@ -15,8 +15,6 @@ import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
@@ -24,9 +22,10 @@ import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.resources.databinding.AkafistListBibleBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
-class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearHistoryListener {
+class MalitvyPrynagodnyia : BaseActivity(), DialogClearHishory.DialogClearHistoryListener {
 
     private val data = ArrayList<MenuListData>()
     private lateinit var adapter: MenuListAdaprer
@@ -40,13 +39,6 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
     private var actionExpandOn = false
     private lateinit var binding: AkafistListBibleBinding
     private var resetTollbarJob: Job? = null
-    private var result = false
-    private val prynagodnyiaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == 200) {
-            this.result = true
-            recreate()
-        }
-    }
 
     private fun addHistory(item: String) {
         val temp = ArrayList<String>()
@@ -100,16 +92,15 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
     override fun onCreate(savedInstanceState: Bundle?) {
         chin = getSharedPreferences("biblia", MODE_PRIVATE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = AkafistListBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+        Slidr.attach(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (savedInstanceState != null) {
             searchViewQwery = savedInstanceState.getString("SearchViewQwery", "")
             actionExpandOn = savedInstanceState.getBoolean("actionExpandOn")
-            result = savedInstanceState.getBoolean("result")
         }
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams
@@ -129,6 +120,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         binding.titleToolbar.text = resources.getText(by.carkva_gazeta.malitounik.R.string.prynagodnyia)
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
         data.add(MenuListData("Малітва аб блаславеньні", "prynagodnyia_0"))
@@ -203,7 +195,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             val intent = Intent(this@MalitvyPrynagodnyia, Bogashlugbovya::class.java)
             intent.putExtra("title", data[position].title)
             intent.putExtra("resurs", data[position].resurs)
-            prynagodnyiaLauncher.launch(intent)
+            startActivity(intent)
             val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.ListView.windowToken, 0)
             if (autoCompleteTextView?.text.toString() != "") {
@@ -231,7 +223,7 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
             val edit = history[position]
             intent.putExtra("title", edit)
             intent.putExtra("resurs", findTypeResource(edit))
-            prynagodnyiaLauncher.launch(intent)
+            startActivity(intent)
             addHistory(edit)
             saveHistopy()
             actionExpandOn = false
@@ -256,11 +248,6 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
-    }
-
-    override fun onBackPressed() {
-        if (result) onSupportNavigateUp()
-        else super.onBackPressed()
     }
 
     private fun changeSearchViewElements(view: View?) {
@@ -296,6 +283,10 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_clean_histopy) {
             val dialogClearHishory = DialogClearHishory.getInstance()
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")
@@ -305,6 +296,11 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
+        if (!MainActivity.checkBrightness) {
+            val lp = window.attributes
+            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+            window.attributes = lp
+        }
         menuInflater.inflate(by.carkva_gazeta.malitounik.R.menu.malitvy_prynagodnyia, menu)
         val searchViewItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_seashe_text)
         searchView = searchViewItem.actionView as SearchView
@@ -342,22 +338,10 @@ class MalitvyPrynagodnyia : AppCompatActivity(), DialogClearHishory.DialogClearH
         return true
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("SearchViewQwery", autoCompleteTextView?.text.toString())
         outState.putBoolean("actionExpandOn", actionExpandOn)
-        outState.putBoolean("result", result)
     }
 
     private inner class MyTextWatcher : TextWatcher {

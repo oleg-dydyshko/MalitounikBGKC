@@ -9,17 +9,15 @@ import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.ExpandableListView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.util.*
 
 
-class MineiaShodzennaia : AppCompatActivity() {
-
+class MineiaShodzennaia : BaseActivity() {
     private lateinit var k: SharedPreferences
     private lateinit var binding: ContentBibleBinding
     private var resetTollbarJob: Job? = null
@@ -33,12 +31,17 @@ class MineiaShodzennaia : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (!MainActivity.checkBrightness) {
+            val lp = window.attributes
+            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+            window.attributes = lp
+        }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         setTollbarTheme()
         val slugba = SlugbovyiaTextu()
         val mineiaList = slugba.getMineiaShtodzennia()
@@ -186,6 +189,7 @@ class MineiaShodzennaia : AppCompatActivity() {
             false
         }
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = R.style.AppCompatDark
             binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
         } else {
@@ -234,11 +238,6 @@ class MineiaShodzennaia : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
         val cal = Calendar.getInstance()
         if (month == null) {
             for (i in 0 until groups.size) {
@@ -248,8 +247,6 @@ class MineiaShodzennaia : AppCompatActivity() {
             }
         }
         binding.elvMain.expandGroup(month ?: 0)
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onBackPressed() {

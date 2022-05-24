@@ -17,7 +17,6 @@ import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
 import android.view.animation.AnimationUtils
-import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -28,22 +27,23 @@ import by.carkva_gazeta.malitounik.databinding.PesnyBinding
 import by.carkva_gazeta.malitounik.databinding.ProgressPesnyAllBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
 
-class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener {
+class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
     private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
     private var dzenNoch = false
+    private var checkVybranoe = false
     private var n = 0
     private var title = ""
     private var men = false
     private var resurs = ""
-    private var checkSetDzenNoch = false
     private lateinit var binding: PesnyBinding
     private lateinit var bindingprogress: ProgressPesnyAllBinding
     private var procentJob: Job? = null
@@ -317,9 +317,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
 
     override fun onResume() {
         super.onResume()
-        setTollbarTheme()
         if (fullscreenPage) hide()
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -337,18 +335,18 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = PesnyBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
+        Slidr.attach(this)
         binding.constraint.setOnTouchListener(this)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
         }
@@ -379,6 +377,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
         val search = intent.extras?.getString("search", "") ?: ""
         if (search != "") findAllAsanc(search)
         men = checkVybranoe(this, resurs)
+        checkVybranoe = men
         bindingprogress.fontSizePlus.setOnClickListener {
             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX)  bindingprogress.progressTitle.text = getString(R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
@@ -437,6 +436,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             fullscreenPage = false
             show()
         }
+        setTollbarTheme()
     }
 
     private fun setTollbarTheme() {
@@ -554,12 +554,13 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-        dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor = k.edit()
         val id = item.itemId
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == R.id.action_dzen_noch) {
-            checkSetDzenNoch = true
             item.isChecked = !item.isChecked
             if (item.isChecked) {
                 prefEditor.putBoolean("dzen_noch", true)
@@ -569,12 +570,7 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
             prefEditor.apply()
             recreate()
         }
-        if (id == android.R.id.home) {
-            onBackPressed()
-            return true
-        }
         if (id == R.id.action_vybranoe) {
-            checkSetDzenNoch = true
             men = setVybranoe(this, resurs, title)
             if (men) {
                 MainActivity.toastView(getString(R.string.addVybranoe))
@@ -621,11 +617,18 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     }
 
     override fun onBackPressed() {
-        if (fullscreenPage) {
-            fullscreenPage = false
-            show()
-        } else {
-            if (checkSetDzenNoch) onSupportNavigateUp() else super.onBackPressed()
+        when {
+            fullscreenPage -> {
+                fullscreenPage = false
+                show()
+            }
+            intent.extras?.getBoolean("chekVybranoe", false) ?: false && men != checkVybranoe -> {
+                setResult(200)
+                finish()
+            }
+            else -> {
+                super.onBackPressed()
+            }
         }
     }
 
@@ -655,6 +658,5 @@ class PesnyAll : AppCompatActivity(), OnTouchListener, DialogFontSize.DialogFont
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
-        outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
     }
 }

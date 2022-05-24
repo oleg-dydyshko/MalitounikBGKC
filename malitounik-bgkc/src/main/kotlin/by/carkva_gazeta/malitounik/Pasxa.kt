@@ -11,22 +11,21 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.webkit.WebSettings
-import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.PasxaBinding
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 
-class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
+class Pasxa : BaseActivity(), DialogFontSize.DialogFontSizeListener {
     private lateinit var binding: PasxaBinding
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
-    private var change = false
+    private var dzenNoch = false
 
     override fun onPause() {
         super.onPause()
@@ -51,12 +50,11 @@ class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val fontBiblia = chin.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-        val dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        dzenNoch = chin.getBoolean("dzen_noch", false)
         super.onCreate(savedInstanceState)
         binding = PasxaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams
             if (binding.titleToolbar.isSelected) {
@@ -72,15 +70,13 @@ class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
                 }
             }
         }
-        if (savedInstanceState != null) {
-            change = savedInstanceState.getBoolean("change")
-        }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         binding.titleToolbar.text = resources.getText(R.string.pascha_kaliandar_bel)
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
                 WebSettingsCompat.setForceDark(binding.pasxa.settings, WebSettingsCompat.FORCE_DARK_ON)
             }
@@ -116,20 +112,6 @@ class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
-    override fun onBackPressed() {
-        if (change) {
-            onSupportNavigateUp()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         val infl = menuInflater
@@ -161,7 +143,6 @@ class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             dialogFontSize.show(supportFragmentManager, "font")
         }
         if (id == R.id.action_dzen_noch) {
-            change = true
             val prefEditor = chin.edit()
             item.isChecked = !item.isChecked
             if (item.isChecked) {
@@ -179,10 +160,5 @@ class Pasxa : AppCompatActivity(), DialogFontSize.DialogFontSizeListener {
             startActivity(Intent.createChooser(sendIntent, null))
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean("change", change)
     }
 }

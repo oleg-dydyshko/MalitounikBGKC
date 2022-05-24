@@ -111,13 +111,9 @@ class WidgetMun : AppWidgetProvider() {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
             }
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
+            else -> {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
                 alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000, pIntentBoot)
-            }
-            else -> {
-                alarmManager[AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH])] = pIntent
-                alarmManager[AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 300000] = pIntentBoot
             }
         }
     }
@@ -200,11 +196,8 @@ class WidgetMun : AppWidgetProvider() {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
                 }
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
-                }
                 else -> {
-                    alarmManager[AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH])] = pIntent
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, mkTime(c[Calendar.YEAR], c[Calendar.MONTH], c[Calendar.DAY_OF_MONTH]), pIntent)
                 }
             }
         }
@@ -270,11 +263,8 @@ class WidgetMun : AppWidgetProvider() {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 120000, pReset)
                     }
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 120000, pReset)
-                    }
                     else -> {
-                        alarmManager[AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 120000] = pReset
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 120000, pReset)
                     }
                 }
                 updateWidget(context, AppWidgetManager.getInstance(context), mAppWidgetId)

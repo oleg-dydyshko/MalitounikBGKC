@@ -78,6 +78,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
+        checkSetDzenNoch = dzenNoch
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = ActivityBibleBinding.inflate(layoutInflater)
@@ -235,7 +236,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
                 fullscreenPage = false
                 show()
             }
-            checkSetDzenNoch -> {
+            checkSetDzenNoch != dzenNoch -> {
                 onSupportNavigateUp()
             }
             MenuBibleSemuxa.bible_time -> {
@@ -269,7 +270,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         val prefEditors = k.edit()
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            checkSetDzenNoch = true
             men = DialogVybranoeBibleList.setVybranoe(this, resources.getString(by.carkva_gazeta.malitounik.R.string.psalom2), 0, binding.pager.currentItem, bibleName = 3)
             if (men) {
                 MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
@@ -285,7 +285,6 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             invalidateOptionsMenu()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            checkSetDzenNoch = true
             val prefEditor = k.edit()
             item.isChecked = !item.isChecked
             if (item.isChecked) {
@@ -293,6 +292,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
             } else {
                 prefEditor.putBoolean("dzen_noch", false)
             }
+            dzenNoch = item.isChecked
             prefEditor.apply()
             recreate()
         }

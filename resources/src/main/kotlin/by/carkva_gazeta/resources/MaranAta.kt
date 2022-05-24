@@ -21,7 +21,6 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
@@ -37,13 +36,16 @@ import by.carkva_gazeta.resources.databinding.AkafistMaranAtaBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.r0adkll.slidr.Slidr
+import com.r0adkll.slidr.model.SlidrConfig
+import com.r0adkll.slidr.model.SlidrInterface
+import com.r0adkll.slidr.model.SlidrListener
 import kotlinx.coroutines.*
 import java.io.*
 
-class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener {
+class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItemClickListener, OnItemLongClickListener {
 
     private var fullscreenPage = false
-    private var change = false
     private var cytanne = ""
     private lateinit var k: SharedPreferences
     private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
@@ -74,6 +76,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     private var scrolltosatrt = false
     private var vydelenie = ArrayList<ArrayList<Int>>()
     private var bibleCopyList = ArrayList<Int>()
+    private lateinit var slidr: SlidrInterface
 
     override fun onDialogFontSize(fontSize: Float) {
         fontBiblia = fontSize
@@ -115,11 +118,28 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         spid = k.getInt("autoscrollSpid", 60)
         maranAtaScrollPosition = k.getInt("maranAtaScrollPasition", 0)
         super.onCreate(savedInstanceState)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         binding = AkafistMaranAtaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
         setTollbarTheme()
+        val config = SlidrConfig.Builder().listener(object : SlidrListener {
+            override fun onSlideStateChanged(state: Int) {
+                mActionDown = true
+            }
+
+            override fun onSlideChange(percent: Float) {
+            }
+
+            override fun onSlideOpened() {
+                mActionDown = false
+            }
+
+            override fun onSlideClosed(): Boolean {
+                onBackPressed()
+                return false
+            }
+        }).build()
+        slidr = Slidr.attach(this, config)
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
@@ -139,12 +159,12 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             onsave = true
             MainActivity.dialogVisable = false
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            change = savedInstanceState.getBoolean("change")
             tollBarText = savedInstanceState.getString("tollBarText") ?: ""
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
             paralel = savedInstanceState.getBoolean("paralel", paralel)
             binding.subtitleToolbar.text = savedInstanceState.getString("chtenie")
             if (paralel) {
+                slidr.lock()
                 paralelPosition = savedInstanceState.getInt("paralelPosition")
                 parralelMestaView(paralelPosition)
             }
@@ -242,6 +262,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         }
         binding.constraint.setOnTouchListener(this)
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
@@ -1049,6 +1070,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
 
     override fun onBackPressed() {
         if (paralel) {
+            slidr.unlock()
             binding.scroll.visibility = View.GONE
             binding.ListView.visibility = View.VISIBLE
             binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
@@ -1070,11 +1092,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             }
             invalidateOptionsMenu()
         } else {
-            if (change) {
-                onSupportNavigateUp()
-            } else {
-                super.onBackPressed()
-            }
+            super.onBackPressed()
         }
     }
 
@@ -1118,8 +1136,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             autoStartScroll()
         }
         bindingprogress.progress.visibility = View.GONE
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
@@ -1174,10 +1190,8 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
         val id = item.itemId
         val prefEditor = k.edit()
         if (id == android.R.id.home) {
-            if (paralel) {
-                onBackPressed()
-                return true
-            }
+            onBackPressed()
+            return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_semuxa) {
             item.isChecked = !item.isChecked
@@ -1194,7 +1208,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             recreate()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            change = true
             item.isChecked = !item.isChecked
             if (item.isChecked) {
                 prefEditor.putBoolean("dzen_noch", true)
@@ -1265,7 +1278,6 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
-        outState.putBoolean("change", change)
         outState.putString("tollBarText", tollBarText)
         outState.putBoolean("paralel", paralel)
         outState.putInt("paralelPosition", paralelPosition)
@@ -1309,6 +1321,7 @@ class MaranAta : AppCompatActivity(), OnTouchListener, DialogFontSizeListener, O
             if (!autoscroll) {
                 val t1 = maranAta[position].indexOf("$")
                 if (t1 != -1) {
+                    slidr.lock()
                     paralel = true
                     val pm = ParalelnyeMesta()
                     val t2 = maranAta[position].indexOf("-->")

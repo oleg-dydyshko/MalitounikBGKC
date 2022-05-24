@@ -10,14 +10,17 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import by.carkva_gazeta.malitounik.databinding.OpisanieBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
@@ -28,14 +31,13 @@ import java.net.URL
 import java.util.*
 
 
-class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener {
+class Opisanie : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener {
     private var dzenNoch = false
     private var mun = Calendar.getInstance()[Calendar.MONTH] + 1
     private var day = Calendar.getInstance()[Calendar.DATE]
     private var year = Calendar.getInstance()[Calendar.YEAR]
     private var svity = false
     private lateinit var binding: OpisanieBinding
-    private var change = false
     private lateinit var chin: SharedPreferences
     private var resetTollbarJob: Job? = null
     private var loadIconsJob: Job? = null
@@ -104,12 +106,6 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
         resetTollbarJob?.cancel()
         loadIconsJob?.cancel()
         loadPiarlinyJob?.cancel()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun resizeImage(bitmap: Bitmap): Bitmap {
@@ -202,22 +198,19 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = chin.getBoolean("dzen_noch", false)
         super.onCreate(savedInstanceState)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
         binding = OpisanieBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         val c = Calendar.getInstance()
-        mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: c[Calendar.MONTH] + 1
+        mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: (c[Calendar.MONTH] + 1)
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
         year = intent.extras?.getInt("year", c[Calendar.YEAR]) ?: c[Calendar.YEAR]
         svity = intent.extras?.getBoolean("glavnyia", false) ?: false
-        if (savedInstanceState != null) {
-            change = savedInstanceState.getBoolean("change")
-            if (savedInstanceState.getBoolean("imageViewFullVisable")) {
-                val bmp: Bitmap? = savedInstanceState.getParcelable("bitmap")
-                bmp?.let {
-                    binding.imageViewFull.setImageBitmap(Bitmap.createScaledBitmap(it, it.width, it.height, false))
-                    binding.imageViewFull.visibility = View.VISIBLE
-                }
+        if (savedInstanceState?.getBoolean("imageViewFullVisable") == true) {
+            val bmp: Bitmap? = savedInstanceState.getParcelable("bitmap")
+            bmp?.let {
+                binding.imageViewFull.setImageBitmap(Bitmap.createScaledBitmap(it, it.width, it.height, false))
+                binding.imageViewFull.visibility = View.VISIBLE
             }
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
@@ -230,8 +223,12 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
             }
             binding.swipeRefreshLayout.isRefreshing = false
         }
-        if (dzenNoch) binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary_black)
-        else binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
+        if (dzenNoch) {
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
+            binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary_black)
+        } else {
+            binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
+        }
         startLoadIconsJob(loadIcons = !MainActivity.isNetworkAvailable(true))
         setTollbarTheme()
     }
@@ -487,11 +484,7 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
         if (binding.imageViewFull.visibility == View.VISIBLE) {
             binding.imageViewFull.visibility = View.GONE
         } else {
-            if (change) {
-                onSupportNavigateUp()
-            } else {
-                super.onBackPressed()
-            }
+            super.onBackPressed()
         }
     }
 
@@ -519,13 +512,16 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean("change", change)
         outState.putParcelable("bitmap", binding.imageViewFull.drawable?.toBitmap())
         outState.putBoolean("imageViewFullVisable", binding.imageViewFull.visibility == View.VISIBLE)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == R.id.action_piarliny) {
             val i = Intent(this, Piarliny::class.java)
             i.putExtra("mun", mun)
@@ -557,7 +553,6 @@ class Opisanie : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
             }
         }
         if (id == R.id.action_dzen_noch) {
-            change = true
             val prefEditor = chin.edit()
             item.isChecked = !item.isChecked
             if (item.isChecked) {

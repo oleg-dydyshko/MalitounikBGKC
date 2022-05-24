@@ -153,6 +153,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
             window.attributes = lp
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
+        checkSetDzenNoch = dzenNoch
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = ActivityBibleBinding.inflate(layoutInflater)
@@ -447,7 +448,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
             val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
             fragment.onBackPressedFragment()
         } else {
-            if (setedit || checkSetDzenNoch) {
+            if (setedit || checkSetDzenNoch != dzenNoch) {
                 onSupportNavigateUp()
             } else {
                 super.onBackPressed()
@@ -480,7 +481,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         val prefEditors = k.edit()
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            checkSetDzenNoch = true
             men = DialogVybranoeBibleList.setVybranoe(this, title, kniga, BibleGlobalList.mListGlava)
             if (men) {
                 MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
@@ -496,7 +496,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
             invalidateOptionsMenu()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            checkSetDzenNoch = true
             val prefEditor = k.edit()
             item.isChecked = !item.isChecked
             if (item.isChecked) {
@@ -504,6 +503,7 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
             } else {
                 prefEditor.putBoolean("dzen_noch", false)
             }
+            dzenNoch = item.isChecked
             prefEditor.apply()
             recreate()
         }

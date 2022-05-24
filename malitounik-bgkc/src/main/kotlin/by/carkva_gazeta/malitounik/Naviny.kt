@@ -15,17 +15,16 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.webkit.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import by.carkva_gazeta.malitounik.databinding.NavinyBinding
+import com.r0adkll.slidr.Slidr
 
 
-class Naviny : AppCompatActivity() {
+class Naviny : BaseActivity() {
 
     private lateinit var kq: SharedPreferences
     private var dzenNoch = false
@@ -36,9 +35,9 @@ class Naviny : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         kq = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = kq.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
         binding = NavinyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         binding.swipeRefreshLayout.setOnRefreshListener {
             if (MainActivity.isNetworkAvailable()) {
                 binding.viewWeb.settings.cacheMode = WebSettings.LOAD_NO_CACHE
@@ -134,9 +133,7 @@ class Naviny : AppCompatActivity() {
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
         binding.viewWeb.onResume()
-        if (kq.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onPause() {
@@ -158,6 +155,10 @@ class Naviny : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         var error = false
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == R.id.action_forward) {
             binding.viewWeb.goForward()
         }
@@ -275,7 +276,8 @@ class Naviny : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
-            binding.toolbar.popupTheme = R.style.AppCompatDark
+            binding.toolbar.popupTheme = R.style.AppCompatDarkSlider
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.titleToolbar.setBackgroundResource(R.color.colorprimary_material_dark)
         }
     }
@@ -327,6 +329,7 @@ class Naviny : AppCompatActivity() {
 
     private inner class MyWebViewClient : WebViewClient() {
 
+        @Deprecated("Deprecated in Java")
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             if (url.contains("viber://")) {
                 try {

@@ -1,7 +1,6 @@
 package by.carkva_gazeta.resources
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -88,6 +87,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             window.attributes = lp
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
+        checkSetDzenNoch = dzenNoch
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
@@ -239,14 +239,18 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         dzenNoch = k.getBoolean("dzen_noch", false)
         val prefEditor: Editor = k.edit()
         val id = item.itemId
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            checkSetDzenNoch = true
             item.isChecked = !item.isChecked
             if (item.isChecked) {
                 prefEditor.putBoolean("dzen_noch", true)
             } else {
                 prefEditor.putBoolean("dzen_noch", false)
             }
+            dzenNoch = item.isChecked
             prefEditor.apply()
             recreate()
         }
@@ -358,9 +362,8 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             fullscreenPage = false
             show()
         } else {
-            if (checkSetDzenNoch) {
-                setResult(Activity.RESULT_OK)
-                finish()
+            if (checkSetDzenNoch != dzenNoch) {
+                onSupportNavigateUp()
             } else {
                 super.onBackPressed()
             }

@@ -10,14 +10,14 @@ import android.util.TypedValue
 import android.view.*
 import android.widget.BaseExpandableListAdapter
 import android.widget.ExpandableListView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.ChildViewBinding
 import by.carkva_gazeta.malitounik.databinding.ContentBibleBinding
 import by.carkva_gazeta.malitounik.databinding.GroupViewBinding
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
-class StaryZapavietSemuxaList : AppCompatActivity() {
+class StaryZapavietSemuxaList : BaseActivity() {
     private var dzenNoch = false
     private var mLastClickTime: Long = 0
     private val groups = ArrayList<ArrayList<String>>()
@@ -32,15 +32,22 @@ class StaryZapavietSemuxaList : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!MainActivity.checkBrightness) {
+            val lp = window.attributes
+            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+            window.attributes = lp
+        }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
         binding = ContentBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (dzenNoch)
+        Slidr.attach(this)
+        if (dzenNoch) {
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
-        else
+        } else {
             binding.elvMain.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
+        }
         val children1 = ArrayList<String>()
         val children2 = ArrayList<String>()
         val children3 = ArrayList<String>()
@@ -263,6 +270,7 @@ class StaryZapavietSemuxaList : AppCompatActivity() {
             intent1.putExtra("stix", intent.extras?.getInt("stix"))
             startActivity(intent1)
         }
+        setTollbarTheme()
     }
 
     private fun setTollbarTheme() {
@@ -316,18 +324,6 @@ class StaryZapavietSemuxaList : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
-        setTollbarTheme()
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private inner class ExpListAdapterStaryZapaviet(private val mContext: Activity) : BaseExpandableListAdapter() {

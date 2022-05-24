@@ -11,25 +11,22 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.malitounik.databinding.PiarlinyBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
-import kotlin.collections.ArrayList
 
 
-class Piarliny : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener {
+class Piarliny : BaseActivity(), DialogFontSize.DialogFontSizeListener, DialogOpisanieWIFI.DialogOpisanieWIFIListener {
     private var dzenNoch = false
     private var mun = Calendar.getInstance()[Calendar.MONTH] + 1
     private var day = Calendar.getInstance()[Calendar.DATE]
     private lateinit var binding: PiarlinyBinding
-    private var change = false
     private lateinit var chin: SharedPreferences
     private var resetTollbarJob: Job? = null
     private var loadPiarlinyJob: Job? = null
@@ -38,12 +35,6 @@ class Piarliny : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
         super.onPause()
         loadPiarlinyJob?.cancel()
         resetTollbarJob?.cancel()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun loadPiarliny(update: Boolean = false) {
@@ -121,15 +112,12 @@ class Piarliny : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = chin.getBoolean("dzen_noch", false)
         super.onCreate(savedInstanceState)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
         binding = PiarlinyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         val c = Calendar.getInstance()
-        mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: c[Calendar.MONTH] + 1
+        mun = intent.extras?.getInt("mun", c[Calendar.MONTH] + 1) ?: (c[Calendar.MONTH] + 1)
         day = intent.extras?.getInt("day", c[Calendar.DATE]) ?: c[Calendar.DATE]
-        if (savedInstanceState != null) {
-            change = savedInstanceState.getBoolean("change")
-        }
         binding.swipeRefreshLayout.setOnRefreshListener {
             if (MainActivity.isNetworkAvailable(true)) {
                 val dialog = DialogOpisanieWIFI()
@@ -139,8 +127,12 @@ class Piarliny : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
             }
             binding.swipeRefreshLayout.isRefreshing = false
         }
-        if (dzenNoch) binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary_black)
-        else binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
+        if (dzenNoch) {
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
+            binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary_black)
+        } else {
+            binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
+        }
         loadPiarliny()
         setTollbarTheme()
     }
@@ -188,14 +180,6 @@ class Piarliny : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
         binding.titleToolbar.isSingleLine = true
     }
 
-    override fun onBackPressed() {
-        if (change) {
-            onSupportNavigateUp()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         val infl = menuInflater
@@ -217,11 +201,6 @@ class Piarliny : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
         return true
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean("change", change)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
@@ -238,7 +217,6 @@ class Piarliny : AppCompatActivity(), DialogFontSize.DialogFontSizeListener, Dia
             }
         }
         if (id == R.id.action_dzen_noch) {
-            change = true
             val prefEditor = chin.edit()
             item.isChecked = !item.isChecked
             if (item.isChecked) {

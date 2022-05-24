@@ -14,7 +14,10 @@ import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.provider.Settings
-import android.text.*
+import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
@@ -23,7 +26,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -36,6 +38,7 @@ import by.carkva_gazeta.malitounik.databinding.SabytieBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItemColorBinding
 import com.google.gson.Gson
+import com.r0adkll.slidr.Slidr
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
 import com.woxthebox.draglistview.swipe.ListSwipeItem
@@ -43,9 +46,8 @@ import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileWriter
 import java.util.*
-import kotlin.collections.ArrayList
 
-class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener, DialogHelpAlarm.DialogHelpAlarmListener {
+class Sabytie : BaseActivity(), DialogSabytieSaveListener, DialogContextMenuSabytieListener, DialogDeliteListener, DialogSabytieDelite.DialogSabytieDeliteListener, DialogSabytieTime.DialogSabytieTimeListener, DialogSabytieDeliteAll.DialogSabytieDeliteAllListener, DialogHelpAlarm.DialogHelpAlarmListener {
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var konec = false
@@ -314,12 +316,12 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (dzenNoch) {
-            setTheme(R.style.AppCompatDark)
             colors[0] = "#f44336"
         }
         super.onCreate(savedInstanceState)
         binding = SabytieBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         binding.labelbutton12.setOnClickListener(View.OnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@OnClickListener
@@ -532,6 +534,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4)
         binding.titleToolbar.text = resources.getString(R.string.sabytie)
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.pacatak.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
             binding.kanec.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
             binding.pavedamic.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
@@ -829,12 +832,6 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
     private fun changeSearchViewElements(view: View?) {
         if (view == null) return
         if (view.id == R.id.search_edit_frame || view.id == R.id.search_mag_icon) {
@@ -1002,16 +999,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (londs2 > c.timeInMillis) {
                                 val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                 val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                when {
-                                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                    }
-                                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                    }
-                                    else -> {
-                                        am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                    }
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                } else {
+                                    am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                 }
                             }
                         }
@@ -1052,16 +1043,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (londs2 > c.timeInMillis) {
                                     val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                    when {
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        else -> {
-                                            am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                        }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                    } else {
+                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                     }
                                 }
                             }
@@ -1115,16 +1100,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                     if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                        when {
-                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                            }
-                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                                am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                            }
-                                            else -> {
-                                                am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                            }
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                        } else {
+                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                         }
                                     }
                                 }
@@ -1180,16 +1159,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                     if (londs2 > c.timeInMillis) {
                                         val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                        when {
-                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                            }
-                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                                am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                            }
-                                            else -> {
-                                                am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                            }
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                        } else {
+                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                         }
                                     }
                                 }
@@ -1244,16 +1217,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (londs2 > c.timeInMillis) {
                                     val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                    when {
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        else -> {
-                                            am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                        }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                    } else {
+                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                     }
                                 }
                             }
@@ -1306,16 +1273,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (londs2 > c.timeInMillis) {
                                     val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                    when {
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        else -> {
-                                            am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                        }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                    } else {
+                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                     }
                                 }
                             }
@@ -1368,16 +1329,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (londs2 > c.timeInMillis) {
                                     val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                    when {
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        else -> {
-                                            am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                        }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                    } else {
+                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                     }
                                 }
                             }
@@ -1429,16 +1384,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (londs2 > c.timeInMillis) {
                                     val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                    when {
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        else -> {
-                                            am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                        }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                    } else {
+                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                     }
                                 }
                             }
@@ -1477,16 +1426,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (londs2 > c.timeInMillis) {
                                     val intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     val pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                    when {
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        else -> {
-                                            am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                        }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                    } else {
+                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                     }
                                 }
                             }
@@ -1587,16 +1530,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                             if (londs2 > c.timeInMillis) {
                                 intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                 pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                when {
-                                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                    }
-                                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                    }
-                                    else -> {
-                                        am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                    }
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                } else {
+                                    am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                 }
                             }
                         }
@@ -1637,16 +1574,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (londs2 > c.timeInMillis) {
                                     intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                    when {
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        else -> {
-                                            am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                        }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                    } else {
+                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                     }
                                 }
                             }
@@ -1700,16 +1631,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                     if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                        when {
-                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                            }
-                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                                am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                            }
-                                            else -> {
-                                                am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                            }
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                        } else {
+                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                         }
                                     }
                                 }
@@ -1765,16 +1690,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                     if (londs2 > c.timeInMillis) {
                                         intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                         pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                        when {
-                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                            }
-                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                                am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                            }
-                                            else -> {
-                                                am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                            }
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                        } else {
+                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                         }
                                     }
                                 }
@@ -1830,16 +1749,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (londs2 > c.timeInMillis) {
                                     intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                    when {
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        else -> {
-                                            am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                        }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                    } else {
+                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                     }
                                 }
                             }
@@ -1891,16 +1804,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (londs2 > c.timeInMillis) {
                                     intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                    when {
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        else -> {
-                                            am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                        }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                    } else {
+                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                     }
                                 }
                             }
@@ -1952,16 +1859,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (londs2 > c.timeInMillis) {
                                     intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                    when {
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        else -> {
-                                            am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                        }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                    } else {
+                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                     }
                                 }
                             }
@@ -2013,16 +1914,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (londs2 > c.timeInMillis) {
                                     intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                    when {
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        else -> {
-                                            am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                        }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                    } else {
+                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                     }
                                 }
                             }
@@ -2062,16 +1957,10 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
                                 if (londs2 > c.timeInMillis) {
                                     intent = createIntent(edit, "Падзея $da у $ta", da, ta)
                                     pIntent = PendingIntent.getBroadcast(this@Sabytie, londs3.toInt(), intent, flags)
-                                    when {
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                                            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                                            am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
-                                        }
-                                        else -> {
-                                            am[AlarmManager.RTC_WAKEUP, londs2] = pIntent
-                                        }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, londs2, pIntent)
+                                    } else {
+                                        am.setExact(AlarmManager.RTC_WAKEUP, londs2, pIntent)
                                     }
                                 }
                             }
@@ -2345,7 +2234,7 @@ class Sabytie : AppCompatActivity(), DialogSabytieSaveListener, DialogContextMen
     private inner class SabytieAdapter(list: ArrayList<Padzeia>, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<Padzeia, SabytieAdapter.ViewHolder>(), Filterable {
         private var dzenNoch = false
         private val day = Calendar.getInstance() as GregorianCalendar
-        private val origData = ArrayList<Padzeia>(list)
+        private val origData = ArrayList(list)
 
         fun getOpigData() = origData
 

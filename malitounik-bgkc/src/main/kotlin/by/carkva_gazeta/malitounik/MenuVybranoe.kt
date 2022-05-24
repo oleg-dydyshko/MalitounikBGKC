@@ -32,8 +32,6 @@ class MenuVybranoe : VybranoeFragment(), DialogVybranoeBibleList.DialogVybranoeB
     private val menuVybranoeLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == 200) {
             adapter.updateList(vybranoe)
-            val editDzenNoch = result.data?.extras?.getBoolean("editDzenNoch", false) ?: false
-            if (editDzenNoch) activity?.recreate()
         }
     }
 
@@ -320,7 +318,8 @@ class MenuVybranoe : VybranoeFragment(), DialogVybranoeBibleList.DialogVybranoeB
                         val intent = Intent(it, PesnyAll::class.java)
                         intent.putExtra("type", itemList[adapterPosition].resurs)
                         intent.putExtra("pesny", itemList[adapterPosition].data)
-                        startActivity(intent)
+                        intent.putExtra("chekVybranoe", true)
+                        menuVybranoeLauncher.launch(intent)
                     }
                 } else {
                     if (MainActivity.checkmoduleResources()) {
@@ -349,6 +348,7 @@ class MenuVybranoe : VybranoeFragment(), DialogVybranoeBibleList.DialogVybranoeB
                                     intent.setClassName(it, MainActivity.BOGASHLUGBOVYA)
                                     intent.putExtra("resurs", itemList[adapterPosition].resurs)
                                     intent.putExtra("title", itemList[adapterPosition].data)
+                                    intent.putExtra("chekVybranoe", true)
                                     menuVybranoeLauncher.launch(intent)
                                 }
                             }

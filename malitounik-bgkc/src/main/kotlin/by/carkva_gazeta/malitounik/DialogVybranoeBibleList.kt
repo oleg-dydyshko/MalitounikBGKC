@@ -102,6 +102,7 @@ class DialogVybranoeBibleList : DialogFragment(), DialogDeliteBibliaVybranoe.Dia
             if (dzenNoch) style = R.style.AlertDialogThemeBlackVybranoe
             val builder = AlertDialog.Builder(it, style)
             builder.setView(binding.root)
+            if (dzenNoch) binding.appBarLayout2.setBackgroundColor(ContextCompat.getColor(it, R.color.colorPrimary_black))
             binding.dragListView.recyclerView.isVerticalScrollBarEnabled = false
             val gson = Gson()
             val type = object : TypeToken<ArrayList<VybranoeBibliaData>>() {}.type

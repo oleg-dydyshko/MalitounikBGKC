@@ -14,7 +14,6 @@ import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +23,7 @@ import by.carkva_gazeta.resources.DialogDeliteAllZakladkiINatatki.DialogDeliteAl
 import by.carkva_gazeta.resources.DialogZakladkaDelite.ZakladkaDeliteListiner
 import by.carkva_gazeta.resources.databinding.BibleZakladkiBinding
 import com.google.gson.Gson
+import com.r0adkll.slidr.Slidr
 import com.woxthebox.draglistview.DragItemAdapter
 import com.woxthebox.draglistview.DragListView
 import com.woxthebox.draglistview.swipe.ListSwipeHelper
@@ -31,7 +31,7 @@ import com.woxthebox.draglistview.swipe.ListSwipeItem
 import kotlinx.coroutines.*
 import java.io.File
 
-class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakladkiINatatkiListener {
+class BibleZakladki : BaseActivity(), ZakladkaDeliteListiner, DialogDeliteAllZakladkiINatatkiListener {
     private lateinit var adapter: ItemAdapter
     private var data = ArrayList<BibleZakladkiData>()
     private var semuxa = 1
@@ -77,9 +77,9 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         binding = BibleZakladkiBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         semuxa = intent.getIntExtra("semuxa", 1)
         if (semuxa == 1) {
             data = BibleGlobalList.zakladkiSemuxa
@@ -172,6 +172,7 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setText(by.carkva_gazeta.malitounik.R.string.zakladki_bible)
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
@@ -241,8 +242,6 @@ class BibleZakladki : AppCompatActivity(), ZakladkaDeliteListiner, DialogDeliteA
     override fun onResume() {
         super.onResume()
         setTollbarTheme()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onPause() {

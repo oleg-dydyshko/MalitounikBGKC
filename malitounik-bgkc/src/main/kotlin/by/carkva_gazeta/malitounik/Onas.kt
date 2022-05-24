@@ -12,16 +12,15 @@ import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.toSpannable
-import by.carkva_gazeta.malitounik.databinding.OnasBinding
+import by.carkva_gazeta.malitounik.databinding.HelpBinding
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class Onas : AppCompatActivity() {
-    private lateinit var binding: OnasBinding
+class Onas : BaseActivity() {
+    private lateinit var binding: HelpBinding
     private var resetTollbarJob: Job? = null
     private lateinit var k: SharedPreferences
     private var mLastClickTime: Long = 0
@@ -39,13 +38,13 @@ class Onas : AppCompatActivity() {
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
-        binding = OnasBinding.inflate(layoutInflater)
+        binding = HelpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         val fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-        binding.onas.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
-        binding.onas.movementMethod = LinkMovementMethod.getInstance()
+        binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
+        binding.textView.movementMethod = LinkMovementMethod.getInstance()
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setOnClickListener {
@@ -63,6 +62,7 @@ class Onas : AppCompatActivity() {
                 }
             }
         }
+        if (dzenNoch) binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         binding.titleToolbar.text = resources.getString(R.string.pra_nas)
         val inputStream = resources.openRawResource(R.raw.onas)
@@ -98,7 +98,7 @@ class Onas : AppCompatActivity() {
                 startActivity(intent)
             }
         }, t1, t1 + 16, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        binding.onas.text = spannable
+        binding.textView.text = spannable
     }
 
     private fun resetTollbar(layoutParams: ViewGroup.LayoutParams) {
@@ -109,12 +109,6 @@ class Onas : AppCompatActivity() {
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
-    }
-
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

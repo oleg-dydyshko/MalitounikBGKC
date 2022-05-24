@@ -7,41 +7,27 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import by.carkva_gazeta.resources.databinding.AkafistListBibleBinding
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
-class SlugbyVialikagaPostuSpis : AppCompatActivity() {
+class SlugbyVialikagaPostuSpis : BaseActivity() {
     private var mLastClickTime: Long = 0
     private var data = ArrayList<SlugbovyiaTextuData>()
     private lateinit var binding: AkafistListBibleBinding
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
-    private var result = false
-    private val bogashlugbovyaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == 200) {
-            this.result = true
-            recreate()
-        }
-    }
-
-    override fun onBackPressed() {
-        if (result) onSupportNavigateUp() else super.onBackPressed()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean("result", result)
-    }
 
     override fun onPause() {
         super.onPause()
@@ -51,11 +37,11 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = AkafistListBibleBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+        Slidr.attach(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams
@@ -73,9 +59,9 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
             }
         }
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
-        binding.titleToolbar.text = intent.extras?.getString("title")
-                ?: getString(by.carkva_gazeta.malitounik.R.string.slugby_vialikaga_postu)
+        binding.titleToolbar.text = intent.extras?.getString("title") ?: getString(by.carkva_gazeta.malitounik.R.string.slugby_vialikaga_postu)
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
         val slugba = SlugbovyiaTextu()
@@ -99,10 +85,7 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
             val intent = Intent(this, Bogashlugbovya::class.java)
             intent.putExtra("resurs", data[position].resource)
             intent.putExtra("title", data[position].title)
-            bogashlugbovyaLauncher.launch(intent)
-        }
-        if (savedInstanceState != null) {
-            result = savedInstanceState.getBoolean("result")
+            startActivity(intent)
         }
     }
 
@@ -123,8 +106,6 @@ class SlugbyVialikagaPostuSpis : AppCompatActivity() {
             lp.screenBrightness = MainActivity.brightness.toFloat() / 100
             window.attributes = lp
         }
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

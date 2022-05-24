@@ -2,33 +2,31 @@ package by.carkva_gazeta.resources
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import by.carkva_gazeta.malitounik.DialogBrightness
-import by.carkva_gazeta.malitounik.DialogFontSize
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.NadsanMalitvyIPesnyBinding
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
+class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
 
     private var fullscreenPage = false
-    private var checkSetDzenNoch = false
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
     private var fontBiblia = SettingsActivity.GET_FONT_SIZE_DEFAULT
@@ -48,10 +46,10 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         }
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = NadsanMalitvyIPesnyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         if (intent.extras != null) {
             var pedsny = R.raw.nadsan_pered
             val malitva = intent.extras?.getInt("malitva", 0)
@@ -87,7 +85,6 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         }
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            checkSetDzenNoch = savedInstanceState.getBoolean("checkSetDzenNoch")
         }
         fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
         binding.malitvyIPesny.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
@@ -109,6 +106,7 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
@@ -168,14 +166,13 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val prefEditor: Editor = k.edit()
+        val prefEditor = k.edit()
         val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
             return true
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            checkSetDzenNoch = true
             item.isChecked = !item.isChecked
             if (item.isChecked) {
                 prefEditor.putBoolean("dzen_noch", true)
@@ -197,7 +194,6 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
             fullscreenPage = true
             hide()
         }
-        prefEditor.apply()
         return super.onOptionsItemSelected(item)
     }
 
@@ -206,19 +202,13 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
             fullscreenPage = false
             show()
         } else {
-            if (checkSetDzenNoch) {
-                onSupportNavigateUp()
-            } else {
-                super.onBackPressed()
-            }
+            super.onBackPressed()
         }
     }
 
     override fun onResume() {
         super.onResume()
         if (fullscreenPage) hide()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -252,6 +242,5 @@ class NadsanMalitvyIPesni : AppCompatActivity(), DialogFontSizeListener {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
-        outState.putBoolean("checkSetDzenNoch", checkSetDzenNoch)
     }
 }

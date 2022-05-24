@@ -22,7 +22,6 @@ import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
@@ -37,13 +36,16 @@ import by.carkva_gazeta.resources.databinding.BogasluzbovyaBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.r0adkll.slidr.Slidr
+import com.r0adkll.slidr.model.SlidrConfig
+import com.r0adkll.slidr.model.SlidrListener
 import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
 import java.util.*
 
-class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener {
+class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.DialogFontSizeListener, InteractiveScrollView.OnInteractiveScrollChangedCallback, LinkMovementMethodCheck.LinkMovementMethodCheckListener {
 
     private var fullscreenPage = false
     private lateinit var k: SharedPreferences
@@ -54,9 +56,9 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     private var spid = 60
     private var resurs = ""
     private var men = true
+    private var checkVybranoe = false
     private var positionY = 0
     private var title = ""
-    private var editDzenNoch = false
     private var mActionDown = false
     private var mAutoScroll = true
     private lateinit var binding: BogasluzbovyaBinding
@@ -637,10 +639,27 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
         super.onCreate(savedInstanceState)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         binding = BogasluzbovyaBinding.inflate(layoutInflater)
         bindingprogress = binding.progressView
         setContentView(binding.root)
+        val config = SlidrConfig.Builder().listener(object : SlidrListener {
+            override fun onSlideStateChanged(state: Int) {
+                mActionDown = true
+            }
+
+            override fun onSlideChange(percent: Float) {
+            }
+
+            override fun onSlideOpened() {
+                mActionDown = false
+            }
+
+            override fun onSlideClosed(): Boolean {
+                onBackPressed()
+                return false
+            }
+        }).build()
+        Slidr.attach(this, config)
         resurs = intent?.extras?.getString("resurs") ?: ""
         title = intent?.extras?.getString("title") ?: ""
         autoscroll = k.getBoolean("autoscroll", false)
@@ -654,7 +673,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         binding.constraint.setOnTouchListener(this)
         if (savedInstanceState != null) {
             fullscreenPage = savedInstanceState.getBoolean("fullscreen")
-            editDzenNoch = savedInstanceState.getBoolean("editDzenNoch")
             MainActivity.dialogVisable = false
             if (savedInstanceState.getBoolean("seach")) {
                 binding.find.visibility = View.VISIBLE
@@ -664,6 +682,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         binding.textView.textSize = fontBiblia
         DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             DrawableCompat.setTint(binding.textSearch.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.progress.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
@@ -672,6 +691,7 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
         men = checkVybranoe(this, resurs)
+        checkVybranoe = men
         bindingprogress.fontSizePlus.setOnClickListener {
             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
@@ -1688,10 +1708,8 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        fontBiblia = k.getFloat("font_biblia", SettingsActivity.GET_FONT_SIZE_DEFAULT)
-        dzenNoch = k.getBoolean("dzen_noch", false)
-        val prefEditor: Editor = k.edit()
-        val id: Int = item.itemId
+        val prefEditor = k.edit()
+        val id = item.itemId
         if (id == android.R.id.home) {
             onBackPressed()
             return true
@@ -1725,7 +1743,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
             startActivity(intent)
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            editDzenNoch = true
             item.isChecked = !item.isChecked
             if (item.isChecked) {
                 prefEditor.putBoolean("dzen_noch", true)
@@ -1813,12 +1830,12 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
                 val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.textSearch.windowToken, 0)
             }
+            intent.extras?.getBoolean("chekVybranoe", false) ?: false && men != checkVybranoe -> {
+                setResult(200)
+                finish()
+            }
             else -> {
-                if (editDzenNoch) {
-                    onSupportNavigateUp()
-                } else {
-                    super.onBackPressed()
-                }
+                super.onBackPressed()
             }
         }
     }
@@ -1844,8 +1861,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
         if (autoscroll) {
             autoStartScroll()
         }
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun hide() {
@@ -1874,7 +1889,6 @@ class Bogashlugbovya : AppCompatActivity(), View.OnTouchListener, DialogFontSize
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("fullscreen", fullscreenPage)
-        outState.putBoolean("editDzenNoch", editDzenNoch)
         if (binding.find.visibility == View.VISIBLE) outState.putBoolean("seach", true)
         else outState.putBoolean("seach", false)
         outState.putString("textLine", firstTextPosition)

@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     private var idSelect = 0
     private var idOld = -1
     private var dzenNoch = false
+    private var checkDzenNoch = false
     private var tolbarTitle = ""
     private var shortcuts = false
     private var mLastClickTime: Long = 0
@@ -144,6 +145,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
 
     override fun onResume() {
         super.onResume()
+        dzenNoch = k.getBoolean("dzen_noch", false)
+        if (checkDzenNoch != dzenNoch)
+            recreate()
         if (checkBrightness) {
             brightness = try {
                 Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
@@ -184,6 +188,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         mkDir()
         loadOpisanieSviatyiaISxiaty()
         dzenNoch = k.getBoolean("dzen_noch", false)
+        checkDzenNoch = dzenNoch
         if (dzenNoch) setTheme(R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -1487,7 +1492,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
 
         fun checkmodulesBiblijateka(): Boolean {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return true
             val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
             for (mod in muduls) {
                 if (mod == "biblijateka") {
@@ -1498,7 +1502,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
 
         fun checkmoduleResources(): Boolean {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return true
             val muduls = SplitInstallManagerFactory.create(Malitounik.applicationContext()).installedModules
             for (mod in muduls) {
                 if (mod == "resources") {

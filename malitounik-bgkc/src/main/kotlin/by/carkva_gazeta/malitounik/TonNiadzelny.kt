@@ -9,22 +9,16 @@ import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.AkafistListBinding
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
-class TonNiadzelny : AppCompatActivity() {
+class TonNiadzelny : BaseActivity() {
     private var mLastClickTime: Long = 0
-    private val data: ArrayList<String>
-        get() {
-            val t = ArrayList<String>()
-            for (i in 1..8) t.add(getString(R.string.ton, i.toString()))
-            return t
-        }
+    private val data = ArrayList<String>()
     private lateinit var binding: AkafistListBinding
     private var resetTollbarJob: Job? = null
     private lateinit var chin: SharedPreferences
@@ -35,14 +29,22 @@ class TonNiadzelny : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (!MainActivity.checkBrightness) {
+            val lp = window.attributes
+            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+            window.attributes = lp
+        }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         val dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = AkafistListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        for (i in 1..8) {
+            data.add(getString(R.string.ton, i.toString()))
+        }
         binding.titleToolbar.setOnClickListener {
             val layoutParams = binding.toolbar.layoutParams
             if (binding.titleToolbar.isSelected) {
@@ -61,6 +63,7 @@ class TonNiadzelny : AppCompatActivity() {
         binding.titleToolbar.setTextSize(TypedValue.COMPLEX_UNIT_SP, SettingsActivity.GET_FONT_SIZE_MIN + 4.toFloat())
         binding.titleToolbar.text = resources.getText(R.string.ton_n)
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
         if (dzenNoch) binding.ListView.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
@@ -94,17 +97,6 @@ class TonNiadzelny : AppCompatActivity() {
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

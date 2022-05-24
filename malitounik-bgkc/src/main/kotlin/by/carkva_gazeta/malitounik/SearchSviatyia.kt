@@ -17,18 +17,17 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.SearchSviatyiaBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem2Binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.util.*
-import kotlin.collections.ArrayList
 
-class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistoryListener {
+class SearchSviatyia : BaseActivity(), DialogClearHishory.DialogClearHistoryListener {
     private lateinit var adapter: SearchListAdapter
     private var dzenNoch = false
     private var editText: AutoCompleteTextView? = null
@@ -49,12 +48,6 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
     override fun onPause() {
         super.onPause()
         resetTollbarJob?.cancel()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -140,9 +133,9 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
         val c = Calendar.getInstance() as GregorianCalendar
         dzenNoch = chin.getBoolean("dzen_noch", false)
         super.onCreate(savedInstanceState)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
         binding = SearchSviatyiaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         val searchSvityxString = chin.getString("search_svityx_string", "") ?: ""
         if (searchSvityxString != "") {
             if (searchSvityxString.length >= 3) {
@@ -157,8 +150,12 @@ class SearchSviatyia : AppCompatActivity(), DialogClearHishory.DialogClearHistor
             binding.ListView.visibility = View.GONE
         }
         historyAdapter = HistoryAdapter(this, history, true)
-        if (dzenNoch) binding.History.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
-        else binding.History.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
+        if (dzenNoch) {
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
+            binding.History.selector = ContextCompat.getDrawable(this, R.drawable.selector_dark)
+        } else {
+            binding.History.selector = ContextCompat.getDrawable(this, R.drawable.selector_default)
+        }
         binding.History.adapter = historyAdapter
         binding.History.setOnItemClickListener { _, _, position, _ ->
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {

@@ -20,16 +20,16 @@ import android.widget.ArrayAdapter
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.SettingsActivityBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 import java.io.File
 import java.text.DecimalFormat
 import java.util.*
 
-class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
+class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
     private lateinit var k: SharedPreferences
     private lateinit var prefEditor: Editor
     private var dzenNoch = false
@@ -120,11 +120,8 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                     am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeAlarm, pendingIntent)
                 }
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
-                    am.setExact(AlarmManager.RTC_WAKEUP, timeAlarm, pendingIntent)
-                }
                 else -> {
-                    am[AlarmManager.RTC_WAKEUP, timeAlarm] = pendingIntent
+                    am.setExact(AlarmManager.RTC_WAKEUP, timeAlarm, pendingIntent)
                 }
             }
         }
@@ -651,12 +648,6 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         resetTollbarJob?.cancel()
     }
 
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             onBackPressed()
@@ -690,9 +681,9 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         k = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = k.getBoolean("dzen_noch", false)
         val notification = k.getInt("notification", 2)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         prefEditor = k.edit()
         val vibr = k.getInt("vibra", 1)
         if (dzenNoch) binding.vibro.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -767,6 +758,7 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
         binding.textView16.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.notificationView.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.textView14.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.textView15.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             binding.textView16.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
@@ -788,11 +780,9 @@ class SettingsActivity : AppCompatActivity(), CheckLogin.CheckLoginListener {
             adminResetJob?.cancel()
             adminClickTime = SystemClock.elapsedRealtime()
             if (adminItemCount == 7) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    val checkLogin = CheckLogin()
-                    checkLogin.isCancelable = false
-                    checkLogin.show(supportFragmentManager, "checkLogin")
-                }
+                val checkLogin = CheckLogin()
+                checkLogin.isCancelable = false
+                checkLogin.show(supportFragmentManager, "checkLogin")
                 binding.titleToolbar.text = resources.getString(R.string.tools_admin_item, ": Гатова")
             }
             when (adminItemCount) {

@@ -8,14 +8,13 @@ import android.os.SystemClock
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
-import androidx.appcompat.app.AppCompatActivity
 import by.carkva_gazeta.malitounik.databinding.ContentPsalterBinding
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.*
 
-class NadsanContent : AppCompatActivity() {
+class NadsanContent : BaseActivity() {
     private var dzenNoch = false
     private var mLastClickTime: Long = 0
     private lateinit var binding: ContentPsalterBinding
@@ -28,12 +27,17 @@ class NadsanContent : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (!MainActivity.checkBrightness) {
+            val lp = window.attributes
+            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
+            window.attributes = lp
+        }
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = ContentPsalterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Slidr.attach(this)
         val arrayList = ArrayList<String>()
         for (i in 1..151) {
             arrayList.add(getString(R.string.psalom2) + " " + i)
@@ -85,6 +89,7 @@ class NadsanContent : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.titleToolbar.setText(R.string.title_psalter)
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = R.style.AppCompatDark
         }
     }
@@ -97,16 +102,5 @@ class NadsanContent : AppCompatActivity() {
         }
         binding.titleToolbar.isSelected = false
         binding.titleToolbar.isSingleLine = true
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (!MainActivity.checkBrightness) {
-            val lp = window.attributes
-            lp.screenBrightness = MainActivity.brightness.toFloat() / 100
-            window.attributes = lp
-        }
-        overridePendingTransition(R.anim.alphain, R.anim.alphaout)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 }

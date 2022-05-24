@@ -153,6 +153,7 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
             window.attributes = lp
         }
         dzenNoch = k.getBoolean("dzen_noch", false)
+        checkSetDzenNoch = dzenNoch
         if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = ActivityBibleBinding.inflate(layoutInflater)
@@ -491,7 +492,7 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
             val fragment = supportFragmentManager.findFragmentByTag("f" + binding.pager.currentItem) as BackPressedFragment
             fragment.onBackPressedFragment()
         } else {
-            if (setedit || checkSetDzenNoch) {
+            if (setedit || checkSetDzenNoch != dzenNoch) {
                 onSupportNavigateUp()
             } else {
                 super.onBackPressed()
@@ -523,7 +524,6 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
         val prefEditors = k.edit()
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (id == by.carkva_gazeta.malitounik.R.id.action_vybranoe) {
-            checkSetDzenNoch = true
             men = DialogVybranoeBibleList.setVybranoe(this, title, kniga, BibleGlobalList.mListGlava, bibleName = 2)
             if (men) {
                 MainActivity.toastView(getString(by.carkva_gazeta.malitounik.R.string.addVybranoe))
@@ -539,7 +539,6 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
             invalidateOptionsMenu()
         }
         if (id == by.carkva_gazeta.malitounik.R.id.action_dzen_noch) {
-            checkSetDzenNoch = true
             val prefEditor = k.edit()
             item.isChecked = !item.isChecked
             if (item.isChecked) {
@@ -547,6 +546,7 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
             } else {
                 prefEditor.putBoolean("dzen_noch", false)
             }
+            dzenNoch = item.isChecked
             prefEditor.apply()
             recreate()
         }

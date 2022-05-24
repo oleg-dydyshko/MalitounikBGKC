@@ -165,7 +165,7 @@
         <activity
             android:name=".Onas"
             android:label="@string/pra_nas"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -173,11 +173,11 @@
         <activity
             android:name=".CaliandarMun"
             android:label="@string/kaliandar"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppThemeSlider" />
         <activity
             android:name=".Pasxa"
             android:label="@string/pascha_kaliandar_bel"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -185,7 +185,7 @@
         <activity
             android:name=".Sabytie"
             android:label="@string/sabytie"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppThemeSlider"
             android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -194,7 +194,7 @@
         <activity
             android:name=".Help"
             android:label="@string/help"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -202,7 +202,7 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/tools_item"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -210,7 +210,7 @@
         <activity
             android:name=".Naviny"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppThemeSlider"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -219,7 +219,7 @@
         <activity
             android:name=".SearchSviatyia"
             android:label="@string/search_svityia"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppThemeSlider"
             android:windowSoftInputMode="stateVisible|adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -228,7 +228,7 @@
         <activity
             android:name=".MalitvyPasliaPrychascia"
             android:label="@string/pasliaPrychscia"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -236,7 +236,7 @@
         <activity
             android:name=".TonNiadzelny"
             android:label="@string/ton_n"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -244,7 +244,7 @@
         <activity
             android:name=".TonNaKoznyDzen"
             android:label="@string/ton_sh"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -259,13 +259,6 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-        <!--<activity
-            android:name=".VybranoeBibleList"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="by.carkva_gazeta.malitounik.MainActivity" />
-        </activity>-->
         <activity
             android:name=".NovyZapavietSemuxaList"
             android:theme="@style/AppTheme">
@@ -280,18 +273,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
-
-        <!-- android:icon="@drawable/book_icon" -->
         <activity
             android:name=".NovyZapavietSinaidalList"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
         </activity>
         <activity
             android:name=".StaryZapavietSinaidalList"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -299,7 +290,7 @@
         <activity
             android:name=".NadsanContent"
             android:label="@string/title_psalter"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -307,7 +298,7 @@
         <activity
             android:name=".PesnyAll"
             android:label="@string/pesny3"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppThemeSlider"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -316,7 +307,7 @@
         <activity
             android:name=".AktoixList"
             android:label="@string/viachernia"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.SubMenuBogashlugbovyaViachernia" />
@@ -324,7 +315,7 @@
         <activity
             android:name=".SubMenuBogashlugbovyaViachernia"
             android:label="@string/viachernia"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -332,7 +323,7 @@
         <activity
             android:name=".SubMenuBogashlugbovyaVialikiPost"
             android:label="@string/slugby_vialikaga_postu"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -340,7 +331,7 @@
         <activity
             android:name=".BogashlugbovyaTryjodz"
             android:label="@string/tryjodz"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.BogashlugbovyaTryjodzList" />
@@ -348,7 +339,7 @@
         <activity
             android:name=".BogashlugbovyaTryjodzList"
             android:label="@string/tryjodz"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -356,7 +347,7 @@
         <activity
             android:name=".Opisanie"
             android:label="@string/zmiest"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -364,7 +355,7 @@
         <activity
             android:name=".Piarliny"
             android:label="@string/zmiest"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -372,7 +363,7 @@
         <activity
             android:name=".MineiaShodzennaia"
             android:label="@string/mineia_shtodzennaia"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />
@@ -380,7 +371,7 @@
         <activity
             android:name=".MineiaSviatochnaia"
             android:label="@string/mineia_sviatochnaia"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppThemeSlider">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="by.carkva_gazeta.malitounik.MainActivity" />

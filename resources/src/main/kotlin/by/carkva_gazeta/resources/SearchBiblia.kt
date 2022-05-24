@@ -21,7 +21,6 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
@@ -32,6 +31,7 @@ import by.carkva_gazeta.malitounik.databinding.SimpleListItem4Binding
 import by.carkva_gazeta.resources.databinding.SearchBibliaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,7 +39,7 @@ import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHishory.DialogClearHistoryListener {
+class SearchBiblia : BaseActivity(), View.OnClickListener, DialogClearHishory.DialogClearHistoryListener {
     private var seash = ArrayList<Spannable>()
     private lateinit var adapter: SearchBibliaListAdaprer
     private lateinit var prefEditors: Editor
@@ -213,12 +213,6 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         prefEditors.apply()
     }
 
-    override fun onResume() {
-        super.onResume()
-        overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
-        if (chin.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!MainActivity.checkBrightness) {
             val lp = window.attributes
@@ -228,14 +222,15 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
         chin = getSharedPreferences("biblia", Context.MODE_PRIVATE)
         prefEditors = chin.edit()
         dzenNoch = chin.getBoolean("dzen_noch", false)
-        if (dzenNoch) setTheme(by.carkva_gazeta.malitounik.R.style.AppCompatDark)
         super.onCreate(savedInstanceState)
         binding = SearchBibliaBinding.inflate(layoutInflater)
-        setContentView(binding.rootView)
+        setContentView(binding.root)
+        Slidr.attach(this)
         binding.filterGrup.visibility = View.VISIBLE
         binding.buttonx2.setOnClickListener(this)
         DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary))
         if (dzenNoch) {
+            binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             DrawableCompat.setTint(binding.editText2.background, ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.buttonx2.setImageResource(by.carkva_gazeta.malitounik.R.drawable.cancel)
         }
@@ -564,9 +559,9 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
         }
-        binding.rootView.viewTreeObserver.addOnGlobalLayoutListener {
-            val heightDiff = binding.rootView.rootView.height - binding.rootView.height
-            val keywordView = binding.rootView.rootView.height / 4
+        binding.constraint.viewTreeObserver.addOnGlobalLayoutListener {
+            val heightDiff = binding.constraint.rootView.height - binding.constraint.height
+            val keywordView = binding.constraint.rootView.height / 4
             keyword = heightDiff > keywordView
             settingsView()
         }
@@ -691,6 +686,10 @@ class SearchBiblia : AppCompatActivity(), View.OnClickListener, DialogClearHisho
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        if (id == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         if (id == by.carkva_gazeta.malitounik.R.id.action_clean_histopy) {
             val dialogClearHishory = DialogClearHishory.getInstance()
             dialogClearHishory.show(supportFragmentManager, "dialogClearHishory")

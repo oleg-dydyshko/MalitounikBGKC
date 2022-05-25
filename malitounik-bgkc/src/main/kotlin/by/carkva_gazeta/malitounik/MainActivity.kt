@@ -19,6 +19,7 @@ import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.LinearLayout
@@ -70,6 +71,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     private var mLastClickTime: Long = 0
     private var resetTollbarJob: Job? = null
     private var snackbar: Snackbar? = null
+    private val mainActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == 300) {
+            recreate()
+        }
+        if (result.resultCode == 200 && supportFragmentManager.findFragmentByTag("menuCaliandar") != null) {
+            recreate()
+        }
+    }
 
     private val searchSviatyiaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -599,7 +608,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
         if (id == R.id.settings) {
             val i = Intent(this, SettingsActivity::class.java)
-            startActivity(i)
+            mainActivityLauncher.launch(i)
         }
         if (id == R.id.onas) {
             val i = Intent(this@MainActivity, Onas::class.java)
@@ -936,7 +945,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         }
 
         if (idOld != idSelect) {
-            val ftrans: FragmentTransaction = supportFragmentManager.beginTransaction()
+            val ftrans = supportFragmentManager.beginTransaction()
             ftrans.setCustomAnimations(R.anim.alphainfragment, R.anim.alphaoutfragment)
 
             c = Calendar.getInstance() as GregorianCalendar

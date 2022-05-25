@@ -383,6 +383,8 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.subtitleToolbar.text = title
         if (dzenNoch) {
+            binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
+            binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
@@ -437,9 +439,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
                 binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.stary_zapaviet)
                 binding.subtitleToolbar.text = title
                 paralel = false
-                val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
-                binding.actionBack.visibility = View.GONE
-                binding.actionBack.animation = animation
                 invalidateOptionsMenu()
             }
             BibleGlobalList.mPedakVisable -> {
@@ -534,7 +533,11 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
     override fun onResume() {
         super.onResume()
         fullscreenPage = k.getBoolean("fullscreenPage", false)
-        if (fullscreenPage) hide()
+        if (fullscreenPage) {
+            binding.linealLayoutTitle.post {
+                hide()
+            }
+        }
         setTollbarTheme()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -565,11 +568,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         binding.tabLayout.visibility = View.GONE
         binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, cytanneSours)
         binding.subtitleToolbar.visibility = View.GONE
-        if (fullscreenPage) {
-            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-            binding.actionBack.visibility = View.VISIBLE
-            binding.actionBack.animation = animation
-        }
         invalidateOptionsMenu()
     }
 
@@ -590,8 +588,6 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         binding.actionFullscreen.animation = animation
         binding.actionBack.visibility = View.VISIBLE
         binding.actionBack.animation = animation
-        binding.actionBack.visibility = View.GONE
-        binding.actionBack.animation = animation
     }
 
     private fun show() {
@@ -606,6 +602,8 @@ class StaryZapavietSemuxa : AppCompatActivity(), DialogFontSizeListener, DialogB
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
         binding.actionFullscreen.visibility = View.GONE
         binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.GONE
+        binding.actionBack.animation = animation
     }
 
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {

@@ -689,6 +689,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
+            binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
+            binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
         men = checkVybranoe(this, resurs)
         checkVybranoe = men
@@ -774,6 +776,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         }
         binding.actionFullscreen.setOnClickListener {
             show()
+        }
+        binding.actionBack.setOnClickListener {
+            onBackPressed()
         }
         binding.scrollView2.setOnBottomReachedListener(object : InteractiveScrollView.OnBottomReachedListener {
             override fun onBottomReached(checkDiff: Boolean) {
@@ -1525,6 +1530,11 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
+            if (fullscreenPage) {
+                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+                binding.actionBack.visibility = View.VISIBLE
+                binding.actionBack.animation = animation2
+            }
             binding.textView.setTextIsSelectable(true)
             binding.textView.movementMethod = setLinkMovementMethodCheck()
             autoScrollJob?.cancel()
@@ -1547,6 +1557,9 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
                 binding.actionMinus.animation = animation
                 binding.actionPlus.animation = animation
+                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+                binding.actionBack.visibility = View.GONE
+                binding.actionBack.animation = animation2
             }
             mActionDown = false
             resetScreenJob?.cancel()
@@ -1855,6 +1868,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
             autoStartScroll()
+        } else if (fullscreenPage) {
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+            binding.actionBack.visibility = View.VISIBLE
+            binding.actionBack.animation = animation
         }
     }
 
@@ -1873,6 +1890,10 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
+        if (!autoscroll) {
+            binding.actionBack.visibility = View.VISIBLE
+            binding.actionBack.animation = animation
+        }
     }
 
     private fun show() {

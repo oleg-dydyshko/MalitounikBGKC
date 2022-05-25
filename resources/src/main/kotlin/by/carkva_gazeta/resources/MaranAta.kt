@@ -266,6 +266,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, by.carkva_gazeta.malitounik.R.color.colorPrimary_black))
             binding.actionPlus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionMinus.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
+            binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
+            binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
         TooltipCompat.setTooltipText(binding.copyBig, getString(by.carkva_gazeta.malitounik.R.string.copy_big))
         TooltipCompat.setTooltipText(binding.adpravit, getString(by.carkva_gazeta.malitounik.R.string.share))
@@ -962,6 +964,11 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
+            if (fullscreenPage) {
+                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+                binding.actionBack.visibility = View.VISIBLE
+                binding.actionBack.animation = animation2
+            }
             autoScrollJob?.cancel()
             stopAutoStartScroll()
             if (!k.getBoolean("scrinOn", false) && delayDisplayOff) {
@@ -982,6 +989,9 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
                 binding.actionMinus.animation = animation
                 binding.actionPlus.animation = animation
+                val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
+                binding.actionBack.visibility = View.GONE
+                binding.actionBack.animation = animation2
             }
             resetScreenJob?.cancel()
             stopAutoStartScroll()
@@ -1075,9 +1085,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                 binding.ListView.visibility = View.VISIBLE
                 binding.titleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.maranata2)
                 paralel = false
-                val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
-                binding.actionBack.visibility = View.GONE
-                binding.actionBack.animation = animation
                 invalidateOptionsMenu()
             }
             mPedakVisable -> {
@@ -1133,6 +1140,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
             autoStartScroll()
+        } else if (fullscreenPage) {
+            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
+            binding.actionBack.visibility = View.VISIBLE
+            binding.actionBack.animation = animation
         }
         bindingprogress.progress.visibility = View.GONE
     }
@@ -1265,6 +1276,10 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
+        if (!autoscroll) {
+            binding.actionBack.visibility = View.VISIBLE
+            binding.actionBack.animation = animation
+        }
     }
 
     private fun show() {
@@ -1339,11 +1354,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
                     binding.ListView.visibility = View.GONE
                     binding.titleToolbar.text = resources.getString(by.carkva_gazeta.malitounik.R.string.paralel_smoll, biblia[0] + " " + biblia[1] + "." + biblia[2])
                     invalidateOptionsMenu()
-                    if (fullscreenPage) {
-                        val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-                        binding.actionBack.visibility = View.VISIBLE
-                        binding.actionBack.animation = animation
-                    }
                 }
             }
         }

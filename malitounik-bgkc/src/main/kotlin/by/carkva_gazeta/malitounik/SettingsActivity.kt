@@ -24,6 +24,8 @@ import androidx.core.content.ContextCompat
 import by.carkva_gazeta.malitounik.databinding.SettingsActivityBinding
 import by.carkva_gazeta.malitounik.databinding.SimpleListItem1Binding
 import com.r0adkll.slidr.Slidr
+import com.r0adkll.slidr.model.SlidrConfig
+import com.r0adkll.slidr.model.SlidrListener
 import kotlinx.coroutines.*
 import java.io.File
 import java.text.DecimalFormat
@@ -41,6 +43,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
     private var adminClickTime: Long = 0
     private var adminItemCount = 0
     private var edit = false
+    private var editFull = false
 
     companion object {
         const val UPDATE_ALL_WIDGETS = "update_all_widgets"
@@ -657,8 +660,17 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
     }
 
     override fun onBackPressed() {
-        if (edit) onSupportNavigateUp()
-        else super.onBackPressed()
+        when {
+            editFull -> {
+                setResult(300)
+                finish()
+            }
+            edit -> {
+                setResult(200)
+                finish()
+            }
+            else -> super.onBackPressed()
+        }
     }
 
     private fun formatFigureTwoPlaces(value: Float): String {
@@ -669,6 +681,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("edit", edit)
+        outState.putBoolean("editFull", editFull)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -683,7 +696,22 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
         val notification = k.getInt("notification", 2)
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Slidr.attach(this)
+        val config = SlidrConfig.Builder().listener(object : SlidrListener {
+            override fun onSlideStateChanged(state: Int) {
+            }
+
+            override fun onSlideChange(percent: Float) {
+            }
+
+            override fun onSlideOpened() {
+            }
+
+            override fun onSlideClosed(): Boolean {
+                onBackPressed()
+                return false
+            }
+        }).build()
+        Slidr.attach(this, config)
         prefEditor = k.edit()
         val vibr = k.getInt("vibra", 1)
         if (dzenNoch) binding.vibro.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -696,6 +724,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
         if (k.getInt("notification", 2) == 0) binding.spinnerTime.visibility = View.GONE
         if (savedInstanceState != null) {
             edit = savedInstanceState.getBoolean("edit", false)
+            editFull = savedInstanceState.getBoolean("editFull", false)
         }
         val dataTimes = ArrayList<DataTime>()
         for (i in 6..17) {
@@ -835,46 +864,50 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
         binding.prav.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.secret.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.prav.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            edit = true
+            val check = k.getInt("pravas", 0)
             if (isChecked) {
                 prefEditor.putInt("pravas", 1)
             } else {
                 prefEditor.putInt("pravas", 0)
             }
             prefEditor.apply()
+            if (check != k.getInt("pravas", 0)) edit = true
         }
         if (dzenNoch) binding.pkc.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.pkc.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.pkc.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            edit = true
+            val check = k.getInt("pkc", 0)
             if (isChecked) {
                 prefEditor.putInt("pkc", 1)
             } else {
                 prefEditor.putInt("pkc", 0)
             }
             prefEditor.apply()
+            if (check != k.getInt("pkc", 0)) edit = true
         }
         if (dzenNoch) binding.dzair.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.dzair.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.dzair.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            edit = true
+            val check = k.getInt("gosud", 0)
             if (isChecked) {
                 prefEditor.putInt("gosud", 1)
             } else {
                 prefEditor.putInt("gosud", 0)
             }
             prefEditor.apply()
+            if (check != k.getInt("gosud", 0)) edit = true
         }
         if (dzenNoch) binding.praf.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.praf.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         binding.praf.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            edit = true
+            val check = k.getInt("pafesii", 0)
             if (isChecked) {
                 prefEditor.putInt("pafesii", 1)
             } else {
                 prefEditor.putInt("pafesii", 0)
             }
             prefEditor.apply()
+            if (check != k.getInt("pafesii", 0)) edit = true
         }
         if (k.getInt("pkc", 0) == 1) binding.pkc.isChecked = true
         if (k.getInt("pravas", 0) == 1) binding.prav.isChecked = true
@@ -936,6 +969,12 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
         binding.checkBox7.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
         if (scrinOn) {
             binding.checkBox7.isChecked = true
+        }
+        val fullScreen = k.getBoolean("fullscreenPage", false)
+        if (dzenNoch) binding.checkBox9.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.checkBox9.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        if (fullScreen) {
+            binding.checkBox9.isChecked = true
         }
         val adminDayInYear = k.getBoolean("adminDayInYear", false)
         if (dzenNoch) binding.checkBox8.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
@@ -1010,6 +1049,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             binding.checkBox6.isChecked = false
             binding.checkBox7.isChecked = false
             binding.checkBox8.isChecked = false
+            binding.checkBox9.isChecked = false
             binding.maranata.isChecked = false
             binding.maranataRus.isChecked = false
             binding.maranataBel.isChecked = true
@@ -1024,6 +1064,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             binding.prav.isChecked = false
             binding.dzair.isChecked = false
             binding.praf.isChecked = false
+            editFull = true
             recreate()
         }
         binding.maranataGrup.setOnCheckedChangeListener { _: RadioGroup?, checkedId: Int ->
@@ -1065,16 +1106,17 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             prefEditor.apply()
         }
         binding.sinoidal.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            edit = true
+            val check = k.getInt("sinoidal", 0)
             if (isChecked) {
                 prefEditor.putInt("sinoidal", 1)
             } else {
                 prefEditor.putInt("sinoidal", 0)
             }
             prefEditor.apply()
+            if (check != k.getInt("sinoidal", 0)) editFull = true
         }
         binding.maranata.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            edit = true
+            val check = k.getInt("maranata", 0)
             if (isChecked) {
                 if (k.getBoolean("belarus", true)) {
                     val semuxaNoKnigi = DialogSemuxaNoKnigi.getInstance(true)
@@ -1101,6 +1143,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
                 binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             }
             prefEditor.apply()
+            if (check != k.getInt("maranata", 0)) edit = true
         }
         binding.guk.setOnCheckedChangeListener { _, isChecked: Boolean ->
             if (isChecked) {
@@ -1111,17 +1154,19 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             prefEditor.apply()
         }
         binding.checkBox5.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            edit = true
+            val check = k.getBoolean("dzen_noch", false)
             prefEditor.putBoolean("dzen_noch", isChecked)
             prefEditor.apply()
-            recreate()
+            if (check != k.getBoolean("dzen_noch", false)) {
+                recreate()
+            }
         }
         binding.checkBox6.setOnCheckedChangeListener { _, isChecked: Boolean ->
             prefEditor.putBoolean("autoscrollAutostart", isChecked)
             prefEditor.apply()
         }
         binding.checkBox7.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            edit = true
+            val check = k.getBoolean("scrinOn", false)
             prefEditor.putBoolean("scrinOn", isChecked)
             if (isChecked) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -1129,9 +1174,16 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
                 window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
             prefEditor.apply()
+            if (check != k.getBoolean("scrinOn", false)) editFull = true
         }
         binding.checkBox8.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            val check = k.getBoolean("adminDayInYear", false)
             prefEditor.putBoolean("adminDayInYear", isChecked)
+            prefEditor.apply()
+            if (check != k.getBoolean("adminDayInYear", false)) edit = true
+        }
+        binding.checkBox9.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            prefEditor.putBoolean("fullscreenPage", isChecked)
             prefEditor.apply()
         }
         binding.vibro.typeface = MainActivity.createFont(Typeface.NORMAL)
@@ -1145,6 +1197,8 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
         binding.checkBox5.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.checkBox6.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.checkBox7.typeface = MainActivity.createFont(Typeface.NORMAL)
+        binding.checkBox8.typeface = MainActivity.createFont(Typeface.NORMAL)
+        binding.checkBox9.typeface = MainActivity.createFont(Typeface.NORMAL)
         if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true) && (notification == 1 || notification == 2)) {
             val notifi = DialogHelpNotification()
             notifi.show(supportFragmentManager, "help_notification")

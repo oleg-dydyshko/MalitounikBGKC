@@ -119,6 +119,9 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         binding.actionFullscreen.setOnClickListener {
             show()
         }
+        binding.actionBack.setOnClickListener {
+            onBackPressed()
+        }
         binding.pager.setCurrentItem(glava, false)
     }
 
@@ -133,6 +136,8 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
+            binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
+            binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
     }
@@ -315,7 +320,9 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
     override fun onResume() {
         super.onResume()
         fullscreenPage = k.getBoolean("fullscreenPage", false)
-        if (fullscreenPage) hide()
+        if (fullscreenPage) {
+            hide()
+        }
         setTollbarTheme()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -350,6 +357,8 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.VISIBLE
+        binding.actionBack.animation = animation
     }
 
     private fun show() {
@@ -364,6 +373,8 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
         binding.actionFullscreen.visibility = View.GONE
         binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.GONE
+        binding.actionBack.animation = animation
     }
 
     private inner class MyPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {

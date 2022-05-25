@@ -9,6 +9,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -88,6 +89,9 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
         binding.actionFullscreen.setOnClickListener {
             show()
         }
+        binding.actionBack.setOnClickListener {
+            onBackPressed()
+        }
         setTollbarTheme()
     }
 
@@ -102,6 +106,8 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (dzenNoch) {
+            binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
+            binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.constraint.setBackgroundResource(by.carkva_gazeta.malitounik.R.color.colorbackground_material_dark)
             binding.toolbar.popupTheme = by.carkva_gazeta.malitounik.R.style.AppCompatDark
         }
@@ -195,7 +201,9 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
     override fun onResume() {
         super.onResume()
         fullscreenPage = k.getBoolean("fullscreenPage", false)
-        if (fullscreenPage) hide()
+        if (fullscreenPage) {
+            hide()
+        }
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
@@ -215,6 +223,8 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.VISIBLE
+        binding.actionBack.animation = animation
     }
 
     private fun show() {
@@ -229,6 +239,8 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
         binding.actionFullscreen.visibility = View.GONE
         binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.GONE
+        binding.actionBack.animation = animation
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

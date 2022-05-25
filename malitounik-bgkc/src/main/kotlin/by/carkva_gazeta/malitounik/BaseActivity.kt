@@ -3,7 +3,6 @@ package by.carkva_gazeta.malitounik
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 
@@ -23,7 +22,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("Oleg", "BaseActivity: onResume()")
         dzenNoch = k.getBoolean("dzen_noch", false)
         if (checkDzenNoch != dzenNoch)
             recreate()

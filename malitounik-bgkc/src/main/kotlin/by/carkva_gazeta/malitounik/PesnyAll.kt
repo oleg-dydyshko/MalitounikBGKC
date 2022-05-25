@@ -318,7 +318,9 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
     override fun onResume() {
         super.onResume()
         fullscreenPage = k.getBoolean("fullscreenPage", false)
-        if (fullscreenPage) hide()
+        if (fullscreenPage) {
+            hide()
+        }
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -350,6 +352,8 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             binding.constraint.setBackgroundResource(R.color.colorbackground_material_dark)
             bindingprogress.progressText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
             bindingprogress.progressTitle.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_black))
+            binding.actionFullscreen.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
+            binding.actionBack.background = ContextCompat.getDrawable(this, R.drawable.selector_dark_maranata_buttom)
         }
         binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontBiblia)
         title = intent.extras?.getString("pesny", "") ?: ""
@@ -435,6 +439,9 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         }
         binding.actionFullscreen.setOnClickListener {
             show()
+        }
+        binding.actionBack.setOnClickListener {
+            onBackPressed()
         }
         setTollbarTheme()
     }
@@ -639,6 +646,8 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.VISIBLE
+        binding.actionBack.animation = animation
     }
 
     private fun show() {
@@ -653,6 +662,8 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         val animation = AnimationUtils.loadAnimation(baseContext, R.anim.alphaout)
         binding.actionFullscreen.visibility = View.GONE
         binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.GONE
+        binding.actionBack.animation = animation
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

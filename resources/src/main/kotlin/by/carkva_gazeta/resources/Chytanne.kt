@@ -1134,6 +1134,8 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
         binding.actionFullscreen.visibility = View.GONE
         binding.actionFullscreen.animation = animation
+        binding.actionBack.visibility = View.GONE
+        binding.actionBack.animation = animation
     }
 
     override fun onScroll(t: Int, oldt: Int) {

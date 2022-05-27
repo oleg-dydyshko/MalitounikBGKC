@@ -847,7 +847,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                     val y = binding.textView.layout.getLineTop(line)
                     val anim = ObjectAnimator.ofInt(binding.InteractiveScroll, "scrollY", binding.InteractiveScroll.scrollY, y)
                     anim.setDuration(1000).start()
-                    if (fullscreenPage) hide()
                 }
             }
             if (savedInstanceState != null) {
@@ -859,14 +858,10 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
                         val y = binding.textView.layout.getLineTop(line)
                         binding.InteractiveScroll.scrollY = y
                     }
-                    if (fullscreenPage) hide()
                 }
             } else {
                 if (k.getBoolean("autoscrollAutostart", false)) {
                     autoStartScroll()
-                }
-                binding.textView.post {
-                    if (fullscreenPage) hide()
                 }
             }
         } catch (t: Throwable) {
@@ -1048,15 +1043,15 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         super.onResume()
         setTollbarTheme()
         fullscreenPage = k.getBoolean("fullscreenPage", false)
-        if (fullscreenPage) hide()
+        if (fullscreenPage) {
+            binding.constraint.post {
+                hide()
+            }
+        }
         spid = k.getInt("autoscrollSpid", 60)
         autoscroll = k.getBoolean("autoscroll", false)
         if (autoscroll) {
             autoStartScroll()
-        } else if (fullscreenPage) {
-            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-            binding.actionBack.visibility = View.VISIBLE
-            binding.actionBack.animation = animation
         }
     }
 
@@ -1123,10 +1118,8 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
-        if (!autoscroll) {
-            binding.actionBack.visibility = View.VISIBLE
-            binding.actionBack.animation = animation
-        }
+        binding.actionBack.visibility = View.VISIBLE
+        binding.actionBack.animation = animation
     }
 
     private fun show() {

@@ -662,7 +662,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         Slidr.attach(this, config)
         resurs = intent?.extras?.getString("resurs") ?: ""
         title = intent?.extras?.getString("title") ?: ""
-        autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         val autoscrollOFF = intent?.extras?.containsKey("autoscrollOFF") ?: false
         if (autoscrollOFF) {
@@ -1277,8 +1276,7 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 text.setSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         var strPosition = text.indexOf("Адзінародны Сыне", bst2 + strLigBS2, true)
-                        if (resurs == "lit_jan_zalat")
-                            strPosition = text.indexOf("Адзінародны Сыне", strPosition + 16, true)
+                        if (resurs == "lit_jan_zalat") strPosition = text.indexOf("Адзінародны Сыне", strPosition + 16, true)
                         val line = binding.textView.layout.getLineForOffset(strPosition)
                         val y = binding.textView.layout.getLineTop(line)
                         val anim = ObjectAnimator.ofInt(binding.scrollView2, "scrollY", binding.scrollView2.scrollY, y)
@@ -1378,7 +1376,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                 } else if (k.getBoolean("autoscrollAutostart", false) && mAutoScroll) {
                     autoStartScroll()
                 }
-                if (fullscreenPage) hide()
             }
         } else {
             if (resurs.contains("viachernia_ton")) {
@@ -1411,7 +1408,6 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
                         mAutoScroll = false
                         invalidateOptionsMenu()
                     }
-                    if (fullscreenPage) hide()
                 }
             }
         }
@@ -1863,15 +1859,15 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         super.onResume()
         setTollbarTheme()
         fullscreenPage = k.getBoolean("fullscreenPage", false)
-        if (fullscreenPage) hide()
+        if (fullscreenPage) {
+            binding.constraint.post {
+                hide()
+            }
+        }
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
             autoStartScroll()
-        } else if (fullscreenPage) {
-            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-            binding.actionBack.visibility = View.VISIBLE
-            binding.actionBack.animation = animation
         }
     }
 
@@ -1890,10 +1886,8 @@ class Bogashlugbovya : BaseActivity(), View.OnTouchListener, DialogFontSize.Dial
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
-        if (!autoscroll) {
-            binding.actionBack.visibility = View.VISIBLE
-            binding.actionBack.animation = animation
-        }
+        binding.actionBack.visibility = View.VISIBLE
+        binding.actionBack.animation = animation
     }
 
     private fun show() {

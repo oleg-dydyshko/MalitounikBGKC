@@ -850,9 +850,6 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
             }
         }
         adapter.notifyDataSetChanged()
-        binding.ListView.post {
-            if (fullscreenPage) hide()
-        }
     }
 
     private fun getSinoidalGlavas(nomer: Int, konec: Int): String {
@@ -1135,15 +1132,15 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
     override fun onResume() {
         super.onResume()
         fullscreenPage = k.getBoolean("fullscreenPage", false)
-        if (fullscreenPage) hide()
+        if (fullscreenPage) {
+            binding.constraint.post {
+                hide()
+            }
+        }
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
             autoStartScroll()
-        } else if (fullscreenPage) {
-            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-            binding.actionBack.visibility = View.VISIBLE
-            binding.actionBack.animation = animation
         }
         bindingprogress.progress.visibility = View.GONE
     }
@@ -1276,10 +1273,8 @@ class MaranAta : BaseActivity(), OnTouchListener, DialogFontSizeListener, OnItem
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
-        if (!autoscroll) {
-            binding.actionBack.visibility = View.VISIBLE
-            binding.actionBack.animation = animation
-        }
+        binding.actionBack.visibility = View.VISIBLE
+        binding.actionBack.animation = animation
     }
 
     private fun show() {

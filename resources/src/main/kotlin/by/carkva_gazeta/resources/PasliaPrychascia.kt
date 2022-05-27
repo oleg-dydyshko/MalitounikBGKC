@@ -64,7 +64,9 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
         setTollbarTheme()
         fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
-            hide()
+            binding.constraint.post {
+                hide()
+            }
         }
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

@@ -570,7 +570,9 @@ class StaryZapavietSinaidal : AppCompatActivity(), DialogFontSizeListener, Dialo
         super.onResume()
         fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
-            hide()
+            binding.linealLayoutTitle.post {
+                hide()
+            }
         }
         setTollbarTheme()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)

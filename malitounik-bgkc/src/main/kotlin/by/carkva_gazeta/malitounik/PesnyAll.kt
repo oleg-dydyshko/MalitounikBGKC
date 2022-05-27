@@ -319,7 +319,9 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         super.onResume()
         fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
-            hide()
+            binding.constraint.post {
+                hide()
+            }
         }
     }
 
@@ -375,16 +377,13 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
         } else {
             builder.append(getString(R.string.error_ch))
         }
-        binding.textView.post {
-            if (fullscreenPage) hide()
-        }
         binding.textView.text = MainActivity.fromHtml(builder.toString())
         val search = intent.extras?.getString("search", "") ?: ""
         if (search != "") findAllAsanc(search)
         men = checkVybranoe(this, resurs)
         checkVybranoe = men
         bindingprogress.fontSizePlus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX)  bindingprogress.progressTitle.text = getString(R.string.max_font)
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) bindingprogress.progressTitle.text = getString(R.string.max_font)
             if (fontBiblia < SettingsActivity.GET_FONT_SIZE_MAX) {
                 fontBiblia += 4
                 bindingprogress.progressText.text = getString(R.string.get_font, fontBiblia.toInt())
@@ -398,7 +397,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             startProcent()
         }
         bindingprogress.fontSizeMinus.setOnClickListener {
-            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN)  bindingprogress.progressTitle.text = getString(R.string.min_font)
+            if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MIN) bindingprogress.progressTitle.text = getString(R.string.min_font)
             if (fontBiblia > SettingsActivity.GET_FONT_SIZE_MIN) {
                 fontBiblia -= 4
                 bindingprogress.progressText.text = getString(R.string.get_font, fontBiblia.toInt())

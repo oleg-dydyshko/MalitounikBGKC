@@ -71,7 +71,7 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
             var result = builder.toString()
             if (malitva == 2) {
                 val pesnyList = result.split("===")
-                val pesnia = intent.extras?.getInt("pesnia", 1)?: 1
+                val pesnia = intent.extras?.getInt("pesnia", 1) ?: 1
                 result = pesnyList[pesnia]
                 binding.subtitleToolbar.visibility = View.VISIBLE
                 binding.subtitleToolbar.text = getString(by.carkva_gazeta.malitounik.R.string.pesnia, pesnia)
@@ -202,7 +202,9 @@ class NadsanMalitvyIPesni : BaseActivity(), DialogFontSizeListener {
         super.onResume()
         fullscreenPage = k.getBoolean("fullscreenPage", false)
         if (fullscreenPage) {
-            hide()
+            binding.constraint.post {
+                hide()
+            }
         }
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

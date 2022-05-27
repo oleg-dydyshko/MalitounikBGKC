@@ -510,7 +510,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                     val y = binding.textView.layout.getLineTop(line)
                     binding.InteractiveScroll.scrollY = y
                 }
-                if (fullscreenPage) hide()
             }
         } else {
             binding.InteractiveScroll.post {
@@ -522,7 +521,6 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
                 if (k.getBoolean("autoscrollAutostart", false)) {
                     autoStartScroll()
                 }
-                if (fullscreenPage) hide()
             }
         }
     }
@@ -693,15 +691,15 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         super.onResume()
         setTollbarTheme()
         fullscreenPage = k.getBoolean("fullscreenPage", false)
-        if (fullscreenPage) hide()
+        if (fullscreenPage) {
+            binding.constraint.post {
+                hide()
+            }
+        }
         autoscroll = k.getBoolean("autoscroll", false)
         spid = k.getInt("autoscrollSpid", 60)
         if (autoscroll) {
             autoStartScroll()
-        } else if (fullscreenPage) {
-            val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
-            binding.actionBack.visibility = View.VISIBLE
-            binding.actionBack.animation = animation
         }
     }
 
@@ -761,10 +759,8 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
         val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
         binding.actionFullscreen.visibility = View.VISIBLE
         binding.actionFullscreen.animation = animation
-        if (!autoscroll) {
-            binding.actionBack.visibility = View.VISIBLE
-            binding.actionBack.animation = animation
-        }
+        binding.actionBack.visibility = View.VISIBLE
+        binding.actionBack.animation = animation
     }
 
     private fun show() {

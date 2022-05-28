@@ -117,5 +117,5 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/action_fullscreen"
-        app:srcCompat="@drawable/menu_left" />
+        app:srcCompat="@drawable/full_screen_back" />
 </androidx.constraintlayout.widget.ConstraintLayout>

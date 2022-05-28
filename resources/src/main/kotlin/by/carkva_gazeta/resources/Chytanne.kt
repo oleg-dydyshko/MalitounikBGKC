@@ -122,8 +122,6 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             binding.actionFullscreen.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
             binding.actionBack.background = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.selector_dark_maranata_buttom)
         }
-        spid = k.getInt("autoscrollSpid", 60)
-        autoscroll = k.getBoolean("autoscroll", false)
         setChtenia(savedInstanceState)
         bindingprogress.fontSizePlus.setOnClickListener {
             if (fontBiblia == SettingsActivity.GET_FONT_SIZE_MAX) bindingprogress.progressTitle.text = getString(by.carkva_gazeta.malitounik.R.string.max_font)
@@ -924,7 +922,7 @@ class Chytanne : BaseActivity(), OnTouchListener, DialogFontSizeListener, Intera
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
-            if (fullscreenPage) {
+            if (fullscreenPage && binding.actionBack.visibility == View.GONE) {
                 val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
                 binding.actionBack.visibility = View.VISIBLE
                 binding.actionBack.animation = animation2

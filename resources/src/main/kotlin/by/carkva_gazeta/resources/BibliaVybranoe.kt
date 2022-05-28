@@ -595,7 +595,7 @@ class BibliaVybranoe : BaseActivity(), OnTouchListener, DialogFontSizeListener, 
             val animation = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphaout)
             binding.actionMinus.animation = animation
             binding.actionPlus.animation = animation
-            if (fullscreenPage) {
+            if (fullscreenPage && binding.actionBack.visibility == View.GONE) {
                 val animation2 = AnimationUtils.loadAnimation(baseContext, by.carkva_gazeta.malitounik.R.anim.alphain)
                 binding.actionBack.visibility = View.VISIBLE
                 binding.actionBack.animation = animation2

@@ -199,7 +199,7 @@
         android:contentDescription="@string/empty"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/action_plus"
-        app:srcCompat="@drawable/plus_auto_scroll" />
+        app:srcCompat="@drawable/minus_auto_scroll" />
 
     <ImageView
         android:id="@+id/action_plus"
@@ -215,5 +215,5 @@
         android:contentDescription="@string/empty"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/action_fullscreen"
-        app:srcCompat="@drawable/minus_auto_scroll" />
+        app:srcCompat="@drawable/plus_auto_scroll" />
 </androidx.constraintlayout.widget.ConstraintLayout>

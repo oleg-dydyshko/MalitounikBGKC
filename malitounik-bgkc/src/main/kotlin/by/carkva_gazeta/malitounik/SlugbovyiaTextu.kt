@@ -185,6 +185,7 @@ class SlugbovyiaTextu {
         datMinSV.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста - Ютрань", "uzniasienne_jutran", UTRAN, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста - Літургія", "uzniasienne_liturhija", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(39, "Узьнясеньне Госпада нашага Ісуса Хрыста", "uzniasienne_viaczernia", VIACHERNIA, pasxa = true))
+        datMinSV.add(SlugbovyiaTextuData(42, "Нядзеля сьвятых айцоў I-га Усяленскага Сабору", "ndz_ajcou_1susviet_saboru", LITURGIA, pasxa = true))
         datMinSV.add(SlugbovyiaTextuData(274, "Покрыва Найсьвяцейшай Багародзіцы - Літургія", "mm_01_10_liturhija", LITURGIA))
         datMinSV.add(SlugbovyiaTextuData(325, "Уваход у храм Найсьвяцейшай Багародзіцы - Літургія", "mm_21_11_liturhija", LITURGIA))
         datMinSV.add(SlugbovyiaTextuData(33, "Сустрэча Госпада нашага Ісуса Хрыста (ГРАМНІЦЫ) - Літургія", "mm_02_02_liturhija", LITURGIA))

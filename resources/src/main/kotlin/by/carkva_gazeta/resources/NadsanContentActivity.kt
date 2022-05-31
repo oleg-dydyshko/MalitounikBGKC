@@ -10,7 +10,6 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
-import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -31,7 +30,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.*
 import java.io.File
 
-class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NadsanContentPage.ListPosition {
+class NadsanContentActivity : PreBaseActivity(), DialogFontSizeListener, DialogBibleRazdelListener, NadsanContentPage.ListPosition {
 
     private var fullscreenPage = false
     private var glava = 0
@@ -55,6 +54,11 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         prefEditors.putString("psalter_time_psalter_nadsan", gson.toJson(set))
         prefEditors.apply()
         resetTollbarJob?.cancel()
+    }
+
+    override fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
+        checkSetDzenNoch = isDzenNoch
+        recreate()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -251,6 +255,7 @@ class NadsanContentActivity : AppCompatActivity(), DialogFontSizeListener, Dialo
         super.onPrepareOptionsMenu(menu)
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_glava).isVisible = true
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
+        if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = false
         val itemVybranoe: MenuItem = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         if (men) {
             itemVybranoe.icon = ContextCompat.getDrawable(this, by.carkva_gazeta.malitounik.R.drawable.star_big_on)

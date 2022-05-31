@@ -536,6 +536,7 @@ class PesnyAll : BaseActivity(), OnTouchListener, DialogFontSize.DialogFontSizeL
             menu.findItem(R.id.action_vybranoe).title = resources.getString(R.string.vybranoe)
         }
         menu.findItem(R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
+        if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
         val item = menu.findItem(R.id.action_vybranoe)
         val spanString = SpannableString(menu.findItem(R.id.action_vybranoe).title.toString())
         val end = spanString.length

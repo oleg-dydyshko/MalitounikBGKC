@@ -17,7 +17,6 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -27,18 +26,15 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.adapter.FragmentViewHolder
 import androidx.viewpager2.widget.ViewPager2
-import by.carkva_gazeta.malitounik.DialogBrightness
-import by.carkva_gazeta.malitounik.DialogFontSize
+import by.carkva_gazeta.malitounik.*
 import by.carkva_gazeta.malitounik.DialogFontSize.DialogFontSizeListener
-import by.carkva_gazeta.malitounik.MainActivity
-import by.carkva_gazeta.malitounik.SettingsActivity
 import by.carkva_gazeta.resources.databinding.AkafistActivityPasliaPrichBinding
 import by.carkva_gazeta.resources.databinding.ProgressBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
 
 
-class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSizeListener {
+class PasliaPrychascia : PreBaseActivity(), View.OnTouchListener, DialogFontSizeListener {
 
     private var fullscreenPage = false
     private var checkSetDzenNoch = false
@@ -81,6 +77,11 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
     @SuppressLint("NotifyDataSetChanged")
     override fun onDialogFontSize(fontSize: Float) {
         binding.pager.adapter?.notifyDataSetChanged()
+    }
+
+    override fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
+        checkSetDzenNoch = isDzenNoch
+        recreate()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -315,6 +316,7 @@ class PasliaPrychascia : AppCompatActivity(), View.OnTouchListener, DialogFontSi
             menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title = resources.getString(by.carkva_gazeta.malitounik.R.string.vybranoe)
         }
         menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
+        if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(by.carkva_gazeta.malitounik.R.id.action_dzen_noch).isVisible = false
         val item = menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe)
         val spanString = SpannableString(menu.findItem(by.carkva_gazeta.malitounik.R.id.action_vybranoe).title.toString())
         val end = spanString.length

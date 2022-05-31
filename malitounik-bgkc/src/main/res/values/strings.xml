@@ -218,6 +218,7 @@
     <string name="ton_n">Трапары і кандакі нядзельныя васьмі тонаў</string>
     <string name="ton_sh">Трапары і кандакі штодзённыя - на кожны дзень тыдня</string>
     <string name="widget_day_d_n">Начны рэжым</string>
+    <string name="auto_widget_day_d_n">Аўтаматычны начны рэжым</string>
     <string name="type_signal_notif">СІГНАЛ ДЛЯ АПАВЯШЧЭНЬНЯ ПРА ПАДЗЕЮ:</string>
     <string name="sviaty_pfes">Прафесійныя сьвяты ў Беларусі</string>
     <string name="sviaty_dziar">Дзяржаўныя сьвяты і памятныя даты ў Беларусі</string>

@@ -27,7 +27,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
@@ -52,7 +51,7 @@ import java.util.*
 import kotlin.math.roundToLong
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
+class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.DialogContextMenuListener, MenuSviaty.CarkvaCarkvaListener, DialogDelite.DialogDeliteListener, MenuCaliandar.MenuCaliandarPageListinner, DialogFontSize.DialogFontSizeListener, DialogPasxa.DialogPasxaListener, DialogPrazdnik.DialogPrazdnikListener, DialogDeliteAllVybranoe.DialogDeliteAllVybranoeListener, DialogClearHishory.DialogClearHistoryListener {
 
     private lateinit var c: GregorianCalendar
     private lateinit var k: SharedPreferences
@@ -77,7 +76,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
             recreate()
         }
     }
-
     private val searchSviatyiaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val intent = result.data
@@ -153,8 +151,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
     override fun onResume() {
         super.onResume()
         dzenNoch = k.getBoolean("dzen_noch", false)
-        if (checkDzenNoch != dzenNoch)
-            recreate()
+        if (checkDzenNoch != dzenNoch) recreate()
         if (checkBrightness) {
             brightness = try {
                 Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS) * 100 / 255
@@ -190,6 +187,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         textView.setCompoundDrawables(leftDrawable, null, null, null)
     }
 
+    override fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
+        checkDzenNoch = isDzenNoch
+        recreate()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         k = getSharedPreferences("biblia", MODE_PRIVATE)
         mkDir()
@@ -205,7 +207,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
         if (savedInstanceState != null) {
             idSelect = savedInstanceState.getInt("id")
             idOld = savedInstanceState.getInt("idOld")
-        } // Удаление кеша интернета
+        }
+        // Удаление кеша интернета
         val fileSite = File("$filesDir/Site")
         if (fileSite.exists()) fileSite.deleteRecursively() // Создание нового формата нататок
         val fileNatatki = File("$filesDir/Natatki.json")
@@ -727,6 +730,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, DialogContextMen
                 menu.findItem(R.id.action_glava).setIcon(R.drawable.calendar_black)
             }
             menu.findItem(R.id.action_dzen_noch).isChecked = k.getBoolean("dzen_noch", false)
+            if (k.getBoolean("auto_dzen_noch", false)) menu.findItem(R.id.action_dzen_noch).isVisible = false
         }
         return true
     }

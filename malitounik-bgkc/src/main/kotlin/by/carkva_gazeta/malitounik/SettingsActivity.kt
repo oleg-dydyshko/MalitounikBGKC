@@ -6,6 +6,8 @@ import android.content.*
 import android.content.SharedPreferences.Editor
 import android.graphics.Color
 import android.graphics.Typeface
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.os.Build
@@ -954,10 +956,23 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             binding.maranataRus.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
             binding.maranataOpis.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
         }
-        val dzenNochSettings = k.getBoolean("dzen_noch", false)
+        val autoDzenNochSettings = k.getBoolean("auto_dzen_noch", false)
+        if (dzenNoch) binding.checkBox10.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
+        binding.checkBox10.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
+        val mySensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        val lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+        if (lightSensor != null) {
+            if (autoDzenNochSettings) {
+                binding.checkBox10.isChecked = true
+                binding.checkBox5.isClickable = false
+                binding.checkBox5.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            }
+        } else {
+            binding.checkBox10.visibility = View.GONE
+        }
         if (dzenNoch) binding.checkBox5.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.checkBox5.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        if (dzenNochSettings) binding.checkBox5.isChecked = true
+        if (dzenNoch) binding.checkBox5.isChecked = true
         val autoscrollAutostart = k.getBoolean("autoscrollAutostart", false)
         if (dzenNoch) binding.checkBox6.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.checkBox6.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
@@ -1050,6 +1065,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             binding.checkBox7.isChecked = false
             binding.checkBox8.isChecked = false
             binding.checkBox9.isChecked = false
+            binding.checkBox10.isChecked = false
             binding.maranata.isChecked = false
             binding.maranataRus.isChecked = false
             binding.maranataBel.isChecked = true
@@ -1153,12 +1169,14 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             }
             prefEditor.apply()
         }
-        binding.checkBox5.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            val check = k.getBoolean("dzen_noch", false)
-            prefEditor.putBoolean("dzen_noch", isChecked)
-            prefEditor.apply()
-            if (check != k.getBoolean("dzen_noch", false)) {
-                recreate()
+        binding.checkBox5.setOnCheckedChangeListener { view: View, isChecked: Boolean ->
+            if (view.isClickable) {
+                val check = k.getBoolean("dzen_noch", false)
+                prefEditor.putBoolean("dzen_noch", isChecked)
+                prefEditor.apply()
+                if (check != k.getBoolean("dzen_noch", false)) {
+                    recreate()
+                }
             }
         }
         binding.checkBox6.setOnCheckedChangeListener { _, isChecked: Boolean ->
@@ -1186,6 +1204,27 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
             prefEditor.putBoolean("fullscreenPage", isChecked)
             prefEditor.apply()
         }
+        binding.checkBox10.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            if (!isChecked) {
+                binding.checkBox5.isClickable = true
+                if (dzenNoch) {
+                    binding.checkBox5.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
+                } else {
+                    binding.checkBox5.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary_text))
+                }
+                binding.checkBox5.isChecked = dzenNoch
+            } else {
+                binding.checkBox5.isClickable = false
+                binding.checkBox5.isChecked = false
+                binding.checkBox5.setTextColor(ContextCompat.getColor(this, R.color.colorSecondary_text))
+            }
+            val check = k.getBoolean("auto_dzen_noch", false)
+            prefEditor.putBoolean("auto_dzen_noch", isChecked)
+            prefEditor.apply()
+            if (check != k.getBoolean("auto_dzen_noch", false)) {
+                recreate()
+            }
+        }
         binding.vibro.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.guk.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.sinoidal.typeface = MainActivity.createFont(Typeface.NORMAL)
@@ -1199,6 +1238,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
         binding.checkBox7.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.checkBox8.typeface = MainActivity.createFont(Typeface.NORMAL)
         binding.checkBox9.typeface = MainActivity.createFont(Typeface.NORMAL)
+        binding.checkBox10.typeface = MainActivity.createFont(Typeface.NORMAL)
         if (k.getBoolean("check_notifi", true) && Build.MANUFACTURER.contains("huawei", true) && (notification == 1 || notification == 2)) {
             val notifi = DialogHelpNotification()
             notifi.show(supportFragmentManager, "help_notification")

@@ -8,14 +8,13 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import by.carkva_gazeta.malitounik.databinding.CalendarBinding
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.*
 import java.util.*
 
-class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, CaliandarMunTab2.CaliandarMunTab2Listener, DialogCaliandarMunDate.DialogCaliandarMunDateListener {
+class CaliandarMun : PreBaseActivity(), CaliandarMunTab1.CaliandarMunTab1Listener, CaliandarMunTab2.CaliandarMunTab2Listener, DialogCaliandarMunDate.DialogCaliandarMunDateListener {
     private var yearG1 = 0
     private var posMun1 = 0
     private var day1 = 0
@@ -27,6 +26,10 @@ class CaliandarMun : AppCompatActivity(), CaliandarMunTab1.CaliandarMunTab1Liste
     private var sabytue = false
     private lateinit var binding: CalendarBinding
     private var resetTollbarJob: Job? = null
+
+    override fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
+        recreate()
+    }
 
     override fun setDataCalendar(dataCalendar: Int) {
         val fragment = supportFragmentManager.findFragmentByTag("mun") as? CaliandarMunTab1

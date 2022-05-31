@@ -4,9 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : PreBaseActivity() {
 
     private lateinit var k: SharedPreferences
     private var dzenNoch = false
@@ -27,5 +26,10 @@ abstract class BaseActivity : AppCompatActivity() {
             recreate()
         overridePendingTransition(R.anim.alphain, R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    override fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
+        checkDzenNoch = isDzenNoch
+        recreate()
     }
 }

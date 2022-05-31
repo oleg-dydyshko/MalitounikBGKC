@@ -13,6 +13,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.graphics.drawable.Drawable
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.Environment
 import android.os.SystemClock
@@ -34,7 +36,6 @@ import android.webkit.WebViewClient
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -64,7 +65,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import javax.xml.parsers.ParserConfigurationException
 
-class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
+class BibliotekaView : PreBaseActivity(), OnPageChangeListener, OnLoadCompleteListener, DialogSetPageBiblioteka.DialogSetPageBibliotekaListener, DialogTitleBiblioteka.DialogTitleBibliotekaListener, OnErrorListener, DialogFileExplorer.DialogFileExplorerListener, View.OnClickListener, DialogBibliotekaWIFI.DialogBibliotekaWIFIListener, DialogBibliateka.DialogBibliatekaListener, DialogDelite.DialogDeliteListener, DialogFontSize.DialogFontSizeListener, WebViewCustom.OnScrollChangedCallback, WebViewCustom.OnBottomListener, AdapterView.OnItemLongClickListener {
 
     private lateinit var pdfView: PDFView
     private var mLastClickTime: Long = 0
@@ -496,6 +497,22 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
         }
         menu = bookTitle.size != 0
         invalidateOptionsMenu()
+    }
+
+    override fun sensorChangeDzenNoch(isDzenNoch: Boolean) {
+        recreate()
+    }
+
+    private fun setlightSensor() {
+        val mySensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        val lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+        mySensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_UI)
+    }
+
+    private fun removelightSensor() {
+        val mySensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        val lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+        mySensorManager.unregisterListener(this, lightSensor)
     }
 
     @Suppress("DEPRECATION")
@@ -1476,7 +1493,8 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     override fun onPause() {
         super.onPause()
-        val prefEditor: SharedPreferences.Editor = k.edit()
+        removelightSensor()
+        val prefEditor = k.edit()
         if (pdfView.visibility == View.VISIBLE) {
             prefEditor.putInt(fileName, pdfView.currentPage)
         } else {
@@ -1753,6 +1771,7 @@ class BibliotekaView : AppCompatActivity(), OnPageChangeListener, OnLoadComplete
 
     override fun onResume() {
         super.onResume()
+        if (k.getBoolean("auto_dzen_noch", false)) setlightSensor()
         overridePendingTransition(by.carkva_gazeta.malitounik.R.anim.alphain, by.carkva_gazeta.malitounik.R.anim.alphaout)
         if (k.getBoolean("scrinOn", false)) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }

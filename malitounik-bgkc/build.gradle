@@ -11,8 +11,8 @@ android {
         applicationId "by.carkva_gazeta.malitounik"
         minSdkVersion 19
         targetSdkVersion 32
-        versionCode 44084
-        versionName "4.0.5.54"
+        versionCode 44085
+        versionName "4.0.5.55"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -61,7 +61,7 @@ dependencies {
     api 'androidx.appcompat:appcompat:1.4.1'
     api 'androidx.constraintlayout:constraintlayout:2.1.4'
     api 'androidx.gridlayout:gridlayout:1.0.0'
-    api 'com.google.android.material:material:1.6.0'
+    api 'com.google.android.material:material:1.6.1'
     api 'com.google.android.play:core-ktx:1.8.1'
     api 'com.google.code.gson:gson:2.9.0'
     api 'androidx.webkit:webkit:1.4.0'

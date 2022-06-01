@@ -972,7 +972,7 @@ class SettingsActivity : BaseActivity(), CheckLogin.CheckLoginListener {
         }
         if (dzenNoch) binding.checkBox5.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.checkBox5.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)
-        if (dzenNoch) binding.checkBox5.isChecked = true
+        if (dzenNoch && binding.checkBox5.isClickable) binding.checkBox5.isChecked = true
         val autoscrollAutostart = k.getBoolean("autoscrollAutostart", false)
         if (dzenNoch) binding.checkBox6.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stiker_black, 0, 0, 0)
         binding.checkBox6.setTextSize(TypedValue.COMPLEX_UNIT_SP, GET_FONT_SIZE_MIN)

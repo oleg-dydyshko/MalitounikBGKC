@@ -85,7 +85,7 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
                 if (setDataCalendar != data[25].toInt()) {
                     setDataCalendar = data[25].toInt()
                     idOld = -1
-                    onClick(binding.label1)
+                    selectFragment(binding.label1, true)
                 }
             }
         }
@@ -97,7 +97,7 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
         idSelect = R.id.label1
         setDataCalendar = data[25].toInt()
         idOld = -1
-        onClick(binding.label1)
+        selectFragment(binding.label1, true)
     }
 
     override fun onDialogFontSize(fontSize: Float) {
@@ -346,29 +346,29 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
         if (data != null) {
             if (data.toString().contains("shortcuts=1")) {
                 idSelect = R.id.label12
-                onClick(binding.label12)
+                selectFragment(binding.label12, true)
             } else if (data.toString().contains("shortcuts=3")) {
                 idSelect = R.id.label7
                 shortcuts = true
-                onClick(binding.label7)
+                selectFragment(binding.label7, true)
             } else if (data.toString().contains("shortcuts=4")) {
                 idSelect = R.id.label1
                 shortcuts = true
-                onClick(binding.label1)
+                selectFragment(binding.label1, true)
             } else if (data.toString().contains("shortcuts=2")) {
                 idSelect = R.id.label2
                 shortcuts = true
-                onClick(binding.label2)
+                selectFragment(binding.label2, true)
             } else if (data.toString().contains("caliandar")) {
                 idSelect = R.id.label1
-                onClick(binding.label1)
+                selectFragment(binding.label1, true)
             } else if (data.toString().contains("biblija")) {
                 idSelect = R.id.label8
-                onClick(binding.label8)
+                selectFragment(binding.label8, true)
             } else if (!data.toString().contains("https://")) {
                 idSelect = R.id.label2
                 shortcuts = true
-                onClick(binding.label2)
+                selectFragment(binding.label2, true)
             }
         }
         val extras = intent.extras
@@ -399,84 +399,84 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
         }
         var scroll = false
         when (idSelect) {
-            R.id.label1 -> onClick(binding.label1)
-            R.id.label2 -> onClick(binding.label2)
-            R.id.label3 -> onClick(binding.label3)
+            R.id.label1 -> selectFragment(binding.label1, true)
+            R.id.label2 -> selectFragment(binding.label2, true)
+            R.id.label3 -> selectFragment(binding.label3, true)
             R.id.label4 -> {
                 if (!binding.label4.isShown) scroll = true
-                onClick(binding.label4)
+                selectFragment(binding.label4, true)
             }
             R.id.label5 -> {
                 if (!binding.label5.isShown) scroll = true
-                onClick(binding.label5)
+                selectFragment(binding.label5, true)
             }
             R.id.label6 -> {
                 if (!binding.label6.isShown) scroll = true
-                onClick(binding.label6)
+                selectFragment(binding.label6, true)
             }
             R.id.label7 -> {
                 if (!binding.label7.isShown) scroll = true
-                onClick(binding.label7)
+                selectFragment(binding.label7, true)
             }
             R.id.label8 -> {
                 if (!binding.label8.isShown) scroll = true
-                onClick(binding.label8)
+                selectFragment(binding.label8, true)
             }
             R.id.label91 -> {
                 if (!binding.label91.isShown) scroll = true
-                onClick(binding.label91)
+                selectFragment(binding.label91, true)
             }
             R.id.label92 -> {
                 if (!binding.label92.isShown) scroll = true
-                onClick(binding.label92)
+                selectFragment(binding.label92, true)
             }
             R.id.label93 -> {
                 if (!binding.label93.isShown) scroll = true
-                onClick(binding.label93)
+                selectFragment(binding.label93, true)
             }
             R.id.label94 -> {
                 if (!binding.label94.isShown) scroll = true
-                onClick(binding.label94)
+                selectFragment(binding.label94, true)
             }
             R.id.label95 -> {
                 if (!binding.label95.isShown) scroll = true
-                onClick(binding.label95)
+                selectFragment(binding.label95, true)
             }
             R.id.label101 -> {
                 if (!binding.label101.isShown) scroll = true
-                onClick(binding.label101)
+                selectFragment(binding.label101, true)
             }
             R.id.label102 -> {
                 if (!binding.label102.isShown) scroll = true
-                onClick(binding.label102)
+                selectFragment(binding.label102, true)
             }
             R.id.label103 -> {
                 if (!binding.label103.isShown) scroll = true
-                onClick(binding.label103)
+                selectFragment(binding.label103, true)
             }
             R.id.label104 -> {
                 if (!binding.label104.isShown) scroll = true
-                onClick(binding.label104)
+                selectFragment(binding.label104, true)
             }
             R.id.label105 -> {
                 if (!binding.label105.isShown) scroll = true
-                onClick(binding.label105)
+                selectFragment(binding.label105, true)
             }
             R.id.label11 -> {
                 if (!binding.label11.isShown) scroll = true
-                onClick(binding.label11)
+                selectFragment(binding.label11, true)
             }
             R.id.label12 -> {
                 if (!binding.label12.isShown) scroll = true
-                onClick(binding.label12)
+                selectFragment(binding.label12, true)
             }
             R.id.label13 -> {
                 if (!binding.label13.isShown) scroll = true
-                onClick(binding.label13)
+                selectFragment(binding.label13, true)
             }
             else -> {
                 idSelect = R.id.label1
-                onClick(binding.label1)
+                selectFragment(binding.label1, true)
             }
         }
         CoroutineScope(Dispatchers.IO).launch {
@@ -605,7 +605,7 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
             val arrayList = MenuCaliandar.getDataCalaindar(c[Calendar.DATE])
             setDataCalendar = arrayList[0][25].toInt()
             idOld = -1
-            onClick(binding.label1)
+            selectFragment(binding.label1, true)
         }
         if (id == R.id.settings) {
             val i = Intent(this, SettingsActivity::class.java)
@@ -749,7 +749,7 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
         return true
     }
 
-    override fun onClick(view: View?) {
+    private fun selectFragment(view: View?, start: Boolean = false) {
         idSelect = view?.id ?: 0
         if (!(idSelect == R.id.label9a || idSelect == R.id.label10a)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -1164,7 +1164,11 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
                     prefEditors.putInt("id", idSelect)
                 }
             }
-            bindingappbar.toolbar.postDelayed({ ftrans.commitAllowingStateLoss() }, 300)
+            if (start) {
+                ftrans.commit()
+            } else {
+                bindingappbar.toolbar.postDelayed({ ftrans.commitAllowingStateLoss() }, 300)
+            }
             prefEditors.apply()
         }
         bindingappbar.titleToolbar.text = tolbarTitle
@@ -1177,6 +1181,10 @@ class MainActivity : PreBaseActivity(), View.OnClickListener, DialogContextMenu.
             }
         }
         idOld = idSelect
+    }
+
+    override fun onClick(view: View?) {
+        selectFragment(view)
     }
 
     private fun loadOpisanieSviatyiaISxiaty() {
